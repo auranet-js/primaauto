@@ -38,14 +38,14 @@
 
 ## 3. Strefy kruche
 
-Nie ruszaj bez wyraźnej zgody. Szczegóły w `tmp/SKILL.md`.
+Nie ruszaj bez wyraźnej zgody. Pełna dokumentacja: `docs/architektura/`.
 
-1. **Pipeline cenowy** — `class-asiaauto-price.php`, 9 kroków, dual-mode CNY+CIF
-2. **Importer / sync** — dual storage pattern, reservation guard, slug generation z `$api_value`
-3. **Image pipeline** — Dongchedi URL-e wygasają, SEO naming, raw meta ops na `_thumbnail_id`
-4. **Statusy zamówień** — 11 statusów, `LEGACY_STATUS_MAP`, reservation logic (stock vs customer)
-5. **Umowa PDF** — `class-asiaauto-contract.php`, rework agency model w toku (Krok 1–4 DONE)
-6. **MCP server** — `asiaauto.pl/mcp-test/mcp.php`, nie ruszaj z Claude Code
+1. **Pipeline cenowy** — `class-asiaauto-price.php` (1065 linii). 9 kroków USD-centric, dual-mode `calculateFromCny()` / `calculateFromCifUsd()`, breakdown v2 z `_legacy_flat`. Stałe: `META_CIF_USD`, `META_ORIGINAL`, `BREAKDOWN_VERSION=2`. Config: `asiaauto_price_config`. Szczegóły: `docs/architektura/pipeline-cenowy.md`.
+2. **Importer / sync** — `class-asiaauto-importer.php` + `class-asiaauto-sync.php`. Dual storage (taxonomy + meta), reservation guard w sync, slug `$api_value` dla tłumaczonych taksonomii, `findByInnerId()` z NOT IN trash, transient lock 10min. v0.30.6: `_asiaauto_original_price` odświeżany PRZED `applyToListing()`.
+3. **Image pipeline** — `class-asiaauto-media.php`. Dongchedi URL-e z `x-expires` (6 dni). SEO: `{mark}-{model}-{year}-{city}-{inner_id}-{n}.webp`. Raw `update_post_meta('_thumbnail_id')` zamiast `set_post_thumbnail()` (bypass WP internal DELETE). Self-healing gallery[0]→featured w renderze.
+4. **Statusy zamówień** — `class-asiaauto-order.php` (1358 linii). 11 statusów, `LEGACY_STATUS_MAP` (5 starych), flexible transitions, `LISTING_RESERVATION_MAP`, stock→customer conversion, `listingIsBlockedForOrders()` vs `listingHasReservation()`. Szczegóły: `docs/architektura/order-lifecycle.md`.
+5. **Umowa PDF** — `class-asiaauto-contract.php` (1075 linii). mPDF, §1-§9 model agencyjny Prima-Auto, deferred cron. Contract Rework Krok 1-4 DONE, Krok 5 pending (maile/etykiety "depozyt"). Meta: `_order_contract_commission_net`, `_order_vin`.
+6. **MCP server** — `asiaauto.pl/mcp-test/mcp.php` (v2.0, 13 narzędzi), nie ruszaj z Claude Code.
 
 ---
 
