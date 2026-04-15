@@ -1,0 +1,25 @@
+# === Claude Code ===
+.claude/settings.local.json
+.claude/sessions/
+.claude/cache/
+
+# === Robocze / wrażliwe ===
+tmp/
+scratch/
+*.log
+*.tmp
+.env
+.env.local
+secrets/
+
+# === System ===
+.DS_Store
+Thumbs.db
+*~
+.idea/
+.vscode/
+
+# === Eksporty / dane tymczasowe ===
+exports/
+*.bak
+*.backup-*
