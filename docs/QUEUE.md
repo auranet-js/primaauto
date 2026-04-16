@@ -40,22 +40,44 @@ Na serwerze jest starszy kod z patchami v0.30.6 na wierzchu.
 
 ## ZADANIE 2 — Załączniki do umowy PDF (GRUPA 10)
 
-- [ ] Załącznik nr 1 — snapshot aukcji: `renderAttachment1()` w `class-asiaauto-contract.php`
-  - Tabela parametrów z taksonomii + meta, VIN z `_order_vin`, miniaturka
-- [ ] Załącznik nr 2 — breakdown v2 etapów (blocked by v0.30.5 deploy)
-  - CIF USD/PLN + etapy 3-9 PLN + cena końcowa
-  - `step_8_prowizja_wewnetrzna` **NIGDY** w załączniku
+> Priorytet: następny. Wymaga analizy istniejącego `class-asiaauto-contract.php` na serwerze.
+
+### Załącznik nr 1 — snapshot aukcji
+
+Strona dodawana do PDF umowy z parametrami pojazdu z ogłoszenia.
+
+- [ ] Analiza: przeczytać `class-asiaauto-contract.php` — jak generowany jest PDF, gdzie dodać attachment pages
+- [ ] Analiza: jakie dane mamy w taksonomii/meta listingu (marka, model, rok, paliwo, kolor, przebieg, VIN)
+- [ ] `renderAttachment1()` — tabela parametrów pojazdu
+  - Dane: taksonomie (`make`, `model`, `fuel_type`, `body_type`, `color`) + meta (`_asiaauto_year`, `_asiaauto_mileage_km`, `_order_vin`)
+  - Miniaturka pojazdu (featured image)
+  - Link do oryginalnego ogłoszenia (jeśli dostępny w meta)
+- [ ] Styling mPDF — spójny z resztą umowy
+- [ ] Test: wygenerować PDF z załącznikiem na zamówieniu testowym
+
+### Załącznik nr 2 — kalkulacja kosztów etapów
+
+Strona dodawana do PDF z breakdown kosztów sprowadzenia (wg §2 umowy i załącznika nr 2).
+
+- [ ] Analiza: obecny pipeline cenowy (`class-asiaauto-price.php`) — jakie etapy mamy, format breakdown v2
+- [ ] `renderAttachment2()` — tabela kosztów etapów
+  - CIF USD → PLN (przeliczenie po kursie)
+  - Etapy 3-9 PLN (transport morski, odprawa, transport krajowy, akcyza, VAT, rejestracja, inne)
+  - Cena końcowa PLN
+  - **`step_8_prowizja_wewnetrzna` — NIGDY w załączniku** (marża wewnętrzna)
+  - Wynagrodzenie zleceniobiorcy (§3) — osobna pozycja
+- [ ] Sprawdzić czy breakdown v2 jest już na produkcji czy blocked by v0.30.5
+- [ ] Styling mPDF — tabela z kwotami, spójne z resztą
+- [ ] Test: wygenerować PDF z oboma załącznikami
 
 ---
 
-## ZADANIE 3 — Krok 5 umowy (maile + etykiety statusów)
+## ~~ZADANIE 3 — Krok 5 umowy (maile + etykiety statusów)~~ DONE
 
-Contract Rework Krok 5. Edycja przez admin UI, bez deploy PHP.
-
-- [ ] Find-replace w ~15 szablonach: „zaliczka" → „depozyt zabezpieczający"
-  - Kluczowe: `status_umowa_gotowa`, `status_podpisane`, `status_zarezerwowane`, `contract_regenerated`
-- [ ] Sprawdzić etykiety statusów `zakonczone`/`anulowane` czy nie wspominają zaliczki
-- [ ] Test na zamówieniu testowym
+> Zrealizowane w sesji 2026-04-16 w ramach ZADANIE 5.
+> Szablony maili: wszystkie statusy przepisane (podpisane, zarezerwowane, zakupione, w_drodze, na_placu, w_dostawie, zakonczone, odrzucone, anulowane).
+> Etykiety: "depozyt zabezpieczający" wszędzie, "zaliczka" usunięta.
+> Opisy statusów na stronie klienta zaktualizowane.
 
 ---
 
@@ -63,6 +85,7 @@ Contract Rework Krok 5. Edycja przez admin UI, bez deploy PHP.
 
 - [ ] Pełny test na zamówieniu #222262
 - [ ] Wizard flow, PDF, maile, statusy, reservation
+- [ ] Test `w_dostawie` (nowy status)
 
 ---
 
@@ -140,31 +163,37 @@ zakonczone     → wydane klientowi
 **Admin panel (UX):**
 - [x] UI edycji parametrów wyceny w kroku `weryfikacja` (metabox: CIF, prowizja, depozyt, koszty dodatkowe)
 - [x] Poprawki UX admin panelu zamówień — karty CIF/Depozyt z badge'ami, dane do przelewu w osobnym bloku
-- [ ] Przegląd i aktualizacja kart/sekcji w metaboksie zamówienia
-- [ ] Admin lista zamówień — kolumny depozyt/CIF opłacony
+- [x] Przegląd i aktualizacja kart/sekcji w metaboksie zamówienia (karty: Pojazd, Klient, Cena, Dane umowy, Umowa, Notatki, Status, Akcje, Log)
+- [x] Admin lista zamówień — kolumna depozyt + kolumna CIF (✓/✗/—)
 
 **Frontend klienta:**
 - [x] Aktualizacja wizarda — nowe kroki, labele (depozyt zamiast zaliczka, umowa pośrednictwa)
 - [x] Sidebar: szacowany koszt sprowadzenia, CIF z badge ✓/✗, depozyt z badge ✓/✗
-- [ ] Strona statusu zamówienia — wycena + ogólne warunki po potwierdzeniu
-- [ ] Upload potwierdzenia płatności CIF (nowy element po `podpisane`)
-- [ ] Poprawki UX panelu klienta
+- [x] Upload potwierdzenia płatności CIF (blok 4 wizarda, opcjonalny)
+- [x] Strona statusu zamówienia — pricing (CIF, depozyt, czas dostawy) widoczny od step 3
 
 **Backend:**
 - [x] Aktualizacja transition rules w `class-asiaauto-order.php` (usunięcie `dane_klienta`, `odrzucone` → "Oferta niedostępna")
 - [x] Aktualizacja `LISTING_RESERVATION_MAP` (rezerwacja od `zarezerwowane`)
 - [x] Nowe meta: `_order_client_cif_usd`, `_order_cif_paid`, `_order_cif_paid_at`
 - [x] `LEGACY_STATUS_MAP` — `dane_klienta → potwierdzone`
-- [ ] Obsługa elastycznej kolejności depozyt/podpis
+- [x] Nowy status `w_dostawie` — dostawa pod adres klienta (alternatywa dla `na_placu`)
+- [x] Obsługa elastycznej kolejności depozyt/podpis (transitions niezależne od deposit_paid)
 - [x] Aktualizacja szablonów maili: `order_started_customer`, `status_potwierdzone`, `status_umowa_gotowa`
+- [x] Rewizja szablonów maili: podpisane, zarezerwowane, zakupione, w_drodze, na_placu, w_dostawie, zakonczone, odrzucone, anulowane
+- [x] Mail `zakonczone` — link do opinii Google (writereview)
+- [x] Aktualizacja opisów statusów na stronie klienta (podpisane → anulowane)
 - [x] Logo umowy PDF → `primaauto-logo-round.png`
-- [ ] Aktualizacja contract PDF jeśli flow wpływa na treść §§
-- [ ] Rewizja pozostałych szablonów maili (zarezerwowane, zakupione, w_drodze, na_placu, zakonczone, odrzucone)
+- [x] Contract PDF — model agencyjny §1-§9, Krok 4 rework DONE
 
 **Testy:**
 - [x] E2E test nowego flow: nowe → weryfikacja → potwierdzone → umowa_gotowa (PDF auto-gen)
+- [x] Test statusów: podpisane → zarezerwowane → zakupione → w_drodze → na_placu → zakonczone (maile OK)
+- [ ] Test statusu `w_dostawie` (tracking bar, mail)
 - [ ] Test edge cases: depozyt przed podpisem, regeneracja po VIN, anulowanie po depozycie
 - [ ] Test statusu `odrzucone` (Oferta niedostępna)
+
+> **ZADANIE 5 — core flow DONE.** Pozostałe [~] przeniesione do backlogu. Dalej: ZADANIE 2 (załączniki do umowy PDF).
 
 ---
 
