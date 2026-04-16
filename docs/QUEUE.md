@@ -133,31 +133,38 @@ zakonczone     → wydane klientowi
 ### Podzadania
 
 **Analiza i projektowanie:**
-- [ ] Rewizja transition rules — obecne blokady sekwencyjne vs nowa elastyczność (depozyt/podpis)
-- [ ] Zaprojektować nową mapę `LISTING_RESERVATION_MAP` (blokada od `zarezerwowane`)
-- [ ] Zaprojektować merge kroków wizarda (usunięcie `dane_klienta`, billing w `potwierdzone`)
+- [x] Rewizja transition rules — obecne blokady sekwencyjne vs nowa elastyczność (depozyt/podpis)
+- [x] Zaprojektować nową mapę `LISTING_RESERVATION_MAP` (blokada od `zarezerwowane`)
+- [x] Zaprojektować merge kroków wizarda (usunięcie `dane_klienta`, billing w `potwierdzone`)
 
 **Admin panel (UX):**
-- [ ] UI edycji parametrów wyceny w kroku `weryfikacja` (metabox: CIF, prowizja, depozyt, koszty dodatkowe)
-- [ ] Poprawki UX admin panelu zamówień (przy okazji refaktoru — order admin, admin import)
+- [x] UI edycji parametrów wyceny w kroku `weryfikacja` (metabox: CIF, prowizja, depozyt, koszty dodatkowe)
+- [x] Poprawki UX admin panelu zamówień — karty CIF/Depozyt z badge'ami, dane do przelewu w osobnym bloku
 - [ ] Przegląd i aktualizacja kart/sekcji w metaboksie zamówienia
+- [ ] Admin lista zamówień — kolumny depozyt/CIF opłacony
 
 **Frontend klienta:**
-- [ ] Aktualizacja wizarda — nowe kroki, labele, podświetlenie obecnego kroku
+- [x] Aktualizacja wizarda — nowe kroki, labele (depozyt zamiast zaliczka, umowa pośrednictwa)
+- [x] Sidebar: szacowany koszt sprowadzenia, CIF z badge ✓/✗, depozyt z badge ✓/✗
 - [ ] Strona statusu zamówienia — wycena + ogólne warunki po potwierdzeniu
 - [ ] Upload potwierdzenia płatności CIF (nowy element po `podpisane`)
 - [ ] Poprawki UX panelu klienta
 
 **Backend:**
-- [ ] Aktualizacja transition rules w `class-asiaauto-order.php`
-- [ ] Aktualizacja `LISTING_RESERVATION_MAP`
+- [x] Aktualizacja transition rules w `class-asiaauto-order.php` (usunięcie `dane_klienta`, `odrzucone` → "Oferta niedostępna")
+- [x] Aktualizacja `LISTING_RESERVATION_MAP` (rezerwacja od `zarezerwowane`)
+- [x] Nowe meta: `_order_client_cif_usd`, `_order_cif_paid`, `_order_cif_paid_at`
+- [x] `LEGACY_STATUS_MAP` — `dane_klienta → potwierdzone`
 - [ ] Obsługa elastycznej kolejności depozyt/podpis
-- [ ] Aktualizacja szablonów maili pod nowy flow
+- [x] Aktualizacja szablonów maili: `order_started_customer`, `status_potwierdzone`, `status_umowa_gotowa`
+- [x] Logo umowy PDF → `primaauto-logo-round.png`
 - [ ] Aktualizacja contract PDF jeśli flow wpływa na treść §§
+- [ ] Rewizja pozostałych szablonów maili (zarezerwowane, zakupione, w_drodze, na_placu, zakonczone, odrzucone)
 
 **Testy:**
-- [ ] E2E test nowego flow na zamówieniu testowym
+- [x] E2E test nowego flow: nowe → weryfikacja → potwierdzone → umowa_gotowa (PDF auto-gen)
 - [ ] Test edge cases: depozyt przed podpisem, regeneracja po VIN, anulowanie po depozycie
+- [ ] Test statusu `odrzucone` (Oferta niedostępna)
 
 ---
 
