@@ -9,19 +9,10 @@
 
 ---
 
-## Pending 1: v0.30.5 — pipeline USD-centric (NIE WGRANY)
+## ~~Pending 1: v0.30.5 — pipeline USD-centric~~ DONE
 
-5 plików wygenerowanych w claude.ai, leżą w sandboxie (`/mnt/user-data/outputs/asiaauto-v0.30.5/`).
-Na serwerze jest starszy kod z patchami v0.30.6 na wierzchu.
-
-**Pliki:**
-- `class-asiaauto-price.php` — pełen rewrite: USD pipeline, `calculateFromCifUsd()`, breakdown v2, lazy migration
-- `class-asiaauto-admin.php` — 8 kart sekcyjnych, AJAX bulk recalc, podgląd mieszany CNY+CIF USD
-- `class-asiaauto-listing-editor.php` — pole `_asiaauto_cif_price_usd` w metaboksie
-- `class-asiaauto-admin-manual-import.php` — JS preview pod v2
-- `class-asiaauto-order-admin.php` — `renderCardPriceBreakdownV2()` dispatcher v1/v2
-
-**Decyzja wymagana:** Dostarczyć pliki z sandboxa i wgrać, czy odtworzyć w Claude Code?
+Zweryfikowane 2026-04-17 — wszystkie zmiany są już na produkcji:
+`calculateFromCifUsd()`, `BREAKDOWN_VERSION=2`, `ajaxBulkRecalc`, `_asiaauto_cif_price_usd` w listing editor.
 
 ---
 
@@ -191,7 +182,7 @@ zakonczone     → wydane klientowi
 - [ ] Krok 4 manual editor — metabox extra_prep (18 zakładek)
 - [x] Panel klienta `/klient/` — shortcode `[asiaauto_klient_panel]`, logout→/klient/, auto-redirect do zamówienia (2026-04-16)
 - [ ] Email HTML templates (obecnie plain text)
-- [ ] SEO: meta title/desc, Open Graph, Schema ItemList na inventory, llms.txt
+- [x] SEO: meta title/desc + OG dla single i inventory, blok SEO marki/modelu, term meta opisu, llms.txt (0.30.9, 2026-04-17)
 - [ ] Homepage + Contact CSS → pliki zewnętrzne (z inline)
 - [ ] Orphaned taxonomy terms (Li Auto, Volvo, NIO z count=0)
 - [ ] Duplikat `Lynk & Co` / `Lynk &amp; Co` w make
