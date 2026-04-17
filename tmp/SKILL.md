@@ -4540,3 +4540,131 @@ Po wgraniu i pomyślnych testach (#1 kolumna CIF, #2 profiler output, #3 sync na
 2. Aktualizacja wpisu pluginu w sekcji „Active Plugins" tego skilla
 3. Usunięcie bloku „🚀 PENDING UPDATE — v0.30.6" z góry skilla (wpisy historyczne zostają tu, w Kroku 9)
 4. Analiza outputu profilera z testu #2 → planowanie Kroku 9.5 (cache transient na 3× COUNT)
+
+---
+
+## Sesja 2026-04-16 — v0.30.7 (ZADANIE 5 core DONE)
+
+### Rework workflow zamówień — model agencyjny
+
+**Kontekst:** Prima Auto = agencja importowa, nie dealer. Klient płaci za auto bezpośrednio
+chińskiemu dealerowi. Prima zarabia na prowizji kontraktowej + depozycie zabezpieczającym.
+
+**Nowy flow statusów:**
+```
+nowe → weryfikacja → potwierdzone → umowa_gotowa → podpisane → zarezerwowane
+     → zakupione → w_drodze → na_placu / w_dostawie → zakonczone
+```
+
+**Kluczowe zmiany:**
+- `dane_klienta` usunięty — billing wchłonięty w krok `potwierdzone`
+- Depozyt i podpis — elastyczna kolejność (nie sekwencyjna)
+- `zarezerwowane` = ręczne potwierdzenie sprzedawcy (nie automatyczne)
+- Blokada listingu dopiero przy `zarezerwowane` (nie `potwierdzone`)
+- Nowy status `w_dostawie` — dostawa pod adres klienta
+- `LEGACY_STATUS_MAP`: `dane_klienta → potwierdzone`
+- Nowe meta: `_order_client_cif_usd`, `_order_cif_paid`, `_order_cif_paid_at`
+
+**Pliki zmienione:**
+- `class-asiaauto-order.php` — transition rules, LISTING_RESERVATION_MAP, LEGACY_STATUS_MAP
+- `class-asiaauto-order-admin.php` — UI metabox (karty: Pojazd, Klient, Cena, Umowa, Status, Akcje, Log)
+- `class-asiaauto-order-wizard.php` — kroki wizarda, labele, upload CIF, sidebar
+- `class-asiaauto-contract.php` — model agencyjny §1-§9, logo primaauto-logo-round.png
+
+**Maile:** wszystkie statusy przepisane pod narrację depozytu (nie zaliczki):
+`order_started_customer`, `status_potwierdzone`, `status_umowa_gotowa`, `status_podpisane`,
+`status_zarezerwowane`, `status_zakupione`, `status_w_drodze`, `status_na_placu`,
+`status_w_dostawie`, `status_zakonczone` (link Google review), `status_odrzucone`, `status_anulowane`
+
+**Panel klienta `/klient/`:**
+- Shortcode `[asiaauto_klient_panel]`
+- Logout → /klient/
+- Auto-redirect do aktywnego zamówienia
+
+---
+
+## Sesja 2026-04-17 — v0.30.8 (ZADANIE 2: PDF + bezpieczeństwo)
+
+### Załączniki do umowy PDF
+
+**Nowe metody w `class-asiaauto-contract.php`:**
+- `renderAttachment1()` — snapshot aukcji: foto + tabela 12 parametrów + podpisy
+- `renderAttachment2()` — kalkulacja kosztów: CIF USD→PLN, etapy importu, §3 prowizja, extras, suma
+
+**Poprawki umowy:**
+- Akcyza 0% — widoczna z adnotacją „zwolnione, {fuel_slug}" zamiast ukrytej linii
+- Nr umowy w tytule przelewu depozytowego: `ZWROTNY DEPOZYT GWARANCYJNY {contract_number}`
+- Token bezpieczeństwa w nazwie pliku PDF: `{safe_name}-{bin2hex(random_bytes(4))}.pdf`
+- `UPLOAD_DIR`: `asiaauto/contracts` → `contracts`
+- Wizard krok podpisu: info o formach (odręczny/kwalifikowany/ePUAP)
+
+**Incydent:** `sed -i` na `asiaauto-sync.php` wyzerował plik (0 bajtów). Plik odtworzony
+z dokumentacji w SKILL.md. Lekcja: backup PRZED sed na każdym pliku (nie tylko includes/).
+
+**Błąd przy odtwarzaniu:** `ArgumentCountError: Too few arguments to AsiaAuto_Importer::__construct()`.
+Przyczyna: klasy z wymaganymi argumentami konstruktora (Importer, Sync, Taxonomy) były
+błędnie instantiowane w bootstrap. Poprawka: instantiowanie TYLKO klas no-arg z hookami.
+
+**Klasy static/utility (NIE instantiowane w plugins_loaded):**
+Logger, API, Price, Translator, UI_Translator, Media, Importer, Sync, Rotation, Taxonomy, Order_Content
+
+**Klasy hook (instantiowane w plugins_loaded):**
+CPT, Order, Order_API, Order_Wizard, Contract, Shortcodes, Inventory, Single, Redirects,
+Security, Homepage, Contact, Login + admin-only: Admin, Admin_Manual_Import, Order_Admin,
+Listing_Editor, Gallery_Metabox
+
+---
+
+## Sesja 2026-04-17 — v0.30.9 (B2 SEO)
+
+### Meta/OG/Schema dla ogłoszeń i inventory
+
+**`class-asiaauto-single.php`** — nowe hooki w `__construct()`:
+- `document_title_parts` filter → `{Make} {Model} {Year} – import z Chin`
+- `wp_head` (priority 1) → meta description + OG tags + Schema.org Car
+
+**Schema.org wymagał przeniesienia do `wp_head`:** Elementor single template używa osobnych
+shortcodów (`[asiaauto_gallery]`, `[asiaauto_key_specs]`, etc.) — NIE `[asiaauto_single]`.
+Schema z `render()` nigdy nie była wywoływana. Rozwiązanie: output w `renderMeta()` w `wp_head`.
+
+**Seller name** w Schema: `AsiaAuto.pl` → `Prima Auto` (także w starym `schema()`).
+
+**`class-asiaauto-inventory.php`** — nowe hooki:
+- `document_title_parts` → tytuł z marką/modelem gdy aktywny pojedynczy filtr
+- `wp_head` (priority 2) → meta description + OG; przy 2+ markach → ogólny katalog
+- `renderSeoBlock()` → blok tekstu pod gridem (tylko przy count=1 marka lub model)
+- `getMinPriceForTerm()` → MIN(price) per taxonomy/slug, transient 6h
+
+**Wykrycie strony inventory:** `has_shortcode($post->post_content, 'asiaauto_inventory')` —
+O(1) string search na już załadowanej treści strony. Uwaga: główny URL katalogu to `/samochody/`
+(nie `/oferta/` — to CPT archive). Substrony: `/w-rzeszowie/`, `/w-drodze/`.
+
+**`class-asiaauto-cpt.php`** — term meta `asiaauto_seo_desc` dla `make` i `serie`:
+- Hooki: `{tax}_add_form_fields`, `{tax}_edit_form_fields`, `created_{tax}`, `edited_{tax}`
+- Pole "Opis SEO" widoczne w WP admin → Ogłoszenia → Marki / Modele
+
+**`llms.txt`** — nowy plik w katalogu głównym WP (`public_html/llms.txt`).
+URL-e: `primaauto.com.pl` (docelowa domena, nie `asiaauto.pl`).
+
+**Opisy SEO wgrane do bazy:** 10 marek + 75 modeli przez `INSERT INTO termmeta`.
+Pominięte: modele z chińskimi nazwami w slugu, count <= 2.
+
+---
+
+## ZADANIE 6 — Filtr miast (planowane)
+
+### Lista miast od klienta (2026-04-17)
+
+Guangdong: Guangzhou (广州), Shenzhen (深圳), Foshan (佛山), Dongguan (东莞)
+Fujian: Xiamen (厦门), Fuzhou (福州)
+Guangxi: Beihai (北海), Nanning (南宁)
+Hainan: Haikou (海口), Sanya (三亚)
+
+### Plan (szczegóły w QUEUE.md)
+
+**Krok A:** Weryfikacja — jak API koduje pole `city`, ile ofert per miasto.
+**Krok B:** Filtr w admin (toggle ON/OFF + checkboxy miast), `city_filter_enabled` + `city_filter_cities` w config.
+**Krok C:** Aktualizacja marek (klient prześle listę).
+**Krok D:** Po zatwierdzeniu — backup → wyczyszczenie listings → re-import z filtrem.
+
+Filtr domyślnie **OFF** — obecne ogłoszenia nie znikają od razu.

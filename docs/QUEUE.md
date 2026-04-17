@@ -1,16 +1,14 @@
 # Kolejka zadań — Prima Auto
 
-> Aktualizacja: 2026-04-17 (sesja 4: kolejka wyczyszczona, ZADANIE 6 dodane)
+> Aktualizacja: 2026-04-17 (sesja 5: ZADANIE 6 Krok A+B done, perf transient, trash TTL 7d)
 
 ---
 
-## GRUPA 9.5 — performance (backlog, gdy pojawi się potrzeba)
+## GRUPA 9.5 — performance ✅ DONE (0.30.10)
 
-- [ ] Uruchomić profiler (`?aa_profile=1`) na panelu admina
-- [ ] Zidentyfikować bottleneck (najpewniej 3× COUNT na postmeta w `renderPriceTab`)
-- [ ] Transient cache z invalidate przy `ajaxBulkRecalc` i `saveConfig`
-
-> Wdrożyć gdy Ruslan zgłosi wolne ładowanie admina. Na razie brak sygnału.
+- [x] Zidentyfikowano: 3× COUNT na postmeta (~600ms) + JOINy w `renderPricePreview` (~400ms)
+- [x] Transient `asiaauto_listing_counts` (10min TTL), invalidate po `ajaxBulkRecalc`
+- [x] Trash TTL 30d → 7d (2534 listings w koszu się samooczyści szybciej)
 
 ---
 
@@ -46,22 +44,20 @@ Volvo) mogą wrócić lub zostać usunięte.
 > Uwaga: klient podał też regiony (Fujian, Guangxi, Hainan) — interpretowane jako prowincje,
 > z których wybrano konkretne miasta. Filtr dotyczy miast, nie prowincji.
 
-### Podzadania — Krok A: weryfikacja dostępności ogłoszeń
+### Podzadania — Krok A: weryfikacja dostępności ogłoszeń ✅ DONE (0.30.10)
 
-- [ ] Sprawdzić jak API (Dongchedi/Che168) koduje pole `city` — slugi, ID czy pełna nazwa
-- [ ] Odpytać pierwsze ~50 stron API bez filtra, zebrać unikalne wartości `city`
-- [ ] Zmapować wartości API → lista miast klienta
-- [ ] Zliczyć dostępne ogłoszenia per miasto → tabela: miasto | liczba ofert | zasadność
-- [ ] Przedstawić wyniki klientowi — potwierdzenie finalnej listy
+- [x] Sprawdzone: API `getFilters()` NIE ma filtra `city` — filtr tylko po stronie PHP
+- [x] Scan 80 stron dongchedi (1600 ofert), pole `city` = chińskie znaki (广州, 深圳...)
+- [x] Zmapowane wszystkie miasta z 4 prowincji z co najmniej 1 ofertą
+- [x] Lista finalna: **31 miast** (15 Guangdong + 6 Fujian + 8 Guangxi + 2 Hainan)
+- [x] Nadgorliwość Ruslana skorygowana — dodane m.in. 惠州 (19 ofert), 泉州 (9), 南平 (8), 柳州 (5)
 
-### Podzadania — Krok B: filtr w panelu admina
+### Podzadania — Krok B: filtr w panelu admina ✅ DONE (0.30.10)
 
-- [ ] Nowa opcja w `asiaauto_price_config` (lub osobna): `city_filter_enabled` (bool, domyślnie OFF)
-- [ ] Nowa opcja: `city_filter_cities` (array slugów/kodów miast z API)
-- [ ] UI w panelu admina (sekcja "Import — filtr miast"):
-  - toggle "Filtruj po miastach: TAK/NIE" (domyślnie NIE)
-  - lista miast z checkboxami (wypełniona po weryfikacji z API)
-- [ ] Zastosowanie filtra w `class-asiaauto-sync.php` / `class-asiaauto-api.php` przy buildowaniu query do API
+- [x] Opcja `city_filter_enabled` (bool) + `city_filter_cities` (array `[{zh,pl,province}]`) w `asiaauto_import_config[source]`
+- [x] UI w zakładce "Filtry": toggle + przycisk "Konfiguruj miasta" otwierający modal
+- [x] Modal: 4 sekcje prowincji z checkboxami, per-prowincja "wszystkie/żadne", sekcja "Dodaj miasto" (ZH + PL + prowincja), licznik zaznaczonych
+- [x] Filtr w `AsiaAuto_Importer::isAllowedByConfig()` — skip oferty której `city` nie ma na liście `zh`
 
 ### Podzadania — Krok C: aktualizacja marek
 
