@@ -8,7 +8,7 @@
 
 - **Repo:** `primaauto` (GitHub: `auranet-js/primaauto`)
 - **Produkcja:** `asiaauto.pl`
-- **Plugin:** `asiaauto-sync` v0.29.0-wip (header; faktycznie zawiera patche v0.30.6)
+- **Plugin:** `asiaauto-sync` v0.30.8
 - **Child theme:** `asiaauto` (Hello Elementor parent)
 - **Klient:** Ruslan Prima, PRIMA-AUTO — agencja importu aut z Chin
 

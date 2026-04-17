@@ -1,6 +1,6 @@
 # Kolejka zadań — Prima Auto
 
-> Aktualizacja: 2026-04-16 (sesja 2: CIF fix, panel klienta, version bump)
+> Aktualizacja: 2026-04-17 (sesja 3: załączniki PDF, bezpieczeństwo, wizard, bump 0.30.8)
 
 ## ~~Pending 0: podbicie wersji~~ DONE
 
@@ -35,12 +35,12 @@ Na serwerze jest starszy kod z patchami v0.30.6 na wierzchu.
 
 ## ZADANIE 2 — Załączniki do umowy PDF (GRUPA 10)
 
-> Kod wgrany 2026-04-16. Do testu na nowym zamówieniu z CIF.
+> Kod wgrany 2026-04-16, przetestowane 2026-04-17.
 
 ### Załącznik nr 1 — snapshot aukcji
 
 - [x] `renderAttachment1()` — foto + tabela 12 parametrów + podpisy (wgrane 2026-04-16)
-- [ ] Test: wygenerować PDF z załącznikiem na nowym zamówieniu testowym
+- [x] Test: PDF z załącznikiem na zamówieniu #238868 (2026-04-17) — OK
 
 ### Załącznik nr 2 — kalkulacja kosztów
 
@@ -48,7 +48,16 @@ Na serwerze jest starszy kod z patchami v0.30.6 na wierzchu.
 - [x] `suggestClientCif()` — hint przy inpucie CIF w adminie
 - [x] `calculateOrderPrice()` — auto-przeliczenie price_final po zapisie CIF
 - [x] Fix: `$client_cif` niezdefiniowane → input CIF zawsze pusty po zapisie (2026-04-16)
-- [ ] Test: PDF z oboma załącznikami na nowym zamówieniu
+- [x] Akcyza 0% — widoczna z adnotacją „zwolnione" zamiast ukrytej (2026-04-17)
+- [x] Test: PDF z oboma załącznikami — regeneracja #238868 OK (2026-04-17)
+
+### Poprawki umowy i bezpieczeństwo (sesja 3, 2026-04-17)
+
+- [x] Nr umowy w tytule przelewu depozytowego (deposit-box §1)
+- [x] Token w nazwie pliku PDF (bezpieczeństwo — URL nieodgadywalny)
+- [x] `UPLOAD_DIR` zmieniony z `asiaauto/contracts` na `contracts`
+- [x] Info o formach podpisu w wizardzie klienta (odręczny/kwalifikowany/ePUAP)
+- [x] Bootstrap `asiaauto-sync.php` odtworzony po uszkodzeniu sed, bump 0.30.8
 
 ---
 
