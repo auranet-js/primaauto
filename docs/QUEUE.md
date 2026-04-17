@@ -1,6 +1,6 @@
 # Kolejka zadań — Prima Auto
 
-> Aktualizacja: 2026-04-17 (sesja 5: ZADANIE 6 Krok A+B done, perf transient, trash TTL 7d)
+> Aktualizacja: 2026-04-17 (sesja 6: ZADANIE 6 Krok C+D done, cron bug fixes, bump 0.30.12)
 
 ---
 
@@ -59,19 +59,24 @@ Volvo) mogą wrócić lub zostać usunięte.
 - [x] Modal: 4 sekcje prowincji z checkboxami, per-prowincja "wszystkie/żadne", sekcja "Dodaj miasto" (ZH + PL + prowincja), licznik zaznaczonych
 - [x] Filtr w `AsiaAuto_Importer::isAllowedByConfig()` — skip oferty której `city` nie ma na liście `zh`
 
-### Podzadania — Krok C: aktualizacja marek
+### Podzadania — Krok C: aktualizacja marek ✅ DONE (0.30.12)
 
-- [ ] Klient przesyła zaktualizowaną listę marek
-- [ ] Weryfikacja orphaned termów (Li Auto, NIO, Volvo, Lynk & Co) — usunąć lub zostawić
-- [ ] Ewentualne dodanie brakujących marek jako terminy taksonomii
+- [x] Klient wybrał 66 marek z panelu — zrzuty ekranu z panelu admina
+- [x] Orphaned termy (Li Auto, NIO, Volvo, Lynk & Co) — zostają, część wróci z importem
+- [x] Brakujące marki dodane jako terminy taksonomii przez sync
 
-### Podzadania — Krok D: re-import (po finalizacji filtrów)
+### Podzadania — Krok D: re-import (po finalizacji filtrów) ✅ DONE (0.30.12)
 
-- [ ] Filtr miast przetestowany i zatwierdzony przez klienta
-- [ ] Backup aktualnej bazy ogłoszeń (`mysqldump` listings + postmeta)
-- [ ] Decyzja: ręczny import jednorazowy czy cron automatyczny
-- [ ] Wyczyszczenie aktualnych ogłoszeń (`listings` CPT)
-- [ ] Import z filtrem miast i marek — monitoring pierwszych partii
+- [x] Filtr miast przetestowany i zatwierdzony przez klienta (31 miast)
+- [x] Backup bazy przed purge (`mysqldump` listings + postmeta + options do `~/backups/primaauto/pre-purge-20260417-1524.sql`, 445MB)
+- [x] Purge: 2905 listings → trash (marki OR miasta poza listą, rezerwacje chronione)
+- [x] Bulk-import przez `diag/bulk-import-by-brand.php`: reverse-order pages, MAX_PAGES=50, probe [50,40,30,20,10,5,2,1], parametr API `mark=X` (nie `brand=`)
+- [x] Fix-missing-images: 45/45 (15 OK, 30 TRASH ghost-offers)
+- [x] Cron bug fix: `add_action('asiaauto_sync_changes')` + `cron_schedules` filter — sync faktycznie działa (change_id 2868663 → 2870663 po pierwszym handler fire)
+
+### Cena — zmiana filtru
+
+- Klient obniżył `price_from` 120000 → 75000 CNY (2026-04-17 ~16:10); v4 bulk-import wczytał świeży config, zmiana obowiązuje dla cron syncu.
 
 ### Zależności i uwagi
 
@@ -84,6 +89,7 @@ Volvo) mogą wrócić lub zostać usunięte.
 
 ## Backlog (niski priorytet)
 
+- [ ] SKILL/CLAUDE.md: zasada „MCP tylko gdy lokalnie nie da się" — MCP http round-trip marnuje tokeny, jeśli uruchamiamy Claude Code na Elarze mającej bezpośredni dostęp do plików i `wp` CLI. Dotyczy: `read_file`, `list_dir`, `query_db` (zastąpić `wp db query`), `options` (zastąpić `wp option get`), `stats` (własny `wp eval`). MCP sens zachowuje tylko dla zewnętrznych projektów bez local shell (Claude.ai web).
 - [ ] Krok 4 manual editor — metabox extra_prep (18 zakładek)
 - [ ] Email HTML templates (maile są plain text)
 - [ ] Homepage + Contact CSS → pliki zewnętrzne (z inline)
