@@ -1,0 +1,1400 @@
+{
+  "name": "VICTORINI PRODUCT DESC TECHNISTONE V4",
+  "nodes": [
+    {
+      "parameters": {
+        "toolDescription": "Tavily SERP Results Tool",
+        "method": "POST",
+        "url": "https://api.tavily.com/search",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "parametersBody": {
+          "values": [
+            {
+              "name": "query",
+              "valueProvider": "fieldValue",
+              "value": "=={{ $('Set Product Fields for Agents').item.json.product_name + \" \" + $('Set Product Fields for Agents').item.json.main_category }}"
+            }
+          ]
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+      "typeVersion": 1.1,
+      "position": [
+        1456,
+        816
+      ],
+      "id": "e7f9a611-6959-4fd1-acbb-3871c48221cb",
+      "name": "Tavily search results",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "1SDXvZxl6xBtu0Se",
+          "name": "Tavily Api"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "folder",
+        "name": "={{ $('Set Product Fields for Agents').item.json.product_name }}",
+        "driveId": {
+          "__rl": true,
+          "value": "My Drive",
+          "mode": "list",
+          "cachedResultName": "My Drive",
+          "cachedResultUrl": "https://drive.google.com/drive/my-drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $('Brand Settings').item.json.gdrive_parent }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1952,
+        1040
+      ],
+      "id": "61389975-b3f7-4dda-9bc7-11d962c8fe8d",
+      "name": "Create Article Folder",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "gzxVYEEKpYarmWA6",
+          "name": "Google Drive account kredki"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "folderId": "={{ $json.id }}",
+        "title": "={{ $('Set Product Fields for Agents').item.json.product_name }}"
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        2176,
+        1040
+      ],
+      "id": "29eddd85-12ce-4c57-b04d-7f2d513ef16e",
+      "name": "Create Doc Filename is title",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "6xVBmrStaHdVQu0X",
+          "name": "Google Docs account kredki"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentURL": "={{ $json.id }}",
+        "actionsUi": {
+          "actionFields": [
+            {
+              "action": "insert",
+              "text": "={{ $('Final Description Assembly').item.json.output }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.googleDocs",
+      "typeVersion": 2,
+      "position": [
+        2400,
+        1040
+      ],
+      "id": "0571acd7-5853-4229-a10b-4980cc20a77b",
+      "name": "Add Final Article",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "6xVBmrStaHdVQu0X",
+          "name": "Google Docs account kredki"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        2032,
+        272
+      ],
+      "id": "b40ec2d7-a77e-48bb-b615-5d57a83b167c",
+      "name": "Loop Over Items1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3a433b0f-9957-4b64-ad81-359ab5e521d5",
+              "name": "wordpress_url",
+              "type": "string",
+              "value": "=https://victorini.pl"
+            },
+            {
+              "id": "49664137-2d8a-411b-b991-2ee835447587",
+              "name": "base_id",
+              "value": "app1fTqEAJO5dlrO2",
+              "type": "string"
+            },
+            {
+              "id": "a6429e58-d136-41dc-bb97-99f449ed6f01",
+              "name": "gdrive_parent",
+              "value": "1G_M4I8x2dA-Y5To3zmNC8zfePF21MA1P",
+              "type": "string"
+            },
+            {
+              "id": "018b7078-f47a-4391-b2a8-73057903d351",
+              "name": "woocommerce_consumer_key",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "27cf72fc-30de-43bc-8550-b444ab383e78",
+              "name": "woocommerce_consumer_secret",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d898737e-9c69-49e8-9b2a-279cda4b05ce",
+      "name": "Brand Settings",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        720,
+        272
+      ],
+      "typeVersion": 3.3
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1360,
+        272
+      ],
+      "id": "f32b6fd3-09a8-49c7-b1f3-bd99f2fe3a79",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "mode": "markdownToHtml",
+        "markdown": "={{ $('Final Description Assembly').item.json.output\n  .replace(/^\\s*```(?:\\w+)?\\s*\\n/, '')               // otwarcie na początku\n  .replace(/\\n```$/, '')                              // zamknięcie na końcu\n  .replace(/```(?:markdown|html)?\\s*\\n([\\s\\S]*?)\\n```/g, '$1') // wszystkie bloki w środku\n}}\n",
+        "options": {
+          "simplifiedAutoLink": true,
+          "completeHTMLDocument": false,
+          "emoji": false,
+          "headerLevelStart": 1
+        }
+      },
+      "type": "n8n-nodes-base.markdown",
+      "typeVersion": 1,
+      "position": [
+        1728,
+        1040
+      ],
+      "id": "075c7b33-39d2-465a-862e-7279559d6080",
+      "name": "Markdown"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0f76bbe4-e5db-4b60-83bc-9aebb28d5489",
+              "leftValue": "={{ $json.name }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "24ec5f65-ec9b-46f9-ad78-18aeff660254",
+              "leftValue": "={{ $json.tags?.map(tag => tag.name).includes('content-write') }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1808,
+        272
+      ],
+      "id": "52c1f288-d79b-4cf6-a034-d57225eda0ff",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Brand Settings').item.json.wordpress_url }}/wp-json/wc/v3/products",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "wooCommerceApi",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "tag",
+              "value": "325"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1584,
+        272
+      ],
+      "id": "dff3d5e4-07d5-48fd-a7b0-660a23853c83",
+      "name": "GET - WooCommerce Products",
+      "alwaysOutputData": true,
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "F3xJmha7nDiovEiK",
+          "name": "victorini-woocommerce-consumer"
+        },
+        "wooCommerceApi": {
+          "id": "Z7EFBt5p4uARUMyU",
+          "name": "Victorini"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3cc01dbf-7718-49ae-a463-c0e848a78cc6",
+              "name": "product_id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "7dbd7d60-2454-47ee-b02a-3ffddd588009",
+              "name": "product_name",
+              "value": "={{ $json.name }}",
+              "type": "string"
+            },
+            {
+              "id": "bf205dfc-ce10-40fe-b868-0bebd4de3d33",
+              "name": "product_slug",
+              "value": "={{ $json.slug }}",
+              "type": "string"
+            },
+            {
+              "id": "ccce37af-f230-4d5d-bf74-9e69d965be08",
+              "name": "short_description",
+              "value": "={{ $json.short_description }}",
+              "type": "string"
+            },
+            {
+              "id": "fa3a5b9a-133b-4720-a287-0ee20b1d6167",
+              "name": "current_description",
+              "value": "={{ $json.description }}",
+              "type": "string"
+            },
+            {
+              "id": "826460a4-e2c2-495c-9cb6-007ad033cd59",
+              "name": "categories",
+              "value": "={{ $json.categories.map(cat => cat.name).join(', ') }}",
+              "type": "string"
+            },
+            {
+              "id": "6ad52b16-753e-4be5-acde-c453092d2fb1",
+              "name": "main_category",
+              "value": "={{ $json.categories[0]?.name || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "2b5eb9e5-2be0-4611-9ab8-d2b1f24e8d07",
+              "name": "attributes",
+              "value": "={{ JSON.stringify($json.attributes) }}",
+              "type": "string"
+            },
+            {
+              "id": "54d0de62-4c9d-4b2e-9530-69324f0e4138",
+              "name": "main_image_url",
+              "value": "={{ $json.images[0]?.src || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "4fb7e09b-568b-4df8-a3ef-6536ef1ab07f",
+              "name": "price_info",
+              "value": "={{ 'Cena: ' + ($json.regular_price || $json.price || 'Zapytaj o cenę') }}",
+              "type": "string"
+            },
+            {
+              "id": "20aef72a-4d75-4abc-a6ec-dfb1a952d977",
+              "name": "SKU",
+              "value": "={{ $json.sku || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "d6a7041c-3ba3-4b69-962e-640413863784",
+              "name": "Guidelines",
+              "value": "=Przestrzegaj Brand Guidelines podczas generowania treści dla produktu:\\n{{ $('Aggregate').first().json.data[0].Name }}\\n{{ $('Aggregate').first().json.data[0].Content }}\\n\\nDodatkowe wytyczne dla produktów:\\n- Używaj format pytanie-odpowiedź zgodnie z AEO 2025\\n- Umieść najważniejsze informacje na początku\\n- Używaj punktorów dla łatwiejszego skanowania\\n- Optymalizuj pod wyszukiwanie głosowe\\n- Skoncentruj się na korzyściach i zastosowaniach",
+              "type": "string"
+            },
+            {
+              "id": "df387492-b6b9-491b-b64c-31f3bcdc95a8",
+              "name": "wymiary-min-maks",
+              "value": "=dlugosc_minimalna = {{ $('GET - WooCommerce Products').item.json.meta_data[2].value }}\ndlugosc_maksymalna = {{ $('GET - WooCommerce Products').item.json.meta_data[2].value }}\nszerokosc_minimalna = {{ $('GET - WooCommerce Products').item.json.meta_data[4].value }}\nszerokosc_maksymalna = {{ $('GET - WooCommerce Products').item.json.meta_data[5].value }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2256,
+        272
+      ],
+      "id": "e28f0c5d-4774-4226-a067-4192a6b054c4",
+      "name": "Set Product Fields for Agents"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Zoptymalizuj nazwę produktu:\n\nObecna nazwa: {{ $('Set Product Fields for Agents').item.json.product_name }}\nKategoria: {{ $('Set Product Fields for Agents').item.json.main_category }}\nIntencja: {{ $json.search_intent }}\nGrupa docelowa: {{ $json.target_audience }}\nSłowa kluczowe: {{ $json.technical_keywords }}\nGłówny keyword: {{ $json.main_keyword }}\n\n{\n  \"optimized_title\": \"nowa zoptymalizowana nazwa\",\n  \"seo_improvements\": \"lista ulepszeń SEO\",\n  \"keyword_density\": \"analiza słów kluczowych\"\n}",
+        "options": {
+          "systemMessage": "=Jesteś ekspertem w optymalizacji nazw produktów e-commerce pod kątem SEO, AEO 2025 i konwersji.\n\nOptymalizujesz nazwy produktów aby były:\n- Czytelne i zrozumiałe dla klientów\n- Zawierające kluczowe słowa techniczne\n- Zgodne z intencją wyszukiwania\n- Optymalne dla wyszukiwarek i AI\n\n{{ $('Set Product Fields for Agents').item.json.Guidelines }}\n\nZwracaj tylko JSON bez dodatkowych znaków."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        2192,
+        592
+      ],
+      "id": "2882c09e-9c36-401c-a65b-78873d75a2aa",
+      "name": "Product Title Optimizer"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-2024-11-20",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-2024-11-20"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "You are an SEO-optimized Meta Description Generator. Your task is to generate a compelling, keyword-rich meta description for the provided article. The description should be concise, engaging, and optimized for search engines while accurately summarizing the article’s core value.\n\nGuidelines:\n✅ Length: Keep the meta description between 150–160 characters to ensure full visibility in search results.\n✅ Keyword Optimization: Incorporate primary and secondary keywords naturally, focusing on high-impact phrases relevant to the article.\n✅ Engagement & Clarity:\n\nWrite in an active voice with a clear and compelling hook.\nSummarize the key benefit of the article—why should someone read it?\nAvoid vague statements—be specific about what the article covers.\n✅ Call to Action (Optional, but Preferred): Where possible, include a soft CTA to encourage clicks (e.g., “Discover how…”, “Learn the best strategies…”).\n✅ Formatting:\nUse plain text format.\nNo extra spacing or unnecessary formatting—the output should be clean and ready to use.\nExamples:\nBefore (Weak Example):\n\"This article discusses agentic AI and how it can be used in businesses.\" ❌ Too vague, lacks engagement.\n\nAfter (Optimized Example):\nUnlock the power of agentic AI automation! Learn how businesses enhance efficiency, decision-making, and scalability with self-evolving AI-driven workflows.\n",
+              "role": "system"
+            },
+            {
+              "content": "=Generate a transactional, conversion-focused meta description for this product page. Include action words and commercial intent. Length: 150-160 characters.\n\nProduct: {{ $('Final Description Assembly').item.json.output }}\n\nFocus on:\n- Action verbs (Zamów, Sprawdź, Kup, Skonfiguruj)\n- Commercial benefits (cena, dostawa, jakość)\n- Urgency or value proposition\n- Clear CTA\n\nExamples of transactional tone:\n- \"Zamów narożnik maskujący ciemny dąb - sprawdź cenę i skonfiguruj wymiary online\"\n- \"Kup narożnik podbitki dachowej z dostawą 2 dni - profesjonalna jakość, konkurencyjna cena\"\n\nWAŻNE: met adescription musi zawierać  {{ $('Set Product Insights1').item.json.main_keyword }}"
+            },
+            {
+              "content": "Format the output in plain text",
+              "role": "system"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        2624,
+        1040
+      ],
+      "id": "5ac0148f-6753-4d25-92b2-09716ffcb890",
+      "name": "Product Meta Description",
+      "credentials": {
+        "openAiApi": {
+          "id": "yVgfjs217iqKk6hx",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "={{ $('Brand Settings').item.json.wordpress_url }}/wp-json/wc/v3/products/{{ $('Set Product Fields for Agents').item.json['product_id'] }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "wooCommerceApi",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "description",
+              "value": "={{ $('Markdown').item.json.data }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3296,
+        1040
+      ],
+      "id": "c9006a95-0c24-4ad8-bd20-3fde62d8e012",
+      "name": "WooCommerce Product Updater",
+      "credentials": {
+        "wooCommerceApi": {
+          "id": "Z7EFBt5p4uARUMyU",
+          "name": "Victorini"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "={{ $('Brand Settings').item.json.wordpress_url }}/wp-json/wc/v3/products/{{ $('Set Product Fields for Agents').item.json['product_id'] }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "wooCommerceApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3968,
+        1040
+      ],
+      "id": "98ecabff-b164-4a16-aee4-8f1ec4ab5f76",
+      "name": "Update Product Tags",
+      "credentials": {
+        "wooCommerceApi": {
+          "id": "Z7EFBt5p4uARUMyU",
+          "name": "Victorini"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "={{ $('Brand Settings').item.json.wordpress_url }}/wp-json/wc/v3/products/{{ $('Set Product Fields for Agents').item.json['product_id'] }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "wooCommerceApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"meta_data\": [\n    {\n      \"key\": \"rank_math_focus_keyword\",\n      \"value\": \"{{ $('Set Product Insights1').item.json.main_keyword }}\"\n    },\n    {\n      \"key\": \"rank_math_description\",\n      \"value\": \"{{ $('Product Meta Description').item.json.message.content }}\"\n    }\n  ]\n}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3024,
+        1040
+      ],
+      "id": "3a563dd6-8d1d-4cd3-b196-b937f9a52302",
+      "name": "POST RankMath Info1",
+      "credentials": {
+        "wooCommerceApi": {
+          "id": "Z7EFBt5p4uARUMyU",
+          "name": "Victorini"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 4
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        480,
+        272
+      ],
+      "id": "aa015c21-6bf0-4b76-aef9-33d565104356",
+      "name": "Schedule Trigger1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        464,
+        672
+      ],
+      "id": "e4d92cda-8ce3-46b0-b5d5-9c0ebf722700",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Brand Settings').item.json.wordpress_url }}/wp-json/wc/v3/products/{{ $('Set Product Fields for Agents').item.json.product_id }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "wooCommerceApi",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3504,
+        1040
+      ],
+      "id": "30e1b56f-548e-4d9c-b5fd-c9d18d5d2181",
+      "name": "HTTP Request",
+      "credentials": {
+        "wooCommerceApi": {
+          "id": "Z7EFBt5p4uARUMyU",
+          "name": "Victorini"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const FROM = 325, TO = 326;\nconst input = items[0].json.tags || [];\n\nconst ids = new Set();\nconst tags = [];\nfor (const t of input) {\n  if (!t || typeof t.id !== 'number') continue;\n  const id = t.id === FROM ? TO : t.id;\n  if (!ids.has(id)) { ids.add(id); tags.push({ id }); }\n}\n\nreturn [{ json: { tags } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3712,
+        1040
+      ],
+      "id": "42be7181-b8a5-4e54-919b-3bc7fdad1910",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1JjsX5Yz6cQB3RL0szRh9CjO0zogmk6ojIk8INGdnt48",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Brand Guidlines",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1JjsX5Yz6cQB3RL0szRh9CjO0zogmk6ojIk8INGdnt48/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1152,
+        272
+      ],
+      "id": "07db78f7-9f17-43d2-89f6-3631e5655708",
+      "name": "Get Brand Guidlines",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "7sLyl8vTXx9s9QaR",
+          "name": "N8N WITOLD 09.2025"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// ============================================================\n// KNOWLEDGE SEARCH ENGINE v2 – Konglomerat Kwarcowy + Legacy\n// ============================================================\n\n// --- 1. Pobierz dane produktu ---\nconst productName = $('Set Product Fields for Agents').item.json.product_name || '';\nconst category = $('Set Product Fields for Agents').item.json.main_category || '';\nconst shortDescription = $('Set Product Fields for Agents').item.json.short_description || '';\nconst currentDescription = $('Set Product Fields for Agents').item.json.current_description || '';\nconst attributes = $('Set Product Fields for Agents').item.json.attributes || '';\n\nconst searchText = `${productName} ${category} ${shortDescription} ${currentDescription}`.toLowerCase();\n\n// --- 2. Sprawdź czy to konglomerat kwarcowy ---\nconst isQuartz = searchText.includes('konglomerat') ||\n  searchText.includes('kwarcow') ||\n  searchText.includes('quartz') ||\n  searchText.includes('crystal') ||\n  searchText.includes('noble ') ||\n  searchText.includes('starlight') ||\n  searchText.includes('harmonia') ||\n  searchText.includes('gobi') ||\n  searchText.includes('elegance') ||\n  searchText.includes('mystery') ||\n  searchText.includes('brilliant') ||\n  searchText.includes('taurus') ||\n  searchText.includes('glencoe') ||\n  searchText.includes('altamonte') ||\n  searchText.includes('ambiente') ||\n  searchText.includes('badal');\n\nif (!isQuartz) {\n  // --- LEGACY PATH: stary silnik dla nie-kwarcowych materiałów ---\n  const knowledgeBase = $('Knowledge Base - Materials').item.json.materials_database;\n  const materials = knowledgeBase.split('MATERIAŁ: ').filter(s => s.trim().length > 0);\n  const foundMaterials = [];\n  const foundKeywords = [];\n\n  materials.forEach(material => {\n    const lines = material.split('\\n');\n    const materialName = lines[0].trim().toLowerCase();\n    const keywords = [materialName, materialName.replace(' ', ''), materialName.split(' ')[0]];\n\n    if (materialName.includes('konglomerat marmurowy')) keywords.push('aglomarmur', 'marmur', 'kamień');\n    if (materialName.includes('pcv') || materialName.includes('pvc')) keywords.push('pcv', 'pvc', 'polichlorek');\n    if (materialName.includes('blacha')) keywords.push('trapezowa', 'ryflowana', 'falisty');\n    if (materialName.includes('stal')) keywords.push('nierdzewna', 'inox', 'ocynk');\n    if (materialName.includes('aluminium')) keywords.push('alu', 'aluminum');\n    if (materialName.includes('hpl')) keywords.push('laminat', 'wysokociśnieniowy');\n\n    const found = keywords.some(kw => { if (searchText.includes(kw)) { foundKeywords.push(kw); return true; } return false; });\n    if (found) foundMaterials.push(material);\n  });\n\n  return [{\n    json: {\n      is_quartz: false,\n      relevant_knowledge: foundMaterials.join('\\n\\n') || 'Brak dodatkowej wiedzy technicznej dla tego materiału.',\n      found_keywords: [...new Set(foundKeywords)].join(', '),\n      searched_in: searchText,\n      knowledge_found: foundMaterials.length > 0,\n      // puste pola kwarcowe (kompatybilność)\n      color_info: '',\n      collection_info: '',\n      application_info: '',\n      care_info: '',\n      faq_pool: '',\n      seo_keywords: '',\n      comparisons: '',\n      style_recommendations: ''\n    }\n  }];\n}\n\n// ============================================================\n// --- QUARTZ PATH: inteligentne wyszukiwanie kwarcowe ---\n// ============================================================\n\n// --- 3. Identyfikuj kolor produktu z nazwy ---\nconst colorLookup = $('Knowledge Base - Materials').item.json.quartz_colors || '';\nconst colorLines = colorLookup.split('\\n').filter(l => l.includes('|'));\n\nlet matchedColor = null;\nconst productNameLower = productName.toLowerCase();\n\nfor (const line of colorLines) {\n  const parts = line.split('|');\n  if (parts.length < 6) continue;\n  const colorName = parts[0].trim();\n  if (productNameLower.includes(colorName.toLowerCase())) {\n    matchedColor = {\n      name: colorName,\n      collection: parts[1].trim(),\n      baseColor: parts[2].trim(),\n      description: parts[3].trim(),\n      finishes: parts[4].trim(),\n      styles: parts[5].trim()\n    };\n    break;\n  }\n}\n\n// --- 4. Identyfikuj kolekcję ---\nconst collectionsDB = $('Knowledge Base - Materials').item.json.quartz_collections || '';\nlet collectionInfo = '';\n\nconst collectionName = matchedColor ? matchedColor.collection : '';\nif (collectionName) {\n  const collectionMarker = 'KOLEKCJA: ' + collectionName;\n  const startIdx = collectionsDB.indexOf(collectionMarker);\n  if (startIdx !== -1) {\n    const nextCollection = collectionsDB.indexOf('\\nKOLEKCJA: ', startIdx + 1);\n    collectionInfo = nextCollection !== -1\n      ? collectionsDB.substring(startIdx, nextCollection).trim()\n      : collectionsDB.substring(startIdx).trim();\n  }\n}\n\n// --- 5. Identyfikuj kategorię zastosowania ---\nconst applicationsDB = $('Knowledge Base - Materials').item.json.quartz_applications || '';\nlet applicationInfo = '';\nlet applicationCategory = '';\n\nconst categoryLower = category.toLowerCase();\nif (categoryLower.includes('blat') && categoryLower.includes('kuchenn')) {\n  applicationCategory = 'Blaty kuchenne';\n} else if (categoryLower.includes('blat') && categoryLower.includes('łazienk')) {\n  applicationCategory = 'Blaty łazienkowe';\n} else if (categoryLower.includes('schod') || productNameLower.includes('stopień') || productNameLower.includes('podstopień') || productNameLower.includes('stopnic') || productNameLower.includes('podstopnic')) {\n  applicationCategory = 'Schody wewnętrzne';\n} else if (categoryLower.includes('parapet')) {\n  applicationCategory = 'Parapety wewnętrzne';\n}\n\nif (applicationCategory) {\n  const appMarker = 'ZASTOSOWANIE: ' + applicationCategory;\n  const startIdx = applicationsDB.indexOf(appMarker);\n  if (startIdx !== -1) {\n    const nextApp = applicationsDB.indexOf('\\nZASTOSOWANIE: ', startIdx + 1);\n    applicationInfo = nextApp !== -1\n      ? applicationsDB.substring(startIdx, nextApp).trim()\n      : applicationsDB.substring(startIdx).trim();\n  }\n}\n\n// fallback: jeśli nie znaleziono konkretnej kategorii, daj ogólne info\nif (!applicationInfo && applicationsDB) {\n  // Szukaj po słowach kluczowych z nazwy produktu\n  if (productNameLower.includes('blat kuchenny') || productNameLower.includes('blat kuchenn')) {\n    applicationCategory = 'Blaty kuchenne';\n  } else if (productNameLower.includes('blat łazienkowy') || productNameLower.includes('blat łazienk')) {\n    applicationCategory = 'Blaty łazienkowe';\n  } else if (productNameLower.includes('stopień') || productNameLower.includes('podstopień') || productNameLower.includes('stopnic') || productNameLower.includes('podstopnic')) {\n    applicationCategory = 'Schody wewnętrzne';\n  } else if (productNameLower.includes('parapet')) {\n    applicationCategory = 'Parapety wewnętrzne';\n  }\n  \n  if (applicationCategory) {\n    const appMarker = 'ZASTOSOWANIE: ' + applicationCategory;\n    const startIdx = applicationsDB.indexOf(appMarker);\n    if (startIdx !== -1) {\n      const nextApp = applicationsDB.indexOf('\\nZASTOSOWANIE: ', startIdx + 1);\n      applicationInfo = nextApp !== -1\n        ? applicationsDB.substring(startIdx, nextApp).trim()\n        : applicationsDB.substring(startIdx).trim();\n    }\n  }\n}\n\n// --- 6. Pobierz pielęgnację, certyfikaty i porównania ---\nconst careCertsDB = $('Knowledge Base - Materials').item.json.quartz_care_certs || '';\n\n// Wyciągnij sekcję porównań\nlet comparisons = '';\nconst compMarker = 'PORÓWNANIA MATERIAŁOWE:';\nconst compIdx = careCertsDB.indexOf(compMarker);\nif (compIdx !== -1) {\n  comparisons = careCertsDB.substring(compIdx).trim();\n}\n\n// --- 7. Pobierz FAQ z puli ---\nconst faqDB = $('Knowledge Base - Materials').item.json.quartz_faq || '';\n\n// Wybierz FAQ relevantne dla kategorii\nlet faqPool = faqDB; // daj pełną pulę, agent wybierze odpowiednie\n\n// --- 8. SEO keywords ---\nconst seoDB = $('Knowledge Base - Materials').item.json.quartz_seo || '';\nlet seoKeywords = '';\nlet styleRecommendations = '';\n\n// Wyciągnij keywords per kategoria z seoDB\nif (applicationCategory === 'Blaty kuchenne') {\n  seoKeywords = 'blat kuchenny z konglomeratu kwarcowego, blat kuchenny kwarcowy, blaty kuchenne z kamienia kwarcowego, nieporowaty blat kuchenny, higieniczny blat kuchenny';\n} else if (applicationCategory === 'Blaty łazienkowe') {\n  seoKeywords = 'blat łazienkowy z konglomeratu kwarcowego, wodoodporny blat łazienkowy, blat pod umywalkę kwarcowy, blat łazienkowy kamień kwarcowy';\n} else if (applicationCategory === 'Schody wewnętrzne') {\n  seoKeywords = 'schody z konglomeratu kwarcowego, stopnica kwarcowa, stopień schodowy kamień kwarcowy, schody wewnętrzne konglomerat, podstopnica kwarcowa';\n} else if (applicationCategory === 'Parapety wewnętrzne') {\n  seoKeywords = 'parapet wewnętrzny z konglomeratu kwarcowego, parapet kwarcowy, parapet z kamienia kwarcowego, parapet na wymiar konglomerat';\n}\n\n// Dodaj keywords kolorystyczne jeśli znaleziono kolor\nif (matchedColor) {\n  const colorKw = matchedColor.baseColor + ' konglomerat kwarcowy, ' + matchedColor.baseColor + ' kamień kwarcowy';\n  seoKeywords = seoKeywords ? seoKeywords + ', ' + colorKw : colorKw;\n}\n\n// Style wnętrz\nif (matchedColor && matchedColor.styles) {\n  const stylesArr = matchedColor.styles.split(',').map(s => s.trim());\n  const styleMap = seoDB.match(/STYLE WNĘTRZ[\\s\\S]*?(?=TOP 10|$)/)?.[0] || '';\n  styleRecommendations = `Rekomendowane style wnętrz dla ${matchedColor.name}: ${stylesArr.join(', ')}`;\n}\n\n// --- 9. Zbuduj pakiet wiedzy materiałowej ---\nconst materialsDB = $('Knowledge Base - Materials').item.json.materials_database || '';\nlet quartzMaterialInfo = '';\nconst quartzMarker = 'MATERIAŁ: Konglomerat kwarcowy';\nconst qIdx = materialsDB.indexOf(quartzMarker);\nif (qIdx !== -1) {\n  const nextMat = materialsDB.indexOf('\\nMATERIAŁ: ', qIdx + 1);\n  quartzMaterialInfo = nextMat !== -1\n    ? materialsDB.substring(qIdx, nextMat).trim()\n    : materialsDB.substring(qIdx).trim();\n}\n\n// --- 10. Kompiluj wynik ---\nconst colorInfoStr = matchedColor\n  ? `Kolor: ${matchedColor.name} | Kolekcja: ${matchedColor.collection} | Odcień bazowy: ${matchedColor.baseColor} | Opis: ${matchedColor.description} | Wykończenia: ${matchedColor.finishes} | Style: ${matchedColor.styles}`\n  : 'Kolor nierozpoznany w bazie – użyj ogólnych informacji o konglomeracie kwarcowym';\n\n// Relevant knowledge = materiał + zastosowanie + kolekcja (skompresowane)\nconst relevantKnowledge = [\n  quartzMaterialInfo,\n  applicationInfo ? `\\n${applicationInfo}` : '',\n  collectionInfo ? `\\nINFO O KOLEKCJI: ${collectionInfo.substring(0, 500)}` : '',\n  matchedColor ? `\\nKOLOR PRODUKTU: ${colorInfoStr}` : ''\n].filter(Boolean).join('\\n');\n\nreturn [{\n  json: {\n    is_quartz: true,\n    relevant_knowledge: relevantKnowledge,\n    found_keywords: ['konglomerat kwarcowy', applicationCategory, matchedColor?.name, matchedColor?.collection].filter(Boolean).join(', '),\n    searched_in: searchText,\n    knowledge_found: true,\n    color_info: colorInfoStr,\n    collection_info: collectionInfo.substring(0, 800),\n    application_info: applicationInfo,\n    care_info: careCertsDB.substring(0, careCertsDB.indexOf('PORÓWNANIA') > 0 ? careCertsDB.indexOf('PORÓWNANIA') : careCertsDB.length).trim(),\n    faq_pool: faqPool,\n    seo_keywords: seoKeywords,\n    comparisons: comparisons,\n    style_recommendations: styleRecommendations\n  }\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1904,
+        592
+      ],
+      "id": "b9a273f1-6d0c-42af-a5fc-2f2689891b5b",
+      "name": "Knowledge Search Engine"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1184,
+        800
+      ],
+      "id": "9cdb1270-069d-474d-91f5-9f6857621e65",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "yOOUBophRLg3tIXj",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Pobierz dane z agregatora\nconst rawData = items[0].json;\n\nlet outputData;\n\nif (rawData.output) {\n  // Wyczyść JSON z backtickow markdown\n  let cleaned = rawData.output;\n  // Usuń ```json ... ``` oraz ``` ... ```\n  cleaned = cleaned.replace(/^\\s*```(?:json)?\\s*\\n?/i, '').replace(/\\n?\\s*```\\s*$/i, '');\n  cleaned = cleaned.trim();\n  \n  try {\n    outputData = JSON.parse(cleaned);\n  } catch (e) {\n    // Fallback: spróbuj wyciągnąć JSON z tekstu\n    const jsonMatch = cleaned.match(/\\{[\\s\\S]*\\}/);\n    if (jsonMatch) {\n      try {\n        outputData = JSON.parse(jsonMatch[0]);\n      } catch (e2) {\n        // Ostateczny fallback\n        outputData = {\n          writing_style: 'profesjonalny i techniczny',\n          writing_tone: 'przyjazny i ekspercki',\n          search_intent: 'commercial',\n          target_audience: 'właściciele domów i mieszkań, projektanci wnętrz',\n          product_benefits: [],\n          common_questions: [],\n          technical_keywords: [],\n          application_keywords: []\n        };\n      }\n    } else {\n      outputData = {\n        writing_style: 'profesjonalny i techniczny',\n        writing_tone: 'przyjazny i ekspercki',\n        search_intent: 'commercial',\n        target_audience: 'właściciele domów i mieszkań, projektanci wnętrz',\n        product_benefits: [],\n        common_questions: [],\n        technical_keywords: [],\n        application_keywords: []\n      };\n    }\n  }\n} else if (rawData.data && Array.isArray(rawData.data)) {\n  outputData = rawData.data[0];\n} else {\n  outputData = rawData;\n}\n\n// Funkcja pomocnicza do bezpiecznego join\nconst safeJoin = (value, separator = ', ') => {\n  if (Array.isArray(value)) {\n    return value.join(separator);\n  }\n  return value || '';\n};\n\nreturn [\n  {\n    json: {\n      writing_style: safeJoin(outputData.writing_style),\n      writing_tone: safeJoin(outputData.writing_tone),\n      search_intent: safeJoin(outputData.search_intent),\n      target_audience: safeJoin(outputData.target_audience),\n      product_benefits: safeJoin(outputData.product_benefits),\n      common_questions: safeJoin(outputData.common_questions),\n      technical_keywords: safeJoin(outputData.technical_keywords),\n      application_keywords: safeJoin(outputData.application_keywords),\n      main_keyword: $('Set Product Fields for Agents').item.json.product_name\n        .split(' ')\n        .slice(0, 4)\n        .join(' ')\n        .toLowerCase()\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1664,
+        592
+      ],
+      "id": "ec3c7c83-a415-48be-bfc3-eeff66420f93",
+      "name": "Set Product Insights1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        2192,
+        784
+      ],
+      "id": "80178fd1-241d-4222-b27f-1aada2c9dbd1",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "yOOUBophRLg3tIXj",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        2528,
+        800
+      ],
+      "id": "15a2367b-eef0-4dd8-80d8-e37c9c6781cc",
+      "name": "Google Gemini Chat Model2",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "yOOUBophRLg3tIXj",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        3264,
+        784
+      ],
+      "id": "55ba9d6e-0384-4913-a008-eab2507c3ed0",
+      "name": "Google Gemini Chat Model3",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "yOOUBophRLg3tIXj",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        3600,
+        784
+      ],
+      "id": "011b9297-96f3-4ae5-8217-e8aecbd79ba1",
+      "name": "Google Gemini Chat Model4",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "yOOUBophRLg3tIXj",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        3936,
+        800
+      ],
+      "id": "a542d291-8060-42f8-a841-9f48bb4450be",
+      "name": "Google Gemini Chat Model5",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "yOOUBophRLg3tIXj",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        2896,
+        800
+      ],
+      "id": "eab68cb1-ad8b-4f4c-b163-edd42374bef0",
+      "name": "Google Gemini Chat Model7",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "yOOUBophRLg3tIXj",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Napisz intro (2-3 zdania, max 60 słów):\n\nProdukt: {{ $('Set Product Fields for Agents').item.json.product_name }}\nKategoria: {{ $('Set Product Fields for Agents').item.json.main_category }}\nGłówny keyword: {{ $('Set Product Insights1').item.json.main_keyword }}\nKolor: {{ $('Knowledge Search Engine').item.json.color_info || 'brak danych' }}\nStyl wnętrz: {{ $('Knowledge Search Engine').item.json.style_recommendations || 'brak danych' }}\n\nFormat: plain text, BEZ nagłówka ## ani #, BEZ markdown bold.",
+        "options": {
+          "systemMessage": "=Jesteś doradcą w showroomie kamieniarskim. Piszesz wprowadzenia do opisów produktów — konkretnie, bez pustych superlatywów.\n\nZASADY TWARDE:\n- Dokładnie 2-3 zdania, łącznie 40-60 słów\n- Pierwsze zdanie MUSI zawierać główny keyword produktu\n- Podaj: CO to jest + Z CZEGO (materiał, kolekcja, kolor) + GŁÓWNA PRZEWAGA (1 konkretna)\n- Ostatnie zdanie prowadzi do sekcji korzyści\n\nZAKAZANE SŁOWA I FRAZY (generujesz je za często — BEZWZGLĘDNIE unikaj):\n\"podnieś prestiż\", \"przekształć swoją\", \"oaza luksusu\", \"niezrównana\", \"wyjątkowa jakość\", \"ponadczasowa elegancja\", \"wyobraź sobie\", \"odkryj\", \"szukasz...?\", \"idealne rozwiązanie dla tych, którzy pragną\"\n\nZAMIAST SUPERLATYWÓW → FAKTY:\n❌ \"niezrównana trwałość\" → ✅ \"twardość przewyższająca granit\"\n❌ \"wyjątkowa higiena\" → ✅ \"absorpcja wody 0,02%, certyfikat NSF\"\n❌ \"luksusowy wygląd\" → ✅ \"głęboka czerń z kolekcji Essential Collection\"\n\nWZORY DOBRYCH INTRO (dopasuj do kategorii):\n- Blat kuchenny: \"[Nazwa] z konglomeratu kwarcowego to powierzchnia, na której możesz gotować bez stresu — [1 parametr], [1 cecha], na wymiar.\"\n- Blat łazienkowy: \"[Nazwa] eliminuje problem pleśni i zacieków — [cecha materiału], [kolor z kolekcji], wykończenie [opcje].\"\n- Schody: \"[Nazwa] wytrzymuje codzienne użytkowanie bez zarysowań — [parametr twardości], [kolor], grubość [X] cm.\"\n- Parapety: \"[Nazwa] nie boi się kondensatu ani doniczek — [parametr absorpcji], na wymiar do [max] cm.\"\n\nKRYTYCZNE ZASADY NAZEWNICTWA:\n- Victorini = firma. victorini.pl = sklep online\n- NIGDY \"firma victorini.pl\", \"z naszej kolekcji\", \"nasza oferta\"\n- Pisz \"z kolekcji [nazwa]\", \"oferta Victorini\"\n\n{{ $('Set Product Fields for Agents').item.json.Guidelines }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        2912,
+        592
+      ],
+      "id": "987733ef-ed0c-45c2-bfe9-1c45a6e4f20c",
+      "name": "Product Intro Generator"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Napisz CTA (2-3 zdania):\n\nProdukt: {{ $('Set Product Fields for Agents').item.json.product_name }}\nKategoria: {{ $('Set Product Fields for Agents').item.json.main_category }}\n\nFormat: plain text, bez nagłówka, bez markdown linków.",
+        "options": {
+          "systemMessage": "=Tworzysz CTA (Call to Action) dla produktów kamiennych na wymiar. Dokładnie 2-3 zdania.\n\nSTRUKTURA CTA:\nZdanie 1: Czasownik akcji + nazwa produktu + zastosowanie + \"korzystając z kalkulatora na victorini.pl\"\nZdanie 2: Jedna konkretna możliwość personalizacji (wymiary / wykończenie / grubość)\nZdanie 3: \"Potrzebujesz wsparcia? Zadzwoń: 14 626 64 58 lub napisz na zamowienia@victorini.pl.\"\n\nCZASOWNIKI AKCJI (rotuj między nimi):\nSkonfiguruj, Wylicz cenę, Zaprojektuj, Zamów, Dopasuj\n\nZASADY:\n- Plain text, bez nagłówka, bez bold\n- NIE używaj markdown linków [tekst](url) — pisz: victorini.pl\n- Dane kontaktowe: tel. 14 626 64 58, zamowienia@victorini.pl\n- NIGDY nie wymyślaj innych danych kontaktowych\n\n{{ $('Set Product Fields for Agents').item.json.Guidelines }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        3600,
+        592
+      ],
+      "id": "46008c3a-7663-469e-8f69-84748bb1627b",
+      "name": "CTA Generator"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Stwórz specyfikację techniczną HTML:\n\nProdukt: {{ $('Set Product Fields for Agents').item.json.product_name }}\nAtrybuty JSON: {{ $('Set Product Fields for Agents').item.json.attributes }}\nKategoria: {{ $('Set Product Fields for Agents').item.json.main_category }}\nSKU: {{ $('Set Product Fields for Agents').item.json.SKU }}\nWiedza o materiale: {{ $('Knowledge Search Engine').item.json.relevant_knowledge || '' }}\nKolor: {{ $('Knowledge Search Engine').item.json.color_info || '' }}\nKolekcja: {{ $('Knowledge Search Engine').item.json.collection_info || '' }}\nPielęgnacja: {{ $('Knowledge Search Engine').item.json.care_info || '' }}\nWymiary: {{ $('Set Product Fields for Agents').item.json['wymiary-min-maks'] || '' }}\n\nFormat: czysty HTML (h3 + table), bez wrapper div, bez CSS classes.",
+        "options": {
+          "systemMessage": "=Generujesz tabelę specyfikacji technicznej w czystym HTML dla WordPress.\n\nFORMAT WYJŚCIOWY:\n<h3>Specyfikacja techniczna</h3>\n<table>\n<tr><th>Parametr</th><th>Wartość</th></tr>\n...wiersze...\n<tr><td>Cena</td><td>Użyj kalkulatora do wyliczenia</td></tr>\n</table>\n\nWYMAGANE PARAMETRY — ZAWSZE uwzględnij te wiersze (jeśli dane są dostępne):\n1. Materiał\n2. Kolekcja (np. Essential Collection, Noble Collection)\n3. Kolor (pełna nazwa np. Taj Mahal Gold)\n4. Odcień bazowy (np. Beżowy, Czarny, Biały)\n5. Grubość / Dostępne grubości\n6. Wykończenie — ZAWSZE pisz: Polished (standard)\n7. Narożniki — TYLKO dla schodów (stopnice, podstopnice)\n8. Skład\n9. Gęstość\n10. Absorpcja wody\n11. Wytrzymałość na zginanie\n12. Odporność na mróz\n13. Odporność na plamy\n14. Waga dla danej grubości\n15. Max wymiar płyty\n16. Pielęgnacja (krótko: Wilgotna ściereczka, zwykły detergent, bez impregnacji)\n17. Certyfikaty\n18. Gwarancja\n19. SKU\n20. Cena — ZAWSZE ostatni wiersz: Użyj kalkulatora do wyliczenia\n\nWAŻNE O WYKOŃCZENIACH:\n- Wszystkie produkty są domyślnie w wykończeniu Polished — w tabeli ZAWSZE pisz: Polished (standard)\n- NIE wymieniaj Matt, Terra ani innych wykończeń w tabeli\n- Informacja o dodatkowych wykończeniach pojawia się w FAQ\n\nZABRONIONE: wiersze opisowe, marketingowe, z zaletami. Każda komórka td = max 15 słów, bez formatowania HTML wewnątrz.\n\n{{ $('Set Product Fields for Agents').item.json.Guidelines }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        3920,
+        592
+      ],
+      "id": "58b8896b-aa81-403a-850c-a494a1fa5a94",
+      "name": "Technical Specs Generator"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Stwórz 6 pytań FAQ:\n\nProdukt: {{ $('Set Product Fields for Agents').item.json.product_name }}\nKategoria: {{ $('Set Product Fields for Agents').item.json.main_category }}\nAtrybuty: {{ $('Set Product Fields for Agents').item.json.attributes }}\nSKU: {{ $('Set Product Fields for Agents').item.json.SKU }}\nFAQ z bazy wiedzy: {{ $('Knowledge Search Engine').item.json.faq_pool || '' }}\nPorównania: {{ $('Knowledge Search Engine').item.json.comparisons || '' }}\nPielęgnacja: {{ $('Knowledge Search Engine').item.json.care_info || '' }}\nKolor: {{ $('Knowledge Search Engine').item.json.color_info || '' }}\nZastosowania: {{ $('Knowledge Search Engine').item.json.application_info || '' }}\nDostępne wykończenia z bazy koloru: {{ $('Knowledge Search Engine').item.json.color_info || '' }}\n\nPytania jak klient w showroomie. Odpowiedzi 1-3 zdań, bez marketingu.",
+        "options": {
+          "systemMessage": "=Jesteś ekspertem FAQ dla e-commerce, zgodnym z AEO 2025 i schema.org FAQPage.\n\nZASADA NADRZĘDNA — ZAKAZ DUPLIKACJI:\nSekcja korzyści JUŻ opisuje: odporność materiału, higienę, porównania, estetykę.\nFAQ NIE MOŻE powtarzać tych informacji innymi słowami. Skup się na pytaniach PRAKTYCZNYCH i KONFIGURACYJNYCH.\n\nSTRUKTURA 6 PYTAŃ:\n\nPytania 1-2: PRAKTYCZNE UŻYTKOWANIE\nNie \"czy jest odporny\" (to jest w korzyściach!), ale:\n- \"Czy wymaga impregnacji?\" — krótko: nie\n- \"Jak czyścić na co dzień?\" — konkretna instrukcja\n- \"Czy mogę postawić gorący garnek?\" — ostrzeżenie + rada\n- \"Czego unikać przy czyszczeniu?\" — lista zakazanych środków\n\nPytanie 3: KONFIGURACYJNE — MUSI zawierać informację o wykończeniach:\n- Produkt jest domyślnie w wykończeniu Polished (polerowanym)\n- Sprawdź w polu \"Dostępne wykończenia z bazy koloru\" czy dany kolor ma opcje Matt lub Terra\n- Jeśli w bazie koloru widnieje \"polished,matt\" → napisz: \"Produkt dostarczany jest w standardowym wykończeniu Polished. Jeśli interesuje Cię wykończenie Matt, skontaktuj się z Victorini — tel. 14 626 64 58 lub zamowienia@victorini.pl.\"\n- Jeśli w bazie koloru widnieje \"polished,matt,terra\" → napisz analogicznie dodając Terra\n- Jeśli TYLKO \"polished\" → nie wspominaj o innych wykończeniach, skup się na innych opcjach konfiguracji (grubości, narożniki, wymiary)\n- Dodatkowo wymień inne opcje konfiguracji właściwe dla kategorii (narożniki dla schodów, grubości dla blatów)\n\nPytanie 4: PORÓWNAWCZE — ALE INNE niż w korzyściach:\nJeśli korzyści porównują z granitem — FAQ porównuje z laminatem lub drewnem\nJeśli korzyści porównują z marmurem — FAQ porównuje z ceramiką lub Corianem\n\nPytanie 5: O VICTORINI:\n\"Dlaczego warto zamówić w Victorini?\"\nOdpowiedź: kalkulator na victorini.pl, profesjonalne doradztwo, gwarancja, kontakt\n\nPytanie 6: SPECYFICZNE — coś unikalnego dla tego produktu:\nWaga na m2, max wymiar płyty, możliwość montażu bez fug, czas gwarancji\n\nFORMAT:\n**Pytanie naturalne?**\nOdpowiedź 1-3 zdań. Konkrety, bez marketingu.\n\nDANE KONTAKTOWE: Victorini, victorini.pl, zamowienia@victorini.pl, tel. 14 626 64 58\n\nZASADY NAZEWNICTWA:\n- Victorini = firma. victorini.pl = sklep online\n- NIGDY \"firma victorini.pl\"\n- NIE używaj składni markdown [tekst](url). Pisz: victorini.pl\n\n{{ $('Set Product Fields for Agents').item.json.Guidelines }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        3264,
+        592
+      ],
+      "id": "3f6a1c9a-bbf0-44e9-880d-2179171402e8",
+      "name": "FAQ Generator"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ============================================================\n// FINAL DESCRIPTION ASSEMBLY v3.1 — rozszerzony regex FAQ\n// ============================================================\n\nconst intro = ($('Product Intro Generator').item.json.output || '').trim();\nconst benefits = ($('Product Benefits Generator').item.json.output || '').trim();\nconst specs = ($('Technical Specs Generator').item.json.output || '').trim();\nconst faq = ($('FAQ Generator').item.json.output || '').trim();\nconst cta = ($('CTA Generator').item.json.output || '').trim();\n\nfunction cleanIntro(text) {\n  return text\n    .replace(/^\\s*#{1,3}\\s+.*\\n+/, '')\n    .trim();\n}\n\nfunction cleanFaq(text) {\n  // Usuń WSZYSTKIE meta-zdania przed pierwszym pytaniem **\n  // Łapie: \"Oto 6 pytań FAQ...\", \"Oto pytania i odpowiedzi...\", \n  // \"Poniżej FAQ...\", \"Sekcja FAQ...\", \"Przygotowałem...\"\n  // Strategia: wytnij wszystko przed pierwszym **\n  const firstBold = text.indexOf('**');\n  if (firstBold > 0) {\n    // Jest tekst przed pierwszym ** — sprawdź czy to meta-zdanie\n    const before = text.substring(0, firstBold).trim();\n    // Jeśli to krótki tekst (< 500 znaków) i nie zawiera nagłówka ## — to meta-zdanie\n    if (before.length < 500 && !before.includes('##')) {\n      text = text.substring(firstBold);\n    }\n  }\n  return text.trim();\n}\n\nfunction cleanCta(text) {\n  return text\n    .replace(/^\\s*#{1,3}\\s+.*\\n+/, '')\n    .trim();\n}\n\nfunction ensureBenefitsHeader(text) {\n  if (/^\\s*##\\s+Główne korzyści/i.test(text)) {\n    return text;\n  }\n  return '## Główne korzyści:\\n\\n' + text;\n}\n\nconst sections = [];\n\nif (intro) {\n  sections.push(cleanIntro(intro));\n}\n\nif (benefits) {\n  sections.push(ensureBenefitsHeader(benefits));\n}\n\nif (specs) {\n  sections.push(specs);\n}\n\nsections.push('---');\n\nif (faq) {\n  sections.push(cleanFaq(faq));\n}\n\nif (cta) {\n  sections.push(cleanCta(cta));\n}\n\nlet finalOutput = sections.join('\\n\\n');\n\nfinalOutput = finalOutput\n  .replace(/^\\s*```(?:markdown|html)?\\s*\\n/gm, '')\n  .replace(/\\n```\\s*$/gm, '')\n  .replace(/```(?:markdown|html)?\\s*\\n([\\s\\S]*?)\\n```/g, '$1');\n\nfinalOutput = finalOutput.replace(/\\n{3,}/g, '\\n\\n');\n\nreturn [{ json: { output: finalOutput } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4352,
+        592
+      ],
+      "id": "a2fbd086-9dbe-4161-a93e-9a494b4914f0",
+      "name": "Final Description Assembly"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Stwórz sekcję korzyści (definicja + 5 bulletów, każdy max 3 zdania):\n\nProdukt: {{ $('Set Product Fields for Agents').item.json.product_name }}\nZoptymalizowany tytuł: {{ $('Product Title Optimizer').item.json.output }}\nKategoria: {{ $('Set Product Fields for Agents').item.json.main_category }}\nAtrybuty WooCommerce: {{ $('Set Product Fields for Agents').item.json.attributes }}\nGrupa docelowa: {{ $('Set Product Insights1').item.json.target_audience }}\nKorzyści AI: {{ $('Set Product Insights1').item.json.product_benefits }}\nSłowa kluczowe: {{ $('Set Product Insights1').item.json.technical_keywords }}\nWiedza o materiale: {{ $('Knowledge Search Engine').item.json.relevant_knowledge || '' }}\nKolor: {{ $('Knowledge Search Engine').item.json.color_info || '' }}\nKolekcja: {{ $('Knowledge Search Engine').item.json.collection_info || '' }}\nZastosowania: {{ $('Knowledge Search Engine').item.json.application_info || '' }}\nPielęgnacja: {{ $('Knowledge Search Engine').item.json.care_info || '' }}\nSEO keywords: {{ $('Knowledge Search Engine').item.json.seo_keywords || '' }}\nPorównania: {{ $('Knowledge Search Engine').item.json.comparisons || '' }}\nStyle wnętrz: {{ $('Knowledge Search Engine').item.json.style_recommendations || '' }}\n\nWAŻNE: Nagłówki korzyści jako STWIERDZENIA, nigdy jako pytania. Każdy bullet max 3 zdania.",
+        "options": {
+          "systemMessage": "=Jesteś ekspertem w opisach produktów z konglomeratu kwarcowego. Tworzysz sekcję korzyści: definicja + 5 bullet pointów.\n\nWYMAGANA STRUKTURA ODPOWIEDZI:\n\n## Główne korzyści:\n\n**[Pełna nazwa produktu z kategorią] - definicja produktu**\n[1-2 zdania: co to jest, materiał, kolekcja (NIE \"nasza\"!), kolor, grubości, na wymiar]\n\n* **[Stwierdzenie korzyści]:**\n[Max 3 zdania]\n\nZASADA 1 — NAGŁÓWEK KORZYŚCI = STWIERDZENIE, nie pytanie:\n❌ \"Czy podstopnica wytrzyma intensywne użytkowanie? Absolutnie! Niezrównana odporność:\"\n✅ \"Odporność na ścieranie przewyższająca granit\"\n❌ \"Jakie są zalety konglomeratu? Higiena i łatwość pielęgnacji:\"\n✅ \"Nieporowata powierzchnia — zero bakterii, zero impregnacji\"\n❌ \"Czy to dobra inwestycja na lata? Zdecydowanie!\"\n✅ \"10 lat gwarancji na zastosowania wewnętrzne\"\n\nZASADA 2 — BULLET = MAX 3 ZDANIA:\n- Zdanie 1: fakt techniczny z parametrem lub certyfikatem\n- Zdanie 2: scenariusz życiowy lub porównanie z materiałem konkurencyjnym\n- Zdanie 3 (opcjonalne): podsumowanie korzyści dla klienta\n\nZASADA 3 — NIE POWTARZAJ SPECYFIKACJI:\nW korzyściach możesz wspomnieć max 1 parametr per bullet jako DOWÓD korzyści.\n\nZASADA 4 — KAŻDY BULLET = INNA TECHNIKA:\nBullet 1: parametr liczbowy + co oznacza dla klienta\nBullet 2: porównanie z konkurencyjnym materiałem\nBullet 3: scenariusz życiowy\nBullet 4: certyfikat/norma + praktyczna konsekwencja\nBullet 5: personalizacja — co klient może wybrać\n\nZASADA 5 — DOPASUJ DO KATEGORII:\nBLATY KUCHENNE: bezpieczeństwo żywności NSF, plamy, porównanie z granitem, czyszczenie, styl kuchni\nBLATY ŁAZIENKOWE: wodoodporność/pleśń, higiena, porównanie z marmurem, umywalka, atmosfera\nSCHODY: ścieranie/obciążenia, porównanie z drewnem/laminatem, estetyka, narożniki, gwarancja\nPARAPETY: UV/kondensat, porównanie z drewnem/PCV, estetyka okna, czyszczenie, wymiary\n\nZASADA 6 — WYKOŃCZENIA W DEFINICJI PRODUKTU:\n- Produkt jest ZAWSZE w standardowym wykończeniu Polished\n- W definicji produktu NIGDY nie wymieniaj Matt, Terra jako opcji równorzędnych\n- Poprawnie: \"dostępny w standardowym wykończeniu Polished\" lub \"w wykończeniu polerowanym\"\n- Informacja o innych wykończeniach (Matt, Terra) pojawia się WYŁĄCZNIE w FAQ jako opcja na zapytanie\n\nZASADA 7 — BEZWZGLĘDNIE ZAKAZANE SŁOWA:\nPoniższe słowa i frazy są zakazane. Jeśli je wygenerujesz — opis jest odrzucany:\n❌ \"niezrównana\" / \"niezrównaną\" / \"niezrównane\"\n❌ \"wyjątkowa jakość\" / \"wyjątkowej jakości\"\n❌ \"ponadczasowa elegancja\"\n❌ \"oaza luksusu\"\n❌ \"idealne rozwiązanie\"\n❌ \"podnieś prestiż\"\n\nZAMIAST NICH używaj KONKRETÓW:\n- zamiast \"niezrównana wodoodporność\" → \"absorpcja wody 0,02-0,09%\"\n- zamiast \"wyjątkowa jakość\" → \"10 lat gwarancji, certyfikat NSF\"\n- zamiast \"niezrównana trwałość\" → \"twardość przewyższająca granit, wytrzymałość 30-59 MPa\"\n\nZASADY NAZEWNICTWA:\n- NIGDY \"z naszej kolekcji\" — pisz \"z kolekcji Essential Collection\" / \"z kolekcji Noble Collection\"\n- NIGDY \"nasza oferta\", \"nasz produkt\"\n- Można: \"Victorini oferuje [usługę]\", \"w ofercie Victorini\"\n\n{{ $('Set Product Fields for Agents').item.json.Guidelines }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        2528,
+        592
+      ],
+      "id": "a354253c-c1e5-4e32-b854-c5749b6db6db",
+      "name": "Product Benefits Generator"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Przeanalizuj produkt i zwróć TYLKO czysty JSON (bez tekstu, bez backticks):\n\nNazwa: {{ $('Set Product Fields for Agents').item.json.product_name }}\nKategoria: {{ $('Set Product Fields for Agents').item.json.main_category }}\nAtrybuty: {{ $('Set Product Fields for Agents').item.json.attributes }}\n\n{\n  \"search_intent\": \"commercial\",\n  \"writing_style\": \"profesjonalny i techniczny\",\n  \"writing_tone\": \"przyjazny i ekspercki\",\n  \"target_audience\": \"[konkretna grupa: np. właściciele domów remontujący kuchnię, architekci wnętrz projektujący łazienki]\",\n  \"product_benefits\": [\"korzyść1 z parametrem\", \"korzyść2 z parametrem\", \"korzyść3 z parametrem\"],\n  \"common_questions\": [\"pytanie praktyczne 1\", \"pytanie porównawcze 2\", \"pytanie konfiguracyjne 3\"],\n  \"technical_keywords\": [\"keyword1\", \"keyword2\", \"keyword3\"],\n  \"application_keywords\": [\"zastosowanie1\", \"zastosowanie2\"]\n}",
+        "options": {
+          "systemMessage": "=Jesteś ekspertem w analizie produktów e-commerce kamieniarskich i tworzeniu strategii treści zgodnych z AEO 2025.\n\nAnalizujesz produkt na podstawie nazwy, kategorii i atrybutów technicznych.\n\nZASADY GENEROWANIA INSIGHTS:\n\n1. TARGET_AUDIENCE — bądź KONKRETNY:\n❌ \"osoby poszukujące wysokiej jakości produktów\"\n✅ \"właściciele domów remontujący schody wewnętrzne, architekci wnętrz szukający trwałych materiałów na stopnice\"\n\n2. PRODUCT_BENEFITS — KAŻDA korzyść musi zawierać parametr lub fakt:\n❌ \"wysoka trwałość\"\n✅ \"wytrzymałość na zginanie 30-59 MPa — przewyższa granit naturalny\"\n\n3. COMMON_QUESTIONS — pytania PRAKTYCZNE, nie marketingowe:\n❌ \"Dlaczego warto wybrać ten produkt?\"\n✅ \"Czy konglomerat kwarcowy wymaga impregnacji?\"\n✅ \"Jak czyścić blat z konglomeratu na co dzień?\"\n✅ \"Jakie grubości i wykończenia są dostępne?\"\n\n4. TECHNICAL_KEYWORDS — frazy wyszukiwania klientów:\nDopasuj do kategorii produktu, np.:\n- Blat kuchenny: \"blat kuchenny kwarcowy\", \"blat kuchenny na wymiar\", \"konglomerat kwarcowy kuchnia\"\n- Blat łazienkowy: \"blat łazienkowy kwarcowy\", \"blat pod umywalkę konglomerat\"\n- Schody: \"stopnica kwarcowa\", \"podstopnica konglomerat\", \"schody z kamienia kwarcowego\"\n- Parapet: \"parapet wewnętrzny kwarcowy\", \"parapet z konglomeratu na wymiar\"\n\n5. APPLICATION_KEYWORDS — konkretne zastosowania z nazwy produktu i kategorii.\n\nWAŻNE: Odpowiadaj WYŁĄCZNIE czystym JSON. Bez backticks, bez komentarzy, bez tekstu przed/po JSON."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        1312,
+        592
+      ],
+      "id": "648f85c3-b98c-468f-be29-456d64d312a6",
+      "name": "Product Analysis Agent (adaptacja z \"SERPs, Writing, KWs, Insights\")"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6d33d569-bccb-4089-9b09-42be550cb9b4",
+              "name": "materials_database",
+              "value": "MATERIAŁ: Blacha Aluminium\nStop aluminium charakteryzuje się wysoką odpornością na korozję, lekkością (gęstość 2,7 g/cm³) i trwałością. Lekki, bardzo odporny na korozję, doskonała przewodność cieplna, łatwo formowalny i spawalny. Idealny do parapetów, elewacji, podbitki, blach na wymiar.\nW przypadku arkuszy Blacha aluminiowa 1050 H24\nBlacha aluminiowa 1050 H24 wyróżnia się bardzo wysoką odpornością na korozję (min. 99,5% Al), niską masą, świetną przewodnością cieplną i elektryczną oraz estetyczną, gładką powierzchnią. Jest półtwarda, dobrze formowalna na zimno, łatwa w obróbce i spawaniu, co sprawia, że idealnie nadaje się do parapetów, pokryć dachowych, elementów elewacyjnych i innych zastosowań konstrukcyjnych wymagających trwałości oraz odporności na czynniki atmosferyczne\n\nMATERIAŁ: Konglomerat marmurowy\nKonglomerat marmurowy (aglomarmur) to kompozyt składający się w 90-95% z naturalnego kamienia i 5-10% żywicy poliestrowej. Charakteryzuje się wysoką odpornością na ścieranie (≤28 mm według Böhme), nasiąkliwość <0,5%, wytrzymałość na zginanie ≥10 MPa. Norma PN-EN 15285 określa wymagania dla kamienia aglomerowanego. Dostępny w grubościach 12mm, 20mm, 30mm. Można polerować, szlifować i frezować.\nWłaściwości techniczne\tNorma / metoda\tJednostka\tZakres wartości\nOdchyłki wymiarowe\n• grubość\n• prostoliniowość krawędzi\n• płaskość powierzchni górnej\tEN 13748-1:2005\t—\tGrubość: < ± 3 mm\nProstokątność krawędzi: < ± 0,3 %\nPłaskość: < 0,3 %\nGęstość\tEN 14617-1:2005\tkg/dm³\t2,4 – 2,6\nNasiąkliwość wodą\tEN 13748-1:2005\tW24h\t0,24 – 0,30 g/cm²\nNasiąkliwość wodą\tEN 13748-1:2005\tWm,a\t5,16 – 6,85 %\nWytrzymałość na zginanie (obciążenie łamiące)\tEN 13748-1:2005\tPm\t3,1 – 3,5 kN\nWytrzymałość na zginanie\tEN 13748-1:2005\tTm\t7,7 – 8,8 MPa\nWytrzymałość na ściskanie\tEN 14671-15\tN/mm²\t70 – 100\nOdporność na ścieranie\tEN 13478-1:2005\tmm\t>24\nOdporność na poślizg (sucha powierzchnia)\tEN 13748-1:2005\tSRV sucha\tSzlifowana 400: 47 – 49\nOdporność na poślizg (mokra powierzchnia)\tEN 13748-1:2005\tSRV mokra\tSzlifowana 400: 14 – 20\nReakcja na ogień\tEN-13501-1\tKlasa\tA1\n\nMATERIAŁ: Konglomerat kwarcowy\nKonglomerat kwarcowy (kamień kwarcowy, engineered stone) to kompozyt składający się w 90-93% z naturalnych surowców mineralnych (kwarc, granit) i 7-10% żywicy poliestrowej wysokiej jakości. Produkowany oryginalną technologią Breton (Włochy) w Republice Czeskiej od 1991 roku. Twardszy niż granit i marmur naturalny. Powierzchnia nieporowata - brak wnikania zabrudzeń, bakterii i pleśni. Certyfikat NSF - bezpieczny kontakt z żywnością. Nie wymaga impregnacji. Gęstość: 2200-2440 kg/m³. Absorpcja wody (48h): 0,02-0,09%. Wytrzymałość na zginanie: 30-59 MPa. Odporność na mróz: 90-110 (EN 14617-5). Odporność na plamy: Klasa 5. Dostępny w grubościach 12mm (28 kg/m²), 20mm (57 kg/m²), 30mm (82 kg/m²). Rozmiary płyt: Jumbo 155 (318,5x155cm, 4,94m²), Jumbo 160 (320x160cm, 5,12m²), Jumbo 165 (330x165cm, 5,45m²). Wykończenia: Polished (wysoki połysk), Matt (matowe), Terra (fakturowane 3D). Gwarancja: 10 lat wnętrza, 5 lat miejsca publiczne. Ponad 50 kolorów w 7 kolekcjach. Szersze informacje w polach quartz_*.\n\nMATERIAŁ: BLACHA RYFLOWANA\nBlacha aluminiowa ryflowana 1050 H244 posiada te same zalety stopu 1050A (bardzo wysoka odporność na korozję, niska masa, doskonała przewodność cieplna), ale wyróżnia się antypoślizgową, ryflowaną powierzchnią (wzór W5 – łezka). Stan H244 gwarantuje wyższą wytrzymałość mechaniczną przy zachowaniu dobrej plastyczności i spawalności. Blachy te znajdują zastosowanie w miejscach, gdzie wymagana jest zwiększona przyczepność oraz odporność na ścieranie, takich jak schody, podłogi przemysłowe czy pomosty\n\nMATERIAŁ: Aluminium: Lekki, bardzo odporny na korozję, doskonała przewodność cieplna, łatwo formowalny i spawalny. Idealny do parapetów, elewacji, podbitki, blach na wymiar.\n\nMATERIAŁ: Corten: Stal o wysokiej odporności na warunki atmosferyczne – tworzy samonaprawiającą się patynę antykorozyjną, ma unikalny, rdzawy wygląd. Stosowany w nowoczesnej architekturze, ogrodzeniach, detalu elewacyjnym.\n\nMATERIAŁ: Drewnopodobne: Najczęściej stalowy panel powlekany imitacją drewna. Trwałe, nie wymagają konserwacji, odporne na wilgoć i promieniowanie UV. Popularne w podbitkach i elewacjach.\n\nMATERIAŁ: Granit: Kamień naturalny, bardzo twardy, odporny na zarysowania, ścieranie i warunki atmosferyczne. Wysoka trwałość i odporność chemiczna. Doskonały na parapety, blaty kuchenne, schody.\n\nMATERIAŁ: Nierdzewna: Stal nierdzewna, bardzo wysoka odporność na korozję, łatwa w utrzymaniu czystości i wytrzymała mechanicznie. Szeroko stosowana w kuchniach, laboratoriach i detalu budowlanym.\n\nMATERIAŁ: Ocynk: Blacha stalowa pokryta warstwą cynku – dobra ochrona przed korozją, ekonomiczne rozwiązanie na elementy zewnętrzne narażone na wilgoć.\n\nMATERIAŁ: Ocynk lakierowany: Stal ocynkowana pokryta powłoką lakierniczą – wyższa odporność na korozję, szeroki wybór kolorów, dodatkowe zabezpieczenie estetyczne.\n\nMATERIAŁ: Ocynk powlekany: Stal ocynkowana pokryta powłoką z tworzywa (np. poliester, PVDF). Podwyższona odporność na korozję oraz działanie promieniowania UV, stosowana w blachach trapezowych, podbitkach.\n\nMATERIAŁ: PCV: Tworzywo sztuczne, wodoodporne, nie wymaga konserwacji, odporne na wilgoć i UV. Bardzo popularne w podbitkach dachowych, parapetach, panelach elewacyjnych.\n\nMATERIAŁ: Stal: Materiał o wysokiej wytrzymałości mechanicznej, stosunkowo niski koszt, uniwersalne zastosowanie (blachy, konstrukcje, profile). Wymaga zabezpieczenia antykorozyjnego w środowisku zewnętrznym.\n\nMATERIAŁ: PCV\nPCV (polichlorek winylu) charakteryzuje się wysoką odpornością chemiczną, trudnopalnością (klasa B-s1,d0) i stabilnością wymiarową. W budownictwie stosuje się PVC-U (nieplastyfikowany) o twardości Shore D 80-85. Temperatura eksploatacji -40°C do +60°C. Odporność na promieniowanie UV zapewniają stabilizatory i pigmenty TiO₂. Współczynnik rozszerzalności: 80×10⁻⁶/K. Dostępny w kolorach RAL.\n\nMATERIAŁ: Blacha ryflowana\nBlacha ryflowana (trapezowa) produkowana standardowo w grubościach 0,5mm, 0,7mm, 0,8mm i 1,0mm dla dachów oraz 5mm dla zastosowań przemysłowych i podłóg. Ryflowanie zwiększa moment bezwładności i nośność do 3-5 razy. Powłoki: ocynk Z275 (275g/m²), powłoka poliestrowa PE25 lub PVDF dla zwiększonej trwałości do 15 lat. Dostępne profile: T18, T35, T60.\n\nMATERIAŁ: Stal nierdzewna\nStal nierdzewna gatunki 1.4301 (304) i 1.4404 (316L) o podwyższonej odporności korozyjnej. Zawartość chromu min. 18%, niklu 8-10%. Wytrzymałość na rozciąganie 500-700 MPa. Temperatura pracy do 600°C dla 304, do 800°C dla 316L. Wykończenia: 2B (walcowane na zimno), BA (jasne wyżarzanie), satin (szczotkowane).\n\nMATERIAŁ: HPL\nHPL (High Pressure Laminate) - laminat wysokociśnieniowy składający się z warstw papieru impregnowanego żywicami fenolowymi i melamninowymi. Prasowanie w temp. 150°C pod ciśnieniem 70-100 bar. Grubość 0,5-25mm, odporność na ścieranie >4000 obrotów, trudnopalność B-s1,d0. Dostępny w teksturach: mat, półmat, połysk, struktura drewna, beton.",
+              "type": "string"
+            },
+            {
+              "id": "a1b2c3d4-1111-4aaa-bbbb-111111111111",
+              "name": "quartz_collections",
+              "value": "KOLEKCJA: Noble Collection (Kolekcja Szlachetna)\nStyl: Imitacja najbardziej popularnych rodzajów marmuru. Nowa generacja wzorów marmurowych. Najczęściej wybierana kolekcja.\nWzory: Noble Supreme White (elegancka biel marmurowa), Noble Carrara (klasyczna imitacja Carrary - białe z szarymi weniami), Noble Botticino (ciepły beżowy marmur), Noble Calista (delikatny kremowy odcień z weniami), Noble Troya (szlachetny szary z weniami), Noble Imperial Grey (szary luksusowy), Noble Pietra Grey (kamienny szary), Noble Argos Nero (ciemny dramatyczny czarny), Noble Quartzite (jasny szary z delikatnym użylkowaniem), Noble Silver Notte (srebrny nocny), Noble Perlato Luna (perłowy księżycowy beż), Noble Ivory White (kremowa biel - kość słoniowa), Noble Concrete Grey (betonowy szary), Noble Areti Bianco (ciepła szlachetna biel), Noble Desiree Grey (elegancki szary), Noble Athos Brown (brązowy szlachetny), Noble Pro Cloud (chmurny szary)\nZastosowania premium: blaty kuchenne premium, powierzchnie łazienkowe luksusowe, okładziny ścienne reprezentacyjne\nPrzewaga: Wygląd naturalnego marmuru z praktycznością kwarcu - nie wymaga impregnacji, odporny na kwasy, znacznie twardszy niż marmur\n\nKOLEKCJA: Essential Collection (Kolekcja Podstawowa)\nStyl: Kryształy, piasek i lustrzane wtrącenia. Jednolite kolory z drobnymi cząstkami. Uniwersalne wzory.\nWzory białe: Crystal Absolute White (najbielszy w ofercie, czysta elegancja), Crystal Polar White (drugi najbielsz, śnieżnobiała baza), Crystal Arctic (arktyczna biel), Crystal Diamond (diamentowa biel), Crystal Quartz White (kwarcowa ciepła biel), Crystal Royal (królewska biel), Classic Ice (lodowa biel z błękitem)\nWzory kremowe/beżowe: Crystal Cream Beige (delikatny kremowy beż), Crystal Nevada (pustynny jasny beż), Crystal Sahara (piaskowy beż)\nWzory szare/ciemne: Crystal Anthracite (głęboki antracyt), Elegance Dark Grey (ciemny elegancki szary), Elegance Eco Ash (popielaty eko)\nWzory brązowe: Gobi Brown (pustynny ciemny brąz), Gobi Grey (pustynny szary), Gobi Black (pustynna głęboka czerń)\nKolory świeże: Fresh Orange (świeża pomarańcz), Fresh Green (świeża zieleń)\nZastosowania: blaty kuchenne codziennego użytku, uniwersalne powierzchnie robocze, projekty komercyjne, przestrzenie biurowe\n\nKOLEKCJA: Starlight Collection (Kolekcja Gwiezdna)\nStyl: Wysoki połysk z migoczącą powierzchnią. Lustrzane fragmenty odbijające światło. Efekt rozświetlający wnętrze. Charakterystyczne odblaski przy pośrednim oświetleniu.\nWzory: Starlight White (śnieżnobiała z refleksami świetlnymi), Starlight Black (czerń z gwiazdnym efektem), Starlight Grey (szara z lustrzanymi wtrąceniami), Starlight Brown (brązowa z błyskami), Starlight Frappe (kawowy odcień z refleksami), Starlight Latte (mleczny z połyskiem), Starlight Sand (piaskowy z połyskiem), Starlight Ruby (rubinowy z gwiazdami)\nCharakterystyka refleksów: Drobinki mineralne z efektem refleksu świetlnego. Lustrzana struktura rozprasza światło. Rozświetla nawet najciemniejsze zakątki.\nZastosowania: przestrzenie prestiżowe, lobby i recepcje, eleganckie kuchnie, łazienki z charakterem\nUwaga projektancka: Najlepiej prezentuje się z dobrym oświetleniem - naturalnym lub sztucznym. Zalecane LED pod szafkami.\n\nKOLEKCJA: Harmonia Collection (Kolekcja Harmonijna)\nStyl: Inspirowana naturalnymi kamieniami - marmur, margiel, piaskowiec. Spokojne barwy skalne. Subtelne użylkowanie.\nWzory: Harmonia Altay (górskie wzornictwo, beżowy), Harmonia Blanca (biała harmonia), Harmonia Cerros (skaliste wzory), Harmonia Dolomites (dolomitowy jasny szary), Harmonia Highlands (wzgórza szkockie), Harmonia Merida (południowy kamień), Harmonia Sierra (góry kamienne), Harmonia Velasco (iberyjski kamień), Harmonia Yosemite (amerykański park)\nZastosowania: wnętrza w stylu naturalnym, przestrzenie zen, projekty eko, kuchnie skandynawskie\n\nKOLEKCJA: Terrazzo Collection (Kolekcja Wenecka)\nStyl: Inspirowana wenecką mozaikową podłogą. Dodatki marmuru i szkła różnej frakcji. Kolorowe wtrącenia. Artystyczny charakter.\nZastosowania: podłogi artystyczne, przestrzenie komercyjne, designerskie wnętrza, projekty boutique\n\nKOLEKCJA: Rustic Collection (Kolekcja Rustykalna)\nStyl: Połączenie naturalnego granitu z piaskiem krzemionkowym. Elegancka i praktyczna powierzchnia. Bardziej ziarnista struktura. Autentyczny wygląd kamienia.\nZastosowania: wnętrza rustykalne, kuchnie wiejskie i tradycyjne, projekty vintage\n\nKOLEKCJA: Trend Collection (Kolekcja Industrialna)\nStyl: Styl industrialny i loftowy. Nowoczesne wzornictwo. Ostre linie i kontrasty. Miejski charakter.\nWzory: Mystery White (białe z szarymi żyłami i brązowymi akcentami), Brilliant White (białe z połyskiem), Taurus Brown Pearl (brązowy perłowy), Glencoe (beż, złoto, miedź), Altamonte, Ambiente Light, Badal Grey\nZastosowania: lofty i przestrzenie industrialne, nowoczesne biura, projekty minimalistyczne",
+              "type": "string"
+            },
+            {
+              "id": "a1b2c3d4-2222-4aaa-bbbb-222222222222",
+              "name": "quartz_applications",
+              "value": "ZASTOSOWANIE: Blaty kuchenne z konglomeratu kwarcowego\nDlaczego idealny: Powierzchnia odporna na zarysowania przy intensywnym użytkowaniu. Bezpieczny kontakt z żywnością (certyfikat NSF). Łatwe czyszczenie po przygotowywaniu posiłków. Odporność na plamy z wina, kawy, soków. Nie wchłania zapachów. Możliwość wykonania blatu z jednej płyty (do 4-5 m²).\nMożliwości wykonania: blaty robocze główne, wyspy kuchenne, półwyspy i barki śniadaniowe, blaty z wbudowanymi zlewozmywakami, listwy ochronne ścienne (backsplash), rynienki ociekowe.\nGrubości: 20mm (standard), 30mm (efekt masywności).\nKrawędzie: proste (square edge), fazowane (beveled), zaokrąglone (rounded), dekoracyjne (ogee, bullnose).\nKluczowe SEO: blat kuchenny z konglomeratu kwarcowego, blat kuchenny kwarcowy, blaty kuchenne z kamienia kwarcowego, nieporowaty blat kuchenny, higieniczny blat kuchenny.\n\nZASTOSOWANIE: Blaty łazienkowe z konglomeratu kwarcowego\nZastosowania: blaty pod umywalki nadblatowe, blaty z wbudowanymi umywalkami, okładziny ścienne w strefie natryskowej, okładziny wokół wanny, półki i konsole ścienne, parapety wewnętrzne.\nKorzyści w łazience: wodoodporność i brak absorpcji wilgoci, higieniczna nieporowata powierzchnia, odporność na pleśń i bakterie, łatwe utrzymanie w czystości, możliwość montażu bez fug.\nGrubości: 20mm (standard), 30mm (premium).\nKluczowe SEO: blat łazienkowy z konglomeratu kwarcowego, wodoodporny blat łazienkowy, blat pod umywalkę kwarcowy, blat łazienkowy kamień kwarcowy.\n\nZASTOSOWANIE: Schody wewnętrzne z konglomeratu kwarcowego\nElementy: stopnie schodowe (stopnice, gr. 30mm), podstopnice (podstopnie, gr. 20mm), spoczniki schodowe, całe ciągi komunikacyjne. UWAGA: Stopnice i podstopnice zamawiane i montowane osobno w systemie dwuetapowym.\nZalety: wysoka wytrzymałość na obciążenia, odporność na ścieranie, łatwe czyszczenie, jednolity wygląd, trwałość na lata intensywnego użytkowania.\nGrubości: 20mm (podstopnice), 30mm (stopnice - zwiększona wytrzymałość).\nWskazówka Victorini – Zamów w dwóch krokach i uniknij pomyłek:\nKrok 1: Zamów i zamontuj stopnie (stopnice).\nKrok 2: Wykonaj pomiar podstopnic „z natury\" i zamów je u nas.\nSystem dwuetapowy zabezpiecza przed błędami pomiarowymi wynikającymi z krzywizn betonu i pozwala na idealne spasowanie materiału bez zbędnych luzów.\nKluczowe SEO: schody z konglomeratu kwarcowego, stopnica kwarcowa, stopień schodowy kamień kwarcowy, schody wewnętrzne konglomerat, podstopnica kwarcowa.\n\nZASTOSOWANIE: Parapety wewnętrzne z konglomeratu kwarcowego\nZalety: doskonała odporność na wilgoć (absorpcja wody 0,02-0,09%), odporność na UV - stabilność koloru, łatwa konserwacja, różne szerokości i długości na wymiar, elegancki wygląd przez lata.\nMożliwości: parapety okienne wewnętrzne, szerokie parapety jako dodatkowa powierzchnia użytkowa, parapety dekoracyjne.\nGrubości: 20mm (standard).\nKluczowe SEO: parapet wewnętrzny z konglomeratu kwarcowego, parapet kwarcowy, parapet z kamienia kwarcowego, parapet na wymiar konglomerat.\n\nZASTOSOWANIE: Zastosowania komercyjne\nHoReCa: blaty barowe w restauracjach, powierzchnie robocze w kuchniach komercyjnych, lady barowe w kawiarniach, stoliki w lokalach gastronomicznych.\nObiekty publiczne: recepcje i lady recepcyjne, powierzchnie w salach konferencyjnych, blaty laboratoryjne, powierzchnie w obiektach medycznych, powierzchnie w centrach handlowych.\nCertyfikaty: NSF International (kontakt z żywnością), SCS Indoor Air Quality (jakość powietrza), Green Guard Gold (bezpieczeństwo środowiskowe), HPDC (brak szkodliwych substancji).",
+              "type": "string"
+            },
+            {
+              "id": "a1b2c3d4-3333-4aaa-bbbb-333333333333",
+              "name": "quartz_care_certs",
+              "value": "PIELĘGNACJA konglomeratu kwarcowego:\nCodzienna: wytrzeć wilgotną ściereczką, zwykły detergent gospodarczy, woda z mydłem wystarczy. Nie wymaga specjalnych środków ani impregnacji.\nUsuwanie zabrudzeń: plamy z żywności - ściereczka z mydłem; plamy z kawy/herbaty - zwykły środek czyszczący; plamy z wina - niezwłoczne wytarcie, mydło; tłuszcze - środek do tłuszczów.\nŚrodki ZAKAZANE: produkty z trichloroetanem, chlorkiem metylenu, zmywacze do farb/lakierów, środki do pieczenia/grilli o pH>8.5, proszki ścierne, silnie agresywne środki.\nOchrona termiczna: używać podkładek termoizolacyjnych, nie stawiać gorących garnków bezpośrednio (maks. krótkoterminowo do 120°C), gorące żeliwo/stal nierdzewna mogą pozostawić nieodwracalne ślady.\nRynienki ociekowe: zalecana impregnacja dla lepszego czyszczenia.\nSzwy: przy większych powierzchniach możliwe minimalnie widoczne szwy, doświadczony monter zapewni niewidoczne połączenia.\n\nCERTYFIKATY konglomeratu kwarcowego:\nNSF International: zgodność z wymaganiami dla kontaktu z żywnością, bezpieczne do użytku w przemyśle spożywczym.\nSCS Indoor Air Quality: certyfikat Indoor Advantage Gold, produkt nie emituje substancji wpływających negatywnie na jakość powietrza.\nGreen Guard Gold: zgodność ze standardem California CDPH Method V1.2-2017, dopuszczenie do użytku w szkołach i biurach, certyfikat UL GREENGUARD.\nHPDC: badanie substancji chemicznych, produkt nie zawiera nieautoryzowanych chemikaliów.\nNBS Source: portfolio produktów z charakterystykami materiałowymi.\nSCS Recycled Content: wybrane produkty zawierają 20%, 30%, 40% lub 70% materiałów z recyklingu.\nEkologia: ponad 90% naturalnych surowców, minimalizacja odpadów, długa żywotność.\n\nGWARANCJA:\n10 lat - materiał użyty we wnętrzach\n5 lat - miejsca dostępne publicznie\n2 lata - płytki podłogowe\nWarunki: zgodność z zaleceniami konserwacji, profesjonalny montaż, użytkowanie zgodne z przeznaczeniem.\n\nPORÓWNANIA MATERIAŁOWE:\nKonglomerat kwarcowy vs Granit naturalny: kwarcowy ma powierzchnię nieporowatą (granit wymaga impregnacji), jednolitość koloru (granit - każda płyta inna), nie wymaga okresowej impregnacji, lepsza odporność na plamy. Granit: w 100% naturalny, wyższa odporność na temperatury, nieco tańszy.\nKonglomerat kwarcowy vs Marmur naturalny: kwarcowy znacznie twardszy (marmur miękki), nie wymaga impregnacji, odporny na kwasy (marmur bardzo wrażliwy - sok cytrynowy, wino szkodzą), nie ryzykuje przebarwień, znacznie praktyczniejszy. Marmur: naturalny unikalny wzór, prestiż od wieków, wyższa temperatura pracy.\nKonglomerat kwarcowy vs Konglomerat marmurowy: kwarcowy twardszy i bardziej odporny, lepsza odporność na zarysowania, niższa porowatość, lepsze parametry techniczne, szerszy zakres zastosowań.\nKonglomerat kwarcowy vs Laminat: kwarcowy to prawdziwy kamień (nie imitacja), nie odlupuje się na krawędziach, odporny na wysokie temperatury, może być regenerowany przez szlifowanie, znacznie dłuższa żywotność.\nKonglomerat kwarcowy vs Solid Surface (Corian): kwarcowy twardszy (trudniej zarysować), większa odporność na temperatury, naturalny wygląd kamienia, wyższa wartość dodana nieruchomości. Corian: niewidoczne połączenia, łatwiejsza regeneracja, większa elastyczność kształtów.",
+              "type": "string"
+            },
+            {
+              "id": "a1b2c3d4-4444-4aaa-bbbb-444444444444",
+              "name": "quartz_faq",
+              "value": "FAQ_OGÓLNE konglomeratu kwarcowego:\nQ: Czy mogę postawić gorący garnek na blacie z konglomeratu kwarcowego?\nA: Zaleca się używanie podkładek termoizolacyjnych. Materiał wytrzymuje krótkoterminowo do 120°C, ale gorące naczynia żeliwne lub stalowe mogą pozostawić nieodwracalne ślady lub spowodować pęknięcia.\n\nQ: Ile płyt potrzeba na średnią kuchnię?\nA: Kuchnia z zabudową i powierzchnią do 4-5 m² może być wykonana z jednej płyty Jumbo, gdzie połączenia są praktycznie niewidoczne. Większe projekty (wyspa, bar) wymagają kilku płyt.\n\nQ: Czy można wykonać zlewozmywak z tego samego materiału?\nA: Tak, możliwe jest wykonanie wbudowanego zlewozmywaka w kolorze blatu oraz frezowanie rynienków ociekowych. Dla rynienków zalecana impregnacja.\n\nQ: Jak często konglomerat kwarcowy wymaga impregnacji?\nA: Nie wymaga impregnacji. Powierzchnia jest fabrycznie nieprzepuszczalna i pozostaje taka przez całą żywotność produktu. To jedna z głównych przewag nad granitem naturalnym.\n\nQ: Czy szwy między płytami są widoczne?\nA: Przy profesjonalnym montażu szwy są minimalne lub praktycznie niewidoczne. Dla płyt z jednej partii produkcyjnej grubość jest identyczna.\n\nQ: Czy konglomerat kwarcowy jest odporny na zarysowania?\nA: Tak, materiał jest twardszy niż granit i marmur naturalny. Jednak zaleca się używanie desek do krojenia, aby nie tępić noży.\n\nQ: Jak czyścić konglomerat kwarcowy na co dzień?\nA: Wystarczy wilgotna ściereczka z łagodnym detergentem lub wodą z mydłem. Nie używać ściernych proszków ani silnych chemikaliów.\n\nQ: Czy konglomerat kwarcowy można stosować na podłogach?\nA: Tak, materiał nadaje się na podłogi w obiektach komercyjnych i mieszkalnych, szczególnie w strefach mokrych.\n\nQ: Jaka jest gwarancja na konglomerat kwarcowy?\nA: Standard to 10 lat gwarancji dla zastosowań wewnętrznych, 5 lat dla miejsc publicznych, 2 lata dla płytek podłogowych.\n\nQ: Czy konglomerat kwarcowy jest ekologiczny?\nA: Tak - ponad 90% naturalnych surowców, wybrane produkty zawierają materiały z recyklingu (20-70%), długa żywotność ogranicza odpady. Posiada certyfikaty środowiskowe Green Guard Gold i SCS.\n\nQ: Z czego składa się konglomerat kwarcowy?\nA: W 90-93% z naturalnych surowców mineralnych (kwarc, granit), z dodatkiem cząstek lustra i szkła, pigmentów kolorystycznych (<0,5%) oraz żywicy poliestrowej wysokiej jakości (7-10%). Produkowany technologią Breton.\n\nQ: Czym się różni konglomerat kwarcowy od konglomeratu marmurowego?\nA: Konglomerat kwarcowy jest twardszy, ma niższą porowatość (0,02-0,09% vs <0,5%), wyższą wytrzymałość na zginanie (30-59 MPa vs 7-9 MPa) i szerszy zakres zastosowań. Kwarcowy nie wymaga impregnacji.\n\nFAQ_SCHODY konglomeratu kwarcowego:\nQ: Dlaczego warto zamawiać stopnie i podstopnice osobno?\nA: Betonowe podłoże rzadko jest idealnie równe. Zamontuj najpierw stopnice (stopnie), a potem wykonaj pomiar podstopnic „z natury\" – dzięki temu unikniesz luzów i błędów pomiarowych wynikających z krzywizn betonu.\n\nQ: Czy mogę zamówić stopnie i podstopnice na raz?\nA: Można, ale Victorini rekomenduje dwuetapowy system montażu. Najpierw stopnice, potem pomiar podstopnic z natury i ich zamówienie. To sprawdzona metoda gwarantująca idealne spasowanie.\n\nQ: Jak przygotować podłoże pod schody z konglomeratu kwarcowego?\nA: Podłoże betonowe powinno być stabilne, suche i wolne od pyłu. Nierówności betonu kompensuje się klejem montażowym. Dlatego właśnie system dwuetapowy (najpierw stopnice, potem pomiar podstopnic z natury) daje najlepsze efekty.",
+              "type": "string"
+            },
+            {
+              "id": "a1b2c3d4-5555-4aaa-bbbb-555555555555",
+              "name": "quartz_seo",
+              "value": "SEO_KEYWORDS konglomeratu kwarcowego:\nPodstawowe: kamień kwarcowy, konglomerat kwarcowy, kwarcogranit, blat kwarcowy, blat kuchenny kwarcowy, kamień inżynieryjny, engineered stone\nZ zastosowaniem: blaty kuchenne z kamienia kwarcowego, blaty łazienkowe kwarcowe, parapety z konglomeratu, schody z kamienia kwarcowego, okładziny ścienne kwarcowe\nZ cechami: nieporowaty blat kuchenny, higieniczny kamień kwarcowy, odporny na zarysowania blat, łatwy w utrzymaniu kamień, wodoodporny blat łazienkowy\nFrazy długiego ogona: jaki blat do kuchni wybrać kamień kwarcowy czy granit, czy kamień kwarcowy wymaga impregnacji, ile kosztuje blat z kamienia kwarcowego, jakie są zalety konglomeratu kwarcowego, biały kamień kwarcowy do kuchni, ciemny blat kwarcowy do nowoczesnej kuchni, blat imitacja marmuru kamień kwarcowy, czy kamień kwarcowy jest odporny na plamy\nWedług koloru: biały kamień kwarcowy, czarny konglomerat kwarcowy, szary blat kwarcowy, beżowy kamień kwarcowy, kamień kwarcowy imitacja marmuru Carrara, kamień kwarcowy z refleksami\nWedług stylu: kamień kwarcowy do kuchni skandynawskiej, blat kwarcowy styl industrialny, elegancki kamień kwarcowy klasyczna kuchnia, nowoczesny konglomerat kwarcowy\nKonkurencyjne: kamień kwarcowy vs granit, konglomerat kwarcowy czy marmur, kamień kwarcowy czy corian, różnice między kamieniem kwarcowym a laminatem\n\nSTYLE WNĘTRZ - rekomendacje kolorów:\nMinimalistyczny/nowoczesny: Crystal Absolute White, Crystal Polar White, Noble Concrete Grey\nKlasyczny/elegancki: Noble Carrara, Noble Supreme White, Noble Botticino\nIndustrialny/loftowy: Trend Collection, Noble Concrete Grey, Crystal Anthracite, Gobi Grey\nRustykalny/wiejski: Rustic Collection, Harmonia Collection, ciepłe beże i brązy\nGlamour/luksusowy: Starlight Collection, Noble Collection ciemne odcienie\nSkandynawski: Crystal Polar White, Harmonia Dolomites, jasne jednolite kolory\n\nTOP 10 najpopularniejszych: 1.Crystal Absolute White 2.Starlight White 3.Noble Carrara 4.Crystal Polar White 5.Gobi Grey 6.Noble Concrete Grey 7.Crystal Anthracite 8.Mystery White 9.Noble Botticino 10.Starlight Black",
+              "type": "string"
+            },
+            {
+              "id": "a1b2c3d4-6666-4aaa-bbbb-666666666666",
+              "name": "quartz_colors",
+              "value": "KOLORY konglomeratu kwarcowego - lookup:\nCrystal Absolute White|Essential|biały|Najbielszy kolor w ofercie, czysta elegancja, jednolita śnieżna biel|polished,matt|minimalistyczny,nowoczesny,skandynawski\nCrystal Polar White|Essential|biały|Drugi najbielsz odcień, śnieżnobiała baza z delikatną strukturą|polished,matt|nowoczesny,skandynawski\nCrystal Arctic|Essential|biały|Arktyczna biel|polished,matt|nowoczesny\nCrystal Diamond|Essential|biały|Diamentowa biel z drobnymi cząstkami|polished,matt|nowoczesny,elegancki\nCrystal Quartz White|Essential|biały|Kwarcowa ciepła biel|polished,matt|klasyczny,skandynawski\nCrystal Royal|Essential|biały|Królewska biel|polished,matt|elegancki,klasyczny\nClassic Ice|Essential|biały|Lodowa biel z delikatnym błękitnym odcieniem|polished,matt|nowoczesny,skandynawski\nCrystal Cream Beige|Essential|kremowy|Delikatny kremowy beż z drobnymi cząstkami|polished,matt|klasyczny,ciepły\nCrystal Nevada|Essential|beżowy|Pustynny jasny beż|polished,matt|ciepły,naturalny\nCrystal Sahara|Essential|beżowy|Piaskowy ciepły beż|polished,matt|ciepły,rustykalny\nCrystal Anthracite|Essential|antracytowy|Głęboki antracyt, ciemny dramatyczny|polished,matt|industrialny,nowoczesny,loftowy\nElegance Dark Grey|Essential|szary|Ciemny elegancki szary|polished,matt|nowoczesny,elegancki\nElegance Eco Ash|Essential|szary|Popielaty eko|polished,matt|nowoczesny,eko\nGobi Brown|Essential|brązowy|Pustynny ciemny brąz|polished,matt|rustykalny,ciepły\nGobi Grey|Essential|szary|Pustynny szary, uniwersalny|polished,matt|industrialny,nowoczesny\nGobi Black|Essential|czarny|Pustynna głęboka czerń|polished,matt|nowoczesny,dramatyczny\nFresh Orange|Essential|pomarańczowy|Świeża pomarańcz, kolorowy akcent|polished|nowoczesny,kreatywny\nFresh Green|Essential|zielony|Świeża zieleń, kolorowy akcent|polished|nowoczesny,kreatywny\nNoble Supreme White|Noble|biały|Elegancka biel marmurowa z delikatnymi weniami|polished,matt|klasyczny,elegancki\nNoble Carrara|Noble|biały|Klasyczna imitacja marmuru Carrara - białe tło z szarymi weniami|polished,matt|klasyczny,elegancki,ponadczasowy\nNoble Botticino|Noble|beżowy|Ciepły beżowy marmur z subtelnym użylkowaniem|polished,matt|klasyczny,ciepły\nNoble Calista|Noble|kremowy|Delikatny kremowy odcień z delikatnymi weniami|polished,matt|klasyczny,elegancki\nNoble Troya|Noble|szary|Szlachetny szary z wyrazistymi weniami|polished,matt|elegancki\nNoble Imperial Grey|Noble|szary|Szary luksusowy, ciemny z weniami|polished,matt|glamour,luksusowy\nNoble Pietra Grey|Noble|szary|Kamienny szary|polished,matt|nowoczesny,elegancki\nNoble Argos Nero|Noble|czarny|Ciemny dramatyczny czarny z weniami|polished,matt|dramatyczny,glamour\nNoble Quartzite|Noble|szary|Jasny szary z delikatnym użylkowaniem|polished,matt|nowoczesny,naturalny\nNoble Silver Notte|Noble|szary|Srebrny nocny|polished,matt|nowoczesny,glamour\nNoble Perlato Luna|Noble|beżowy|Perłowy księżycowy beż|polished,matt|elegancki,ciepły\nNoble Ivory White|Noble|kremowy|Kremowa biel - kość słoniowa|polished,matt|klasyczny,elegancki\nNoble Concrete Grey|Noble|szary|Betonowy szary, industrialny charakter|polished,matt|industrialny,loftowy,nowoczesny\nNoble Areti Bianco|Noble|biały|Ciepła szlachetna biel|polished,matt|klasyczny,elegancki\nNoble Desiree Grey|Noble|szary|Elegancki średni szary|polished,matt|elegancki,nowoczesny\nNoble Athos Brown|Noble|brązowy|Brązowy szlachetny|polished,matt|klasyczny,rustykalny\nNoble Pro Cloud|Noble|szary|Chmurny jasny szary|polished,matt|nowoczesny,delikatny\nStarlight White|Starlight|biały|Śnieżnobiała z refleksami świetlnymi, migoczące lustrzane wtrącenia|polished|glamour,luksusowy,elegancki\nStarlight Black|Starlight|czarny|Czerń z gwiazdnym efektem, lustrzane refleksy|polished|glamour,dramatyczny,luksusowy\nStarlight Grey|Starlight|szary|Szara z lustrzanymi wtrąceniami|polished|glamour,nowoczesny\nStarlight Brown|Starlight|brązowy|Brązowa z błyskami lustrzanymi|polished|glamour,ciepły\nStarlight Frappe|Starlight|szary|Kawowy szary odcień z refleksami|polished|glamour,ciepły\nStarlight Latte|Starlight|kremowy|Mleczny ciepły z połyskiem|polished|glamour,ciepły\nStarlight Sand|Starlight|beżowy|Piaskowy z gwiazdkowymi refleksami|polished|glamour,naturalny\nStarlight Ruby|Starlight|czerwony|Rubinowy z gwiazdami, unikatowy|polished|glamour,dramatyczny\nHarmonia Altay|Harmonia|beżowy|Górskie wzornictwo, beżowy z naturalnymi wzorami skalnymi|polished,matt|naturalny,skandynawski\nHarmonia Blanca|Harmonia|biały|Biała harmonia z subtelnym użylkowaniem kamiennym|polished,matt|naturalny,jasny\nHarmonia Cerros|Harmonia|szary|Skaliste wzory, naturalna szarość|polished,matt|naturalny\nHarmonia Dolomites|Harmonia|szary|Dolomitowy jasny szary kamień|polished,matt|naturalny,skandynawski\nHarmonia Highlands|Harmonia|szary|Wzgórza szkockie, kamienne wzory|polished,matt|naturalny,rustykalny\nHarmonia Merida|Harmonia|beżowy|Południowy ciepły kamień|polished,matt|naturalny,ciepły\nHarmonia Sierra|Harmonia|szary|Góry kamienne, naturalna faktura|polished,matt|naturalny\nHarmonia Velasco|Harmonia|beżowy|Iberyjski ciepły kamień|polished,matt|naturalny,ciepły\nHarmonia Yosemite|Harmonia|szary|Amerykański park, naturalna szarość|polished,matt|naturalny\nMystery White|Trend|biały|Białe tło z szarymi żyłami i brązowymi akcentami|polished,matt|elegancki,nowoczesny\nBrilliant White|Trend|biały|Białe z połyskiem, czyste i jasne|polished|nowoczesny,elegancki\nTaurus Brown Pearl|Trend|brązowy|Brązowy perłowy z subtelnym połyskiem|polished|ciepły,elegancki\nGlencoe|Trend|beżowy|Beż, złoto, miedź - ciepłe odcienie specjalne|polished|glamour,ciepły\nAltamonte|Trend|szary|Szary z charakterem, nowoczesny wzór|polished,matt|industrialny,nowoczesny\nAmbiente Light|Trend|beżowy|Jasny beż z delikatnym wzorem|polished,matt|nowoczesny,ciepły\nBadal Grey|Trend|szary|Szary z interesującą strukturą|polished,matt|industrialny,nowoczesny",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        912,
+        272
+      ],
+      "id": "47c23dad-dc22-4906-9c6c-69351c291792",
+      "name": "Knowledge Base - Materials"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Tavily search results": {
+      "ai_tool": [
+        [
+          {
+            "node": "Product Analysis Agent (adaptacja z \"SERPs, Writing, KWs, Insights\")",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Article Folder": {
+      "main": [
+        [
+          {
+            "node": "Create Doc Filename is title",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Doc Filename is title": {
+      "main": [
+        [
+          {
+            "node": "Add Final Article",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add Final Article": {
+      "main": [
+        [
+          {
+            "node": "Product Meta Description",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Set Product Fields for Agents",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Brand Settings": {
+      "main": [
+        [
+          {
+            "node": "Knowledge Base - Materials",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "GET - WooCommerce Products",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Markdown": {
+      "main": [
+        [
+          {
+            "node": "Create Article Folder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GET - WooCommerce Products": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Product Fields for Agents": {
+      "main": [
+        [
+          {
+            "node": "Product Analysis Agent (adaptacja z \"SERPs, Writing, KWs, Insights\")",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Product Title Optimizer": {
+      "main": [
+        [
+          {
+            "node": "Product Benefits Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Product Meta Description": {
+      "main": [
+        [
+          {
+            "node": "POST RankMath Info1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WooCommerce Product Updater": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Product Tags": {
+      "main": [
+        []
+      ]
+    },
+    "POST RankMath Info1": {
+      "main": [
+        [
+          {
+            "node": "WooCommerce Product Updater",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger1": {
+      "main": [
+        [
+          {
+            "node": "Brand Settings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        []
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Update Product Tags",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Brand Guidlines": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Knowledge Search Engine": {
+      "main": [
+        [
+          {
+            "node": "Product Title Optimizer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Product Analysis Agent (adaptacja z \"SERPs, Writing, KWs, Insights\")",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Product Insights1": {
+      "main": [
+        [
+          {
+            "node": "Knowledge Search Engine",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Product Title Optimizer",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Product Benefits Generator",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "FAQ Generator",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model4": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "CTA Generator",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model5": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Technical Specs Generator",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model7": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Product Intro Generator",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Product Intro Generator": {
+      "main": [
+        [
+          {
+            "node": "FAQ Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CTA Generator": {
+      "main": [
+        [
+          {
+            "node": "Technical Specs Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Technical Specs Generator": {
+      "main": [
+        [
+          {
+            "node": "Final Description Assembly",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FAQ Generator": {
+      "main": [
+        [
+          {
+            "node": "CTA Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Product Analysis Agent (adaptacja z \"SERPs, Writing, KWs, Insights\")": {
+      "main": [
+        [
+          {
+            "node": "Set Product Insights1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Product Benefits Generator": {
+      "main": [
+        [
+          {
+            "node": "Product Intro Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Final Description Assembly": {
+      "main": [
+        [
+          {
+            "node": "Markdown",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Knowledge Base - Materials": {
+      "main": [
+        [
+          {
+            "node": "Get Brand Guidlines",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "93e9f60d-e87f-4bbf-becd-9102e82d31e8",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "bb871b4fae836450389627951cd9ceb06158f5e862b01ca3786b09269abe6b9a"
+  },
+  "id": "EcMPE6kGle79gwY9",
+  "tags": [
+    {
+      "updatedAt": "2025-08-04T18:47:17.782Z",
+      "createdAt": "2025-08-04T18:47:17.782Z",
+      "id": "08sd9v3UMSjKJDJI",
+      "name": "Current"
+    },
+    {
+      "updatedAt": "2026-02-15T17:18:20.706Z",
+      "createdAt": "2026-02-15T17:18:20.706Z",
+      "id": "3dB4v9vWlNvKHWHn",
+      "name": "Victorini"
+    }
+  ]
+}
