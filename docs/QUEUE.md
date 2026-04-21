@@ -1,6 +1,34 @@
 # Kolejka zadań — Prima Auto
 
-> Aktualizacja: 2026-04-20 (fix ghost-crona `asiaauto_daily_cleanup`, bump 0.30.13)
+> Aktualizacja: 2026-04-21 (0.31.0 — ALT rotacja + GTM dataLayer + huby /samochody/marka/model/)
+
+---
+
+## ZADANIE 11 — Strony frontowe marek + widoki hubów (NOWE)
+
+> Status: **następne**. Backend gotowy w 0.31.0 (rewrite rules, term_link filter, shortcody `[asiaauto_hub_wiki]`, `[asiaauto_hub_faq]`, `[asiaauto_hub_listings]`, term meta `wiki_body` + `faq_json`). Brakuje widoków.
+
+### Krok A: landing `/samochody/` — lista wszystkich marek
+- [ ] Grid z logo marek + licznikiem listingów per make
+- [ ] Link do `/samochody/<mark-slug>/` (archive make)
+- [ ] Sortowanie: najpopularniejsze (największa liczba listingów) na górze
+- [ ] Filtry w bocznej kolumnie (paliwo, cena, stan) — reuse z `[asiaauto_inventory]`
+
+### Krok B: archive marki `/samochody/<mark>/`
+- [ ] Elementor Theme Builder template dla taxonomy `make`
+- [ ] `[asiaauto_hub_wiki]` na górze (intro + wiki_body z n8n)
+- [ ] Lista modeli tej marki (grid tile z licznikiem per model)
+- [ ] `[asiaauto_hub_listings]` — lista ogłoszeń filtrowana po make
+- [ ] `[asiaauto_hub_faq]` — FAQ z term_meta
+
+### Krok C: archive modelu `/samochody/<mark>/<serie>/`
+- [ ] Template reuse albo osobny — podobny layout do marki
+- [ ] Listings filtered by make + serie (tax_query AND już działa w `filterHubQuery`)
+- [ ] FAQ bardziej szczegółowe (koszt importu tego modelu, zasięg, homologacja)
+
+### Zależności
+- Backend 0.31.0 gotowy — tylko widoki + content
+- Content wiki/FAQ wypełni ZADANIE 8 (n8n pipeline, marki najpierw, modele po spot-check)
 
 ---
 
@@ -158,6 +186,11 @@ Generacja długich opisów SEO dla **66 marek** (taksonomia `make`) + **~150 mod
 - [ ] Kalibracja promptów na bazie obserwacji
 - [ ] Pełny batch marek (~1h) + batch modeli (~2h)
 - [ ] Cron `asiaauto_desc_pipeline_hourly` — quota 20/dzień, invalidation: prompt_version bump, inventory_hash change (7d cooldown), facts_hash change, segment_eu change, kwartalny pełny rerun
+
+### Kolejność wdrożenia (2026-04-21)
+
+1. **Faza 1 — marki** (66 termów `make`): Krok A → B → C → D → E → F → G → H dry-run 5 marek → spot-check → batch 66
+2. **Faza 2 — modele** (~150 termów `serie`): po stabilizacji marek. Adaptacja workflow (mniej paragrafów, węższy fact block), batch ~150
 
 ### Zależności i uwagi
 
