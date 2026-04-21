@@ -1,18 +1,19 @@
-# CLAUDE.md — Prima Auto (asiaauto.pl)
+# CLAUDE.md — Prima Auto (primaauto.com.pl)
 
-> Ostatnia aktualizacja: 2026-04-15. Bootstrap repo.
+> Ostatnia aktualizacja: 2026-04-21. Cutover na docelową domenę + rebrand user-facing.
 
 ---
 
 ## 1. Tożsamość projektu
 
 - **Repo:** `primaauto` (GitHub: `auranet-js/primaauto`)
-- **Produkcja:** `asiaauto.pl`
-- **Plugin:** `asiaauto-sync` v0.30.8
-- **Child theme:** `asiaauto` (Hello Elementor parent)
+- **Produkcja:** `primaauto.com.pl` (cutover 2026-04-21 z asiaauto.pl)
+- **Legacy domain:** `asiaauto.pl` — uśpiona kopia WP, 301 redirect na primaauto (WP canonical), `DISABLE_WP_CRON=true` w wp-config
+- **Plugin:** `asiaauto-sync` v0.30.16
+- **Child theme:** `asiaauto` (slug zostaje; display name `Prima-Auto`)
 - **Klient:** Ruslan Prima, PRIMA-AUTO — agencja importu aut z Chin
 
-**Dlaczego nazwy się rozjeżdżają:** Repo `primaauto` odzwierciedla markę agencji. Kod produkcyjny żyje pod `asiaauto-sync` / `asiaauto.pl`. Klasy `AsiaAuto_*`, CPT `listings`/`asiaauto_order`, meta `_asiaauto_*`, shortcody `[asiaauto_*]`, role `asiaauto_customer`/`primaauto` — wszystko zostaje. Rename pluginu/CPT/meta = osobny, świadomy projekt — **nigdy mimochodem**.
+**Dlaczego slugi zostały `asiaauto-*`:** Klasy `AsiaAuto_*`, CPT `listings`/`asiaauto_order`, meta `_asiaauto_*`, shortcody `[asiaauto_*]`, role `asiaauto_customer`/`primaauto`, slug pluginu `asiaauto-sync`, katalog theme `themes/asiaauto/`, katalog `uploads/asiaauto/`, REST namespace `asiaauto/v1/` — **wszystko zostaje**. Rebranding 2026-04-21 objął wyłącznie **stringi user-facing** (subjecty maili, From Name, stopka, title, regulamin, WhatsApp prefilled message → „Prima-Auto"). Rename pluginu/CPT/meta/klasy = osobny, świadomy projekt — **nigdy mimochodem**.
 
 ---
 
@@ -20,9 +21,10 @@
 
 **Serwer produkcyjny** jest jedynym źródłem kodu. Repo jest kontekstowe (dokumentacja, skrypty, kolejka).
 
-- Plugin: `~/domains/asiaauto.pl/public_html/wp-content/plugins/asiaauto-sync/`
-- Theme: `~/domains/asiaauto.pl/public_html/wp-content/themes/asiaauto/`
-- DB prefix: `wp7j_`
+- Plugin: `~/domains/primaauto.com.pl/public_html/wp-content/plugins/asiaauto-sync/`
+- Theme: `~/domains/primaauto.com.pl/public_html/wp-content/themes/asiaauto/`
+- DB: `host476470_wp521`, prefix `wp7j_` (wspólna z legacy asiaauto.pl — oba katalogi czytają tę samą bazę; cron aktywny tylko w primaauto)
+- Legacy (rollback): `~/domains/asiaauto.pl/public_html/` — synchronizowana kopia plugin+theme, wp-cron wyłączony
 
 **Workflow zmian:**
 1. Czytaj aktualny plik z serwera (`cat`/`Read`)
