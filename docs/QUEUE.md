@@ -1,6 +1,51 @@
 # Kolejka zadań — Prima Auto
 
-> Aktualizacja: 2026-04-21 (0.31.0 — ALT rotacja + GTM dataLayer + huby /samochody/marka/model/)
+> Aktualizacja: 2026-04-22 (benchmark west-motors.pl + plan blokowany akceptacją mapowania przez Ruslana)
+
+---
+
+## ZADANIE 12 — Po akceptacji mapowania przez Ruslana: rollout SEO + Google Ads v2 (NOWE, 2026-04-22)
+
+> Status: **WAIT** — czekamy na STATUS w `tmp/brand_model_mapping.csv` od Ruslana. Bez tego wszystkie kroki poniżej są zablokowane.
+
+### Blokada i trigger
+- Pre-requisite: Ruslan potwierdza mapowanie marek/modeli v5 (scalenia BYD/Geely, Exeed zostaje, dual-name Omoda 9, fallbacki dla 2–5 listings)
+- Po "GO" od Ruslana ruszamy Krok 1 — reszta w kolejności
+
+### Krok 1 — Migracja mapowania (blocker dla wszystkiego)
+- [ ] Backup: `mysqldump` tabel `wp7j_posts`, `wp7j_postmeta`, `wp7j_terms`, `wp7j_term_taxonomy`, `wp7j_term_relationships` → `~/backups/primaauto/YYYY-MM-DD-pre-mapping-v5/`
+- [ ] Skrypt WP-CLI: rename termów `make` i `serie` wg zatwierdzonego CSV (scalenia Fangchengbao/Yangwang→BYD, Galaxy→Geely, + ewentualne poprawki post-review Ruslana)
+- [ ] Aktualizacja importera (`class-asiaauto-importer.php`): mapping CN→EU na wejściu, żeby nowe sync-e używały nowych slugów (inaczej każdy cron przywraca stare)
+- [ ] 301 redirects stare→nowe slugi (listingi + huby) — regex w `.htaccess` albo plugin Redirection
+- [ ] Smoke test: Dongchedi sync → brak nowych starych termów; archive page marki nadal renderuje
+
+### Krok 2 — SEO huby marek i modeli (po Kroku 1)
+**Rozdzielone: (a) kod w WP — (b) content przez n8n.**
+- [ ] **(a) Widoki** — dokończenie ZADANIA 11 (backend 0.31.0 już ma rewrite rules, term_link, shortcody `[asiaauto_hub_wiki|_faq|_listings]`, term meta `wiki_body` + `faq_json` — brakują Elementor templates dla `/samochody/`, `/samochody/<mark>/`, `/samochody/<mark>/<serie>/`)
+- [ ] **(b) Content pipeline n8n** — ZADANIE 8: workflow generujący `wiki_body` i `faq_json` per term (marki najpierw, modele w drugim przebiegu). Output: insert/update do `wp_termmeta` przez REST lub bezpośrednio n8n→DB.
+- [ ] Uwaga: huby to NIE "n8n" same w sobie — n8n tylko produkuje content. Routing, taksonomie, szablony to czysto WP/plugin.
+- [ ] Rozważyć v6 mapowania (hybryda west-motors: parent-brand w URL + sub-brand w `serie`) — decyzja po tym jak Ruslan zaakceptuje v5, nie mieszać tematów
+- [ ] Vehicle Schema + BreadcrumbList + OfferShippingDetails na karcie `single-listings.php` (gap vs west-motors)
+- [ ] Opcjonalnie: `llms.txt` / `llms-full.txt` w root domeny (AEO priorytet 2025 wg globalnego CLAUDE.md)
+
+### Krok 3 — Google Ads v2 (równolegle z Krokiem 2, po podpięciu API)
+- [ ] User podpina Google Ads API (developer_token już przyznany — user potwierdził 2026-04-22, konfiguracja jutro)
+- [ ] n8n workflow: eksport feedu produktowego (listings → Google Merchant Center? albo dynamic Search Ads?) — decyzja architektoniczna do zrobienia
+- [ ] Regeneracja keywordów i reklam pod NOWE slugi marek/modeli (po Kroku 1) — bieżący import w `tmp/Edytor-Google Ads+2026-04-22.csv` jest w starych slugach
+- [ ] Negatywne keyword lists już są (`tmp/negative_keywords.csv`) — zaimportować do konta
+- [ ] Uwaga: nie regenerujemy CSV-ki póki user ręcznie ją poprawia — czekamy na jego eksport (patrz memory `project_google_ads_campaigns.md`)
+
+### Zależności i kolejność
+```
+Ruslan OK → Krok 1 (migracja DB+importer) → Krok 2a (templates) ─┐
+                                          → Krok 2b (n8n content)┤→ uruchomienie huby
+                                          → Krok 3 (Ads v2)      ┘ równolegle z 2
+```
+
+### Ryzyka
+- **Bez Kroku 1 Krok 3 jest bez sensu** — reklamy prowadzące na stare slugi po migracji zgubią ruch
+- **Krok 2a bez Kroku 1** — huby renderują stare termy, po migracji trzeba przerobić drugi raz
+- **Google Ads API developer_token** — jeśli konto jest test, limity są niskie; do zweryfikowania przy podpinaniu
 
 ---
 
