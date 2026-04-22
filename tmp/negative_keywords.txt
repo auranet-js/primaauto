@@ -1,0 +1,195 @@
+# Negative keywords — Prima-Auto
+
+Do ręcznego wklejenia w Google Ads Editor → Tools → Shared library →
+Negative keyword lists, albo jako campaign-level negatives.
+
+Zalecana konfiguracja (jeśli tworzysz Shared lists ręcznie):
+  1. Lista 'prima_smieci_ogolne' (Negative Broad)  → zastosuj do 3 kampanii
+  2. Lista 'prima_smieci_moto'    (Negative Broad)  → zastosuj do 3 kampanii
+  3. Lista 'prima_brand_collision' (Negative Phrase) → zastosuj TYLKO do [Brand] Prima-Auto
+
+Albo: po prostu zaimportuj `negative_keywords.csv` — campaign-level bez shared lists.
+
+### ŚMIECI OGÓLNE  (informacyjne / non-commercial)  (Negative Broad, 90 fraz)
+
+  forum
+  opinie forum
+  pdf
+  instrukcja
+  instrukcja pdf
+  wikipedia
+  wiki
+  definicja
+  co to jest
+  jak to działa
+  tłumacz
+  translator
+  słownik
+  za darmo
+  darmowy
+  darmowe
+  free
+  free download
+  download
+  do pobrania
+  online za darmo
+  tapeta
+  tapety
+  wallpaper
+  wallpaper 4k
+  obraz
+  obrazki
+  ikona
+  ikony
+  logo png
+  clipart
+  gif
+  film
+  filmy
+  film online
+  cały film
+  trailer
+  piosenka
+  tekst piosenki
+  song lyrics
+  lyrics
+  video
+  klip
+  music video
+  youtube
+  tiktok
+  shorts
+  meme
+  memy
+  śmieszne
+  żart
+  żarty
+  zabawka
+  zabawki
+  rc
+  zdalnie sterowany
+  zdalnie sterowane
+  modelarstwo
+  model do sklejania
+  model kolekcjonerski
+  lego
+  gra
+  gry
+  gra online
+  simulator
+  symulator
+  roblox
+  minecraft
+  kurs
+  szkolenie
+  tutorial
+  uniwersytet
+  studia
+  licencjat
+  praca
+  pracodawca
+  rekrutacja
+  zarobki
+  ogłoszenia pracy
+  kariera
+  cv
+  oferta pracy
+  allegro
+  olx
+  otomoto
+  sprzedajemy
+  książka
+  książki
+  podręcznik
+  ebook
+
+### ŚMIECI MOTORYZACYJNE  (części, warsztat, wrak, hurt)  (Negative Broad, 74 fraz)
+
+  części
+  części zamienne
+  części używane
+  sklep z częściami
+  naprawa
+  warsztat
+  warsztaty
+  mechanik
+  serwis
+  awaria
+  usterka
+  diagnostyka
+  felgi
+  opony
+  akumulator
+  akumulatory
+  lakier
+  klimatyzacja
+  hak holowniczy
+  wypadek
+  powypadkowy
+  powypadkowe
+  po wypadku
+  stłuczka
+  do rozbiórki
+  rozbiórka
+  wrak
+  szrot
+  szrotownik
+  złom
+  auto złom
+  skradzione
+  skradziony
+  kradzione
+  kradziony
+  licytacja
+  aukcja komornicza
+  policja
+  komornik
+  komis
+  komisy
+  komis auto
+  komis samochodowy
+  leasing
+  wynajem
+  wynajem długoterminowy
+  rent a car
+  rent
+  carsharing
+  car sharing
+  tuning
+  mapa silnika
+  chiptuning
+  stage 1
+  stage 2
+  diy
+  na warsztat
+  gra symulator jazdy
+  jak ma się nazywać
+  historia auta
+  historia samochodu
+  ciekawostki
+  alibaba
+  aliexpress
+  dropshipping
+  hurt
+  hurtownia
+  ebay
+  tani import
+  zabawki z chin
+  elektronika z chin
+  odzież z chin
+  obuwie z chin
+  meble z chin
+
+### ZDERZENIA BRANDOWE  (tylko kampania [Brand] Prima-Auto)  (Negative Phrase, 11 fraz)
+
+  primark
+  prime video
+  amazon prime
+  primavera
+  primator
+  primabar
+  primacom
+  primabiotic
+  prima sport
+  prima bank
+  auto świat
