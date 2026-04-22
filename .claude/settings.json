@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(php -l *)",
+      "Bash(curl -s *)",
+      "Bash(curl -sI *)",
+      "Bash(curl -sL *)",
+      "Bash(curl -sS *)",
+      "mcp__claude_ai_Victorini_MCP__list_dir",
+      "mcp__claude_ai_Victorini_MCP__read_file",
+      "mcp__claude_ai_Victorini_MCP__query_db",
+      "mcp__claude_ai_Victorini_MCP__wc_options",
+      "mcp__claude_ai_JanSchenk_pl__query_db"
+    ]
+  }
+}
