@@ -29,6 +29,7 @@ nazwy - Tang, Han; AITO ma tylko M5/M7 - nieczytelne solo).
 """
 
 import csv
+import html
 import re
 import unicodedata
 from pathlib import Path
@@ -46,52 +47,59 @@ OUT_CSV = Path(__file__).parent / "brand_model_mapping.csv"
 
 BRAND = {
     # name_eu, uwaga_marki, brand_in_model
+    # KONWENCJA: brand_in_model=False wszędzie, EXCEPT sub-brandy z liniami wewnątrz:
+    #   BYD Leopard (Leopard + Tai), Geely Galaxy (L/E/Starship/A — różne kodowania).
+    # Filtr modelu zawsze pokazuje w kontekście wybranej marki, więc dubel marki
+    # w nazwie modelu byłby redundantny.
     "BYD":              ("BYD",            "",                                                          False),
-    "AITO":             ("AITO",           "Huawei-Seres, w EU pod AITO",                               True),
-    "XPeng":            ("XPENG",          "oficjalnie all-caps",                                       True),
-    "Xiaomi":           ("Xiaomi",         "",                                                          True),
+    "AITO":             ("AITO",           "Huawei-Seres, w EU pod AITO",                               False),
+    "XPeng":            ("XPENG",          "oficjalnie all-caps",                                       False),
+    "Xiaomi":           ("Xiaomi",         "",                                                          False),
     "Geely":            ("Geely",          "niektóre modele mają EU-names (Monjaro, Preface)",          False),
-    "Volkswagen":       ("Volkswagen",     "europejska, modele SAIC-VW CN-exclusive",                   True),
-    "Hongqi":           ("Hongqi",         "FAW premium, EU mało obecne",                               True),
-    "Avatr":            ("Avatr",          "Changan-Huawei-CATL JV, debiut EU 2024+",                   True),
-    "Zeekr":            ("Zeekr",          "Geely premium EV",                                          True),
-    "Denza":            ("Denza",          "BYD-Mercedes JV",                                           True),
-    "NIO":              ("NIO",            "obecny w EU od 2021",                                       True),
-    "Changan":          ("Changan",        "debiut EU 2024+",                                           True),
-    "Li Auto":          ("Li Auto",        "",                                                          True),
-    "Volvo":            ("Volvo",          "europejska (Geely owned)",                                  True),
-    "Leapmotor":        ("Leapmotor",      "partnerstwo Stellantis dla EU",                             True),
-    "Nissan":           ("Nissan",         "japońska, JV Dongfeng-Nissan dla CN",                       True),
-    "Deepal":           ("Deepal",         "Changan EV sub-brand, EU 2024+",                            True),
-    "Chery Fengyun":    ("Chery Fengyun",  "PHEV sub-brand Chery",                                      True),
-    "Jetour":           ("Jetour",         "Chery SUV/offroad, obecny w EU",                            True),
-    "Mazda":            ("Mazda",          "japońska",                                                  True),
-    "Voyah":            ("Voyah",          "Dongfeng premium EV",                                       True),
-    "Haval":            ("Haval",          "GWM",                                                       True),
-    "IM Motors":        ("IM Motors",      "SAIC premium EV",                                           True),
-    "Tank":             ("Tank",           "GWM off-road",                                              True),
-    "iCAR":             ("iCAR",           "Chery sub-brand EV",                                        True),
-    "WEY":              ("WEY",            "GWM premium",                                               True),
-    "Great Wall":       ("GWM",            "Great Wall używa GWM w EU",                                 True),
-    "MINI":             ("MINI",           "BMW; w CN JV z Great Wall dla EV",                          True),
-    "Lotus Cars":       ("Lotus",          "Geely owned",                                               True),
-    "MG":               ("MG",             "SAIC owned",                                                True),
-    "Smart":            ("Smart",          "Geely-Mercedes JV",                                         True),
-    "Lynk & Co":        ("Lynk & Co",      "Geely, obecny w EU",                                        True),
+    "Volkswagen":       ("Volkswagen",     "europejska, modele SAIC-VW CN-exclusive",                   False),
+    "Hongqi":           ("Hongqi",         "FAW premium, EU mało obecne",                               False),
+    "Avatr":            ("Avatr",          "Changan-Huawei-CATL JV, debiut EU 2024+",                   False),
+    "Zeekr":            ("Zeekr",          "Geely premium EV",                                          False),
+    "Denza":            ("Denza",          "BYD-Mercedes JV",                                           False),
+    "NIO":              ("NIO",            "obecny w EU od 2021",                                       False),
+    "Changan":          ("Changan",        "debiut EU 2024+",                                           False),
+    "Li Auto":          ("Li Auto",        "",                                                          False),
+    "Volvo":            ("Volvo",          "europejska (Geely owned)",                                  False),
+    "Leapmotor":        ("Leapmotor",      "partnerstwo Stellantis dla EU",                             False),
+    "Nissan":           ("Nissan",         "japońska, JV Dongfeng-Nissan dla CN",                       False),
+    "Deepal":           ("Deepal",         "Changan EV sub-brand, EU 2024+",                            False),
+    "Chery Fengyun":    ("Chery Fengyun",  "PHEV sub-brand Chery",                                      False),
+    "Jetour":           ("Jetour",         "Chery SUV/offroad, obecny w EU",                            False),
+    "Mazda":            ("Mazda",          "japońska",                                                  False),
+    "Voyah":            ("Voyah",          "Dongfeng premium EV",                                       False),
+    "Haval":            ("Haval",          "GWM",                                                       False),
+    "IM Motors":        ("IM Motors",      "SAIC premium EV",                                           False),
+    "Tank":             ("Tank",           "GWM off-road",                                              False),
+    "iCAR":             ("iCAR",           "Chery sub-brand EV",                                        False),
+    "WEY":              ("WEY",            "GWM premium",                                               False),
+    "Great Wall":       ("GWM",            "Great Wall używa GWM w EU",                                 False),
+    "MINI":             ("MINI",           "BMW; w CN JV z Great Wall dla EV",                          False),
+    "Lotus Cars":       ("Lotus",          "Geely owned",                                               False),
+    "MG":               ("MG",             "SAIC owned",                                                False),
+    "Smart":            ("Smart",          "Geely-Mercedes JV",                                         False),
+    "Lynk & Co":        ("Lynk & Co",      "Geely, obecny w EU",                                        False),
     # REBRAND / MERGE
-    "Chery":            ("Chery",          "w EU także sub-brandy Omoda/Jaecoo",                        True),
-    "Galaxy":           ("Geely Galaxy",   "sub-brand Geely; 'Geely Galaxy' w EU",                      True),
-    "GAC Trumpchi":     ("GAC",            "Trumpchi = CN name; w EU GAC",                              True),
-    "Fangchengbao":     ("BYD Leopard",    "'Formula Leopard' sub-brand BYD",                           True),
-    "Exeed":            ("Omoda",          "user: Exeed w EU występuje jako Omoda",                     True),
-    "Changan Qiyuan":   ("Qiyuan",         "sub-brand Changan",                                         True),
-    "Jetour Shanhai":   ("Jetour",         "Shanhai = offroad line Jetour; merge",                      True),
-    "Maextro":          ("Luxeed",         "Maextro JV Huawei-Chery; dla EU: Luxeed",                   True),
+    "Chery":            ("Chery",          "w EU także sub-brandy Omoda/Jaecoo",                        False),
+    "GAC Trumpchi":     ("GAC",            "Trumpchi = CN name; w EU GAC",                              False),
+    "Exeed":            ("Omoda",          "user: Exeed w EU występuje jako Omoda",                     False),
+    "Changan Qiyuan":   ("Qiyuan",         "sub-brand Changan",                                         False),
+    "Jetour Shanhai":   ("Jetour",         "Shanhai = offroad line Jetour; merge",                      False),
+    "Maextro":          ("Luxeed",         "Maextro JV Huawei-Chery; dla EU: Luxeed",                   False),
     "212":              ("Beijing 212",    "klasyczny off-roader BAIC, CN-only",                        False),
-    "Beijing Off-Road": ("BAIC",           "Beijing Off-Road = BAIC BJ series",                         True),
-    "GAC Aion Hyper":   ("GAC Aion Hyper", "GAC EV premium line",                                       True),
-    "Dongfeng Yipai":   ("Dongfeng Yipai", "sub-brand Dongfeng",                                        True),
-    "Yangwang":         ("BYD Yangwang",   "BYD flagship sub-brand",                                    True),
+    "Beijing Off-Road": ("BAIC",           "Beijing Off-Road = BAIC BJ series",                         False),
+    "GAC Aion Hyper":   ("GAC Aion Hyper", "GAC EV premium line",                                       False),
+    "Dongfeng Yipai":   ("Dongfeng Yipai", "sub-brand Dongfeng",                                        False),
+    "Yangwang":         ("BYD Yangwang",   "BYD flagship sub-brand; modele: U7/U8/U9",                  False),
+    # inne
+    "Audi":             ("Audi",           "niemiecka; JV SAIC-Audi dla CN (Audi A7L, E5 Sportback)",   False),
+    # SUB-BRANDY Z WIELOMA LINIAMI (brand_in_model=True):
+    "Fangchengbao":     ("BYD Leopard",    "'Formula Leopard' — linie Leopard + Tai",                   True),
+    "Galaxy":           ("Geely Galaxy",   "sub-brand Geely — linie L/E/Starship/A",                    True),
 }
 
 DEFAULT_BRAND = ("", "do potwierdzenia", True)  # fallback: brand_in_model=True (bezpieczne)
@@ -203,12 +211,12 @@ MODEL = {
     ("Changan", "Changan CS35 PLUS"):("Changan CS35 Plus","Y", "SUV mini", ""),
     ("Changan", "Changan Eado"):     ("Changan Eado",     "?", "sedan", ""),
 
-    # Changan Qiyuan → Qiyuan
-    ("Changan Qiyuan", "Qiyuan A05"): ("Qiyuan A05", "?", "sedan", ""),
-    ("Changan Qiyuan", "Qiyuan A06"): ("Qiyuan A06", "?", "sedan", ""),
-    ("Changan Qiyuan", "Qiyuan A07"): ("Qiyuan A07", "?", "sedan", ""),
-    ("Changan Qiyuan", "Qiyuan Q05"): ("Qiyuan Q05", "?", "SUV", ""),
-    ("Changan Qiyuan", "Qiyuan Q07"): ("Qiyuan Q07", "?", "SUV", ""),
+    # Changan Qiyuan → Qiyuan  (DB trzyma "Changan Qiyuan A07" z prefixem)
+    ("Changan Qiyuan", "Changan Qiyuan A05"): ("A05", "?", "sedan", ""),
+    ("Changan Qiyuan", "Changan Qiyuan A06"): ("A06", "?", "sedan", ""),
+    ("Changan Qiyuan", "Changan Qiyuan A07"): ("A07", "?", "sedan", ""),
+    ("Changan Qiyuan", "Changan Qiyuan Q05"): ("Q05", "?", "SUV", ""),
+    ("Changan Qiyuan", "Changan Qiyuan Q07"): ("Q07", "?", "SUV", ""),
 
     # Deepal
     ("Deepal", "Deepal S07"):  ("Deepal S07",  "Y", "SUV", ""),
@@ -460,16 +468,41 @@ def full_title(marka_eu, model_clean, brand_in_model):
     return f"{marka_eu} {model_clean}"
 
 
-def normalize_clean(model_raw, brand_in_model, marka_eu):
+def normalize_clean(model_raw, brand_in_model, marka_eu, marka_orig=""):
     """
-    Dla brand_in_model=False: upewnij się że model_raw NIE zaczyna się od marki.
-    Jeśli zaczyna — utnij.
+    Dla brand_in_model=False: upewnij się że model_raw NIE zaczyna się od marki
+    (ani EU, ani oryginalnej CN). Ucina:
+      • pełną markę EU ("XPENG P7+" → "P7+")
+      • ostatnie słowo wielowyrazowej marki EU ("BYD Yangwang" + "Yangwang U7" → "U7")
+      • pełną markę CN ("Changan Qiyuan" + "Changan Qiyuan A07" → "A07")
+      • gdy model == marka → ""
     """
     if brand_in_model:
         return model_raw
-    # obetnij prefix marki jeśli jest
+
+    # 1) prefix = cała marka EU
     if model_raw.lower().startswith(marka_eu.lower() + " "):
         return model_raw[len(marka_eu)+1:].strip()
+    if model_raw.lower() == marka_eu.lower():
+        return ""
+
+    # 2) prefix = cała marka CN (gdy rebrand, np. "Changan Qiyuan" → "Qiyuan")
+    if marka_orig and marka_orig.lower() != marka_eu.lower():
+        if model_raw.lower().startswith(marka_orig.lower() + " "):
+            return model_raw[len(marka_orig)+1:].strip()
+        if model_raw.lower() == marka_orig.lower():
+            return ""
+
+    # 3) prefix = ostatnie słowo wielowyrazowej marki EU (np. "BYD Yangwang" →
+    #    model zaczyna się od "Yangwang ")
+    marka_words = marka_eu.split()
+    if len(marka_words) >= 2:
+        last = marka_words[-1]
+        if model_raw.lower().startswith(last.lower() + " "):
+            return model_raw[len(last)+1:].strip()
+        if model_raw.lower() == last.lower():
+            return ""
+
     return model_raw
 
 
@@ -481,7 +514,9 @@ for line in TSV_IN.read_text().splitlines():
     if not line.strip(): continue
     parts = line.split("\t")
     if len(parts) < 3: continue
-    marka, model, count = parts[0], parts[1], int(parts[2])
+    marka = html.unescape(parts[0])  # "Lynk &amp; Co" → "Lynk & Co"
+    model = html.unescape(parts[1])
+    count = int(parts[2])
     pairs.append((marka, model, count))
 
 pairs.sort(key=lambda x: (-x[2], x[0], x[1]))
@@ -492,16 +527,20 @@ pairs.sort(key=lambda x: (-x[2], x[0], x[1]))
 # ------------------------------------------------------------------
 rows_out = []
 for i, (marka, model, count) in enumerate(pairs, 1):
-    marka_eu_info = BRAND.get(marka, (marka, "do potwierdzenia (brak mapowania)", True))
+    # Fallback gdy marka nie jest zmapowana — zachowaj oryginał, nie ucinaj
+    marka_eu_info = BRAND.get(marka, (marka, "do potwierdzenia (marka nie zmapowana)", False))
     marka_eu, marka_uwaga, brand_in_model = marka_eu_info
 
     model_key = (marka, model)
     if model_key in MODEL:
         model_clean, eu_market, typ, uwagi = MODEL[model_key]
-        model_clean = normalize_clean(model_clean, brand_in_model, marka_eu)
+        model_clean = normalize_clean(model_clean, brand_in_model, marka_eu, marka)
     else:
         has_cn = any("一" <= ch <= "鿿" for ch in model)
-        model_clean = "?" if has_cn else model
+        if has_cn:
+            model_clean = "?"
+        else:
+            model_clean = normalize_clean(model, brand_in_model, marka_eu, marka)
         eu_market = "?"
         typ = ""
         uwagi = "do potwierdzenia (fallback)" + (" — CN znaki" if has_cn else "")
