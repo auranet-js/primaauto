@@ -114,11 +114,20 @@ DEFAULT_BRAND = ("", "do potwierdzenia", True)  # fallback: brand_in_model=True 
 # pierwszeństwo przed mapą BRAND.
 # ------------------------------------------------------------------
 MODEL_BRAND_OVERRIDE = {
-    # Exeed Yaoguang / RX / Yaoguang C-DM → Omoda (oficjalny EU rebrand na
-    # Omoda 9 / Omoda 9 Super Hybrid; Exlantix/TXL/VX/Lingyun zostają Exeed)
-    ("Exeed", "Exeed Yaoguang"):      ("Omoda", False, "rebrand EU: Yaoguang = Omoda 9"),
-    ("Exeed", "Exeed RX"):            ("Omoda", False, "rebrand EU: RX = Yaoguang = Omoda 9"),
-    ("Exeed", "Exeed Yaoguang C-DM"): ("Omoda", False, "rebrand EU: Yaoguang C-DM = Omoda 9 SHS"),
+    # Tu idą przypadki gdy konkretny cn-model w EU sprzedaje się pod INNĄ marką
+    # niż BRAND[cn_mark]. Format: (cn_mark, cn_model) → (eu_mark, brand_in_model, reason).
+}
+
+
+# ------------------------------------------------------------------
+# MODEL_ALT_NAME: dual-name w tytule (SEO). Marka i serie zostają CN/oficjalne,
+# a w tytule dokleja się nawias z nazwą rynkową EU.
+# Np. listing 'Exeed RX' w tytule: "Exeed RX (Omoda 9) 2025 ..."
+# ------------------------------------------------------------------
+MODEL_ALT_NAME = {
+    ("Exeed", "Exeed Yaoguang"):      "Omoda 9",
+    ("Exeed", "Exeed RX"):            "Omoda 9",
+    ("Exeed", "Exeed Yaoguang C-DM"): "Omoda 9 SHS",
 }
 
 
@@ -303,18 +312,18 @@ MODEL = {
     ("Chery Fengyun", "Fengyun A8L"): ("Fengyun A8L", "N", "sedan PHEV", ""),
     ("Chery Fengyun", "风云X3L"):     ("Fengyun X3L", "N", "SUV PHEV", "translit z CN"),
 
-    # Exeed — ważne: marka bazowa zostaje Exeed, per-model override dla Yaoguang
-    # (patrz MODEL_BRAND_OVERRIDE niżej: Yaoguang/RX/Yaoguang C-DM → Omoda)
+    # Exeed — marka bazowa zostaje Exeed; Yaoguang unify do RX z alias "(Omoda 9)"
+    # w tytule (SEO dual-name), patrz MODEL_ALT_NAME niżej.
     ("Exeed", "Exlantix ET"):        ("Exlantix ET",  "?", "sedan EV",     "premium sedan EV, bez EU odpowiednika"),
     ("Exeed", "Exlantix ES"):        ("Exlantix ES",  "?", "sedan EV",     ""),
     ("Exeed", "Exeed TXL"):          ("TXL",          "?", "SUV",          "stary flagship Exeed"),
     ("Exeed", "Exeed VX"):           ("VX",           "?", "SUV 7-os",     "stary flagship Exeed"),
     ("Exeed", "Exeed Lingyun"):      ("Lingyun",      "?", "SUV",          ""),
     ("Exeed", "星途ET5"):            ("ET5",          "?", "sedan",        "translit Xingtu ET5"),
-    # Per-model rebrand → Omoda (override marki niżej):
-    ("Exeed", "Exeed Yaoguang"):      ("9",              "Y", "SUV PHEV flagship", "Yaoguang = Omoda 9 w EU"),
-    ("Exeed", "Exeed RX"):            ("9",              "Y", "SUV PHEV flagship", "Exeed RX = Exeed Yaoguang = Omoda 9"),
-    ("Exeed", "Exeed Yaoguang C-DM"): ("9 Super Hybrid", "Y", "SUV flagship PHEV", "537 KM PHEV = Omoda 9 SHS w PL"),
+    # Yaoguang warianty unify → serie "RX" z aliasem Omoda 9 w tytule
+    ("Exeed", "Exeed Yaoguang"):      ("RX", "Y", "SUV flagship",      "Yaoguang = RX (nowa nazwa handlowa)"),
+    ("Exeed", "Exeed RX"):            ("RX", "Y", "SUV flagship",      ""),
+    ("Exeed", "Exeed Yaoguang C-DM"): ("RX", "Y", "SUV flagship PHEV", "Yaoguang C-DM PHEV 537 KM"),
 
     # Jetour
     ("Jetour", "Jetour T2"):      ("Jetour T2",      "Y", "off-road SUV", ""),
@@ -574,6 +583,9 @@ for i, (marka, model, count) in enumerate(pairs, 1):
 
     # Model EU — pełna nazwa (do title, SEO, Ads)
     model_full = full_title(marka_eu, model_clean, brand_in_model)
+    alt_name = MODEL_ALT_NAME.get((marka, model), "")
+    if alt_name:
+        model_full = f"{model_full} ({alt_name})"
 
     # Slug z model_clean + marka (dla URL /samochody/<marka-slug>/<model-slug>/)
     slug_marka = slugify(marka_eu)
@@ -598,6 +610,7 @@ for i, (marka, model, count) in enumerate(pairs, 1):
         "Model (obecny)": model,
         "Model EU — do `serie` (filtr/URL)": model_clean,
         "Model EU — pełna nazwa (do title/SEO)": model_full,
+        "Alias EU (w tytule)": alt_name,
         "Slug URL huba": url_preview,
         "Tytuł preview": tytul_preview,
         "EU market?": eu_market,
@@ -615,6 +628,7 @@ COLS = [
     "Marka (obecna)", "Marka EU",
     "Model (obecny)", "Model EU — do `serie` (filtr/URL)",
     "Model EU — pełna nazwa (do title/SEO)",
+    "Alias EU (w tytule)",
     "Slug URL huba", "Tytuł preview",
     "EU market?", "Typ", "Uwagi", "STATUS",
 ]
