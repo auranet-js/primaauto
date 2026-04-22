@@ -94,12 +94,15 @@ BRAND = {
     "Beijing Off-Road": ("BAIC",           "Beijing Off-Road = BAIC BJ series",                         False),
     "GAC Aion Hyper":   ("GAC Aion Hyper", "GAC EV premium line",                                       False),
     "Dongfeng Yipai":   ("Dongfeng Yipai", "sub-brand Dongfeng",                                        False),
-    "Yangwang":         ("BYD Yangwang",   "BYD flagship sub-brand; modele: U7/U8/U9",                  False),
     # inne
     "Audi":             ("Audi",           "niemiecka; JV SAIC-Audi dla CN (Audi A7L, E5 Sportback)",   False),
-    # SUB-BRANDY Z WIELOMA LINIAMI (brand_in_model=True):
-    "Fangchengbao":     ("BYD Leopard",    "'Formula Leopard' — linie Leopard + Tai",                   True),
-    "Galaxy":           ("Geely Galaxy",   "sub-brand Geely — linie L/E/Starship/A",                    True),
+    # SCALENIE sub-brandów (user 2026-04-22): wszystko pod marką-matką,
+    # brand_in_model=True żeby zachować nazwę linii w serie (filtr marki
+    # 'BYD' pokaże: Tang DM-i, Leopard 8, Tai 3, Yangwang U7; filtr marki
+    # 'Geely' pokaże: Monjaro, Preface, Galaxy L7, Galaxy Starship 7 EM-i).
+    "Fangchengbao":     ("BYD",            "scalone do BYD; linia Leopard + Tai zachowana w serie",     True),
+    "Yangwang":         ("BYD",            "scalone do BYD; nazwa Yangwang zachowana w serie",          True),
+    "Galaxy":           ("Geely",          "scalone do Geely; nazwa Galaxy zachowana w serie",          True),
 }
 
 DEFAULT_BRAND = ("", "do potwierdzenia", True)  # fallback: brand_in_model=True (bezpieczne)
