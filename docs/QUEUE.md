@@ -266,6 +266,10 @@ Podłączenie 4 zewnętrznych API: **GSC** (monitoring organic), **GA4** (attrib
 
 ## Backlog (niski priorytet)
 
+- [ ] **Plan A — fix race condition w sync** (reaktywne, trigger: gdy znów pojawią się duplikaty). Zastąpić transient lock w `class-asiaauto-sync.php:52-58` przez MySQL `GET_LOCK('asiaauto_sync_dongchedi', 0)`. Bez TTL, auto-release na disconnect. ADR: `docs/decyzje/2026-04-22-dedup-i-optymalizacja-bazy.md`.
+- [ ] **Plan D — prewencja bloatu bazy**:
+  - [ ] `class-asiaauto-media.php`: ustawiać `post_parent = $listing_id` przy `wp_insert_attachment` (bez tego każdy trashowany listing zostawia 10-15 sierot)
+  - [ ] `asiaauto_daily_cleanup` cron: kasować na stałe trashed listings starsze niż 30 dni (teraz tylko drafts→trash, nigdy nie kasuje)
 - [ ] SKILL/CLAUDE.md: zasada „MCP tylko gdy lokalnie nie da się" — MCP http round-trip marnuje tokeny, jeśli uruchamiamy Claude Code na Elarze mającej bezpośredni dostęp do plików i `wp` CLI. Dotyczy: `read_file`, `list_dir`, `query_db` (zastąpić `wp db query`), `options` (zastąpić `wp option get`), `stats` (własny `wp eval`). MCP sens zachowuje tylko dla zewnętrznych projektów bez local shell (Claude.ai web).
 - [ ] Krok 4 manual editor — metabox extra_prep (18 zakładek)
 - [ ] Email HTML templates (maile są plain text)
@@ -286,3 +290,4 @@ Podłączenie 4 zewnętrznych API: **GSC** (monitoring organic), **GA4** (attrib
 - [x] B2 SEO: meta/OG/title dla single i inventory, Schema.org, term meta opisów, 10 marek + 75 modeli, llms.txt (0.30.9, 2026-04-17)
 - [x] Panel klienta `/klient/` — shortcode, logout, auto-redirect (2026-04-16)
 - [x] Fix ghost-crona `asiaauto_daily_cleanup` — handler w bootstrapie + jednorazowy cleanup (trash 5470 → 3559, delete 2077, drafts→trash 166) (0.30.13, 2026-04-20)
+- [x] Dedup 36 par listingów + optymalizacja DB 640 MB → 141 MB (−78%): revisions, trashed listings, orphan attachments; `WP_POST_REVISIONS=3` (2026-04-22) — ADR: `docs/decyzje/2026-04-22-dedup-i-optymalizacja-bazy.md`
