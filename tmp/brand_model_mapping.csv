@@ -69,7 +69,7 @@
 67;8;Tank;Tank;Tank 300;300;Tank 300;/samochody/tank/300/;Tank 300 2025;Y;off-road SUV;MARKA: GWM off-road;
 68;8;Volvo;Volvo;Volvo XC60;XC60;Volvo XC60;/samochody/volvo/xc60/;Volvo XC60 2025;Y;SUV;MARKA: europejska (Geely owned);
 69;8;Zeekr;Zeekr;ZEEKR 007;007;Zeekr 007;/samochody/zeekr/007/;Zeekr 007 2025;Y;sedan;MARKA: Geely premium EV;
-70;7;Exeed;Omoda;Exlantix ET;ET;Omoda ET;/samochody/omoda/et/;Omoda ET 2025;?;sedan EV;Exlantix = Omoda | MARKA: user: Exeed w EU występuje jako Omoda;
+70;7;Exeed;Exeed;Exlantix ET;Exlantix ET;Exeed Exlantix ET;/samochody/exeed/exlantix-et/;Exeed Exlantix ET 2025;?;sedan EV;"premium sedan EV, bez EU odpowiednika | MARKA: niszowa premium CN Chery; TYLKO Yaoguang/RX rebrand→Omoda 9 (per-model override)";
 71;7;Li Auto;Li Auto;Li Auto L9;L9;Li Auto L9;/samochody/li-auto/l9/;Li Auto L9 2025;Y;SUV EREV;;
 72;7;Volkswagen;Volkswagen;Sagitar;Sagitar;Volkswagen Sagitar;/samochody/volkswagen/sagitar/;Volkswagen Sagitar 2025;N;sedan;"CN; EU: Jetta | MARKA: europejska, modele SAIC-VW CN-exclusive";
 73;7;XPeng;XPENG;XPeng G7;G7;XPENG G7;/samochody/xpeng/g7/;XPENG G7 2025;?;SUV;MARKA: oficjalnie all-caps;
@@ -223,9 +223,9 @@
 221;1;Denza;Denza;Denza Z9 GT EV;Z9 GT EV;Denza Z9 GT EV;/samochody/denza/z9-gt-ev/;Denza Z9 GT EV 2025;?;;do potwierdzenia (fallback) | MARKA: BYD-Mercedes JV;
 222;1;Denza;Denza;N8L DM;N8L DM;Denza N8L DM;/samochody/denza/n8l-dm/;Denza N8L DM 2025;?;;do potwierdzenia (fallback) | MARKA: BYD-Mercedes JV;
 223;1;Dongfeng Fengxing;Dongfeng Fengxing;Xinghai V9;Xinghai V9;Dongfeng Fengxing Xinghai V9;/samochody/dongfeng-fengxing/xinghai-v9/;Dongfeng Fengxing Xinghai V9 2025;?;;do potwierdzenia (fallback) | MARKA: do potwierdzenia (marka nie zmapowana);
-224;1;Exeed;Omoda;Exeed Lingyun;Lingyun;Omoda Lingyun;/samochody/omoda/lingyun/;Omoda Lingyun 2025;?;;do potwierdzenia (fallback) | MARKA: user: Exeed w EU występuje jako Omoda;
-225;1;Exeed;Omoda;Exeed Yaoguang C-DM;Yaoguang C-DM;Omoda Yaoguang C-DM;/samochody/omoda/yaoguang-c-dm/;Omoda Yaoguang C-DM 2025;?;;do potwierdzenia (fallback) | MARKA: user: Exeed w EU występuje jako Omoda;
-226;1;Exeed;Omoda;星途ET5;ET5;Omoda ET5;/samochody/omoda/et5/;Omoda ET5 2025;?;sedan;translit Xingtu ET5 | MARKA: user: Exeed w EU występuje jako Omoda;
+224;1;Exeed;Exeed;Exeed Lingyun;Lingyun;Exeed Lingyun;/samochody/exeed/lingyun/;Exeed Lingyun 2025;?;SUV;"MARKA: niszowa premium CN Chery; TYLKO Yaoguang/RX rebrand→Omoda 9 (per-model override)";
+225;1;Exeed;Omoda;Exeed Yaoguang C-DM;9 Super Hybrid;Omoda 9 Super Hybrid;/samochody/omoda/9-super-hybrid/;Omoda 9 Super Hybrid 2025;Y;SUV flagship PHEV;537 KM PHEV = Omoda 9 SHS w PL | MARKA: OVERRIDE: rebrand EU: Yaoguang C-DM = Omoda 9 SHS;
+226;1;Exeed;Exeed;星途ET5;ET5;Exeed ET5;/samochody/exeed/et5/;Exeed ET5 2025;?;sedan;"translit Xingtu ET5 | MARKA: niszowa premium CN Chery; TYLKO Yaoguang/RX rebrand→Omoda 9 (per-model override)";
 227;1;GAC Trumpchi;GAC;Trumpchi E8 PHEV;Trumpchi E8 PHEV;GAC Trumpchi E8 PHEV;/samochody/gac/trumpchi-e8-phev/;GAC Trumpchi E8 PHEV 2025;?;;"do potwierdzenia (fallback) | MARKA: Trumpchi = CN name; w EU GAC";
 228;1;GAC Trumpchi;GAC;Trumpchi ES9 PHEV;Trumpchi ES9 PHEV;GAC Trumpchi ES9 PHEV;/samochody/gac/trumpchi-es9-phev/;GAC Trumpchi ES9 PHEV 2025;?;;"do potwierdzenia (fallback) | MARKA: Trumpchi = CN name; w EU GAC";
 229;1;Galaxy;Geely;Yizhen L380;Yizhen L380;Geely Yizhen L380;/samochody/geely/yizhen-l380/;Geely Yizhen L380 2025;?;;"do potwierdzenia (fallback) | MARKA: scalone do Geely; nazwa Galaxy zachowana w serie";

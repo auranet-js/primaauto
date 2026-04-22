@@ -86,7 +86,7 @@ BRAND = {
     # REBRAND / MERGE
     "Chery":            ("Chery",          "w EU także sub-brandy Omoda/Jaecoo",                        False),
     "GAC Trumpchi":     ("GAC",            "Trumpchi = CN name; w EU GAC",                              False),
-    "Exeed":            ("Omoda",          "user: Exeed w EU występuje jako Omoda",                     False),
+    "Exeed":            ("Exeed",          "niszowa premium CN Chery; TYLKO Yaoguang/RX rebrand→Omoda 9 (per-model override)", False),
     "Changan Qiyuan":   ("Qiyuan",         "sub-brand Changan",                                         False),
     "Jetour Shanhai":   ("Jetour",         "Shanhai = offroad line Jetour; merge",                      False),
     "Maextro":          ("Luxeed",         "Maextro JV Huawei-Chery; dla EU: Luxeed",                   False),
@@ -106,6 +106,20 @@ BRAND = {
 }
 
 DEFAULT_BRAND = ("", "do potwierdzenia", True)  # fallback: brand_in_model=True (bezpieczne)
+
+
+# ------------------------------------------------------------------
+# PER-MODEL OVERRIDE MARKI: niektóre modele z danej marki CN w EU są
+# sprzedawane pod inną marką niż BRAND[cn_mark]. Lookup tutaj ma
+# pierwszeństwo przed mapą BRAND.
+# ------------------------------------------------------------------
+MODEL_BRAND_OVERRIDE = {
+    # Exeed Yaoguang / RX / Yaoguang C-DM → Omoda (oficjalny EU rebrand na
+    # Omoda 9 / Omoda 9 Super Hybrid; Exlantix/TXL/VX/Lingyun zostają Exeed)
+    ("Exeed", "Exeed Yaoguang"):      ("Omoda", False, "rebrand EU: Yaoguang = Omoda 9"),
+    ("Exeed", "Exeed RX"):            ("Omoda", False, "rebrand EU: RX = Yaoguang = Omoda 9"),
+    ("Exeed", "Exeed Yaoguang C-DM"): ("Omoda", False, "rebrand EU: Yaoguang C-DM = Omoda 9 SHS"),
+}
 
 
 # ------------------------------------------------------------------
@@ -289,13 +303,18 @@ MODEL = {
     ("Chery Fengyun", "Fengyun A8L"): ("Fengyun A8L", "N", "sedan PHEV", ""),
     ("Chery Fengyun", "风云X3L"):     ("Fengyun X3L", "N", "SUV PHEV", "translit z CN"),
 
-    # Exeed → Omoda
-    ("Exeed", "Exlantix ET"): ("Omoda ET",  "?", "sedan EV", "Exlantix = Omoda"),
-    ("Exeed", "Exlantix ES"): ("Omoda ES",  "?", "sedan EV", ""),
-    ("Exeed", "Exeed RX"):    ("Omoda RX",  "?", "SUV", ""),
-    ("Exeed", "Exeed TXL"):   ("Omoda TXL", "?", "SUV", ""),
-    ("Exeed", "Exeed VX"):    ("Omoda VX",  "?", "SUV 7-os", ""),
-    ("Exeed", "星途ET5"):     ("Omoda ET5", "?", "sedan", "translit Xingtu ET5"),
+    # Exeed — ważne: marka bazowa zostaje Exeed, per-model override dla Yaoguang
+    # (patrz MODEL_BRAND_OVERRIDE niżej: Yaoguang/RX/Yaoguang C-DM → Omoda)
+    ("Exeed", "Exlantix ET"):        ("Exlantix ET",  "?", "sedan EV",     "premium sedan EV, bez EU odpowiednika"),
+    ("Exeed", "Exlantix ES"):        ("Exlantix ES",  "?", "sedan EV",     ""),
+    ("Exeed", "Exeed TXL"):          ("TXL",          "?", "SUV",          "stary flagship Exeed"),
+    ("Exeed", "Exeed VX"):           ("VX",           "?", "SUV 7-os",     "stary flagship Exeed"),
+    ("Exeed", "Exeed Lingyun"):      ("Lingyun",      "?", "SUV",          ""),
+    ("Exeed", "星途ET5"):            ("ET5",          "?", "sedan",        "translit Xingtu ET5"),
+    # Per-model rebrand → Omoda (override marki niżej):
+    ("Exeed", "Exeed Yaoguang"):      ("9",              "Y", "SUV PHEV flagship", "Yaoguang = Omoda 9 w EU"),
+    ("Exeed", "Exeed RX"):            ("9",              "Y", "SUV PHEV flagship", "Exeed RX = Exeed Yaoguang = Omoda 9"),
+    ("Exeed", "Exeed Yaoguang C-DM"): ("9 Super Hybrid", "Y", "SUV flagship PHEV", "537 KM PHEV = Omoda 9 SHS w PL"),
 
     # Jetour
     ("Jetour", "Jetour T2"):      ("Jetour T2",      "Y", "off-road SUV", ""),
@@ -533,6 +552,11 @@ for i, (marka, model, count) in enumerate(pairs, 1):
     # Fallback gdy marka nie jest zmapowana — zachowaj oryginał, nie ucinaj
     marka_eu_info = BRAND.get(marka, (marka, "do potwierdzenia (marka nie zmapowana)", False))
     marka_eu, marka_uwaga, brand_in_model = marka_eu_info
+
+    # Per-model override marki (np. pojedyncze modele Exeed → Omoda)
+    if (marka, model) in MODEL_BRAND_OVERRIDE:
+        marka_eu, brand_in_model, override_reason = MODEL_BRAND_OVERRIDE[(marka, model)]
+        marka_uwaga = f"OVERRIDE: {override_reason}"
 
     model_key = (marka, model)
     if model_key in MODEL:
