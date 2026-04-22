@@ -4,7 +4,6 @@
 .claude/cache/
 
 # === Robocze / wrażliwe ===
-tmp/
 scratch/
 *.log
 *.tmp
