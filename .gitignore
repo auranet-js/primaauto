@@ -21,4 +21,11 @@ Thumbs.db
 # === Eksporty / dane tymczasowe ===
 exports/
 *.bak
+*.bak-*
 *.backup-*
+
+# === Wygenerowane JSON-y n8n z wstawionymi kluczami API ===
+# (pilot 2026-04-23: klucze inline; docelowo przeniesiemy do n8n credentials
+#  i JSON-y z placeholderami zacommitujemy do workflows/)
+tmp/primaauto-make-desc.json
+tmp/primaauto-serie-desc.json

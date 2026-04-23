@@ -1,32 +1,42 @@
 # Kolejka zadań — Prima Auto
 
-> Aktualizacja: 2026-04-22 (benchmark west-motors.pl + plan blokowany akceptacją mapowania przez Ruslana)
+> Aktualizacja: 2026-04-23 (0.31.5 SEO content huby — 3 widoki PHP + n8n pipeline Claude Sonnet 4.6, batch ~175 marek+modeli w toku)
 
 ---
 
-## ZADANIE 12 — Po akceptacji mapowania przez Ruslana: rollout SEO + Google Ads v2 (NOWE, 2026-04-22)
+## ZADANIE 12 — Rollout SEO + Google Ads v2 (2026-04-22, aktualizowane 2026-04-23)
 
-> Status: **WAIT** — czekamy na STATUS w `tmp/brand_model_mapping.csv` od Ruslana. Bez tego wszystkie kroki poniżej są zablokowane.
+> Status: **W TOKU** — mapowanie v6.1 DONE w 0.31.2, widoki + content pipeline DONE w 0.31.5, batch contentu trwa (~60 min). Google Ads v2 pending.
 
-### Blokada i trigger
-- Pre-requisite: Ruslan potwierdza mapowanie marek/modeli v5 (scalenia BYD/Geely, Exeed zostaje, dual-name Omoda 9, fallbacki dla 2–5 listings)
-- Po "GO" od Ruslana ruszamy Krok 1 — reszta w kolejności
+### Krok 1 — Migracja mapowania ✅ DONE (0.31.2, 2026-04-23)
+- [x] Backup 4 tabel w `~/backups/primaauto/2026-04-23-v6.1-taxonomy/terms-112846.sql` (540KB)
+- [x] 208 rename serie, 258 move_parent, 510 termmeta, 2 create serie, 8 nowych marek (BAIC, Beijing 212, Chery Fulwin, Exlantix, GAC, GWM, Luxeed, Nevo)
+- [x] `class-asiaauto-mapping.php` singleton + `data/brand-mapping-v6.1.php` (260 pozycji) — importer mapuje CN→EU na wejściu
+- [x] 301 redirects `redirectV61Brands()` (16 par: fangchengbao/yangwang→byd, galaxy→geely, itd.)
+- [x] Batch update 930 post_title (`tmp/update-listing-titles.php`)
+- [x] Smoke test 6 URL hubów 200 OK
 
-### Krok 1 — Migracja mapowania (blocker dla wszystkiego)
-- [ ] Backup: `mysqldump` tabel `wp7j_posts`, `wp7j_postmeta`, `wp7j_terms`, `wp7j_term_taxonomy`, `wp7j_term_relationships` → `~/backups/primaauto/YYYY-MM-DD-pre-mapping-v5/`
-- [ ] Skrypt WP-CLI: rename termów `make` i `serie` wg zatwierdzonego CSV (scalenia Fangchengbao/Yangwang→BYD, Galaxy→Geely, + ewentualne poprawki post-review Ruslana)
-- [ ] Aktualizacja importera (`class-asiaauto-importer.php`): mapping CN→EU na wejściu, żeby nowe sync-e używały nowych slugów (inaczej każdy cron przywraca stare)
-- [ ] 301 redirects stare→nowe slugi (listingi + huby) — regex w `.htaccess` albo plugin Redirection
-- [ ] Smoke test: Dongchedi sync → brak nowych starych termów; archive page marki nadal renderuje
+### Krok 2 — SEO huby marek i modeli
+**2a — widoki PHP ✅ DONE (0.31.5, 2026-04-23):**
+- [x] `/marki/` — page ID 263572, template `page-marki.php` (grid 29 marek Top 8 + reszta alfabetycznie)
+- [x] `taxonomy-make.php` — hero, wiki_body z `{{LISTINGS_BAR}}`, pigułki modeli (`aa-brand-card`), USP box, FAQ
+- [x] `taxonomy-serie.php` — dwupoziomowy URL via `template_include`, tabelka 14+ wierszy specs, lista wyposażenia, drugi listing bar „Inne oferty marki", USP box, FAQ
+- [x] Child theme `asiaauto/` rozszerzony (functions.php, style.css z wrapperami aa-home__*)
+- [x] Strona główna: linki marek → huby (`get_term_link`) zamiast filtered inventory; „Wszystkie marki →" → `/marki/`
 
-### Krok 2 — SEO huby marek i modeli (po Kroku 1)
-**Rozdzielone: (a) kod w WP — (b) content przez n8n.**
-- [ ] **(a) Widoki** — dokończenie ZADANIA 11 (backend 0.31.0 już ma rewrite rules, term_link, shortcody `[asiaauto_hub_wiki|_faq|_listings]`, term meta `wiki_body` + `faq_json` — brakują Elementor templates dla `/samochody/`, `/samochody/<mark>/`, `/samochody/<mark>/<serie>/`)
-- [ ] **(b) Content pipeline n8n** — ZADANIE 8: workflow generujący `wiki_body` i `faq_json` per term (marki najpierw, modele w drugim przebiegu). Output: insert/update do `wp_termmeta` przez REST lub bezpośrednio n8n→DB.
-- [ ] Uwaga: huby to NIE "n8n" same w sobie — n8n tylko produkuje content. Routing, taksonomie, szablony to czysto WP/plugin.
-- [ ] Rozważyć v6 mapowania (hybryda west-motors: parent-brand w URL + sub-brand w `serie`) — decyzja po tym jak Ruslan zaakceptuje v5, nie mieszać tematów
-- [ ] Vehicle Schema + BreadcrumbList + OfferShippingDetails na karcie `single-listings.php` (gap vs west-motors)
-- [ ] Opcjonalnie: `llms.txt` / `llms-full.txt` w root domeny (AEO priorytet 2025 wg globalnego CLAUDE.md)
+**2b — content pipeline n8n ✅ DONE (0.31.5, 2026-04-23):**
+- [x] Nowa klasa `AsiaAuto_REST_Hub` — 5 GET + 1 POST endpointów (`facts-for-make/serie`, `latest-by-make/serie`, `aliases-for-make/serie`, POST `hub-content/{tax}/{id}`)
+- [x] `factsForSerie` parsuje `_asiaauto_extra_prep` JSON (200+ chińskich kluczy) → specs + features_standard + features_optional + notable + taxonomies breakdown (fuel/drive/body/ca-year)
+- [x] 2 workflow n8n (make + serie) na witold140-20140.wykr.es, pipeline: Webhook → 3× HTTP → Code build prompt → Claude Sonnet 4.6 (max 8000 tok, system prompt 4k) → Parse+Lint (regex wycina FAQ/„Modele"+ JSON safety) → Resolve term_id → POST save
+- [x] Generator `tmp/generate-n8n-workflows.py` (gitignored JSON — klucze inline). Docelowo: klucze do n8n credentials + czysty JSON do `workflows/`
+- [x] Pilot Voyah + Voyah FREE zweryfikowany (3 iteracje promptu)
+- [x] Batch ~175 (45 marek + ~130 modeli), `tmp/batch-hub-parallel.sh` z xargs -P3, szacowany czas 60 min, koszt ~$25
+- [ ] Po batch: spot-check 5-10 randomowych hubów, retry fail (np. BYD timeout @123s)
+
+**2c — Schema.org + llms.txt (pending):**
+- [ ] Vehicle Schema + BreadcrumbList + OfferShippingDetails na `single-listings.php` (gap vs west-motors)
+- [ ] `llms.txt` / `llms-full.txt` w root domeny (AEO priorytet 2025)
+- [ ] Prompt caching w n8n workflow (`cache_control: ephemeral` na system prompt) — 2-3× oszczędność przy regenach
 
 ### Krok 3 — Google Ads v2 (równolegle z Krokiem 2, po podpięciu API)
 - [ ] User podpina Google Ads API (developer_token już przyznany — user potwierdził 2026-04-22, konfiguracja jutro)
@@ -49,31 +59,9 @@ Ruslan OK → Krok 1 (migracja DB+importer) → Krok 2a (templates) ─┐
 
 ---
 
-## ZADANIE 11 — Strony frontowe marek + widoki hubów (NOWE)
+## ZADANIE 11 — Strony frontowe marek + widoki hubów ✅ DONE (0.31.5, 2026-04-23)
 
-> Status: **następne**. Backend gotowy w 0.31.0 (rewrite rules, term_link filter, shortcody `[asiaauto_hub_wiki]`, `[asiaauto_hub_faq]`, `[asiaauto_hub_listings]`, term meta `wiki_body` + `faq_json`). Brakuje widoków.
-
-### Krok A: landing `/samochody/` — lista wszystkich marek
-- [ ] Grid z logo marek + licznikiem listingów per make
-- [ ] Link do `/samochody/<mark-slug>/` (archive make)
-- [ ] Sortowanie: najpopularniejsze (największa liczba listingów) na górze
-- [ ] Filtry w bocznej kolumnie (paliwo, cena, stan) — reuse z `[asiaauto_inventory]`
-
-### Krok B: archive marki `/samochody/<mark>/`
-- [ ] Elementor Theme Builder template dla taxonomy `make`
-- [ ] `[asiaauto_hub_wiki]` na górze (intro + wiki_body z n8n)
-- [ ] Lista modeli tej marki (grid tile z licznikiem per model)
-- [ ] `[asiaauto_hub_listings]` — lista ogłoszeń filtrowana po make
-- [ ] `[asiaauto_hub_faq]` — FAQ z term_meta
-
-### Krok C: archive modelu `/samochody/<mark>/<serie>/`
-- [ ] Template reuse albo osobny — podobny layout do marki
-- [ ] Listings filtered by make + serie (tax_query AND już działa w `filterHubQuery`)
-- [ ] FAQ bardziej szczegółowe (koszt importu tego modelu, zasięg, homologacja)
-
-### Zależności
-- Backend 0.31.0 gotowy — tylko widoki + content
-- Content wiki/FAQ wypełni ZADANIE 8 (n8n pipeline, marki najpierw, modele po spot-check)
+Zrealizowane jako PHP templates w child theme `asiaauto/` (nie Elementor — pragmatyka: theme był pusty, PHP szybsze niż konfiguracja Theme Buildera). Szczegóły w ZADANIE 12 Krok 2a.
 
 ---
 
