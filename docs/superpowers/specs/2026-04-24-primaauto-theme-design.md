@@ -63,12 +63,12 @@ Razem ~1786 linii własnego CSS — renderują cały content-area. Theme dostarc
 
 ### 2.5 Sticky/fixed elements (KRYTYCZNE — patrz §6)
 
-**Header Elementor (93650):** `"sticky":"top"`, wysokość ≈ 78px desktop / 70px mobile.
+**Header Elementor (93650):** `"sticky":"top"`, **`min_height: 70px`** (oba breakpointy — potwierdzone z eksportu JSON 2026-04-24).
 
 **Plugin CSS — hardcoded zależności od wysokości headera:**
-- `asiaauto-single.css:26` → sticky sidebar single, `top: 78px`
+- `asiaauto-single.css:26` → sticky sidebar single, `top: 78px` (**8px szczelina pod headerem 70px = celowa**)
 - `asiaauto-inventory.css:65` → sticky filtry sidebar desktop, `top: 78px`
-- `asiaauto-inventory.css:528` → sticky pasek filtrów mobile, `top: 70px`
+- `asiaauto-inventory.css:528` → sticky pasek filtrów mobile, `top: 70px` (mobile bez szczeliny — sticky filtry przyklejone do dolnej krawędzi headera)
 
 **Plugin sticky/fixed (zostaje, niezależne od motywu):**
 - Sticky sidebar single (gallery/specs lewa kolumna)
@@ -92,17 +92,20 @@ Wygląd 1:1 z produkcji (zero ryzyka wizualnego). Implementacja przez tokeny CSS
 
 ```css
 :root {
-  --c-primary:   #1B2A4A;
-  --c-secondary: #718096;
-  --c-text:      #2D3748;
-  --c-accent:    #D63031;
-  --c-bg:        #F5F6F8;
-  --c-surface:   #FFFFFF;
-  --c-amber:     #E8AC07;
-  --c-success:   #38A169;
-  --c-on-primary:#B0BEC5;
-  --c-border:    #E1E4E8;
-  --c-btn-hover: #B52828;
+  --c-primary:    #1B2A4A;
+  --c-secondary:  #718096;
+  --c-text:       #2D3748;
+  --c-accent:     #D63031;
+  --c-bg:         #F5F6F8;
+  --c-surface:    #FFFFFF;
+  --c-amber:      #E8AC07;
+  --c-success:    #38A169;
+  --c-on-primary: #B0BEC5;
+  --c-border:     #E1E4E8;
+  --c-btn-hover:  #B52828;
+  --c-header-bg:  #9B0000;  /* override accent dla headera (z eksportu Elementor) */
+
+  --shadow-card: 0 1px 4px rgba(0,0,0,0.08);  /* z box_shadow karty single */
 
   --font-body: 'Inter', sans-serif;
   --fz-body: 15px;
@@ -111,8 +114,7 @@ Wygląd 1:1 z produkcji (zero ryzyka wizualnego). Implementacja przez tokeny CSS
   --fz-h2: 24px; --fw-h2: 600;
   --fz-h3: 16px; --fw-h3: 600;
 
-  --header-h-desktop: 78px;
-  --header-h-mobile:  70px;
+  --header-h: 70px;  /* desktop = mobile, potwierdzone z JSON */
 }
 ```
 
@@ -179,32 +181,89 @@ wp-content/themes/primaauto/
 | `/marki/` | `page-marki.php` | bez zmian |
 | 404 | `404.php` | `[asiaauto_404_listing]` |
 
-### 4.3 `single-listings.php` — sekwencja shortcodów
+### 4.3 `single-listings.php` — 4 oddzielne kontenery z responsive control
 
-Z analizy `_elementor_data` template 101874:
+Eksport JSON 2026-04-24 ujawnił że produkcja ma **3 kontenery `hide_*` + 1 desktop wspólny**, NIE pojedynczy markup. Mobile i desktop mają wyraźnie inne układy.
+
 ```php
 <main class="aa-single">
-    <?php echo do_shortcode('[aa_breadcrumb]'); ?>
-    <h1><?php the_title(); ?></h1>
+
+    <!-- 1. Mobile-only sticky-top (drugi sticky pod main headerem) -->
+    <div class="aa-single__mobile-top is-sticky-top mobile-only">
+        <h1 class="aa-single__title-mobile"><?php the_title(); ?></h1>
+        <?php echo do_shortcode('[asiaauto_price_breakdown]'); ?>
+    </div>
+
+    <!-- 2. Desktop 2-kolumnowy + mobile pojedynczy stack -->
+    <div class="aa-single__breadcrumb">
+        <?php echo do_shortcode('[aa_breadcrumb]'); ?>
+    </div>
     <div class="aa-single__layout">
-        <div class="aa-single__media">
+        <div class="aa-single__main">
             <?php echo do_shortcode('[asiaauto_gallery]'); ?>
-        </div>
-        <aside class="aa-single__sidebar">
             <?php echo do_shortcode('[asiaauto_key_specs]'); ?>
-            <?php echo do_shortcode('[asiaauto_price_breakdown]'); ?>
+            <div class="aa-single__benefits">
+                <div class="aa-single__benefit-card aa-single__benefit-card--accent">
+                    <h3>W cenie:</h3>
+                    <ul>...</ul>  <!-- statyczna lista (źródło: nav-menu w wp-admin?) -->
+                </div>
+                <div class="aa-single__benefit-card">
+                    <h3>Dlaczego my:</h3>
+                    <ul>...</ul>
+                </div>
+                <div class="aa-single__benefit-card aa-single__benefit-card--bg">
+                    <h3>Informacje:</h3>
+                    <ul>...</ul>  <!-- 🐛 linki na asiaauto.pl/informacje/* — patrz §11 BUG -->
+                </div>
+            </div>
+            <div class="aa-single__seller-desc">...opis sprzedającego...</div>
+            <?php echo do_shortcode('[asiaauto_tech_specs]'); ?>
+            <?php echo do_shortcode('[asiaauto_equipment]'); ?>
+        </div>
+
+        <!-- Sticky sidebar desktop-only -->
+        <aside class="aa-single__sidebar is-sticky-top desktop-only">
+            <h1 class="aa-single__title-desktop"><?php the_title(); ?></h1>
+            <div class="aa-single__price-block">
+                <p>CENA</p>
+                <?php echo do_shortcode('[asiaauto_price_breakdown]'); ?>
+            </div>
+            <div class="aa-single__benefit-card aa-single__benefit-card--bg">
+                <h3>W cenie:</h3>
+                <ul>...</ul>
+            </div>
             <?php echo do_shortcode('[asiaauto_order_cta]'); ?>
+            <button class="aa-btn aa-btn--primary">...</button>
+            <button class="aa-btn aa-btn--success">...</button>
         </aside>
     </div>
-    <section class="aa-single__details">
-        <?php echo do_shortcode('[asiaauto_tech_specs]'); ?>
-        <?php echo do_shortcode('[asiaauto_equipment]'); ?>
-        <?php echo do_shortcode('[asiaauto_updated]'); ?>
-    </section>
+
+    <!-- 3. Mobile-only sticky-bottom (CTA bar dolna ramka ekranu) -->
+    <div class="aa-single__mobile-cta is-sticky-bottom mobile-only">
+        <?php echo do_shortcode('[asiaauto_order_cta]'); ?>
+        <div class="aa-single__cta-buttons">
+            <button class="aa-btn aa-btn--primary">...</button>
+            <button class="aa-btn aa-btn--success">...</button>
+        </div>
+    </div>
+
+    <!-- 4. Mobile-only Informacje (dodatkowa sekcja na końcu) -->
+    <div class="aa-single__info-mobile mobile-only">
+        <h3>Informacje</h3>
+        <ul>...</ul>
+    </div>
+
 </main>
 ```
 
-**Kolejność do potwierdzenia z eksportu `single-listing.json`** — może być inna w produkcji.
+**Statyczne listy „W cenie" / „Dlaczego my" / „Informacje":** w obecnej produkcji są wpisane jako Elementor `icon-list` widget (a NIE shortcode). Decyzja do podjęcia w implementacji:
+- **A)** Zaszyć w PHP jako tablica → najprościej, ale klient nie edytuje bez kodu
+- **B)** Zarejestrować jako WP nav-menu (3 menu: „w-cenie", „dlaczego-my", „informacje") → klient edytuje w wp-admin → Wygląd → Menu
+- **C)** Stworzyć Custom Field / option group w wp-admin → settings page
+
+Domyślnie **B** (najbliższe obecnemu UX edycji).
+
+**Statyczna lista buttonów w sidebar/CTA:** źródło tekstu/linków do potwierdzenia podczas implementacji (najpewniej tel + WhatsApp, dynamic tag `aa_phone`/`aa_whatsapp`).
 
 ## 5. Plan asset/enqueue
 
@@ -238,15 +297,20 @@ Po stabilizacji nowego motywu + dezaktywacji Elementora można:
 
 ## 6. Sticky behavior — twardy wymóg
 
-Nowy header **musi mieć dokładnie**:
-- Desktop: **78px** wysokości całkowitej
-- Mobile (≤768px): **70px** wysokości
+Nowy header **musi mieć dokładnie 70px wysokości** (oba breakpointy — `min_height:70px` w eksporcie JSON 2026-04-24).
 
-To wynika z hardcoded `top: 78px` / `top: 70px` w plugin CSS (§2.5). Zmiana wysokości headera bez równoczesnego refaktoru plugin CSS = przykrycie sticky sidebarów single + inventory.
+Plugin CSS hardcoduje `top: 78px` (single sidebar, inventory sidebar desktop) — to celowa **8px szczelina** między dolną krawędzią headera a górą sticky sidebara. Na mobile filtry mają `top: 70px` (przyklejone bezpośrednio do dolnej krawędzi headera).
 
-Implementacja: `header.aa-header { position: sticky; top: 0; z-index: 100; height: var(--header-h-desktop); }` + media query mobile.
+**Implementacja:**
+```css
+.aa-header {
+  position: sticky; top: 0; z-index: 100;
+  height: var(--header-h);  /* 70px */
+  background: var(--c-header-bg);
+}
+```
 
-**Alternatywa do rozważenia (poza tym specem):** ekspozycja CSS variable `--aa-header-h` przez theme, użycie `top: var(--aa-header-h)` w plugin CSS. Daje swobodę zmiany wysokości w przyszłości. Niewielki diff w pluginie. Decyzja w fazie implementacji — domyślnie zostawiamy 78/70.
+**Alternatywa (poza tym specem):** ekspozycja `--aa-header-h` przez theme, użycie `top: calc(var(--aa-header-h) + 8px)` w plugin CSS. Daje swobodę zmiany wysokości w przyszłości. Decyzja w fazie implementacji — domyślnie zostawiamy hardcoded 70/78.
 
 ## 7. Plan cutover
 
@@ -304,19 +368,21 @@ Faza 4 — czyszczenie (po stabilizacji)
 - 7 dni produkcji bez krytycznych błędów (5xx, brakujące assets)
 - Konwersje GA4 (click_phone, click_whatsapp, generate_lead) działają tak jak przed switchem
 
-## 9. Materiały od klienta — wymagane przed implementacją
+## 9. Materiały od klienta — status
 
-Eksporty Elementora (Templates → Eksport JSON) wgrane do `~/projekty/primaauto/tmp/elementor-export/`:
+Otrzymane 2026-04-24 (commit `84daeb0`):
 
-| Plik | Źródło | Co weryfikuję |
+| Plik | Źródło | Status |
 |---|---|---|
-| `header.json` | "Header AsiaAuto" (93650) | Sticky settings, breakpointy, dynamic tags `aa_phone`, dokładny markup mobile |
-| `footer.json` | "Prima-Auto Footer" (93679) | Kolumny, kolejność linków, spacing |
-| `home.json` | "Strona główna" (93629) | Czy `[asiaauto_homepage]` ma jakieś wrapper/hero/tło wokół |
-| `inventory.json` | "Samochody z Chin" (93720) | Wrapper wokół `[asiaauto_inventory]`, hero sekcja |
-| `single-listing.json` | "asiaauto-single-listing" (101874) | Kolejność widgetów, layout 2-kolumnowy, ozdobniki |
+| `tmp/elementor-265656-2026-04-24.json` | Header (93650) | ✅ przeanalizowane → §2.5, §3.2, §6 zaktualizowane |
+| `tmp/elementor-265659-2026-04-24.json` | Footer (93679) | ✅ przeanalizowane → §4.2 zgodne |
+| `tmp/elementor-265662-2026-04-24.json` | Single listing (101874) | ✅ przeanalizowane → §4.3 całkowicie przepisane (4 kontenery, mobile/desktop split) |
+| `tmp/primaauto-header-desktop.png` | Screenshot | ✅ tło `#9B0000`, layout zweryfikowany |
+| `tmp/primaauto-header-mobile.png` | Screenshot | ✅ hamburger amber, pill telefon+WhatsApp |
 
-**Nice-to-have (nie blokuje):** screenshoty desktop + mobile dla home, single, header z otwartym hamburgerem.
+Świadomie pominięte przez klienta (czyste shortcode wrappery, nic w Elementor edycji nie wymaga rozpoznania):
+- Strona główna (93629) → `[asiaauto_homepage]`
+- Inventory page (93720) → `<h1>` + opis + `[asiaauto_inventory]`
 
 ## 10. Open questions
 
@@ -334,6 +400,18 @@ Eksporty Elementora (Templates → Eksport JSON) wgrane do `~/projekty/primaauto
 - Nowy design (inny look niż produkcja) — odrzucone, klonujemy
 - Migracja stron 153875/153877/93720 z Elementor `_elementor_edit_mode` na czysty `post_content` — opcjonalnie po cutover, post_content już jest poprawny shortcode, edit_mode meta to tylko hint dla Elementor admin
 - Migracja huby SEO (`page-marki.php`, `taxonomy-make.php`, `taxonomy-serie.php`) — kopiujemy as-is, nie zmieniamy
+
+### 🐛 BUG do osobnego ticketu (znalezione przy review eksportu single 2026-04-24)
+W single listing template (101874) sekcja „Informacje" zawiera linki na **starą domenę**:
+- `https://asiaauto.pl/informacje/proces-zamawiania/`
+- `https://asiaauto.pl/informacje/gwarancja-i-serwis/`
+- `https://asiaauto.pl/informacje/jezyk-obslugi-pojazdu/`
+- `https://asiaauto.pl/informacje/finansowanie/` (link wskazuje na jezyk-obslugi-pojazdu — kolejny bug)
+- `https://asiaauto.pl/informacje/regulamin-serwisu/` (j.w.)
+- `https://asiaauto.pl/informacje/homologacja-i-rejestracja/`
+
+Powinny wskazywać na `primaauto.com.pl/informacje/...`. Obecnie redirectują przez 301 (asiaauto → primaauto) — działa, ale dodaje hop.
+Naprawimy przy okazji wpisywania tych list w PHP/menu w nowym motywie.
 
 ---
 
