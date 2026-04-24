@@ -1,0 +1,340 @@
+# Spec: Standalone theme `primaauto` — eliminacja Elementora
+
+> Data: 2026-04-24
+> Status: design / czeka na materiały od klienta (eksporty Elementor)
+> Sesja brainstormingu: zob. wątek Claude Code 2026-04-24
+
+---
+
+## 1. Cel
+
+Wyeliminować plugin `elementor` + `elementor-pro` z front-endu primaauto.com.pl przez wymianę aktywnego motywu z `asiaauto` (child Hello Elementor) na nowy, samodzielny motyw `primaauto`.
+
+**Główny driver: Core Web Vitals.** Z front-endu znikają:
+- `elementor-frontend.min.js` + Pro chunki + swiper + share-link + eicons
+- 4× per request inline `elementor-post-{id}.css` (Header / Footer / Single / Kit)
+- Hello Elementor `style.css` + `theme.json` block presets
+- Font Awesome (ładowane przez Elementor)
+- Wrappery `.elementor-element`, `.elementor-widget-container` (lżejszy DOM = lepszy LCP/CLS)
+
+Cel uboczny: czystsza architektura motywu, bez parent-theme zależności od Elementora, łatwiejsza iteracja designu w przyszłości.
+
+## 2. Stan aktualny (źródła)
+
+### 2.1 Wtyczki aktywne (4)
+- `complianz-gdpr-premium` 7.5.7.2 — RODO, **zostaje**
+- `elementor` 4.0.3 — **do usunięcia po stabilizacji**
+- `elementor-pro` 4.0.3 — **do usunięcia po stabilizacji**
+- `asiaauto-sync` 0.31.8 — własny plugin, **kluczowy, theme-agnostic, bez zmian**
+
+### 2.2 Motyw aktywny
+- `asiaauto` (child) — 5 plików: `functions.php`, `style.css`, `page-marki.php`, `taxonomy-make.php`, `taxonomy-serie.php`
+- Parent: `hello-elementor` — minimalistyczny, ale zaprojektowany pod Elementor
+
+### 2.3 Co Elementor renderuje na froncie
+
+| Template ID | Rola | Theme Builder condition | Co w środku |
+|---|---|---|---|
+| 93632 | Kit | global tokens | kolory + typografia (Inter, body 15/1.6, H1 32/700) |
+| 93650 | Header | `include/general` | logo, WP nav-menu, 2× icon-list (linki + telefony przez `aa_phone` dynamic tag), `aa_whatsapp`, `"sticky":"top"` |
+| 93679 | Footer | `include/general` | logo, opis, nawigacja icon-list (4 linki), kontakt icon-list, divider, copyright, link Auranet |
+| 101874 | single-listing | `include/singular/listings` | `aa_breadcrumb`, `asiaauto_gallery`, `asiaauto_key_specs`, `asiaauto_price_breakdown`, `asiaauto_tech_specs`, `asiaauto_equipment`, `asiaauto_updated`, `asiaauto_order_cta`, `aa_phone`, `aa_whatsapp` + ozdobniki Elementora |
+| 145549 | archive listings | `include/archive/listings_archive` | **DEAD** — `https://primaauto.com.pl/listings/` zwraca 404, używa nieistniejącego JetSmartFilters |
+| 154093 | 404 | `include/singular/not_found404` | jeden shortcode `[asiaauto_404_listing]` |
+| 198673 | Single content page | `include/singular/page` (exclude front_page) | heading + `theme-post-content` |
+
+**Strony WP (5) edytowane Elementorem — `post_content` to praktycznie tylko shortcode:**
+- 93629 Strona główna → `[asiaauto_homepage]`
+- 93720 Samochody z Chin → `<h1>` + opis + `[asiaauto_inventory]`
+- 153875 W drodze → `[asiaauto_inventory reservation_status="in_transit"]`
+- 153877 W Polsce → `[asiaauto_inventory reservation_status="on_lot"]`
+- 186946 Kontakt → `[asiaauto_contact]`
+
+### 2.4 Plugin assets (nietykane)
+
+| Plik | Rozmiar | Zakres |
+|---|---|---|
+| `assets/css/asiaauto-single.css` | 143 linii | layout single listing |
+| `assets/css/asiaauto-inventory.css` | 654 linii | layout listy + filtry |
+| `assets/css/asiaauto-order-wizard.css` | 989 linii | wizard zamówienia |
+| `assets/js/asiaauto-{single,inventory,tracking,order-wizard}.js` | — | interakcje |
+
+Razem ~1786 linii własnego CSS — renderują cały content-area. Theme dostarcza tylko: header, footer, page skeleton, globalne tokeny.
+
+### 2.5 Sticky/fixed elements (KRYTYCZNE — patrz §6)
+
+**Header Elementor (93650):** `"sticky":"top"`, wysokość ≈ 78px desktop / 70px mobile.
+
+**Plugin CSS — hardcoded zależności od wysokości headera:**
+- `asiaauto-single.css:26` → sticky sidebar single, `top: 78px`
+- `asiaauto-inventory.css:65` → sticky filtry sidebar desktop, `top: 78px`
+- `asiaauto-inventory.css:528` → sticky pasek filtrów mobile, `top: 70px`
+
+**Plugin sticky/fixed (zostaje, niezależne od motywu):**
+- Sticky sidebar single (gallery/specs lewa kolumna)
+- Fixed bottom CTA bar mobile single (telefon/WhatsApp)
+- Sticky sidebar filtrów inventory desktop
+- Sticky pasek filtrów inventory mobile
+- Fixed drawer filtrów mobile + overlay
+- Sticky bottom action bar inventory
+- Sticky footer wizardu zamówienia
+
+## 3. Decyzje projektowe
+
+### 3.1 Strategia migracji
+**Nowy standalone motyw** `primaauto` (slug bez roku). Cutover przez `wp theme activate primaauto`. Rollback: `wp theme activate asiaauto` (1 komenda, motyw asiaauto pozostaje na dysku jako safety net).
+
+Switch motywu = atomowy cutover Theme Builder Elementora — lokalizacje (`elementor-location-header/footer/single`) są wpinane przez hooki aktywnego motywu, więc zmiana motywu automatycznie odcina rendering Elementor templatów (Plugin może być nadal aktywny — wyłączymy go dopiero po tygodniu obserwacji produkcji).
+
+### 3.2 CSS — wariant „Hybryda" (klon w design-systemie)
+
+Wygląd 1:1 z produkcji (zero ryzyka wizualnego). Implementacja przez tokeny CSS:
+
+```css
+:root {
+  --c-primary:   #1B2A4A;
+  --c-secondary: #718096;
+  --c-text:      #2D3748;
+  --c-accent:    #D63031;
+  --c-bg:        #F5F6F8;
+  --c-surface:   #FFFFFF;
+  --c-amber:     #E8AC07;
+  --c-success:   #38A169;
+  --c-on-primary:#B0BEC5;
+  --c-border:    #E1E4E8;
+  --c-btn-hover: #B52828;
+
+  --font-body: 'Inter', sans-serif;
+  --fz-body: 15px;
+  --lh-body: 1.6;
+  --fz-h1: 32px; --fw-h1: 700;
+  --fz-h2: 24px; --fw-h2: 600;
+  --fz-h3: 16px; --fw-h3: 600;
+
+  --header-h-desktop: 78px;
+  --header-h-mobile:  70px;
+}
+```
+
+Wartości pochodzą z Elementor Kit (93632) — pełna inwentaryzacja w §2.3.
+
+### 3.3 Inter font — self-host
+
+Pliki `Inter-Regular.woff2`, `Inter-SemiBold.woff2`, `Inter-Bold.woff2` w `themes/primaauto/fonts/`.
+- `<link rel="preload">` dla wariantu 400 (body) w `wp_head`
+- `font-display: swap`
+- Bez `fonts.googleapis.com` → -1 DNS lookup, eliminacja blokowania third-party
+
+### 3.4 Hamburger menu — vanilla JS (~50 linii)
+
+CSS-only checkbox-trick działa, ale focus-trap + ARIA wymaga JS. Brak bibliotek.
+- `<button aria-expanded>` + `<dialog>`-like pattern
+- ESC zamyka, Tab cykluje wewnątrz, scroll-lock body
+
+## 4. Architektura motywu `primaauto`
+
+### 4.1 Struktura plików
+
+```
+wp-content/themes/primaauto/
+├── style.css                   # header motywu + tokens + reset + typography
+├── functions.php               # enqueue, theme supports, nav menus, image sizes
+├── theme.json                  # minimalny — bez block presets (nic nie renderujemy Gutenbergiem)
+├── header.php                  # sticky desktop + mobile hamburger
+├── footer.php                  # 3-kolumnowy + copyright bar
+├── index.php                   # fallback
+├── page.php                    # generic — H1 + the_content() (obsłuży 4 strony shortcode-only)
+├── front-page.php              # the_content() — strona główna ([asiaauto_homepage])
+├── single-listings.php         # własny szablon CPT listings
+├── 404.php                     # [asiaauto_404_listing]
+├── page-marki.php              # przeniesione z asiaauto/ bez zmian
+├── taxonomy-make.php           # przeniesione z asiaauto/ bez zmian
+├── taxonomy-serie.php          # przeniesione z asiaauto/ bez zmian
+├── assets/
+│   ├── css/
+│   │   ├── header.css
+│   │   ├── footer.css
+│   │   └── base.css            # reset, typography, utilities
+│   └── js/
+│       └── nav.js              # hamburger + focus trap
+├── fonts/
+│   ├── Inter-Regular.woff2
+│   ├── Inter-SemiBold.woff2
+│   └── Inter-Bold.woff2
+└── screenshot.png
+```
+
+### 4.2 Mapowanie WP template hierarchy → pliki
+
+| Strona | Template | Renderuje |
+|---|---|---|
+| `/` (93629) | `front-page.php` | `the_content()` → `[asiaauto_homepage]` |
+| `/samochody/` (93720) | `page.php` | `<h1>` + opis + `[asiaauto_inventory]` |
+| `/w-drodze/` (153875) | `page.php` | `[asiaauto_inventory reservation_status="in_transit"]` |
+| `/w-rzeszowie/` (153877) | `page.php` | `[asiaauto_inventory reservation_status="on_lot"]` |
+| `/kontakt/` (186946) | `page.php` | `[asiaauto_contact]` |
+| `/oferta/{slug}/` | `single-listings.php` | shortcody pluginu w określonej kolejności |
+| `/samochody/{make}/` | `taxonomy-make.php` | bez zmian |
+| `/samochody/{make}/{serie}/` | `taxonomy-serie.php` (przez `template_include`) | bez zmian |
+| `/marki/` | `page-marki.php` | bez zmian |
+| 404 | `404.php` | `[asiaauto_404_listing]` |
+
+### 4.3 `single-listings.php` — sekwencja shortcodów
+
+Z analizy `_elementor_data` template 101874:
+```php
+<main class="aa-single">
+    <?php echo do_shortcode('[aa_breadcrumb]'); ?>
+    <h1><?php the_title(); ?></h1>
+    <div class="aa-single__layout">
+        <div class="aa-single__media">
+            <?php echo do_shortcode('[asiaauto_gallery]'); ?>
+        </div>
+        <aside class="aa-single__sidebar">
+            <?php echo do_shortcode('[asiaauto_key_specs]'); ?>
+            <?php echo do_shortcode('[asiaauto_price_breakdown]'); ?>
+            <?php echo do_shortcode('[asiaauto_order_cta]'); ?>
+        </aside>
+    </div>
+    <section class="aa-single__details">
+        <?php echo do_shortcode('[asiaauto_tech_specs]'); ?>
+        <?php echo do_shortcode('[asiaauto_equipment]'); ?>
+        <?php echo do_shortcode('[asiaauto_updated]'); ?>
+    </section>
+</main>
+```
+
+**Kolejność do potwierdzenia z eksportu `single-listing.json`** — może być inna w produkcji.
+
+## 5. Plan asset/enqueue
+
+### 5.1 Co theme dorzuca
+- `style.css` (theme header + tokens + reset)
+- `assets/css/base.css`
+- `assets/css/header.css` z `<link rel="preload">` dla Inter-400
+- `assets/css/footer.css`
+- `assets/js/nav.js` (defer, tylko gdy istnieje mobile menu w DOM)
+
+### 5.2 Co plugin dorzuca (bez zmian)
+- `aa-single` (CSS+JS) na single listing
+- `asiaauto-inventory` (CSS+JS) na hubach + inventory pages
+- `asiaauto-order-wizard` (CSS+JS) na wizard
+- `asiaauto-tracking` na wszystkich (GA4/Ads conversions)
+
+### 5.3 Co znika z front-endu
+- Hello Elementor `style.css`, `theme.json` block presets, fonty Hello
+- Elementor frontend bundle + Pro
+- Eicons font, Font Awesome (Elementor)
+- 4× per request inline `<style id="elementor-post-{id}-css">`
+- Elementor wrappery DOM (`.elementor-element`, `.elementor-widget-*`, `.e-con-*`)
+
+### 5.4 Aktualizacja `class-asiaauto-perf.php`
+Po stabilizacji nowego motywu + dezaktywacji Elementora można:
+- usunąć ostrożny komentarz „Header/footer Elementor template still has its widget CSS"
+- agresywniej dequeue na **wszystkich** stronach (nie tylko huby/single/archive)
+- rozważyć dequeue `wp-emoji-release.min.js`, `comment-reply` (chyba że Complianz korzysta)
+
+**Nie w tym specu** — osobny ticket po cutover.
+
+## 6. Sticky behavior — twardy wymóg
+
+Nowy header **musi mieć dokładnie**:
+- Desktop: **78px** wysokości całkowitej
+- Mobile (≤768px): **70px** wysokości
+
+To wynika z hardcoded `top: 78px` / `top: 70px` w plugin CSS (§2.5). Zmiana wysokości headera bez równoczesnego refaktoru plugin CSS = przykrycie sticky sidebarów single + inventory.
+
+Implementacja: `header.aa-header { position: sticky; top: 0; z-index: 100; height: var(--header-h-desktop); }` + media query mobile.
+
+**Alternatywa do rozważenia (poza tym specem):** ekspozycja CSS variable `--aa-header-h` przez theme, użycie `top: var(--aa-header-h)` w plugin CSS. Daje swobodę zmiany wysokości w przyszłości. Niewielki diff w pluginie. Decyzja w fazie implementacji — domyślnie zostawiamy 78/70.
+
+## 7. Plan cutover
+
+```
+Faza 0 — przygotowanie (TEN spec)
+  ✓ inwentaryzacja
+  ✓ decyzje projektowe
+  ⏳ materiały od klienta (eksporty Elementor + screenshoty)
+
+Faza 1 — implementacja (osobny plan)
+  - utworzenie themes/primaauto/ (na produkcji, ale nieaktywne)
+  - plain plików: style.css, functions.php, header.php, footer.php, etc.
+  - test na admin preview (?preview=1&theme=primaauto?) lub krótki switch w godzinach niskiego ruchu
+
+Faza 2 — switch
+  - mysqldump bazy (backup)
+  - tar themes/asiaauto + themes/hello-elementor (backup)
+  - wp theme activate primaauto
+  - smoke test: home, /samochody/, /oferta/{listing}, /kontakt/, 404, hub marki, hub serii
+  - jeśli OK — zostawiamy
+  - jeśli nie OK — wp theme activate asiaauto (rollback w sekundach)
+
+Faza 3 — obserwacja (7 dni)
+  - PSI runs codziennie (porównanie do baseline z tmp/psi-final-2026-04-23/)
+  - GA4: bounce rate, session duration na single listing
+  - logi Apache: 5xx, 404 nieoczekiwane
+  - feedback klienta
+
+Faza 4 — czyszczenie (po stabilizacji)
+  - wp plugin deactivate elementor-pro elementor
+  - usunięcie elementor_library posts (po backupie)
+  - wp theme delete hello-elementor (zostaje asiaauto jako safety dla peace of mind)
+  - aktualizacja class-asiaauto-perf.php — agresywniejsze dequeue
+  - cleanup elementor_* options w wp_options
+```
+
+## 8. Acceptance criteria
+
+**Funkcjonalne:**
+- Strona główna, /samochody/, /w-drodze/, /w-rzeszowie/, /kontakt/, /oferta/{slug}/, 404, /samochody/{make}/, /samochody/{make}/{serie}/, /marki/ — wszystkie renderują się **wizualnie identycznie** z produkcją (z dokładnością do tokenów kolorów/typo z §3.2)
+- Sticky header działa (desktop + mobile), wysokość 78/70 px, nie kolizjuje ze sticky sidebarami plugin CSS
+- Hamburger menu mobile otwiera się, zamyka ESC, Tab nie wycieka poza menu
+- Wszystkie shortcody pluginu renderują się tak samo jak teraz
+- WP nav-menu działa (przeniesione z asiaauto bez zmian)
+- Complianz banner pojawia się normalnie
+
+**Wydajność (cel — porównanie do baseline `tmp/psi-final-2026-04-23/`):**
+- Mobile LCP: ≥ -300 ms vs baseline
+- Mobile TBT: ≥ -200 ms vs baseline
+- Mobile CLS: bez regresji
+- Desktop wszystkie metryki: bez regresji
+- Liczba wymaganych żądań HTTP per wyświetlenie single listing: -10 minimum
+
+**Stabilność:**
+- 7 dni produkcji bez krytycznych błędów (5xx, brakujące assets)
+- Konwersje GA4 (click_phone, click_whatsapp, generate_lead) działają tak jak przed switchem
+
+## 9. Materiały od klienta — wymagane przed implementacją
+
+Eksporty Elementora (Templates → Eksport JSON) wgrane do `~/projekty/primaauto/tmp/elementor-export/`:
+
+| Plik | Źródło | Co weryfikuję |
+|---|---|---|
+| `header.json` | "Header AsiaAuto" (93650) | Sticky settings, breakpointy, dynamic tags `aa_phone`, dokładny markup mobile |
+| `footer.json` | "Prima-Auto Footer" (93679) | Kolumny, kolejność linków, spacing |
+| `home.json` | "Strona główna" (93629) | Czy `[asiaauto_homepage]` ma jakieś wrapper/hero/tło wokół |
+| `inventory.json` | "Samochody z Chin" (93720) | Wrapper wokół `[asiaauto_inventory]`, hero sekcja |
+| `single-listing.json` | "asiaauto-single-listing" (101874) | Kolejność widgetów, layout 2-kolumnowy, ozdobniki |
+
+**Nice-to-have (nie blokuje):** screenshoty desktop + mobile dla home, single, header z otwartym hamburgerem.
+
+## 10. Open questions
+
+- Czy `primaauto` (bez roku) jako slug — **OK (Janek 2026-04-24)**
+- Wymiar headera 78/70 px — **OK (Janek 2026-04-24)**
+- Inter self-host woff2 — **OK (Janek 2026-04-24)**
+- Vanilla JS hamburger — **OK (Janek 2026-04-24)**
+- Czy `theme.json` ma być pusty czy z minimalnymi presetami dla edytora WP-admin — **odpowiedź po wgraniu materiałów** (jeśli nie używasz block editora w WP admin do żadnej strony — pusty)
+- Czy plik `front-page.php` ma renderować coś poza `the_content()` (np. preload obrazu hero z homepage shortcode) — **odpowiedź po obejrzeniu home.json**
+
+## 11. Co JEST poza tym specem
+
+- Refaktor plugin CSS na CSS variables (`--aa-header-h` zamiast hardcoded 78px) — osobny ticket
+- Przepisanie `class-asiaauto-shortcodes.php` na coś nowoczesniejszego — nieruszane, działa
+- Nowy design (inny look niż produkcja) — odrzucone, klonujemy
+- Migracja stron 153875/153877/93720 z Elementor `_elementor_edit_mode` na czysty `post_content` — opcjonalnie po cutover, post_content już jest poprawny shortcode, edit_mode meta to tylko hint dla Elementor admin
+- Migracja huby SEO (`page-marki.php`, `taxonomy-make.php`, `taxonomy-serie.php`) — kopiujemy as-is, nie zmieniamy
+
+---
+
+**Następny krok:** klient wgrywa eksporty Elementor JSON do `tmp/elementor-export/` → review materiałów → przejście do `writing-plans` skill (implementation plan).
