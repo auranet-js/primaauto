@@ -251,7 +251,7 @@ const userMessage = `DATA:\\n${{JSON.stringify(data, null, 2)}}\\n\\nGenerate hu
 const anthropicBody = {{
   model: {json.dumps(MODEL_ID)},
   max_tokens: 8000,
-  system: {sys_prompt_js},
+  system: [{{ type: 'text', text: {sys_prompt_js}, cache_control: {{ type: 'ephemeral' }} }}],
   messages: [{{ role: 'user', content: userMessage }}]
 }};
 
@@ -352,38 +352,13 @@ return [{
         "name": "Parse + Lint",
     }
 
-    # Zdobycie term_id (make->id) przez kolejny GET
-    n_get_term = http_get(
-        "Resolve term_id",
-        f"={WP_BASE}/facts-for-make/{{{{ $json.make_slug }}}}",
-        [1560, 180],
-    )
-
-    save_body = {
-        "wiki_body": "={{ $('Parse + Lint').item.json.payload.wiki_body }}",
-        "faq_json": "={{ $('Parse + Lint').item.json.payload.faq_json }}",
-        "seo_desc": "={{ $('Parse + Lint').item.json.payload.seo_desc }}",
-        "prompt_version": "={{ $('Parse + Lint').item.json.prompt_version }}",
-    }
-
-    # term_id pochodzi z query taxonomii make — użyjemy bezpośrednio slug bo endpoint robi lookup. Ale POST endpoint wymaga id.
-    # Dodamy resolver: WordPress REST /wp/v2/make?slug=X → id
-    n_resolve_id = {
-        "parameters": {
-            "url": "=https://primaauto.com.pl/wp-json/wp/v2/make?slug={{ $('Parse + Lint').item.json.make_slug }}&_fields=id",
-            "options": {"response": {"response": {"responseFormat": "json"}}},
-        },
-        "type": "n8n-nodes-base.httpRequest",
-        "typeVersion": 4.2,
-        "position": [1560, 300],
-        "id": nid(),
-        "name": "Resolve Term ID",
-    }
+    # term_id pobierany z Fetch Facts (`asiaauto/v1/facts-for-make` od 0.31.12 zwraca term_id)
+    # — zero extra fetch, zawsze właściwy term (parent-aware resolution po stronie WP)
 
     n_save = {
         "parameters": {
             "method": "POST",
-            "url": "=https://primaauto.com.pl/wp-json/asiaauto/v1/hub-content/make/{{ $('Resolve Term ID').first().json.id }}",
+            "url": "=https://primaauto.com.pl/wp-json/asiaauto/v1/hub-content/make/{{ $('Fetch Facts').first().json.term_id }}",
             "sendHeaders": True,
             "headerParameters": {
                 "parameters": [
@@ -418,7 +393,7 @@ return [{
 
     nodes = [
         n_webhook, n_facts, n_latest, n_aliases, n_merge,
-        n_build_prompt, n_anthropic, n_parse, n_resolve_id, n_save, n_respond,
+        n_build_prompt, n_anthropic, n_parse, n_save, n_respond,
     ]
 
     connections = {
@@ -523,7 +498,7 @@ const userMessage = `DATA:\\n${{JSON.stringify(data, null, 2)}}\\n\\nGenerate hu
 const anthropicBody = {{
   model: {json.dumps(MODEL_ID)},
   max_tokens: 8000,
-  system: {sys_prompt_js},
+  system: [{{ type: 'text', text: {sys_prompt_js}, cache_control: {{ type: 'ephemeral' }} }}],
   messages: [{{ role: 'user', content: userMessage }}]
 }};
 
@@ -612,23 +587,11 @@ return [{
         "name": "Parse + Lint",
     }
 
-    # Resolve serie term_id — skomplikowane bo trzeba po parent. Użyjemy WP REST z filter po slug + parent.
-    n_resolve = {
-        "parameters": {
-            "url": "=https://primaauto.com.pl/wp-json/wp/v2/serie?slug={{ $('Parse + Lint').item.json.serie_slug }}&_fields=id,parent",
-            "options": {"response": {"response": {"responseFormat": "json"}}},
-        },
-        "type": "n8n-nodes-base.httpRequest",
-        "typeVersion": 4.2,
-        "position": [1560, 300],
-        "id": nid(),
-        "name": "Resolve Term ID",
-    }
-
+    # term_id pobierany z Fetch Facts — parent-aware (filtruje po make) od 0.31.12.
     n_save = {
         "parameters": {
             "method": "POST",
-            "url": "=https://primaauto.com.pl/wp-json/asiaauto/v1/hub-content/serie/{{ $('Resolve Term ID').first().json.id }}",
+            "url": "=https://primaauto.com.pl/wp-json/asiaauto/v1/hub-content/serie/{{ $('Fetch Facts').first().json.term_id }}",
             "sendHeaders": True,
             "headerParameters": {
                 "parameters": [
@@ -663,7 +626,7 @@ return [{
 
     nodes = [
         n_webhook, n_facts, n_latest, n_aliases, n_merge,
-        n_build_prompt, n_anthropic, n_parse, n_resolve, n_save, n_respond,
+        n_build_prompt, n_anthropic, n_parse, n_save, n_respond,
     ]
 
     connections = {
@@ -678,8 +641,7 @@ return [{
         "Merge": {"main": [[{"node": "Build Prompt", "type": "main", "index": 0}]]},
         "Build Prompt": {"main": [[{"node": "Claude Sonnet 4.6", "type": "main", "index": 0}]]},
         "Claude Sonnet 4.6": {"main": [[{"node": "Parse + Lint", "type": "main", "index": 0}]]},
-        "Parse + Lint": {"main": [[{"node": "Resolve Term ID", "type": "main", "index": 0}]]},
-        "Resolve Term ID": {"main": [[{"node": "Save to WP", "type": "main", "index": 0}]]},
+        "Parse + Lint": {"main": [[{"node": "Save to WP", "type": "main", "index": 0}]]},
         "Save to WP": {"main": [[{"node": "Respond", "type": "main", "index": 0}]]},
     }
 

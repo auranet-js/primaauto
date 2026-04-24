@@ -1,5 +1,12 @@
 {
   "permissions": {
+    "deny": [
+      "Bash(git push --force *)",
+      "Bash(git push --force)",
+      "Bash(git push -f *)",
+      "Bash(git push -f)",
+      "Bash(git push --force-with-lease *)"
+    ],
     "allow": [
       "Bash(php -l *)",
       "Bash(curl -s *)",
@@ -20,6 +27,20 @@
       "Bash(wp theme list *)",
       "Bash(wp config get *)",
       "Bash(wp rewrite list *)",
+      "Bash(dig *)",
+      "Bash(wp cron event list *)",
+      "Bash(wp db query *)",
+      "Bash(python3 *)",
+      "Bash(php *)",
+      "Bash(mkdir *)",
+      "Bash(cp *)",
+      "Bash(chmod *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push)",
+      "Bash(git push *)",
+      "Bash(mysql *)",
+      "mcp__claude_ai_Victorini_MCP__write_file",
       "mcp__claude_ai_Victorini_MCP__list_dir",
       "mcp__claude_ai_Victorini_MCP__read_file",
       "mcp__claude_ai_Victorini_MCP__query_db",
