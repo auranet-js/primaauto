@@ -1,5 +1,16 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.7 — 2026-04-28
+
+- **Homepage SEO refocus na „import samochodów z Chin".** User cel: pierwsza pozycja w Google we frazie „import samochodów z Chin". Zmiany:
+  - H1 w `class-asiaauto-homepage.php::renderHero()`: „Samochody elektryczne i hybrydowe z Chin" → **„Import samochodów z Chin do Polski"**.
+  - Hero subtitle: „Prima-Auto — agencja importu samochodów z Chin. EV, PHEV, hybrydy. Pełna obsługa: transport, cło, homologacja i rejestracja w cenie."
+  - `rank_math_title` page_id=93629: **„Import samochodów z Chin do Polski | Prima-Auto"** (62 chars).
+  - `rank_math_description`: focus kw na początku + USP + 1841 ofert + Rzeszów (155 chars).
+  - `rank_math_focus_keyword`: **„import samochodów z Chin"**.
+  - OG/Twitter title + description ustawione bezpośrednio przez `rank_math_facebook_*` i `rank_math_twitter_*` term meta.
+- Strona główna jest WP page (id=93629) z content `[asiaauto_homepage]` shortcode — RM widzi tylko shortcode w editor, ale frontend ma pełną treść (RM analizuje frontend, nie source content).
+
 ## 0.32.6 — 2026-04-28
 
 - **RankMath Pro migration — total przeniesienie SEO meta na RankMath.** User po instalacji RM Pro wykrył dublowanie 3 meta z `class-asiaauto-seo.php`: 2× description, 2× canonical, 2× CollectionPage JSON-LD na hubach marek/modeli. Strategia: total migration — RM zarządza title/description/canonical/og/twitter/CollectionPage, zostawiamy tylko nasz ItemList (lista listingów per hub — RM tego nie ma) + FAQPage (z `aa-hub-faq` w wiki_body) + BreadcrumbList na single listings (`class-asiaauto-single.php` nietknięte).
