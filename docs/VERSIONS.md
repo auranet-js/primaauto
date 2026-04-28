@@ -1,5 +1,13 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.16 — 2026-04-28
+
+- **Sync `wiki_body + FAQ` → natywny `term->description` (RankMath SEO Analyser).** User-pytanie: RankMath nie ma czego analizować bo content jest w custom termmeta (`asiaauto_wiki_body`, `asiaauto_faq_json`), a natywne `term->description` było puste. Fix:
+  - **REST endpoint `POST /wp-json/asiaauto/v1/hub-content/{tax}/{id}`**: przy save `wiki_body` syncuje do `term->description`. Przy save `faq_json` dorzuca FAQ jako `<h2 class="aa-rm-faq">...</h2>` + `<details><summary>Q</summary>A</details>` po wiki_body. n8n NIE zmienia się (nadal woła ten sam endpoint).
+  - **Backfill całego DB** (raw SQL UPDATE wp7j_term_taxonomy, omija `wp_kses_post`): 49 make + 307 serie termów ma teraz `description` = `wiki_body + FAQ HTML5`. Przykład Chery (term_id 3578): 9950 chars, 5× h2, 8× details. RankMath SEO Analyser teraz analizuje pełen content.
+- **FAQPage schema NIE duplikat** — RankMath rozpoznaje tylko własny block `wp:rank-math/faq-block`, NIE rozpoznaje natywnych `<details>` jako FAQ → nie generuje drugiej FAQPage. Sprawdzone: hub `/samochody/chery/` ma nadal 1× FAQPage (nasz custom z `class-asiaauto-brand-hub.php`). GSC FAQ rich results bezpieczne.
+- **Frontend nieaktualizowany** — template `taxonomy-make.php`/`taxonomy-serie.php` renderuje wiki_body + FAQ z termmeta (nie z `description`). Wizualnie strona bez zmian. RankMath analizuje description niezależnie od frontu.
+
 ## 0.32.15 — 2026-04-28
 
 - **Car schema parity vs west-motors**: dodane `manufacturer` (Organization z brand name) + `offers.priceValidUntil` (+90 dni od teraz, format YYYY-MM-DD). Drobne quality signals dla Google Product Snippet (bold price w SERP). Schema validator (schema.org/validate): **0 errors, 0 warnings** — 14 typów rozpoznanych (Car, Brand, Organization, Offer, OfferShippingDetails, ShippingDeliveryTime, MonetaryAmount, EngineSpecification, QuantitativeValue, DefinedRegion, Country, BreadcrumbList, ListItem, Thing).
