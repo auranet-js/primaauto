@@ -1,5 +1,17 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.5 — 2026-04-28
+
+- **`missing-images` chunked apply + scope fix.** Bug: user dostawał alert „Apply błąd: Invalid JSON" + 2 listingi „nie do ruszenia". Trzy przyczyny:
+  1. **Scope rozjazd:** check class scanował `post_status IN ('publish','draft')`, ale skrypt `diag/fix-missing-images.php` filtrował tylko `publish`. Stuck drafts (Xiaomi SU7 #242486, AITO M9 #246353 — oba ghost-offers 404) były znajdowane ale nigdy naprawiane.
+  2. **Stdout w response:** `AsiaAuto_API::getOffer()` przy 404 wypisywał warning na stdout (poza zasięgiem `WP_CLI` guard), psuło JSON gdy AJAX response.
+  3. **Proxy timeout:** apply na 18+ listingach ~3-4 min > LiteSpeed proxy timeout (~60-90s), klient dostawał truncated response.
+- **Fixy:**
+  - `diag/fix-missing-images.php`: scope `IN ('publish','draft')`. Plus `$max_items` 3rd arg (chunk size).
+  - `class-check-missing-images.php` `applyFix`: `ob_start/ob_get_clean` wokół invocation (output do logger jako warning, JSON czysty); chunk_size=8 per request; zwraca `has_more` + `remaining`.
+  - `class-check-base.php` `validateApplyToken`: usunięta `delete_transient` — token TTL-based 300s, reuse w obrębie chunked apply (bez tego każdy chunk wymagałby nowego preview).
+  - `assets/admin-diag.js` `previewAndApply`: pętla while max 50 chunks, per chunk update modal z progress („Chunk 3: naprawiono 8 (łącznie 24). Pozostało: 6"), re-scan rowka po wszystkim.
+
 ## 0.32.4 — 2026-04-28
 
 - **`missing-images` apply timeout fix.** Domyślny `set_time_limit(25)` w abstract base był za krótki dla `fix-missing-images.php` (iteruje API getOffer + downloadAndStore per listing, ~1-3s/listing × 30+ = >25s). Skutek: skrypt był **przerywany w środku** — naprawiał N listingów, AJAX wracał z `applied=0`, token był single-use'd przed timeoutem. User widział „Naprawiono: 0" ale bazowy count realnie spadał (32→23).
