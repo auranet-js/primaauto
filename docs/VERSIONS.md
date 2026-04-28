@@ -1,5 +1,25 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.6 — 2026-04-28
+
+- **RankMath Pro migration — total przeniesienie SEO meta na RankMath.** User po instalacji RM Pro wykrył dublowanie 3 meta z `class-asiaauto-seo.php`: 2× description, 2× canonical, 2× CollectionPage JSON-LD na hubach marek/modeli. Strategia: total migration — RM zarządza title/description/canonical/og/twitter/CollectionPage, zostawiamy tylko nasz ItemList (lista listingów per hub — RM tego nie ma) + FAQPage (z `aa-hub-faq` w wiki_body) + BreadcrumbList na single listings (`class-asiaauto-single.php` nietknięte).
+- **Zmiany w `class-asiaauto-seo.php`:**
+  - `renderMeta()` — early return gdy `defined('RANK_MATH_VERSION')`. RM emituje canonical/description/og/twitter z `rank_math_*` term meta.
+  - `renderSchema()` — gdy RM aktywny, emituje TYLKO ItemList (BreadcrumbList + CollectionPage przejęte przez RM).
+  - `filterHomeTitle()` — early return gdy RM aktywny (RM kontroluje title z templates).
+  - Backward compat: kod fallback gdy RM dezaktywowany (np. tymczasowo).
+- **Bulk setup 284 hubów** (46 marek + 238 modeli z `asiaauto_wiki_body`):
+  - `rank_math_focus_keyword` — make: nazwa marki, serie: „Marka Model" (parent-aware).
+  - `rank_math_description` — z `asiaauto_seo_desc` (z REST hub-content endpoint, generowane przez n8n batch 0.31.5).
+  - `rank_math_title` — template: make `{Marka} — Auto z Chin | Prima-Auto`, serie `{Marka} {Model} — Import z Chin | Prima-Auto`.
+- **Thin tax noindex fix.** Nasz `wp_robots` filter był przykryty przez RM. Dodany `rank_math/frontend/robots` filter w `class-asiaauto-seo.php` — wymusza `noindex, follow` na taxonomy `transmission`, `drive`, `exterior-color`, `interior-color`, `condition`. Test: `/skrzynia-biegow/cvt/`, `/naped/awd/`, `/kolor-nadwozia/red/` → noindex ✓; `/paliwo/electric/`, `/samochody/byd/` → index (zostawione, wartościowe).
+- **Sitemap regenerowany** przez `wp rankmath sitemap generate`. RM sitemap zawiera: make, serie (×2 plików), listings (×13), pages, local. Brak thin tax (RM domyślnie wyklucza taxonomy z 0 wpisami i niewartościowe).
+
+**Pending (user-side):**
+- W RankMath admin UI: Status & Tools → Database Tools → „Re-analyze SEO Score" — bulk obliczy score dla 284 hubów (auto przez admin, niedostępne via WP-CLI).
+- Po score: review najgorszych w `Listings → Marki/Modele → Edit` (RM panel z prawej).
+- Brakujące huby (4 marki + 70 modeli z `tmp/missing-hubs-2026-04-28.md`): n8n PAUZOWANE, najpierw dobry score na obecnych, potem dodawanie nowych.
+
 ## 0.32.5 — 2026-04-28
 
 - **`missing-images` chunked apply + scope fix.** Bug: user dostawał alert „Apply błąd: Invalid JSON" + 2 listingi „nie do ruszenia". Trzy przyczyny:
