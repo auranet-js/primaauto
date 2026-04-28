@@ -4,7 +4,7 @@
 
 ---
 
-## ZADANIE 14 — Panel diagnostyczny admina (asiaauto-sync) ✅ DONE (0.32.2, 2026-04-28)
+## ZADANIE 14 — Panel diagnostyczny admina (asiaauto-sync) ✅ DONE (0.32.3, 2026-04-28)
 
 Pluggable rejestr **10 checków** + Admin UI + WP-CLI + AJAX. Spec: `docs/superpowers/specs/2026-04-28-diagnostyka-admin-panel-design.md`. Plan: `docs/superpowers/plans/2026-04-28-diagnostyka-admin-panel.md`.
 
@@ -24,7 +24,7 @@ Pluggable rejestr **10 checków** + Admin UI + WP-CLI + AJAX. Spec: `docs/superp
 
 ### Live findings (pierwszy run-all 2026-04-28)
 - 32 listings bez zdjęć (auto-fix dostępny)
-- 370 chińskich znaków w post_title/termach
+- 370 miejsc CN: 117 tytułów (re-translate) + 1 aktywny term (manual) + 252 orphany (bulk delete) — split w 0.32.3 + edytor mapy
 - 1 złamany JSON extra_prep
 - 4 aktywne marki bez wiki_body (po fixie meta_key w 0.32.2): Changan Qiyuan, Dongfeng Fengshen, GAC Aion Hyper, Wuling
 - 66 aktywnych modeli bez wiki_body (po fixie 0.32.2; było mylone „303")

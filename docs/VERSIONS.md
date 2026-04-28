@@ -1,5 +1,14 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.3 — 2026-04-28
+
+- **`chinese-chars` check — split na 3 grupy + edytor tłumaczeń.** Wcześniejsze „370 miejsc z CN" było bezużytecznym agregatem 3 fundamentalnie różnych problemów. Teraz w UI rozdzielone:
+  - **Tytuły z CN (117):** post_title z nieprzetłumaczonymi fragmentami. Fix: `asiaauto_diag_chinese_v23(true)` — re-translate przez `translations-models.php` + `translations-complectations.php`.
+  - **Aktywne termy z CN (1):** np. `银河A7 EM` parent=0, count=4. Wymagają ręcznej decyzji (rename + migracja listingów na canonical EN). NIE batchujemy — pomijane w apply z error msg.
+  - **Orphany count=0 (252):** bagaż migracji v6.1, niewidoczne na froncie. Fix: bulk `wp_delete_term` (kosmetyka bazy).
+- **Edytor tłumaczeń inline w modalu.** Sekcja „Niezamapowane fragmenty CN" pokazuje 84 unikalnych fragmentów (`高能`, `征服者`, `真香`, `劲擎`, `头等舱`, …) z formularzem `[CN] [EN input] [select model/complectation] [Dodaj]`. Klik wywołuje nowy AJAX `asiaauto_diag_add_translation` → atomic append do odpowiedniego `translations-*.php` z `.bak-YYYY-MM-DD-HHMMSS` + parse-verify + rollback. Po dodaniu wpisu można re-run `chinese-chars` apply żeby title-fix był pełniejszy.
+- Issue meta `unmapped_fragments` array per title issue — pozwala UI pokazać które tytuły wymagają wpisów w mapie.
+
 ## 0.32.2 — 2026-04-28
 
 - **Bugfix `make/serie-without-wiki` — meta_key prefix.** Checki używały `wiki_body` jako klucz term_meta zamiast `asiaauto_wiki_body` (faktyczny klucz zapisywany przez REST endpoint `hub-content/{tax}/{id}` z 0.31.5). Skutek: WSZYSTKIE aktywne termy raportowane jako bez wiki, mimo że BYD/Chery/Voyah itd. mają 6000+ znaków opisów. Real counts po fixie: make 50→4 (Changan Qiyuan, Dongfeng Fengshen, GAC Aion Hyper, Wuling), serie 303→66.
