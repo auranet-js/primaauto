@@ -1,5 +1,9 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.2 — 2026-04-28
+
+- **Bugfix `make/serie-without-wiki` — meta_key prefix.** Checki używały `wiki_body` jako klucz term_meta zamiast `asiaauto_wiki_body` (faktyczny klucz zapisywany przez REST endpoint `hub-content/{tax}/{id}` z 0.31.5). Skutek: WSZYSTKIE aktywne termy raportowane jako bez wiki, mimo że BYD/Chery/Voyah itd. mają 6000+ znaków opisów. Real counts po fixie: make 50→4 (Changan Qiyuan, Dongfeng Fengshen, GAC Aion Hyper, Wuling), serie 303→66.
+
 ## 0.32.1 — 2026-04-28
 
 - **Diag panel — uzupełnienia v1.1 (operacyjne fixy z 1. dnia)** — wszystkie 10 checków mają teraz fix actions, mapując workflow „dojdzie nowy model → popraw mapping → dodaj hub → wygeneruj opis":
