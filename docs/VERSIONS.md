@@ -1,5 +1,16 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.18 — 2026-04-29 (sesja nocna)
+
+- **GSC sitemap fix**: Google indeksował nas na bazie starego `wp-sitemap.xml` (WP native, RankMath ma `noindex` na nim) — submitted 2026-04-23, downloaded 2026-04-27 z 1 warning. **Submit nowych 8 sitemap RankMath** przez Search Console API: `/sitemap_index.xml` + child sitemaps (`page-sitemap.xml`, `make-sitemap.xml`, `serie-sitemap.xml`, `listings-sitemap1-4.xml`). Wszystkie 8 z 0 errors, 0 warnings. Po tym Google zacznie crawl-ować huby modeli (były "URL is unknown to Google" przed).
+- **GSC indeks audyt** (11 kluczowych URLs): `/`, `/samochody/`, `/marki/`, `/samochody/byd/` = **PASS** (zaindeksowane, last crawl 2026-04-28). Hub modeli = **NEUTRAL "URL is unknown to Google"** lub "Discovered - currently not indexed" (5/7 hub serie sample). Pierwszy listing single = "URL is unknown" — czyli Google nie wszedł jeszcze głębiej. Sitemap fix + title fix v0.32.17 powinien to odblokować.
+- **Search Analytics top 20 queries (28 dni)** — 153 impr na home pos=5.8, brand-dominant (prima auto rzeszów / prima auto / prima-auto). Long-tail flagship już widoczne: `denza z9 gt` pos=42, `geely galaxy starship 8` pos=11, `aito seres` pos=1, `icar v23 cena w polsce` pos=9, `mg auto import` pos=11. Domena świeża, ranking rośnie naturalnie.
+- **4 nowe orphan parents serie** (importer dorzucił po popołudniowej naprawie): 3 unique parent fix (`smart #3`, `Jetour X70 PRO`, `Mazda 3 Axela`) + 1 duplikat MERGE (`#6553 Seal U DM-I (Song Plus)` orphan → `#3702` keeper, `seal-u-dm-i` slug). 301 redirect już istnieje w V62_SERIE_REDIRECTS od popołudnia. `serie-broken-parent: 4 → 0`.
+- **Chinese-chars batch ×2** w `translations-complectations.php`:
+  - +18 entries TIER 4 (`二`→II, `超`→Super, `星夜`→Starnight, `智能超`→Smart Super, `超然致远`→Transcendent Vision, `陆冠`→Land Crown, `星空龙耀`→Starsky Dragon, `定制`→Custom, `首发`→Debut, `途昂`→Teramont, `出众`→Outstanding, `骑士`→Knight, `致行`→Drive, `自在`→Free, `花生`→Peanut, `银河`→Galaxy, `旅行升级`→Travel Upgrade, `纵野`→Wild, `享境`→Journey).
+  - +2 entries (`智能`→Smart, `星月女神`→Star Goddess).
+  - **chinese-chars: 26 → 8** (dwa tytuły wciąż failują, fragment `为`/`然致远` to sub-fragmenty oraz nowo zaimportowane).
+
 ## 0.32.17 — 2026-04-28
 
 - **KRYTYCZNY FIX: title/meta/schema dla hub MODELU.** User zauważył że hub `/samochody/byd/leopard-8/` ma w `<head>` title z hub MARKI: `"BYD — Auto z Chin | Prima-Auto"` zamiast `"BYD Leopard 8 (Denza B8) — Import z Chin | Prima-Auto"`. Powód: WP rewrite `^samochody/(make)/(serie)/?$` ustawia oba query vars, ale **`get_queried_object()` zwraca pierwsze (make=BYD)** — RankMath/theme/schema generują z perspektywy hub MARKI. Każdy hub modelu Google indeksował jako duplikat hub make → 0 rank dla "BYD Leopard 8/5/7", "Denza Z9", itd.
