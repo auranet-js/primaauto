@@ -1,5 +1,13 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.12 — 2026-04-28
+
+- **Tłumaczenia TIER 1⚠ + TIER 3 (25 nowych w `translations-complectations.php`).** User-aprobowane:
+  - **TIER 1⚠** (5): `奕派007`→`ePi 007`, `奕派008`→`ePi 008`, `奕派`→`ePi`, `途昂Pro`→`Pro`, `高山8`→`Gaoshan 8` (`超级混`→`Super Hybrid` był już w mapie). Per analizy `tmp/chinese-fragments-analysis-2026-04-28.md`.
+  - **TIER 3** (20 top frequency): `式`→`Style`, `商用`→`Commercial`, `智享`→`Smart Premium`, `智慧新蓝鲸`→`Blue Whale 2.0`, `万辆甄选款`→`Selected Edition`, `超越`→`Surpass`, `进取`→`Progressive`, `超级`→`Super`, `战舰`→`Battleship`, `至臻`→`Premium+`, `智雅`→`Smart Elegance`, `鸿蒙座舱`→`HarmonyOS Cabin`, `智逸`→`Smart Comfort`, `悦享`→`Joy Edition`, `向往`→`Aspire`, `传奇`→`Legend`, `冠军`→`Champion`, `磷酸铁锂`→`LFP`, `停产`→`Discontinued`, `运`→`Sport`.
+- Mapa używana zarówno przez `wp asiaauto diag apply-fix chinese-chars` (retranslate post_title) jak i przez `class-asiaauto-translator.php:750` przy każdym imporcie z dongchedi → trwały efekt na obecne (98 → 50 tytułów chińskich) + przyszłe.
+- **Termmeta `marka=` link sync** (47 termmeta rows): w `asiaauto_wiki_body` zamieniono stare slugi v6.1 marek (`marka=fangchengbao` → `marka=byd`, `marka=galaxy` → `marka=geely`, etc.) na docelowe — eliminacja "linki do Fangchengbao" w hub Leopard/Voyah/itd. po migracji v6.1 marek (treści generowane 2026-04-23 przed v6.1).
+
 ## 0.32.11 — 2026-04-28
 
 - **Hub fallback luka: `/samochody/{make}/{cokolwiek}/` → 404.** Wcześniej dowolny string w drugim segmencie URL renderował hub marki (200 + index) — `/samochody/byd/cokolwiek-fake-12345/` zwracał `BYD — Auto z Chin` z `index, follow`. Każdy crawler/spam/typo URL = thin index = duplicate content. Fix w `class-asiaauto-cpt.php::filterHubQuery()`: jeśli `make` lub `serie` term nie istnieje (po `get_term_by('slug', ...)`), `$q->set_404() + status_header(404) + nocache_headers()`. Test: fake → 404 ✓, prawdziwy hub → 200 ✓, V62 redirects → 301 ✓.
