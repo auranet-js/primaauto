@@ -1,5 +1,9 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.8 — 2026-04-28
+
+- **Inventory filter URLs noindex.** User zauważył w Screaming Frog że `/samochody/?nadwozie=suv`, `/samochody/?paliwo=hybrid`, `/samochody/?marka=byd` itd. są nadal indeksowalne — duplikat treści z hubów (`/samochody/byd/`). Pierwszy fix v0.32.6 używał `is_post_type_archive('listings')`, ale to nie zwraca true bo `/samochody/` to **WP page z shortcode `[asiaauto_inventory]`**, nie WP archive. Zmiana detekcji na `has_shortcode($post->post_content, 'asiaauto_inventory')` + sprawdzenie `$_GET` z whitelistą filter params (`nadwozie, paliwo, marka, model, naped, rok, cena, kolor, skrzynia`). Aktywne w obu hookach: `wp_robots` (core) + `rank_math/frontend/robots`. Test: `/samochody/?marka=byd` → noindex,follow ✓; `/samochody/` (czysty) → index ✓.
+
 ## 0.32.7 — 2026-04-28
 
 - **Homepage SEO refocus na „import samochodów z Chin".** User cel: pierwsza pozycja w Google we frazie „import samochodów z Chin". Zmiany:
