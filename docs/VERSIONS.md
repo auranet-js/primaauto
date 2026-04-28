@@ -1,5 +1,9 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.10 — 2026-04-28
+
+- **`/zamow/?listing_id=X` → noindex,follow.** User zauważył że formularz wizard zamówienia per listing jest indeksowalny — 1841 ogłoszeń × identyczny szablon = duplicate content na masową skalę. Canonical do `/zamow/` był ustawiony, ale Google czasem ignoruje canonical przy silnych sygnałach (np. linki wewnętrzne z każdego ogłoszenia). Fix analogiczny do v0.32.8 inventory filters: nowa metoda `isOrderWizardPerListing()` w `class-asiaauto-seo.php` (detekcja `post_name='zamow'` + `$_GET['listing_id']`) podpięta w obu hookach `wp_robots` + `rank_math/frontend/robots`. Test: `/zamow/?listing_id=278417` → noindex,follow ✓; `/zamow/` (bez param) → index,follow ✓.
+
 ## 0.32.9 — 2026-04-28
 
 - **Dedup orphan-fix duplicates + V62_SERIE_REDIRECTS.** Fix błędu z 0.32.0 `serie-broken-parent apply`: 70 orphan termów dostało parent, ale 11 z nich to były duplikaty istniejących keeperów v6.1 (np. `zeekr-9x`/`9x`, `leopard-5-denza-b5`/`leopard-5`, `atto-3-yuan-plus`/`atto-3`, `seal-u-dm-i-song-plus`/`seal-u-dm-i`, `voyah-taishan`/`taishan`...). Każdy duplikat = 2 huby na ten sam model = split SEO. Naprawa:
