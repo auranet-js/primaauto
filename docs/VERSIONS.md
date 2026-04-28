@@ -1,5 +1,15 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.20 — 2026-04-29 (Listing card badges priorytet on_lot/in_transit/nowe)
+
+- **Listing card badges priorytet:** `on_lot` (`🇵🇱 Na placu`, zielony #1B5E20) → `in_transit` (`🚢 W drodze`, niebieski #0D47A1) → `is_new` (`Nowe`, żółty #E8AC07 — fallback). Dotąd listingi miały tylko badge "Nowe" (post < 24h) — nie eksponowały statusu fizycznego pojazdu na froncie.
+- **Implementacja w 2 plikach:**
+  - `class-asiaauto-homepage.php::getLatestListings()` + `renderLatest()` — sekcja "Najnowsze oferty samochodów z Chin" na home.
+  - `class-asiaauto-brand-hub.php::renderListings()` — shortcode `[asiaauto_hub_listings]` używany na hub make/serie.
+- **CSS** w `class-asiaauto-homepage.php::renderCSS()` — dodane warianty `.aa-home__car-badge--pl` i `.aa-home__car-badge--transit` (dziedziczą positioning z bazowego `.aa-home__car-badge`).
+- **Test live:** `/samochody/byd/sealion-8-dm-i/` pokazuje "🇵🇱 Na placu" na pierwszym listingu (BYD Sealion 8 z `_asiaauto_reservation_status=on_lot`).
+- **Spójność z Stock Highlights** (v0.32.19): te same emoji + colors. Sekcja "Auta dostępne teraz" na home + badge na każdej karcie listingu = pełna sygnalizacja statusu fizycznego pojazdu w obu warstwach (home overview + per-listing).
+
 ## 0.32.19 — 2026-04-29 (Stock Highlights na home)
 
 - **Sekcja "Auta dostępne teraz" (W Polsce + W drodze)** na stronie głównej — między `renderLatest` a `renderMakes`. User insight: "sprzedawca wie co się powinno teraz sprzedawać" — auta z `_asiaauto_reservation_status` ∈ `{in_transit, on_lot}` to realne flagshipy biznesowe (sprzedawca już zainwestował). Trust signal + 12 internal links z home do hub modeli (poprzednio 0).
