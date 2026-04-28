@@ -1,5 +1,16 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.19 — 2026-04-29 (Stock Highlights na home)
+
+- **Sekcja "Auta dostępne teraz" (W Polsce + W drodze)** na stronie głównej — między `renderLatest` a `renderMakes`. User insight: "sprzedawca wie co się powinno teraz sprzedawać" — auta z `_asiaauto_reservation_status` ∈ `{in_transit, on_lot}` to realne flagshipy biznesowe (sprzedawca już zainwestował). Trust signal + 12 internal links z home do hub modeli (poprzednio 0).
+- **Implementacja w `class-asiaauto-homepage.php`:**
+  - `getStockHighlights()` — DB query po listings z `_asiaauto_reservation_status`, JOIN make+serie, grupowanie per model (make_slug+serie_slug) z licznikami `on_lot`/`in_transit`, sort priorytet on_lot DESC. Cache transient 1h.
+  - `renderStockHighlights()` — kafelki (thumb 4:3, title, badge `🇵🇱 W Polsce: N` + `🚢 W drodze: N`). CTA: linki do `/w-rzeszowie/` i `/w-drodze/` (istniejące strony z shortcodami `[asiaauto_inventory reservation_status="on_lot|in_transit"]`).
+  - `invalidateStockOnMeta()` — hooki `updated/added/deleted_post_meta` dla klucza `_asiaauto_reservation_status` flushuje transient.
+- **CSS** ~30 linii w `renderCSS()`: grid responsywny (2 kolumny <600px), card hover, badges (zielony PL / niebieski transit), CTA primary buttons.
+- **Dane na deploy:** 12 unique modeli (5 on_lot + 9 in_transit). Top: BYD Sealion 8 (1+1), BYD Leopard 5 (1+1), Geely Monjaro (1), Denza N8L DM (1), Mazda EZ-6 (1), reszta in_transit-only.
+- **Decyzja modele vs listingi:** modele wygrywają — hub trwa wiecznie a single listing znika po sprzedaży = SEO equity przepada; linki do hub kumulują authority dla "BYD Leopard 5/8" itd. które chcemy rankować; badge "1 dostępne dziś" daje trust + klient klika do hub gdzie widzi WSZYSTKIE oferty modelu.
+
 ## 0.32.18 — 2026-04-29 (sesja nocna)
 
 - **GSC sitemap fix**: Google indeksował nas na bazie starego `wp-sitemap.xml` (WP native, RankMath ma `noindex` na nim) — submitted 2026-04-23, downloaded 2026-04-27 z 1 warning. **Submit nowych 8 sitemap RankMath** przez Search Console API: `/sitemap_index.xml` + child sitemaps (`page-sitemap.xml`, `make-sitemap.xml`, `serie-sitemap.xml`, `listings-sitemap1-4.xml`). Wszystkie 8 z 0 errors, 0 warnings. Po tym Google zacznie crawl-ować huby modeli (były "URL is unknown to Google" przed).
