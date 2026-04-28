@@ -1,5 +1,12 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.4 — 2026-04-28
+
+- **`missing-images` apply timeout fix.** Domyślny `set_time_limit(25)` w abstract base był za krótki dla `fix-missing-images.php` (iteruje API getOffer + downloadAndStore per listing, ~1-3s/listing × 30+ = >25s). Skutek: skrypt był **przerywany w środku** — naprawiał N listingów, AJAX wracał z `applied=0`, token był single-use'd przed timeoutem. User widział „Naprawiono: 0" ale bazowy count realnie spadał (32→23).
+- Override `set_time_limit(300)` w `applyFix()` tylko dla missing-images.
+- Logger zapisuje teraz `apply-start` (przed) i `apply-end` (po) — diagnoza timeoutów.
+- JS: button „Wykonaj" disabled + tekst „Wykonywanie… (do 5 min)" po kliku, anti-double-click + jasny feedback że apply trwa.
+
 ## 0.32.3 — 2026-04-28
 
 - **`chinese-chars` check — split na 3 grupy + edytor tłumaczeń.** Wcześniejsze „370 miejsc z CN" było bezużytecznym agregatem 3 fundamentalnie różnych problemów. Teraz w UI rozdzielone:
