@@ -1,5 +1,15 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.17 — 2026-04-28
+
+- **KRYTYCZNY FIX: title/meta/schema dla hub MODELU.** User zauważył że hub `/samochody/byd/leopard-8/` ma w `<head>` title z hub MARKI: `"BYD — Auto z Chin | Prima-Auto"` zamiast `"BYD Leopard 8 (Denza B8) — Import z Chin | Prima-Auto"`. Powód: WP rewrite `^samochody/(make)/(serie)/?$` ustawia oba query vars, ale **`get_queried_object()` zwraca pierwsze (make=BYD)** — RankMath/theme/schema generują z perspektywy hub MARKI. Każdy hub modelu Google indeksował jako duplikat hub make → 0 rank dla "BYD Leopard 8/5/7", "Denza Z9", itd.
+- **Fix w `class-asiaauto-brand-hub.php`** — nowy hook `wp` (prio=5) `fixQueriedObjectForSerieHub()`: dla URL z make+serie nadpisuje `$wp_query->queried_object` na **serie** term + `is_tax=true`. RankMath teraz widzi Leopard 8 jako queried object → bierze `rank_math_title`/`rank_math_description`/`rank_math_focus_keyword` z termmeta serie. Test:
+  - `/byd/leopard-8/` → `BYD Leopard 8 (Denza B8) — Import z Chin | Prima-Auto` + meta desc z 3 egzemplarzy 2025...
+  - `/byd/leopard-5/` → `BYD Leopard 5 (Denza B5) — Import z Chin | Prima-Auto`
+  - `/byd/leopard-7/` → `BYD Leopard 7 (Tai 7) FCB, PHEV — Import z Chin | Prima-Auto`
+  - `/aito/m8/` → `AITO M8 — Import z Chin | Prima-Auto`
+- **Bonus**: dodane `renderRankMathTitle()` helper resolves `%term%/%sep%/%sitename%/%title%` placeholders w stored RankMath title patterns dla `filterHubTitle` + `overrideHubDocumentTitle` (priorytet rank_math_title term meta jeśli istnieje).
+
 ## 0.32.16 — 2026-04-28
 
 - **Sync `wiki_body + FAQ` → natywny `term->description` (RankMath SEO Analyser).** User-pytanie: RankMath nie ma czego analizować bo content jest w custom termmeta (`asiaauto_wiki_body`, `asiaauto_faq_json`), a natywne `term->description` było puste. Fix:
