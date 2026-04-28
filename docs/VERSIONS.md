@@ -1,5 +1,18 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.1 — 2026-04-28
+
+- **Diag panel — uzupełnienia v1.1 (operacyjne fixy z 1. dnia)** — wszystkie 10 checków mają teraz fix actions, mapując workflow „dojdzie nowy model → popraw mapping → dodaj hub → wygeneruj opis":
+  - **Tool 1 (mapping):** `listings-without-mapping` → fix per-item (form `make_eu`/`serie_eu` → atomic write do `data/brand-mapping-v6.1.php` z `.bak`). Future-facing — meta keys w listingach jeszcze niewypełniane.
+  - **Tool 2 (hub structure):** Dwa NOWE checki:
+    - `serie-broken-parent` — termy serie z `parent=0` ale `count > 0`. Heurystyka: `guessMakeFromListings()` JOIN przez term_relationships → `wp_update_term($id, ['parent' => $make_id])`. Live: 65 termów (artefakty migracji v6.1).
+    - `duplicate-serie-terms` — grupuje listingi po prefiksie 3 słów post_title; gdy >1 term serie pod tym prefiksem → grupa. Fix: `wp_set_object_terms` na canonical (priorytet: parent>0 + post_count) + `wp_delete_term` reszty + `flush_rewrite_rules`. Live: 37 grup (m.in. Zeekr 9X #4824 vs #6532). UWAGA: per-item review wymagany, sub-warianty (EV/DM-I) mogą być false-positive.
+  - **Tool 3 (description):** `make/serie-without-wiki` (już dodane w 0.32.0 v1.0.1) wysyłają webhook do `https://witold140-20140.wykr.es/webhook/primaauto-{make,serie}-desc` z `usleep(300000)` throttle.
+- **`make/serie-without-wiki` — `hide_empty=true`** (zamiast false). Liczą tylko aktywne marki/modele z listingami. Counts: 296→50 (make), 2460→303 (serie) — sygnał operacyjny zamiast szumu.
+- **`missing-images` — `getFixMode='confirm'`** (było `auto`) + dry-run probe HEAD na próbie ≤50 listingów w `previewFix()`. Modal pokazuje split: `~X dostanie zdjęcia, ~Y do KOSZA (ghost-offer 404)`.
+
+Pełna trasa zmian: `docs/superpowers/specs/2026-04-28-diagnostyka-admin-panel-design.md` + `docs/superpowers/plans/2026-04-28-diagnostyka-admin-panel.md`.
+
 ## 0.32.0 — 2026-04-28
 
 - **Diagnostyka admin panel** — nowe submenu `Listings → Diagnostyka`. 8 checków integralność + SEO coverage. Trzywarstwowy dostęp: UI / AJAX / WP-CLI (`wp asiaauto diag …`). Pluggable rejestr — dodanie checku = 1 plik + 1 linia. Patrz `docs/superpowers/specs/2026-04-28-diagnostyka-admin-panel-design.md`.

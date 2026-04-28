@@ -4,24 +4,39 @@
 
 ---
 
-## ZADANIE 14 — Panel diagnostyczny admina (asiaauto-sync) ✅ DONE (0.32.0, 2026-04-28)
+## ZADANIE 14 — Panel diagnostyczny admina (asiaauto-sync) ✅ DONE (0.32.1, 2026-04-28)
 
-Pluggable rejestr 8 checków + Admin UI + WP-CLI + AJAX. Spec: `docs/superpowers/specs/2026-04-28-diagnostyka-admin-panel-design.md`. Plan: `docs/superpowers/plans/2026-04-28-diagnostyka-admin-panel.md`.
+Pluggable rejestr **10 checków** + Admin UI + WP-CLI + AJAX. Spec: `docs/superpowers/specs/2026-04-28-diagnostyka-admin-panel-design.md`. Plan: `docs/superpowers/plans/2026-04-28-diagnostyka-admin-panel.md`.
 
-### Klastry v1
-- Integralność (4): missing-images, chinese-chars, broken-extra-prep, duplicate-listings
-- Pokrycie SEO (4): make/serie-without-wiki, listings-without-mapping, mapping-without-term
+### Klastry (10)
+- **Integralność (4):** missing-images, chinese-chars, broken-extra-prep, duplicate-listings
+- **Pokrycie SEO (6):** make/serie-without-wiki, listings-without-mapping, mapping-without-term, serie-broken-parent, duplicate-serie-terms
+
+### Workflow „dojdzie nowy model" (3 narzędzia w panelu)
+1. **Popraw mapping** → `listings-without-mapping` (per-item form → append do `data/brand-mapping-v6.1.php`)
+2. **Dodaj hub** → `mapping-without-term` (auto wp_insert_term) + `serie-broken-parent` (heurystyka parenta z listingów)
+3. **Wygeneruj opis** → `make/serie-without-wiki` (POST do n8n webhook → wiki_body async ~30-60s)
 
 ### Punkty wejścia
 - UI: WP admin → Listings → Diagnostyka
 - CLI: `wp asiaauto diag list | run | run-all | preview-fix | apply-fix`
 - AJAX: `asiaauto_diag_run | preview | apply` z capability `manage_options`
 
+### Live findings (pierwszy run-all 2026-04-28)
+- 32 listings bez zdjęć (auto-fix dostępny)
+- 370 chińskich znaków w post_title/termach
+- 1 złamany JSON extra_prep
+- 50 aktywnych marek bez wiki_body (po `hide_empty=true`)
+- 303 aktywne modele bez wiki_body
+- **65 orphan termów serie** (parent=0 z listingami) — m.in. Zeekr 9X #6532 (artefakt migracji v6.1)
+- **37 grup duplikatów serie** — m.in. Zeekr 9X jako `9x` #4824 + `zeekr-9x` #6532
+
 ### Pending v2
 - Klaster lifecycle (rotacja, orphan attachments, trash >30d permanent delete) — Plan D
 - Klaster ops (filter cleanup, race detection alerts) — Plan A
-- Auto-fix dla `make/serie-without-wiki` przez n8n REST endpointy (osobne ZADANIE)
+- UI form-input modal dla `listings-without-mapping` (applyFix czeka na `$_POST['mappings']` ale JS go nie generuje — count=0 więc niegrający)
 - Cron `asiaauto_diag_daily` z mailem alertem
+- `duplicate-serie-terms`: heurystyka prefix 3-słów daje false-positives dla intencjonalnych sub-wariantów (EV vs DM-I) — można dodać whitelist po batch review
 
 ---
 
