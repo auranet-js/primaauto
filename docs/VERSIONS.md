@@ -1,5 +1,21 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.21 — 2026-04-29 (Stock bary na hub make/serie — przed głównym contentem)
+
+- **Hub make/serie pokazują stock listings PRZED głównym contentem.** User insight: "tych aut nie będziemy mieć dużo, możemy wyciągnąć w Rzeszowie/w drodze przed nowościami" — eksponuj realnie dostępne pojazdy z stocku sprzedawcy na każdym hubu marki/modelu, jeśli istnieją.
+- **Shortcode `[asiaauto_hub_listings]` rozszerzony o `reservation_status` parametr** w `class-asiaauto-brand-hub.php`:
+  - Filter `reservation_status="on_lot"` lub `"in_transit"` (whitelist).
+  - Pusty wynik dla filtra → zwraca `''` cicho (nie pokazuje "Brak ofert").
+  - Meta_query dodany do WP_Query.
+- **Templates `taxonomy-make.php` + `taxonomy-serie.php`** (theme primaauto2026):
+  - 2 nowe shortcody przed `<section class="aa-hub__body">` w nowej `<section class="aa-hub__stock">`:
+    - `🇵🇱 {model/marka} — na placu w Rzeszowie` (CTA: `/w-rzeszowie/`)
+    - `🚢 {model/marka} — w drodze do Polski` (CTA: `/w-drodze/`)
+  - n=6 sztuk na sekcję, sortowanie domyślne (data DESC).
+  - Sekcja renderowana **warunkowo** — tylko jeśli przynajmniej jedna z dwóch sub-sekcji ma listings (else nic nie pokazuj, brak placeholdera).
+- **Test:** `/byd/sealion-8-dm-i/` pokazuje obie sekcje (1 + 1 listing); `/byd/` (make) pokazuje agregat marki (5 + 9); `/byd/tang-dm-i/` (brak stocku) → 0 sekcji aa-hub__stock ✓.
+- **Spójność z v0.32.19/20:** te same emoji + colors + badge na karcie. Klient widzi status w warstwach: home Stock Highlights → hub make/serie stock bars → per-listing badge.
+
 ## 0.32.20 — 2026-04-29 (Listing card badges priorytet on_lot/in_transit/nowe)
 
 - **Listing card badges priorytet:** `on_lot` (`🇵🇱 Na placu`, zielony #1B5E20) → `in_transit` (`🚢 W drodze`, niebieski #0D47A1) → `is_new` (`Nowe`, żółty #E8AC07 — fallback). Dotąd listingi miały tylko badge "Nowe" (post < 24h) — nie eksponowały statusu fizycznego pojazdu na froncie.
