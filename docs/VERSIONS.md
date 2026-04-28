@@ -1,5 +1,9 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.11 — 2026-04-28
+
+- **Hub fallback luka: `/samochody/{make}/{cokolwiek}/` → 404.** Wcześniej dowolny string w drugim segmencie URL renderował hub marki (200 + index) — `/samochody/byd/cokolwiek-fake-12345/` zwracał `BYD — Auto z Chin` z `index, follow`. Każdy crawler/spam/typo URL = thin index = duplicate content. Fix w `class-asiaauto-cpt.php::filterHubQuery()`: jeśli `make` lub `serie` term nie istnieje (po `get_term_by('slug', ...)`), `$q->set_404() + status_header(404) + nocache_headers()`. Test: fake → 404 ✓, prawdziwy hub → 200 ✓, V62 redirects → 301 ✓.
+
 ## 0.32.10 — 2026-04-28
 
 - **`/zamow/?listing_id=X` → noindex,follow.** User zauważył że formularz wizard zamówienia per listing jest indeksowalny — 1841 ogłoszeń × identyczny szablon = duplicate content na masową skalę. Canonical do `/zamow/` był ustawiony, ale Google czasem ignoruje canonical przy silnych sygnałach (np. linki wewnętrzne z każdego ogłoszenia). Fix analogiczny do v0.32.8 inventory filters: nowa metoda `isOrderWizardPerListing()` w `class-asiaauto-seo.php` (detekcja `post_name='zamow'` + `$_GET['listing_id']`) podpięta w obu hookach `wp_robots` + `rank_math/frontend/robots`. Test: `/zamow/?listing_id=278417` → noindex,follow ✓; `/zamow/` (bez param) → index,follow ✓.
