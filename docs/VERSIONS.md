@@ -1,5 +1,10 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.13 — 2026-04-28
+
+- **Car schema enrichment + OfferShippingDetails na single listings.** `class-asiaauto-single.php::renderMeta()` wzbogacone (utracone przy dedup 2026-04-24): `bodyType`, `vehicleTransmission`, `driveWheelConfiguration`, `color`, `itemCondition` (z taksonomii body/transmission/drive/color/condition), `vehicleEngine` (enginePower KW z `power($ep)` na bazie `_asiaauto_extra_prep` `energy_elect_max_power`). Plus `offers.shippingDetails` (`OfferShippingDetails`): shippingRate 0 PLN, addressCountry PL, handlingTime 0-7 dni, transitTime 56-84 dni — gap vs west-motors zamknięty. Test #281026: 16 kluczy w Car schema (vs 11 wcześniej), 392 KW enginePower, AWD, SUV, UsedCondition, full ShippingDetails.
+- **`银河A7 EM` term cleanup.** Term #6539 rename `银河A7 EM` → `Galaxy A7 EM-i` + parent change Galaxy (#3394) → Geely (#3626). 5 listingów strip `银河` z post_title (`Galaxy 银河A7 EM` → `Galaxy A7 EM`). URL `/samochody/galaxy/a7-em/` → 301 → `/samochody/geely/a7-em/` (V61 redirect).
+
 ## 0.32.12 — 2026-04-28
 
 - **Tłumaczenia TIER 1⚠ + TIER 3 (25 nowych w `translations-complectations.php`).** User-aprobowane:
