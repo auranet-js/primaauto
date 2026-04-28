@@ -32,6 +32,7 @@ Pluggable rejestr **10 checków** + Admin UI + WP-CLI + AJAX. Spec: `docs/superp
 - **37 grup duplikatów serie** — m.in. Zeekr 9X jako `9x` #4824 + `zeekr-9x` #6532
 
 ### Pending v2
+- **Rotator + cleanup ogłoszeń (osobny projekt + dokumentacja)** — wykryte 2026-04-28 przy testowaniu panelu. Trzy luki w `class-asiaauto-rotation.php`: (1) `trashOldDrafts` filtruje przez meta `_asiaauto_removed_at` — drafty bez tej meta (manual status change, legacy) ignorowane (z 64 overdue tylko 30 złapane), (2) `cleanOrphanedImages` filtruje przez `_asiaauto_source_url` — z 350 obecnych orphans 0 pasuje, (3) brak Plan D w importerze (`class-asiaauto-media.php` nie ustawia `post_parent` na `wp_insert_attachment` → przyszłe deletions zostawią sieroty). Realne tempo rotacji: ~220 nowych/dzień (mediana 14d, zakres 38-295), ~80/dzień do trash. Steady state: 700-1100 w trashu rolling 7d. Plan: A) fallback `post_modified_gmt`, B) usunąć filter source_url, C) Plan D, D) cleanup historyczny + ADR `2026-04-28-rotator-cleanup.md`. Akceptowano: zostać przy cron 1×/dziennie, TTL 7d trash do rozważenia.
 - Klaster lifecycle (rotacja, orphan attachments, trash >30d permanent delete) — Plan D
 - Klaster ops (filter cleanup, race detection alerts) — Plan A
 - UI form-input modal dla `listings-without-mapping` (applyFix czeka na `$_POST['mappings']` ale JS go nie generuje — count=0 więc niegrający)
