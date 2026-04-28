@@ -1,5 +1,10 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.15 — 2026-04-28
+
+- **Car schema parity vs west-motors**: dodane `manufacturer` (Organization z brand name) + `offers.priceValidUntil` (+90 dni od teraz, format YYYY-MM-DD). Drobne quality signals dla Google Product Snippet (bold price w SERP). Schema validator (schema.org/validate): **0 errors, 0 warnings** — 14 typów rozpoznanych (Car, Brand, Organization, Offer, OfferShippingDetails, ShippingDeliveryTime, MonetaryAmount, EngineSpecification, QuantitativeValue, DefinedRegion, Country, BreadcrumbList, ListItem, Thing).
+- Sitemap audit: 4 `listings-sitemap{1-4}.xml` × 200 URL = ~800 listings indexable. Najnowszy lastmod: 2026-04-28T19:07:46Z (świeży). RankMath emituje sitemap_index.xml + listings-* + page-sitemap.xml. Robots.txt zawiera referencję.
+
 ## 0.32.14 — 2026-04-28
 
 - **TIER 3 ×1 corner cases** — `data/translations-complectations.php` +25 entries (user-aprobowane wszystkie ✓+⚠): `尊`→Honor, `劲`→Power, `山河`→Mountain, `东方曜`→Eastern Glory, `今朝`→Today, `御`→Royal, `加长`→Extended, `征服`→Conqueror, `超长蓝鲸`→Long Range Blue Whale, `辰光`→Starlight, `美好`→Wonderful, `过道`→Walkway, `新蓝鲸`→New Blue Whale, `天枢`→Tianshu, `乘用`→Passenger, `领先`→Leading, `龙腾`→Dragon, `灵`→Spirit, `省心`→Worry-Free, `奢享`→Luxury Premium, `幸福`→Happiness, `真香`→Sweet Spot, `跃享`→Joy Premium, `劲为`→Power, `巡礼众享款`→Pilgrimage Edition. Retranslate: 44 → 24 tytułów chińskich (20 naprawionych jednorazowo + trwały efekt na importer).
