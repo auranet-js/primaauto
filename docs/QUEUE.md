@@ -37,7 +37,10 @@ Pluggable rejestr **10 checków** + Admin UI + WP-CLI + AJAX. Spec: `docs/superp
 - Klaster ops (filter cleanup, race detection alerts) — Plan A
 - UI form-input modal dla `listings-without-mapping` (applyFix czeka na `$_POST['mappings']` ale JS go nie generuje — count=0 więc niegrający)
 - Cron `asiaauto_diag_daily` z mailem alertem
+
 - `duplicate-serie-terms`: heurystyka prefix 3-słów daje false-positives dla intencjonalnych sub-wariantów (EV vs DM-I) — można dodać whitelist po batch review
+- **RankMath Pro integracja** (2026-04-28+, user instaluje teraz). Po deploy: weryfikacja konfliktów z `class-asiaauto-seo.php` (sitemap/robots/Car schema dublowanie), dezaktywacja naszych filtrów na rzecz RankMath. Pełen plan: memory `project_rankmath_pro_planning.md`. **n8n batch hub generation PAUZOWANY do tego czasu** — brakujące huby (`tmp/missing-hubs-2026-04-28.md`: 4 marki + 70 modeli, z czego 70 to orphan parent → fix `serie-broken-parent` najpierw) user dodaje ręcznie.
+- **Chinese fragments intelligent analysis** (2026-04-28). 84 unmapped fragmenty CN — zamiast batch wpisywania user wymaga per-fragment analizy: gdzie używany, jak globalnie nazywa się, czy podobne istnieje w istniejącej mapie, propozycja EN. Raport: `tmp/chinese-fragments-analysis-2026-04-28.md`.
 
 ---
 

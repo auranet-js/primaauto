@@ -1,5 +1,13 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.9 — 2026-04-28
+
+- **Dedup orphan-fix duplicates + V62_SERIE_REDIRECTS.** Fix błędu z 0.32.0 `serie-broken-parent apply`: 70 orphan termów dostało parent, ale 11 z nich to były duplikaty istniejących keeperów v6.1 (np. `zeekr-9x`/`9x`, `leopard-5-denza-b5`/`leopard-5`, `atto-3-yuan-plus`/`atto-3`, `seal-u-dm-i-song-plus`/`seal-u-dm-i`, `voyah-taishan`/`taishan`...). Każdy duplikat = 2 huby na ten sam model = split SEO. Naprawa:
+  1. **Skrypt `tmp/merge-11-duplicates.php`** — re-tag listings (INSERT IGNORE term_relationships) → keeper, DELETE orphan term, recount keeper. 11/11 OK.
+  2. **`class-asiaauto-redirects.php`** — dodana stała `V62_SERIE_REDIRECTS` (mapa per-make `[old_slug → new_slug]`) + metoda `redirectV62SerieDuplicates()` (priorytet 0, wzorzec V61). 11 starych URLs dostaje 301 → keeper.
+  3. **termmeta `_asiaauto_primary_make_slug`** — 32 termy zsynchronizowane z v6.1 marek (fangchengbao→byd, galaxy→geely, gac-trumpchi→gac, itd.). Bez tego breadcrumb na hubach pokazywał starą markę (`Fangchengbao` zamiast `BYD`).
+- Wynik: serie-broken-parent 70 → 0; duplicate-serie-terms 37 → 29 (reszta = intencjonalne sub-warianty EV/DM); BYD hub clean (1 term per model); breadcrumb po v6.1 marek poprawny. Backup pre-merge: `~/backups/primaauto/2026-04-28-orphan-parent-fix/terms-pre-fix.sql` (3.7 MB).
+
 ## 0.32.8 — 2026-04-28
 
 - **Inventory filter URLs noindex.** User zauważył w Screaming Frog że `/samochody/?nadwozie=suv`, `/samochody/?paliwo=hybrid`, `/samochody/?marka=byd` itd. są nadal indeksowalne — duplikat treści z hubów (`/samochody/byd/`). Pierwszy fix v0.32.6 używał `is_post_type_archive('listings')`, ale to nie zwraca true bo `/samochody/` to **WP page z shortcode `[asiaauto_inventory]`**, nie WP archive. Zmiana detekcji na `has_shortcode($post->post_content, 'asiaauto_inventory')` + sprawdzenie `$_GET` z whitelistą filter params (`nadwozie, paliwo, marka, model, naped, rok, cena, kolor, skrzynia`). Aktywne w obu hookach: `wp_robots` (core) + `rank_math/frontend/robots`. Test: `/samochody/?marka=byd` → noindex,follow ✓; `/samochody/` (czysty) → index ✓.
