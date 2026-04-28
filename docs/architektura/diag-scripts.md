@@ -42,6 +42,10 @@ APPLY=1 wp eval-file diag/fix-chinese-v23.php
 wp eval-file diag/check-data-quality.php
 ```
 
+## Dostęp z UI / WP-CLI (od v0.32.0)
+
+Skrypty `diag/*.php` są jednocześnie wywoływalne przez panel **Listings → Diagnostyka** (admin UI) oraz przez `wp asiaauto diag`. Każdy check w rejestrze (`includes/diag-checks/`) deleguje do funkcji eksportowanej z odpowiedniego skryptu `diag/`. Workflow `wp eval-file diag/X.php` nadal działa bez zmian.
+
 ## Workflow po imporcie nowych marek/modeli
 
 ```bash

@@ -1,12 +1,33 @@
 # Kolejka zadań — Prima Auto
 
-> Aktualizacja: 2026-04-23 (0.31.5 SEO content huby — 3 widoki PHP + n8n pipeline Claude Sonnet 4.6, batch ~175 marek+modeli w toku)
+> Aktualizacja: 2026-04-24 (sesja SEO/AEO post-cutover na motyw primaauto2026 — llms.txt+full deploy, author archive close, schema dedup, audyt PSI/GSC/DataForSEO)
 
 ---
 
-## ZADANIE 12 — Rollout SEO + Google Ads v2 (2026-04-22, aktualizowane 2026-04-23)
+## ZADANIE 14 — Panel diagnostyczny admina (asiaauto-sync) ✅ DONE (0.32.0, 2026-04-28)
 
-> Status: **W TOKU** — mapowanie v6.1 DONE w 0.31.2, widoki + content pipeline DONE w 0.31.5, batch contentu trwa (~60 min). Google Ads v2 pending.
+Pluggable rejestr 8 checków + Admin UI + WP-CLI + AJAX. Spec: `docs/superpowers/specs/2026-04-28-diagnostyka-admin-panel-design.md`. Plan: `docs/superpowers/plans/2026-04-28-diagnostyka-admin-panel.md`.
+
+### Klastry v1
+- Integralność (4): missing-images, chinese-chars, broken-extra-prep, duplicate-listings
+- Pokrycie SEO (4): make/serie-without-wiki, listings-without-mapping, mapping-without-term
+
+### Punkty wejścia
+- UI: WP admin → Listings → Diagnostyka
+- CLI: `wp asiaauto diag list | run | run-all | preview-fix | apply-fix`
+- AJAX: `asiaauto_diag_run | preview | apply` z capability `manage_options`
+
+### Pending v2
+- Klaster lifecycle (rotacja, orphan attachments, trash >30d permanent delete) — Plan D
+- Klaster ops (filter cleanup, race detection alerts) — Plan A
+- Auto-fix dla `make/serie-without-wiki` przez n8n REST endpointy (osobne ZADANIE)
+- Cron `asiaauto_diag_daily` z mailem alertem
+
+---
+
+## ZADANIE 12 — Rollout SEO + Google Ads v2 (2026-04-22, aktualizowane 2026-04-24)
+
+> Status: **PRAWIE DOMKNIĘTE** — mapowanie v6.1 DONE w 0.31.2, widoki + content pipeline DONE w 0.31.5, batch contentu DONE (45/47 make + 246/284 serie wiki coverage), AEO (llms.txt+full) DONE 2026-04-24, schema duplikat fix DONE 2026-04-24, Google Ads v2 SKAG/KI DONE w 2026-04-24 (memory `project_ads_ki_architecture.md`).
 
 ### Krok 1 — Migracja mapowania ✅ DONE (0.31.2, 2026-04-23)
 - [x] Backup 4 tabel w `~/backups/primaauto/2026-04-23-v6.1-taxonomy/terms-112846.sql` (540KB)
@@ -31,19 +52,23 @@
 - [x] Generator `tmp/generate-n8n-workflows.py` (gitignored JSON — klucze inline). Docelowo: klucze do n8n credentials + czysty JSON do `workflows/`
 - [x] Pilot Voyah + Voyah FREE zweryfikowany (3 iteracje promptu)
 - [x] Batch ~175 (45 marek + ~130 modeli), `tmp/batch-hub-parallel.sh` z xargs -P3, szacowany czas 60 min, koszt ~$25
-- [ ] Po batch: spot-check 5-10 randomowych hubów, retry fail (np. BYD timeout @123s)
+- [x] Po batch: coverage 45/47 make + 246/284 serie (z 124/275 wieczór 23-04 — retry zadziałał na ~120 modeli). Pending: 2 marki + 38 modeli bez wiki_body (pewnie świeżo dodane lub failed)
 
 **2c — Schema.org + llms.txt (pending):**
-- [ ] Vehicle Schema + BreadcrumbList + OfferShippingDetails na `single-listings.php` (gap vs west-motors)
-- [ ] `llms.txt` / `llms-full.txt` w root domeny (AEO priorytet 2025)
-- [ ] Prompt caching w n8n workflow (`cache_control: ephemeral` na system prompt) — 2-3× oszczędność przy regenach
+- [x] **Vehicle Schema + BreadcrumbList** na single listings (Car + BreadcrumbList JSON-LD w `class-asiaauto-single.php::renderMeta()` wp_head, Schema #1 z `render()` usunięta 2026-04-24 jako duplikat). OfferShippingDetails — pending, nice-to-have.
+- [x] **llms.txt** (122 linie, top 20 marek + top 30 modeli + 7-krokowy proces + kontakt + AI hints) i **llms-full.txt** (667 linii / 48 KB, 47 marek z opisami + wszystkie modele). Deploy 2026-04-24. Generator `tmp/build-llms-full.php`. Patrz memory `reference_aeo_llms_files.md`.
+- [x] **Prompt caching n8n** — wdrożone w v0.31.12 (memory `project_hub_pipeline_fix_2026_04_24.md`). Koszt €0,060/hub.
+- [ ] OfferShippingDetails w Car schema na single listing (uzupełnienie do gap vs west-motors)
+- [ ] Schema #2 (`renderMeta()`) wzbogacić o pola które miała Schema #1: `vehicleEngine` (KW), `vehicleTransmission`, `driveWheelConfiguration`, `color`, `itemCondition` — usunięte przy dedup 2026-04-24, można dograć
 
 ### Krok 3 — Google Ads v2 (równolegle z Krokiem 2, po podpięciu API)
-- [ ] User podpina Google Ads API (developer_token już przyznany — user potwierdził 2026-04-22, konfiguracja jutro)
-- [ ] n8n workflow: eksport feedu produktowego (listings → Google Merchant Center? albo dynamic Search Ads?) — decyzja architektoniczna do zrobienia
-- [ ] Regeneracja keywordów i reklam pod NOWE slugi marek/modeli (po Kroku 1) — bieżący import w `tmp/Edytor-Google Ads+2026-04-22.csv` jest w starych slugach
-- [ ] Negatywne keyword lists już są (`tmp/negative_keywords.csv`) — zaimportować do konta
-- [ ] Uwaga: nie regenerujemy CSV-ki póki user ręcznie ją poprawia — czekamy na jego eksport (patrz memory `project_google_ads_campaigns.md`)
+- [x] **Google Ads API podpięte** (Basic Access od 2026-04-23, konto Prima-Auto 9506068500 direct, v21). Patrz memory `reference_google_ads_api_client.md`.
+- [x] **3 ENABLED kampanie** (Brand 10/Topic 30/SKAG 60 zł/dz, suma 100 zł/dz). 37 grup SKAG, 262 KW, 37 RSA. Patrz memory `reference_google_seo_stack.md` i `project_ads_campaign_structure.md`.
+- [x] **Negatywy** — 503 BROAD historyczne + 14 PHRASE gapiowe per Topic/SKAG (opinie/test/recenzja/parametry/specyfikacja/wymiary/premiera/youtube itd.).
+- [x] **Architektura SKAG → KI** (2026-04-24): 37 per-model grup → 1 grupa „Długi ogon" z `{KeyWord}` H1 + per-KW finalUrl. Patrz memory `project_ads_ki_architecture.md`.
+- [ ] Import konwersji GA4 → Ads (`click_phone`/`click_whatsapp`/`generate_lead`) — pending user-side w UI Ads (Conversions → Import from GA4). Czas propagacji 9h pierwszy raz.
+- [ ] n8n workflow: eksport feedu produktowego do Google Merchant Center (decyzja architektoniczna pending)
+- [ ] Po 7 dniach: search terms review w GAQL → dosypywać KW/negs
 
 ### Zależności i kolejność
 ```
@@ -53,9 +78,37 @@ Ruslan OK → Krok 1 (migracja DB+importer) → Krok 2a (templates) ─┐
 ```
 
 ### Ryzyka
-- **Bez Kroku 1 Krok 3 jest bez sensu** — reklamy prowadzące na stare slugi po migracji zgubią ruch
-- **Krok 2a bez Kroku 1** — huby renderują stare termy, po migracji trzeba przerobić drugi raz
-- **Google Ads API developer_token** — jeśli konto jest test, limity są niskie; do zweryfikowania przy podpinaniu
+- ~~**Bez Kroku 1 Krok 3 jest bez sensu**~~ DONE — Krok 1 zrobiony 2026-04-23, Ads regenerowane pod nowe slugi
+- ~~**Krok 2a bez Kroku 1**~~ DONE — kolejność dotrzymana
+- ~~**Google Ads API developer_token**~~ DONE — Basic Access 2026-04-23, limit 15k ops/dobę
+
+---
+
+## ZADANIE 13 — Sesja SEO/AEO post-Elementor (2026-04-24) ✅ DONE
+
+Pełen audyt + AEO wdrożenia po przełączeniu na motyw primaauto2026. Patrz memory `project_seo_aeo_session_2026_04_24.md`.
+
+### Wykonane (8 punktów)
+- [x] PSI mediana z 3 runów mobile + 1 desktop. Wniosek: regres mobile lab nie jest realnym problemem (desktop 99/0,6s, real users mają błyskawicznie). CrUX field brak (origin <28d).
+- [x] GSC indeksacja audyt: 1/10 → 5/10 PASS (z 23-04 wieczór). Brand `primaauto` SERP #4. 4 huby (Chery/Voyah/byd-Seal/informacje) w cache crawl history Google, czekają na pełny index.
+- [x] DataForSEO SERP baseline ($0,06 / 17 KW) — primaauto vs west-motors mapping. JSON `tmp/dfs-serp-2026-04-24.json`.
+- [x] Internal linking audit: nic do zmiany. 3 ścieżki home/menu/footer do `/marki/`, stamtąd 47/47 marek.
+- [x] llms.txt rozbudowane 36 → 122 linii. llms-full.txt nowe (667 linii / 48 KB). Generator `tmp/build-llms-full.php`.
+- [x] Numer +48 605 335 559 (prywatny Janka) wywalony z 3 miejsc: llms.txt, header.php nowego motywu, fallback w wizardzie. Zastąpiony firmowym 721 730 507.
+- [x] Author archive disclosure: `/?author=ID` + `/author/<login>/` → 301 → home + `is_author()` noindex + `author_link` filter zwraca home_url. Eliminuje login disclosure 9 userów.
+- [x] Schema duplikat 2× `@type=Car` na single listing fix: `class-asiaauto-single.php:40` `echo $this->schema($d)` usunięty (Schema #2 z wp_head wystarczy + ma BreadcrumbList). Wynik: 2 JSON-LD zamiast 3.
+
+### Pliki utworzone/zmodyfikowane
+- Plugin: `class-asiaauto-seo.php` (+blockAuthorArchive, +filterAuthorLink, +filterRobots is_author), `class-asiaauto-single.php:40` (schema dedup), `class-asiaauto-order-wizard.php:452` (numer 605→721)
+- Theme: `themes/primaauto2026/header.php:4-6` (numer 605→721 + use shortcode)
+- Domain root: `llms.txt`, `llms-full.txt`
+- Repo: `tmp/build-llms-full.php`, `tmp/dfs-serp-2026-04-24.json`, `tmp/psi-after-theme-2026-04-24*/`
+
+### Pozostałe pending z dzisiejszego audytu
+- [ ] Hub aa-hub vs aa-serie różnica mobile + horizontal scroll (memory `project_hub_layout_issues.md` częściowo nieaktualne — padding fix już wdrożony w v0.31.8). Wymaga screenshotu.
+- [ ] 4 CSS chain blocking scalenie motywu (header+base+footer+hub w 1 plik) — kosmetyka pod mobile lab PSI, real user nie odczuje. Robić jako ostatnie gdy motyw się ustabilizuje.
+- [ ] Schema #2 wzbogacić o vehicleEngine KW + transmission + drive + color + itemCondition (utracone przy dedup 2026-04-24).
+- [ ] OfferShippingDetails w Car schema (gap vs west-motors).
 
 ---
 
