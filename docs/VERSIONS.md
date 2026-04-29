@@ -1,5 +1,84 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.28 — 2026-04-29 (Cleanup serii pod GAC — usunięcie prefiksu „Trumpchi" z 4/7 modeli)
+
+Po scaleniu marki (v0.32.27) seryjne kosmetyczne czyszczenie nazw 7 serii pod GAC z prefixem „Trumpchi" (E8, E8 PHEV, ES9 PHEV, E9 PHEV, M6, S7, M8). 4 udało się przepisać do czystych slugów; 3 zostały — kolizje slugów w taksonomii `serie` (globalnie unique w WP od 4.2):
+
+**Zmienione (4 termy):**
+- `Trumpchi E8` (3392) → `E8`, slug `e8`
+- `Trumpchi E8 PHEV` (3389) → `E8 PHEV`, slug `e8-phev`
+- `Trumpchi E9 PHEV` (3383) → `E9 PHEV`, slug `e9-phev`
+- `Trumpchi ES9 PHEV` (3384) → `ES9 PHEV`, slug `es9-phev`
+
+**Pozostawione (3 termy):**
+- `Trumpchi M6` (3377) — kolizja z term 6557 (M6, parent=0, AITO orphan, 1 listing 283901)
+- `Trumpchi S7` (3373) — kolizja z term 5674 (Luxeed S7, parent=6527, 10 listingów)
+- `Trumpchi M8` (3381) — kolizja z term 3372 (GAC M8 zwykły, parent=6525, 53 listingi). Faktycznie inny model (Xiangwang M8 = top trim).
+
+**Post_title batch (REPLACE w bezpiecznej kolejności od najdłuższego):**
+1. `GAC Trumpchi ES9 PHEV ` → `GAC ES9 PHEV ` (3 wpisy)
+2. `GAC Trumpchi E9 PHEV ` → `GAC E9 PHEV ` (5)
+3. `GAC Trumpchi E8 PHEV ` → `GAC E8 PHEV ` (8)
+4. `GAC Trumpchi E8 ` → `GAC E8 ` (4)
+5. `GAC Trumpchi M8 ` → `GAC M8 ` (2 — historyczny listing pod term 3372 GAC M8 z błędnym title po v6.1; bonus cleanup; nie zmienia „Xiangwang M8")
+6. `GAC Trumpchi Empow ` → `GAC Empow ` (1 — bonus cleanup)
+
+Łącznie 23 listingi z post_title zaktualizowane.
+
+**Brand-mapping (`data/brand-mapping-v6.1.php`):** 4 wpisy (`GAC Trumpchi|Trumpchi E8`, `…E8 PHEV`, `…ES9 PHEV`, `…E9 PHEV`) — `serie_eu`, `title_eu`, `slug` zmienione z prefiksowanych na czyste (E8/E8 PHEV/...). Inne wpisy GAC Trumpchi nietknięte (Xiangwang M8/S7 zachowują pełną nazwę CN, M6 z prefixem).
+
+**Redirecty 301 (`class-asiaauto-redirects.php::V62_SERIE_REDIRECTS`):** dodana sekcja `'gac' => [...]` z 4 mapowaniami starych slugów (`trumpchi-e8` itd. → `e8` itd.). Łącznie z istniejącymi `byd`/`zeekr`/`voyah`/`dongfeng` jeden wspólny mechanizm dla orphan-fix duplicate slug redirects.
+
+**Smoke test (curl):**
+- `/samochody/gac/e8/`, `/e8-phev/`, `/e9-phev/`, `/es9-phev/` → 200
+- `/samochody/gac/trumpchi-e8/` itd. → 301 → odpowiednio czysty slug
+- `/samochody/gac/trumpchi-m6/`, `/trumpchi-s7/`, `/trumpchi-m8/` → 200 (zachowane)
+
+**Pliki zmienione:**
+- `wp-content/plugins/asiaauto-sync/asiaauto-sync.php` — bump 0.32.27 → 0.32.28
+- `wp-content/plugins/asiaauto-sync/data/brand-mapping-v6.1.php` — 4 wpisy zaktualizowane
+- `wp-content/plugins/asiaauto-sync/includes/class-asiaauto-redirects.php` — `V62_SERIE_REDIRECTS['gac']` (+6 linii)
+- legacy `~/domains/asiaauto.pl/...` — sync 3 plików
+
+**Pending (kosmetyka, niski priorytet):**
+- `Trumpchi M6` cleanup wymagałby usunięcia/przeniesienia term 6557 (orphan AITO M6, parent=0, listing 283901 → powinien być pod właściwym AITO term). To by też naprawiło inny orphan z raportu 2026-04-28.
+- `Trumpchi S7` cleanup wymagałby zmiany slug Luxeed S7 (term 5674) — nieproporcjonalne ryzyko dla SEO Luxeed.
+- `Trumpchi M8` (Xiangwang M8) — nazwa słusznie zachowana, top trim ≠ podstawowa M8.
+
+## 0.32.27 — 2026-04-29 (GAC Trumpchi → GAC merge — domknięcie residuals v6.1)
+
+Domknięcie świadomie zostawionego residuum z v6.1 (2026-04-23): marka `GAC Trumpchi` (term_id 3368, 11 listingów) była utrzymywana obok `GAC` (6525), co generowało dublujące się prefiksy w post_title („GAC Trumpchi Trumpchi M6"). Po raporcie orphan-fix z 2026-04-28 i diagnozie obecnej sesji decyzja: zmergować w jedną markę GAC.
+
+**Migracja DB (live na produkcji + legacy asiaauto.pl plik plugin):**
+1. **Reparent serii** — `Trumpchi M6` (3377) i `Trumpchi E9 PHEV` (3383) zmienione `parent` z 3368 na 6525 w `wp7j_term_taxonomy`.
+2. **Reparent listingów** — 12 wpisów w `wp7j_term_relationships` z `term_taxonomy_id=3368` przeniesione na 6525. Zero kolizji (żaden listing nie miał już GAC).
+3. **Postmeta cleanup** — `meta_key=make` z wartością `gac-trumpchi` → `gac` (67 listingów; legacy meta nieużywane przez plugin/theme, ale spójne z taksonomią).
+4. **Termmeta cleanup** — `_asiaauto_primary_make_slug` na seriach 3377 i 3383: `gac-trumpchi` → `gac`.
+5. **Post_title batch update** — `REPLACE('GAC Trumpchi Trumpchi', 'GAC Trumpchi')` w `post_title` dla `post_type='listings'`. 13 listingów (12 z mojej listy + 1 historyczny ID 239842 „GAC Trumpchi Trumpchi M8" → „GAC Trumpchi M8").
+6. **Recount** — `wp_update_term_count_now()` dla terms 6525, 3377, 3383. GAC: 112 → 123 (publish only; 134 łącznie w relationships).
+7. **Usunięcie term 3368** — `wp term delete make 3368` (kasuje też termmeta: rank_math_*, asiaauto_wiki_body, asiaauto_seo_desc, asiaauto_faq_json, _asiaauto_desc_*).
+8. **Brand-mapping uzupełniony** — `data/brand-mapping-v6.1.php` dopisane wpisy `'GAC Trumpchi|Trumpchi M6'` i `'GAC Trumpchi|Trumpchi E9 PHEV'` → `mark_eu=GAC`, zachowujące prefix „Trumpchi" w `serie_eu`/`title_eu`/`slug` (spójnie z istniejącymi wpisami E8/Xiangwang M8/S7/E8 PHEV/ES9 PHEV). Bez tego importer przy reimporcie wracałby do tworzenia term 3368 ponownie.
+
+**Redirect 301 już istniał** (`V61_MAKE_REDIRECTS` w `class-asiaauto-redirects.php:37`): `gac-trumpchi → gac`. `/samochody/gac-trumpchi/*` → `/samochody/gac/*` ✓.
+
+**Smoke test (curl):**
+- `/samochody/gac/trumpchi-m6/` → 200
+- `/samochody/gac/trumpchi-e9-phev/` → 200
+- `/samochody/gac-trumpchi/trumpchi-m6/` → 301 → `/samochody/gac/trumpchi-m6`
+- `/samochody/gac-trumpchi/` → 301 → `/samochody/gac`
+- `/samochody/gac/` → 200
+
+**Backup DB:** `~/backups/primaauto/2026-04-29-gac-trumpchi-merge/terms-full.sql` (8.4 MB — wp7j_terms, term_taxonomy, term_relationships, termmeta).
+
+**Pliki zmienione:**
+- `wp-content/plugins/asiaauto-sync/asiaauto-sync.php` — bump 0.32.26 → 0.32.27 (header + ASIAAUTO_VERSION).
+- `wp-content/plugins/asiaauto-sync/data/brand-mapping-v6.1.php` — +14 linii (2 wpisy).
+- `domains/asiaauto.pl/.../asiaauto-sync.php` + `brand-mapping-v6.1.php` — sync legacy (rollback).
+
+**Co odpada w przyszłych sesjach:** raport orphan-fix `tmp/missing-hubs-2026-04-28.md` linie z Trumpchi M6/E9 PHEV — już rozwiązane (pod prawidłowym parent).
+
+**Pending kosmetyka (nie blokuje):** serie pod GAC z prefixem „Trumpchi" w nazwie (`Trumpchi E8`, `Trumpchi M8`, `Trumpchi S7`, `Trumpchi E8 PHEV`, `Trumpchi ES9 PHEV`, `Trumpchi M6`, `Trumpchi E9 PHEV`) — można w v6.2 wyczyścić do `E8`, `M8` itd. Wymagałoby: rename term name (zachowując slug), batch update post_title, regen sitemap.
+
 ## 0.32.26 — 2026-04-29 (Social media — sameAs schema + ikony w stopce)
 
 W sesji konfiguracji wizytówki Google Business Profile dodano profile social media (FB / IG / TT) na stronie:
