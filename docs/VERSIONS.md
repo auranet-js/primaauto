@@ -1,5 +1,59 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.24 — 2026-04-29 (Single listing — sekcja „Inne modele tej samej marki")
+
+- **Internal linking single → hub modelu** (TODO #3 z planu SEO 2026-04-29). Single listing wcześniej linkował do hubów tylko przez breadcrumb i CTA „Wróć do wyników" — brak dedicated cross-link do sibling modeli tej samej marki.
+- **Nowa metoda `relatedModels(array $d)`** w `class-asiaauto-single.php`:
+  - Pobiera make_term i serie_term listingu przez `wp_get_object_terms`.
+  - `get_terms` po taxonomy=serie z parent=make.term_id, exclude=[serie.term_id], hide_empty=true, orderby=count DESC, limit=8.
+  - Render: `<section class="aa-related">` z grid kafelek (auto-fill, min 180px). Każdy kafelek = nazwa modelu (display_name termmeta lub fallback name) + count z polską odmianą („27 ofert", „2 oferty", „1 oferta").
+  - Link do `get_term_link($sibling)` = hub modelu.
+- **Wstawione w `render()`** po `[asiaauto_equipment]`, przed zamknięciem `aa-single__main`. Mobile sticky CTA (`mobileCta`) nadal na końcu.
+- **CSS** w `assets/css/asiaauto-single.css`: `.aa-related` (margin-top 32px, separator border-top), `.aa-related__grid` (CSS grid auto-fill), `.aa-related__item` (border 1px, hover translateY+border-accent).
+- **Smoke test:** `/oferta/byd-han-dm-2025-96111/` (BYD Han DM-i):
+  - Tytuł: „Inne modele BYD" ✓
+  - Wyklucza Han DM-i (serie listingu) ✓
+  - 8 modeli sortowanych count DESC: Tang DM-i (37), Seal 6 DM-i (37), Song Pro DM-i (29), Qin L DM-i (25), Song L DM-i (21), Song L EV (19), Seal U DM-I (17), Atto 2 (16)
+  - Leopard 3 (15, pozycja 9 w DB) odcięty przez limit ✓
+- **Dlaczego ważne:** każde single listing daje 8 nowych internal links do hubów modeli tej samej marki. Skala: ~1841 listings × 8 = ~14k nowych internal linków po stronie. To wzmacnia hub authority i daje user-flow „BYD Han DM-i → Tang DM-i" zamiast „BYD Han DM-i → /samochody/" (utrata kontekstu marki).
+- **Backupy:** `class-asiaauto-single.php.bak-2026-04-29-related`, `asiaauto-single.css.bak-2026-04-29-related`.
+
+## 0.32.23 — 2026-04-29 (SEO: Product/AggregateOffer hub modelu + lifecycle 301 sprzedanych)
+
+Dwa wins z planu SEO (audyt 2026-04-29 popołudnie):
+
+### #1 Product + AggregateOffer schema na hub modelu (`class-asiaauto-seo.php`)
+
+- **Nowa metoda `buildProductForSerieHub($ctx)`** — emituje `@type: Product` z `offers: AggregateOffer { lowPrice, highPrice, offerCount, priceCurrency, availability }` dla huba modelu (`is_hub === 'serie'`). Hub marki celowo pominięty (zbyt szeroka grupa, niska trafność dla Product Snippet).
+- **Nowa `getPriceStatsForTerm(WP_Term $term)`** — single SQL query (JOIN posts × postmeta `price` × term_relationships × term_taxonomy) liczy MIN/MAX/COUNT po wszystkich publish listingach w danym serie term. Filtruje `price > 0`.
+- **Wstawione do `renderSchema()`** w obu gałęziach (RankMath ON / OFF).
+- **Smoke test:** `/samochody/byd/leopard-8/` → schema dokładnie zgodne z DB:
+  - DB: `lowPrice=283000, highPrice=325000, offerCount=5`
+  - HTML schema: identyczne wartości ✓
+- **Dlaczego ważne:** Google Vehicle Search i Product Snippet wyciągają „od X PLN" z `lowPrice` w `AggregateOffer`. Każdy hub modelu z N>0 listingów dostaje rich result.
+
+### #2 Lifecycle 301 sprzedanych listings → hub modelu (`class-asiaauto-redirects.php`)
+
+- **Modyfikacja `detectListingNotFound()`** — przed dotychczasowym fallbackiem (`is_listing_404 = true` + static make context dla shortcode `[asiaauto_404_listing]`) próbuje `resolveHubUrlForListing($post_id)` i robi `wp_safe_redirect($hub_url, 301); exit;`.
+- **Nowa `resolveHubUrlForListing($post_id)`** — preferowany hub modelu (taxonomy=serie), fallback hub marki (taxonomy=make). `wp_get_object_terms` zwraca terms niezależnie od post_status, więc działa dla draft i trash do permanent delete (~30 dni po sprzedaży).
+- **Smoke test:**
+  - `/oferta/byd-song-l-ev-2025-100886/` (draft) → 301 → `/samochody/byd/song-l-ev/` (200) ✓
+  - `/oferta/zeekr-001-2025-108296/` (draft) → 301 → `/samochody/zeekr/001/` (200) ✓
+  - `/oferta/nieistniejacy-slug-2024-99999999/` (deleted) → 404 ✓ (poprawny fallback gdy post nie istnieje)
+- **Dlaczego ważne:** sprzedane listingi (publish→draft→trash w `class-asiaauto-rotation.php`) wcześniej dawały soft 404 w GSC i traciły equity z backlinków/historycznego rankingu. Teraz 301 do hub modelu kumuluje sygnały SEO na hubach, które są właściwym targetem dla brand+model queries.
+
+### Backupy
+- `class-asiaauto-seo.php.bak-2026-04-29-aggoffer`
+- `class-asiaauto-redirects.php.bak-2026-04-29-301hub`
+
+## 0.32.22 — 2026-04-29 (Single listing — netto pod brutto, regresja po migracji theme z Elementor)
+
+- **Przywrócenie linii „netto: X PLN"** pod ceną brutto na single listing. Regresja z 2026-04-24 (cutover Elementor → primaauto2026): stary template Elementora 101874 używał shortcode `[asiaauto_price_breakdown]` (rozbicie brutto + netto, VAT 23%); nowy `single-listings.php` woła `[asiaauto_single]`, który w `class-asiaauto-single.php::sidebar()` renderował tylko brutto.
+- **Zmiana w `class-asiaauto-single.php:312-321`** (gałąź `if` z ceną): dodany `<span class="aa-single__price-netto">` z netto = brutto / 1.23 (VAT hardcode 23%, spójnie z `[asiaauto_price_breakdown]` w `class-asiaauto-shortcodes.php:1617-1618`). Gałąź `else` („Cena na zapytanie") bez zmian.
+- **CSS** w `assets/css/asiaauto-single.css:34`: nowa reguła `.aa-single__price-netto` (14px, var(--sec) szary, font-weight 500, display block).
+- **Smoke test:** `/oferta/denza-d9-dm-2024-94073/` → brutto 247 000 PLN + netto 200 813 PLN ✓.
+- **Backupy:** `class-asiaauto-single.php.bak-2026-04-29-netto`, `asiaauto-single.css.bak-2026-04-29-netto`.
+
 ## 0.32.21 — 2026-04-29 (Stock bary na hub make/serie — przed głównym contentem)
 
 - **Hub make/serie pokazują stock listings PRZED głównym contentem.** User insight: "tych aut nie będziemy mieć dużo, możemy wyciągnąć w Rzeszowie/w drodze przed nowościami" — eksponuj realnie dostępne pojazdy z stocku sprzedawcy na każdym hubu marki/modelu, jeśli istnieją.
