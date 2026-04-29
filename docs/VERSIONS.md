@@ -1,5 +1,23 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.26 — 2026-04-29 (Social media — sameAs schema + ikony w stopce)
+
+W sesji konfiguracji wizytówki Google Business Profile dodano profile social media (FB / IG / TT) na stronie:
+
+1. **`sameAs` w `AutoDealer` schema na home** (`class-asiaauto-homepage.php::renderSchema`) — array z 3 URL:
+   - `https://www.facebook.com/prima1auto/`
+   - `https://www.instagram.com/prima_auto.pl/`
+   - `https://www.tiktok.com/@primaauto.pl`
+2. **`sameAs` w `LocalBusiness` schema na /kontakt/** (`class-asiaauto-contact.php::renderSchema`) — te same 3 URL.
+3. **Ikony social w stopce theme primaauto2026** (`themes/primaauto2026/footer.php`) — pod `<p class="pa-footer__about">` w kolumnie brand. Inline SVG (FB/IG/TT), `target="_blank" rel="noopener nofollow"`. Lista `<ul class="pa-footer__social">` z aria-label.
+4. **CSS w `themes/primaauto2026/assets/css/footer.css`** — `.pa-footer__social` (flex gap 10px), kółko 38×38 z `rgba(255,255,255,.08)`, hover na `var(--c-secondary)` z translateY(-1px).
+
+**Backupy:** `class-asiaauto-homepage.php.bak-2026-04-29-social`, `class-asiaauto-contact.php.bak-2026-04-29-social`, `footer.php.bak-2026-04-29-social`, `footer.css.bak-2026-04-29-social`.
+
+**Smoke test:** `curl https://primaauto.com.pl/` + `/kontakt/` — `sameAs` w obu schemach ✓, footer renderuje ikony ✓ (200 OK).
+
+**Dlaczego ważne:** `sameAs` to oficjalny sygnał Schema.org dla Google Knowledge Graph — łączy wizytówkę GBP, profile social i stronę w jeden węzeł tożsamości firmy. Bez `sameAs` Knowledge Panel zostaje pusty (brak boxa „Profile") i Google ma trudność potwierdzić, że profil FB/IG i strona to ten sam podmiot. Wzmacnia E-E-A-T.
+
 ## 0.32.25 — 2026-04-29 (Schema NAP fix — AutoDealer name + usunięty numberOfEmployees bug)
 
 Audyt przed wizytówką Google ujawnił dwa problemy w schema na home (`class-asiaauto-homepage.php::renderSchema`):
