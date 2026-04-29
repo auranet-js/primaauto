@@ -1,5 +1,45 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.29 — 2026-04-30 (Mobile single redesign — sticky title bar pod headerem strony)
+
+Single listing przebudowany na mobile: title + brutto/netto przyklejone u góry pod headerem strony, gallery tuż pod, "Informacje" (linki do podstron) zjechały na sam dół pod inne moduły, breadcrumb i top „Wróć do wyników" ukryte na mobile (BreadcrumbList JSON-LD nadal w `<head>`).
+
+**Architektura sticky head — dwa warianty (desktop sidebar + mobile poza layoutem):**
+- Wyciągnięty `stickyHead($d, $variant)` z `sidebar()`. Renderowany 2× z modyfikatorami `--desktop` (w `<aside>`) i `--mobile` (poza `<div class="aa-single__layout">`, jako sibling).
+- Variant `--mobile` ma `position: sticky; top: var(--header-h, 70px); z-index: 90` — przykleja się POD `.pa-header` (z-index 100). Backup-y atemptów: position: fixed (porzucony — wymagał dynamicznego JS measure margin-top), display: contents na sidebar (porzucony — niestabilne w grid + sticky cascade).
+- Negatywny margin-top `-16px` niweluje `--space-2` padding na `.pa-main` na mobile — title bar bez gapu po site headerze.
+- Mobile sticky-back arrow (←) jako lewa kolumna grid sticky head; na desktop hidden (`display: none`).
+- `aa-info--desktop` (w sidebar) vs `aa-info--mobile` (na końcu main) — info linki widoczne tylko w odpowiednim viewporcie.
+- `aa-sep--desktop`, `aa-single__updated--desktop` — dodatkowe dekoracje sidebar ukryte na mobile.
+
+**iOS Safari fix mobile CTA (3 buttons):** `position: fixed; bottom: 0` ląduje pod toolbarem Safari. JS `visualViewport` API liczy gap między layout a visual viewport i ustawia `bottom: <gap>px` żeby CTA podążał za widocznym dołem ekranu. Resize/scroll listenery.
+
+**iOS Safari fix dolnego CTA (`asiaauto-single.js`):**
+```js
+var bottomGap = window.innerHeight - (vv.height + vv.offsetTop);
+mobileCta.style.bottom = bottomGap > 0 ? bottomGap + 'px' : '';
+```
+
+**Asset versioning:** `wp_enqueue_style/script` dla `aa-single` przerzucone z hardcoded `'0.25.0'` na `filemtime()` z fallback do `ASIAAUTO_VERSION` — automatyczne cache-busting przy edytach CSS/JS.
+
+**`wp_kses` fix w `taxonomy-make.php` + `taxonomy-serie.php` (theme-side):**
+Sanitizer `wp_kses()`/`wp_kses_post()` na zmergowanej zawartości `wiki + bar` strip'ował `<img fetchpriority="high" decoding="async" />` i `<svg>` z attrybutami nieuwzględnionymi w domyślnym allowlist. Skutek: niedomknięte `</div>` w kartach + zagnieżdżone `<a>` w `<a>` → karuzela "Najnowsze oferty" w hubach renderowała się jako wysokie kolumny pionowe (browser parse'ował broken HTML). Fix: split `$wiki` przez placeholder `{{LISTINGS_BAR}}`, sanityzowanie tylko user-side wiki content, `$bar` (nasz zaufany hub-listings HTML) wstawiany RAW.
+
+**Pliki zmienione:**
+- `wp-content/plugins/asiaauto-sync/asiaauto-sync.php` — bump 0.32.28 → 0.32.29
+- `wp-content/plugins/asiaauto-sync/includes/class-asiaauto-single.php` — extracted `stickyHead()` + `infoBox()`, dwa renderingi w `render()`, filemtime cache busting
+- `wp-content/plugins/asiaauto-sync/assets/css/asiaauto-single.css` — sekcja `@media (max-width: 768px)` z sticky head variants, hide breadcrumb/back, mobile info-box
+- `wp-content/plugins/asiaauto-sync/assets/js/asiaauto-single.js` — visualViewport listener dla iOS Safari mobile CTA fix
+- `themes/primaauto2026/taxonomy-make.php` + `taxonomy-serie.php` — split `$wiki/$bar` przy `wp_kses` (rozwiązanie karuzeli rozjechanej)
+- `themes/primaauto2026/assets/css/footer.css` — mobile centered brand col + social icons
+- `themes/primaauto2026/assets/css/hub.css` — `.aa-container { padding: 0 12px }` zamiast `0`, listing slider `flex-direction: row !important; flex-wrap: nowrap !important; flex: 0 0 70vw` na mobile, `aa-home__section-header { flex-wrap: wrap }`
+- `themes/primaauto2026/assets/css/header.css` — `.pa-header { z-index: 9000 }` (było 100) — fix problemu zasłaniania mobile menu hamburgera przez sticky inventory toolbar
+- `themes/primaauto2026/functions.php` — bump `PRIMAAUTO_THEME_VERSION` 1.0.4 → 1.0.6
+
+**Smoke test:** `/oferta/<slug>/`, `/marki/`, `/samochody/<make>/`, `/samochody/<make>/<serie>/`, `/samochody/` → 200; rendered HTML zawiera oba sticky head variants, info-mobile + info-desktop, karty z `<img fetchpriority>` i zamkniętymi tagami.
+
+**Rollback:** wszystkie pliki z .bak-2026-04-29-mobilesingle (plus header.css, hub.css, taxonomy-*.php, footer.css w temacie).
+
 ## 0.32.28 — 2026-04-29 (Cleanup serii pod GAC — usunięcie prefiksu „Trumpchi" z 4/7 modeli)
 
 Po scaleniu marki (v0.32.27) seryjne kosmetyczne czyszczenie nazw 7 serii pod GAC z prefixem „Trumpchi" (E8, E8 PHEV, ES9 PHEV, E9 PHEV, M6, S7, M8). 4 udało się przepisać do czystych slugów; 3 zostały — kolizje slugów w taksonomii `serie` (globalnie unique w WP od 4.2):
