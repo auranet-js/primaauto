@@ -1,5 +1,20 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.25 — 2026-04-29 (Schema NAP fix — AutoDealer name + usunięty numberOfEmployees bug)
+
+Audyt przed wizytówką Google ujawnił dwa problemy w schema na home (`class-asiaauto-homepage.php::renderSchema`):
+
+1. **Niespójność NAP:** `AutoDealer.name = "Prima Auto"` (bez myślnika) vs `LocalBusiness.name = "Prima-Auto"` na `/kontakt/` (z myślnikiem). Google bierze niespójność NAP jako negatywny sygnał Local SEO. Fix: ujednolicenie do `"Prima-Auto"` (zgodnie z legalName "Prima-Auto Ruslan Prima"). Dotyczy też `WebSite.name` ("Prima Auto — Samochody z Chin" → "Prima-Auto — Samochody z Chin").
+2. **Bug `numberOfEmployees`:** `numberOfEmployees: { value: 2677, unitText: "vehicles in stock" }` — pole Schema.org `numberOfEmployees` opisuje LICZBĘ PRACOWNIKÓW (oczekiwany QuantitativeValue z liczbą osób), nie samochodów. Google validator może zignorować cały blok lub flaguje inconsistency. Fix: pole usunięte. Stock count i tak jest pokazywany przez `Product/AggregateOffer` per hub modelu (v0.32.23) — nie potrzebujemy go w org schema.
+
+**Backup:** `class-asiaauto-homepage.php.bak-2026-04-29-schema-nap`.
+
+**Smoke test home:**
+- Przed: `"name": "Prima Auto"` + `numberOfEmployees: 2677`
+- Po: `"name": "Prima-Auto"` + brak numberOfEmployees ✓
+
+**Dlaczego ważne:** w sesji wizytówki Google (Google Business Profile) kluczowe jest aby NAP na stronie 1:1 zgadzało się z nazwą GBP i wizytówką w Knowledge Panel. Niespójność typu "Prima Auto" vs "Prima-Auto" działa jak dwa różne podmioty dla algorytmu Local SEO — utrudnia łączenie sygnałów.
+
 ## 0.32.24 — 2026-04-29 (Single listing — sekcja „Inne modele tej samej marki")
 
 - **Internal linking single → hub modelu** (TODO #3 z planu SEO 2026-04-29). Single listing wcześniej linkował do hubów tylko przez breadcrumb i CTA „Wróć do wyników" — brak dedicated cross-link do sibling modeli tej samej marki.
