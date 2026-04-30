@@ -1,6 +1,161 @@
 # Kolejka zadań — Prima Auto
 
-> Aktualizacja: 2026-04-24 (sesja SEO/AEO post-cutover na motyw primaauto2026 — llms.txt+full deploy, author archive close, schema dedup, audyt PSI/GSC/DataForSEO)
+> Aktualizacja: 2026-04-30 (fix mocy KM dla PHEV — analiza pól Dongchedi, wzorce BYD/Denza/non-BYD, plan wdrożenia)
+
+---
+
+## ZADANIE 15 — Fix mocy KM dla PHEV (single + inventory cards) (2026-04-30)
+
+> Status: zgłoszony przez klienta 2026-04-30 — „dla PHEV liczy źle, EV i benzyna OK". Analiza w pełni potwierdzona na próbce ~25 modeli (BYD, Denza, AITO, Geely, Chery, Hongqi, WEY, Changan, Volvo, Zeekr) + statystyka 614 PHEV w bazie. Kierunek poprawki uzgodniony.
+
+### Diagnoza
+
+Trzy renderery, dwa aktywne błędne:
+- `class-asiaauto-inventory.php::parseSystemPower()` (linia 1159) — karty na `/samochody/`
+- `class-asiaauto-single.php::power()` (linia 245) — strona pojedynczego ogłoszenia
+- `class-asiaauto-shortcodes.php::resolvePower()` (linia 1066) — **logika wzorcowa**, ale shortcode nieaktywny w motywie primaauto2026
+
+Pierwsze dwa opierają się głównie na polu `energy_elect_max_power` które dla PHEV jest niespójne lub puste. Fallback do `_asiaauto_horse_power` (meta) zwraca moc silnika SPALINOWEGO, nie systemu.
+
+Statystyka PHEV (614 listings):
+- `energy_elect_max_power`: 193 (32%) ⚠️ niespójne, czasem combined w KM, czasem kW, czasem null
+- `electric_max_power`: 392 (64%) ✓ format `"{kW}({KM}Ps)"`
+- `front_electric_max_horsepower` + `total_electric_power`: 613 (99,8%) ✓ **najbardziej wiarygodne**
+- `engine_max_horsepower`: 613 ✓ moc samego silnika spalinowego
+
+### Konkretne błędy zaobserwowane
+
+| Auto (post ID) | Aktualnie (single) | Powinno być | Manufacturer |
+|---|---|---|---|
+| Denza Z9 DM-i Ultra (94535) | **152 kW (207 KM)** | 640 kW (870 KM) | 870 PS ✓ |
+| Denza N9 DM-i Premium (145822) | 710 kW (965 KM) ⚠️ | 680 kW (925 KM) | 925 PS |
+| BYD Han DM-i (96111) | **115 kW (156 KM)** | 200 kW (272 KM) | 272 PS |
+| BYD Sealion 8 DM-p 4WD (111353) | **115 kW (156 KM)** | 400 kW (544 KM) | 544 PS |
+| BYD Leopard 7 PHEV (168147) | **115 kW (156 KM)** | 360 kW (490 KM) | 490 PS |
+| Volvo S90 T8 PHEV (242003) | 228 kW (310 KM) ⚠️ edge | 335 kW (455 KM) combined | 455 KM |
+
+EV-y i benzynowe działają dobrze — bo dla EV `energy_elect_max_power = "{kW}({KM}Ps)"` zawiera moc systemu, a dla benzynowych zawiera moc silnika. PHEV wpada między te dwa wzorce.
+
+### Plan wdrożenia
+
+**Krok 1** — Backup obu plików z datą:
+```bash
+cd ~/domains/primaauto.com.pl/public_html/wp-content/plugins/asiaauto-sync/includes/
+cp class-asiaauto-single.php class-asiaauto-single.php.bak-2026-04-30-power
+cp class-asiaauto-inventory.php class-asiaauto-inventory.php.bak-2026-04-30-power
+```
+
+**Krok 2** — Wspólny helper `resolvePower(int $post_id, array $ep): array`. Najlepiej w `class-asiaauto-inventory.php` jako `public static`, a `class-asiaauto-single.php::power()` go używa (DRY). Sygnatura zwraca `['kw'=>int|null, 'km'=>int|null, 'display'=>string, 'label'=>string]`.
+
+**Krok 3** — Logika (kolejność prób):
+
+```
+fuel_slug = get_the_terms($pid, 'fuel')[0]->slug
+fuel_name = ...
+
+is_phev_like = in_array(fuel_slug, ['phev','erev','hev']) 
+            || str_contains(fuel_name, 'PHEV') 
+            || str_contains(fuel_name, 'EREV') 
+            || str_contains(fuel_name, 'HEV')
+            || str_contains(fuel_name, 'Hybryda')
+is_ev = in_array(fuel_slug, ['ev','bev']) || str_contains(fuel_name,'Elektryczny')
+
+# PHEV/EREV/HEV/EV → moc systemu elektrycznego
+if (is_phev_like || is_ev):
+    front_hp  = (int) ($ep['front_electric_max_horsepower'] ?? 0)
+    total_kw  = (int) ($ep['total_electric_power'] ?? 0)
+    engine_kw = (int) ($ep['engine_max_power'] ?? 0)
+    
+    # Edge case: ICE dominuje (Volvo S90 T8, niektóre europejskie PHEV)
+    # — pokaż combined zamiast samej elektrycznej
+    if (is_phev_like && engine_kw > 0 && total_kw > 0 
+        && engine_kw * 1.5 > total_kw):
+        combined_kw = engine_kw + total_kw
+        combined_km = (int) round(combined_kw * 1.36)
+        return [kw=>combined_kw, km=>combined_km, 
+                display=>"{combined_kw} kW ({combined_km} KM)", 
+                label=>'Moc']
+    
+    # Standard: moc napędu elektrycznego (DM-i, EM-i, EREV, EV)
+    if (front_hp > 0 && total_kw > 0):
+        return [kw=>total_kw, km=>front_hp, 
+                display=>"{total_kw} kW ({front_hp} KM)", 
+                label=>'Moc']
+    if (front_hp > 0):
+        return [kw=>null, km=>front_hp, 
+                display=>"{front_hp} KM", label=>'Moc']
+    
+    # Fallback 1: electric_max_power "kW(KMPs)"
+    raw = $ep['electric_max_power'] ?? ''
+    if preg_match('/^(\d+)\((\d+)Ps\)$/', trim(raw), m):
+        return [kw=>(int)m[1], km=>(int)m[2], 
+                display=>"{m[1]} kW ({m[2]} KM)", label=>'Moc']
+    
+    # Fallback 2: energy_elect_max_power TYLKO w formacie (NPs)
+    # NIE używać raw (niejednoznaczne kW vs KM combined)
+    raw = $ep['energy_elect_max_power'] ?? ''
+    if preg_match('/^(\d+)\((\d+)Ps\)$/', trim(raw), m):
+        return [kw=>(int)m[1], km=>(int)m[2], 
+                display=>"{m[1]} kW ({m[2]} KM)", label=>'Moc']
+
+# Benzyna/Diesel/inne — moc silnika
+engine_hp = (int) ($ep['engine_max_horsepower'] ?? 0)
+engine_kw = (int) ($ep['engine_max_power'] ?? 0)
+if (engine_hp > 0 && engine_kw > 0):
+    return [kw=>engine_kw, km=>engine_hp, 
+            display=>"{engine_kw} kW ({engine_hp} KM)", label=>'Moc']
+
+# Ostateczny fallback: meta `_asiaauto_horse_power` 
+# (UWAGA: dla PHEV zawiera ICE-only — używać tylko gdy fuel = benzyna/diesel)
+if (!is_phev_like && !is_ev):
+    meta_hp = (int) get_post_meta($pid, '_asiaauto_horse_power', true)
+    if (meta_hp > 0):
+        kw = (int) round(meta_hp / 1.3596)
+        return [kw=>kw, km=>meta_hp, 
+                display=>"{kw} kW ({meta_hp} KM)", label=>'Moc']
+
+return [kw=>null, km=>null, display=>'', label=>'']
+```
+
+**Krok 4** — `class-asiaauto-single.php`:
+- Linia 230: `$pw = $this->power($d['ep']);` → zostawić sygnaturę, zmienić ciało
+- Linia 231: etykieta `'Moc łączna'` → zmienić na `$pw['label']` (czyli `'Moc'`) — bo to nie jest combined
+- Linia 245-256: zastąpić logikę nową (wywołanie helpera lub inline)
+- Sprawdzić linia 535 i 687 (też używają `power()`) — powinno działać bez zmian
+
+**Krok 5** — `class-asiaauto-inventory.php`:
+- Linia 1124: `$hp = self::parseSystemPower($ep);` → zmienić na `$resolved = self::resolvePower($postId, $ep); $hp = $resolved['km'];`
+- Linia 1159-1193: zastąpić `parseSystemPower($ep)` nową `resolvePower($postId, $ep)`
+- Sygnatura zmienia się — przyjmuje też `$postId` żeby czytać taksonomię fuel
+
+**Krok 6** — Testy weryfikacyjne (otworzyć w przeglądarce):
+- `/samochody/byd/han/` — karta + single dla BYD Han DM-i (oczekiwane: 200 kW / 272 KM)
+- Single Denza Z9 DM-i (post 94535) — oczekiwane: 640 kW / 870 KM
+- Single Denza N9 DM-i (post 145822) — oczekiwane: 680 kW / 925 KM
+- Single BYD Leopard 7 PHEV (168147) — oczekiwane: 360 kW / 490 KM
+- Single AITO M7 EREV 4WD (244737) — oczekiwane: 330 kW / 449 KM (regresja test)
+- Single dowolny EV np. Z9 GT EV (211197) — bez zmian: 710 kW / 966 KM
+- Single dowolny benzynowiec — bez zmian
+- Single Volvo S90 T8 PHEV (242003) — edge case combined: oczekiwane: 335 kW / 455 KM
+
+**Krok 7** — Bump wersji + commit:
+- `ASIAAUTO_VERSION` → bump (sprawdzić aktualną w `asiaauto-sync.php`, np. `0.32.29` → `0.32.30`)
+- Commit message: `[fix:][single:][inventory:] vX.Y.Z — moc PHEV z front_electric_max_horsepower zamiast ICE-only`
+- Update `docs/VERSIONS.md`
+
+### Czego NIE robić
+- ❌ NIE zmieniać `_asiaauto_horse_power` w bazie (614 listings × engine_hp; działa jako fallback dla benzynowych)
+- ❌ NIE zmieniać importera (`class-asiaauto-importer.php:434` — `update_post_meta('_asiaauto_horse_power', $data['horse_power'])` — to celowo zapisuje ICE HP z API)
+- ❌ NIE ruszać shortcode `resolvePower()` w `class-asiaauto-shortcodes.php` — jest poprawny, służy jako wzorzec; można go skonsolidować z nowym helperem później
+- ❌ NIE ruszać MCP, contractu, statusów zamówień — to izolowana zmiana frontu
+
+### Edge case'y do akceptacji
+- **Zeekr 9X Ultra PHEV** (post 174380): Dongchedi nie ma combined power (1305 PS wg producenta), pokażemy 660 kW / 898 KM (sam napęd elektryczny). Akceptowalne — manufacturer combined niedostępne w API.
+- **Hongqi HS7/HQ9** mają combined w `energy_elect_max_power` (358/300 KM) ale heuristyka wybierze `front_electric_max_horsepower` (324/286 KM). Różnica ~10%, nadal pokazuje moc realną. Akceptowalne.
+
+### Memory
+- Po wdrożeniu: dopisać do `project_session_2026_04_30_power_fix.md` (analiza pól Dongchedi PHEV, wnioski).
+- Wzbogacić memory `reference_dongchedi_api_quirks.md` o sekcję power fields (`energy_elect_max_power` niespójne, `front_electric_max_horsepower` wiarygodne, `_asiaauto_horse_power` meta = ICE only).
 
 ---
 
