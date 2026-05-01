@@ -4,8 +4,11 @@
 
 ---
 
-## ZADANIE 15 — Fix mocy KM dla PHEV (single + inventory cards) (2026-04-30)
+## ZADANIE 15 — Fix mocy KM dla PHEV (single + inventory cards) ✅ DONE (0.32.30, 2026-05-01)
 
+> Wdrożone 2026-05-01 wg planu poniżej. Helper `AsiaAuto_Inventory::resolvePower($post_id, $ep)` jako fuel-aware źródło prawdy, `class-asiaauto-single.php::power()` jako cienki wrapper. Weryfikacja klienta: wszystkie 8 testów PASS (Han DM-i, Z9 DM-i Ultra, N9 DM-i Premium, Leopard 7 PHEV, AITO M7 EREV, Volvo S90 T8 combined, Z9 GT EV bez regresji, benzynowiec bez regresji). Etykieta „Moc łączna" → „Moc" dynamicznie z helpera.
+
+### Pierwotne zgłoszenie (2026-04-30)
 > Status: zgłoszony przez klienta 2026-04-30 — „dla PHEV liczy źle, EV i benzyna OK". Analiza w pełni potwierdzona na próbce ~25 modeli (BYD, Denza, AITO, Geely, Chery, Hongqi, WEY, Changan, Volvo, Zeekr) + statystyka 614 PHEV w bazie. Kierunek poprawki uzgodniony.
 
 ### Diagnoza

@@ -1,5 +1,25 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.30 — 2026-05-01 (Fix mocy KM dla PHEV — single + karty inventory)
+
+Klient zgłosił 2026-04-30: PHEV-y pokazują absurdalnie niskie liczby KM (BYD Han DM-i 156 zamiast 272, Denza Z9 DM-i 207 zamiast 870, Sealion 8 DM-p 4WD 156 zamiast 544). Diagnoza pełna w `docs/QUEUE.md` ZADANIE 15: dwa renderery (`class-asiaauto-inventory.php::parseSystemPower`, `class-asiaauto-single.php::power`) opierały się na `energy_elect_max_power` (niespójne dla PHEV) z fallbackiem do meta `_asiaauto_horse_power` (= moc samego silnika spalinowego).
+
+**Wdrożenie:**
+- Nowy `public static AsiaAuto_Inventory::resolvePower(int $post_id, array $ep): array` — fuel-aware: dla PHEV/EREV/HEV/EV używa `front_electric_max_horsepower` + `total_electric_power` (wiarygodne 99,8% PHEV w bazie). Edge case PHEV: gdy ICE dominuje (`engine_kw * 1.5 > total_kw`, np. Volvo S90 T8) → pokaż combined `engine_kw + total_kw`. Dla benzyny/diesla — `engine_max_horsepower` + `engine_max_power`. Meta `_asiaauto_horse_power` jako ostateczny fallback **tylko dla ICE** (dla PHEV nadal zawiera ICE-only HP, ale nie jest dla nich brany pod uwagę).
+- `class-asiaauto-inventory.php` — karta listings woła `resolvePower($postId, $ep)` zamiast `parseSystemPower($ep)`. Stary helper zostawiony jako `@deprecated` (nieużywany).
+- `class-asiaauto-single.php::power($ep, $post_id = null)` — cienki wrapper na `AsiaAuto_Inventory::resolvePower()`. Etykieta nad mocą zmieniona z „Moc łączna" na „Moc" (dynamicznie z `$pw['label']`). Caller w `wp_head` (linia 687) dostaje `$pid` jawnie — `get_the_ID()` bywa nullem przed The Loop.
+
+**Weryfikacja klienta (2026-05-01):** wszystkie 8 testów z planu PASS — Han DM-i, Z9 DM-i Ultra, N9 DM-i Premium, Leopard 7 PHEV, AITO M7 EREV, Volvo S90 T8 (combined), Z9 GT EV (bez regresji), benzynowiec (bez regresji).
+
+**Czego NIE ruszono:** importer (`_asiaauto_horse_power` celowo zapisuje ICE HP — zostaje), `class-asiaauto-shortcodes.php::resolvePower()` (wzorcowa logika — nieaktywna w motywie primaauto2026, pozostaje na osobny refactor konsolidujący).
+
+**Pliki zmienione:**
+- `wp-content/plugins/asiaauto-sync/asiaauto-sync.php` — bump 0.32.29 → 0.32.30
+- `wp-content/plugins/asiaauto-sync/includes/class-asiaauto-inventory.php` — `resolvePower()` static helper + podmiana w karcie listings
+- `wp-content/plugins/asiaauto-sync/includes/class-asiaauto-single.php` — `power()` jako wrapper, etykieta „Moc", `$pid` jawny w wp_head schema
+
+---
+
 ## 0.32.29 — 2026-04-30 (Mobile single redesign — sticky title bar pod headerem strony)
 
 Single listing przebudowany na mobile: title + brutto/netto przyklejone u góry pod headerem strony, gallery tuż pod, "Informacje" (linki do podstron) zjechały na sam dół pod inne moduły, breadcrumb i top „Wróć do wyników" ukryte na mobile (BreadcrumbList JSON-LD nadal w `<head>`).
