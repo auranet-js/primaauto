@@ -1,5 +1,178 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.33 — 2026-05-04 (HOTFIX: martwe linki asiaauto.pl w mailingu i umowie PDF)
+
+W trybie autonomous przy v0.32.32 zostawiłem 7 hardcoded URL-i `https://asiaauto.pl/*` w mailach do klientów i logo URL w umowie PDF jako „TODO osobny task" — uznając że „działa bo plik istnieje na asiaauto.pl". To było błędne. Klient zwrócił uwagę: domena `asiaauto.pl` zwraca **HTTP 500 na wszystkich routach poza wąskim zakresem statycznych plików w `/2026/04/`**. Klienci dostawali maile z linkami `https://asiaauto.pl/proces/`, `/homologacja/`, `/faq/`, `/samochody/` — wszystkie 500. Umowa PDF używała LOGO_URL z asiaauto.pl który czasem dawał 200, czasem 500 (warunkowo).
+
+**Szybka inwentaryzacja stanu asiaauto.pl (curl -I):**
+- `/`, `/proces/`, `/homologacja/`, `/faq/`, `/samochody/` — **HTTP 500**
+- `/wp-content/uploads/2026/04/primaauto-logo-round.png` — **HTTP 200** (jeden statyczny plik z 04/ działa)
+- `/wp-content/uploads/2026/03/primaauto-logo-round.png` — **HTTP 500**
+
+Przyczyna 500-ek na asiaauto.pl wymaga osobnej diagnozy (pewnie wp-config WP_HOME na primaauto + brak fallback dla starej domeny w .htaccess albo plugin asiaauto-sync który DB wspólną i coś failuje). **Cutover 2026-04-21 zakładał 301 na całej domenie — nie działa zgodnie z założeniem.** Do osobnego task (TODO).
+
+**`class-asiaauto-order-content.php` (6 linków w 4 statusach maili):**
+- 116-118: lista przydatnych informacji w mailu „Zamówienie przyjęte" — 3 linki:
+  - `https://asiaauto.pl/proces/` → `https://primaauto.com.pl/informacje/proces-zamawiania/`
+  - `https://asiaauto.pl/homologacja/` → `https://primaauto.com.pl/informacje/homologacja-i-rejestracja/`
+  - `https://asiaauto.pl/faq/` (nigdy nie istniała na primaauto) → `https://primaauto.com.pl/informacje/` (parent landing dla wszystkich podstron informacyjnych)
+- 159: link do procesu w mailu „Wycena": `asiaauto.pl/proces/` → `primaauto.com.pl/informacje/proces-zamawiania/`
+- 350: oferty alternatywne w mailu „Niedostępny": `asiaauto.pl/samochody/` → `primaauto.com.pl/samochody/`
+- 371: oferty w mailu „Anulowane": `asiaauto.pl/samochody/` → `primaauto.com.pl/samochody/`
+
+**`class-asiaauto-contract.php` (LOGO w PDF umowy):**
+- Linia 53: `LOGO_URL = 'https://asiaauto.pl/wp-content/uploads/2026/04/primaauto-logo-round.png'` → `'https://primaauto.com.pl/wp-content/uploads/2026/03/primaauto-logo-round.png'`
+- Linia 290: `resolveLogoPath()` próbuje najpierw lokalny `$upload_dir/2026/04/primaauto-logo-round.png` — który **nie istnieje** (plik leży w `/2026/03/`). Path zmieniony na `/2026/03/primaauto-logo-round.png` (200 lokalnie + 200 z URL fallback).
+
+**Smoke test (PASS):**
+- `/informacje/proces-zamawiania/` 200 ✓
+- `/informacje/homologacja-i-rejestracja/` 200 ✓
+- `/informacje/` 200 ✓ (landing dla wszystkich info)
+- `/samochody/` 200 ✓
+- `/wp-content/uploads/2026/03/primaauto-logo-round.png` 200 ✓
+
+**Sync legacy domain:** 3 pliki skopiowane do `~/domains/asiaauto.pl/public_html/wp-content/plugins/asiaauto-sync/` (rutynowo, choć sama domena daje 500).
+
+**Pliki zmienione:**
+- `wp-content/plugins/asiaauto-sync/asiaauto-sync.php` — bump 0.32.32 → 0.32.33
+- `wp-content/plugins/asiaauto-sync/includes/class-asiaauto-order-content.php` — 6 linków asiaauto.pl → primaauto.com.pl
+- `wp-content/plugins/asiaauto-sync/includes/class-asiaauto-contract.php` — LOGO_URL + lokalny path do 2026/03/
+
+**Diagnoza + fix asiaauto.pl 500 (przy okazji v0.32.33, infra-only):**
+
+Przyczyna: `wp eval` na asiaauto.pl rzucał `Fatal error: Failed opening required '...wp-content/plugins/asiaauto-sync/includes/class-asiaauto-mapping.php'`. Plik powstał 2026-04-23 przy v6.1 brand-mapping (`AsiaAuto_Mapping::getEuForCn()`), ale **sync legacy do asiaauto.pl był niekompletny** — kopiowaliśmy tylko aktualnie zmieniane pliki w danej sesji, nigdy nie robiliśmy `rsync` całego plugin dir. `diff -rq` pokazał **kilkadziesiąt** plików brakujących na asiaauto.pl (admin-diag.css/js, asiaauto-tracking.js, kilka diag/, kilka data/translations + część kluczowa: `class-asiaauto-mapping.php`, `class-asiaauto-admin-diag.php`).
+
+Fix: ZAMIAST sync wszystkiego z primaauto, zgodnie z założeniem cutover 2026-04-21 (memory: „asiaauto = uśpiona kopia z 301") → **bezwarunkowy 301 w `.htaccess` przed jakimkolwiek przetwarzaniem PHP**:
+
+```apache
+# BEGIN AsiaAuto 301 → primaauto.com.pl
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule ^(.*)$ https://primaauto.com.pl/$1 [R=301,L]
+</IfModule>
+# END AsiaAuto 301
+```
+
+Backup: `~/domains/asiaauto.pl/public_html/.htaccess.bak-2026-05-04` (oryginalny ze starym Login Hide block + WP rewrites — bez 301).
+
+**Smoke test po fix .htaccess:**
+- `https://asiaauto.pl/` → 301 → `primaauto.com.pl/` 200 ✓
+- `https://asiaauto.pl/proces/` → 301 → `primaauto.com.pl/proces/` → 301 → `primaauto.com.pl/informacje/proces-zamawiania/` 200 ✓
+- `https://asiaauto.pl/samochody/icar/03/` → 301 → `primaauto.com.pl/samochody/icar/03/` 200 ✓ (potwierdza migrację iCAR działa też z legacy domain)
+- `https://asiaauto.pl/wp-content/uploads/2026/03/primaauto-logo-round.png` → 301 → primaauto
+
+**Implikacja:** sync legacy do asiaauto.pl staje się zbędny — domena zwraca 301 dla wszystkiego, nie odpala WP, nie używa pluginu. Można w przyszłości całkowicie zrezygnować z kopiowania plików (sam plik `.htaccess` musi tam zostać). Pliki kopiowane w sesji v0.32.31-33 do asiaauto.pl/wp-content są bezużyteczne, ale nie szkodzą.
+
+---
+
+## 0.32.32 — 2026-05-04 (Galaxy → Geely merge + chinese cleanup + /kontakt/ fix)
+
+Druga część sesji 2026-05-04 (po iCAR merge v0.32.31): scalenie residuala Galaxy do Geely, doczyszczenie chińskich znaków w 21 post_title i naprawa shortcode `[asiaauto_contact]` na stronie /kontakt/ (subject mail + 404 schema image).
+
+**Galaxy → Geely (v6.1 residual finalized):**
+- Term `Galaxy` (3394, 16 listingów) — pusty po migracji, **usunięty** (`wp term delete`). Redirect `galaxy → geely` był w V61_MAKE_REDIRECTS od 2026-04-23 — działa po usunięciu termu.
+- 17 listingów: `term_relationships.term_taxonomy_id=3394` → `3626` (Geely)
+- 1 seria pod parent=Galaxy: `Galaxy M9` (6550) → parent=3626 (reszta serii Galaxy* już była pod Geely)
+- `wp7j_postmeta`: `make=galaxy` → `geely` (17 wpisów)
+- `wp7j_termmeta`: `_asiaauto_primary_make_slug=galaxy` → `geely` (term 6550)
+- `wp7j_posts.post_title`:
+  1. REPLACE `'Galaxy 银河'` → `'Geely Galaxy '` (chinese cleanup + Geely prefix; 6 listingów A7 EM)
+  2. REPLACE `'Galaxy Galaxy'` → `'Geely Galaxy'` (de-duplicate; 1 listing 282264 z poprzednim partial fix)
+  3. CONCAT `'Geely '` przed `'Galaxy %'` gdzie nie zaczyna się od `'Geely '` (10 pozostałych)
+- `wp term recount`: Geely 341 → 357 (+16 publish, 17 minus 1 draft)
+
+**Brand-mapping bez zmian:** wszystkie 12 wpisów `Galaxy|*` już mapowały na `mark_eu='Geely'` od v6.1 (importer importował nowe listingi pod Geely; tylko stare pod taxonomy Galaxy zostały do dziś).
+
+**Chinese cleanup (translations-complectations.php — 15 nowych mapowań):**
+
+Dodano sekcję `// === 2026-05-04 — chinese-fragments cleanup po Galaxy/iCAR merge (15 nowych) ===`:
+- 巅峰性能 → Peak Performance (iCAR Super V23 V23S, listing 299535)
+- 大家庭欢乐 → Family Joy (Jetour X90 PLUS)
+- 星辉 → Starlight (MAEXTRO S800)
+- 锦绣 → Splendid (Geely Atlas Pro)
+- 启航 → Voyager (Geely Galaxy E5)
+- 凌云 → Soaring (Exeed TXL)
+- 智慧 → Smart (Changan CS75 Plus)
+- 威赫 → Mighty (Xingchi Bochi Venus)
+- 出行 → Mobility (Hongqi E-QM5)
+- 公务 → Official (Geely Galaxy E5)
+- 高功 → High Power (Geely Monjaro)
+- 霄汉 → Skyward (Geely Monjaro)
+- 乘势 → Momentum (Chery Tiggo 8 PLUS)
+- 电 → Electric (Jetour Shanhai L7 PLUS)
+- 星 → Star (Exeed TXL — single char na końcu mapy, longest-first PHP str_replace iteruje by-array-order więc 星舰/星耀/星辉/星空龙耀/星月女神 zamienione przed)
+
+**APPLY `diag/fix-chinese-v23.php`:** 15 listings zaktualizowanych. Po: `SELECT COUNT(*) WHERE post_title REGEXP '[一-龥]'` = **0** (ZERO chińskich w post_title publish). Galaxy listings z chińskim 银河 obsłużone wcześniej w SQL transaction Galaxy migration (REPLACE 'Galaxy 银河' → 'Geely Galaxy ').
+
+**Shortcode `[asiaauto_contact]` na /kontakt/ (`class-asiaauto-contact.php`):**
+- Linia 127: `'image' => home_url('/wp-content/themes/asiaauto/assets/asia-auto-logo.png')` → `home_url('/wp-content/uploads/2026/03/primaauto-logo-round.png')`. Plik `asia-auto-logo.png` w themes/asiaauto/assets/ **nie istniał** (404) — schema.org/AutoDealer image był broken. Nowy URL → 200.
+- Linia 306: subject mailto `'Zapytanie ze strony asiaauto.pl'` → `'Zapytanie ze strony primaauto.com.pl'`. To było user-facing (klient widział temat w mailu od użytkownika). User nie mógł poprawić bo treść strony to shortcode z PHP.
+
+**Smoke test (PASS):**
+- `/samochody/galaxy/` → 301 → `/samochody/geely/` 200 ✓
+- `/samochody/galaxy/galaxy-m9/` → 301 → `/samochody/geely/galaxy-m9/` 200 ✓
+- `/samochody/geely/a7-em/` 200 ✓ (16+ listingów A7 EM)
+- `/kontakt/` 200 ✓ — schema image primaauto-logo-round.png, mailto subject „Zapytanie ze strony primaauto.com.pl"
+- 0 listings publish z chińskimi znakami w post_title
+
+**Backup DB:** `~/backups/primaauto/2026-05-04-galaxy-merge/terms-and-posts.sql` (8.4 MB, 4 tabele).
+
+**Sync legacy domain:** 3 pliki skopiowane do `~/domains/asiaauto.pl/public_html/wp-content/plugins/asiaauto-sync/`.
+
+**Pliki zmienione:**
+- `wp-content/plugins/asiaauto-sync/asiaauto-sync.php` — bump 0.32.31 → 0.32.32
+- `wp-content/plugins/asiaauto-sync/data/translations-complectations.php` — 15 nowych mapowań
+- `wp-content/plugins/asiaauto-sync/includes/class-asiaauto-contact.php` — schema image URL fix + mailto subject
+
+**Pozostałe odwołania `asiaauto.pl` w kodzie (NIE naprawione w tej sesji — poza scope dziś):**
+- `class-asiaauto-contract.php:53` — `LOGO_URL = 'https://asiaauto.pl/wp-content/uploads/2026/04/primaauto-logo-round.png'` (działa bo plik istnieje na asiaauto.pl, ale powinno wskazywać na primaauto.com.pl)
+- `class-asiaauto-order-content.php:116-118, 159, 350, 371` — emaile statusów zamówień zawierają linki `https://asiaauto.pl/proces/`, `/homologacja/`, `/faq/`, `/samochody/` (user-facing — TODO osobny task)
+
+---
+
+## 0.32.31 — 2026-05-04 (iCAR merge: 03/03T/V27 z Chery do iCAR)
+
+Klient zgłosił 2026-05-04: iCAR ma być wyłącznie marką, modele iCAR widniejące pod Chery (iCAR 03, iCAR 03T, iCAR V27) trzeba przerzucić pod główną markę iCAR. Stan przed migracją był niespójny: brand-mapping v6.1 mapował `iCAR Super V23` na markę iCAR, ale `iCAR 03` i `iCAR V27` na Chery; redirect `icar → chery` w V61_MAKE_REDIRECTS sprzeczny ze stanem (term marki iCAR istniał z 9 listingami). Plus orphan `iCAR 03T` (term 5519, parent=0) bez wpisu w mapping.
+
+**Migracja DB live (2026-05-04 ~17:05):**
+- `wp7j_terms`: rename serie 5518 (iCAR 03 → 03 / `03`), 5519 (iCAR 03T → 03T / `03t`), 6508 (iCAR V27 → V27 / `v27`). Naming bez prefiksu — wzorzec spójny z istniejącą serią V23 (term 5517, sam numer/oznaczenie, prefix marki tylko w post_title)
+- `wp7j_term_taxonomy`: serie 5517/5518/5519/6508 → `parent=5516` (iCAR). Przy okazji fix orphana 5517 V23 (był parent=0) i 5519 (był parent=0)
+- `wp7j_term_relationships`: 12 wpisów `term_taxonomy_id=3578 (Chery)` → `5516 (iCAR)` dla listingów: 245892, 249700, 249717, 250800, 259268, 265157, 267536, 271571, 273041, 287720, 287730, 291872 (287534 już miał make=iCAR)
+- `wp7j_postmeta`: 7× klucz `make=chery` → `icar` (część listingów miała już `icar` w postmeta — niespójność postmeta vs taxonomy uleczona)
+- `wp7j_termmeta`: `_asiaauto_primary_make_slug=chery` → `icar` dla 5518 i 6508 (5519 i 5517 już miały `icar`)
+- `wp7j_posts`: REPLACE `'Chery iCAR'` → `'iCAR'` w post_title, 11 listingów (287534 już bez prefiksu)
+- `wp term recount make serie` — count: Chery 132 → 124 (-8 publish), iCAR 9 → 17 (+8 publish), suma 141 = 141 ✓
+
+**Brand-mapping uzupełniony** (`data/brand-mapping-v6.1.php`):
+- `'iCAR|iCAR 03'` → mark_eu=`iCAR` (zmiana z Chery), serie_eu=`03`, title_eu=`iCAR 03`, slug=`03`
+- `'iCAR|iCAR 03T'` → **nowy wpis** (rozwiązuje orphan), mark_eu=`iCAR`, serie_eu=`03T`, slug=`03t`
+- `'iCAR|iCAR V27'` → mark_eu=`iCAR` (zmiana z Chery), serie_eu=`V27`, slug=`v27`
+
+Bez tego importer przy reimporcie cofnąłby zmiany (wrzucał iCAR 03/V27 z powrotem pod Chery i nie tworzyłby relacji dla 03T).
+
+**Redirects (`class-asiaauto-redirects.php`):**
+- **USUNIĘTO** `'icar' => 'chery'` z `V61_MAKE_REDIRECTS` (niespójność: marka iCAR istnieje, redirect ją zabijał)
+- **DODANO** nową stałą `V63_MAKE_SERIE_REDIRECTS` (mapa `[old_make][old_serie] => [new_make, new_serie]`) + metodę `redirectV63MakeSerieMoves()` na `template_redirect` priorytet 0. Mapa: `chery/icar-03 → icar/03`, `chery/icar-03t → icar/03t`, `chery/icar-v27 → icar/v27`. Mechanizm rozszerzalny — następne migracje modeli między markami w jednym miejscu.
+
+**Smoke test (PASS):**
+- `/samochody/icar/` 200 (17 listingów)
+- `/samochody/icar/03/`, `/icar/03t/`, `/icar/v27/`, `/icar/v23/` 200
+- `/samochody/chery/icar-03/` → 301 → `/samochody/icar/03/` 200 ✓
+- `/samochody/chery/icar-03t/` → 301 → `/samochody/icar/03t/` 200 ✓
+- `/samochody/chery/icar-v27/` → 301 → `/samochody/icar/v27/` 200 ✓
+- `/samochody/chery/` 200 (124 listingów, bez iCAR)
+
+**Backup DB:** `~/backups/primaauto/2026-05-04-icar-merge/terms-full.sql` (8.4 MB, 4 tabele: terms/term_taxonomy/term_relationships/termmeta).
+
+**Sync legacy domain:** 3 pliki skopiowane też do `~/domains/asiaauto.pl/public_html/wp-content/plugins/asiaauto-sync/` (legacy 301-redirect na primaauto, ale wp-content musi być spójne — wspólna DB).
+
+**Pliki zmienione:**
+- `wp-content/plugins/asiaauto-sync/asiaauto-sync.php` — bump 0.32.30 → 0.32.31
+- `wp-content/plugins/asiaauto-sync/data/brand-mapping-v6.1.php` — 3 wpisy iCAR (mark_eu zmiana + nowy 03T)
+- `wp-content/plugins/asiaauto-sync/includes/class-asiaauto-redirects.php` — usunięty `icar→chery`, dodany `V63_MAKE_SERIE_REDIRECTS` + `redirectV63MakeSerieMoves()`
+
+---
+
 ## 0.32.30 — 2026-05-01 (Fix mocy KM dla PHEV — single + karty inventory)
 
 Klient zgłosił 2026-04-30: PHEV-y pokazują absurdalnie niskie liczby KM (BYD Han DM-i 156 zamiast 272, Denza Z9 DM-i 207 zamiast 870, Sealion 8 DM-p 4WD 156 zamiast 544). Diagnoza pełna w `docs/QUEUE.md` ZADANIE 15: dwa renderery (`class-asiaauto-inventory.php::parseSystemPower`, `class-asiaauto-single.php::power`) opierały się na `energy_elect_max_power` (niespójne dla PHEV) z fallbackiem do meta `_asiaauto_horse_power` (= moc samego silnika spalinowego).
