@@ -1,5 +1,36 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.36 — 2026-05-06 (fix dup meta description single listing — RankMath suppression)
+
+**Problem (zdiagnozowany live curl):** single listings `/oferta/*` emitowały **2× `<meta name="description">`** + 2× `og:type/og:title/og:description/og:image`:
+- RankMath Pro: auto-extract z `post_content` → łapie chińskie znaki z importu Dongchedi (np. „Nie można wystawić faktury VAT【Stan zewnętrzny】Drobne rysy【Stan lakieru】..."). **Śmieciowa desc**.
+- `class-asiaauto-single::renderMeta()`: bogata desc z marką/rokiem/paliwem/przebiegiem/ceną/USP („Import z Chin – Prima Auto"). **Lepsza dla CTR**.
+
+**Decyzja:** zostawić `class-asiaauto-single` (bogata custom emisja), zsupressować RankMath dla single listings. Memory v0.32.0 „single nietknięte" było prawidłowe — broniło przed RM auto-extract.
+
+**Fix:** `class-asiaauto-single::initRankMathSuppression()` — 11 filtrów zwracających `''` lub `[]` dla `is_singular('listings')`:
+- `rank_math/frontend/title`, `rank_math/frontend/description`, `rank_math/frontend/robots`
+- `rank_math/opengraph/facebook/og_title`, `og_description`, `og_type`, `og_image`
+- `rank_math/opengraph/twitter/twitter_title`, `twitter_description`, `twitter_image`, `card_type`
+
+**Bonus:** wyłączenie `rank_math/frontend/title` aktywuje `class-asiaauto-single::filterTitle` (wcześniej dead code) — 10 wariantowych templatów title rotuje per inner_id (`Używane {base} z Chin`, `{base} import z Chin`, `Sprowadź {base} z Chin`, etc.).
+
+**Smoke 2/2 listingi (Zeekr 8X / BYD Sealion 8):**
+- 1× `meta description` (bogata: marka, rok, paliwo, przebieg, cena, USP) ✓
+- 1× `og:type=product` (nie article) ✓
+- 1× `og:title/description/image` (custom template) ✓
+- 1× `<title>` (template z filterTitle) ✓
+- 1× `meta robots` (max-snippet/max-image-preview, brak `noindex`) ✓
+- 1× `link canonical`, 1× `twitter:card` ✓
+
+**Hand-off konwencji RankMath ↔ AsiaAuto (po v0.32.36):**
+- **RankMath rządzi:** home, page (`/samochody/`, `/marki/`, `/informacje/*`), taxonomy (make, serie, body, fuel, ca-year)
+- **AsiaAuto rządzi:** single listings (`/oferta/*`) — title + meta + og + twitter + Schema Car + dataLayer (RankMath supressed). Plus huby make/serie — Schema ItemList/FAQPage/BreadcrumbList (RankMath nie generuje, custom emituje równolegle do RM CollectionPage).
+
+Backup: `class-asiaauto-single.php.bak-2026-05-06-rm-dedup`.
+
+---
+
 ## 0.32.35 — 2026-05-06 (audyt SEO Plan A: GSC sitemap cleanup + dup desc fix + /marki/ meta)
 
 **Audyt SEO 2026-05-06 — porównanie do baseline 2026-04-23:**
