@@ -1,5 +1,37 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.35 — 2026-05-06 (audyt SEO Plan A: GSC sitemap cleanup + dup desc fix + /marki/ meta)
+
+**Audyt SEO 2026-05-06 — porównanie do baseline 2026-04-23:**
+
+| Metryka | 2026-04-23 | 2026-05-06 |
+|---|---|---|
+| Indeksacja 10 URL | 1/10 PASS | **10/10 PASS** |
+| GSC 30d impresje | 4 | **1282** |
+| GSC 30d clicks | 0 | **98** (CTR 7.64%, avg pos 7.6) |
+| Top query | brak | **"prima auto rzeszów" pos 2.4 CTR 26.1%** |
+
+**Konflikt RankMath ↔ class-asiaauto-seo (zdiagnozowany, fixed):**
+- Pierwsze meta desc na `/samochody/`: RankMath ("Tylko aktualne i sprawdzone oferty…")
+- Drugie meta desc: `class-asiaauto-inventory.php::renderInventoryMeta()` linia 1732 ("Elektryki, hybrydy…") — **duplikat**
+- `class-asiaauto-seo.php` ma already early return gdy `defined('RANK_MATH_VERSION')` (v0.32.0), `class-asiaauto-inventory.php` nie miał — **fix w tej wersji**
+
+**Fix A1 — DELETE stary sitemap z GSC:** `wp-sitemap.xml` (3609 URL submitted, downloaded 2026-05-01) — duplikat z RankMath `sitemap_index.xml` (3691 URL). API DELETE → HTTP 204.
+
+**Fix A2 — Submit 24 RankMath sitemaps do GSC:** GSC wcześniej widział tylko 4 z 18 listings sitemaps (sitemap1-4). PUT przez `webmasters/v3/sites/{site}/sitemaps/{url}` dla pełnego setu: `sitemap_index.xml` + `page-sitemap.xml` + `make-sitemap.xml` + `serie-sitemap1-2.xml` + `local-sitemap.xml` + `listings-sitemap1-18.xml`. Wszystkie 24 → 0 errors. Łącznie 3691 URL submitted, w tym 18 sitemaps × 200 listings = ~3600 (sitemap18 ma 43, sitemap17 ma 82 — końcówki).
+
+**Fix A3 — `class-asiaauto-inventory.php::renderInventoryMeta()` early return gdy RankMath aktywny:** dodane w linii 1700 `if (defined('RANK_MATH_VERSION')) return;`. URL-e parametryczne (`?marka=X&model=Y`) i tak są noindex od v0.32.5/8 (`isInventoryPage()` + filter params whitelist). RankMath obsługuje główny `/samochody/` z `rank_math_title`/`rank_math_description` ustawionymi w admin. Backup: `class-asiaauto-inventory.php.bak-2026-05-06-rm-handoff`. Po fix smoke `/samochody/` ma desc:1 (RankMath: "Tylko aktualne i sprawdzone oferty aut z rynku chińskiego. Bezpośredni importer.").
+
+**Fix A4 — `/marki/` (page_id 263572) brakujące rank_math_*:** `rank_math_title` = "Marki samochodów z Chin — Prima-Auto", `rank_math_description` = "Pełen katalog 50+ marek samochodów z Chin: BYD, Xiaomi, Chery, Geely, Voyah, AITO, XPeng, Zeekr i inne. Import do Polski, ceny końcowe, gwarancja." (155 chars), `rank_math_focus_keyword` = "marki samochodów z Chin". `wp post meta update 263572` × 3.
+
+**Smoke test 5/5:** `/samochody/` desc:1 ✓ (RankMath), `/marki/` desc:1 ✓ (nowy desc + custom title), `/samochody/?marka=byd` desc:1 ✓ (RankMath), Listing Denza desc:2 (out-of-scope, do osobnej decyzji), Hub BYD/SU7 bez zmian.
+
+**KRYTYCZNE pozostałe (osobna sesja):**
+- **PSI mobile home REGRES**: perf 75 (04-23) → **39** (05-06), TBT 160ms → **3890ms** (24×!), LCP 4.9s → 6.1s. CrUX field data **wszystkie 4 metryki = POOR (F)** — Google klasyfikuje jako poor CWV → ranking penalty. Source: prawdopodobnie RankMath analytics + Complianz + asiaauto-tracking + GTM stacked w main thread. Wymaga audytu JS payloadu i defer/async refactor. Theme `primaauto2026` 1.0.4 (Elementor wycofany 2026-04-24, ale TBT regres jest inny problem).
+- **Listing desc:2** — `class-asiaauto-single.php` (custom z marką/modelem/ceną/przebiegiem) konkuruje z RankMath auto-extract z post content. AsiaAuto desc lepsza SEO-wise (zawiera focus-keywordy), RankMath desc generic. Decyzja: zostawić AsiaAuto + wyłączyć RM dla CPT `listings` (filter `rank_math/frontend/description` return false dla `is_singular('listings')`) lub w admin RM disable post type.
+
+**Top pages w GSC (30d, what's working):** `/` 469imp/56clk/CTR11.9%, `/samochody/` 147/3, `/samochody/aito/` 89/3, `/samochody/byd/` 69/3, `/marki/` 63/2, `/samochody/byd/leopard-5/` 101/2. Niche-modele rankują: "tank 300 cena w polsce" pos 6.4, "geely preface cena" pos 8.7, "aito m9", "li auto l9", "zeekr 9x 2025", "changan uni-v" pos 27 (do dopchnięcia).
+
 ## 0.32.34 — 2026-05-06 (W1+W2: prevent ghost-offer publish-then-trash churn)
 
 **Problem:** importer publikował listingi mimo że auto-api.com zwracał już-wygasłe URL-e Dongchedi (`x-expires` < `synced_at`). Listingi w `publish` bez thumbnail → indeksowane przez Google → potem masowy cleanup przez `diag missing-images` (2026-05-03: 60 listings; rano 2026-05-06: znów 93). Strata budżetu indeksacji + churn URL-i.
