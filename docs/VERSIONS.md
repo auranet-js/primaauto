@@ -1,5 +1,21 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.37 — 2026-05-06 (make-sitemap: wycięcie 15 redirected makes V61)
+
+**Problem (zdiagnozowany przez GSC URL Inspection 54 hubów marek):** 6/54 hubów = NEUTRAL „Strona zawiera przekierowanie". `make-sitemap.xml` publikował slugi marek które robią 301 (V61_MAKE_REDIRECTS w `class-asiaauto-redirects.php`) — Google odrzucał je z indeksu jako redirect.
+
+**Fix:** `AsiaAuto_Redirects::excludeRedirectedMakeFromSitemap()` — hook `rank_math/sitemap/entry` priority 10. Per-entry filter zwraca `false` dla term'ów `make` których slug jest kluczem w `V61_MAKE_REDIRECTS` (15 slugów). Bez ruszania DB — listings podpięte pod te termy nadal indeksowane przez `listings-sitemap*` (osobne sitemaps dla CPT `listings`).
+
+**Verify (po `wp rankmath sitemap generate`):** make-sitemap.xml: 54 → **47 URL**. Zniknęły: `galaxy`, `great-wall`, `dongfeng-yipai`, `gac-aion-hyper`, `jetour-shanhai`, `yangwang`, `fangchengbao`, `chery-fengyun`, `gac-trumpchi`, `maextro`, `changan-qiyuan`, `beijing-off-road`, `212`, `dongfeng-fengxing`, `lotus-cars`. `polestar/` + `xingchi/` (NEUTRAL „zeskanowana, czeka na index") zostały — submit do Indexing API dla acceleracji.
+
+**GSC URL Inspection wynik finalny dla 54 hubów make (przed fix):** 46 PASS / 2 NEUTRAL waiting / 6 NEUTRAL redirect = po fix: 47 sitemap URL, z czego 46 PASS + 2 waiting. Realnie **48 marek (54 - 6 redirected) z których 46 zaindeksowane = 96%**.
+
+**Indexing API submitowane w sesji:** 12/200 quota:
+- 10 hubów (pretendenci top10 z GSC + świeże po batch n8n + huby po merge'ach)
+- 2 hub-y NEUTRAL (`polestar/`, `xingchi/`)
+
+---
+
 ## 0.32.36 — 2026-05-06 (fix dup meta description single listing — RankMath suppression)
 
 **Problem (zdiagnozowany live curl):** single listings `/oferta/*` emitowały **2× `<meta name="description">`** + 2× `og:type/og:title/og:description/og:image`:
