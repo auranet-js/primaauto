@@ -1,5 +1,34 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.34 — 2026-05-06 (W1+W2: prevent ghost-offer publish-then-trash churn)
+
+**Problem:** importer publikował listingi mimo że auto-api.com zwracał już-wygasłe URL-e Dongchedi (`x-expires` < `synced_at`). Listingi w `publish` bez thumbnail → indeksowane przez Google → potem masowy cleanup przez `diag missing-images` (2026-05-03: 60 listings; rano 2026-05-06: znów 93). Strata budżetu indeksacji + churn URL-i.
+
+**Rozwiązanie 2-warstwowe:**
+
+**W1 — preflight w `AsiaAuto_Importer::importListing()`:**
+Przed `wp_insert_post` parsuje obrazy i sprawdza `allUrlsExpired()` (nowy static helper). Jeśli WSZYSTKIE URL-e z parametrem `x-expires` są po terminie → `return null`, log warning. Cron pomija ofertę i ponowi przy następnym sync (świeżych danych z API). **Manual import (`force=true`) pomija preflight** — klient świadomie wskazał ofertę.
+
+**W2 — guard w `AsiaAuto_Media::downloadAndStore()`:**
+Gdy wszystkie pobrania zwrócą 403 (`empty($attachment_ids)`) — zamiast zostawić post w `publish` bez thumbnail, przenosi go do `draft` i zapisuje `_asiaauto_image_failure_at`. Listing nie pojawia się publicznie. `updateListing` przy kolejnym sync może go odzyskać (`downloadMissingImages` nadal próbuje).
+
+**Manual import UI:**
+`ajaxImport()` po imporcie sprawdza gallery i jeśli pusta — zwraca `data.warning` z instrukcją: „URL-e wygasły, otwórz ofertę na Dongchedi (auto-odświeży cache po stronie auto-api.com), ponów import za ~30s". JS renderuje jako `notice notice-warning`.
+
+**Helper `AsiaAuto_Importer::allUrlsExpired(array $urls): bool`:**
+- `[]` → `false` (no-op, nic do importu)
+- URL-e che168 / bez `x-expires` → `false` (conservative: nie blokujemy)
+- Mieszane (chociaż 1 świeży) → `false`
+- Wszystkie z `x-expires` po terminie → `true`
+
+**Pliki:** `asiaauto-sync.php` (version), `includes/class-asiaauto-importer.php` (W1 + helper), `includes/class-asiaauto-media.php` (W2), `includes/class-asiaauto-admin-manual-import.php` (UI warning + JS).
+
+**Backupy:** `*.bak-2026-05-03-w1`, `*.bak-2026-05-03-w2`, `*.bak-2026-05-03-warning`.
+
+**Smoke test:** `php -l` × 4 czysty. `wp eval allUrlsExpired()` dla 5 case'ów: poprawne wyniki (mixed=false, all_old=true, no_param=false, empty=false, real_dongchedi_old=true).
+
+**Co dalej:** monitor logu po następnym cronie (`grep "API cache stale" logs/asiaauto-sync.log`) — ile ofert pominiętych. Jeśli liczba jest wysoka i nie spada przez 2-3 cykle, zbadać dlaczego auto-api.com serwuje stary cache (może tam jest TTL do podkręcenia).
+
 ## 0.32.33 — 2026-05-04 (HOTFIX: martwe linki asiaauto.pl w mailingu i umowie PDF)
 
 W trybie autonomous przy v0.32.32 zostawiłem 7 hardcoded URL-i `https://asiaauto.pl/*` w mailach do klientów i logo URL w umowie PDF jako „TODO osobny task" — uznając że „działa bo plik istnieje na asiaauto.pl". To było błędne. Klient zwrócił uwagę: domena `asiaauto.pl` zwraca **HTTP 500 na wszystkich routach poza wąskim zakresem statycznych plików w `/2026/04/`**. Klienci dostawali maile z linkami `https://asiaauto.pl/proces/`, `/homologacja/`, `/faq/`, `/samochody/` — wszystkie 500. Umowa PDF używała LOGO_URL z asiaauto.pl który czasem dawał 200, czasem 500 (warunkowo).
