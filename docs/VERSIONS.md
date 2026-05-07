@@ -1,5 +1,42 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.43 — 2026-05-07 (auto-regen hub titles — agregator pattern)
+
+**Nowa klasa:** `class-asiaauto-hub-title-generator.php` (~200 linii) — generator title + description dla hub modelu na bazie aktualnych count + min/max(price).
+
+**Wzór title:** `{Brand} {Model} — od {min_price} PLN, {count} sztuk | Import z Chin | Prima-Auto`
+
+Przykłady:
+- `BYD Atto 2 — od 104 000 PLN, 15 sztuk | Import z Chin | Prima-Auto`
+- `Geely Preface — od 97 000 PLN, 53 sztuki | Import z Chin | Prima-Auto`
+- `AITO M9 — od 290 000 PLN, 89 sztuk | Import z Chin | Prima-Auto`
+
+**Kluczowe features:**
+- **Brand prefix auto-add** — gdy term name nie zawiera marki (np. „Preface" → „Geely Preface"), dodawany z `_asiaauto_primary_make_slug` lub parent term
+- **Polish pluralization** — 1 sztuka / 2-4 sztuki / 5+ sztuk
+- **Brand display map** dla special cases — BYD/GAC/MG/AITO/NIO (allcaps), XPeng/HiPhi/iCAR (mixed), Mercedes-Benz/Land Rover/Lynk & Co (multi-word)
+- **Skip flag** — `_asiaauto_skip_title_regen=1` per term blokuje regen (manual override)
+
+**Hooks:**
+- `asiaauto_after_set_taxonomies` — wywoływany w `class-asiaauto-importer.php:580` po `setTaxonomies()` per importowany listing → regen wszystkich serie terms którym ten listing należy
+- `asiaauto_regen_hub_titles_daily` — daily cron 04:00 lokalnego czasu (catch-up)
+
+**WP-CLI:**
+- `wp asiaauto regen_hub_titles --all` — bulk regen wszystkich
+- `wp asiaauto regen_hub_titles --term=<id> --dry-run` — test pojedynczego
+
+**Bulk regen executed 2026-05-07:** **333 hubów** updated (wszystkie z `count > 0`). Smoke test 5 random URL'i: title format poprawny, brand prefix gdzie trzeba, cena+count z DB.
+
+**Co straciliśmy** (trade-off vs spójność): 15 ręcznie tunowanych dziś hubów straciło custom USP w title (np. „50% taniej niż salon" dla BYD Sealion 7, „Hybryda 1400KM" dla Zeekr 9X). USP nadal w description. Jeśli chcemy custom USP w title per hub — można później dodać `_asiaauto_title_suffix` opcjonalny.
+
+**Reasoning** (dlaczego dynamic title):
+- Backlinko 2022: title z ceną → +15% CTR dla commercial queries
+- Otodom/AAAauto/Allegro używają tego wzoru i rangują top 10
+- Cena min zmienia się rzadko (~tygodnie), count codziennie → daily cron rozwiązuje stale info
+- LLM-y (ChatGPT/Perplexity/AI Overviews) cytują dosłownie konkretne fakty z title → AEO benefit
+
+---
+
 ## 0.32.42 — 2026-05-07 (v6.2 residuals cleanup phase 2: importer fix + bucket B 15)
 
 **Kluczowy systemowy fix — importer ignorował `slug` field z brand-mapping:**
