@@ -1,5 +1,41 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.41 — 2026-05-07 (v6.2 residuals cleanup phase 1: A delete 29 / C rename 12 / D parent fix 35)
+
+**Scope:** taxonomy `serie` cleanup po 4 merge'ach v6.1 (GAC Trumpchi 04-29, iCAR + Galaxy 05-04, Jetour Zongheng 05-06). 95 targets, 80 wykonane, 15 pending user review (bucket B).
+
+**Bucket A — bulk DELETE (29 termów, parent=0+count=0+merged-prefix):**
+6× `great-wall-*`, 13× `trumpchi-*`, 3× `beijing-off-road-*`, 2× `changan-qiyuan-*`, 2× `fengyun-*`, 2× `yangwang-*`, 1× `jetour-shanhai-l6`. DELETE z wp7j_terms + term_taxonomy + termmeta.
+
+**Bucket C — slug rename + V62 (12 termów):**
+- 9 galaxy-* → bez prefix (geely): `a7-phev/e5/e8/l6/l7/m9/starship-6/starship-7-em-i/starship-8-phev`. V62 `'geely' => [9 entries]`.
+- 3 trumpchi-* → bez prefix (gac): `m6/m8/s7`. V62 `'gac' => [+3 entries]`.
+- **REVERT 4 termów:** `yangwang-u7`, `changan-qiyuan-a06-classic`, `changan-qiyuan-e07`, `jetour-shanhai-t1`. Były błędnie w bucket C — ich parent_make jest w V61 (yangwang→byd, changan-qiyuan→nevo, jetour-shanhai→jetour), więc URL `/samochody/<v61-target>/<bezprefix>/` po V61 bounceuje z powrotem. **Slug-z-prefiksem jest poprawnym wzorcem** dla deprecated makes. V63 entries dodane wcześniej (nevo/byd/jetour) cofnięte.
+
+**Bucket D — orphan parent repair (35 termów + 4 pms fix):**
+Heurystyka `_asiaauto_primary_make_slug` z listingów per orphan. UPDATE wp7j_term_taxonomy.parent dla 35. Dodatkowo INSERT/UPDATE pms dla 4 missing/wrong: `8x→zeekr`, `fushun→jmc-ev`, `shark-6→byd`, `zunjie-s800: zunju→maextro`. Wszystkie 35 mają teraz poprawny parent + pms (URL `/samochody/<make>/<slug>/` → 200).
+
+**Bucket B — pending user review (15 termów, NO DB CHANGES):**
+`tmp/v6.2-bucket-B-mapping.md`. Plan B1 (10 z keeperem — listings migration), B2 (5 bez keepera — parent fix + slug rename).
+
+**V62/V63 zmiany w `class-asiaauto-redirects.php`:**
+- V62: dodane `'geely'` (9 entries) + `'gac'` (3 nowe entries: `trumpchi-m6/m8/s7`)
+- V63: bez zmian (próba dodania nevo/byd/jetour cofnięta)
+
+**Verify finalny (smoke test):**
+- 12× bucket C 301 → bezprefix target (200) ✓
+- 4× revert 200 ✓ (`/samochody/byd/yangwang-u7/`, `/samochody/nevo/changan-qiyuan-e07/`, etc.)
+- Bucket D sample 5/35 200 ✓
+- Bucket A `/samochody/gac/trumpchi-ga3/` → 404 (term deleted) ✓
+- Sitemap: serie-sitemap1=199 + sitemap2=121 = 320 (close to expected 321)
+- Orphan count: 50 → 15 (= bucket B pending) ✓
+
+**Backup:** `~/backups/primaauto/2026-05-07-v6.2-cleanup/terms-full.sql` (8.2 MB).
+
+**Lekcja:** V61_MAKE_REDIRECTS dla deprecated marek = slug-z-prefiksem jest poprawny dla terms w hierarchii deprecated. URL routing przez V61 bounce → bezprefix slug = błąd.
+
+---
+
 ## 0.32.40 — 2026-05-06 (Jetour Zongheng cleanup — V61 zongheng→jetour, V62 zongheng-g700→g700)
 
 **Stan przed:** chaos — `Zongheng` istniał jako oddzielny `make` (term 6536, count=0), term `serie` `zongheng-g700` (6537, parent=jetour 4525, count=4) z URL `/samochody/zongheng/zongheng-g700/`. Listings post_title już marketingowe „JETOUR G700" ale slug i hub URL trzymały „Zongheng".
