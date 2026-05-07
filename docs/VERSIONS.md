@@ -1,5 +1,39 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.40 — 2026-05-06 (Jetour Zongheng cleanup — V61 zongheng→jetour, V62 zongheng-g700→g700)
+
+**Stan przed:** chaos — `Zongheng` istniał jako oddzielny `make` (term 6536, count=0), term `serie` `zongheng-g700` (6537, parent=jetour 4525, count=4) z URL `/samochody/zongheng/zongheng-g700/`. Listings post_title już marketingowe „JETOUR G700" ale slug i hub URL trzymały „Zongheng".
+
+**Plan migracji (11 kroków, wykonane):**
+1. Create new term `g700` w `serie` parent=jetour (term_id 6581, tt_id 6581)
+2. Copy 6 termmeta z 6537 → 6581 (wiki_body 6795, faq_json 3593, seo_desc 155, _asiaauto_primary_make_slug, etc.)
+3. Reassign 5 listings (4 publish + 1 trash) z tt_id 6537 → 6581
+4. Update count: 6537 count=0, 6581 count=4
+5. Delete orphan `zongheng` make (term_id 6536, term_taxonomy + term + termmeta)
+6. Add `'zongheng' => 'jetour'` do `V61_MAKE_REDIRECTS`
+7. Add `'jetour' => ['zongheng-g700' => 'g700']` do `V62_SERIE_REDIRECTS`
+8. Bump `ASIAAUTO_VERSION` 0.32.40
+9. Flush RankMath sitemap cache + regenerate
+10. **Krytyczny gotcha:** termmeta `_asiaauto_primary_make_slug` skopiowana z 6537 zawierała `'zongheng'` (źle dla nowego term). Plugin `AsiaAuto_CPT::filterSerieTermLink` używa tej meta jako source-of-truth dla URL hub'a (nie taxonomy parent). **Update 6581 `_asiaauto_primary_make_slug = 'jetour'`** — bez tego URL hub'a był `/samochody/zongheng/g700/` zamiast `/samochody/jetour/g700/`, RM Sitemap też publikował zły URL i go wycinał (count=0 dla zongheng make).
+11. Commit + push
+
+**Verify finalny:**
+- `/samochody/jetour/g700/` → 200 ✓ (4 listings, wiki, FAQ, schema)
+- `/samochody/zongheng/` → 301 → `/samochody/jetour` (V61) ✓
+- `/samochody/zongheng/zongheng-g700/` → 301 → `/samochody/jetour/zongheng-g700/` (V61) ✓
+- `/samochody/jetour/zongheng-g700/` → 301 → `/samochody/jetour/g700/` (V62) ✓
+- `/oferta/jetour-zongheng-g700-2026-302325/` → 200 (post slugi zachowane, decyzja Q1=zachowaj) ✓
+- serie-sitemap: 320 → 321 (+ g700, − zongheng-g700 wycięte przez filter)
+- make-sitemap: 47 (zongheng wycięte przez V61)
+
+**Incydent:** podczas debugowania niewidoczności g700 w sitemap, `Cache::invalidate_storage()` zniszczył `rank-math-options-sitemap` (option z 30 kluczami → null). Sitemap_index.xml zwracał 404 dla wszystkich. **Recovery:** hardkodowane defaults (`pt_listings_sitemap=on`, `tax_make_sitemap=on`, `tax_serie_sitemap=on`, items_per_page=200, 30 kluczy łącznie) + `wp rewrite flush --hard`. Stan przywrócony.
+
+**TODO osobne sesje (audyt wykazał):**
+- ~25 martwych terms `serie` ze starymi prefixami sub-brand (`great-wall-*`, `trumpchi-*`, `beijing-off-road-*`, `changan-qiyuan-*`) — count=0, parent=0, do bulk delete
+- ~25 z listings przypiętymi (count>0): atto-3-yuan-plus (10), seal-u-dm-i-song-plus (13), yangwang-u8 (5), galaxy-l7 (24), galaxy-starship-7-em-i (16), trumpchi-m6 (8), etc. — wymagają per-term migracji wzorem Jetour Zongheng
+
+---
+
 ## 0.32.39 — 2026-05-06 (diag-check make/serie-without-wiki: filtr V61/V62/V63 redirected)
 
 **Problem (znaleziony przez user'a):** diag-check „Marki bez wiki_body" zgłaszał 8 marek do generacji wiki przez n8n, ale **5 z 8** to V61_MAKE_REDIRECTS (chery-fengyun, galaxy, lotus-cars, maextro + chery-fengyun) — czyli marki które robią 301 do innych. Generowanie wiki dla nich = waste (~€0.06 × 5 = €0.30 + zaśmiecone webhooks). 
