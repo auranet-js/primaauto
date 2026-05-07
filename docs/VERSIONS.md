@@ -1,5 +1,24 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.39 — 2026-05-06 (diag-check make/serie-without-wiki: filtr V61/V62/V63 redirected)
+
+**Problem (znaleziony przez user'a):** diag-check „Marki bez wiki_body" zgłaszał 8 marek do generacji wiki przez n8n, ale **5 z 8** to V61_MAKE_REDIRECTS (chery-fengyun, galaxy, lotus-cars, maextro + chery-fengyun) — czyli marki które robią 301 do innych. Generowanie wiki dla nich = waste (~€0.06 × 5 = €0.30 + zaśmiecone webhooks). 
+
+User uruchomił apply-fix, dostał 8 webhook timeoutów (n8n offline), ale wskazał że Galaxy w generacji to bałagan.
+
+**Fix:**
+- Public API w `AsiaAuto_Redirects`: `isMakeRedirected(slug)` + `isSerieRedirected(make_slug, serie_slug)` — re-use w diag-checks.
+- `class-check-make-without-wiki.php`: skip gdy `isMakeRedirected($t->slug)`.
+- `class-check-serie-without-wiki.php`: skip gdy `isSerieRedirected($make_slug, $t->slug)` (tylko dla termów z `parent != 0` — orphans z `parent=0` to osobny problem dla `serie-broken-parent` check).
+
+**Verify (live scan po fix):**
+- Marki bez wiki: **8 → 0** (wszystkie 8 były redirected) ✓
+- Modele bez wiki: 46 (top 10 to głównie ORPHAN parent=0 — broken historic import; oraz `icar/03t` po V63 merge — legit, wymaga wiki gen)
+
+**Pending:** orphan terms (parent=0) to oddzielny problem — `class-check-serie-broken-parent` powinien je naprawiać przed generacją wiki. n8n webhook 5s timeout oznacza że workflow `primaauto-make-desc` jest offline lub muli się — sprawdź w n8n.
+
+---
+
 ## 0.32.38 — 2026-05-06 (serie-sitemap: wycięcie 23 redirected series V61/V62/V63 + URL-based filter)
 
 **Problem (zdiagnozowany przez GSC URL Inspection 344 hubów modeli):** 13/344 = NEUTRAL „Strona zawiera przekierowanie". `serie-sitemap.xml` publikował slugi modeli których URL robi 301:
