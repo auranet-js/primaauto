@@ -1,5 +1,26 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.38 — 2026-05-06 (serie-sitemap: wycięcie 23 redirected series V61/V62/V63 + URL-based filter)
+
+**Problem (zdiagnozowany przez GSC URL Inspection 344 hubów modeli):** 13/344 = NEUTRAL „Strona zawiera przekierowanie". `serie-sitemap.xml` publikował slugi modeli których URL robi 301:
+- modele marki redirectowanej (V61): `chery-fengyun/fengyun-x3`, `gac-aion-hyper/hyper-ssr`, `dongfeng-yipai/yipai-007`, `jetour-shanhai/jetour-shanhai-l7-plus`, `yangwang/yangwang-u7-ev`, etc.
+- serie zdedupowane V62: `byd/leopard-5-denza-b5`, `byd/seal-u-dm-i-song-plus`, `byd/leopard-3-tai-3-fcb`, `byd/sealion-8-dm-i-tang-l`, `byd/atto-3-yuan-plus`, `byd/leopard-8-denza-b8`, `byd/sealion-8-tang-l-ev`, `byd/leopard-7-tai-7-fcb-phev`, `zeekr/zeekr-9x`, `voyah/voyah-taishan`, `dongfeng/e008`, `gac/trumpchi-e8`, etc.
+- serie cross-make migrated V63: `chery/icar-03`, `chery/icar-03t`, `chery/icar-v27`
+
+**Fix:** rozszerzenie hooka `rank_math/sitemap/entry` w `AsiaAuto_Redirects` — `excludeRedirectedTermsFromSitemap()`:
+- **make:** ten sam check co v0.32.37 (slug w V61_MAKE_REDIRECTS)
+- **serie:** **URL-based parsing** zamiast `$term->parent` (wiele serie-termów to orphans z `parent=0`). Wyciągamy `<make_slug>/<serie_slug>` z URL ścieżki `/samochody/<make>/<serie>/`, deterministycznie sprawdzamy V61 (parent_make redirects), V62 (serie dedup w obrębie make), V63 (cross-make migration).
+- **Bonus fix:** RankMath przekazuje `$url` jako tablicę `['loc' => ..., 'mod' => ..., 'images' => ...]`, nie string. Refactor obsługuje oba typy (forward/backward compat).
+
+**Verify (po `wp rankmath sitemap generate`):**
+- make-sitemap.xml: 47 URL (bez zmian, v0.32.37)
+- serie-sitemap1.xml + serie-sitemap2.xml: **344 → 321 URL** (wycięte 23 redirected)
+- Sample 6/6 URL'i 301-redirect: usunięte ✓
+
+**Indexing API quota:** dziś submitowanych 12 (huby make z poprzedniej sesji) + 29 (huby serie NEUTRAL waiting) = **41/200**. Zostaje 159 na inne potrzeby do końca dnia.
+
+---
+
 ## 0.32.37 — 2026-05-06 (make-sitemap: wycięcie 15 redirected makes V61)
 
 **Problem (zdiagnozowany przez GSC URL Inspection 54 hubów marek):** 6/54 hubów = NEUTRAL „Strona zawiera przekierowanie". `make-sitemap.xml` publikował slugi marek które robią 301 (V61_MAKE_REDIRECTS w `class-asiaauto-redirects.php`) — Google odrzucał je z indeksu jako redirect.
