@@ -1,5 +1,57 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.42 — 2026-05-07 (v6.2 residuals cleanup phase 2: importer fix + bucket B 15)
+
+**Kluczowy systemowy fix — importer ignorował `slug` field z brand-mapping:**
+
+`class-asiaauto-importer.php:514` — `setTaxonomies()` przekazywał do `setTaxonomyAndMeta()` tylko 3 argumenty (post_id, taxonomy, value). Bez 4-go argumentu `$api_value` slug auto-derive'ował się przez `slugify($value)` z labela "ATTO 3 (Yuan PLUS)" → `atto-3-yuan-plus`. **Pole `'slug' => 'atto-3'` z brand-mapping-v6.1.php było dead code.**
+
+Fix (1 linia):
+```php
+$serieSlug = isset($eu['slug']) ? (string) $eu['slug'] : '';
+$this->setTaxonomyAndMeta($post_id, $this->tax_model, $serieFinal, $serieSlug);
+```
+
+Od v0.32.42: każdy nowy listing z mapowaną parą CN→EU dostaje keeper-slug → zero nowych orphanów dla mapped combinations. Listings podejmowanych UPDATE też zostaną reasiagned do keepera przy następnym sync'u.
+
+**Bucket B — 15 termów wykonane (10 merge + 5 parent fix):**
+
+MERGE do existing keepera (10):
+- `seal-u-dm-i-song-plus` (13) → `seal-u-dm-i` (28 total)
+- `atto-3-yuan-plus` (10) → `atto-3` (23)
+- `leopard-3-tai-3-fcb` (8) → `leopard-3` (19)
+- `sealion-8-dm-i-tang-l` (2) → `sealion-8-dm-i` (14)
+- `sealion-8-tang-l-ev` (2) → `sealion-8-ev` (3) — EV osobno od PHEV
+- `leopard-5-denza-b5` (1) → `leopard-5` (9)
+- `leopard-7-tai-7-fcb-phev` (1) → `leopard-7` (8)
+- `voyah-taishan` (1) → `taishan` (8)
+- `zeekr-9x` (2) → `9x` (11)
+- `e008` (2) → `e-008` (6)
+- `fengyun-t11` (1) → `t11` (2) — keeper był ukryty pod `chery-fulwin`, dodano V62 entry
+
+PARENT FIX (5, slug zostaje, deprecated-make pattern):
+- `yangwang-u8` (5) — parent=byd, pms=byd
+- `fengyun-x3` (1) — parent=chery-fulwin, pms=chery-fulwin
+- `jetour-shanhai-l7-plus` (1) — parent=jetour, pms=jetour
+- `yangwang-u7-ev` (1) — parent=byd, pms=byd
+
+**Brand-mapping rozszerzone (5 nowych entries dla CN keys które wcześniej tworzyły orphany):**
+- `'Chery Fengyun|Fengyun X3'` → slug='fengyun-x3'
+- `'Chery Fengyun|Fengyun T11'` → slug='t11'
+- `'Jetour Shanhai|Jetour Shanhai L7 PLUS'` → slug='jetour-shanhai-l7-plus'
+- `'Yangwang|Yangwang U7 EV'` → slug='yangwang-u7-ev'
+- `'Yangwang|Yangwang U8'` → slug='yangwang-u8'
+
+**V62 dodane:** `'chery-fulwin' => ['fengyun-t11' => 't11']` (nowy klucz pierwszego poziomu).
+
+**Verify:**
+- Orphans: 15 → **0** ✓
+- Serie terms total: 2256 → 2216 (40 ghosts deleted across A+B)
+- 10 merge'y: ghost URL → 301 → keeper (200) ✓
+- 5 parent fix URLs → 200 ✓ (`/samochody/byd/yangwang-u8/`, `/samochody/chery-fulwin/fengyun-x3/`, etc.)
+
+---
+
 ## 0.32.41 — 2026-05-07 (v6.2 residuals cleanup phase 1: A delete 29 / C rename 12 / D parent fix 35)
 
 **Scope:** taxonomy `serie` cleanup po 4 merge'ach v6.1 (GAC Trumpchi 04-29, iCAR + Galaxy 05-04, Jetour Zongheng 05-06). 95 targets, 80 wykonane, 15 pending user review (bucket B).
