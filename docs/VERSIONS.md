@@ -1,5 +1,43 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.44 — 2026-05-13 (bugfix suggestClientCif — match ceny katalogowej)
+
+**Bug:** `AsiaAuto_Order::suggestClientCif()` używała liniowego transferu marży (`prowizja_wewn - §3`) → dopłaty do CIF. Wzór nie kompensował że pipeline B (`calculateOrderPrice()` — umowa) ma inną podstawę cła (CIF zamiast CIF+agencja) i VAT (CIF+cło zamiast pełnej bazy z pipeline A).
+
+**Skutek:** Jak admin wpisał sugerowaną wartość w pole "CIF dla klienta" i wygenerował umowę, Załącznik nr 2 pokazywał "Szacowany łączny koszt sprowadzenia" **~1-2 tys. zł niższy** niż cena widoczna na ofercie samochodu. Klient zgłaszał rozbieżność (#315462 Deepal: 171k vs 173k, #323757 BYD: 200k vs 202k).
+
+**Fix — nowy wzór odwrotny do `calculateOrderPrice()`:**
+```
+cif_pln_target = (subtotal_A − fixed_pln) / M
+M              = 1 + clo% + (1+clo%)·akcyza% + (1+clo%)·(1+akcyza%)·vat%
+fixed_pln      = agencja + transport + homologacja + commission_gross
+```
+
+Dla phev/bev (akcyza=0%): M ≈ 1,353. Dla petrol (akcyza 3,1%): M ≈ 1,395. Multiplikator zależny od paliwa listingu.
+
+**Pliki:**
+- `class-asiaauto-order.php` ~817-880 — nowy wzór + legacy fallback gdy brak `subtotal_pln` w breakdown
+- `class-asiaauto-contract.php` ~1033-1045 — w `renderAttachment2()` gdy `_order_client_cif_usd <= 0`, użyj `suggestClientCif()` zamiast raw `real_cif_usd` z breakdown listingu (PDF od razu pokazuje poprawną cenę, bez konieczności ręcznego wpisywania przez admina)
+- `class-asiaauto-order-admin.php` ~1097 — UI label "daje cenę w umowie ≈ cena katalogowa" zamiast mylącego "CIF + marża"
+
+**Weryfikacja:** 3 ręczne testy — wszystkie cena umowy = cena listingu co do 1 zł przed zaokrągleniem ceil/1000:
+
+| Zamówienie | Paliwo | Listing | Sugestia nowa | Cena umowy | Match |
+|---|---|---|---|---|---|
+| #323757 BYD Sealion 8 | phev | 202 000 | 37 688 USD | 202 000 | ✓ |
+| #315462 Deepal G318 | phev | 173 000 | 31 839 USD | 173 000 | ✓ |
+| #323747 smoke test | petrol | 176 000 | 31 601 USD | 176 000 | ✓ |
+
+**Dla istniejących zamówień (status `weryfikacja`/`potwierdzone`/`umowa_gotowa`):**
+- Te z `_order_client_cif_usd = 0` (admin nie wpisał) → po deployu automatycznie pokażą poprawną cenę w umowie (fallback w `contract.php`)
+- Te z `_order_client_cif_usd > 0` (admin wpisał starą sugestię) → trzeba odświeżyć panel, wpisać nową sugerowaną wartość (UI pokaże poprawną liczbę), zapisać → auto-rekalkulacja `_order_price_final` → "Regeneruj umowę" → klient po zalogowaniu zobaczy nowy PDF
+
+**Uwaga regen:** Regeneracja umowy na statusie != `podpisane` NIE wysyła automatycznie maila do klienta (linia 332-346 `handleGenerateContract`). Admin musi powiadomić klienta ręcznie.
+
+**Backup:** `.bak-2026-05-13-cif-suggest` per file.
+
+---
+
 ## 0.32.43 — 2026-05-07 (auto-regen hub titles — agregator pattern)
 
 **Nowa klasa:** `class-asiaauto-hub-title-generator.php` (~200 linii) — generator title + description dla hub modelu na bazie aktualnych count + min/max(price).
