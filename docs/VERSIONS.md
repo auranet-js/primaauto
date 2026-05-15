@@ -1,5 +1,30 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.45 — 2026-05-15 (umowa: „rok pierwszej rejestracji" zamiast „rok produkcji")
+
+**Problem:** Umowa generowała w polu „§1 b) rok produkcji" i tabeli specyfikacji „Rok produkcji" wartość z taxonomy `ca-year`, która w praktyce trzyma **rok modelowy** (z pola `year` API Dongchedi). Dla aut sprzedawanych jako prawie-nowe (dealer rejestruje na siebie żeby zwolnić VAT, klient odbiera po 1-12 miesiącach) `year` API ≠ kalendarzowy rok produkcji. Klient #329788 zgłosił rozbieżność: auto wyprodukowane w 2024 (potwierdza VIN `LURMCWEY6RA017761` — 10. znak `R` = rok modelowy 2024 wg ISO 3779), pierwsza rejestracja 2025-01-01, umowa pokazywała „2025".
+
+**Ustalenie diagnostyczne:** API Dongchedi nie zwraca osobnego pola „rok produkcji". Zwraca tylko `year` (rok modelowy), `reg_date` (pierwsza rejestracja) i `extra_prep.market_time` (data wprowadzenia modelu na rynek). Wszystkie trzy często się pokrywają i dla 23653477 wszystkie były „2025".
+
+**Decyzja:** Zmiana etykiety w umowie na „rok pierwszej rejestracji" + podstawiamy rok z meta `registration_date` (format `DD/MM/YYYY` → ostatnie 4 cyfry). Fallback: `ca-year` gdy brak rejestracji w API (1.6% listingów w 14d — głównie nowe modele/dealer-stock bez `reg_date`).
+
+**Pliki:**
+- `class-asiaauto-contract.php:327` — `'year' => self::extractRegistrationYear($listing_id, $get_term('ca-year'))`
+- `class-asiaauto-contract.php` — nowa metoda `extractRegistrationYear(int $listing_id, string $fallback_model_year): string` (regex `#/(\d{4})$#` na meta `registration_date`, fallback na rok modelowy)
+- `class-asiaauto-contract.php:604` — `<tr><td>b)</td><td>rok pierwszej rejestracji: ...</td></tr>` (było: „rok produkcji")
+- `class-asiaauto-contract.php:975` — `['Rok pierwszej rejestracji', ...]` w tabeli specyfikacji (było: „Rok produkcji")
+
+**Weryfikacja:** Test live `extractRegistrationYear()`:
+- post 329788 (z `registration_date=01/01/2025`) → `2025` ✓
+- post 328905 (bez `registration_date`, świeży Avatr 11) → fallback do `ca-year` ✓
+- post 0 (nieistniejący) → fallback ✓
+
+**Pokrycie 14d (2026-05-01 → 2026-05-15):** 2067/2101 listings (98.4%) ma `registration_date` → poprawna wartość w umowie. 34/2101 (1.6%) fallback do roku modelowego — wartość sensowna, choć etykieta wtedy lekko niespójna. Trade-off akceptowalny, problem dotyczy tylko świeżych dealer-stock przed pierwszą sprzedażą.
+
+**Decyzja w `docs/decyzje/2026-05-15-rok-rejestracji-zamiast-produkcji.md`.**
+
+---
+
 ## 0.32.44 — 2026-05-13 (bugfix suggestClientCif — match ceny katalogowej)
 
 **Bug:** `AsiaAuto_Order::suggestClientCif()` używała liniowego transferu marży (`prowizja_wewn - §3`) → dopłaty do CIF. Wzór nie kompensował że pipeline B (`calculateOrderPrice()` — umowa) ma inną podstawę cła (CIF zamiast CIF+agencja) i VAT (CIF+cło zamiast pełnej bazy z pipeline A).
