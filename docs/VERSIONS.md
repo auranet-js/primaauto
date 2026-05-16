@@ -1,5 +1,36 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.46 — 2026-05-16 (W2: fix DUP_BLOCKED_META — kopia nie dziedziczy rezerwacji)
+
+**Problem:** `AsiaAuto_Listing_Editor::handleDuplicate()` przy duplikacji kopiowała wszystkie meta poza wąską blocklist. Kopia dziedziczyła `_asiaauto_reservation_status` + `_asiaauto_reservation_order_id` → blokada utworzenia drugiego zamówienia na ten sam res_order_id („order się zduplikował"). Dowody w DB (2026-05-16):
+- 303534 + 314155 → `res_order_id=303657` (Denza Z9 GT DM-i)
+- 317106 + 324822 → `res_order_id=317400` (BYD Leopard 7)
+
+Dodatkowo kopia dziedziczyła historię sync-removal (`_asiaauto_removed_at`, `_asiaauto_removal_reason`, `_asiaauto_api_removed`) i flagi importu z UI „Dodaj z Dongchedi" (`_asiaauto_manual_import*`) — przekłamywało statystyki i mogło wywoływać późniejsze decyzje sync na kopię.
+
+**Fix:** dopisane 8 kluczy do `DUP_BLOCKED_META` w `class-asiaauto-listing-editor.php`:
+```php
+'_asiaauto_api_removed',
+'_asiaauto_removed_at',
+'_asiaauto_removal_reason',
+'_asiaauto_manual_import',
+'_asiaauto_manual_import_at',
+'_asiaauto_manual_import_by',
+'_asiaauto_reservation_status',
+'_asiaauto_reservation_order_id',
+```
+
+**Pliki:**
+- `class-asiaauto-listing-editor.php:80-111` — rozszerzona stała `DUP_BLOCKED_META`
+
+**Backup:** `class-asiaauto-listing-editor.php.bak-2026-05-16-pre-w2`
+
+**Decyzja w `docs/decyzje/2026-05-16-ochrona-recznie-zarzadzanych-listings.md` (sekcja „W2").**
+
+**Cleanup istniejących par (303534+314155, 317106+324822) — osobnym krokiem po smoke teście, z backupem mysqldump.**
+
+---
+
 ## 0.32.45 — 2026-05-15 (umowa: „rok pierwszej rejestracji" zamiast „rok produkcji")
 
 **Problem:** Umowa generowała w polu „§1 b) rok produkcji" i tabeli specyfikacji „Rok produkcji" wartość z taxonomy `ca-year`, która w praktyce trzyma **rok modelowy** (z pola `year` API Dongchedi). Dla aut sprzedawanych jako prawie-nowe (dealer rejestruje na siebie żeby zwolnić VAT, klient odbiera po 1-12 miesiącach) `year` API ≠ kalendarzowy rok produkcji. Klient #329788 zgłosił rozbieżność: auto wyprodukowane w 2024 (potwierdza VIN `LURMCWEY6RA017761` — 10. znak `R` = rok modelowy 2024 wg ISO 3779), pierwsza rejestracja 2025-01-01, umowa pokazywała „2025".
