@@ -1,5 +1,33 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.47 — 2026-05-16 (W1: sync guard — pomijaj ręcznie zarządzane listings)
+
+**Problem:** `AsiaAuto_Sync::run()` sprawdzał tylko `_asiaauto_reservation_status` przed `updateListing()` (case `changed`) i nic przed `markRemoved()` (case `removed`). Ignorował flagi `_asiaauto_manual_import` (UI „Dodaj z Dongchedi", 71 listings) i `_asiaauto_manual_entry` (pierwszy zapis przez metabox „Dane pojazdu", 75 listings). Skutek: ogłoszenia które Ruslan dodawał ręcznie były wycofywane przez sync z powrotem do trash (`removal_reason=sold`).
+
+**Fix:** w `class-asiaauto-sync.php` dodana prywatna metoda `isManuallyManaged(int $post_id): bool` (sprawdza obie flagi). Wstrzelona jako guard w `case 'changed'` (przed `updateListing`) i `case 'removed'` (przed `markRemoved`). Gdy listing jest manual: log `info("Sync skip: listing #X (inner_id: Y) is manually managed, skipping changed|removed")` + `$total_skipped++`.
+
+**Pliki:**
+- `class-asiaauto-sync.php:134-167` — 2 guard'y w switch-case + `$total_skipped++` per pominięty
+- `class-asiaauto-sync.php:222-240` — nowa prywatna metoda `isManuallyManaged()`
+
+**Backup:** `class-asiaauto-sync.php.bak-2026-05-16-pre-w1`
+
+**Zasięg ochrony (81 unique aktywnych listings):**
+- `_asiaauto_manual_import=1` → 71 sztuk (publish 54, draft 8, trash 9)
+- `_asiaauto_manual_entry=1` → 75 sztuk
+- Konkretne wzbudzenia (Ruslan edytował metabox): 249638 (BYD Yangwang U7), 306890 (Denza Z9 DM-i)
+
+**Smoke test (`tmp/w1-smoke-test.php` przez Reflection):**
+- Case 1 (manual_import=1 #260409) → `true` ✓
+- Case 2 (manual_entry=1 bez import #222255) → `true` ✓
+- Case 3 (normalny sync-owy #94073) → `false` ✓
+- Case 4 (planned-protect 249638, 306890) → `true` ✓ (oba)
+- Real `wp asiaauto sync --source=dongchedi` — brak fatal po patchu (0 zmian z API w tej iteracji)
+
+**Decyzja w `docs/decyzje/2026-05-16-ochrona-recznie-zarzadzanych-listings.md` (sekcja „W1").**
+
+---
+
 ## 0.32.46 — 2026-05-16 (W2: fix DUP_BLOCKED_META — kopia nie dziedziczy rezerwacji)
 
 **Problem:** `AsiaAuto_Listing_Editor::handleDuplicate()` przy duplikacji kopiowała wszystkie meta poza wąską blocklist. Kopia dziedziczyła `_asiaauto_reservation_status` + `_asiaauto_reservation_order_id` → blokada utworzenia drugiego zamówienia na ten sam res_order_id („order się zduplikował"). Dowody w DB (2026-05-16):
