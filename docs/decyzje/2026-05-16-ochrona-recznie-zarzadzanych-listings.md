@@ -374,4 +374,41 @@ done
 
 ---
 
+## 9. Stan wykonania — wpis sesji 2026-05-16 wieczór
+
+**Wszystkie 3 wątki wdrożone w kolejności W2 → W1 → restore → W3.**
+
+### W2 — v0.32.46 (commit 159fad3)
+- `class-asiaauto-listing-editor.php` — `DUP_BLOCKED_META` rozszerzona z 22 → 30 kluczy (8 nowych: api_removed/removed_at/removal_reason + manual_import×3 + reservation×2)
+- Smoke test (Reflection + replikacja pętli `handleDuplicate()`): kopia #317106 (BYD Leopard 7 z aktywną rezerwacją) czysta z wszystkich 8 blocked meta
+- Cleanup par (mysqldump backup w `~/backups/primaauto/2026-05-16-pre-dup-cleanup/`):
+  - 314155 (kopia 303534, Denza Z9 GT DM-i): -2 wiersze (res×2)
+  - 324822 (kopia 317106, BYD Leopard 7): -4 wiersze (res×2 + removed_at + removal_reason)
+- Oryginały 303534/317106 nietknięte (zachowują rezerwację)
+
+### W1 — v0.32.47 (commit 1115c92)
+- `class-asiaauto-sync.php` — prywatna `isManuallyManaged(int $post_id): bool` + 2 guardy w `case 'changed'` (przed `updateListing`) i `case 'removed'` (przed `markRemoved`)
+- Smoke test (Reflection): 5/5 case PASS — manual_import=1 → true, manual_entry=1 (bez import) → true, normalny sync-owy → false, planned-protect 249638 + 306890 → true
+- Real `wp asiaauto sync --source=dongchedi`: brak fatal po patchu
+
+### Restore 8 listings — sekcja 3 planu
+- Backup: `~/backups/primaauto/2026-05-16-restore-listings/{posts,postmeta}-before.sql` (mysqldump)
+- 8/8 → publish, post_name czyste (bez `__trashed` suffix)
+- 16 wierszy meta usunięte (`_asiaauto_removed_at` + `_asiaauto_removal_reason` + `_asiaauto_api_removed` × 8)
+- Wszystkie 8 z `_asiaauto_manual_import=1` (W1 ich chroni przed kolejnym sync)
+- **Otwarte:** 310457 (BYD Yangwang U8) — 0 zdjęć (decyzja Ruslana sekcja 5 punkt 3: pobranie z Dongchedi vs kopia z 310458). 299535 (iCAR V23) — drobny rozjazd: 12 attach w `post_parent` ale 6 w `gallery` meta (do zgłoszenia, render działa)
+
+### W3 — v0.32.48 (commit do utworzenia)
+- NOWY `class-asiaauto-admin-listings-views.php` — `AsiaAuto_Admin_Listings_Views` (hooki `views_edit-listings` + `pre_get_posts`, count = 69 active manual_import=1 po restore)
+- `asiaauto-sync.php` — `require_once` + `new AsiaAuto_Admin_Listings_Views()` w `if (is_admin())`
+- Smoke test (6/6 PASS): klasa loaded, 2 hooki @10, count zgadza się z direct SQL, link HTML poprawny, meta_query setowanie działa pod `?asiaauto_view=manual_import`
+
+### Otwarte komunikaty do Ruslana
+- Potwierdzenie wdrożenia W1 + W2 (rezerwacja-na-kopiach naprawiona, sync nie wycofuje ręcznie dodanych)
+- Restore 8 listings → publish (z notatką że 310457 BYD Yangwang U8 jest BEZ zdjęć — decyzja Ruslana: pobrać z Dongchedi czy skopiować z 310458 z 9 zdjęciami)
+- 299535 (iCAR V23) ma 12 attachmentów ale `gallery` meta tylko 6 — do potwierdzenia czy uzupełnić
+- Link „Ręczny import (69)" w admin listings — szybki dostęp do tej grupy
+
+---
+
 **Koniec dokumentu.**

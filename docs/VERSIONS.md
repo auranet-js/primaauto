@@ -1,5 +1,31 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.48 — 2026-05-16 (W3: filtr „Ręczny import" w admin views)
+
+**Cel:** w `edit.php?post_type=listings` dodać link „Ręczny import (X)" obok natywnych „Wszystkie | Moje | Opublikowane | Szkice | Kosz". Filtruje po `_asiaauto_manual_import=1` (TYLKO listings dodane przez UI „Dodaj z Dongchedi"). Bez ograniczenia po autorze — admin i Ruslan widzą tę samą listę.
+
+**Pliki:**
+- `includes/class-asiaauto-admin-listings-views.php` — NOWA klasa `AsiaAuto_Admin_Listings_Views`:
+  - hook `views_edit-listings` → `addManualImportView()` (dodaje link)
+  - hook `pre_get_posts` → `filterManualImportQuery()` (ustawia `meta_query` gdy `?asiaauto_view=manual_import`)
+  - prywatna `countManualImports()` z DISTINCT count na `_asiaauto_manual_import=1` (NOT IN trash, auto-draft)
+- `asiaauto-sync.php` — `require_once` + `new AsiaAuto_Admin_Listings_Views()` w bloku `if (is_admin())`
+
+**Backup:** `asiaauto-sync.php.bak-2026-05-16-pre-w3`
+
+**Smoke test (`tmp/w3-smoke-test.php`):**
+- Klasa ładowana via `require_once` ✓
+- Hooki registered (`views_edit-listings@10`, `pre_get_posts@10`) ✓
+- `countManualImports()=69` vs direct SQL=69 ✓ (po restore 8 listings)
+- `addManualImportView()` dorzuca klucz `asiaauto_manual_import` ✓
+- `filterManualImportQuery()` bez param → meta_query empty ✓; z `?asiaauto_view=manual_import` → `meta_query[0]={key:_asiaauto_manual_import, value:1, compare:=}` ✓
+
+**Weryfikacja w admin:** `https://primaauto.com.pl/wp-admin/edit.php?post_type=listings` — link „Ręczny import (69)" widoczny, klik filtruje.
+
+**Decyzja w `docs/decyzje/2026-05-16-ochrona-recznie-zarzadzanych-listings.md` (sekcja „W3").**
+
+---
+
 ## 0.32.47 — 2026-05-16 (W1: sync guard — pomijaj ręcznie zarządzane listings)
 
 **Problem:** `AsiaAuto_Sync::run()` sprawdzał tylko `_asiaauto_reservation_status` przed `updateListing()` (case `changed`) i nic przed `markRemoved()` (case `removed`). Ignorował flagi `_asiaauto_manual_import` (UI „Dodaj z Dongchedi", 71 listings) i `_asiaauto_manual_entry` (pierwszy zapis przez metabox „Dane pojazdu", 75 listings). Skutek: ogłoszenia które Ruslan dodawał ręcznie były wycofywane przez sync z powrotem do trash (`removal_reason=sold`).
