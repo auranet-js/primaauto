@@ -1,5 +1,116 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.53 — 2026-05-20 (Generyczne redirecty 404 — porządkowanie GSC)
+
+**Cel:** wyczyścić ~1300 trafień 404 Googlebota/dzień (martwe huby + sprzedane listingi). Przyczyna: stare slugi sprzed importer slug fix (v0.32.42) + listingi trwale usunięte (>30d, poza zasięgiem detectListingNotFound).
+
+**Dodane do `class-asiaauto-redirects.php` — generyczne, samonaprawiające, BEZ hardcode i BEZ 410 dla hubów (bo modele wracają):**
+- `redirectHubMakePrefix()` (template_redirect prio 1, tylko na is_404) — 3 warstwy dla hubów `/samochody/<make>/<serie>/`:
+  1. **Prefiks marki**: `changan/changan-uni-z` → odcina `changan-` → 301 na `uni-z` (get_term_link, kanoniczny URL).
+  2. **Normalized match**: `sea-lion-07dm` → `sealion-7-dm`, `seal-05-dm` → `seal-5-dm` (normalizacja: usuń myślniki + wiodące zera; tylko exact-norm, nie prefix).
+  3. **Brand fallback**: model martwy/zmieniony, marka żyje → 301 na hub marki. Warunkowane is_404 → gdy model wróci (term=200), redirect się NIE odpala. Zero blokady powrotu.
+  + feed strip: `/samochody/<x>/feed/` → 301 na hub bez feed (główny `/feed/` bloga nietknięty).
+- `resolveHubFromSlug()` + sam-make case — parsuje markę+model ze slugu listingu (longest-prefix po slugach marek), działa po trwałym usunięciu posta. Wpięte w `detectListingNotFound`: 301 hub modelu → hub marki. Listing bez modelu (`haval-2025-id`) → hub marki.
+- `send410()` — 410 Gone TYLKO dla listingu (sprzedany egzemplarz NIE wraca) bez żadnej rozpoznawalnej marki. Huby nigdy nie dostają 410.
+- helpery: `serieLinkBySlug()`, `normalizeSlug()`, `findSerieByNormalizedSlug()`, `getMakeSlugs()` (cache per-request).
+
+**Wynik (pomiar curl 683 unikalnych 404 z logów maja):** **677 → 301 (99,1%)**. Zostaje 5 śmieci (U+2060 w URL, listing bez roku) = 404 słusznie. 0 niepożądanych 410. Regression: żywe huby/listingi/feed bloga = 200; hub `super-v23` ożył naturalnie (nowy import → 200).
+
+**Backup:** `class-asiaauto-redirects.php.bak-2026-05-20-pre-generic-404`, `*-pre-brand-fallback`
+
+**Zdiagnozowane przy okazji (osobne taski, NIE w tej wersji):**
+- **1876/2239 serie z count=0** (puste huby) — NIE w sitemapie (RankMath wyklucza puste), więc nie zgłaszane Google. Do rozważenia: noindex gdy count=0 (samonaprawiające).
+- rewrite slug taksonomii `serie` = `model` → niektóre `get_term_link` dają 2-hop chain (`/model/i6/` → `/samochody/li-auto/i6/`). Minor.
+
+## 0.32.51 — 2026-05-20 (Indexing API — wycięcie URL_DELETED, go-live URL_UPDATED-only)
+
+**Cel:** hook Indexing API (v0.32.49) zawierał niezlecony `trash→URL_DELETED` (scope creep). Wycięty — hook zgłasza wyłącznie URL_UPDATED na publish nowego ogłoszenia. Sprzedaż (publish→trash) obsługuje 301-na-hub w `class-asiaauto-redirects.php`.
+
+**Powody wycięcia:** niezlecony + sprzeczny z 301 (Google idzie za realnym HTTP) + bug (`get_permalink()` trashowanego posta zwraca URL z `__trashed`, nigdy nieindeksowany) + marnował wspólną quotę Indexing API (200/dz per GCP project, dzielona z innymi projektami).
+
+**Pliki:**
+- `includes/class-asiaauto-indexing.php` — `resolveNotificationType()`: usunięty branch `trash→TYPE_DELETED` (zwraca `null`). Stała `TYPE_DELETED` pozostaje (nieużywana). Docblock zaktualizowany.
+
+**Go-live (2026-05-20 ~09:16):** `asiaauto_indexing_enabled=1`, armed. Live test ID 340966 → HTTP 200. Bez daily cap (decyzja: hook rozkłada ~162/dz na 24h, praca 8-18).
+
+**Backup:** `class-asiaauto-indexing.php.bak-2026-05-20-pre-urldelete-cut`
+
+**ADR:** `docs/decyzje/2026-05-20-indexing-api-url-update-only.md`
+
+## 0.32.50 — 2026-05-19 (Hub marek — pivot title na agregator-style Wariant C)
+
+**Cel:** ujednolicić title hub marek z formatem hub modeli (działający, 60% fraz `{model} import` w DFS top 10). Hub marek miały dotychczas `{Make} — Auto z Chin | Prima-Auto` — bez ceny i licznika. Pivot na `{Make} — od {min} PLN, {count} sztuk | Import z Chin | Prima-Auto`.
+
+**Decyzja oparta na danych:**
+- GSC 28d, 10 top hubów marek: **0% impressions z „import"**, 254 bez. Pivot na poziomie marki NIE z powodu „import" jako KW (zero search demand) ale z powodu spójności wzorca + dodanie ceny+count (intent „cena" wszechobecny w GSC).
+- Wariant C wybrany przez Janka: „szkoda marnować znaków" — pełne aggregator-style.
+
+**Pliki:**
+- `includes/class-asiaauto-hub-title-generator.php` — rozszerzenie:
+  - `regenerateForMakeTerm(int $term_id)` — odpowiednik `regenerateForTerm` dla `make`
+  - `regenerateAllMakes()` — bulk wszystkie marki z count > 0
+  - `buildMakeTitle()` + `buildMakeDescription()` — wzorce
+  - `getMakePriceRange()` — SQL JOIN przez `make` taxonomy (zamiast `serie`)
+  - `pluralizeOferty()` — dla description
+  - `brandSlugToDisplay()` zmienione z `private` na `public` (utility)
+  - Hook `asiaauto_after_set_taxonomies` rozszerzony: po imporcie regen + serie + make
+  - Daily cron `asiaauto_regen_hub_titles_daily` woła obie funkcje
+- `cli/class-asiaauto-cli.php` — nowy sub-command `regen-make-titles [--all|--term=<id>] [--dry-run]`
+
+**Backup:**
+- `class-asiaauto-hub-title-generator.php.bak-2026-05-19-pre-make`
+- termmeta dump: `~/backups/primaauto/2026-05-19-make-titles/before-bulk.tsv`
+
+**Wynik bulk:** 61/61 marek z `count > 0` zaktualizowane (100%). Dystrybucja długości title:
+- ≤60ch: 11
+- 61-70ch: 47
+- >70ch: 3 (Dongfeng Fengshen 73, Dongfeng Fengxing 73, Beijing Off-Road 72)
+- Avg 63, max 73
+
+**Live verification:** 3 sample URL-i sprawdzone (BYD/Geely/Volkswagen) — title + description renderują się natychmiast (zero RankMath cache).
+
+**Co NIE ruszono:**
+- Hub modeli (~340) — już Wariant C, działa (DFS 60% top 10)
+- Single (3915) — GSC 0% imp z „import", 2.7% z „cena", marginal ruch — bez wartości pivotu
+- 18 marek bez listings publish (Mercedes-Benz, Rolls-Royce, Aston Martin itd.) — count=0, fallback WP `{TermName} - {SiteTitle}` (osobny temat: noindex empty hubów)
+
+**Memory cross-link:** [[project_session_2026_05_19_make_titles_pivot]], [[project_session_2026_05_07_seo]] (kontekst v0.32.43 generator dla serie).
+
+---
+
+## 0.32.49 — 2026-05-19 (Indexing API integration — przygotowane, DEFAULT OFF)
+
+**Cel:** zamiast batch'owego pushu single listings do Google Indexing API (jak rano 2026-05-19, 192 URL wyczerpało quota), wstawiamy hook `transition_post_status` — każde nowe ogłoszenie zaraz po publish wysyła URL_UPDATED do Indexing API, każde przejście do trash wysyła URL_DELETED. Naturalna, real-time integracja. Quota Google 200/dzień mieści się w ~150-200 sync/dzień bez wybuchów batch.
+
+**Status: WYŁĄCZONA do ręcznego włączenia.** Procedura włączenia: `tmp/indexing-api-go-live-2026-05-20.md`. Włączenie zaplanowane 2026-05-20 po 02:00 PL (po reset quota).
+
+**Pliki:**
+- `includes/class-asiaauto-indexing.php` — NOWA klasa `AsiaAuto_Indexing_API`:
+  - hook `transition_post_status@20` → `onTransition()` (publish/trash dla CPT `listings`)
+  - cron godzinny `asiaauto_indexing_retry_cron` → `processRetryQueue()` (max 50/run, retry 5×, stop na 429)
+  - `getAccessToken()` — OAuth refresh z `~/secrets/google/{oauth-desktop-client.json,tokens.json}`, transient cache 50 min
+  - `callApi()` — POST `indexing.googleapis.com/v3/urlNotifications:publish` z URL_UPDATED/DELETED
+  - guard `isEnabled()` (option `asiaauto_indexing_enabled`, default false) + `isArmed()` (option `asiaauto_indexing_armed_after_utc`)
+  - logi przez `AsiaAuto_Logger`
+- `asiaauto-sync.php` — `require_once class-asiaauto-indexing.php` + `new AsiaAuto_Indexing_API()` w `plugins_loaded`
+- `cli/class-asiaauto-cli.php` — 3 sub-commands:
+  - `wp asiaauto indexing-test --id=<id> [--type=URL_UPDATED|URL_DELETED] [--live]` (dry-run domyślnie, OAuth refresh test)
+  - `wp asiaauto indexing-status` (queue size, flags, cron schedule)
+  - `wp asiaauto indexing-drain` (manual drain retry queue, respektuje quota/guards)
+
+**Backups:**
+- `asiaauto-sync.php.bak-2026-05-19-pre-indexing`
+
+**Bezpieczniki (option ustawione 2026-05-19):**
+- `asiaauto_indexing_enabled = 0`
+- `asiaauto_indexing_armed_after_utc = 2026-05-20T00:00:00Z`
+
+**Dry-run test 2026-05-19:** post #338530 (geely-galaxy-l6) — OAuth OK (token 254), oba guard'y blokują, success, zero API call. Quota Google nietknięta.
+
+**Memory cross-link:** `[[project_session_2026_05_18_seo_hubs_in_progress]]`, `[[reference_google_seo_stack]]`.
+
+---
+
 ## 0.32.48 — 2026-05-16 (W3: filtr „Ręczny import" w admin views)
 
 **Cel:** w `edit.php?post_type=listings` dodać link „Ręczny import (X)" obok natywnych „Wszystkie | Moje | Opublikowane | Szkice | Kosz". Filtruje po `_asiaauto_manual_import=1` (TYLKO listings dodane przez UI „Dodaj z Dongchedi"). Bez ograniczenia po autorze — admin i Ruslan widzą tę samą listę.

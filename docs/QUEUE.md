@@ -1,6 +1,18 @@
 # Kolejka zadań — Prima Auto
 
-> Aktualizacja: 2026-04-30 (fix mocy KM dla PHEV — analiza pól Dongchedi, wzorce BYD/Denza/non-BYD, plan wdrożenia)
+> Aktualizacja: 2026-05-20 (redirecty 404 cleanup GSC + Indexing API go-live)
+
+---
+
+## CHECK — GSC weryfikacja 404 (po redirectach v0.32.53) ⏳
+
+> **Weryfikacja „Sprawdź poprawkę" w GSC uruchomiona 2026-05-20** (raport „Nie znaleziono (404)", status: Weryfikacja → Rozpoczęto). Po wdrożeniu redirectów 677/683 (99,1%) martwych URL → 301.
+> **Sprawdzić ~2026-06-03** (po ~2 tyg): czy GSC zamknął błędy (weryfikacja PASS) + czy raport „Nie znaleziono" opadł. Jeśli URL-e wciąż wiszą → `curl -I` na próbce + log. **Indexing API NIE używać do tego** (zżera wspólną quotę 200/dz per GCP project).
+> Powiązane: `docs/decyzje/2026-05-20-redirecty-404-cleanup-gsc.md`.
+
+### Opcjonalnie przy okazji (zdiagnozowane 2026-05-20)
+- 1876/2239 hubów modeli ma count=0 (puste). NIE w sitemapie (RankMath wyklucza), więc nie pilne. Rozważyć `noindex` gdy count=0 (samonaprawiające).
+- rewrite slug taksonomii `serie` = `model` → część `get_term_link` daje 2-hop chain. Kosmetyka.
 
 ---
 
