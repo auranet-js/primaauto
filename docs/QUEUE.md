@@ -1,6 +1,6 @@
 # Kolejka zadań — Prima Auto
 
-> Aktualizacja: 2026-05-20 (redirecty 404 cleanup GSC + Indexing API go-live)
+> Aktualizacja: 2026-05-25 (GA4 eksploracje — RAPORT 3 done, RAPORT 2 funnel do dokończenia)
 
 ---
 
@@ -13,6 +13,36 @@
 ### Opcjonalnie przy okazji (zdiagnozowane 2026-05-20)
 - 1876/2239 hubów modeli ma count=0 (puste). NIE w sitemapie (RankMath wyklucza), więc nie pilne. Rozważyć `noindex` gdy count=0 (samonaprawiające).
 - rewrite slug taksonomii `serie` = `model` → część `get_term_link` daje 2-hop chain. Kosmetyka.
+
+---
+
+## GA4 — eksploracje analityczne (kontynuacja sesji 2026-05-25) ⏳
+
+> Property `534017542`. Custom channel group „Prima-Auto — Kanały" (primary). Skrypty: `tmp/ga4_query.py` (events/click/source), `tmp/ga4_channel_group.py` (list/create/primary). Spec eksploracji (drop): `auratest.pl/fe4f58fec53ctmp/primaauto-ga4-raporty-2026-05-20.md`. Memory: `project_ga4_channel_group_and_click.md`.
+
+### DONE w sesji 2026-05-25
+- **RAPORT 3 „Landing per kanał — Prima-Auto"** — Free form, zapisany w GA4 ✅. Wiersze = Strona docelowa + ciąg zapytania; Wartości = Sesje / Współczynnik zaangażowania / Średni czas zaangażowania na sesję / Współczynnik kluczowych zdarzeń w sesji / Najważniejsze wydarzenia; Filtr = Sesja – główna grupa kanałów = **Paid Search**; 30 dni, 50 wierszy. **Wniosek:** `/` (home) = 11 z 15 konwersji (6,1%), `/samochody/` 302 płatne sesje → 2 konw (0,7%), model-huby `/samochody/...` i single `/oferta/...` ≈ 0 → potwierdza „single landing conv issue (KORZEŃ)" z [[project_session_2026_05_19_ads_revision]].
+
+### DONE — RAPORT 2 (Funnel „Lejek leada — kanały") ✅ (2026-05-25)
+Funnel zbudowany i zapisany w GA4. Technika „Eksploracja ścieżki" (= funnel), OPEN FUNNEL ON, PODZIAŁ = Sesja – główna grupa kanałów, 30 dni. Kroki:
+1. **Wejście** = `page_view`
+2. **Obejrzał ofertę** = `page_view` + param `page_location` zawiera `/oferta/` — **substytut za `view_item`, bo `view_item` NIE istnieje jako zdarzenie GA4** (jest tylko w dataLayer, brak tagu GA4 konwertującego go na event).
+3. **Lead** = `generate_lead` (pominięto `form_start` — generyczny EM łapałby inne formularze)
+4. **Kontakt** = `click_phone` LUB `click_whatsapp`
+
+**Wyniki 30d (open funnel):** Wejście 1920 → Obejrzał ofertę 938 (−51%) → Lead 5 (**−99,5%**) → Kontakt 0. Per kanał krok 1→2: Paid Search realizacja **39,9%** (najgorsza) vs Direct 66%, Organic Search 57%. Potwierdza ten sam korzeń co RAPORT 3.
+
+⚠️ **Krok 4 = 0 to artefakt, nie błąd:** `generate_lead` i `click_phone/whatsapp` to RÓWNOLEGŁE metody kontaktu, nie sekwencyjne — nikt nie robi leada, a POTEM dzwoni. Realna wartość funnela = kroki 1–3 (zabójczy drop „obejrzał ofertę → lead"). Jeśli chcesz sensowny ostatni krok: zrób 3-krokowy funnel z połączonym krokiem „Kontakt/Lead" = `generate_lead` LUB `click_phone` LUB `click_whatsapp` (edycja ~2 min w edytorze kroków).
+
+### TODO — re-check przeliczenia channel group (~2026-05-21+, 24h po zmianie)
+- [ ] Zapytanie o `sessionPrimaryChannelGroup` (inline wariant `tmp/ga4_query.py`). Na 2026-05-20 reprocessing **częściowy**: `Facebook / Meta` 5, `AI Search` 1, reszta FB wciąż `Organic Social`. Oczekiwany stan docelowy: `Organic Social` znika → ~330 do `Facebook / Meta`, `AI Search` ~34.
+
+### Gotchy GA4 picker/UI (oszczędność czasu przy kontynuacji)
+- „Key events" w tej property = **„Najważniejsze wydarzenia"** (NIE „Kluczowe zdarzenia"). Session key event rate = „Współczynnik kluczowych zdarzeń w sesji".
+- Nietypowe nazwy technik: **Funnel = „Eksploracja ścieżki"**, Path = „Eksploracja sekwencji ścieżki".
+- Custom CG w pickerze: „Sesja – główna grupa kanałów (Prima-Auto — Kanały)".
+- Okno przeglądarki max ~1920×945 (ekran 1080, nie da się 1400). Edytor warunku filtra renderuje się pod krawędzią panelu Ustawień → obejście: `document.body.style.zoom='0.6'` przez javascript_tool, na koniec reset `='1'`.
+- Dodawanie wymiarów/metryk do Wierszy/Wartości/Filtrów: klik w „Upuść lub wybierz…" daje dropdown wyboru — pewniejsze niż drag&drop.
 
 ---
 
