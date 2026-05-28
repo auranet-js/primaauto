@@ -1,6 +1,57 @@
 # Kolejka zadań — Prima Auto
 
-> Aktualizacja: 2026-05-25 (GA4 eksploracje — RAPORT 3 done, RAPORT 2 funnel do dokończenia)
+> Aktualizacja: 2026-05-28 (Galeria klientów /klienci/ wdrożona — v0.32.57 / theme 1.0.7)
+
+---
+
+## META — odblokowanie kampanii FB (BLOCKED przez Ruslana) ⛔
+
+> Status `act_1083673765606618` na **2026-05-27**: karta podpięta (Mastercard *3519), waluta PLN, balance 0; kampania `120248507523010111` PAUSED, 0 zestawów/0 reklam; **firma `145818221430407` `verification_status: rejected`** (gorzej niż piątkowe `not_verified` — Ruslan próbował, Meta odrzuciła). API nie zwraca powodu odrzucenia.
+> Pełne tło: memory `project_meta_campaign_build_2026_05_25.md` + `project_meta_pixel_capi_setup.md`.
+
+### Akcje po stronie Ruslana (admin firmy, Janek NIE może tego zrobić)
+- [ ] **Account Quality recheck:** `facebook.com/accountquality` → portfolio „Prima Auto" `145818221430407` → odczytać dokładny **powód odrzucenia weryfikacji UE/DSA** + poprawić dokument/dane firmy + ponowne zgłoszenie. SLA Meta: 1-3 dni roboczych.
+- [ ] **Katalog pojazdów (AIA) — gate niezależny od weryfikacji UE:** `business.facebook.com` → Katalogi → „Utwórz katalog" typ **Pojazdy** → dopiąć System Usera `61590035266690` jako admina katalogu. ALBO nadać temu SU rolę **Admin firmy** (wtedy wszystko z API). Po tym ja dopinam feed URL+pixel+harmonogram przez API (feed CSV 4045 aut już live, cron 04:30).
+
+### Akcje po stronie Janka (gdy Ruslan odblokuje weryfikację)
+- [ ] Dokończyć zestaw (`dsa_beneficiary`/`dsa_payor` = nazwa do biblioteki UE — potwierdzić z Ruslanem) + 5 reklam (existing posts: Xiaomi SU7 Ultra / DongFeng M-Hero 917 / BYD Leopard 8 / Volvo XC70 / BYD Shark)
+- [ ] 2 reguły automatyczne dayparting (PAUSE 21:00 / UNPAUSE 08:00, entity ad set)
+- [ ] `spend_cap` na koncie (proponowane ~16 000 UAH/mies. przed zmianą waluty — przeliczyć na PLN, ~1600 zł/mies. = 50 zł/dz × 32)
+- [ ] Wpiąć katalog jako asset CAPI (pixel+feed) gdy Ruslan utworzy
+
+### Check (codziennie szybkie ~30s)
+```bash
+bash ~/secrets/meta/meta_call.sh --project primaauto-mktg \
+  "/145818221430407?fields=verification_status"
+```
+Gdy `verified` → odblokowane, budujemy zestaw.
+
+---
+
+## ZADANIE — Galeria klientów (social proof) ✅ DONE 2026-05-28
+
+> **Wdrożone v0.32.57 (theme primaauto2026 → 1.0.7):** `/klienci/` z galerią **47 zdjęć** (mask `klienci-prima-auto-NNN.webp`, batch rozszerzony z 30 do 47), kwadratowe miniatury 1:1 object-fit:cover (grid 4/3/2 col desktop/tablet/mobile), vanilla lightbox z klawiaturą + swipe mobile, ImageGallery JSON-LD, lazyload native (eager dla pierwszych 6 LCP-friendly), OG image z #001 (RankMath title/desc/FB set).
+
+### Co zrobione
+- [x] **Template** `themes/primaauto2026/page-klienci.php` — inline CSS + JS, scope `.aa-klienci-*`. Query attachmentów po `post_name LIKE klienci-prima-auto-%`, ASC po title (001→047).
+- [x] **WP page** `/klienci/` (ID 350745), `_wp_page_template=page-klienci.php`, featured image 350682
+- [x] **Menu** — pozycja 5 w `header` (po „Marki", przed „Informacje"), `db_id=350746`
+- [x] **SEO meta** — RankMath title/description/facebook_title/description, twitter_use_facebook
+- [x] **Schema** — `ImageGallery` JSON-LD z 47 `ImageObject` (contentUrl/thumbnailUrl/width/height)
+- [x] **Lightbox UX** — strzałki ←/→, ESC, klik tła, swipe mobile, focus return po close, body scroll lock
+- [x] **A11y** — `aria-label` per tile, `role="dialog"`, `aria-hidden` na lightbox
+- [x] **Smoke test** — HTTP 200, 0.18s, 47 tiles wyrenderowane, JSON-LD obecny
+
+### Kosztem prostoty pominięte (do późniejszej iteracji)
+- **Cross-site wzmocnienie:** linki z single listing / strony głównej / `/zamow/` do `/klienci/`. Trigger: gdy CTR z głównej spadnie i Janek zechce wzmocnić proof.
+- **OG image dedykowany 1200×630** — obecnie używamy #001 (proporcje ~3:4). Best practice: dorobić banner z 4 miniaturkami + logo. Niski priorytet, ścieżka działa.
+- **Banner przy hero galerii** — obecnie suchy H1 + lead. Rozważyć dodanie liczb (lata działalności / sprowadzonych aut) — wymaga decyzji z Ruslanem, jaki konkret podać.
+
+### Co świadomie pomijamy (scope guard)
+- Brak CPT „klient" / case studies — 47 statycznych zdjęć nie uzasadnia.
+- Brak ratingów / gwiazdek — nie mamy realnych ocen.
+- Brak podpisów (marka/model/miasto) — decyzja Janek 2026-05-27 (zbyt osobiste).
+- Brak integracji z Google Reviews / Trustpilot — osobny temat.
 
 ---
 

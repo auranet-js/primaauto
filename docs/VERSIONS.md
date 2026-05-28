@@ -1,5 +1,50 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.57 — 2026-05-28 (Galeria klientów `/klienci/` — theme primaauto2026 v1.0.7)
+
+**Cel:** wdrożenie galerii social proof — 47 zdjęć klientów Prima-Auto z autami sprowadzonymi z Chin. Decyzje produktowe zamknięte 2026-05-27 (memory `project-client-gallery-consents`); user dorzucił batch zdjęć do biblioteki mediów (mask `klienci-prima-auto-NNN.webp`, 001-047).
+
+**To NIE jest zmiana pluginu `asiaauto-sync`** — pełen zakres siedzi w themie `primaauto2026`. Wpisujemy pod 0.32.57 tylko dla spójności trackingu sesji. `ASIAAUTO_VERSION` w pluginie NIE bumpowane.
+
+**Zakres:**
+
+1. **`themes/primaauto2026/page-klienci.php`** (NEW) — Template Name „Klienci — galeria social proof". Query attachmentów: `post_type=attachment`, `post_mime_type=image/webp`, `s=klienci-prima-auto`, filter po `post_name` LIKE `klienci-prima-auto-*`, orderby title ASC. 47 unikalnych ID (350682-350728). Grid 4/3/2 col (desktop/tablet/mobile), kwadrat `aspect-ratio: 1/1` + `object-fit: cover` (rozwiązuje różne proporcje oryginałów bez letterboxa). Inline `<style>` + `<script>` (scope `.aa-klienci-*`, vanilla JS ~80 linii lightbox z klawiaturą + swipe touch).
+
+2. **`themes/primaauto2026/functions.php`** — `PRIMAAUTO_THEME_VERSION` 1.0.6 → 1.0.7 (cache bust).
+
+3. **WP page `/klienci/`** (ID 350745) — `post_status=publish`, `_wp_page_template=page-klienci.php`, featured image 350682 (klienci-prima-auto-001). RankMath meta: `title`, `description`, `facebook_title`, `facebook_description`, `facebook_image_id=350682`, `twitter_use_facebook=on`.
+
+4. **Menu `header`** (term_id 6033) — nowa pozycja „Klienci" na pozycji 5, link `/klienci/`, między „Marki" (4) a „Informacje" (6). `db_id=350746`.
+
+5. **Schema ImageGallery JSON-LD** — render warunkowy gdy `$gallery_items` niepuste. 47 `ImageObject` z `contentUrl` (full) + `thumbnailUrl` (medium_large) + `width`/`height` z `wp_get_attachment_image_src`.
+
+**Decyzje techniczne:**
+- **Brak osobnego CSS file** (tj. brak `klienci.css` enqueued) — inline `<style>` ładuje się tylko na tej stronie, nie obciąża globalnego CSS. Trade-off: trochę inline kodu vs. dodatkowy roundtrip dla 200 linii CSS.
+- **Brak nowego JS file** — vanilla lightbox inline. Trade-off jw. Brak dependency na bibliotekę (Fancybox/GLightbox).
+- **Lazyload native** (`loading="lazy"`), pierwsze 6 zdjęć `loading="eager"` — LCP-friendly dla above-the-fold.
+- **A11y** — `<button>` zamiast `<a>` dla tile (akcja JS, nie nawigacja), `aria-label` per tile, `role="dialog"` na lightbox, `aria-hidden` toggle, focus return po close.
+
+**Decyzje produktowe (auto-mode defaults wybrane przez Claude bez quiza):**
+- Scope: publiczna `/klienci/` (zdjęcia w bibliotece = ten task), NIE admin tab opisany w `PROMPT-zakladka-klienci-2026-05-28.md`.
+- Layout: kwadrat object-fit:cover (zgodnie z sugestią user'a „miniatury w kwadracie albo trzeba JAKIŚ ŁADNY wygląd").
+- Lightbox: vanilla inline (brak istniejącego lightboxa w themie — grep nic nie znalazł).
+- SEO: ImageGallery JSON-LD + neutralny lead (bez konkretnych liczb, bo Ruslan ich nie podał).
+
+**Smoke test:**
+- `https://primaauto.com.pl/klienci/` → HTTP 200, 0.18s, 143KB.
+- 47 `<button class="aa-klienci-tile">` w renderze (grep `data-index=` == 47).
+- 1 `ImageGallery` JSON-LD obecne.
+- H1 prawidłowy (z post_title).
+
+**Backupy:** brak (nowy plik `page-klienci.php`, jedyna zmiana w `functions.php` to bump wersji 1 char).
+
+**Pending follow-up (NIE w tej wersji):**
+- Cross-site linki do `/klienci/` (single listing, strona główna, `/zamow/`).
+- OG image dedykowany 1200×630 (obecnie #001 ~3:4).
+- Banner przy hero (konkretne liczby działalności — wymaga decyzji Ruslana).
+
+---
+
 ## 0.32.56 — 2026-05-28 (Wycofanie pól „Typ dokumentu" + „Numer dokumentu" z UI i PDF)
 
 **Decyzja klienta (Ruslan, 28.05):** pola „typ dokumentu" (dowód osobisty/paszport) i „numer dokumentu" nigdy nie były używane, komplikowały klientom wypełnianie umowy i są zbędne. Wycofujemy z UI i PDF.
