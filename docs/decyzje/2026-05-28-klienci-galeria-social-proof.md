@@ -1,57 +1,80 @@
-# ADR: Galeria klientów `/klienci/` jako social proof
+# ADR: Galeria klientów `/klienci/` — Gutenberg Gallery block (po rollbacku)
 
 **Data:** 2026-05-28
-**Wersja:** v0.32.57 (theme primaauto2026 → 1.0.7)
-**Status:** wdrożone na produkcję
+**Wersja:** v0.32.57
+**Status:** wdrożone na produkcję (po rollbacku z custom template)
 
 ## Kontekst
 
-Ruslan dostarczył batch zdjęć klientów Prima-Auto z autami sprowadzonymi z Chin (zgody potwierdzone — patrz memory `project-client-gallery-consents`). Batch oryginalnie planowany na 30 szt., finalnie 47 (mask `klienci-prima-auto-NNN.webp` w bibliotece mediów, IDs 350682-350728). Cel: silny dowód społeczny dla undecided buyers w lejku Ads/SEO; możliwa poprawa conversion na single listing przez „inni już zaufali" frame.
+Ruslan dostarczył batch 47 zdjęć klientów Prima-Auto (zgody potwierdzone — patrz memory `project-client-gallery-consents`). Cel: silny dowód społeczny dla undecided buyers w lejku Ads/SEO. **Krytyczne wymaganie:** Ruslan musi móc samodzielnie dodawać/usuwać zdjęcia, bo widzi w batchu duplikaty kontentowe i będzie też dosyłał nowe.
 
-## Decyzja
+## Decyzja (finalna)
 
-Statyczna strona WP `/klienci/` + page template `page-klienci.php` z dynamicznym query po nazwie attachmentu. Brak CPT, brak adminowego UI w tej iteracji — KISS.
+Zwykła strona WP `/klienci/` z natywnym blokiem `wp:gallery` Gutenberga w content. ZERO custom kodu. Zarządzanie 100% w wp-admin → Strony → Klienci → edytor Gutenberga (drag&drop, dodawanie z biblioteki UI, lightbox built-in via Interactivity API).
 
 ## Architektura
 
-**Template** (`themes/primaauto2026/page-klienci.php`):
-- Query: `get_posts({post_type=attachment, s='klienci-prima-auto', post_mime_type=image/webp})` + post-filter `post_name LIKE 'klienci-prima-auto-%'`. Order: title ASC (czyli kolejność numerków 001 → 047).
-- Grid: 4/3/2 col (desktop/tablet/mobile), `aspect-ratio: 1/1` + `object-fit: cover`. Różne proporcje oryginałów (150×150 → 1536×1152) ujednolicone wizualnie bez letterboxa.
-- Lightbox: vanilla JS inline (~80 linii). Klawiatura ←/→ ESC, swipe touch, focus return, body scroll lock.
-- Lazyload native; pierwsze 6 zdjęć `loading="eager"` (LCP-friendly).
-- JSON-LD `ImageGallery` z 47 `ImageObject` (contentUrl/thumbnailUrl/width/height).
+WP page ID 350745, `_wp_page_template=''` (default `page.php`), content:
 
-**Dynamiczna lista** — galeria reaguje automatycznie na zmiany w bibliotece mediów. Dodanie attachmentu z nazwą `klienci-prima-auto-048.webp` → następna iteracja query załapie. Brak hardcoded ID-ków.
+```
+wp:heading {level:1}  →  H1 „Klienci Prima-Auto..."
+wp:paragraph          →  lead z dowodu społecznego
+wp:gallery {columns:4, imageCrop:true, linkTo:"none", sizeSlug:"medium_large"}
+  wp:image × 47       →  każdy z lightbox:{enabled:true}
+wp:heading {level:2}  →  CTA „Sprowadzimy auto..."
+wp:paragraph          →  linki do /samochody/ + /zamow/
+```
 
-## Alternatywy odrzucone
+- `imageCrop:true` → square thumbs (problem różnych proporcji rozwiązany w runtime CSS bloku)
+- `lightbox.enabled:true` → WP 6.4+ Interactivity API (swipe, klawiatura, ESC — out-of-the-box)
+- `sizeSlug:medium_large` → ~768px thumb, full size w lightboxie
 
-- **CPT `klient`** — overkill dla 47 statycznych zdjęć bez danych dodatkowych.
-- **ACF Gallery** w content stronie WP — wymaga ręcznego dodawania każdego zdjęcia w edytorze, mniej KISS niż auto-discovery.
-- **Lightbox z biblioteki (Fancybox/GLightbox)** — dodatkowy dependency dla ~80 linii własnego kodu. Zysk: brak. Strata: cudzy JS w stack.
-- **Letterbox 4:3 z padding** — niejednolity look (różne tła pod różnymi zdjęciami).
+## Rollback z pierwotnej implementacji
+
+**Pierwotnie (2026-05-28 popołudnie):** custom page template `themes/primaauto2026/page-klienci.php` (~360 linii):
+- PHP query po `klienci-prima-auto-*.webp` z auto-discovery
+- Inline CSS grid 4/3/2 col + aspect-ratio:1/1 + object-fit:cover
+- Vanilla JS lightbox ~80 linii (klawiatura, swipe, focus return)
+- ImageGallery JSON-LD ręcznie z 47 ImageObject
+- Theme bump 1.0.6 → 1.0.7
+
+**Powód rollbacku:** wszystko co napisane na piechotę istnieje w Gutenbergu out-of-the-box. Custom template był overengineered. Plus krytyczny problem: Ruslan nie mógłby sam dodać zdjęcia bez WebP-konwersji + numeracji 048/049 — co znaczyło wciąż friction. Gallery block w edytorze = klik „dodaj z biblioteki" + drag, koniec.
+
+**Co usunięte przy rollbacku:**
+- `themes/primaauto2026/page-klienci.php` (z disk + z repo)
+- `PRIMAAUTO_THEME_VERSION` 1.0.7 → 1.0.6
+- `_wp_page_template` meta na page 350745
+- `ImageGallery` JSON-LD (Gallery block sam dostarcza `<img>` + alty)
+
+## Alternatywy odrzucone (po rollbacku to wciąż obowiązują)
+
+- **CPT `klient`** — overkill dla 47 statycznych zdjęć.
+- **ACF Gallery** — wymaga dodatkowego pluginu/configu, Gallery block daje to samo.
+- **Custom lightbox z biblioteki (Fancybox/GLightbox)** — Gutenberg ma natywny.
+- **Auto-discovery po nazwie pliku** — nie pozwala Ruslanowi reorder/hide bez kasowania.
 
 ## Konsekwencje
 
 **Pozytywne:**
-- Zero adminowej obsługi — upload do Media Library, galeria sama załapie.
-- Schema `ImageGallery` może zaindeksować się w Google Images.
-- Lightbox UX dorównuje produktowym galeriom (klawiatura, swipe).
+- Ruslan zarządza sam w wp-admin (drag&drop, dodaj z biblioteki, „×" do usunięcia, „Aktualizuj"). Zero Janka.
+- Schema indeksacji w Google Images via `<img>` + alty (Gallery block standard markup).
+- Reorder, square crop, lightbox — natywnie.
+- HTML edytowalny — można dorzucić tekst między grupami zdjęć, podpisy per grupa, banner CTA pośrodku.
 
-**Negatywne / do rozwiązania:**
-- Brak filtra duplikatów — jeśli batch ma powtarzające się zdjęcia, wszystkie się wyświetlą. Rozwiązanie: ręczne czyszczenie w Media Library (`/wp-admin/upload.php?s=klienci-prima-auto`) lub dorobić meta `_aa_klienci_hidden=1` per attachment + filter w query.
-- Brak reorderingu — kolejność wynika z nazwy pliku (001 → 047). Zmiana kolejności = rename slug attachmentu albo dorobić `menu_order`.
-- Brak adminowego UI do zarządzania — przy częstym dorzucaniu zdjęć przez Ruslana to friction. Możliwe rozszerzenie w v0.32.58 (custom admin page lub meta box na attachment).
-- Inline CSS (~200 linii) i JS (~80 linii) w page template — minimalnie rozdyma HTML, ale ładuje się tylko na `/klienci/`.
+**Negatywne / trade-off:**
+- HTML 240KB vs 143KB w custom (Gutenberg `wp-block-library` CSS + Interactivity API JS). 0.12s response, lazyload native — akceptowalne.
+- Lista 47 ID-ków siedzi w `post_content` jako `{"ids":[...]}` — przy delete attachmentu link zostaje (Gutenberg powinien obsłużyć graceful, do potwierdzenia podczas pierwszego ruchu Ruslana).
+- Kolejność = ręcznie w edytorze (nie ASC po nazwie). Trade-off zaakceptowany: Ruslan widzi co dodaje gdzie.
 
 ## Pending follow-up
 
-- **Filtr duplikatów / hide** — jeśli batch ma duplikaty (user flagował 2026-05-28), albo ręczne czyszczenie w Media Library, albo dorobić checkbox „ukryj z galerii klientów" na karcie attachmentu (admin meta box).
-- **Cross-site linki** — single listing, strona główna, `/zamow/` → CTA „Zobacz zadowolonych klientów".
-- **OG image dedykowany 1200×630** — obecnie używamy #001 (proporcje ~3:4). Best: banner z 4 miniaturkami + logo.
-- **Banner z liczbami** w hero — wymaga decyzji Ruslana (ile aut sprowadzonych, od którego roku).
+- **Cross-site linki do `/klienci/`** — single listing (po cenie/CTA, przed FAQ?), strona główna (sekcja proof z 3-4 miniaturkami), `/zamow/` (kafelek). **Decyzja gdzie i jak — kolejna sesja.**
+- **OG image dedykowany 1200×630** — obecnie #001 (~3:4).
+- **Liczby w hero** — wymaga konkretu od Ruslana (ile aut sprowadzonych, od kiedy).
+- **ImageGallery JSON-LD** — dodać filterem w functions.php jeśli za 1-2 mies. okaże się że brak signalu hurts indexing.
 
 ## Powiązane
 
-- Memory: `project-client-gallery-consents`, `project_session_2026_05_28_klienci_gallery` (NEW).
-- QUEUE: sekcja „Galeria klientów" → DONE.
+- Memory: `project-client-gallery-consents`, `project_session_2026_05_28_klienci_gallery`.
+- QUEUE: sekcja „Galeria klientów" → DONE (po rollbacku).
 - VERSIONS: 0.32.57.

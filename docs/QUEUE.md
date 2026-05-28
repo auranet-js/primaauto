@@ -30,22 +30,26 @@ Gdy `verified` → odblokowane, budujemy zestaw.
 
 ## ZADANIE — Galeria klientów (social proof) ✅ DONE 2026-05-28
 
-> **Wdrożone v0.32.57 (theme primaauto2026 → 1.0.7):** `/klienci/` z galerią **47 zdjęć** (mask `klienci-prima-auto-NNN.webp`, batch rozszerzony z 30 do 47), kwadratowe miniatury 1:1 object-fit:cover (grid 4/3/2 col desktop/tablet/mobile), vanilla lightbox z klawiaturą + swipe mobile, ImageGallery JSON-LD, lazyload native (eager dla pierwszych 6 LCP-friendly), OG image z #001 (RankMath title/desc/FB set).
+> **Wdrożone v0.32.57:** `/klienci/` jako zwykła strona WP z blokiem **Gutenberg Gallery** — 47 zdjęć, square crop (`imageCrop:true`), wbudowany lightbox (`lightbox.enabled:true`, Interactivity API od WP 6.4+), OG image #001. Zarządzanie: wp-admin → Strony → Klienci → edytor (drag&drop dodaj/usuń/przestaw). Wieczorny rollback z custom template (overengineered).
 
 ### Co zrobione
-- [x] **Template** `themes/primaauto2026/page-klienci.php` — inline CSS + JS, scope `.aa-klienci-*`. Query attachmentów po `post_name LIKE klienci-prima-auto-%`, ASC po title (001→047).
-- [x] **WP page** `/klienci/` (ID 350745), `_wp_page_template=page-klienci.php`, featured image 350682
+- [x] **WP page** `/klienci/` (ID 350745) z natywnym blokiem `wp:gallery` Gutenberga, 47 zdjęć, `imageCrop:true` (square crop), per-image `lightbox:{enabled:true}` (Interactivity API WP 6.4+)
 - [x] **Menu** — pozycja 5 w `header` (po „Marki", przed „Informacje"), `db_id=350746`
-- [x] **SEO meta** — RankMath title/description/facebook_title/description, twitter_use_facebook
-- [x] **Schema** — `ImageGallery` JSON-LD z 47 `ImageObject` (contentUrl/thumbnailUrl/width/height)
-- [x] **Lightbox UX** — strzałki ←/→, ESC, klik tła, swipe mobile, focus return po close, body scroll lock
-- [x] **A11y** — `aria-label` per tile, `role="dialog"`, `aria-hidden` na lightbox
-- [x] **Smoke test** — HTTP 200, 0.18s, 47 tiles wyrenderowane, JSON-LD obecny
+- [x] **SEO meta** — RankMath title/description/facebook_title/description/og_image_id, twitter_use_facebook
+- [x] **Lightbox** — natywny WP (swipe + klawiatura + ESC out-of-the-box)
+- [x] **Smoke test** — HTTP 200, 0.12s, 47 `wp-block-image`, lightbox triggers obecne
+- [x] **Rollback custom template** (wieczorem 2026-05-28) — usunięty `themes/primaauto2026/page-klienci.php` (overengineered), strona przełączona na zwykły `page.php` z Gallery block w content
 
 ### Kosztem prostoty pominięte (do późniejszej iteracji)
-- **Cross-site wzmocnienie:** linki z single listing / strony głównej / `/zamow/` do `/klienci/`. Trigger: gdy CTR z głównej spadnie i Janek zechce wzmocnić proof.
-- **OG image dedykowany 1200×630** — obecnie używamy #001 (proporcje ~3:4). Best practice: dorobić banner z 4 miniaturkami + logo. Niski priorytet, ścieżka działa.
-- **Banner przy hero galerii** — obecnie suchy H1 + lead. Rozważyć dodanie liczb (lata działalności / sprowadzonych aut) — wymaga decyzji z Ruslanem, jaki konkret podać.
+- **Cross-site wzmocnienie:** linki z single listing / strony głównej / `/zamow/` do `/klienci/`. **Następny krok do omówienia z Jankiem.**
+- **OG image dedykowany 1200×630** — obecnie #001 (~3:4).
+- **Liczby w hero galerii** (ile aut sprowadzonych, od kiedy działacie) — wymaga konkretu od Ruslana.
+- **ImageGallery JSON-LD** — Gallery block sam się indeksuje w Google Images, schema dodajemy jeśli za 1-2 mies. okaże się brak signalu.
+
+### Zarządzanie galerią dla Ruslana (3 kroki)
+1. `wp-admin → Strony → Klienci → Edytuj`
+2. Klik w blok Galeria → toolbar: `+` (dodaj z biblioteki) / drag (reorder) / `×` na zdjęciu (usuń)
+3. „Aktualizuj"
 
 ### Co świadomie pomijamy (scope guard)
 - Brak CPT „klient" / case studies — 47 statycznych zdjęć nie uzasadnia.

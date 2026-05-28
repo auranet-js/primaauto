@@ -1,6 +1,32 @@
 # Historia wersji asiaauto-sync
 
-## 0.32.57 — 2026-05-28 (Galeria klientów `/klienci/` — theme primaauto2026 v1.0.7)
+## 0.32.57 — 2026-05-28 (Galeria klientów `/klienci/` — Gutenberg Gallery block, ZERO kodu)
+
+> **Wieczorny rollback:** pierwotnie wdrożone jako custom page template `themes/primaauto2026/page-klienci.php` (~360 linii: PHP query + inline CSS grid 4/3/2 + vanilla JS lightbox + ImageGallery JSON-LD + theme bump 1.0.6→1.0.7). **Cofnięte.** Powód: Gutenberg ma `wp:gallery` z `imageCrop:true` + per-image `lightbox.enabled:true` (Interactivity API od WP 6.4+). Zero custom kodu, drag&drop dla Ruslana, edycja w wp-admin. Plik usunięty z theme i repo, `PRIMAAUTO_THEME_VERSION` z powrotem 1.0.6.
+
+**Stan po rollbacku:**
+
+1. **WP page `/klienci/`** (ID 350745) — content = bloki Gutenberga: `wp:heading {level:1}` (H1) + `wp:paragraph` (lead) + `wp:gallery {columns:4, imageCrop:true, linkTo:"none", sizeSlug:"medium_large"}` z 47 zagnieżdżonymi `wp:image` (każdy z `lightbox:{enabled:true}`) + `wp:heading {level:2}` + CTA. `_wp_page_template=''` (default `page.php`). Featured 350682, RankMath meta bez zmian.
+
+2. **Menu „Klienci"** — pos 5 w `header`, `db_id=350746` (bez zmian).
+
+3. **Zarządzanie galerią dla Ruslana:** wp-admin → Strony → Klienci → Edytuj. Blok Galeria → klik `+` żeby dodać z biblioteki, drag żeby przestawić, `×` żeby usunąć, „Aktualizuj". Koniec. Auto-discovery po nazwie usunięte — Gallery block trzyma listę ID-ków w post_content (`{"ids":[...]}`).
+
+**Konsekwencje:**
+- HTML 240KB (vs 143KB w custom) — Gutenberg dodaje `wp-block-library` CSS + Interactivity API JS dla lightboxa. Akceptowalne: 0.12s response time, lazyload native.
+- Brak `ImageGallery` JSON-LD — Gallery block sam się indeksuje przez `<img>` + alty. Jeśli za 1-2 mies. okaże się brak signalu, dorzucimy filterem w functions.php.
+- Kolejność = ręczna w edytorze (drag&drop), nie ASC po nazwie. Ruslan widzi co dodaje gdzie.
+
+**Smoke test (rollback):** HTTP 200, 0.12s, 240KB, 47 `wp-block-image`, lightbox triggers via Interactivity API obecne.
+
+**Backupy:** brak (rollback przez `wp eval-file` na ID 350745 + `git rm` theme files).
+
+**Pending follow-up:**
+- Cross-site linki do `/klienci/` (single listing, strona główna, `/zamow/`) — decyzja gdzie/jak.
+- OG image dedykowany 1200×630 (obecnie #001 ~3:4).
+- Banner z liczbami w hero — wymaga konkretu od Ruslana.
+
+<details><summary>Historyczna treść (custom template — usunięte)</summary>
 
 **Cel:** wdrożenie galerii social proof — 47 zdjęć klientów Prima-Auto z autami sprowadzonymi z Chin. Decyzje produktowe zamknięte 2026-05-27 (memory `project-client-gallery-consents`); user dorzucił batch zdjęć do biblioteki mediów (mask `klienci-prima-auto-NNN.webp`, 001-047).
 
@@ -42,6 +68,8 @@
 - Cross-site linki do `/klienci/` (single listing, strona główna, `/zamow/`).
 - OG image dedykowany 1200×630 (obecnie #001 ~3:4).
 - Banner przy hero (konkretne liczby działalności — wymaga decyzji Ruslana).
+
+</details>
 
 ---
 
