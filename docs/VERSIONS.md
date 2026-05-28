@@ -1,5 +1,34 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.56 — 2026-05-28 (Wycofanie pól „Typ dokumentu" + „Numer dokumentu" z UI i PDF)
+
+**Decyzja klienta (Ruslan, 28.05):** pola „typ dokumentu" (dowód osobisty/paszport) i „numer dokumentu" nigdy nie były używane, komplikowały klientom wypełnianie umowy i są zbędne. Wycofujemy z UI i PDF.
+
+**Zakres:**
+
+1. **`class-asiaauto-order.php::CUSTOMER_META`** — `billing_id_type` i `billing_id_number` zmienione z `required: true` → `required: false`. Wpisy zostają w strukturze (getCustomerData() nadal je zwróci) na wypadek istniejących danych w user_meta starych klientów. `isCustomerDataComplete()` (iteracja po required=true) przestaje ich wymagać.
+
+2. **`class-asiaauto-order-wizard.php::getBillingFieldDefs()`** — usunięte 2 wpisy z definicji pól wizard frontend. Klient nie widzi już tych pól w kroku „Dane do umowy".
+
+3. **`class-asiaauto-order-admin.php`**:
+   - `renderCardCustomer()` — usunięty blok `cols-id` z typem dokumentu (select) i numerem (input).
+   - `handleUpdateCustomerBilling()` — usunięte 2 keys (`billing_id_type`, `billing_id_number`) z whitelist pól przyjmowanych z $_POST.
+
+4. **`class-asiaauto-contract.php`**:
+   - Mapowanie placeholderów (linie 254-255) — usunięte `customer_id_type` i `customer_id_num`.
+   - Layout PDF (linia ~571) — usunięta linia `{customer_id_type}: {customer_id_num}<br>` z nagłówka „Zleceniodawca".
+
+**Historyczne dane:**
+- Wpisy w user_meta `billing_id_type` / `billing_id_number` zostają w bazie (nie czyścimy).
+- 5 historycznych umów z dziurami (AA/2026/0006, 0008, 0011, 0012, 0013) — bez ruchu. Gdy ktoś ręcznie zregeneruje PDF, linia „dowód osobisty: ..." zniknie z dokumentu (bo placeholder już nie istnieje).
+- 0 userów stało się „nagle kompletnymi" po fixie (smoke test) — brak side effectów na istniejące dane.
+
+**`case 'billing_id_type'` w `saveCustomerData()`** — zostawiony jako defensywna walidacja (gdyby ktoś jednak wysłał payload z `billing_id_type` z innej drogi, sprawdza czy `dowod|paszport`). Nie szkodzi, w UI pola nie ma.
+
+**Backupy:** `*.bak-2026-05-28-remove-id-doc` (4 pliki: order, order-wizard, order-admin, contract).
+
+---
+
 ## 0.32.55 — 2026-05-28 (Formularz „Dane do umowy" w panelu zamówienia + auto-regen PDF)
 
 **Problem (następstwo v0.32.54):** bramka v0.32.54 zaczęła blokować przejście na `umowa_gotowa` gdy klient nie ma kompletu billing — ale **nie istniało UI dla admina** do uzupełnienia tych danych. Funkcja `saveCustomerData()` była dostępna tylko przez REST endpoint `submitBilling` (wizard frontend dla klienta, z guardem `status === 'potwierdzone'`). W standardowym WP-admin → Users → Edit klient widać tylko WP-natywne pola, nie nasze `billing_pesel/nip/id_type/id_number/address_*`. Ruslan po wdrożeniu v0.32.54 zadzwonił, że klikał „edytuj użytkownika" i nie widzi gdzie wpisać dane.
