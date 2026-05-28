@@ -1,5 +1,35 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.58 — 2026-05-28 (page.php H1 fix + cross-link „Galeria sprzedanych aut" na single listing)
+
+**Cel:** naprawa duplikatu tytułu w edytorze Gutenberga `/klienci/` (post_title pole + wp:heading {level:1} w content) + cross-link do galerii klientów z każdego single listing.
+
+**Zakres:**
+
+1. **`themes/primaauto2026/page.php`** — dodany `<h1 class="entry-title"><?php the_title(); ?></h1>` przed `the_content()`. Wcześniej page.php renderował tylko content, więc tytuł postu nie pojawiał się jako H1 nigdzie na stronie. To był ukryty bug (audyt podczas tej sesji: 8 z 13 stron page.php nie miało H1 w ogóle). Po fixie: post_title jest H1 (standardowy WP).
+
+2. **`themes/primaauto2026/functions.php`** — `PRIMAAUTO_THEME_VERSION` 1.0.6 → 1.0.7.
+
+3. **`includes/class-asiaauto-contact.php`** linia 154 — H1 → H2 dla `aa-contact__hero-title` (uniknięcie duplikatu z `entry-title` z page.php). CSS selectorem `.aa-contact__hero-title` styling nieruszany.
+
+4. **`includes/class-asiaauto-single.php`**:
+   - `infoBox()` (sidebar desktop + mobile) — dodany 5-ty link `['Galeria sprzedanych aut', home_url('/klienci/')]`
+   - `uspStrip()` kolumna „Informacje" — dodany 5-ty wpis `['icon' => 'dot', 'text' => 'Galeria sprzedanych aut', 'href' => home_url('/klienci/')]`
+
+5. **WP page 350745 Klienci** — `post_title` cofnięty na pełną nazwę („Klienci Prima-Auto — auta, które dla nich sprowadziliśmy"), wp:heading {level:1} usunięty z content (duplikat z entry-title).
+
+6. **WP pages 153875 (W drodze) + 153877 (W rzeszowie)** — usunięte `<h1>` z post_content (duplikat z entry-title).
+
+**Stan H1 po fixie (smoke test wszystkich page.php pages):**
+- ✅ klienci, kontakt (H2 teraz), polityka-prywatnosci, w-drodze, w-rzeszowie — 1 H1 z entry-title
+- ⚠️ regulamin, o-nas, finansowanie, jezyk-obslugi-pojazdu, pod-dom-do-rejestracji, proces-zamawiania, gwarancja-i-serwis, homologacja-i-rejestracja — **nadal 0 H1** (te strony nie używają primaauto2026/page.php — pewnie Elementor Pro mimo `add_filter('elementor/theme/get_location_templates', '__return_empty_array')`. Wymaga osobnego audytu).
+
+**Pending follow-up:** zdiagnozować dlaczego 8 stron nie używa naszego page.php (`pa-main` markup nieobecny). Możliwe sources: Elementor Pro Theme Builder mimo disable filtra, jakiś inny plugin/snippet, page templates ustawiane per page z UI.
+
+**Backupy:** `*.bak-2026-05-28-h1` (page.php, class-asiaauto-contact.php), `*.bak-2026-05-28-klienci-link` (class-asiaauto-single.php).
+
+---
+
 ## 0.32.57 — 2026-05-28 (Galeria klientów `/klienci/` — Gutenberg Gallery block, ZERO kodu)
 
 > **Wieczorny rollback:** pierwotnie wdrożone jako custom page template `themes/primaauto2026/page-klienci.php` (~360 linii: PHP query + inline CSS grid 4/3/2 + vanilla JS lightbox + ImageGallery JSON-LD + theme bump 1.0.6→1.0.7). **Cofnięte.** Powód: Gutenberg ma `wp:gallery` z `imageCrop:true` + per-image `lightbox.enabled:true` (Interactivity API od WP 6.4+). Zero custom kodu, drag&drop dla Ruslana, edycja w wp-admin. Plik usunięty z theme i repo, `PRIMAAUTO_THEME_VERSION` z powrotem 1.0.6.
