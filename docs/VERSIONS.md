@@ -1,5 +1,41 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.55 — 2026-05-28 (Formularz „Dane do umowy" w panelu zamówienia + auto-regen PDF)
+
+**Problem (następstwo v0.32.54):** bramka v0.32.54 zaczęła blokować przejście na `umowa_gotowa` gdy klient nie ma kompletu billing — ale **nie istniało UI dla admina** do uzupełnienia tych danych. Funkcja `saveCustomerData()` była dostępna tylko przez REST endpoint `submitBilling` (wizard frontend dla klienta, z guardem `status === 'potwierdzone'`). W standardowym WP-admin → Users → Edit klient widać tylko WP-natywne pola, nie nasze `billing_pesel/nip/id_type/id_number/address_*`. Ruslan po wdrożeniu v0.32.54 zadzwonił, że klikał „edytuj użytkownika" i nie widzi gdzie wpisać dane.
+
+**Fix v0.32.55 — trzy zmiany:**
+
+1. **`class-asiaauto-order-admin.php` — nowa sekcja w karcie „Klient"** (`renderCardCustomer`): badge „Komplet"/"Niekompletne" + formularz inline z 4 sekcjami (Dane osobowe / Identyfikator / Adres / Firma). Layout: kod pocztowy 140px obok miasta, typ dokumentu 200px obok numeru, reszta 50/50. Submit → `handleUpdateCustomerBilling()` → woła istniejące `AsiaAuto_Order::saveCustomerData()`.
+
+2. **Auto-regen PDF** w `handleUpdateCustomerBilling()`: po zapisie billing, jeśli `isCustomerDataComplete()` zwraca true i status zamówienia to `umowa_gotowa`/`podpisane`/`zarezerwowane`/`zakupione`/`w_drodze`/`na_placu`/`w_dostawie` → `AsiaAuto_Contract::regenerate($order_id)`. Powód: dla zamówień z dziurami z czasu sprzed v0.32.54 (5 historycznych umów: AA/2026/0006, 0008, 0011, 0012, 0013) admin wpisuje dane → PDF się odświeża jednym kliknięciem zapisu, bez konieczności osobnego „Regeneruj umowę".
+
+3. **`class-asiaauto-order-api.php` — rozluźniony guard `submitBilling`:** klient może teraz edytować billing w statusach `potwierdzone`/`umowa_gotowa`/`podpisane`/`zarezerwowane`/`zakupione`/`w_drodze`/`na_placu`/`w_dostawie` (wcześniej tylko `potwierdzone`). Auto-advance `potwierdzone → umowa_gotowa` zostaje (historyczne zachowanie). Plus analogiczny auto-regen PDF jak w (2) — gdy klient sam poprawia dane w wizardzie po wygenerowaniu umowy.
+
+**Backupy:** `class-asiaauto-order-admin.php.bak-2026-05-28-customer-billing-form`, `class-asiaauto-order-api.php.bak-2026-05-28-customer-billing-form`
+
+**Lessons learned (auto-memory):** w mailu do Rusłana z 27.05 obiecałem „uzupełnij dane ręcznie w panelu admina" zakładając, że UI istnieje skoro `saveCustomerData()` jest w kodzie — bez grep'a po pliku order-admin. Funkcji w UI nie było. Konfabulacja, którą Ruslan wykrył dzwoniąc 28.05. Patrz `feedback_no_unverified_ui_claims.md`.
+
+---
+
+## 0.32.54 — 2026-05-27 (Bramka kompletności danych klienta przed `umowa_gotowa`)
+
+**Problem:** umowa `AA/2026/0013` (Miron Orłowski) wygenerowana z pustym adresem i napisem „dowód osobisty:" bez numeru. Admin (Ruslan) przeszedł `potwierdzone → umowa_gotowa` 2 minuty po `weryfikacja → potwierdzone`, klient nie zdążył (i nie musiał) wypełnić kroku 3 wizardu z billing. PDF wygenerował się automatycznie z fallbackami: pusty adres, ternary `?? 'dowod'` wstawił „dowód osobisty" mimo że nic nie wybrano.
+
+**Root cause:** `AsiaAuto_Order::changeStatus()` sprawdzała tylko graf `TRANSITIONS`, nie wołała `isCustomerDataComplete()` (funkcja istniała od dawna w `order.php:1069`, tylko nikt jej nie używał przy zmianie statusu).
+
+**Fix (`class-asiaauto-order.php::changeStatus()`):** bramka po sprawdzeniu TRANSITIONS — gdy `$new_status === 'umowa_gotowa'` i `$order_type === TYPE_CUSTOMER` i `!isCustomerDataComplete($customer_id)` → `WP_Error('customer_data_incomplete', ...)`. Komunikat wskazuje administratorowi gdzie uzupełnić (krok wizardu klienta lub panel admin).
+
+**Stock orders nietknięte:** `createInternal()` wchodzi w `w_drodze`/`na_placu`/`zakupione`/`zarezerwowane` — graf TRANSITIONS z tych statusów nie prowadzi do `umowa_gotowa`. Guard `$order_type === TYPE_CUSTOMER` = defense in depth.
+
+**Stan po deployu:**
+- 1 customer order natychmiast zablokowany: `#339595` (BYD Leopard 5, Agnieszka Koman, `potwierdzone`, brak billing) — admin musi poprosić klientkę o uzupełnienie lub wypełnić ręcznie.
+- 5 historycznych umów z dziurami (AA/2026/0006, 0008, 0011, 0012, 0013) zostaje — forward-only fix, naprawiane per case.
+
+**Backup:** `class-asiaauto-order.php.bak-2026-05-27-customer-data-gate`
+
+---
+
 ## 0.32.53 — 2026-05-20 (Generyczne redirecty 404 — porządkowanie GSC)
 
 **Cel:** wyczyścić ~1300 trafień 404 Googlebota/dzień (martwe huby + sprzedane listingi). Przyczyna: stare slugi sprzed importer slug fix (v0.32.42) + listingi trwale usunięte (>30d, poza zasięgiem detectListingNotFound).
