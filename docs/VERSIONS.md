@@ -1,5 +1,38 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.59 — 2026-05-30 (Workflow zamawiania: usunięcie auto-advance + powiadomienie admina o wypełnieniu billing)
+
+**Powód:** klient (Ruslan) chce sam decydować kiedy wystawić umowę. Obecnie gdy klient wypełnił komplet danych w wizardzie krok 3 (`/order/{id}/billing`), system automatycznie zmieniał status `potwierdzone → umowa_gotowa`, przydzielał numer kontraktu, generował PDF i wysyłał mail klientowi — Ruslan tracił kontrolę nad timingiem. Plus problem klientów zagranicznych (np. Stefan Nicolae, RO, zamówienie #350835 — firma SC Burger Society SRL z CUI/adresem rumuńskim), gdzie Ruslan musi dane przetłumaczyć/sprawdzić przed wystawieniem umowy.
+
+**Cztery zmiany:**
+
+1. **`class-asiaauto-order-api.php::submitBilling()`** — usunięty auto-advance `potwierdzone → umowa_gotowa`. Po wypełnieniu billing status zostaje `potwierdzone`. Sprzedawca sam zmienia status (bramka v0.32.54 sprawdzi komplet, hook wygeneruje PDF, mail do klienta poleci `status_umowa_gotowa`).
+
+2. **`class-asiaauto-order.php::sendBillingCompletedEmail()`** — nowa metoda, wysyła mail do admina (Reply-To: klient) gdy klient wypełnił komplet danych przy statusie `potwierdzone`. Wywoływana z `submitBilling()` zamiast auto-advance. Wymaga `admin_email_notifications=1` w config.
+
+3. **`class-asiaauto-order-content.php`**:
+   - Nowy default template `customer_billing_completed` (subject + 9-linijkowy body) z `{admin_link}` do panelu zamówienia.
+   - Dodany do `getTemplateKeyLabels()` jako „Klient wypełnił dane → Admin" (panel ustawień templates).
+   - Poprawiona treść `status_potwierdzone` punkt 3: zamiast „Umowa zostanie wygenerowana automatycznie..." → „Sprzedawca przygotuje umowę po uzupełnieniu danych — otrzymasz osobne powiadomienie mailem gdy umowa będzie gotowa do podpisu."
+
+4. **`submitBilling()` response message** — zamiast „Dane zapisane. Zaakceptuj warunki umowy." (sugerowało że umowa jest gotowa) → „Dane zapisane. Sprzedawca przygotuje umowę i powiadomi Cię mailem." Pole `step` zawsze 3 (nie skoczy na 4).
+
+**Zachowane bez zmian:**
+- Auto-regen PDF gdy klient poprawia dane na **już istniejącej umowie** (status `umowa_gotowa+`) — to inny use case, dane↔PDF muszą być spójne.
+- Bramka v0.32.54 `isCustomerDataComplete` przy `changeStatus → umowa_gotowa` — działa.
+- Maile statusowe po ręcznej zmianie statusu przez admina (klient dostaje `status_umowa_gotowa` z magic linkiem normalnie).
+
+**Workflow docelowy:**
+1. Ruslan klika „Potwierdź" → status `potwierdzone` → mail do klienta z magic linkiem (template z pkt 3 poprawiony, mówi „sprzedawca przygotuje umowę po uzupełnieniu")
+2. Klient wpisuje dane → walidacja → zapis → komunikat „Sprzedawca przygotuje umowę i powiadomi Cię mailem"
+3. **Mail do Ruslana** „Klient wypełnił dane → Admin"
+4. Ruslan sprawdza w panelu (sekcja „Dane do umowy" v0.32.55 z badge'em Komplet), ewentualnie poprawia
+5. Ruslan klika dropdown statusu → „Umowa gotowa" → bramka v0.32.54 OK → numer kontraktu + PDF + mail `status_umowa_gotowa` do klienta z magic linkiem
+
+**Backupy:** `*.bak-2026-05-30-no-autoadvance` (3 pliki: order-api, order-content, order).
+
+---
+
 ## 0.32.58 — 2026-05-28 (page.php H1 fix + cross-link „Galeria sprzedanych aut" na single listing)
 
 **Cel:** naprawa duplikatu tytułu w edytorze Gutenberga `/klienci/` (post_title pole + wp:heading {level:1} w content) + cross-link do galerii klientów z każdego single listing.
