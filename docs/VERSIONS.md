@@ -1,5 +1,15 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.63 — 2026-05-30 (Usunięty badge źródła umowy)
+
+**Powód:** Janek po review v0.32.62 — badge „Indywidualna (wgrana ręcznie)" / „Auto-generowana" pokazywał się prawidłowo (Stefan #350835 manual → „Indywidualna", Miron #350537 auto → „Auto-generowana"), ale to nadmiar wizualny. Nazwa pliku attachmentu (`Umowa AA/2026/0014 (wgrana ręcznie)` vs `Umowa AA/2026/0013`) plus mime type i tak wskazują źródło.
+
+**Zmiana:** usunięte oba badge z `renderCardContract()`. Meta `_aa_contract_source` zostaje w bazie (nadal używana w `changeStatus` jako warunek pomijania bramki `isCustomerDataComplete`) — tylko UI rendering wycięty.
+
+**Lint:** czysty / Produkcja: 200 / Sprawdzone w Chrome: po fixie ani „Indywidualna" ani „Auto-generowana" nie pojawiają się na #350835 (manual) ani #350537 (auto).
+
+---
+
 ## 0.32.62 — 2026-05-30 (UX uploadu własnej umowy: obok Regeneruj, zielone tło, +DOC/DOCX/ODT)
 
 **Powód:** drobne UX poprawki po review v0.32.61. Janek poprosił o:
