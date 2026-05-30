@@ -1,5 +1,40 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.62 — 2026-05-30 (UX uploadu własnej umowy: obok Regeneruj, zielone tło, +DOC/DOCX/ODT)
+
+**Powód:** drobne UX poprawki po review v0.32.61. Janek poprosił o:
+1. Toggle „Wgraj własną" obok przycisku Regeneruj/Wygeneruj (nie pod spodem)
+2. Zielone tło sekcji uploadu (zamiast pomarańczowego)
+3. Akceptacja plików `.doc`, `.docx`, `.odt` obok PDF (Word z LibreOffice też się liczy)
+
+**Zmiany:**
+
+1. **Nowa metoda `renderUploadCustomContractToggle(array $data, bool $has_contract)`** w `class-asiaauto-order-admin.php` — wydzielony toggle z formularzem. Wywoływana inline po przycisku Regeneruj (gdy umowa istnieje) lub po Wygeneruj PDF (gdy brak).
+2. **CSS:** `<details>` z `display:inline-block` + `vertical-align:top`, summary jako zielony pill (`#C6F6D5` bg, `#9AE6B4` border, `#22543D` text). Formularz wypada pod summary jako blok (`F0FFF4` bg, zielona ramka).
+3. **`accept` attribute** w input file:
+   ```
+   .pdf,.doc,.docx,.odt,application/pdf,application/msword,
+   application/vnd.openxmlformats-officedocument.wordprocessingml.document,
+   application/vnd.oasis.opendocument.text
+   ```
+4. **Handler `handleUploadCustomContract()`** — walidacja po **rozszerzeniu** (mime DOCX/ODT to ZIP, nie wiarygodne):
+   ```php
+   $allowed_exts = ['pdf', 'doc', 'docx', 'odt'];
+   $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+   if (!in_array($ext, $allowed_exts, true)) → error
+   ```
+   `wp_handle_upload` z whitelistą mimes (4 typy) — dodatkowa walidacja po stronie WP.
+
+**Nie ruszane:**
+- Logika handlera (purge starego attachment, bump licznika, meta `_aa_contract_source`) — nadal działa
+- Klient pobiera plik przez `wp_get_attachment_url()` → przeglądarka decyduje co zrobić (PDF otworzy się inline, DOC/DOCX/ODT pobierze i otworzy w Word/LibreOffice)
+
+**Backupy:** `*.bak-2026-05-30-upload-custom-contract` (z poprzedniego patcha v0.32.61 — wystarczają).
+
+**Lint:** czysty / Produkcja: 200 / `renderUploadCustomContractToggle` istnieje.
+
+---
+
 ## 0.32.61 — 2026-05-30 (Generowanie PDF z `potwierdzone` + upload własnej umowy + walidacja numeru)
 
 **Dwie sprawy do naprawienia w workflow po v0.32.59:**
