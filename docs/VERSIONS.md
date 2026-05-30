@@ -1,5 +1,17 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.64 — 2026-05-30 (Przywrócenie badge źródła umowy po pomyłce cache)
+
+**Powód:** w v0.32.63 usunąłem badge „Indywidualna" / „Auto-generowana" na podstawie komentarza Janka „nie wiem po co jest pojawia się niezależnie od tego czy umowa jest generowana czy załącznikiem". Po refleksji: badge **działał poprawnie** (Chrome MCP weryfikacja: Stefan #350835 manual upload → „Indywidualna" pomarańczowy, Miron #350537 auto-gen → „Auto-generowana" niebieski). Janek miał cache CSS / nieodświeżone style — widział tylko pomarańczowy badge na różnych zamówieniach, stąd wrażenie że nie reaguje na typ umowy.
+
+**Lesson:** „nie wiem po co jest" ≠ „usuń". Powinienem był najpierw wyjaśnić co badge robi i poczekać na decyzję.
+
+**Zmiana:** revert `c999881` (`docs/VERSIONS.md`) + manualny rewert kodu w `renderCardContract()` — badge przywrócony 1:1 z v0.32.62. Smoke w Chrome: badge widoczny dla Stefana po `Ctrl+Shift+R`.
+
+**Komentarz w kodzie** (jako ślad): `// v0.32.61 dodany, v0.32.63 usunięty, v0.32.64 przywrócony`.
+
+---
+
 ## 0.32.62 — 2026-05-30 (UX uploadu własnej umowy: obok Regeneruj, zielone tło, +DOC/DOCX/ODT)
 
 **Powód:** drobne UX poprawki po review v0.32.61. Janek poprosił o:
