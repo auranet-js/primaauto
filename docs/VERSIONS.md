@@ -1,5 +1,20 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.65 — 2026-05-30 (Spójność modelu: „zaliczka" → „depozyt" w 2 stringach user-facing)
+
+**Powód:** model biznesowy Prima-Auto to **pośrednictwo** (umowa zlecenia sprowadzenia, **zwrotny depozyt gwarancyjny**, prowizja — Zleceniodawca/Zleceniobiorca), a nie sprzedaż z zaliczką. Audyt przy okazji przeglądu dokumentów prawnych (regulamin/polityka od prawnika Ruslana) wykrył 2 user-facing stringi wciąż mówiące „zaliczka", niezgodne z umową generowaną przez `class-asiaauto-contract.php` (tam wszędzie „depozyt").
+
+**Zmiany:**
+
+1. `class-asiaauto-order-api.php:729` — komunikat REST po potwierdzeniu umowy: „Oczekujemy na wpłatę **zaliczki**." → „...**depozytu**."
+2. `class-asiaauto-order-content.php:32` — opis placeholdera `{deposit_amount}`: „Kwota **zaliczki**" → „Kwota **depozytu**".
+
+**Nie ruszane:** komentarz/changelog w nagłówku `class-asiaauto-order-admin.php` (słowo „Zaliczka" jako ślad historyczny renamingu, nie user-facing). `.bak` pominięte.
+
+**Kontekst szerszy:** obecny live regulamin (strona ID 153866) i polityka (ID 198526) też operują na błędnym modelu sprzedaży — czekają na poprawione dokumenty od prawnika Ruslana (zero wdrożenia hybrydy). Notka zwrotna z prawidłowym słownikiem modelu wysłana Ruslanowi.
+
+---
+
 ## 0.32.64 — 2026-05-30 (Przywrócenie badge źródła umowy po pomyłce cache)
 
 **Powód:** w v0.32.63 usunąłem badge „Indywidualna" / „Auto-generowana" na podstawie komentarza Janka „nie wiem po co jest pojawia się niezależnie od tego czy umowa jest generowana czy załącznikiem". Po refleksji: badge **działał poprawnie** (Chrome MCP weryfikacja: Stefan #350835 manual upload → „Indywidualna" pomarańczowy, Miron #350537 auto-gen → „Auto-generowana" niebieski). Janek miał cache CSS / nieodświeżone style — widział tylko pomarańczowy badge na różnych zamówieniach, stąd wrażenie że nie reaguje na typ umowy.
