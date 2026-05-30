@@ -1,5 +1,36 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.60 — 2026-05-30 (Walidacja billing dla klientów zagranicznych — NIP/CUI 8-13 cyfr, kod pocztowy elastyczny)
+
+**Powód:** Stefan Nicolae (zamówienie #350835, RO) podał Ruslanowi dane firmy rumuńskiej SC Burger Society SRL — CUI `46732411` (8 cyfr) i kod pocztowy `010025` (6 cyfr ciągiem). Walidacja w `saveCustomerData()` miała sztywne regexy pod PL: `^\d{10}$` dla NIP i `^\d{2}-\d{3}$` dla kodu — oba odrzucały rumuńskie dane. Ruslan nie mógł wpisać.
+
+**Dry-run pokazał (przed fixem):**
+- `46732411` → ODRZUCONE („NIP musi mieć 10 cyfr")
+- `010025` → ODRZUCONE („Kod pocztowy: format XX-XXX")
+- `+40763971874` → PRZEJDZIE (regex telefonu już międzynarodowy)
+
+**Decyzja klienta (Janka):** zluzować globalnie, bez dropdowna kraju — najprostsze, działa dla większości EU bez UI changes.
+
+**Zmiany:**
+
+1. **`class-asiaauto-order.php::saveCustomerData()`** — luźniejsze regexy:
+   - NIP/CUI: `^\d{8,13}$` (PL=10, RO=8, DE=9-11, CZ=8-10, IT=11, FR=9-11). Strip prefiksu kraju (`PL`/`RO`/`DE`/itd.) przed walidacją — wpisanie `PL1234567890` lub `RO46732411` też przejdzie.
+   - Kod pocztowy: `^[A-Z0-9][A-Z0-9\s\-]{2,9}$` (case-insensitive). Akceptuje PL `XX-XXX`, RO `123456`, DE `12345`, CZ `123 45`, UK `SW1A 1AA`, US `12345`. Odrzuca <3 znaki i >10 znaków.
+
+2. **`class-asiaauto-order-admin.php::renderCardCustomer()`** — podbita `maxlength` w formularzu admin:
+   - NIP: `13 → 15` (z marginesem na prefiks), placeholder zaktualizowany („10 cyfr (PL) / 8 cyfr (RO CUI) / itd.")
+   - Kod pocztowy: `6 → 10`, placeholder „PL: XX-XXX / RO: 6 cyfr / DE: 5 cyfr"
+
+**Test po fixie (`/home/host476470/tmp/test-validation-after.php`):**
+- NIP: PL ✓ / RO ✓ / DE ✓ / CZ ✓ / PL z prefiksem ✓ / RO z prefiksem ✓ / <8 cyfr ✗ / >13 cyfr ✗
+- Kod: PL XX-XXX ✓ / RO 010025 ✓ / DE 10115 ✓ / CZ „110 00" ✓ / UK SW1A 1AA ✓ / US 90210 ✓ / <3 znaki ✗ / >10 znaków ✗
+
+**Backupy:**
+- `class-asiaauto-order.php.bak-2026-05-30-loose-international`
+- `class-asiaauto-order-admin.php.bak-2026-05-30-loose-international`
+
+---
+
 ## 0.32.59 — 2026-05-30 (Workflow zamawiania: usunięcie auto-advance + powiadomienie admina o wypełnieniu billing)
 
 **Powód:** klient (Ruslan) chce sam decydować kiedy wystawić umowę. Obecnie gdy klient wypełnił komplet danych w wizardzie krok 3 (`/order/{id}/billing`), system automatycznie zmieniał status `potwierdzone → umowa_gotowa`, przydzielał numer kontraktu, generował PDF i wysyłał mail klientowi — Ruslan tracił kontrolę nad timingiem. Plus problem klientów zagranicznych (np. Stefan Nicolae, RO, zamówienie #350835 — firma SC Burger Society SRL z CUI/adresem rumuńskim), gdzie Ruslan musi dane przetłumaczyć/sprawdzić przed wystawieniem umowy.
