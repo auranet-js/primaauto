@@ -1,5 +1,54 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.61 — 2026-05-30 (Generowanie PDF z `potwierdzone` + upload własnej umowy + walidacja numeru)
+
+**Dwie sprawy do naprawienia w workflow po v0.32.59:**
+
+1. **Brak ręcznego generowania umowy zanim Ruslan wyśle ją klientowi.** Po wyłączeniu auto-advance w v0.32.59 status zostaje `potwierdzone`, ale przycisk „Wygeneruj PDF" pokazywał się dopiero od `umowa_gotowa`. Jedyna ścieżka: zmiana statusu → PDF generuje się automatycznie + mail do klienta leci jednocześnie. Brak chwili na podgląd.
+
+2. **Ruslan czasem przygotowuje własną umowę poza systemem** (klient zagraniczny ze specyficznymi załącznikami, indywidualne klauzule, klient w biurze podpisał inną wersję). Wcześniej taka umowa szła mailem off-system → brak śladu w bazie, status zalegał na `potwierdzone`, klient nie miał PDF w panelu.
+
+**Patch (4 pliki):**
+
+1. **`class-asiaauto-order-admin.php::renderCardContract()`** — przycisk „Wygeneruj PDF" widoczny też dla statusu `potwierdzone` (z guardem `isCustomerDataComplete=true`). Komunikat „(uzupełnij dane klienta, żeby wygenerować)" gdy bramka nie spełniona. PDF powstaje, status zostaje `potwierdzone` — Ruslan ogląda, ewentualnie regeneruje, dopiero potem dropdown na `umowa_gotowa` → hook widzi że PDF istnieje (`$existing > 0 && get_post()` linia 73) → nie generuje znowu → tylko mail leci.
+
+2. **`class-asiaauto-order-admin.php::renderCardContract()`** — nowa sekcja `<details>` „Wgraj własną umowę" widoczna dla statusów `potwierdzone+`:
+   - Pole upload PDF (max 20MB, walidacja `mime_content_type === application/pdf`)
+   - Pole text „Numer umowy" (default: `previewNextContractNumber()`)
+   - Plus badge w UI: „Indywidualna (wgrana ręcznie)" pomarańczowy vs „Auto-generowana" niebieski
+
+3. **`class-asiaauto-order-admin.php::handleUploadCustomContract()`** — nowy handler:
+   - Walidacje: numer non-empty, max 50, unikalny (`isContractNumberInUse`); plik PDF, max 20MB, mime check
+   - `wp_handle_upload` + `wp_insert_attachment` z `post_parent=$order_id`
+   - Stary `_order_contract_attachment_id` (jeśli istniał) — `wp_delete_attachment(true)` (purge)
+   - Meta: nowy `META_CONTRACT_ID`, `META_CONTRACT_NUMBER`, **`_aa_contract_source = 'manual_upload'`**
+   - **Bumpnij licznik** przez `bumpContractCounterFromManual()` jeśli numer w formacie `AA/YYYY/NNNN` z NNNN > current
+   - Status NIE zmieniany, mail NIE leci
+
+4. **`class-asiaauto-order.php`** — 3 nowe helpery statyczne:
+   - `previewNextContractNumber()` — `AA/YYYY/NNNN+1` bez inkrementacji licznika (pre-fill formularza)
+   - `isContractNumberInUse(string $number, int $exclude_order_id = 0)` — `SELECT post_id FROM postmeta WHERE meta_key=_order_contract_number AND meta_value=$number AND post_id != $exclude`
+   - `bumpContractCounterFromManual(string $number)` — jeśli pasuje regex `^{prefix}/(\d{4})/(\d+)$` i numer > licznik dla tego roku → `update_option(counter_prefix_YYYY, N)`. Log info.
+
+5. **`class-asiaauto-order.php::changeStatus()`** — bramka `isCustomerDataComplete` w przejściu na `umowa_gotowa` **pomijana gdy `_aa_contract_source = 'manual_upload'`**. Powód: Ruslan zna dane klienta z PDF, user_meta może być niekompletny.
+
+**Hotfix smart quotes** — initial deploy padł `Parse error` przez `"` w środku polskiego cytatu „Umowa gotowa". Naprawione przez polski cudzysłów zamykający `”` (U+201D). Pierwsza lekcja [[feedback_smart_quotes_break_json.md]] dotyczyła JSON-a, teraz przypomnienie dla PHP stringów.
+
+**Smoke (po deployu):**
+- `previewNextContractNumber()` → `AA/2026/0014` (licznik = 13 po Mironie) ✓
+- `isContractNumberInUse(AA/2026/0013)` → true ✓
+- `isContractNumberInUse(CUSTOM-XYZ)` → false ✓
+- `method_exists(handleUploadCustomContract)` → true ✓
+- `https://primaauto.com.pl/` → 200 (po hotfix) ✓
+
+**Backupy:** `*.bak-2026-05-30-upload-custom-contract` (3 pliki: order, order-admin, contract).
+
+**Workflow Stefana Nicolae (#350835, RO) — dwie ścieżki dziś:**
+1. *Templatem:* Ruslan klika „Wygeneruj PDF" (przycisk widoczny bo dane Stefana kompletne po v0.32.60 sesji chrome), ogląda PDF, OK → dropdown na „Umowa gotowa" → mail leci.
+2. *Własną umową:* Ruslan rozwija sekcję „Wgraj własną umowę", wybiera plik PDF z dysku (wcześniej przygotowany w Word/Adobe), wpisuje numer (`AA/2026/0014` lub własny), klika „Wgraj umowę" → PDF zapisany. Potem dropdown na „Umowa gotowa" → mail z magic linkiem leci, klient widzi w panelu wgraną umowę zamiast template'owej.
+
+---
+
 ## 0.32.60 — 2026-05-30 (Walidacja billing dla klientów zagranicznych — NIP/CUI 8-13 cyfr, kod pocztowy elastyczny)
 
 **Powód:** Stefan Nicolae (zamówienie #350835, RO) podał Ruslanowi dane firmy rumuńskiej SC Burger Society SRL — CUI `46732411` (8 cyfr) i kod pocztowy `010025` (6 cyfr ciągiem). Walidacja w `saveCustomerData()` miała sztywne regexy pod PL: `^\d{10}$` dla NIP i `^\d{2}-\d{3}$` dla kodu — oba odrzucały rumuńskie dane. Ruslan nie mógł wpisać.
