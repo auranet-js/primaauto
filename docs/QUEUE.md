@@ -1,6 +1,6 @@
 # Kolejka zadań — Prima Auto
 
-> Aktualizacja: 2026-05-28 (Galeria klientów /klienci/ wdrożona — v0.32.57 / theme 1.0.7)
+> Aktualizacja: 2026-05-31 (SEO hub rework rollout cena/AEO + dekontaminacja taksonomii — ~70 hubów)
 
 ---
 
@@ -41,10 +41,12 @@ Gdy `verified` → odblokowane, budujemy zestaw.
 - [x] **Rollback custom template** (wieczorem 2026-05-28) — usunięty `themes/primaauto2026/page-klienci.php` (overengineered), strona przełączona na zwykły `page.php` z Gallery block w content
 
 ### Kosztem prostoty pominięte (do późniejszej iteracji)
-- **Cross-site wzmocnienie:** linki z single listing / strony głównej / `/zamow/` do `/klienci/`. **Następny krok do omówienia z Jankiem.**
-- **OG image dedykowany 1200×630** — obecnie #001 (~3:4).
-- **Liczby w hero galerii** (ile aut sprowadzonych, od kiedy działacie) — wymaga konkretu od Ruslana.
-- **ImageGallery JSON-LD** — Gallery block sam się indeksuje w Google Images, schema dodajemy jeśli za 1-2 mies. okaże się brak signalu.
+- ~~**Cross-link z single listing**~~ — DONE w v0.32.58 (infoBox + USP strip kolumna „Informacje" → „Galeria sprzedanych aut")
+- **Cross-link homepage** — sekcja proof z 3-4 miniaturkami + CTA do `/klienci/`
+- **Cross-link `/zamow/`** — kafelek/banner „Nasi klienci ich zaufali"
+- **OG image dedykowany 1200×630** — obecnie #001 (~3:4)
+- **Liczby w hero galerii** (ile aut sprowadzonych, od kiedy działacie) — wymaga konkretu od Ruslana
+- **ImageGallery JSON-LD** — Gallery block sam się indeksuje w Google Images, schema dodajemy jeśli za 1-2 mies. okaże się brak signalu
 
 ### Zarządzanie galerią dla Ruslana (3 kroki)
 1. `wp-admin → Strony → Klienci → Edytuj`
@@ -651,3 +653,6 @@ Podłączenie 4 zewnętrznych API: **GSC** (monitoring organic), **GA4** (attrib
 - [x] Panel klienta `/klient/` — shortcode, logout, auto-redirect (2026-04-16)
 - [x] Fix ghost-crona `asiaauto_daily_cleanup` — handler w bootstrapie + jednorazowy cleanup (trash 5470 → 3559, delete 2077, drafts→trash 166) (0.30.13, 2026-04-20)
 - [x] Dedup 36 par listingów + optymalizacja DB 640 MB → 141 MB (−78%): revisions, trashed listings, orphan attachments; `WP_POST_REVISIONS=3` (2026-04-22) — ADR: `docs/decyzje/2026-04-22-dedup-i-optymalizacja-bazy.md`
+- [x] **SEO hub rework — rollout cena/AEO (2026-05-30/31).** Lead AEO answer-first + H1 „+ cena w Polsce i import z Chin" (Tier A) + wiki 7 H2 (dane z DB) + FAQPage 5 Q per hub; mechanizmy per-term `_asiaauto_{lead,h1_suffix,pl_availability,seo_rework=v1-2026-05-30}`. **~70 hubów** (pilot Leopard 5 → batch 1+2 → rozdzielone → normalna kolejka count≥18). PRAWDZIWOŚĆ per model: import_only / import_only-niuans / salon_available / forward (web-recheck dla marek obecnych w PL: BYD/VW/Chery/Leapmotor/MG itd.). Metoda: `docs/seo/hub-rework-method-2026-05-30.md`, triage: `docs/seo/hub-rework-preflight-triage-2026-05-30.md`, narzędzia: `tmp/deploy-hub.php` + `tmp/recon-hub.php` + `tmp/gsc-hub.py`. Pomiar GSC efektu ≈2026-06-09.
+- [x] **Dekontaminacja taksonomii (2026-05-30/31)** — split brand-level mislabeled listings do właściwych termów (make był poprawny, serie błędna): Haval H6/H5↔Hongqi (Hongqi H5=102, H6=12), GAC M8↔AITO M8(43), Avatr 07↔WEY 07(17), Geely Galaxy L6/L7↔Li Auto(42/31), VW Jetta↔Lavida(8), Nissan N7↔Denza N7(3). Porządki: Galaxy A7 CJK cleanup + make unifikacja, Geely Galaxy L6/L7 dedup (6587→3399, 6589→3401), 46 Geely Preface→6558(151). Wszystkie URL-e 200, redirecty 301 dla skasowanych slugów. Backupy `~/backups/primaauto/2026-05-30/`. ⚠️ panelowy `duplicate-serie-terms` Napraw NIE używać hurtem (canonical heuristic odwrotny dla kontaminacji).
+- [ ] **SEO hub rework — ogon count<18** (kolejna sesja) + `duplicate-serie-terms` 37 grup audyt canonical-safety + make „Galaxy"(6579) scalić z Geely? + CJK w `stm_car_location` (nazwy miast) systemowy fix translacji
