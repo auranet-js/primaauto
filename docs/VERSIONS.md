@@ -1,5 +1,15 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.66 — 2026-06-02 (dataLayer `serie_id` pod dynamic remarketing Google Ads — Faza 2)
+
+**Powód:** Faza 2 Google Ads (Display dynamic remarketing, feed model-hubów). Feed używa `id = serie term_id`, ale dataLayer `view_item` w `renderMeta()` wystawiał tylko `inner_id` auta — brak identyfikatora model-huba, więc GTM nie miał czym ustawić `dynx_itemid`.
+
+**Zmiany (`class-asiaauto-single.php::renderMeta()`, addytywne):**
+- Nowa zmienna `$serie_id` (= serie term_id, w idiomie sąsiednich termów).
+- Nowy klucz `listing.serie_id` w dataLayer (obok `inner_id`). Czyta go tylko nowy DLV w GTM → `dynx_itemid`. Bloki `ecommerce`/`item_id`/schema/og **nietknięte** (GA4/Meta ViewContent bez zmian).
+
+Backup: `class-asiaauto-single.php.bak-2026-06-02-dynx`. Smoke OK (single AITO M9 → `serie_id:5304` match z feedem hubów). `php -l` czysty, OPcache podchwycił od razu.
+
 ## 0.32.65 — 2026-05-30 (Spójność modelu: „zaliczka" → „depozyt" w 2 stringach user-facing)
 
 **Powód:** model biznesowy Prima-Auto to **pośrednictwo** (umowa zlecenia sprowadzenia, **zwrotny depozyt gwarancyjny**, prowizja — Zleceniodawca/Zleceniobiorca), a nie sprzedaż z zaliczką. Audyt przy okazji przeglądu dokumentów prawnych (regulamin/polityka od prawnika Ruslana) wykrył 2 user-facing stringi wciąż mówiące „zaliczka", niezgodne z umową generowaną przez `class-asiaauto-contract.php` (tam wszędzie „depozyt").
