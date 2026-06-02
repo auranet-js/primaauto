@@ -1,5 +1,21 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.67 — 2026-06-02 (Fix: panel admina kłamał „klient nie przesłał umowy" przy wielo-plikowym podpisie)
+
+**Zgłoszenie:** Ruslan — realny klient (Miron Orłowski, zamówienie Denza N9 `#351079`) podpisał umowę Profilem Zaufanym i przesłał ją przez panel, ale karta zamówienia w wp-admin pokazywała „Podpisana umowa: Brak — klient jeszcze nie przesłał".
+
+**Diagnoza (dane realne, nie intuicja):** umowa była na miejscu — załącznik `351149` (`AA-2026-0015-…-podpisana.pdf`), status zamówienia `podpisane`, log: „Klient potwierdził przesłanie podpisanej umowy (1 plik(ów))" 2026-06-02 14:44. Bug był wyłącznie wizualny.
+
+**Root cause:** podpisana umowa wspiera **wiele plików** (wielostronicowy skan) i jest zapisywana jako **JSON-array** (`_order_signed_attachment_id` = `[351149]`, zapis przez `wp_json_encode` w `order-api.php:577/658`). `getOrderData()` czytało tę meta przez `(int) get_post_meta(...)`, a `(int) "[351149]" === 0` w PHP → render karty (`order-admin.php`) wpadał w gałąź „Brak". Kod klienta (REST `getSignedAttachmentIds`) i regeneracja umowy parsowały JSON poprawnie — stąd status doszedł do `podpisane`, ale karta admina pokazywała sprzeczność (badge „podpisane" + „Brak").
+
+**Audyt zakresu (cały plugin + motyw):** dokładnie **jedno** zepsute miejsce odczytu (`order.php:1457`) i jego jedyny konsument (render `order-admin.php`). Bliźniak `payment_proof` zapisywany jako pojedynczy int (jeden plik z założenia) — `(int)` cast tam **poprawny**, bez buga. Motyw `asiaauto` — zero odwołań do tej meta.
+
+**Zmiany:**
+1. `class-asiaauto-order.php` — nowy helper `parseSignedAttachmentIds()` (mirror `order-api.php:845`, w modelu); `getOrderData()` zwraca `signed_ids` (tablica) + `signed_id` (pierwszy plik, wsteczna kompatybilność).
+2. `class-asiaauto-order-admin.php` — wiersz „Podpisana umowa" renderowany w pętli po `signed_ids` (pokazuje wszystkie pliki; „Brak" tylko gdy realnie pusto).
+
+Backup: `*.bak-2026-06-02-signed-array`. `php -l` czysty. Smoke: `getOrderData(351145)` → `signed_ids=[351149]`; `getOrderData(326921)` (Exeed, drugi dotknięty) → `[337660]`; stock bez podpisu → `[]`. Helper przetestowany: JSON-single/multi, legacy bare-int, `"0"`, `""`. Mirror `asiaauto.pl` już nie istnieje (czysty 301) — sync zbędny. ADR: `docs/decyzje/2026-06-02-fix-signed-contract-array-display.md`.
+
 ## 0.32.66 — 2026-06-02 (dataLayer `serie_id` pod dynamic remarketing Google Ads — Faza 2)
 
 **Powód:** Faza 2 Google Ads (Display dynamic remarketing, feed model-hubów). Feed używa `id = serie term_id`, ale dataLayer `view_item` w `renderMeta()` wystawiał tylko `inner_id` auta — brak identyfikatora model-huba, więc GTM nie miał czym ustawić `dynx_itemid`.
