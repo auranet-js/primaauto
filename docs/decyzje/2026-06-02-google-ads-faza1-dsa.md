@@ -42,10 +42,19 @@ landing single `/oferta/` (osobny workstream, poza tą fazą).
    PAUSE „Geely LEVC L380" (251809 trash, brak żywej sztuki — jedyna pauza);
    +5 nowych grup: Leopard 5, Sealion 8, Song L EV, Zeekr 001, Zeekr 7X.
 
-7. **Brand:** bid ad group 0,42 → 1,00 zł (łapie 24% rank-lost IS, CPC grosze);
-   +3 negatywy PHRASE `łask`/`warka`/`miechów` (inne firmy „Prima Auto").
+7. **Brand:** bid ad group 0,42 → 1,00 zł + 3 negatywy PHRASE `łask`/`warka`/`miechów`
+   (inne firmy „Prima Auto"). ZOSTAJE (decyzja Janka). Uzasadnienie z danych 14d po rewizji:
+   konwertujący keyword `prima auto` [PHRASE] (6 konw/14d) trzyma #1 tylko w 48% → tam siedzi
+   gros z 24% rank-lost; bid-up odzyskuje niedopokryte konwertujące zapytania brandowe.
+   `prima auto` [EXACT] = ruch nawigacyjny (#1=91%, 0 konw, obrona marki). Budżet-lost 1% → OK.
 
-8. **Topic:** bid ad group 3,10 → 1,80 zł (IS 92% to nadwyżka; CPA 188 zł najdroższa).
+8. **Topic:** bid-down 3,10→1,80 był BŁĘDEM (realny CPC 2,18 → 1,80 zrzuciłoby nas z #1) —
+   **COFNIĘTE do 3,10**. Topic to dominacja kategorii, NIE kampania konwersyjna: trzymamy
+   **#1 (76% abs top, 94% IS) na cały temat „import aut z Chin"**. Oceniać po pozycji, nie CPA.
+   Dane 14d po rewizji: CPA 131 zł, rank-lost 6%, budżet-lost 0%. Zostaje 3,10.
+
+   **Uwaga metodologiczna:** Brand/Topic analizować WYŁĄCZNIE na oknie po zmianach (od 19.05),
+   nie 30d blob (ciągnie usunięte frazy jak „auta z chin import" + stare stawki).
 
 ## Stan końcowy (budżet 112 zł/dz bez zmian)
 
