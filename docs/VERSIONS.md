@@ -1,5 +1,21 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.68 — 2026-06-05 (Fix: import ręczny robił śmieć z pustej oferty — „Listing {id}" + slug=ID + zero parametrów)
+
+**Zgłoszenie:** Ruslan — w panelu „Dodaj z Dongchedi" niektóre oferty po imporcie nie miały parametrów, dostawały tytuł „Listing {inner_id}" i slug w postaci samego numeru ID zamiast `marka-model-rok-ID`.
+
+**Diagnoza (API na żywo, nie intuicja):** auto-api.com zwraca dla części ofert **pustą wydmuszkę** — ten sam zestaw 33 kluczy, ale `mark`/`model`/`year`/`complectation`/`body_type`/`engine_type`/`images`/`extra_prep` = pusty string; wypełnione tylko `id`, `inner_id`, `url`, `price`, `created_at`. To oferty sprzedane/usunięte na Dongchedi (auto-api trzyma rekord z ceną, szczegóły znikają — pokrewne incydentowi crawlera z 25.05). `extractData()` działa poprawnie (nie błąd zagnieżdżenia).
+
+**Root cause (nasz bug):** import ręczny woła `importListing(..., force=true)`, co omija filtr konfiguracji i preflight zdjęć W1 — żadna bramka nie zatrzymywała pustki. Efekt: tytuł `trim("")` → fallback „Listing {id}"; `buildListingSlug('','','',ID)` → same puste człony → slug = sam `post_id`; `extra_prep` pusty → blok parametrów pominięty; taksonomie tylko `condition` (default). Cena zapisywała się (jedyne wypełnione pole).
+
+**Dowody:** 3 zepsute posty (`355913`, `355869`, `303690`) — wszystkie ręczne importy. API na żywo: `23958107`/`23984272` → wydmuszki; `23701521` (Denza N8L DM) → komplet, 402 parametry.
+
+**Zmiany:**
+1. `class-asiaauto-importer.php` — nowy helper `isEmptyShell()` (mark+model puste) + bramka w `importListing()` (po sprawdzeniu `inner_id`, przed filtrami) → `return null` + log. Chroni **wszystkie** ścieżki, też force.
+2. `class-asiaauto-admin-manual-import.php` — guard w `ajaxImport()` (czytelny komunikat zamiast cichego null) + flaga `is_empty_shell` w `ajaxPreview()` + blok JS w podglądzie (blokada przycisku „Zaimportuj" + notatka, że oferta sprzedana/usunięta).
+
+`buildListingSlug()` **nietknięty** — „dziwny slug" był objawem pustych danych, nie wadą slugu; bramka eliminuje przypadek u źródła. Backup: `*.bak-2026-06-05-emptyshell`. `php -l` czysty. Smoke: `isEmptyShell` blokuje `23958107`+`23984272`, przepuszcza `23701521`. Mirror `asiaauto.pl` nie istnieje — sync zbędny. **Sprzątanie 3 śmieci pending (osobno).**
+
 ## 0.32.67 — 2026-06-02 (Fix: panel admina kłamał „klient nie przesłał umowy" przy wielo-plikowym podpisie)
 
 **Zgłoszenie:** Ruslan — realny klient (Miron Orłowski, zamówienie Denza N9 `#351079`) podpisał umowę Profilem Zaufanym i przesłał ją przez panel, ale karta zamówienia w wp-admin pokazywała „Podpisana umowa: Brak — klient jeszcze nie przesłał".

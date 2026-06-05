@@ -8,8 +8,8 @@
 
 - **Repo:** `primaauto` (GitHub: `auranet-js/primaauto`)
 - **Produkcja:** `primaauto.com.pl` (cutover 2026-04-21 z asiaauto.pl)
-- **Legacy domain:** `asiaauto.pl` — uśpiona kopia WP, 301 redirect na primaauto (WP canonical), `DISABLE_WP_CRON=true` w wp-config
-- **Plugin:** `asiaauto-sync` v0.30.16
+- **Legacy domain `asiaauto.pl`:** **NIE ISTNIEJE** — instalacja WP (`~/domains/asiaauto.pl/public_html/`) została **usunięta** (zostały tylko `awstats` + `logs`). Brak kopii rollbackowej, brak lustra do synchronizacji. Każda zmiana dotyka **wyłącznie** `primaauto.com.pl`. NIE zakładaj istnienia katalogu/strony asiaauto.pl ani potrzeby syncu legacy. (Potwierdzone 2026-06-05.)
+- **Plugin:** `asiaauto-sync` v0.32.68
 - **Child theme:** `asiaauto` (slug zostaje; display name `Prima-Auto`)
 - **Klient:** Ruslan Prima, PRIMA-AUTO — agencja importu aut z Chin
 
@@ -23,8 +23,8 @@
 
 - Plugin: `~/domains/primaauto.com.pl/public_html/wp-content/plugins/asiaauto-sync/`
 - Theme: `~/domains/primaauto.com.pl/public_html/wp-content/themes/asiaauto/`
-- DB: `host476470_wp521`, prefix `wp7j_` (wspólna z legacy asiaauto.pl — oba katalogi czytają tę samą bazę; cron aktywny tylko w primaauto)
-- Legacy (rollback): `~/domains/asiaauto.pl/public_html/` — synchronizowana kopia plugin+theme, wp-cron wyłączony
+- DB: `host476470_wp521`, prefix `wp7j_`
+- ~~Legacy (rollback) `~/domains/asiaauto.pl/public_html/`~~ — **usunięty** (patrz sekcja 1). Brak lustra: deploy idzie tylko na primaauto, bez kopiowania na asiaauto.pl.
 
 **Workflow zmian:**
 1. Czytaj aktualny plik z serwera (`cat`/`Read`)
