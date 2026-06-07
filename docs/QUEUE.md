@@ -10,8 +10,8 @@
 
 **Zakres:**
 - [x] **Strona główna — treść pod head termy** ✅ **v0.32.71 (2026-06-07):** hero-sub + lead answer-first + przeróbka 7 H2 + opisy pod gridami + sekcja prozy „Import aut z Chin — jak to działa" + 5×FAQ (FAQPage, dedup vs huby/info). H1 nietknięte. Fix NAP w H2 USP. Smoke 11/11, FAQPage waliduje. Pomiar GSC ~06-20.
-- [ ] **Strony informacyjne — mapa keywordsów:** jakie KW robimy/powinny (homologacja → `homologacja samochodu z chin` poz 6,5 ✅; `proces-zamawiania` ~0 imp; `pod-dom-do-rejestracji` → `koszt sprowadzenia auta z chin` poz 53-87; `finansowanie` słabo) — żeby przejęły intent informacyjny i odciążyły homepage. **Osobny task** (DFS research per strona).
-- [ ] **Proces importu dla LLM-ów:** weryfikacja spójności llms.txt / llms-full.txt po reworku homepage.
+- [x] **Strony informacyjne — mapa keywordsów** ✅ **(2026-06-07):** audyt GSC+DFS per strona → rm_title dla 9 stron (4 nowe: gwarancja/homologacja/jezyk/regulamin — ciągnęły blogname=korzeń B1) + de-kanibalizacja intentu (proces=„jak sprowadzić", pod-dom=„koszt/dostawa") + intro proza na /informacje/ (post_content, nad kafelkami) + fix 3×H1→1 na proces. Smoke PASS. Strony=zwykłe WP (NIE Elementor). DFS: informacyjny long-tail „z chin" thin (<40 vol) → gra=konsolidacja+AEO. Memory `project_info_pages_seo_2026_06_07`, skrypty `tmp/gsc-info-pages-*` + `tmp/dfs-info-pages-*`. Pomiar GSC ~06-20.
+- [ ] **Proces importu dla LLM-ów:** weryfikacja spójności llms.txt / llms-full.txt po reworku homepage + stron info.
 
 **Uwaga:** `class-asiaauto-homepage.php` + `front-page.php` = strefa **ZAWSZE PYTAJ** ([[feedback_no_edit_homepage_without_ok]]).
 
