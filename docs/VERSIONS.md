@@ -1,5 +1,19 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.71 — 2026-06-07 (SEO rework strony głównej — treść topiczna pod head termy)
+
+**Kontekst:** osobny track SEO strony głównej (homepage = własna encja topiczna, [[feedback_homepage_seo_separate_track]]). Dedykowany research DataForSEO przewartościował topic: head term `chińskie samochody` **22 200/mc** (+ `chińskie samochody elektryczne` 1300), 85× większy niż frazy import- z B1 (`import aut z chin` 260). Decyzja Janka: **import = główny intent** (H1/title nietknięte), resztę pokryć wtórnie. Dotąd homepage = czysty katalog, zero prozy semantycznej.
+
+**Zmiana — `class-asiaauto-homepage.php` (strefa ZAWSZE PYTAJ, backup `.bak-2026-06-07-seo-rework`):**
+- **H1 BEZ ZMIAN** „Import samochodów z Chin do Polski" (nie rozrywać exact-match głównej frazy).
+- **hero-sub** przerobiony → „import chińskich samochodów…" (lemma `chińskie samochody` pod H1).
+- **Lead answer-first** (`renderLead()`) pod hero: `chińskie samochody` + `używane auta` + cena końcowa (AEO).
+- **Przeróbka 7 H2** + opisy pod gridami (Latest/Makes/BodyTypes/FuelTypes): rozłożone `chińskie samochody`, `chińskie samochody elektryczne` (1300, exact w H2 paliwa), `auta z chin do sprowadzenia`, intent cena/import. Fix NAP „Prima Auto"→„Prima-Auto" w H2 USP.
+- **Sekcja prozy + FAQ** (`renderTopicFaq()`) przed CTA: H2 `Import aut z Chin do Polski — jak to działa` (exact head term) + 5 pytań FAQ (FAQPage, ASCII quotes), markowo-transakcyjnych, zdedupowanych względem hubów (encjowe) i stron info (proces/koszt/homologacja). Link do `/informacje/` (oddanie intentu informacyjnego).
+- CSS dla lead/proza/FAQ (akordeon `<details>` natywny).
+
+**Smoke:** 11/11 treści live, FAQPage waliduje (5 Q), 0 PHP errorów, `php -l` clean. **Pomiar GSC ~06-20** (recrawl). Memory: [[project_homepage_seo_topic_2026_06_07]]. ADR `docs/decyzje/2026-06-07-homepage-seo-rework.md`.
+
 ## 0.32.70 — 2026-06-07 (SEO P2: fallback resolwera `/model/` — zamknięcie klasy 404)
 
 **Kontekst:** audyt GSC 2026-06-07. Stary handler `/model/<slug>/` (`class-asiaauto-redirects.php` → `redirectLegacyTaxonomy`) przekierowywał **tylko** gdy żywy term serie istnieje pod dokładnym slugiem; po fuzji marek / normalizacji importera slug się zmieniał → `null` → 404 (żywe `/model/e008/`, `/model/galaxy-l6/` w indeksie Google jako „zaindeksowana", a HTTP 404). Nowszy `redirectHubMakePrefix` ma 3-warstwowy samonaprawiający fallback — stary `/model/` go nie miał.

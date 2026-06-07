@@ -4,16 +4,16 @@
 
 ---
 
-## SEO — REWORK STRONY GŁÓWNEJ (osobny task, do dogłębnego zbadania) 🔲
+## SEO — REWORK STRONY GŁÓWNEJ (osobny track) ⏳ treść DONE, info+llms pending
 
-> Dodane 2026-06-07. Geneza: decyzja Janka (B1, 06-06) — **strona główna ma rankować na „import samochodów z chin" ORAZ „import aut z chin"** (oba head termy). B1 załatwił TYLKO title + intencyjne oddzielenie stron informacyjnych; treść homepage NIE ruszona. Patrz [[project_b1_cannibal_import_z_chin_2026_06_06]].
+> Dodane 2026-06-07. Geneza: B1 (06-06) zmienił tylko title homepage; treść NIE ruszona. **Track SEO homepage = osobny** ([[feedback_homepage_seo_separate_track]]). Research DataForSEO 2026-06-07 przewartościował topic: `chińskie samochody` 22 200/mc >> `import aut z chin` 260. Decyzja Janka: import=główny intent, resztę pokryć wtórnie. Patrz [[project_homepage_seo_topic_2026_06_07]], ADR `docs/decyzje/2026-06-07-homepage-seo-rework.md`.
 
-**Zakres (omówione, NIEzrobione):**
-- [ ] **Strona główna — budowa + treść pod head termy:** dodać **intro** (dziś homepage to czysty katalog, zero prozy), poprawić **H2** (dziś tylko wariant „samochodów"; brak „aut z chin"), dodać **krótkie opisy** sekcji — nasycone KW „import samochodów z chin" + „import aut z chin".
-- [ ] **Strony informacyjne — mapa keywordsów:** jakie KW robimy/powinny (homologacja, proces, finansowanie, koszt sprowadzenia) — żeby przejęły intent informacyjny i odciążyły homepage.
-- [ ] **Proces importu dla LLM-ów:** pokrycie w llms.txt / llms-full.txt.
+**Zakres:**
+- [x] **Strona główna — treść pod head termy** ✅ **v0.32.71 (2026-06-07):** hero-sub + lead answer-first + przeróbka 7 H2 + opisy pod gridami + sekcja prozy „Import aut z Chin — jak to działa" + 5×FAQ (FAQPage, dedup vs huby/info). H1 nietknięte. Fix NAP w H2 USP. Smoke 11/11, FAQPage waliduje. Pomiar GSC ~06-20.
+- [ ] **Strony informacyjne — mapa keywordsów:** jakie KW robimy/powinny (homologacja → `homologacja samochodu z chin` poz 6,5 ✅; `proces-zamawiania` ~0 imp; `pod-dom-do-rejestracji` → `koszt sprowadzenia auta z chin` poz 53-87; `finansowanie` słabo) — żeby przejęły intent informacyjny i odciążyły homepage. **Osobny task** (DFS research per strona).
+- [ ] **Proces importu dla LLM-ów:** weryfikacja spójności llms.txt / llms-full.txt po reworku homepage.
 
-**Uwaga:** `class-asiaauto-homepage.php` + `front-page.php` = strefa **ZAWSZE PYTAJ** ([[feedback_no_edit_homepage_without_ok]]). Osobna, skupiona sesja — nie wpychać między inne punkty.
+**Uwaga:** `class-asiaauto-homepage.php` + `front-page.php` = strefa **ZAWSZE PYTAJ** ([[feedback_no_edit_homepage_without_ok]]).
 
 ---
 
