@@ -1,5 +1,37 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.70 — 2026-06-07 (SEO P2: fallback resolwera `/model/` — zamknięcie klasy 404)
+
+**Kontekst:** audyt GSC 2026-06-07. Stary handler `/model/<slug>/` (`class-asiaauto-redirects.php` → `redirectLegacyTaxonomy`) przekierowywał **tylko** gdy żywy term serie istnieje pod dokładnym slugiem; po fuzji marek / normalizacji importera slug się zmieniał → `null` → 404 (żywe `/model/e008/`, `/model/galaxy-l6/` w indeksie Google jako „zaindeksowana", a HTTP 404). Nowszy `redirectHubMakePrefix` ma 3-warstwowy samonaprawiający fallback — stary `/model/` go nie miał.
+
+**Zmiana — `/model/<slug>/` dostał 4-warstwowy fallback (każda warstwa redirectuje TYLKO gdy cel żyje):**
+1. Term żyje → hub modelu.
+2. Term martwy → match **bez myślników** (`e008` → `e-008` Dongfeng) — przed stripem zer, bo „008" to odrębny numer modelu, nie „8".
+3. Term martwy → **pełna normalizacja** (`sea-lion-07dm` → `sealion-7-dm`).
+4. Zdejmij **prefiks żywej marki** (`galaxy-l6` → make `galaxy` + remainder `l6`) → hub modelu remaindera, w ostateczności hub marki.
+Brak żywego celu → przepuszczamy (naturalny 404, nie zgadujemy). Samonaprawiające: gdy model wróci (term=200), wcześniejsze warstwy go łapią.
+
+**Kluczowa decyzja techniczna — markę wyznaczamy z dominującej marki listingów serii, NIE z mety `_asiaauto_primary_make_slug`.** Meta jest niewiarygodna: serie 3399 „Galaxy L6" ma metę `li-auto`, a 15/16 listingów to Geely → meta dałaby `/samochody/li-auto/l6/` (zły model, choć 200). Dominacja listingów daje poprawne `/samochody/geely/l6/`. To częściowo obchodzi P7 dla ścieżki redirectu (P7 nadal wart dla kanonicznych linków `filterSerieTermLink`).
+
+**Nowe helpery (prywatne, redirects):** `serieHubUrl`, `dominantMakeSlug`, `serieHubBySlug`, `serieSlugMaps` (jeden przelot `get_terms` → 2 mapy: dashless + norm, cache per-request), `serieHubByDashlessSlug`, `serieHubByNormalizedSlug`, `modelOrMakeHubFromPrefixedSlug`. Heavy operacje (`get_terms` 2738 serii, `get_posts` 100) odpalają się **tylko na trafieniach legacy `/model/`** (rzadkie).
+
+**Weryfikacja:** `php -l` czysty. Smoke (final HTTP, 2 hopy = 1×301+200, zero łańcuchów):
+- `/model/galaxy-l6/` → `/samochody/geely/l6/` ✅ (dominacja naprawiła błędną metę)
+- `/model/e008/` → `/samochody/dongfeng/e-008/` ✅ (dashless tier — Dongfeng E008, nie GAC/Geely E8)
+- `/model/sea-lion-07dm/` → `/samochody/byd/sealion-7-dm/` ✅ (normalizacja)
+- Regresja `/model/leopard-5,arrizo-8,8x/` → właściwe huby 301 ✅, `/marka/byd/` 301 ✅
+Backup: `class-asiaauto-redirects.php.bak-2026-06-07`. **Pending: P3 — Janek eksportuje pełną listę 404 z GSC UI do rewalidacji.**
+
+## 0.32.69 — 2026-06-07 (SEO P1: oferty jako Product snippet — multi-type `["Product","Car"]`)
+
+**Kontekst:** audyt GSC 2026-06-07 (memory `project_session_2026_06_07_gsc_full_audit`). URL Inspection `richResultsResult` dowiódł, że single oferta (`/oferta/...`) z `@type=Car`+`Offer` jest przez Google promowana **tylko do breadcrumbu**, nie do „Opisów produktów" — licznik „Opisy produktów" w GSC zbierał wyłącznie ~28 hubów modelu, mimo 4458 ofert z ceną. Car⊂Vehicle⊂Product w Schema.org, ale Google kwalifikuje do „Product snippets" dopiero przy **jawnym** `Product`.
+
+**Zmiana:** w żywym builderze schematu single (`class-asiaauto-single.php` → `renderMeta()`, ~linia 721) `'@type'=>'Car'` → `'@type'=>['Product','Car']`. Cały blok `offers` (Offer / price PLN / InStock / seller / shippingDetails / priceValidUntil) zachowany bez zmian. Ujednolicono `seller.name` „Prima Auto" → „Prima-Auto" (NAP) w obu blokach. **NIE** dodano `aggregateRating`/`review` (brak realnych ocen = ryzyko kary).
+
+**Uwaga techniczna:** w pliku istnieje też martwa metoda `schema()` (~linia 558, zero wywołań) — dla spójności też dostała `["Product","Car"]`+„Prima-Auto", ale renderowanie idzie wyłącznie przez `renderMeta()`.
+
+**Weryfikacja:** `php -l` czysty. Smoke 3 oferty (Leapmotor Lafa5 / iCAR Super V23 / AITO M8) → wyrenderowany JSON-LD ma `@type:["Product","Car"]`, `seller:"Prima-Auto"`, komplet wymogów Product snippet (name+image+offers.price/priceCurrency/availability). Backup: `class-asiaauto-single.php.bak-2026-06-07`. **Pending: Rich Results Test (Janek) + pomiar „Opisy produktów" w GSC po recrawl (~2 tyg).**
+
 ## 0.32.68 — 2026-06-05 (Fix: import ręczny robił śmieć z pustej oferty — „Listing {id}" + slug=ID + zero parametrów)
 
 **Zgłoszenie:** Ruslan — w panelu „Dodaj z Dongchedi" niektóre oferty po imporcie nie miały parametrów, dostawały tytuł „Listing {inner_id}" i slug w postaci samego numeru ID zamiast `marka-model-rok-ID`.

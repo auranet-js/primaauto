@@ -4,6 +4,26 @@
 
 ---
 
+## SEO — REWORK STRONY GŁÓWNEJ (osobny task, do dogłębnego zbadania) 🔲
+
+> Dodane 2026-06-07. Geneza: decyzja Janka (B1, 06-06) — **strona główna ma rankować na „import samochodów z chin" ORAZ „import aut z chin"** (oba head termy). B1 załatwił TYLKO title + intencyjne oddzielenie stron informacyjnych; treść homepage NIE ruszona. Patrz [[project_b1_cannibal_import_z_chin_2026_06_06]].
+
+**Zakres (omówione, NIEzrobione):**
+- [ ] **Strona główna — budowa + treść pod head termy:** dodać **intro** (dziś homepage to czysty katalog, zero prozy), poprawić **H2** (dziś tylko wariant „samochodów"; brak „aut z chin"), dodać **krótkie opisy** sekcji — nasycone KW „import samochodów z chin" + „import aut z chin".
+- [ ] **Strony informacyjne — mapa keywordsów:** jakie KW robimy/powinny (homologacja, proces, finansowanie, koszt sprowadzenia) — żeby przejęły intent informacyjny i odciążyły homepage.
+- [ ] **Proces importu dla LLM-ów:** pokrycie w llms.txt / llms-full.txt.
+
+**Uwaga:** `class-asiaauto-homepage.php` + `front-page.php` = strefa **ZAWSZE PYTAJ** ([[feedback_no_edit_homepage_without_ok]]). Osobna, skupiona sesja — nie wpychać między inne punkty.
+
+---
+
+## SEO — PONOWNA ANALIZA 16 resztkowych 404 (odłożone 2026-06-07) 🔲
+
+> Stan 2026-06-07: raport GSC „Nie znaleziono (404)" = 697 adresów, ale **675 to duchy** (już 301/200, raport nieaktualny). Janek zgłosił **„Sprawdź poprawkę"** w GSC → raport powinien spaść do ~16. **Realnie zepsute = 16** (lista: `tmp/gsc-404-realne-2026-06-07.txt`): śmieci techniczne (wpgmza/datatables/cdn-cgi/?page_id=3/complianz-css), stary system `/cars/*` + `/category-cars/` + `/landing/buying/` (dawno usunięte auta), literówka `/samochodos/byd/...`, 3× stare `/model/` (sea-lion-06ev, c-dm, lafa5). Decyzja Janka: **zostawić, recheck za jakiś czas**.
+- [ ] **Po przetworzeniu „Sprawdź poprawkę" przez Google (~2-3 tyg, ~koniec 06.2026):** ponownie pobrać listę 404 (Sheets API, ID `1tMwUUmhwR1yD0wT2RJ31mTJUMPhwGrQhBmftN0fX6zc` lub świeży eksport) → re-test HTTP (`tmp/` skrypty). Sprawdzić: czy raport spadł do ~16, czy doszły NOWE realne 404 (istotne, z ruchem), czy resztki nadal to śmieci. Naprawiać tylko jeśli coś z ruchem/wartością. Kosmetyka (literówka `/samochodos/`, 3× `/model/`) opcjonalna — strefa redirectów, ZAWSZE PYTAJ.
+
+---
+
 ## META — odblokowanie kampanii FB (BLOCKED przez Ruslana) ⛔
 
 > Status `act_1083673765606618` na **2026-05-27**: karta podpięta (Mastercard *3519), waluta PLN, balance 0; kampania `120248507523010111` PAUSED, 0 zestawów/0 reklam; **firma `145818221430407` `verification_status: rejected`** (gorzej niż piątkowe `not_verified` — Ruslan próbował, Meta odrzuciła). API nie zwraca powodu odrzucenia.
