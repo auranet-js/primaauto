@@ -1,5 +1,33 @@
 # Historia wersji asiaauto-sync
 
+## 0.32.73 — 2026-06-09 (rotation: kasowanie zdjęć przy permanent delete + backfill 54508 sierot)
+
+**Kontekst:** audyt inode konta — `uploads/asiaauto/` urósł do ~575 tys. plików / 13,2 GB (główny konsument inode). Korzeń: `deleteOldTrash()` kasował listingi przez `wp_delete_post($pid, true)`, a WP core (`wp-includes/post.php:3861` — „Point all attachments to this post up one level") **przepina attachmenty usuwanego posta na `post_parent=0`**. `cleanOrphanedImages()` filtruje `post_parent>0` → nigdy ich nie łapał → „0 orphaned images removed" przez wszystkie 84 uruchomienia crona od marca. Zdjęcia każdego usuniętego auta (oryginał + 4 miniatury) wyciekały na dysk → **54 508 osieroconych attachmentów**.
+
+**Zmiana — `includes/class-asiaauto-rotation.php` (backup `.bak-2026-06-09`):**
+- W `deleteOldTrash()`, w pętli przed `wp_delete_post()`: `$this->media()->removeImages($pid, true)` — kasuje pliki + miniatury + wiersze attachment PÓKI listing żyje (czyta meta `gallery`, omija reparenting WP). Licznik `$images_removed` + log „Permanently deleted N trashed posts (M images removed)".
+- Helper `media()` (leniwa `AsiaAuto_Media`) + property `$media`. `isReserved()` nietknięte.
+- **Listingi ręczne bezpieczne bez dodatkowego guardu:** `markRemoved()` (jedyny setter `_asiaauto_removed_at` → jedyne wejście do trash→delete) wołany tylko z sync (guard `isManuallyManaged()`) i order-cancel (gate `_asiaauto_api_removed`, nieosiągalny dla ręcznych). `removeImages()` nie jest manual-aware (pętla galerii kasuje bezwarunkowo), ale ręczne nigdy nie trafiają do `deleteOldTrash` przez rotację.
+
+**Backfill istniejących sierot** (skrypt chunkowy, re-weryfikacja 0 referencji galerii + skip `_asiaauto_manual_upload`; kryterium: `post_parent=0` + `_asiaauto_source_url`, 0 referencji w `gallery`/`_thumbnail_id` żadnego listingu):
+- 2026/03: 742 → 106M/4204 plików → 38M/1155
+- 2026/04: 34 538 → 5,5G/252980 → 1,9G/82785
+- 2026/05: 19 228 → 6,1G/282114 → 4,1G/184507
+- Pozostałe `parent=0` sieroty: **0**. Odzysk **~5,7 GB / ~254 tys. inode**.
+
+**Walidacja:** `php -l` clean, dry-run cleanup OK, test forward-fixu na 355476 (9 attach / 53 pliki na dysku) → 0 plików, 0 wierszy attachment, post usunięty. Backup DB przed: `~/backups/primaauto/2026-06-09/posts-postmeta-pre-orphan-cleanup.sql` (372 MB). Smoke homepage/oferta/marki = 200. Pomiar w boju: następny cron 2026-06-10 03:00 zaloguje M>0 images removed. ADR `docs/decyzje/2026-06-09-rotation-image-cleanup.md`.
+
+## 0.32.72 — 2026-06-08 (hub marek: template pod answer-first lead + fact strip + dateModified)
+
+**Kontekst:** rework hubów MAREK (`/samochody/<marka>/`) — domknięcie wzorca answer-first lead z pilota modeli. KROK 1 = template (treść per marka w osobnym batchu). Analiza KW + recon: `docs/seo/make-hubs-kw-analysis-2026-06-08.md`. Dane: `{marka} import`≈0 wolumenu → orientacja cena/Polska, nie import.
+
+**3 pliki (strefa ZAWSZE PYTAJ, backupy `*.bak-2026-06-08`):**
+- **`themes/primaauto2026/taxonomy-make.php`:** H1 z mechanizmem `_asiaauto_h1_suffix` (fallback „z Chin") + fact strip (`_asiaauto_facts` JSON: models/count/price_min-max-median/year_min-max/avail_label/updated) + „Stan oferty: {rok}" (`date('Y')`) + lead `_asiaauto_lead` (mirror `taxonomy-serie.php:107-111`). Wszystko render-if-meta — brak meta = stare zachowanie.
+- **`themes/primaauto2026/assets/css/hub.css`:** `.aa-hub__facts` (+ `-note`) — nowa klasa, nieobecna na `taxonomy-serie.php` → 0 regresji 228 hubów modeli. Lead bez CSS.
+- **`includes/class-asiaauto-seo.php`:** `dateModified` przez filtr `rank_math/json_ld` (`addHubDateModified`) z `_asiaauto_facts.updated`. Uwaga: `buildCollectionPage()` to dead code gdy RankMath aktywny (renderSchema emituje tylko ItemList+Product; CollectionPage/@graph robi RankMath).
+
+**Smoke PASS:** baic (test facts) → H1 suffix + strip 6 pól + lead + dateModified 2026-06-08; byd (bez facts) → „BYD z Chin" nietknięte, HTTP 200, brak strip/lead/dateModified; modele (leopard-5) nietknięte. Fact strip = dane STORED (odświeżane reworkiem, nie live). Decyzja: bez newsów/premier (osobny projekt). KROK 2 = generacja treści per marka (subagenty, PYTAĆ przed batch).
+
 ## 0.32.71 — 2026-06-07 (SEO rework strony głównej — treść topiczna pod head termy)
 
 **Kontekst:** osobny track SEO strony głównej (homepage = własna encja topiczna, [[feedback_homepage_seo_separate_track]]). Dedykowany research DataForSEO przewartościował topic: head term `chińskie samochody` **22 200/mc** (+ `chińskie samochody elektryczne` 1300), 85× większy niż frazy import- z B1 (`import aut z chin` 260). Decyzja Janka: **import = główny intent** (H1/title nietknięte), resztę pokryć wtórnie. Dotąd homepage = czysty katalog, zero prozy semantycznej.
