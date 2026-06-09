@@ -15,4 +15,6 @@ update_term_meta($tid, '_asiaauto_lead', $cfg['lead']);
 update_term_meta($tid, '_asiaauto_pl_availability', $cfg['pl_availability']);
 update_term_meta($tid, '_asiaauto_seo_rework', $cfg['rework_version']);
 if (!empty($cfg['h1_suffix'])) update_term_meta($tid, '_asiaauto_h1_suffix', $cfg['h1_suffix']); // Tier B: pomijamy
-WP_CLI::success("term $tid: wiki ".strlen($wiki)."B, faq ".count($faq)."Q, lead ".mb_strlen($cfg['lead'])."zn, h1=".($cfg['h1_suffix']??'(brak/TierB)'));
+if (!empty($cfg['facts']) && is_array($cfg['facts'])) // hub marki: fact strip + dateModified
+    update_term_meta($tid, '_asiaauto_facts', wp_json_encode($cfg['facts'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+WP_CLI::success("term $tid: wiki ".strlen($wiki)."B, faq ".count($faq)."Q, lead ".mb_strlen($cfg['lead'])."zn, h1=".($cfg['h1_suffix']??'(brak/TierB)').", facts=".(empty($cfg['facts'])?'(brak)':'TAK'));

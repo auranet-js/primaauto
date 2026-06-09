@@ -1,6 +1,27 @@
 # Kolejka zadań — Prima Auto
 
-> Aktualizacja: 2026-05-31 (SEO hub rework rollout cena/AEO + dekontaminacja taksonomii — ~70 hubów)
+> Aktualizacja: 2026-06-09 (pomiar hub rework + indexing marek + długi ogon marek <12)
+
+---
+
+## SESJA 2026-06-09 — domknięcie reworku marek + pomiar ✅
+
+**Zrobione:**
+1. **Pomiar GSC hub reworku (przebieg B)** — gate `tmp/gsc-inspect.py`: tylko 8/21 hubów przecrawlowane po reworku (recrawl wolniejszy niż Indexing API prosił). **Pełny pomiar przedwczesny → ponowić ~16-18.06.** Tier B `denza/z9-gt-dm-i` POTWIERDZONY BEZPIECZNY („import" poz 2,5/33% CTR nienaruszone). Memory `project_session_2026_05_30_hub_rework_pilot` (sekcja PRZEBIEG B).
+2. **Indexing marek count≥12** — 23 pozostałe zgłoszone (12 z 06-08 + 23 = cały rework 35 live zaindeksowany). `tmp/make-index-rest23-2026-06-08.txt`.
+3. **Długi ogon marek count<12** — **12 hubów zreworkowanych+live+zaindeksowanych**, 7 zablokowanych redirectem V61. Wzorzec subagentów jak 06-08. Memory `project_make_hubs_rework_2026_06_08` (sekcja KROK 3). Backup `~/backups/primaauto/2026-06-09/`. Lista `tmp/make-longtail-index-2026-06-09.txt`.
+4. **META** — status firmy `rejected` → `pending` (ruszyło, patrz sekcja META niżej).
+5. **GSC full audit (P1)** — zweryfikowane: już zamknięte 07.06 (P1+P2 wdrożone, reszta odrzucona).
+
+**Budżet Indexing dziś: 35/100 ad-hoc** (rezerwa PrimaAuto 100 nietknięta).
+
+**PLAN / pozostałe (czeka na czas lub decyzję Janka):**
+- ⏳ **80 URL re-test** — automat `at` job 11.06 09:00 (`tmp/gsc-reindex-retest-2026-06-07.py` zmaila).
+- ⏳ **Pomiar skuteczności hub reworku** — ~16-18.06 (`tmp/gsc-inspect.py` gate → `tmp/gsc-hub.py` per hub). Decyzja o 3 destrukcyjnych taksonomicznych PO tym.
+- ⏳ **META verified** — SLA Meta 1-3 dni, check `meta_call.sh`.
+- ⏳ **16 resztkowych 404** — recheck ~27.06.
+- 🔲 **DECYZJA Janka — taksonomia (sub-marki scalone redirectem V61):** 7 z długiego ogona (dongfeng-yipai→dongfeng, jetour-shanhai→jetour, beijing-off-road→baic, chery-fengyun→chery-fulwin, yangwang→byd, dongfeng-fengxing→dongfeng, maextro→luxeed) + galaxy/gac-aion-hyper + 3 destrukcyjne (galaxy-starship-8/GAC S7/galaxy-e5). Plan: `docs/seo/taksonomia-destrukcyjna-plan-2026-06-06.md`. Rozdzielić sub-markę na osobny hub czy zostawić scalone?
+- 🔲 **Pominięte z długiego ogona** (count≥1): toyota/iveco/foton/jmc-ev (globalne/użytkowe), great-wall (dup gwm), lotus+lotus-cars (dup), auxun (CJK). ~237 marek count=0 — pomijamy (nie rankują).
 
 ---
 
@@ -27,6 +48,7 @@
 ## META — odblokowanie kampanii FB (BLOCKED przez Ruslana) ⛔
 
 > Status `act_1083673765606618` na **2026-05-27**: karta podpięta (Mastercard *3519), waluta PLN, balance 0; kampania `120248507523010111` PAUSED, 0 zestawów/0 reklam; **firma `145818221430407` `verification_status: rejected`** (gorzej niż piątkowe `not_verified` — Ruslan próbował, Meta odrzuciła). API nie zwraca powodu odrzucenia.
+> **2026-06-09:** status zmienił się `rejected` → **`pending`** — Ruslan ponowił zgłoszenie, Meta rozpatruje (SLA 1-3 dni rob.). Czekamy na `verified`, wtedy budujemy zestaw. Check `bash ~/secrets/meta/meta_call.sh --project primaauto-mktg "/145818221430407?fields=verification_status"`.
 > Pełne tło: memory `project_meta_campaign_build_2026_05_25.md` + `project_meta_pixel_capi_setup.md`.
 
 ### Akcje po stronie Ruslana (admin firmy, Janek NIE może tego zrobić)
