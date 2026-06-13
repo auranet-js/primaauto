@@ -2,7 +2,7 @@
 
 > **Cel:** każdy hub modelu (`taxonomy=serie`) ma rankować na frazy parametryczne (spalanie, wymiary, przyspieszenie, zasięg, bateria, dane techniczne, 0-100, „kiedy w Polsce") — dla wyszukiwarek **i** LLM-ów — przez jednolitą, weryfikowalną tabelę spec + `Car`/`Vehicle` schema + blok llms, generowane **z danych Dongchedi**, nie z zamrożonego tekstu LLM.
 >
-> **Status na 2026-06-13:** Faza 1 + 1b **DONE** (generator dry-run zahartowany, 53/60 modeli czystych). **KROK 1 / kontaminacja taksonomii (T-158) — DONE** (2026-06-13, patrz §4). Faza 2 (template, produkcja) **NIE rozpoczęta** — strefa krucha, czeka na świadomy start + go Janka.
+> **Status na 2026-06-13:** Faza 1 + 1b **DONE**. KROK 1 / kontaminacja taksonomii (T-158) **DONE** (§4). **FAZA 2 + KROK 3 + KROK 5 — DONE (2026-06-13, v0.32.74).** Generator → klasa `includes/class-asiaauto-spec.php`. **GOTCHA: aktywny motyw = `primaauto2026`, NIE `asiaauto`** (ten runbook mylił — patrz §5). Spec renderuje się live na **357 hubach** (cała baza count>0 z extra_prep), nad barami stocku pod leadem. Tabela przeprojektowana wg DFS (wymiary rozbite L/Sz/W + masa własna+całkowita, jednostki w etykietach — `tmp/dfs-spec-longtail-2026-06-13.md`). 122 zamrożone tabele usunięte (31 porównawczych zostało). llms-full rebuild ze spec. 356 snapshotów (fallback count=0). **Indexing: cel WSZYSTKIE 357, dzień 1 = 168 done, reszta 189 w `tmp/spec-hub-indexing-remaining-2026-06-13.txt`.** OTWARTE: 4+ świeże huby bez lead/wiki (content track — patrz §8 + nowy wątek). Pomiar GSC ~14 dni (T-017).
 
 ---
 

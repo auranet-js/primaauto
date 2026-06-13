@@ -113,6 +113,14 @@ foreach ($makes as $make) {
             if (is_wp_error($m_url)) continue;
             $full = (string) (get_term_meta($m->term_id, '_serie_full_title', true) ?: $m->name);
             $out[] = "- [" . $full . "](" . $m_url . "): " . $m->count . " ofert";
+            // v0.32.74: dane techniczne per-wersja z AsiaAuto_Spec (spalanie/zasięg/moc/0-100/bateria)
+            if (class_exists('AsiaAuto_Spec')) {
+                $block = AsiaAuto_Spec::buildLlmsBlock((int) $m->term_id);
+                foreach (explode("\n", trim($block)) as $bl) {
+                    if ($bl === '' || $bl[0] === '#') continue; // pomiń nagłówek "## {model}"
+                    $out[] = "  " . $bl;                        // wcięcie — pod-punkt modelu
+                }
+            }
         }
         $out[] = "";
     }
