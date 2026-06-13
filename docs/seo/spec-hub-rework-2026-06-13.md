@@ -2,7 +2,7 @@
 
 > **Cel:** każdy hub modelu (`taxonomy=serie`) ma rankować na frazy parametryczne (spalanie, wymiary, przyspieszenie, zasięg, bateria, dane techniczne, 0-100, „kiedy w Polsce") — dla wyszukiwarek **i** LLM-ów — przez jednolitą, weryfikowalną tabelę spec + `Car`/`Vehicle` schema + blok llms, generowane **z danych Dongchedi**, nie z zamrożonego tekstu LLM.
 >
-> **Status na 2026-06-13:** Faza 1 + 1b **DONE** (generator dry-run zahartowany, 53/60 modeli czystych). Faza 2 (produkcja) **NIE rozpoczęta** — czeka na (a) rozwiązanie kontaminacji taksonomii, (b) świadomy start w nowym, przetestowanym wątku.
+> **Status na 2026-06-13:** Faza 1 + 1b **DONE** (generator dry-run zahartowany, 53/60 modeli czystych). **KROK 1 / kontaminacja taksonomii (T-158) — DONE** (2026-06-13, patrz §4). Faza 2 (template, produkcja) **NIE rozpoczęta** — strefa krucha, czeka na świadomy start + go Janka.
 
 ---
 
@@ -53,20 +53,37 @@ Pozostałe 7 flag = **realny sygnał** (patrz §4).
 
 ---
 
-## 4. BLOKER przed batchem: kontaminacja taksonomii
+## 4. BLOKER przed batchem: kontaminacja taksonomii — ROZWIĄZANE (T-158, 2026-06-13)
 
-Lint wariancji rozstawu osi/długości wyłapał termy, gdzie pod jednym `serie` siedzą **różne modele/generacje** (tabela spec byłaby bełkotem):
+Detektor `SAMPLE_N=228` → 204/227 czystych, 23 flagi. Analiza (REGEXP name+slug+post_title + obie taksonomie make/serie) rozbiła je na 3 grupy. **Kluczowe ustalenie: `make` był już POPRAWNY na każdym skażonym listingu — błędna była tylko `serie`** (zamrożone legacy sprzed naprawy mappingu importera; nowe importy lecą już dobrze → reassignment trwały).
 
-| Term | Sygnał | Hipoteza |
+### GRUPA A — obca marka pod termem (5 termów, NAPRAWIONE — 106 listingów przeniesionych)
+
+| Term skażony (usunięty) | przeniesione | → keeper (serie) |
 |---|---|---|
-| **Li Auto „Galaxy L7"** (slug `l7`) | rozstaw Δ220 mm, długość Δ350 mm | **Li Auto L7 + Geely Galaxy L7** pod jednym termem |
-| **AITO M7** | rozstaw Δ210 mm | generacje / 6 vs 7 miejsc / mix |
-| Jetour T2 | długość Δ249 mm | mix generacji |
-| Geely Atlas Pro | długość Δ220 mm | mix generacji |
-| NIO ES8 | długość Δ181 mm | mix generacji |
-| AITO M8 (×2 termy) | długość Δ123 mm | borderline |
+| 3401 Galaxy L7 (li-auto/l7) | 18× Geely Galaxy L7 / 4× Li Auto L7 | → 7153 geely (galaxy-l7, URL geely/l7) / 5739 li-auto/l7 |
+| 3399 Galaxy L6 (li-auto/l6) | 15× Geely Galaxy L6 / 2× Li Auto L6 | → 7155 geely (galaxy-l6, URL geely/l6) / 5735 li-auto/l6 |
+| 4812 WEY 07 (wey/07) | 9× Avatr 07 / 3× WEY 07 | → 6906 avatr/avatr-07 / 5388 wey/07 |
+| 4409 Hongqi H5 (hongqi/h5) | 3× Haval H5 / 16× Hongqi H5 | → 6715 haval/haval-h5 / 5002 hongqi/h5 |
+| 3372 AITO M8 (aito/m8) | 27× GAC M8 / 9× AITO M8 | → **3381** gac/m8 / 5302 aito/m8 |
 
-**Do zrobienia PRZED batchem:** przejrzeć te termy (REGEXP po name+slug+post_title, jak w `feedback_market_gap_check_thoroughly`), rozdzielić/scalić, zsynchronizować z T-019. Detektor: `SAMPLE_N=228 wp eval-file diag/spec-hub-dryrun.php` → sekcja KRYTYKA.
+Po: 5 pustych termów skażonych (3401/3399/4812/4409/3372) **usuniętych**. make_meta ustawione na 6906/6715. Smoke: 10/10 URL keeperów = 200, przeniesione oferty 200.
+
+**GOTCHA GAC M8:** keeper to **3381 (gac/m8)**, NIE 6735 (trumpchi-m8) — `V62_SERIE_REDIRECTS` w `class-asiaauto-redirects.php:76` ma twardy `trumpchi-m8 → m8`, więc 6735 to slug-źródło-redirectu (auta byłyby niewidoczne). Backup bazy: `~/backups/primaauto/2026-06-13-spec-hub-taxonomy/wp521-pre-taxonomy-merge.sql`.
+
+**GOTCHA parent=0 (regresja złapana przy smoke treści, nie HTTP):** szablon `themes/asiaauto/taxonomy-serie.php:19-24` rozwiązuje term po **`tt.parent`=make_term_id** (hierarchia), NIE po meta `_asiaauto_primary_make_slug`. 4 termy-cele (7153, 7155, 6906, 6715) miały `parent=0` (oderwane od marki) → po wrzuceniu listingów renderowały „Nie znaleziono modelu." mimo HTTP 200. Fix: `parent` ustawiony (geely/avatr/haval) + slug 7153/7155 `galaxy-l7/l6`→`l7/l6` (bezpośredni `$wpdb->update`, bo `wp_update_term` dodaje `-2`; kolizja slug per-parent jest OK — istniejący wzorzec: 3381 i 5302 oba slug `m8`). **WNIOSEK: weryfikuj RENDER (grep „Nie znaleziono"/H1), nie sam kod HTTP — 200 może być pustym szablonem.** Te 4 huby mają H1-fallback „— import z Chin" (brak reworku 30.05) → dostaną content w batchu. Drobiazg: gac/m8 (3381) H1 pokazuje „Xiangwang M8" (1 listing-kontaminant + stary tytuł) → do regen tytułu + przeniesienia 1 szt. do 6742.
+
+### GRUPA B — mix generacji/wariantów (NIE kontaminacja, NIE ruszać taksonomii)
+
+AITO M7 (2024 vs 2026 EREV, Δ210 rozstaw), GWM Cannon (krótka vs dubel kabina Pao, Δ240), NIO ES8, Geely Atlas Pro (Gen4), VW Teramont/Magotan, BAIC BJ40, XPeng P7, BYD Dolphin, Jetour T2/T2 C-DM — **jeden model, dwie generacje/nadwozia**. Tabela spec pokazuje uczciwy zakres. Detektor wciąż je flaguje (2 zostały: M7, Cannon) → **TODO Faza 2: podnieść próg LINT** (rozstaw 150→220 mm, długość 120→260 mm), żeby nie szumiał na faceliftach.
+
+### GRUPA C — luka generatora/danych (NIE taksonomia, fix w Fazie 2)
+
+3× nieprzetłumaczona skrzynia CJK: `6挡湿式双离合`=6-bieg. mokra DCT, `9挡双离合`=9-bieg. DCT (Jetour X70 PLUS, Haval Big Dog, Haval H6) → dodać mapowania do `data/translations-extra-prep.php`. 1× GWM Cannon King Kong diesel bez `fuel_comprehensive` (drobiazg).
+
+### BONUS — dług taksonomiczny poza batchem (osobny T-019)
+
+Kolizje slugów istnieją (kilka serie-termów slug `l7`/`l6`/`m8`, rozróżniane prefiksem make w URL). NIE blokuje batcha. Wart osobnego pełnego przejścia REGEXP po całej taksonomii `serie`.
 
 ---
 
