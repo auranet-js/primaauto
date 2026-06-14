@@ -1,6 +1,20 @@
 # Kolejka zadań — Prima Auto
 
-> Aktualizacja: 2026-06-09 (pomiar hub rework + indexing marek + długi ogon marek <12)
+> Aktualizacja: 2026-06-14 (dopisana ROADMAPA FUNKCJI — pomysły Janka na rozwój, zsync z `_ops/BACKLOG.md`)
+
+---
+
+## ⭐ ROADMAPA FUNKCJI — pomysły Janka na rozwój (produkt/UX)
+
+> Pomysły Janka na rozwój platformy, zbierane od 2026-06-11. Wszystkie **P2, bez terminu, najpierw spec/brainstorm przed buildem**. Source of truth: `~/projekty/_ops/BACKLOG.md` (T-NNN) — ta sekcja to lustro w repo projektu. **To jest „roadmapa pomysłów na rozwój" — gdy pytam o roadmapę funkcji, pokazuj TĘ sekcję, nie listę zadań SEO/Ads niżej.**
+
+- [ ] **T-114 — Parkowanie aut (ulubione / „koszyk")** — zalogowany user zapisuje listingi do własnej listy „schowanych" aut do przeglądania. Wymusza logowanie/rejestrację. Ikonka w headerze obok kontaktu. Per-user storage (user meta / CPT), spina się z UX rejestracji + mailingiem.
+- [ ] **T-115 — Porównywarka aut** — „dodaj do porównania" + tabela porównawcza specyfikacji. Ikonka w headerze obok parkingu/kontaktu. Bazuje na danych spec listingu (Dongchedi); stateless (cookie/localStorage) lub per-user jak T-114.
+- [ ] **T-121 — Płatność PayU za depozyt** — klient wpłaca zwrotny depozyt (model pośrednictwa) online przez PayU zamiast przelewu ręcznego. Spina się z lifecyclem zamówienia + typem umowy (T-113). PayU sandbox już ograny (`~/secrets/payu/`, damianchen+digit) → przeniesienie na prod. **Dotyka strefy kruchej `class-asiaauto-order.php`** (statusy/rezerwacja) → osobny świadomy projekt, najpierw spec. Decyzja prawna: depozyt zwrotny przez PayU a regulamin śude/zwroty.
+- [ ] **T-113 — Umowa o finansowanie / leasing jako alternatywa dla umowy pośrednictwa** — klient generuje/wybiera typ umowy. **Dotyka strefy kruchej `class-asiaauto-contract.php` + wizard** → osobny świadomy projekt, najpierw spec. Wymaga wzorca umowy o finansowanie od Ruslana + decyzji prawnej (leasing/kredyt/pożyczka?).
+- [ ] **T-116 — Zaawansowana wyszukiwarka fasetowa** — filtrowanie po atrybutach technicznych: liczba miejsc, przyspieszenie 0-100, długość (zakres mm) itd. Cel: precyzyjny dobór auta po parametrach. Wymaga audytu jakie pola spec mamy w meta z Dongchedi + ew. dociągnięcie brakujących; range-slidery.
+- [ ] **T-152 — Wystawianie ogłoszeń na Otomoto** — nowy kanał dystrybucji: automatyczny eksport ofert z CPT `listings` do Otomoto (feed XML/API dla dealerów). Cel: zasięg poza własną stroną. Do rozpoznania: format integracji (CSV/XML vs API), mapowanie pól, polityka cenowa na portalu, model rozliczeń.
+- [ ] **T-162 — Sekcja kontentowa/blogowa (baza wiedzy)** — własny dział treści: rankingi (np. „Top 20 SUV-ów w Chinach 2026"), porównania z europejskim premium (AITO M9 vs Mercedes GLS / BMW X7 itd.), poradniki importu. Cel: **AEO/SEO** (treści cytowalne przez LLM-y + long-tail porównawczy), autorytet, ruch top-funnel → konwersja na listingi. Do ustalenia: CPT/kategorie vs natywne WP posts, szablon rankingu (tabela + linki do hubów), template „X vs Y" (side-by-side z danych Dongchedi + dane konkurenta EU), Schema (Article/ItemList), pipeline (ręczny vs n8n). Spina się z porównywarką T-115.
 
 ---
 
