@@ -1,5 +1,17 @@
 # Historia wersji asiaauto-sync
 
+## 0.33.1 — 2026-06-16 (T-185 rewizja: OSOBNA strona „Import z Che168" + strefa krucha cofnięta do addytywu)
+
+**Powód rewizji (decyzja Janka):** w 0.33.0 che168 był dołożony do współdzielonego panelu „Dodaj z Dongchedi" (używa go też sprzedawca/Ruslan) + refaktorował `importListing` (strefa krucha). Oba zbędne. Lepsza architektura: **osobne menu, czysto samo Che168**, reużywające wspólnych klas jako konsument, bez dotykania panelu Ruslana i bez refaktoru kruchej ścieżki.
+
+**Zmiany:**
+- **Nowa `class-asiaauto-admin-che168-import.php`** — samodzielne top-level menu „Import z Che168", **całe za gate** (`add_menu_page` rejestrowane tylko gdy login∈ASIAAUTO_CHE168_PREVIEW → Ruslan nie dostaje nawet pozycji menu). Własne AJAX-y (`asiaauto_che168_{preview,log,import}`), pełna tabela dry-run, „Zapisz do logu", lista logu, import za flagą.
+- **`class-asiaauto-importer.php` PRZYWRÓCONY do oryginału** (704 linie) — `importListing`/`setMotorsMeta`/`setTaxonomies` bajt w bajt jak przed T-185. `buildPlan`/`computeIdentity`/`computeMeta`/`computeTerms` dopisane jako **czyste metody OBOK** (woła je tylko dry-run; ścieżka realnego importu ich nie używa). **Strefa krucha NIETKNIĘTA.** Wierność dry-run vs realny listing dongchedi: 6/6 title, 88/88 meta, 54/54 terms.
+- **`class-asiaauto-admin-manual-import.php` PRZYWRÓCONY do stanu sprzed T-185** — panel Ruslana bez śladu che168/dry-run.
+- Bez zmian (czyste, konsumowane przez nową stronę): adapter, `resolveForSource` w mapping, che168-model-map, param-map, klasa logu, stałe wp-config.
+
+**Weryfikacja:** gate per user (`js`=widzi menu, `primaauto`=nie); test E2E w wp-admin (Chrome, jako js) — Denza D9 57888520: dry-run pełny, fuel/drive `🆕 nowy`, „Zapisz do logu" → snapshot `57888520-...json` na liście. Wiązanie `resolveForSource` w realny import odroczone do włączenia che168 (T-186, świadoma edycja kruchej ścieżki).
+
 ## 0.33.0 — 2026-06-16 (T-185: Che168 ręczny import + log wdrożeniowy — ukryte, faza obserwacji)
 
 **Kontekst:** feed dongchedi nawracająco pada (T-182); dostawca steruje fallbackiem na Che168 (C2C aut używanych, inny profil — kurator wybiera auta ręcznie, nie automat). Pełny ADR: `docs/decyzje/2026-06-16-che168-manual-import.md`.

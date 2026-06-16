@@ -1,6 +1,13 @@
 # ADR 2026-06-16 — Che168 ręczny import + log wdrożeniowy (T-185)
 
-**Status:** wdrożone na prod (v0.33.0). Realny import Che168 WYŁĄCZONY (faza obserwacji).
+**Status:** wdrożone na prod (v0.33.1). Realny import Che168 WYŁĄCZONY (faza obserwacji).
+
+> **REWIZJA 2026-06-16 (v0.33.1) — nadrzędna nad opisem niżej.** Pierwsza implementacja (0.33.0) dokładała che168 do **współdzielonego** panelu „Dodaj z Dongchedi" (używa go też sprzedawca/Ruslan) i **refaktorowała `importListing` (strefa krucha)**. Decyzja Janka: oba zbędne. Wdrożona architektura docelowa:
+> - **Osobne top-level menu „Import z Che168"** (`class-asiaauto-admin-che168-import.php`), całe za gate — `add_menu_page` rejestrowane TYLKO gdy login∈PREVIEW, więc Ruslan nie dostaje nawet pozycji menu. Reużywa wspólnych klas (API, adapter, importer::buildPlan, translator, mapping, log) jako KONSUMENT.
+> - **`importListing` przywrócony do oryginału** (strefa krucha NIETKNIĘTA); `buildPlan`/`compute*` jako czyste metody OBOK, wołane tylko przez dry-run. Wiązanie `resolveForSource` w realny import odroczone do włączenia che168 (T-186).
+> - **Panel „Dodaj z Dongchedi" przywrócony do stanu sprzed T-185** (Ruslan bez śladu che168).
+> - Powód: „tylko dla mnie" na współdzielonym panelu wymuszał gateowanie każdego elementu (tabela dry-run wyciekła do Ruslana — incydent), a po testach che168 i tak włączymy Ruslanowi jedną flagą; osobna strona = pełna izolacja bez ryzyka i bez dotykania serca importu. Lekcja: memory `feedback_shared_panel_gate_all_view_additions`.
+> Sekcje poniżej opisują wspólny mechanizm buildPlan/adapter/resolver/log — nadal aktualny; zmienił się tylko nośnik UI (osobna strona) i to, że ścieżka prod importera została cofnięta do oryginału (compute* są addytywne, nie wpięte w importListing).
 
 ## Kontekst
 
