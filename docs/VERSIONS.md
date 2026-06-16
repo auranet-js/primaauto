@@ -1,5 +1,21 @@
 # Historia wersji asiaauto-sync
 
+## 0.33.0 — 2026-06-16 (T-185: Che168 ręczny import + log wdrożeniowy — ukryte, faza obserwacji)
+
+**Kontekst:** feed dongchedi nawracająco pada (T-182); dostawca steruje fallbackiem na Che168 (C2C aut używanych, inny profil — kurator wybiera auta ręcznie, nie automat). Pełny ADR: `docs/decyzje/2026-06-16-che168-manual-import.md`.
+
+**Architektura:** wspólny kod symulacji i realnego importu. `AsiaAuto_Importer::importListing()` zrefaktorowany (ekstrakcja czystych `computeIdentity`/`computeMeta`/`computeTerms`/`buildPlan` bez zmiany zachowania — `setMotorsMeta`/`setTaxonomies` to teraz pętle po `compute*`). Dry-run == realny import (zero driftu). Strefa krucha za świadomą zgodą Janka; chroniona testem regresji **6/6 title, 88/88 meta, 54/54 terms** na realnych listingach dongchedi.
+
+**Nowe pliki:** `class-asiaauto-che168-adapter.php` (address→city, first_registration→reg_date, extra.configuration→extra_prep po `id`), `data/che168-param-map.php` (51 id→klucz dongchedi), `class-asiaauto-che168-log.php` (snapshot dry-run → `uploads/asiaauto/che168-dryrun/`), `data/che168-model-map.php` (51 nadpisań resolvera).
+
+**Zmienione:** `class-asiaauto-mapping.php` (`resolveForSource()` — reverse-index brand-mappingu + reguły normalizacji; dongchedi→getEuForCn bez zmian), `class-asiaauto-admin-manual-import.php` (gate `che168Allowed`, detekcja źródła, pełna tabela zgodności dry-run [title/slug/mapowanie/taksonomie ze statusem/meta/extra_prep pogrupowany], przycisk „Zapisz do logu wdrożeniowego", warunkowy import, widok listy logu), `asiaauto-sync.php` (require_once + bump).
+
+**Gate:** `wp-config.php` `ASIAAUTO_CHE168_PREVIEW='js'` (brak stałej = niewidoczne, zero zmian UX dongchedi) + `ASIAAUTO_CHE168_IMPORT_ENABLED=false` (faza obserwacji — realny import che168 ukryty).
+
+**Smoke:** resolver che168 5/5 ze spec; adapter 5/5 (city+vin+reg_date, extra_prep, obrazy `2sc2.autoimg.cn`); tabela podglądu Denza D9 = 9 taksonomii/11 meta/8 kat·46 wierszy; log save→all→re-decode OK (diakrytyki zachowane). Backupy `.bak-2026-06-16-che168` (importer/mapping/manual-import/asiaauto-sync/wp-config).
+
+**Faza obserwacji (otwarta):** Janek zbiera snapshoty → wspólna kalibracja `che168-model-map`/`che168-param-map`/wartości/resolver → po pokryciu `ASIAAUTO_CHE168_IMPORT_ENABLED=true`. Automat = osobny T-186.
+
 ## 0.32.73 — 2026-06-09 (rotation: kasowanie zdjęć przy permanent delete + backfill 54508 sierot)
 
 **Kontekst:** audyt inode konta — `uploads/asiaauto/` urósł do ~575 tys. plików / 13,2 GB (główny konsument inode). Korzeń: `deleteOldTrash()` kasował listingi przez `wp_delete_post($pid, true)`, a WP core (`wp-includes/post.php:3861` — „Point all attachments to this post up one level") **przepina attachmenty usuwanego posta na `post_parent=0`**. `cleanOrphanedImages()` filtruje `post_parent>0` → nigdy ich nie łapał → „0 orphaned images removed" przez wszystkie 84 uruchomienia crona od marca. Zdjęcia każdego usuniętego auta (oryginał + 4 miniatury) wyciekały na dysk → **54 508 osieroconych attachmentów**.
