@@ -1,5 +1,28 @@
 # Historia wersji asiaauto-sync
 
+## 0.33.3 — 2026-06-17 (T-186 fala 2: wczesny getEuForCn + aliasy nazw domowych)
+
+**Kontekst:** rozszerzenie analityki na kolejne 50 ogłoszeń Dongchedi (41 modeli) wykazało pokrycie 30/41; domknięte do **35/41** addytywnie.
+
+**Zmiany:**
+- `class-asiaauto-mapping.php` `resolveChe168` — krok **0a: wczesny `getEuForCn`** na surowych mark/model PRZED stripem marki. Łapie osobną markę che168 „Galaxy / Galaxy L6/L7" (== klucz brand-mappingu `Galaxy|Galaxy L6`), który strip kroku 2 wcześniej rozbijał („Galaxy L6"→„L6"→miss).
+- `data/che168-model-map.php` — 4 aliasy nazw domowych: `Li Auto|Li L6`→L6, `NIO|ET5T`→ET5 Touring, `Changan|CS75 PLUS iDD` i `Changan|长安CS75PLUS`→CS75 Plus.
+- Bez regresji: pierwsza 20 16→**17/20**.
+
+**Grupa B (pending, decyzje per-hub):** Dongfeng Fengxing Xinghai T5 (sub-brand→Forthing), BYD Seal U/Song Plus (nazwa che168 wieloznaczna), BYD Han L EV, iCAR Super V23, Geely Galaxy Starship 8 (nowe warianty), Mazda 3 Axela (poza importem). ADR: `docs/decyzje/2026-06-17-che168-normalize-at-entry.md`.
+
+## 0.33.2 — 2026-06-17 (T-186: normalizacja tożsamości Che168 PRZY WEJŚCIU)
+
+**Powód:** dowód (`tmp/che168-vs-dongchedi-proof`) — surowe mark/model che168≠Dongchedi (0/12 identycznych), `getEuForCn(surowiec che168)`=1/16. Rozjazd realny. Zamiast wpinać resolver w strefę kruchą (stary plan T-186) — normalizacja w adapterze.
+
+**Zmiany (addytywne, `importListing` NIETKNIĘTY):**
+- `class-asiaauto-mapping.php` — nowa `canonicalKeyForSource()` (che168 → klucz CN brand-mappingu przez `resolveChe168` + reverse-index sig→klucz; dongchedi pass-through). `resolveChe168`: strip CJK z marki (`AITO 问界`→`AITO`), alias `IM`→`IM Motors`, prefiks `智己`.
+- `class-asiaauto-che168-adapter.php` `normalize()` — stempluje kanoniczny `mark`/`model` (raw w `*_che168_raw`).
+- `class-asiaauto-importer.php` `computeIdentity`/`computeTerms` (dry-run) — `resolveForSource`→`getEuForCn` (dry-run == realny import). Komentarz nagłówkowy zaktualizowany (stary plan „resolver w importListing" unieważniony).
+- `data/che168-model-map.php` — 5 aliasów: Wey Lanshan, eπ008, Li L9, Fang Cheng Bao Leopard 5, VOYAH Dreamer (PHEV; override ślepy na napęd — EV do dorobienia).
+
+**Weryfikacja:** realna ścieżka adaptera→getEuForCn 16/20 (4 NULL = luki brand-mappingu wspólne z Dongchedi). Import che168 nadal OFF. ADR: `docs/decyzje/2026-06-17-che168-normalize-at-entry.md`.
+
 ## 0.33.1 — 2026-06-16 (T-185 rewizja: OSOBNA strona „Import z Che168" + strefa krucha cofnięta do addytywu)
 
 **Powód rewizji (decyzja Janka):** w 0.33.0 che168 był dołożony do współdzielonego panelu „Dodaj z Dongchedi" (używa go też sprzedawca/Ruslan) + refaktorował `importListing` (strefa krucha). Oba zbędne. Lepsza architektura: **osobne menu, czysto samo Che168**, reużywające wspólnych klas jako konsument, bez dotykania panelu Ruslana i bez refaktoru kruchej ścieżki.
