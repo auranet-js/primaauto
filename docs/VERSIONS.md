@@ -1,5 +1,26 @@
 # Historia wersji asiaauto-sync
 
+## 0.33.10 — 2026-06-18 (Che168: wersja/trim w tytule — parytet z dongchedi)
+
+**Powód:** builder tytułu (`computeIdentity`) jest wspólny i agnostyczny — tytuł =
+`{mark} {model} {year} {complectation}`. Różnica była w DANYCH: dongchedi podaje `complectation`
+(trim) na wierzchu, che168 zostawia je puste — trim siedzi w `param_93` (车型名称) za prefiksem
+„YYYY款" (np. `尚界Z7T 2026款 Max`). Slug bez różnicy (nie zawiera trim).
+
+**Zmiany (addytywne, normalizacja-przy-wejściu):**
+- `class-asiaauto-che168-adapter.php` `normalize()` — ekstrakcja trim z `param_93` (część po „款")
+  → `$data['complectation']` (gdy puste). Wspólny builder daje odtąd tytuł z wersją jak dongchedi.
+- `class-asiaauto-translator.php` `translateComplectation` — strip resztkowego CJK na końcu
+  (marketing che168 `很有型`/`激光雷达` nieobjęty mapą). **Guarded** → no-op dla czystych ASCII
+  (dongchedi bez regresji; mapa już zna 智驾版→Smart Drive, 旗舰型→Flagship, 激光雷达→LiDAR…).
+
+**Wynik (próbka):** „SAIC Shangjie Z7T 2026 Max", „Li Auto L9 2025 Ultra", „BYD Han DM-i 2025
+DM-i Smart Drive 125KM LiDAR Flagship", „Zeekr X 2024 4-osobowy RWD Cube" — czyste, z wersją.
+Slugi niezmienione. Backupy `.bak-2026-06-18-compl`.
+
+**Znane (osobne, nie z tej zmiany):** część ofert che168 ma `year=0` (źródło nie podało roku
+→ „AITO M9 0 …") — do ekstrakcji `year`; redundancja trim×model (ET5 Touring…Touring) = kosmetyka.
+
 ## 0.33.9 — 2026-06-18 (Che168 Faza 2: tłumaczenia wartości CJK)
 
 **Powód:** po param-mapie (0.33.8) 11 kluczy kategorycznych było zmapowanych, ale ukrytych przez
