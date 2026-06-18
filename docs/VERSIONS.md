@@ -1,5 +1,21 @@
 # Historia wersji asiaauto-sync
 
+## 0.33.7 — 2026-06-18 (nowa marka Che168: 尚界 → SAIC Shangjie)
+
+**Powód:** ogłoszenie 58779380 — nowa marka `尚界` (Shangjie, HIMA SAIC+Huawei) + model
+`尚界Z7T`, oba CJK → sierota, make z pustym slugiem. VIN `LSJ`=SAIC, web/Wikipedia + reference
+west-motors → „SAIC Z7/Z7T". Etykieta marki **SAIC Shangjie** (decyzja Janka, hub
+`/samochody/saic-shangjie/z7t/`).
+
+**Zmiany (addytywne, 0 regresji — nowe klucze):**
+- `class-asiaauto-mapping.php` `resolveChe168` — marka `尚界`→`SAIC Shangjie` w `cnPrefix`
+  (strip prefiksu modelu) + `$markAlias` (marka czysto-CJK, nieosiągalna stripem). Skaluje:
+  kolejne modele 尚界 = już tylko wpis w brand-mappingu.
+- `data/brand-mapping-v6.1.php` — wpis `SAIC Shangjie|Z7T` (Z7T = shooting-brake; Z7 = sedan).
+
+**Weryfikacja:** 58779380 → SAIC Shangjie/Z7T mapped=1, slug make `saic-shangjie` (nie pusty),
+serie `z7t`; enumy znormalizowane (rwd-rear-engine→RWD, 银/灰色→silver). Smoke 4/5 bez regresji.
+
 ## 0.33.6 — 2026-06-18 (grupa B: domknięcie 2 luk mark/model Che168)
 
 **Powód:** odświeżenie logów dry-run (v0.33.4) zostawiło 2 rezydua mark/model (nie enumy):
