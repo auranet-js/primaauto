@@ -1,5 +1,23 @@
 # Historia wersji asiaauto-sync
 
+## 0.33.4 — 2026-06-18 (T-186: normalizacja enumów atrybutów Che168 PRZY WEJŚCIU)
+
+**Powód:** dry-run oferty 58545168 (Denza N8L) — 3 taksonomie „🆕 zostanie utworzony"
+(`crossover/suv`, `plug-in hybrid`, `awd (front-engine)`). Surowiec enumów che168 ≠ Dongchedi →
+slug z `api_value` dawałby śmieciowe duplikaty (`crossover-suv` obok `suv`). Tożsamość termu
+idzie po slugu, nie po tłumaczeniu — sama dopiska do słowników nie wystarcza.
+
+**Zmiany (addytywne, `importListing`/`setTaxonomies` NIETKNIĘTE):**
+- `data/che168-enum-map.php` (nowy) — płaska mapa danych surowiec che168 → klucz słownika
+  Dongchedi (body/engine/drive/color). Domena zamknięta (`getFilters`) → mapa, bez resolvera.
+- `class-asiaauto-che168-adapter.php` — `normalizeEnums()` w `normalize()` przed kanonizacją
+  tożsamości; surowiec w `{field}_che168_raw`. Słowniki `translations-*.php` reużyte 1:1.
+- Mild-hybrydy zwinięte w `hybrid` (HEV) — decyzja Janka (bez osobnego filtra MHEV).
+
+**Pokrycie:** body 10/10 + engine 14/14 + drive 11/11 → istniejące termy; zero nowych termów,
+zero śmieci. 58545168: 9/9 ISTNIEJE. Bez regresji mark/model. Import che168 nadal OFF.
+ADR: `docs/decyzje/2026-06-18-che168-enum-normalize.md`.
+
 ## 0.33.3 — 2026-06-17 (T-186 fala 2: wczesny getEuForCn + aliasy nazw domowych)
 
 **Kontekst:** rozszerzenie analityki na kolejne 50 ogłoszeń Dongchedi (41 modeli) wykazało pokrycie 30/41; domknięte do **35/41** addytywnie.
