@@ -1,5 +1,19 @@
 # Historia wersji asiaauto-sync
 
+## 0.33.6 — 2026-06-18 (grupa B: domknięcie 2 luk mark/model Che168)
+
+**Powód:** odświeżenie logów dry-run (v0.33.4) zostawiło 2 rezydua mark/model (nie enumy):
+57762274 „Tank 300 New Energy" (sierota), 58645565 „IM"/`智己LS8` (best-effort raw zamiast hubu).
+
+**Zmiany (addytywne — nowe klucze, zero zmian istniejących linii, 0 orphanów):**
+- `data/che168-model-map.php` — `Tank|Tank 300 New Energy` → konsolidacja do istniejącego huba
+  Tank/300 (wariant nazwy „New Energy" = hybryda/EREV; wzorzec jak `Changan|CS75 PLUS iDD`).
+- `data/brand-mapping-v6.1.php` — nowy wpis `IM Motors|LS8` (realny nowy model; CJK `智己`
+  zdejmuje algorytm resolvera, więc wystarczy entry). Hub LS8 utworzy się czysto przy imporcie.
+
+**Weryfikacja:** 57762274 → Tank/300 (0 nowych termów), 58645565 → IM Motors/LS8 (1 nowy term
+`serie:LS8` = legalny nowy model). Backupy `.bak-2026-06-18-{tank,ls8}`.
+
 ## 0.33.5 — 2026-06-18 (cleanup: usunięty martwy resolveForSource)
 
 **Powód:** po decyzji „normalizuj na wejściu" (ADR 2026-06-17) `AsiaAuto_Mapping::resolveForSource()`
