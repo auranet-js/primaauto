@@ -1,5 +1,27 @@
 # Historia wersji asiaauto-sync
 
+## 0.33.8 — 2026-06-18 (Che168 param-map: +32 id, odzysk specyfikacji EV/silnika)
+
+**Powód:** che168 pokazywał mało danych (Z7T 28/59 param vs SU7 dongchedi 233/371). Diagnoza:
+(1) che168 ze źródła zwraca mniej (~59 vs 371, brak list wyposażenia — `option`/`moreoptions`
+puste); (2) z tego 31 ukrytych przez luki param-mapy + wartości CJK. che168 podaje parametry pod
+numerycznymi `id`, więc `che168-param-map.php` to **adapter id→klucz** — cała reszta (etykiety,
+kategorie, sortowanie, grupowanie) to **wspólny** `translations-extra-prep.php` (ten sam co dongchedi).
+
+**Sample-based (próbka 21 ofert dopasowanych do filtrów importu = same chińskie marki):** agregacja
+ujawniła 76 niezmapowanych id wg częstości. Dodane **32 mapowania** w `data/che168-param-map.php`:
+- **21 numerycznych** (renderują od razu): zasięg CLTC/WLTC, zużycie energii/ekwiwalent,
+  moc/moment łączny + przód/tył silnika EV, moc/moment/obroty silnika spalinowego, moc szybkiego
+  ładowania, zakres %, czas ładowania, promień zawracania.
+- **11 kategorycznych** (zmapowane, czekają na tłumaczenia wartości CJK — Faza 2): typ/producent/
+  gwarancja baterii, typ/liczba/układ silników EV, rodzaj energii, norma emisji, układ silnika,
+  typ 4x4, koło zapasowe.
+
+**Wynik:** Z7T 28→**40** pokazanych, próbka 21 → **68%**; kolejność kategorii identyczna jak
+dongchedi (ten sam config). Post #361316 (zaimportowany Z7T) — meta odświeżone. Backup
+`.bak-2026-06-18-expand`. **Faza 2 (pending):** tłumaczenia wartości CJK; uwaga — che168 używa
+innych znaków niż dongchedi dla części wartości (zawieszenie `悬架` vs `悬挂`).
+
 ## 0.33.7 — 2026-06-18 (nowa marka Che168: 尚界 → SAIC Shangjie)
 
 **Powód:** ogłoszenie 58779380 — nowa marka `尚界` (Shangjie, HIMA SAIC+Huawei) + model
