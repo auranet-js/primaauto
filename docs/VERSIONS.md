@@ -1,5 +1,28 @@
 # Historia wersji asiaauto-sync
 
+## 0.33.12 — 2026-06-18 (Che168: import wyposażenia z extra.option)
+
+**Powód:** ogłoszenia che168 miały „Dane techniczne", ale pustą sekcję wyposażenia
+(`[asiaauto_equipment]`). Diagnoza: che168 trzyma wyposażenie OSOBNO w `extra.option`
+(displayopts + moreoptions[].opts, CJK), a `extra.configuration` to wyłącznie spec techniczny —
+adapter czytał tylko configuration. Dongchedi wplata wyposażenie w `extra_prep`, stąd u niego
+działa „na maksa". Dokumentacja auto-api (`autoapicom/auto-api-php`) nie opisuje pól — źródłem
+prawdy odpowiedź API.
+
+**Zmiany (addytywne, normalizacja-przy-wejściu; strefa krucha importer/render NIETKNIĘTA):**
+- `data/che168-option-map.php` — **nowy**. Mapa 37 distinct optionname (CJK) → klucz `extra_prep`,
+  zbudowana z PRÓBKI 120 ofert (`tmp/che168-option-aggregate-out.tsv`).
+- `class-asiaauto-che168-adapter.php` — `extractOptions()` czyta `extra.option`, wstrzykuje do
+  `extra_prep` wartość `标配` (→ „Tak" → checkmark) tylko gdy klucza brak (spec config wygrywa).
+- `data/translations-extra-prep.php` — 5 nowych etykiet (`auto_brake_hold`, `rear_air_outlet`,
+  `uv_protection_glass`, `center_diff_lock`, `phone_mapping`) + dopięcie istniejących kluczy
+  uncategorized do kategorii (adas: `active_brake`/`lane_keeping_assist`/`line_support`); relabel
+  `active_closed_inlet_grid` „Aktywny grill"→„Aktywna atrapa".
+
+**Wynik:** BAIC BJ60 58760644 (post 361348) → 22 pozycje wyposażenia. Istniejące drafty
+odświeżone re-adapterem (`_asiaauto_extra_prep`), bez re-importu; nowe importy automatycznie.
+58779380 ma 0 (oferta bez `extra.option` w feedzie — nie luka).
+
 ## 0.33.11 — 2026-06-18 (Che168: fallback rocznika gdy year=0)
 
 **Powód:** część ofert che168 ma `year=0` (auto nierejestrowane, `first_registration="未上牌"`)

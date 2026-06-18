@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Prima-Auto Sync
  * Description: Synchronizacja ogłoszeń z Dongchedi/Che168, pipeline cenowy, zamówienia, umowy PDF.
- * Version: 0.32.58
+ * Version: 0.33.12
  * Author: Auranet / Jan Schenk
  * Author URI: https://auranet.com.pl
  * Text Domain: asiaauto
@@ -13,7 +13,7 @@
 
 defined('ABSPATH') || exit;
 
-define('ASIAAUTO_VERSION', '0.32.58');
+define('ASIAAUTO_VERSION', '0.33.12');
 define('ASIAAUTO_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('ASIAAUTO_PLUGIN_URL', plugin_dir_url(__FILE__));
 
@@ -26,6 +26,8 @@ if (file_exists(ASIAAUTO_PLUGIN_DIR . 'vendor/autoload.php')) {
 // Static / utility classes (no constructor or CLI-only with args)
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-logger.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-mapping.php';
+require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-che168-adapter.php';
+require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-che168-log.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-api.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-price.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-translator.php';
@@ -40,6 +42,7 @@ require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-taxonomy.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-cpt.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-admin.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-admin-manual-import.php';
+require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-admin-che168-import.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-admin-listings-views.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-order-content.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-order.php';
@@ -50,6 +53,7 @@ require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-contract.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-shortcodes.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-brand-hub.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-rest-hub.php';
+require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-spec.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-hub-title-generator.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-inventory.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-single.php';
@@ -165,6 +169,7 @@ add_action('plugins_loaded', function () {
     if (is_admin()) {
         new AsiaAuto_Admin();
         new AsiaAuto_Admin_Manual_Import();
+        new AsiaAuto_Admin_Che168_Import();
         new AsiaAuto_Admin_Listings_Views();
         new AsiaAuto_Order_Admin();
         new AsiaAuto_Listing_Editor();
