@@ -1,5 +1,22 @@
 # Historia wersji asiaauto-sync
 
+## 0.33.9 — 2026-06-18 (Che168 Faza 2: tłumaczenia wartości CJK)
+
+**Powód:** po param-mapie (0.33.8) 11 kluczy kategorycznych było zmapowanych, ale ukrytych przez
+wartości CJK (filtr anty-CJK w renderze). Zbiór realnych wartości blokujących zebrany z próbki 21.
+
+**Zmiany (addytywne):**
+- `data/translations-extra-prep.php` (wspólny config, sekcja `values`) — blok wariantów Che168:
+  zawieszenie (che168 `悬架` ≠ dongchedi `悬挂`), nadwozie, hamulce, typ silnika EV, producenci
+  ogniw (CATL/CALB/EVE/Gotion/SVOLT), typ baterii kombi, koło zapasowe, sub-marki.
+- `class-asiaauto-translator.php` `translateExtraPrepValue` — wzorce (kod): gwarancja z CHIŃSKIMI
+  cyframi lat (`八年或16万公里`→`8 lat / 160 000 km`; dongchedi dawał cyfry arabskie), pierwszy
+  właściciel bez limitu, `增程器`→Range extender, oktan `92号`→`92 oktanów`.
+
+**Wynik:** Z7T 40→**44** pokazanych, próbka 21 → 68%→**75%** (z 47% na starcie), **0 wartości
+blokujących CJK**. Reszta ukrytych = rzadki ogon `param_{id}` bez czystego klucza + `选配`/puste.
+Backupy `.bak-2026-06-18-{che168vals,patterns}`.
+
 ## 0.33.8 — 2026-06-18 (Che168 param-map: +32 id, odzysk specyfikacji EV/silnika)
 
 **Powód:** che168 pokazywał mało danych (Z7T 28/59 param vs SU7 dongchedi 233/371). Diagnoza:
