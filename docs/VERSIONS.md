@@ -1,5 +1,22 @@
 # Historia wersji asiaauto-sync
 
+## 0.33.13 — 2026-06-19 (Che168: alias marki Shanhai → Jetour)
+
+**Powód:** ogłoszenie 58660114 wychodziło sierotą — che168 wystawia serię new-energy Jetoura
+„Shanhai" (山海) jako osobną MARKĘ `mark="Shanhai"`, model `"Shanhai L9"` (wersja EN che168
+pokazuje przy tym „Jetour"). Surowy klucz `Shanhai|Shanhai L9` nie istnieje w brand-mappingu
+(tam kanoniczny `Jetour Shanhai|Jetour Shanhai L9`), więc `resolveChe168` zwracało null → `mapped=NIE`.
+
+**Zmiana (addytywna, normalizacja-przy-wejściu; strefa krucha NIETKNIĘTA):**
+- `data/che168-model-map.php` — +1 override `'Shanhai|Shanhai L9'` → sygnatura EU `Jetour|Shanhai L9`.
+  Mostkuje surowy klucz che168 do istniejącej sygnatury brand-mappingu; `sigToKey` rozwija ją do
+  kanonicznego klucza CN → dowiązanie do **istniejącego** huba serie 5624 (slug `shanhai-l9`,
+  parent = make Jetour 4525). Zero nowych termów.
+
+**Wynik:** 58660114 → `mapped=TAK`, mark=Jetour, serie „Shanhai L9", tytuł
+„Jetour Shanhai L9 2025 1.5TD 2DHT Air 7-osobowy". Wyposażenie: `extra.option` (11/11 optionname
+zmapowanych, 0 braków). Backup `che168-model-map.php.bak-2026-06-19-shanhai`.
+
 ## 0.33.12 — 2026-06-18 (Che168: import wyposażenia z extra.option)
 
 **Powód:** ogłoszenia che168 miały „Dane techniczne", ale pustą sekcję wyposażenia
