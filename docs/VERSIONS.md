@@ -1,5 +1,16 @@
 # Historia wersji asiaauto-sync
 
+## 0.33.5 — 2026-06-18 (cleanup: usunięty martwy resolveForSource)
+
+**Powód:** po decyzji „normalizuj na wejściu" (ADR 2026-06-17) `AsiaAuto_Mapping::resolveForSource()`
+przestał być wołany przez żywy kod — pozostały tylko `canonicalKeyForSource()` (woła
+`resolveChe168()` bezpośrednio z adaptera) i `getEuForCn()`. Dług usunięty świadomym commitem.
+
+**Zmiany:** usunięta metoda `resolveForSource()` z `class-asiaauto-mapping.php`; poprawione
+dwa nieaktualne komentarze (`class-asiaauto-importer.php`, `data/che168-model-map.php`)
+wskazujące na usuniętą metodę → teraz `resolveChe168()`. Backup `.bak-2026-06-18-deadcode`.
+Bez regresji: smoke mark/model 4/5 mapped jak wcześniej.
+
 ## 0.33.4 — 2026-06-18 (T-186: normalizacja enumów atrybutów Che168 PRZY WEJŚCIU)
 
 **Powód:** dry-run oferty 58545168 (Denza N8L) — 3 taksonomie „🆕 zostanie utworzony"
