@@ -1,5 +1,14 @@
 # Historia wersji asiaauto-sync
 
+## 0.33.11 — 2026-06-18 (Che168: fallback rocznika gdy year=0)
+
+**Powód:** część ofert che168 ma `year=0` (auto nierejestrowane, `first_registration="未上牌"`)
+→ tytuł „AITO M9 0 …". Rok modelowy jest jednak w `param_93` ("YYYY款").
+
+**Zmiana:** `class-asiaauto-che168-adapter.php` `normalize()` — fallback rocznika
+`year` → `first_registration` (YYYY) → `param_93` ("YYYY款"). Refaktor: `name93` wyciągane raz
+(wspólne dla wersji i rocznika). Wynik: AITO M9 55603575 `year=0`→2025. 1/21 w próbce dotknięte.
+
 ## 0.33.10 — 2026-06-18 (Che168: wersja/trim w tytule — parytet z dongchedi)
 
 **Powód:** builder tytułu (`computeIdentity`) jest wspólny i agnostyczny — tytuł =
