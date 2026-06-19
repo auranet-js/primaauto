@@ -1,5 +1,26 @@
 # Historia wersji asiaauto-sync
 
+## 0.33.14 — 2026-06-19 (Che168: import przeniesiony do menu Ogłoszeń + dostęp dla sprzedawcy)
+
+**Powód:** faza obserwacji domknięta, realny import che168 WŁĄCZONY (v0.33.11). Janek chce,
+żeby Che168 było drugim źródłem importu ręcznego dostępnym tak samo jak Dongchedi — w tym dla
+Ruslana (sprzedawca). Pierwotny gate „osobne top-level menu, tylko login `js`" stracił rację bytu.
+
+**Zmiana (`includes/class-asiaauto-admin-che168-import.php`):**
+- `addMenuPage()` — `add_menu_page` (top-level „Import z Che168", pozycja 27) → `add_submenu_page`
+  pod `edit.php?post_type=listings` jako **„Dodaj z Che168"**, obok „Dodaj z Dongchedi". Usunięty
+  early-return gate — dostępem steruje cap `IMPORT_CAP` (param submenu).
+- `allowed()` — przepisane z gate'u login∈`ASIAAUTO_CHE168_PREVIEW` na zwykłe
+  `current_user_can(IMPORT_CAP)`; otwiera wszystkie handlery (preview/log/import/render) dla
+  admina **i** sprzedawcy (rola `primaauto` = Ruslan). Stała `ASIAAUTO_CHE168_PREVIEW` przestaje
+  być używana (można posprzątać z wp-config, nieszkodliwa).
+- `enqueueScripts()` — hook `toplevel_page_` → `listings_page_` (zmiana typu strony).
+- H1 — usunięte „(ukryte — tylko dla Ciebie)".
+
+**Weryfikacja dostępu:** `js` (administrator) = DOSTĘP, `primaauto` (sprzedawca) = DOSTĘP.
+Strefa krucha (`importListing`/taksonomie/adapter) NIETKNIĘTA. Backup
+`class-asiaauto-admin-che168-import.php.bak-2026-06-19-submenu`.
+
 ## 0.33.13 — 2026-06-19 (Che168: alias marki Shanhai → Jetour)
 
 **Powód:** ogłoszenie 58660114 wychodziło sierotą — che168 wystawia serię new-energy Jetoura
