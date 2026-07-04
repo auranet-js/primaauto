@@ -1,0 +1,92 @@
+{
+  "nazwa": "Etap 1 — Koncepcja i budowa platformy (do prezentacji 08.04.2026)",
+  "okres": "luty — 8 kwietnia 2026",
+  "opis": "Od pomysłu do działającego produktu w ok. 6 tygodni: kompletna platforma sprzedaży aut importowanych z Chin — automatyczny katalog ~4-5 tys. ofert synchronizowany z chińską giełdą co 15 minut, tłumaczenia chińsko-polskie, kalkulator ceny 'pod klucz' (cło, akcyza, VAT), system zamówień z umowami PDF i panel dla sprzedawcy. Na dzień prezentacji: ~23 000 linii autorskiego kodu (bez bibliotek), zero gotowych szablonów.",
+  "referencja_wyceny": "Prezentacja u Ruslana 08.04.2026 — zadeklarowana wartość inwestycji: 50 000 zł",
+  "bloki": [
+    {
+      "nazwa": "Koncepcja, research i przygotowanie projektu",
+      "opis": "Pomysł i model biznesowy platformy, research rynku importu aut z Chin i konkurencji, znalezienie i przetestowanie źródła danych o autach (giełda Dongchedi), negocjacje handlowe z dostawcą feedu (obniżenie ceny z 170 do 100 USD/mc na okres developmentu), projekt architektury całego systemu.",
+      "skala": "Wybór spośród źródeł danych, negocjacje B2B z dostawcą, architektura 11 modułów",
+      "godz_rynkowe": 50,
+      "godz_realne": 50
+    },
+    {
+      "nazwa": "Fundament danych i integracja z giełdą Dongchedi",
+      "opis": "Szkielet systemu: własny typ treści 'ogłoszenie samochodowe' z 10 wymiarami filtrowania (marka, model, paliwo, nadwozie…) i stabilne połączenie z płatnym API danych, odporne na awarie (automatyczne ponawianie).",
+      "skala": "Model danych pod ~5 tys. ofert; integracja z 5 endpointami zewnętrznego API",
+      "godz_rynkowe": 35,
+      "godz_realne": 16
+    },
+    {
+      "nazwa": "Automatyczny import i synchronizacja ofert",
+      "opis": "Automat pobierający co 15 minut zmiany z chińskiej giełdy: dodaje nowe auta, aktualizuje ceny, wycofuje sprzedane — bez udziału człowieka. Chroni auta zarezerwowane przez klientów, radzi sobie z niestabilnymi danymi wejściowymi (duplikaty, wygasające linki, oferty-widma).",
+      "skala": "~1 200 linii logiki stanowej; 2 zadania cykliczne; ochrona przed równoległymi importami",
+      "godz_rynkowe": 70,
+      "godz_realne": 30
+    },
+    {
+      "nazwa": "Silnik tłumaczeń chińsko-polskich",
+      "opis": "Warstwa zamieniająca surowe chińskie dane (nazwy modeli, miasta, specyfikacje) na poprawną polszczyznę handlową — ok. 1 600 ręcznie opracowanych wpisów słownikowych plus tłumaczenie opisów przez AI z zapasowym drugim silnikiem.",
+      "skala": "11 plików słowników (~1 600 wpisów: 104 miasta, 183 wersje wyposażenia, ~920 parametrów technicznych); 2 integracje AI",
+      "godz_rynkowe": 80,
+      "godz_realne": 36
+    },
+    {
+      "nazwa": "Pipeline zdjęć",
+      "opis": "Automatyczne pobieranie kilkudziesięciu zdjęć każdego auta z chińskiego CDN (linki wygasają po 6 dniach!), konwersja do lekkiego formatu WebP i nazewnictwo plików pod Google. Szybkie galerie bez ręcznej pracy.",
+      "skala": "Dziesiątki tysięcy plików; optymalizacja pod hosting współdzielony",
+      "godz_rynkowe": 35,
+      "godz_realne": 14
+    },
+    {
+      "nazwa": "Kalkulator ceny 'pod klucz' (pipeline cenowy)",
+      "opis": "Serce biznesowe: z chińskiej ceny auta wylicza końcową cenę w Polsce — transport, cło, akcyza zależna od typu paliwa (elektryk 0%, benzyna 3,1%…), homologacja, marża, VAT. Klient widzi jedną uczciwą cenę, sprzedawca pełny rozkład kosztów.",
+      "skala": "9-krokowy algorytm celno-podatkowy, 2 tryby wyceny, 12 konfigurowalnych parametrów; błąd w kolejności naliczania = realne straty finansowe",
+      "godz_rynkowe": 60,
+      "godz_realne": 26
+    },
+    {
+      "nazwa": "Frontend — katalog, wyszukiwarka, strona oferty, strony firmowe",
+      "opis": "Cała widoczna część serwisu zbudowana od zera pod szybkość i Google: katalog z filtrowaniem po 9 parametrach z licznikami wyników, wyszukiwarka z podpowiedziami, strona auta z galerią i pełną specyfikacją, strona główna i kontakt.",
+      "skala": "~5 400 linii PHP + 142 KB autorskiego CSS/JS (bez gotowych bibliotek); wydajność przy 5 tys. ofert na hostingu współdzielonym",
+      "godz_rynkowe": 140,
+      "godz_realne": 52
+    },
+    {
+      "nazwa": "System zamówień — od rezerwacji do odbioru auta",
+      "opis": "Mini-CRM wbudowany w stronę: 5-krokowy kreator zamówienia online, 11 statusów realizacji (od rezerwacji przez transport po odbiór), automatyczne maile na każdym etapie (16 szablonów), konta klientów, zabezpieczenia przed spamem i panel obsługi dla sprzedawcy.",
+      "skala": "Największy moduł systemu (~5 700 linii); maszyna stanów z regułami przejść; bezpieczeństwo publicznych formularzy",
+      "godz_rynkowe": 160,
+      "godz_realne": 60
+    },
+    {
+      "nazwa": "Generator umów PDF",
+      "opis": "Automatyczne tworzenie gotowej do podpisu umowy pośrednictwa (9 paragrafów, model agencyjny z depozytem) w momencie osiągnięcia właściwego statusu zamówienia — zero ręcznego przepisywania danych do dokumentu prawnego.",
+      "skala": "~1 100 linii; dokument o skutkach prawnych; numeracja umów, załączniki z rozkładem ceny",
+      "godz_rynkowe": 45,
+      "godz_realne": 18
+    },
+    {
+      "nazwa": "Panel sprzedawcy — narzędzia samoobsługowe",
+      "opis": "Narzędzia, dzięki którym sprzedawca zarządza katalogiem bez programisty: konfiguracja kursów i stawek, ręczny import wybranego auta z giełdy jednym kliknięciem z podglądem, edycja danych pojazdu z wyliczaną na żywo ceną, galeria zdjęć przeciągnij-upuść.",
+      "skala": "~3 600 linii, 7 interaktywnych endpointów; UX projektowany dla nietechnicznego użytkownika",
+      "godz_rynkowe": 80,
+      "godz_realne": 30
+    },
+    {
+      "nazwa": "Bezpieczeństwo i kontrola dostępu",
+      "opis": "Ukrycie panelu logowania przed botami (własny adres /biuro/), firmowy ekran logowania i osobna rola dostępu dla właściciela firmy z ograniczonymi uprawnieniami.",
+      "skala": "Hardening serwera + role i uprawnienia",
+      "godz_rynkowe": 18,
+      "godz_realne": 8
+    },
+    {
+      "nazwa": "Zaplecze serwisowe — narzędzia diagnostyczne i naprawcze",
+      "opis": "18 komend terminalowych (import, przeliczanie cen, symulacje, czyszczenie danych) i 11 skryptów naprawczych do typowych problemów — dzięki nim system da się tanio serwisować przez cały okres życia.",
+      "skala": "~2 600 linii narzędzi + konwencje bezpieczeństwa (tryb próbny domyślnie)",
+      "godz_rynkowe": 50,
+      "godz_realne": 20
+    }
+  ]
+}

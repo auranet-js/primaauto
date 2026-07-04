@@ -1,0 +1,215 @@
+{
+  "nazwa": "Etap 3 — Plany rozwoju (roadmapa, wycena inwestycji)",
+  "opis": "Uporządkowany parking pomysłów rozwojowych — każda pozycja z widełkami godzin. Kolumna 'rynkowo' = ile kosztowałoby to u klasycznego zespołu; kolumna 'realnie' = przewidywany czas zespołu Auranet z warsztatem AI (i taka baza może być podstawą rozliczenia).",
+  "pozycje": [
+    {
+      "id": "T-186",
+      "tytul": "Che168 jako pełne, automatyczne drugie źródło ogłoszeń",
+      "opis": "Automatyczny import z drugiego chińskiego portalu równolegle do głównego — pełna dywersyfikacja na wypadek awarii dostawcy (feed padł 3× w czerwcu) i szersza oferta aut premium. Fundament ręczny już działa; to rozbudowa o pełny automat z deduplikacją aut widocznych na obu giełdach.",
+      "rozmiar": "XL",
+      "rynkowo_od": 240,
+      "rynkowo_do": 280,
+      "realnie_od": 85,
+      "realnie_do": 100,
+      "status": "spec gotowy, czeka na decyzję"
+    },
+    {
+      "id": "T-121",
+      "tytul": "Płatność online (BLIK/karta) za depozyt rezerwacyjny",
+      "opis": "Klient wpłaca zwrotny depozyt od razu w kreatorze zamiast przelewu ręcznego — szybsze domknięcie rezerwacji, mniej porzuceń. Wymaga też rozstrzygnięcia prawnego w regulaminie.",
+      "rozmiar": "L",
+      "rynkowo_od": 85,
+      "rynkowo_do": 100,
+      "realnie_od": 40,
+      "realnie_do": 50,
+      "status": "pomysł"
+    },
+    {
+      "id": "T-188",
+      "tytul": "Zapisane wyszukiwania + alerty mailowe o nowych autach",
+      "opis": "Klient zapisuje kryteria (np. 'czarny Leopard 5 do 150 tys.') i dostaje maila, gdy pasujące auto pojawi się w imporcie. Newsletter oparty na intencji = powracający ruch i gotowa baza kontaktów.",
+      "rozmiar": "L",
+      "rynkowo_od": 100,
+      "rynkowo_do": 120,
+      "realnie_od": 50,
+      "realnie_do": 60,
+      "status": "pomysł"
+    },
+    {
+      "id": "T-113",
+      "tytul": "Finansowanie/leasing jako alternatywa w umowie",
+      "opis": "Klient wybiera: klasyczne pośrednictwo albo finansowanie — otwiera sprzedaż klientom bez gotówki na całość. Wymaga wzorca umowy i partnera finansującego.",
+      "rozmiar": "L",
+      "rynkowo_od": 85,
+      "rynkowo_do": 100,
+      "realnie_od": 40,
+      "realnie_do": 50,
+      "status": "pomysł"
+    },
+    {
+      "id": "T-189",
+      "tytul": "Kalkulator raty finansowania na stronie oferty",
+      "opis": "Widget: klient wpisuje wpłatę własną i okres, widzi szacunkową ratę — obniża barierę 'całość z góry', generuje leady 'zapytaj o finansowanie'.",
+      "rozmiar": "S",
+      "rynkowo_od": 17,
+      "rynkowo_do": 20,
+      "realnie_od": 8,
+      "realnie_do": 10,
+      "status": "pomysł"
+    },
+    {
+      "id": "T-152",
+      "tytul": "Wystawianie ogłoszeń na Otomoto",
+      "opis": "Automatyczna publikacja ofert na największym polskim portalu motoryzacyjnym — nowy kanał sprzedaży poza własną stroną.",
+      "rozmiar": "L",
+      "rynkowo_od": 100,
+      "rynkowo_do": 120,
+      "realnie_od": 40,
+      "realnie_do": 50,
+      "status": "pomysł"
+    },
+    {
+      "id": "T-162",
+      "tytul": "Sekcja blogowa / baza wiedzy (rankingi, porównania, poradniki)",
+      "opis": "Rankingi ('Top 20 SUV-ów z Chin'), porównania z europejskim premium, poradniki importu — autorytet, ruch z Google i cytowania w wyszukiwarkach AI.",
+      "rozmiar": "L",
+      "rynkowo_od": 120,
+      "rynkowo_do": 140,
+      "realnie_od": 50,
+      "realnie_do": 60,
+      "status": "pomysł"
+    },
+    {
+      "id": "T-114",
+      "tytul": "Ulubione auta (schowek klienta)",
+      "opis": "Klient zapisuje auta na własną listę i wraca do nich — wymusza rejestrację, buduje bazę pod mailing i remarketing.",
+      "rozmiar": "M",
+      "rynkowo_od": 40,
+      "rynkowo_do": 50,
+      "realnie_od": 17,
+      "realnie_do": 20,
+      "status": "pomysł"
+    },
+    {
+      "id": "T-115",
+      "tytul": "Porównywarka aut",
+      "opis": "Kilka aut w tabeli specyfikacji obok siebie — łatwiejszy wybór, dłuższy czas na stronie.",
+      "rozmiar": "M",
+      "rynkowo_od": 40,
+      "rynkowo_do": 50,
+      "realnie_od": 17,
+      "realnie_do": 20,
+      "status": "pomysł"
+    },
+    {
+      "id": "T-116",
+      "tytul": "Zaawansowana wyszukiwarka (parametry techniczne)",
+      "opis": "Filtrowanie po liczbie miejsc, przyspieszeniu, długości w zakresie — klient precyzyjnie dobiera auto.",
+      "rozmiar": "L",
+      "rynkowo_od": 75,
+      "rynkowo_do": 90,
+      "realnie_od": 35,
+      "realnie_do": 40,
+      "status": "pomysł"
+    },
+    {
+      "id": "T-187",
+      "tytul": "Pasek podobnych aut tego samego modelu (mobile)",
+      "opis": "Na stronie oferty (telefon) inne egzemplarze tego samego modelu — klient zostaje w ofercie zamiast wracać do wyszukiwarki.",
+      "rozmiar": "S",
+      "rynkowo_od": 14,
+      "rynkowo_do": 16,
+      "realnie_od": 7,
+      "realnie_do": 8,
+      "status": "pomysł"
+    },
+    {
+      "id": "T-183",
+      "tytul": "Watchdog awarii feedu ogłoszeń",
+      "opis": "Automatyczny alarm, gdy synchronizacja przestaje dowozić nowe auta (awarie dostawcy są ciche — dziś wychodzą po fakcie). Chroni świeżość oferty.",
+      "rozmiar": "S",
+      "rynkowo_od": 12,
+      "rynkowo_do": 14,
+      "realnie_od": 5,
+      "realnie_do": 6,
+      "status": "otwarty"
+    },
+    {
+      "id": null,
+      "tytul": "Uruchomienie kampanii Facebook/Instagram",
+      "opis": "Dokończenie weryfikacji firmy w Meta (po stronie Prima-Auto) + katalog pojazdów + zestaw reklam z pikselem — drugi płatny kanał obok Google Ads. Feed i pomiar już przygotowane.",
+      "rozmiar": "M",
+      "rynkowo_od": 35,
+      "rynkowo_do": 40,
+      "realnie_od": 17,
+      "realnie_do": 20,
+      "status": "czeka na weryfikację firmy w Meta"
+    },
+    {
+      "id": null,
+      "tytul": "Import konwersji do Google Ads + cykliczny przegląd fraz",
+      "opis": "Google Ads zacznie optymalizować stawki pod realne kontakty (telefon/WhatsApp/lead); przegląd fraz dosypuje słowa i wykluczenia — lepszy zwrot z każdej złotówki budżetu.",
+      "rozmiar": "S",
+      "rynkowo_od": 14,
+      "rynkowo_do": 16,
+      "realnie_od": 7,
+      "realnie_do": 8,
+      "status": "otwarty"
+    },
+    {
+      "id": null,
+      "tytul": "Skonsolidowany dashboard marketingowy (KPI, koszt leada, ROAS)",
+      "opis": "Jeden raport łączący SEO, Ads, analitykę i Metę: koszt kontaktu, zwrot z reklam, lejek — plus przekazywanie realnych rezerwacji do Google jako konwersji.",
+      "rozmiar": "M",
+      "rynkowo_od": 40,
+      "rynkowo_do": 50,
+      "realnie_od": 20,
+      "realnie_do": 24,
+      "status": "pomysł"
+    },
+    {
+      "id": null,
+      "tytul": "Pipeline opisów v2 — automatyczna kontrola jakości treści AI",
+      "opis": "Twarda weryfikacja faktów w generowanych opisach, filtr 'AI-bełkotu', panel statusów i automatyczne odświeżanie — treści zawsze aktualne bez ręcznej pracy.",
+      "rozmiar": "XL",
+      "rynkowo_od": 170,
+      "rynkowo_do": 200,
+      "realnie_od": 70,
+      "realnie_do": 80,
+      "status": "pomysł"
+    },
+    {
+      "id": null,
+      "tytul": "Ładne maile HTML do klientów",
+      "opis": "Maile transakcyjne (statusy zamówienia, potwierdzenia) w brandowanym szablonie z logo — profesjonalny wizerunek w skrzynce klienta.",
+      "rozmiar": "M",
+      "rynkowo_od": 30,
+      "rynkowo_do": 36,
+      "realnie_od": 14,
+      "realnie_do": 16,
+      "status": "otwarty"
+    },
+    {
+      "id": null,
+      "tytul": "Edytor danych technicznych auta w panelu",
+      "opis": "Ręczna korekta specyfikacji z chińskiego API bezpośrednio w panelu — bez programisty.",
+      "rozmiar": "M",
+      "rynkowo_od": 35,
+      "rynkowo_do": 40,
+      "realnie_od": 15,
+      "realnie_do": 18,
+      "status": "otwarty"
+    },
+    {
+      "id": null,
+      "tytul": "Pakiet higieny technicznej (baza, puste strony, schema, mobile)",
+      "opis": "Zbiór mniejszych domknięć: prewencja puchnięcia bazy, automatyczne ukrywanie ~1900 pustych stron modeli przed Google, wzbogacenie danych strukturalnych ogłoszeń (silnik, skrzynia, kolor), szlify mobilne, systemowe tłumaczenie chińskich nazw miast, kontrola resztkowych 404, kolejna iteracja galerii klientów.",
+      "rozmiar": "M",
+      "rynkowo_od": 60,
+      "rynkowo_do": 70,
+      "realnie_od": 25,
+      "realnie_do": 32,
+      "status": "otwarte drobiazgi (7 pozycji)"
+    }
+  ]
+}

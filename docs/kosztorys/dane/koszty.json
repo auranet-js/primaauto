@@ -1,0 +1,43 @@
+{
+  "nazwa": "Koszty zewnętrzne (poza godzinami pracy)",
+  "opis": "Twarde koszty ponoszone przez Auranet na utrzymanie i rozwój platformy — niezależne od godzin pracy zespołu.",
+  "pozycje": [
+    {
+      "nazwa": "Feed danych o autach (auto-api.com — giełda Dongchedi)",
+      "opis": "Płatna subskrypcja API dostarczającego ogłoszenia, zdjęcia i specyfikacje z chińskiej giełdy. Wynegocjowana stawka startowa 100 USD/mc (cennik: 170 USD), od maja pełna stawka ~145 EUR/mc. Dostęp do drugiego źródła (Che168) na okres wdrożenia wynegocjowany na koszt dostawcy (do 15.07.2026).",
+      "historia": [
+        {"okres": "18.03 — 18.04.2026", "kwota": "100 USD (~400 zł)"},
+        {"okres": "18.04 — 18.05.2026", "kwota": "100 USD (~400 zł) — po interwencji, dostawca próbował naliczyć 140 EUR"},
+        {"okres": "18.05 — 18.06.2026", "kwota": "145 EUR (~620 zł)"},
+        {"okres": "18.06 — 18.07.2026", "kwota": "145 EUR (~620 zł)"}
+      ],
+      "biezaco_mc": "~620 zł/mc",
+      "suma_dotychczas": "~2 040 zł"
+    },
+    {
+      "nazwa": "Infrastruktura serwerowa i domeny",
+      "opis": "Hosting produkcyjny (udział platformy w serwerze), domena primaauto.com.pl + utrzymanie starej asiaauto.pl na przekierowania, certyfikaty SSL, kopie zapasowe.",
+      "biezaco_mc": "~60-80 zł/mc (szacunek, do potwierdzenia)",
+      "suma_dotychczas": "~250-300 zł"
+    },
+    {
+      "nazwa": "Usługi AI do produkcji treści i tłumaczeń",
+      "opis": "Generacja opisów marek/modeli (Gemini/Claude), tłumaczenia opisów aut (Gemini + DeepL jako zapasowy), generacja grafik hero. Koszt jednostkowy zoptymalizowany do ~0,06 EUR za stronę treści.",
+      "biezaco_mc": "~30-60 zł/mc (zależnie od wolumenu treści)",
+      "suma_dotychczas": "~300-500 zł (szacunek, do potwierdzenia)"
+    },
+    {
+      "nazwa": "Narzędzia badawcze SEO (dane o wyszukiwaniach)",
+      "opis": "Płatne dane o wolumenach wyszukiwań, trendach i konkurencji (DataForSEO) — podstawa wszystkich decyzji contentowych 'na danych, nie na intuicji'.",
+      "biezaco_mc": "wg zużycia (drobne)",
+      "suma_dotychczas": "~100-200 zł"
+    },
+    {
+      "nazwa": "Warsztat AI Auranet (narzędzia deweloperskie)",
+      "opis": "Subskrypcje zaawansowanych narzędzi AI (Claude), które pozwalają zespołowi Auranet dostarczać pracę o wartości rynkowej wielokrotnie wyższej niż fizyczny czas — to inwestycja Auranet we własny warsztat, nieprzenoszona wprost na klienta, ale realny koszt prowadzenia projektu.",
+      "biezaco_mc": "pozycja informacyjna",
+      "suma_dotychczas": "—"
+    }
+  ],
+  "uwaga": "Budżety reklamowe Google Ads (~100 zł/dzień) opłacane są bezpośrednio z konta reklamowego Prima-Auto i nie są kosztem Auranet — dlatego nie ma ich w tym zestawieniu."
+}

@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Prima Auto — kosztorys i historia inwestycji</title>
+<style>
+:root {
+  --ink: #1a2332; --ink-2: #4a5568; --ink-3: #8b95a5;
+  --accent: #1f4e79; --accent-soft: #e8eff6;
+  --surface: #ffffff; --bg: #f4f6f9; --line: #e2e7ee;
+  --red: #b03030;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font: 15px/1.55 -apple-system, "Segoe UI", Roboto, Arial, sans-serif; color: var(--ink); background: var(--bg); }
+.wrap { max-width: 980px; margin: 0 auto; padding: 32px 20px 80px; }
+header.top { border-bottom: 3px solid var(--accent); padding-bottom: 20px; margin-bottom: 28px; }
+header.top h1 { font-size: 26px; line-height: 1.25; }
+header.top .sub { color: var(--ink-2); margin-top: 6px; }
+header.top .stamp { color: var(--ink-3); font-size: 13px; margin-top: 10px; }
+h2 { font-size: 20px; margin: 44px 0 6px; }
+h2 .eno { color: var(--accent); }
+.lead { color: var(--ink-2); margin-bottom: 16px; max-width: 860px; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin: 20px 0 8px; }
+.tile { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; }
+.tile .v { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
+.tile .v small { font-size: 15px; font-weight: 500; color: var(--ink-2); }
+.tile .l { color: var(--ink-2); font-size: 13px; margin-top: 3px; }
+.tile.acc { border-top: 3px solid var(--accent); }
+table { width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; margin: 14px 0; }
+th { text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: 0.4px; color: var(--ink-2); background: var(--accent-soft); padding: 10px 14px; border-bottom: 1px solid var(--line); }
+th.num, td.num { text-align: right; }
+td { padding: 12px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr:last-child td { border-bottom: none; }
+td.num { font-variant-numeric: tabular-nums; font-weight: 600; white-space: nowrap; }
+td.nowrap { white-space: normal; font-weight: 500; font-size: 13.5px; }
+td.data-col { white-space: nowrap; color: var(--ink-2); font-size: 13px; font-variant-numeric: tabular-nums; }
+.opis { color: var(--ink-2); font-weight: 400; margin-top: 4px; font-size: 14px; }
+.skala { color: var(--ink-3); font-size: 12.5px; margin-top: 4px; }
+.badge { display: inline-block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.4px; background: var(--accent-soft); color: var(--accent); border-radius: 4px; padding: 2px 7px; margin-bottom: 5px; }
+tfoot td { background: var(--accent-soft); font-weight: 700; }
+.tl-row { display: grid; grid-template-columns: 110px 18px 1fr; gap: 10px; align-items: baseline; padding: 7px 0; }
+.tl-date { text-align: right; color: var(--ink-2); font-size: 13px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tl-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); position: relative; top: 1px; justify-self: center; }
+.timeline { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px 22px; margin: 14px 0; }
+.obars { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px 22px; margin: 14px 0; }
+.obar-row { display: grid; grid-template-columns: 240px 1fr 260px; gap: 12px; align-items: center; padding: 6px 0; }
+.obar-label { font-size: 14px; }
+.obar-track { background: var(--bg); border-radius: 4px; height: 14px; overflow: hidden; }
+.obar-fill { background: var(--accent); height: 100%; border-radius: 0 4px 4px 0; min-width: 3px; }
+.obar-val { font-size: 13.5px; font-variant-numeric: tabular-nums; text-align: right; }
+.obar-meta { color: var(--ink-3); font-size: 12px; }
+.note { background: var(--accent-soft); border-left: 4px solid var(--accent); border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 16px 0; color: var(--ink-2); font-size: 14px; }
+ul.hist { margin: 8px 0 0 18px; color: var(--ink-2); font-size: 13.5px; }
+footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--ink-3); font-size: 12.5px; }
+@media (max-width: 720px) {
+  .obar-row { grid-template-columns: 1fr; gap: 4px; }
+  .obar-val { text-align: left; }
+  .tl-row { grid-template-columns: 90px 14px 1fr; }
+  td.data-col { font-size: 11px; }
+}
+@media print {
+  body { background: #fff; }
+  .wrap { max-width: none; padding: 0; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+<h1>Prima Auto — historia inwestycji i kosztorys prac</h1>
+<div class="sub">Platforma importu samochodów z Chin · primaauto.com.pl · opracowanie: Auranet (Jan Schenk)</div>
+<div class="stamp">Stan na 04.07.2026 · dokument roboczy do rozmowy, aktualizowany wraz z postępem prac</div>
+</header>
+
+<div class="tiles">
+<div class="tile acc"><div class="v">2373 <small>h</small></div><div class="l">wartość rynkowa wykonanych prac (etapy 1-2), w godzinach klasycznego zespołu</div></div>
+<div class="tile"><div class="v">824 <small>h</small></div><div class="l">realny czas pracy zespołu Auranet (z warsztatem AI)</div></div>
+<div class="tile"><div class="v">90+</div><div class="l">wydań oprogramowania od startu na primaauto.com.pl</div></div>
+<div class="tile"><div class="v">6129</div><div class="l">ogłoszeń w katalogu · 112 zamówień w systemie</div></div>
+</div>
+
+<div class="note"><strong>Jak czytać godziny.</strong> Wycena rynkowa: ile godzin zajęłoby wykonanie danej pracy klasycznemu zespołowi (programista senior, specjalista SEO, specjalista Google Ads, copywriter) pracującemu tradycyjnie, bez narzędzi AI. To miara WARTOŚCI wykonanej pracy — standard przy rozliczaniu projektów agencyjnych.<br><br>Faktyczny czas pracy: godziny Jana Schenka + godziny zespołu deweloperskiego pracującego równolegle (praca dwutorowa — prowadzenie projektu i wykonanie liczone osobno). Baza czasowa dla czerwca 2026 zmierzona z dokładnych logów pracy (aktywne okna 10-minutowe); dla wcześniejszych miesięcy odtworzona z gęstości commitów, wersji oprogramowania i dziennika prac.<br><br>Różnica między kolumnami pokazuje efekt inwestycji Auranet we własny, zautomatyzowany warsztat AI — klient otrzymuje pracę o wartości rynkowej wielokrotnie wyższej niż fizycznie spędzony czas.</div>
+
+<h2>Oś czasu projektu</h2>
+<div class="timeline">
+<div class="tl-row"><div class="tl-date">2026-02/03</div><div class="tl-dot"></div><div class="tl-text">Koncepcja platformy, research rynku i źródeł danych o autach z Chin</div></div>
+<div class="tl-row"><div class="tl-date">2026-03-16</div><div class="tl-dot"></div><div class="tl-text">Negocjacje z dostawcą danych auto-api.com (feed giełdy Dongchedi)</div></div>
+<div class="tl-row"><div class="tl-date">2026-03-18</div><div class="tl-dot"></div><div class="tl-text">Start subskrypcji API + instalacja platformy (asiaauto.pl)</div></div>
+<div class="tl-row"><div class="tl-date">2026-03-25</div><div class="tl-dot"></div><div class="tl-text">Pierwsze automatycznie zaimportowane ogłoszenia</div></div>
+<div class="tl-row"><div class="tl-date">2026-04-08</div><div class="tl-dot"></div><div class="tl-text">Prezentacja gotowej platformy u Ruslana (PRIMA-AUTO) — wycena inwestycji: 50 000 zł</div></div>
+<div class="tl-row"><div class="tl-date">2026-04-16</div><div class="tl-dot"></div><div class="tl-text">Pierwsze zamówienie klienta w systemie</div></div>
+<div class="tl-row"><div class="tl-date">2026-04-21</div><div class="tl-dot"></div><div class="tl-text">Rebranding i przeprowadzka na primaauto.com.pl</div></div>
+<div class="tl-row"><div class="tl-date">2026-07-03</div><div class="tl-dot"></div><div class="tl-text">Stan na dziś: 6 129 ogłoszeń w katalogu, 112 zamówień w systemie, 90 wydań oprogramowania od cutovera</div></div>
+</div>
+
+<h2><span class="eno">Etap 1.</span> Koncepcja i budowa platformy (do prezentacji 08.04.2026)</h2>
+<p class="lead">Od pomysłu do działającego produktu w ok. 6 tygodni: kompletna platforma sprzedaży aut importowanych z Chin — automatyczny katalog ~4-5 tys. ofert synchronizowany z chińską giełdą co 15 minut, tłumaczenia chińsko-polskie, kalkulator ceny 'pod klucz' (cło, akcyza, VAT), system zamówień z umowami PDF i panel dla sprzedawcy. Na dzień prezentacji: ~23 000 linii autorskiego kodu (bez bibliotek), zero gotowych szablonów. <strong>Prezentacja u Ruslana 08.04.2026 — zadeklarowana wartość inwestycji: 50 000 zł.</strong></p>
+<table>
+<thead><tr><th>Zakres prac</th><th class="num">Rynkowo [h]</th><th class="num">Realnie [h]</th></tr></thead>
+<tbody>
+<tr>
+<td><strong>Koncepcja, research i przygotowanie projektu</strong><div class="opis">Pomysł i model biznesowy platformy, research rynku importu aut z Chin i konkurencji, znalezienie i przetestowanie źródła danych o autach (giełda Dongchedi), negocjacje handlowe z dostawcą feedu (obniżenie ceny z 170 do 100 USD/mc na okres developmentu), projekt architektury całego systemu.</div><div class="skala">Wybór spośród źródeł danych, negocjacje B2B z dostawcą, architektura 11 modułów</div></td>
+<td class="num">50</td><td class="num">50</td></tr>
+<tr>
+<td><strong>Fundament danych i integracja z giełdą Dongchedi</strong><div class="opis">Szkielet systemu: własny typ treści 'ogłoszenie samochodowe' z 10 wymiarami filtrowania (marka, model, paliwo, nadwozie…) i stabilne połączenie z płatnym API danych, odporne na awarie (automatyczne ponawianie).</div><div class="skala">Model danych pod ~5 tys. ofert; integracja z 5 endpointami zewnętrznego API</div></td>
+<td class="num">35</td><td class="num">16</td></tr>
+<tr>
+<td><strong>Automatyczny import i synchronizacja ofert</strong><div class="opis">Automat pobierający co 15 minut zmiany z chińskiej giełdy: dodaje nowe auta, aktualizuje ceny, wycofuje sprzedane — bez udziału człowieka. Chroni auta zarezerwowane przez klientów, radzi sobie z niestabilnymi danymi wejściowymi (duplikaty, wygasające linki, oferty-widma).</div><div class="skala">~1 200 linii logiki stanowej; 2 zadania cykliczne; ochrona przed równoległymi importami</div></td>
+<td class="num">70</td><td class="num">30</td></tr>
+<tr>
+<td><strong>Silnik tłumaczeń chińsko-polskich</strong><div class="opis">Warstwa zamieniająca surowe chińskie dane (nazwy modeli, miasta, specyfikacje) na poprawną polszczyznę handlową — ok. 1 600 ręcznie opracowanych wpisów słownikowych plus tłumaczenie opisów przez AI z zapasowym drugim silnikiem.</div><div class="skala">11 plików słowników (~1 600 wpisów: 104 miasta, 183 wersje wyposażenia, ~920 parametrów technicznych); 2 integracje AI</div></td>
+<td class="num">80</td><td class="num">36</td></tr>
+<tr>
+<td><strong>Pipeline zdjęć</strong><div class="opis">Automatyczne pobieranie kilkudziesięciu zdjęć każdego auta z chińskiego CDN (linki wygasają po 6 dniach!), konwersja do lekkiego formatu WebP i nazewnictwo plików pod Google. Szybkie galerie bez ręcznej pracy.</div><div class="skala">Dziesiątki tysięcy plików; optymalizacja pod hosting współdzielony</div></td>
+<td class="num">35</td><td class="num">14</td></tr>
+<tr>
+<td><strong>Kalkulator ceny 'pod klucz' (pipeline cenowy)</strong><div class="opis">Serce biznesowe: z chińskiej ceny auta wylicza końcową cenę w Polsce — transport, cło, akcyza zależna od typu paliwa (elektryk 0%, benzyna 3,1%…), homologacja, marża, VAT. Klient widzi jedną uczciwą cenę, sprzedawca pełny rozkład kosztów.</div><div class="skala">9-krokowy algorytm celno-podatkowy, 2 tryby wyceny, 12 konfigurowalnych parametrów; błąd w kolejności naliczania = realne straty finansowe</div></td>
+<td class="num">60</td><td class="num">26</td></tr>
+<tr>
+<td><strong>Frontend — katalog, wyszukiwarka, strona oferty, strony firmowe</strong><div class="opis">Cała widoczna część serwisu zbudowana od zera pod szybkość i Google: katalog z filtrowaniem po 9 parametrach z licznikami wyników, wyszukiwarka z podpowiedziami, strona auta z galerią i pełną specyfikacją, strona główna i kontakt.</div><div class="skala">~5 400 linii PHP + 142 KB autorskiego CSS/JS (bez gotowych bibliotek); wydajność przy 5 tys. ofert na hostingu współdzielonym</div></td>
+<td class="num">140</td><td class="num">52</td></tr>
+<tr>
+<td><strong>System zamówień — od rezerwacji do odbioru auta</strong><div class="opis">Mini-CRM wbudowany w stronę: 5-krokowy kreator zamówienia online, 11 statusów realizacji (od rezerwacji przez transport po odbiór), automatyczne maile na każdym etapie (16 szablonów), konta klientów, zabezpieczenia przed spamem i panel obsługi dla sprzedawcy.</div><div class="skala">Największy moduł systemu (~5 700 linii); maszyna stanów z regułami przejść; bezpieczeństwo publicznych formularzy</div></td>
+<td class="num">160</td><td class="num">60</td></tr>
+<tr>
+<td><strong>Generator umów PDF</strong><div class="opis">Automatyczne tworzenie gotowej do podpisu umowy pośrednictwa (9 paragrafów, model agencyjny z depozytem) w momencie osiągnięcia właściwego statusu zamówienia — zero ręcznego przepisywania danych do dokumentu prawnego.</div><div class="skala">~1 100 linii; dokument o skutkach prawnych; numeracja umów, załączniki z rozkładem ceny</div></td>
+<td class="num">45</td><td class="num">18</td></tr>
+<tr>
+<td><strong>Panel sprzedawcy — narzędzia samoobsługowe</strong><div class="opis">Narzędzia, dzięki którym sprzedawca zarządza katalogiem bez programisty: konfiguracja kursów i stawek, ręczny import wybranego auta z giełdy jednym kliknięciem z podglądem, edycja danych pojazdu z wyliczaną na żywo ceną, galeria zdjęć przeciągnij-upuść.</div><div class="skala">~3 600 linii, 7 interaktywnych endpointów; UX projektowany dla nietechnicznego użytkownika</div></td>
+<td class="num">80</td><td class="num">30</td></tr>
+<tr>
+<td><strong>Bezpieczeństwo i kontrola dostępu</strong><div class="opis">Ukrycie panelu logowania przed botami (własny adres /biuro/), firmowy ekran logowania i osobna rola dostępu dla właściciela firmy z ograniczonymi uprawnieniami.</div><div class="skala">Hardening serwera + role i uprawnienia</div></td>
+<td class="num">18</td><td class="num">8</td></tr>
+<tr>
+<td><strong>Zaplecze serwisowe — narzędzia diagnostyczne i naprawcze</strong><div class="opis">18 komend terminalowych (import, przeliczanie cen, symulacje, czyszczenie danych) i 11 skryptów naprawczych do typowych problemów — dzięki nim system da się tanio serwisować przez cały okres życia.</div><div class="skala">~2 600 linii narzędzi + konwencje bezpieczeństwa (tryb próbny domyślnie)</div></td>
+<td class="num">50</td><td class="num">20</td></tr>
+</tbody>
+<tfoot><tr><td>Razem etap 1</td><td class="num">823</td><td class="num">360</td></tr></tfoot>
+</table>
+
+<h2><span class="eno">Etap 2.</span> Uruchomienie produkcyjne, rozwój i prowadzenie (15.04 — dziś)</h2>
+<p class="lead">Od bootstrapu profesjonalnego warsztatu pracy, przez rebranding i przeprowadzkę na primaauto.com.pl, po nieprzerwany rozwój: 90 wydań oprogramowania, kampanie Google Ads, pełna analityka, ~500 podstron z treścią pod Google, drugie źródło ogłoszeń (Che168), dokumenty prawne, obsługa awarii dostawcy danych. 174 commity, 35 udokumentowanych decyzji architektonicznych, 39 dni sesyjnych.</p>
+
+<table>
+<thead><tr><th>Data</th><th>Praca</th><th class="num">Rynkowo [h]</th><th class="num">Realnie [h]</th></tr></thead>
+<tbody>
+<tr>
+<td class="data-col">2026-04-15</td>
+<td><span class="badge">Infrastruktura i utrzymanie</span><br><strong>Profesjonalizacja projektu — repozytorium i pełna dokumentacja systemu</strong><div class="opis">Przeanalizowano i udokumentowano całą architekturę systemu (~23 tys. linii kodu), założono repozytorium z kolejką zadań i dziennikiem decyzji. Każda późniejsza zmiana ma ślad i uzasadnienie — projekt przestaje zależeć od pamięci jednej osoby.</div><div class="skala">Komplet dokumentacji architektonicznej + proces wdrożeń</div></td>
+<td class="num">24</td><td class="num">8</td></tr>
+<tr>
+<td class="data-col">2026-04-16..17</td>
+<td><span class="badge">Rozwój oprogramowania</span><br><strong>Przebudowa obsługi zamówień pod model agencyjny</strong><div class="opis">Nowy przepływ zamówienia klienta: statusy, automatyczne maile, panel klienta, bezpieczne umowy PDF w załącznikach — proces od rezerwacji do dostawy auta dopasowany do faktycznego modelu biznesowego pośrednictwa.</div><div class="skala">3 wydania, największy moduł systemu</div></td>
+<td class="num">40</td><td class="num">14</td></tr>
+<tr>
+<td class="data-col">2026-04-17..20</td>
+<td><span class="badge">Import i dane katalogu</span><br><strong>Filtr lokalizacji importu — tylko miasta, w których Prima-Auto ma ludzi</strong><div class="opis">Panel pozwala ograniczyć automatyczny import do wybranych chińskich miast i prowincji, w których Prima-Auto ma swoich przedstawicieli (zmapowano 31 miast z 4 prowincji na bazie ~80 stron giełdy). Do tego szybsze działanie panelu i automatyczne sprzątanie starych ofert po 7 dniach.</div><div class="skala">31 miast / 4 prowincje, konfigurator w panelu, 4 wydania</div></td>
+<td class="num">20</td><td class="num">8</td></tr>
+<tr>
+<td class="data-col">2026-04-20..21</td>
+<td><span class="badge">Infrastruktura i utrzymanie</span><br><strong>Rebranding na Prima-Auto i przeprowadzka na primaauto.com.pl</strong><div class="opis">Zmiana marki widocznej dla klientów (maile, stopka, regulamin, WhatsApp) i przeniesienie całego serwisu na docelową domenę z przekierowaniami ze starej — operacja na żywym organizmie, bez przestoju.</div><div class="skala">Cutover produkcyjny: domena, baza, maile, przekierowania 301</div></td>
+<td class="num">24</td><td class="num">12</td></tr>
+<tr>
+<td class="data-col">2026-04-21</td>
+<td><span class="badge">SEO i treści</span><br><strong>Fundament widoczności w Google — strony zbiorcze modeli</strong><div class="opis">Powstały strony /samochody/marka/model/ grupujące oferty pod pozycjonowanie, automatyczne opisy zdjęć i podstawy przekazywania danych do analityki. Baza całego późniejszego ruchu z Google.</div><div class="skala">Routing dwupoziomowy + iteracyjne dopracowanie tytułów (6 poprawek)</div></td>
+<td class="num">24</td><td class="num">8</td></tr>
+<tr>
+<td class="data-col">2026-04-21..22</td>
+<td><span class="badge">Reklamy i analityka</span><br><strong>Pełna analityka: GA4, menedżer tagów, zgody cookies, pomiar kontaktów</strong><div class="opis">Wdrożono Google Analytics 4 z menedżerem tagów i banerem zgód (Consent Mode v2, zgodność z RODO). Każde kliknięcie w telefon, WhatsApp i formularz liczone jako konwersja — bez tego nie da się ocenić skuteczności żadnej reklamy.</div><div class="skala">GTM + Complianz + 3 typy konwersji</div></td>
+<td class="num">20</td><td class="num">8</td></tr>
+<tr>
+<td class="data-col">2026-04-22</td>
+<td><span class="badge">Infrastruktura i utrzymanie</span><br><strong>Usunięcie podwójnych ogłoszeń i odchudzenie bazy z 640 do 141 MB</strong><div class="opis">Zdiagnozowano przyczynę duplikatów (wyścig dwóch równoległych importów), usunięto je i wyczyszczono bazę z ponad 80 tys. zbędnych rekordów — strona i panel działają szybciej, kopie zapasowe robią się kilkukrotnie szybciej.</div><div class="skala">36 par duplikatów, 72 731 osieroconych plików, baza −78%</div></td>
+<td class="num">16</td><td class="num">8</td></tr>
+<tr>
+<td class="data-col">2026-04-22</td>
+<td><span class="badge">Reklamy i analityka</span><br><strong>Start kampanii Google Ads od zera (3 kampanie)</strong><div class="opis">Zaprojektowano i zbudowano pełną strukturę reklam: kampania markowa, tematyczna 'import z Chin' i kampania na konkretne modele — z ~200 słowami kluczowymi, 23 reklamami i ~500 wykluczeniami odsiewającymi puste kliknięcia.</div><div class="skala">3 kampanie, 23 grupy, 200 słów kluczowych, 23 reklamy RSA, ~500 negatywów, własne generatory</div></td>
+<td class="num">40</td><td class="num">12</td></tr>
+<tr>
+<td class="data-col">2026-04-22..23</td>
+<td><span class="badge">Import i dane katalogu</span><br><strong>Wielka przebudowa nazewnictwa marek i modeli (mapowanie chińsko-europejskie)</strong><div class="opis">263 chińskie modele dostały nazwy, pod którymi faktycznie szukają ich Polacy (6 iteracji koncepcji, 16 spornych przypadków rozstrzygniętych z klientem). Przebudowa całego katalogu: nazwy, adresy stron, przekierowania — na 930 ogłoszeniach.</div><div class="skala">263 wiersze mapowania, 90 zmian, migracja produkcyjna + przekierowania 301</div></td>
+<td class="num">50</td><td class="num">18</td></tr>
+<tr>
+<td class="data-col">2026-04-23</td>
+<td><span class="badge">Import i dane katalogu</span><br><strong>Stabilizacja synchronizacji — koniec duplikatów</strong><div class="opis">Naprawiono u źródła wyścig w automatycznej synchronizacji, który tworzył zduplikowane oferty, i wyczyszczono istniejące duplikaty.</div><div class="skala">Blokada na poziomie bazy danych + czyszczenie 25 par</div></td>
+<td class="num">12</td><td class="num">4</td></tr>
+<tr>
+<td class="data-col">2026-04-23</td>
+<td><span class="badge">SEO i treści</span><br><strong>Automat do produkcji treści na strony marek i modeli (AI + n8n)</strong><div class="opis">Zbudowano pipeline generujący opisy i sekcje pytań na strony zbiorcze przy pomocy AI — treści powstają hurtowo (koszt ~0,06 EUR za stronę) zamiast być pisane ręcznie po kilkaset złotych.</div><div class="skala">2 workflow automatyzacji, 5 punktów integracji, centralny moduł SEO</div></td>
+<td class="num">40</td><td class="num">12</td></tr>
+<tr>
+<td class="data-col">2026-04-24</td>
+<td><span class="badge">Wygląd i użyteczność</span><br><strong>Autorski motyw graficzny — pozbycie się page-buildera</strong><div class="opis">Zastąpienie ciężkiego Elementora własnym, szybkim motywem: strona ładuje się szybciej, wygląd pod pełną kontrolą, bez opłat licencyjnych i ryzyk aktualizacji. Przebudowa całego frontu w jeden dzień.</div><div class="skala">Kompletny motyw od zera + refactor strony oferty</div></td>
+<td class="num">60</td><td class="num">14</td></tr>
+<tr>
+<td class="data-col">2026-04-24</td>
+<td><span class="badge">Reklamy i analityka</span><br><strong>Sprytna restruktura Google Ads + własny klient API</strong><div class="opis">37 osobnych grup reklam zastąpiono jedną z dynamicznym nagłówkiem — dodanie nowej marki to 1 wpis zamiast budowy całej grupy. Powstał własny zestaw narzędzi do zarządzania kampaniami skryptami (bez klikania).</div><div class="skala">6 narzędzi (~1200 linii), restruktura bez utraty historii</div></td>
+<td class="num">24</td><td class="num">8</td></tr>
+<tr>
+<td class="data-col">2026-04-28</td>
+<td><span class="badge">Rozwój oprogramowania</span><br><strong>Panel diagnostyczny — system sam wykrywa problemy z danymi</strong><div class="opis">Nowy panel w adminie wykrywa brakujące zdjęcia, chińskie znaki, braki treści — i pozwala naprawić je jednym kliknięciem. Mniej ręcznego szukania błędów, tańsze utrzymanie.</div><div class="skala">6 wydań, 8-10 automatycznych kontroli, edytor tłumaczeń</div></td>
+<td class="num">32</td><td class="num">10</td></tr>
+<tr>
+<td class="data-col">2026-04-28</td>
+<td><span class="badge">SEO i treści</span><br><strong>Migracja na RankMath Pro + sprint SEO technicznego (11 wydań w 1 dzień)</strong><div class="opis">Profesjonalna wtyczka SEO + seria poprawek: właściwe strony w indeksie Google, wzbogacone dane strukturalne aut (cena, dostawa, producent), naprawione tłumaczenia i przekierowania.</div><div class="skala">11 wydań, dane strukturalne całego katalogu</div></td>
+<td class="num">40</td><td class="num">14</td></tr>
+<tr>
+<td class="data-col">2026-04-28..29</td>
+<td><span class="badge">SEO i treści</span><br><strong>Sekcje 'Auta od ręki / W drodze' na stronie głównej + nocny sprint SEO</strong><div class="opis">Strona główna pokazuje auta dostępne natychmiast i w transporcie — klient od razu widzi, co można kupić szybko. Do tego naprawa tytułów stron modeli, zgłoszenie map witryny do Google, przekierowania sprzedanych aut.</div><div class="skala">10 wydań w ~24h</div></td>
+<td class="num">36</td><td class="num">14</td></tr>
+<tr>
+<td class="data-col">2026-04-29</td>
+<td><span class="badge">Reklamy i analityka</span><br><strong>Wizytówka Google (Profil Firmy) — konfiguracja od zera</strong><div class="opis">Kategorie, opis, 12 usług, auta z placu jako produkty, linki społecznościowe — wizytówka w Google Maps zaczyna pracować na lokalną widoczność firmy.</div><div class="skala">6 kategorii, 12 usług, 5 produktów</div></td>
+<td class="num">12</td><td class="num">6</td></tr>
+<tr>
+<td class="data-col">2026-04-29..05-04</td>
+<td><span class="badge">Import i dane katalogu</span><br><strong>Porządki w markach: scalenia GAC Trumpchi, iCAR, Galaxy + czyszczenie chińskich znaków</strong><div class="opis">Pod-marki scalono z markami głównymi, żeby klienci i Google nie widzieli rozproszonych katalogów tego samego producenta. 15 nowych tłumaczeń — zero chińskich znaków w opublikowanych tytułach. Po drodze naprawa strony kontaktowej i 7 zapomnianych odnośników do starej domeny.</div><div class="skala">3 operacje scalania na żywej taksonomii + przekierowania</div></td>
+<td class="num">28</td><td class="num">12</td></tr>
+<tr>
+<td class="data-col">2026-04-30..05-01</td>
+<td><span class="badge">Wygląd i użyteczność</span><br><strong>Poprawki mobilne + prawidłowa moc silnika hybryd</strong><div class="opis">Strona oferty na telefonie dostała przyklejony pasek z ceną, naprawiono karuzelę, a hybrydy plug-in pokazują pełną moc układu (nie zaniżoną o silnik elektryczny).</div><div class="skala">3 wydania</div></td>
+<td class="num">12</td><td class="num">4</td></tr>
+<tr>
+<td class="data-col">2026-05-06</td>
+<td><span class="badge">Import i dane katalogu</span><br><strong>Blokada 'martwych ofert' w imporcie</strong><div class="opis">Import przestał publikować oferty z wygasłymi zdjęciami i danymi — klient nie trafia już na puste ogłoszenia.</div><div class="skala">Podwójna bramka + ostrzeżenie w imporcie ręcznym</div></td>
+<td class="num">12</td><td class="num">4</td></tr>
+<tr>
+<td class="data-col">2026-05-06..07</td>
+<td><span class="badge">SEO i treści</span><br><strong>Audyt Search Console + automat odświeżający tytuły 333 stron co noc</strong><div class="opis">Przegląd stanu w Google: czyszczenie map witryny, usunięcie zduplikowanych opisów, automat generujący tytuły stron zbiorczych z aktualną ceną i liczbą aut — odświeżane codziennie bez ręcznej pracy.</div><div class="skala">9 wydań, 333 strony objęte automatem</div></td>
+<td class="num">30</td><td class="num">10</td></tr>
+<tr>
+<td class="data-col">2026-05-07</td>
+<td><span class="badge">SEO i treści</span><br><strong>Tuning treści 8 najgorętszych stron modeli wg realnego popytu + zgłoszenie 45 do Google</strong><div class="opis">Na podstawie badania, czego Polacy faktycznie szukają (m.in. Zeekr 9X — wzrost wyszukiwań o 2400%), dopieszczono opisy, tytuły i sekcje pytań na najważniejszych stronach. Zidentyfikowano 4 modele o ogromnym popycie, których brakuje w ofercie.</div><div class="skala">8 stron pełny tuning + 1 od zera, badanie ~30 fraz, analiza konkurencji</div></td>
+<td class="num">24</td><td class="num">8</td></tr>
+<tr>
+<td class="data-col">2026-05-13..16</td>
+<td><span class="badge">Rozwój oprogramowania</span><br><strong>Poprawna wycena w umowach + ochrona ręcznie dodanych ogłoszeń</strong><div class="opis">Naprawiono błąd zaniżający cenę w umowie względem katalogowej, umowa podaje prawnie bezpieczny 'rok pierwszej rejestracji' (chińskie źródło nie zna roku produkcji), a ogłoszenia dodane ręcznie przez sprzedawcę nie są już kasowane przez automat. Przy okazji: kopiowanie ogłoszenia nie przenosi już rezerwacji.</div><div class="skala">5 wydań, analiza 4 wariantów na 2101 ogłoszeniach, 81 ogłoszeń objętych ochroną</div></td>
+<td class="num">36</td><td class="num">12</td></tr>
+<tr>
+<td class="data-col">2026-05-18</td>
+<td><span class="badge">SEO i treści</span><br><strong>Treści encyklopedyczne dla 25 stron modeli + wpięcie 49 osieroconych stron</strong><div class="opis">Kolejna fala opisów na strony zbiorcze + naprawa stron modeli, które wypadły ze struktury nawigacji (niewidoczne dla Google).</div><div class="skala">25 stron treści + 49 napraw struktury</div></td>
+<td class="num">20</td><td class="num">6</td></tr>
+<tr>
+<td class="data-col">2026-05-19</td>
+<td><span class="badge">SEO i treści</span><br><strong>Automatyczne zgłaszanie nowych ogłoszeń do Google (Indexing API)</strong><div class="opis">Każde świeżo opublikowane ogłoszenie jest natychmiast zgłaszane Google — auta pojawiają się w wyszukiwarce w godziny zamiast tygodni, automatycznie obsługując ~150-200 publikacji dziennie.</div><div class="skala">Nowy moduł z kolejką ponawiania + 4 komendy serwisowe</div></td>
+<td class="num">24</td><td class="num">8</td></tr>
+<tr>
+<td class="data-col">2026-05-19</td>
+<td><span class="badge">SEO i treści</span><br><strong>Nowe tytuły Google dla wszystkich 61 stron marek (z ceną i liczbą aut)</strong><div class="opis">Dane pokazały, że ludzie szukają marek z dopiskiem 'cena', nie 'import' — przepisano tytuły wszystkich stron marek na wzór z ceną minimalną i liczbą ofert, z automatycznym nocnym odświeżaniem.</div><div class="skala">61/61 marek, 3 warianty przetestowane na danych</div></td>
+<td class="num">16</td><td class="num">6</td></tr>
+<tr>
+<td class="data-col">2026-05-20</td>
+<td><span class="badge">SEO i treści</span><br><strong>Samonaprawiające przekierowania — sprzątnięcie ~1300 błędów 404 dziennie</strong><div class="opis">Google trafiał codziennie na ~1300 nieistniejących adresów (stare linki do sprzedanych aut). Inteligentne przekierowania naprawiły 99% martwych adresów — budżet uwagi Google przestał się marnować.</div><div class="skala">677/683 adresów naprawionych, 3-warstwowy mechanizm</div></td>
+<td class="num">20</td><td class="num">6</td></tr>
+<tr>
+<td class="data-col">2026-05-25</td>
+<td><span class="badge">Reklamy i analityka</span><br><strong>Raporty lejka sprzedażowego GA4 + piksel Facebooka</strong><div class="opis">Raporty pokazujące, gdzie klienci wypadają z lejka na stronie, oraz piksel Meta z konwersjami (zgodny z RODO — czeka na zgodę cookie). Fundament pod płatne kampanie na Facebooku/Instagramie z gotowym planem grup odbiorców.</div><div class="skala">5 tagów, plan kampanii Meta</div></td>
+<td class="num">24</td><td class="num">8</td></tr>
+<tr>
+<td class="data-col">2026-05-27</td>
+<td><span class="badge">Reklamy i analityka</span><br><strong>Odblokowywanie konta firmowego Meta (weryfikacja, role, katalog aut)</strong><div class="opis">Przepchnięto proces weryfikacji firmy w Meta i rozpoznano wymogi katalogu pojazdów pod reklamy — blokady po stronie Meta udokumentowane z planem obejścia.</div><div class="skala">Audyt na 3 poziomach konta, 5 blokad rozpoznanych</div></td>
+<td class="num">10</td><td class="num">4</td></tr>
+<tr>
+<td class="data-col">2026-05-28</td>
+<td><span class="badge">Rozwój oprogramowania</span><br><strong>Formularz 'Dane do umowy' z automatyczną regeneracją PDF + uproszczenie formularza zamówienia</strong><div class="opis">Administrator uzupełnia dane klienta w jednym formularzu, a umowa PDF regeneruje się sama. Z formularza zamówienia usunięto zbędne pola — kupujący wypełnia 10 pól zamiast 12, mniejsze ryzyko porzucenia.</div><div class="skala">3 wydania, zmiany w 4 modułach z zachowaniem starych umów</div></td>
+<td class="num">20</td><td class="num">8</td></tr>
+<tr>
+<td class="data-col">2026-05-28</td>
+<td><span class="badge">Wygląd i użyteczność</span><br><strong>Galeria klientów z odebranymi autami (/klienci/)</strong><div class="opis">Strona z 47 zdjęciami zadowolonych klientów przy odbiorze aut — mocny dowód wiarygodności. Zrobiona tak, że sprzedawca sam dodaje i usuwa zdjęcia w panelu, bez programisty.</div><div class="skala">47 zdjęć, 2 iteracje wdrożenia (finalnie samoobsługowa)</div></td>
+<td class="num">16</td><td class="num">6</td></tr>
+<tr>
+<td class="data-col">2026-05-30</td>
+<td><span class="badge">Rozwój oprogramowania</span><br><strong>Usprawnienia obsługi zamówień: powiadomienia, klienci zagraniczni, własne umowy</strong><div class="opis">Zamówienie nie przeskakuje samo do kolejnego etapu (sprzedawca dostaje powiadomienie i decyduje), formularz przyjmuje dane klientów zagranicznych, sprzedawca może wgrać własną wersję umowy. Ujednolicone słownictwo 'depozyt' w całym systemie.</div><div class="skala">7 wydań w 1 dzień</div></td>
+<td class="num">32</td><td class="num">12</td></tr>
+<tr>
+<td class="data-col">2026-05-30..06-01</td>
+<td><span class="badge">SEO i treści</span><br><strong>Przebudowa ~93 stron modeli pod frazy 'cena / gdzie kupić'</strong><div class="opis">Serwis wygrywał frazy 'import', ale oddawał konkurencji 'cena' i 'gdzie kupić'. Wypracowano metodę (pilot na BYD Leopard 5) i przebudowano ~93 strony: odpowiedź z ceną od razu na górze, rozbudowane sekcje wiedzy i pytań — z pilnowaniem prawdziwości ('dostępny w salonie' vs 'tylko z importu') sprawdzaną w internecie dla każdej marki i ochroną 3 najlepiej działających stron.</div><div class="skala">~93 strony, skan ~40 kandydatów, 122 zgłoszenia do Google</div></td>
+<td class="num">120</td><td class="num">20</td></tr>
+<tr>
+<td class="data-col">2026-05-30..06-02</td>
+<td><span class="badge">Obsługa prawna</span><br><strong>Weryfikacja i wdrożenie dokumentów prawnych od prawnika</strong><div class="opis">Ocena merytoryczna regulaminów i polityki prywatności względem faktycznego modelu pośrednictwa (rozstrzygnięto spór — dokumenty prawnika były poprawne, błędne były stare strony), wdrożenie na stronę z poprawą zapisów o danych osobowych i faktyczną listą narzędzi śledzących.</div><div class="skala">3 dokumenty ocenione, 2 strony wdrożone z backupem</div></td>
+<td class="num">16</td><td class="num">8</td></tr>
+<tr>
+<td class="data-col">2026-06-02</td>
+<td><span class="badge">Rozwój oprogramowania</span><br><strong>Naprawa: podpisana umowa klienta pokazywała się jako 'brak'</strong><div class="opis">Realny klient przesłał podpisaną umowę, a panel twierdził, że jej nie ma. Znaleziono przyczynę (błąd odczytu — dane były całe), naprawiono wyświetlanie wszystkich plików umów, także w 4 starszych zamówieniach.</div><div class="skala">Diagnoza + audyt całego systemu pod kątem tego wzorca</div></td>
+<td class="num">10</td><td class="num">4</td></tr>
+<tr>
+<td class="data-col">2026-06-02..06</td>
+<td><span class="badge">Reklamy i analityka</span><br><strong>Google Ads Faza 1: reklamy dynamiczne zamiast palącej budżet kampanii</strong><div class="opis">Audyt 30 dni pokazał, że kampanie modelowe wydawały ~2700 zł/mc przy słabych efektach. Najgorszą wyłączono i zastąpiono reklamami dynamicznymi dopasowującymi się do stanu magazynu (58 stron modeli). Reklamę tematyczną przepisano tak, by odsiewała 'majsterkowiczów' chcących sprowadzić auto samodzielnie.</div><div class="skala">6 kampanii dotkniętych, feed 58 stron, analiza 30 dni</div></td>
+<td class="num">40</td><td class="num">12</td></tr>
+<tr>
+<td class="data-col">2026-06-02..05</td>
+<td><span class="badge">Rozwój oprogramowania</span><br><strong>Poprawki panelu zamówień i importu ręcznego</strong><div class="opis">Import ręczny przestał tworzyć puste ogłoszenia-śmieci z wygasłych ofert; drobne naprawy panelu.</div><div class="skala">2 wydania</div></td>
+<td class="num">8</td><td class="num">2</td></tr>
+<tr>
+<td class="data-col">2026-06-06..07</td>
+<td><span class="badge">SEO i treści</span><br><strong>Pełny audyt Search Console przez API — naprawa oznaczeń 4458 ofert</strong><div class="opis">Kompleksowy audyt wykrył, że Google 'widział' jako produkty tylko 28 z ~4500 ofert — naprawiono oznaczenia danych strukturalnych całego katalogu i zepsuty mechanizm starych linków. Pozostałe punkty planu po twardej weryfikacji na produkcji świadomie odrzucono — zero ryzykownych zmian na ślepo.</div><div class="skala">4458 ofert objętych naprawą, plan 7-punktowy rozstrzygnięty, 80 adresów do reindeksu</div></td>
+<td class="num">40</td><td class="num">10</td></tr>
+<tr>
+<td class="data-col">2026-06-07</td>
+<td><span class="badge">SEO i treści</span><br><strong>Wzmocnienie treści strony głównej wokół intencji importu</strong><div class="opis">Badanie popytu pokazało ogromny ruch na frazach ogólnych ('chińskie samochody' — 22 200 wyszukiwań/mc), ale główny cel strony pozostał na frazie biznesowej 'import samochodów z Chin' (główne hasło nietknięte). Popularne frazy pokryto wtórnie w podtytułach, opisach sekcji i pytaniach — dodatkowy ruch bez rozmywania intencji importowej, która realnie konwertuje (potwierdzone później w Google Ads: m.in. 'importer samochodów z chin').</div><div class="skala">9 elementów strony głównej, research ~12 fraz</div></td>
+<td class="num">24</td><td class="num">6</td></tr>
+<tr>
+<td class="data-col">2026-06-07</td>
+<td><span class="badge">SEO i treści</span><br><strong>Rozdzielenie intencji 9 stron informacyjnych</strong><div class="opis">Strony 'jak sprowadzić', 'koszty', 'homologacja', 'gwarancja' konkurowały ze sobą w Google o te same frazy — rozdzielono je intencyjnie (każda celuje w inne pytanie klienta) i naprawiono strukturę nagłówków.</div><div class="skala">9 stron, badanie fraz per strona</div></td>
+<td class="num">20</td><td class="num">6</td></tr>
+<tr>
+<td class="data-col">2026-06-06</td>
+<td><span class="badge">SEO i treści</span><br><strong>Reguła opłacalności treści + plan naprawy zduplikowanych stron modeli</strong><div class="opis">Ustalono zasadę, które modele opłaca się promować treścią (tylko te z realną przewagą importu — np. wersje niedostępne w polskich salonach), co skróciło kolejkę o ~9 pozycji bez wartości. Zinwentaryzowano 8 par zduplikowanych stron z bezpieczną procedurą scalenia.</div><div class="skala">Kolejka 262 stron przeanalizowana, procedura scaleń</div></td>
+<td class="num">12</td><td class="num">4</td></tr>
+<tr>
+<td class="data-col">2026-06-08</td>
+<td><span class="badge">SEO i treści</span><br><strong>Przebudowa 37 stron marek: pasek faktów i treść oparte na danych</strong><div class="opis">Strony marek (BYD, Geely, XPeng…) dostały to, czego szukają klienci: liczbę modeli, zakres cen, informację czy marka jest w polskich salonach — z weryfikacją prawdziwości w internecie dla każdej marki osobno. 35 stron na żywo.</div><div class="skala">37 marek treść + badanie 27 marek, 5 fal produkcji</div></td>
+<td class="num">60</td><td class="num">10</td></tr>
+<tr>
+<td class="data-col">2026-06-08..09</td>
+<td><span class="badge">Infrastruktura i utrzymanie</span><br><strong>Odzyskanie 5,7 GB — naprawa wycieku zdjęć po usuwanych autach</strong><div class="opis">Serwer zapychał się plikami: zdjęcia wycofanych aut nigdy nie były kasowane (przyczyna tkwiła w samym WordPressie). Naprawiono na przyszłość i bezpiecznie wyczyszczono 54 508 osieroconych zdjęć.</div><div class="skala">54,5 tys. plików / 5,7 GB / 254 tys. inode odzyskane</div></td>
+<td class="num">24</td><td class="num">6</td></tr>
+<tr>
+<td class="data-col">2026-06-09..10</td>
+<td><span class="badge">SEO i treści</span><br><strong>Protokół pomiaru skuteczności przebudów (mierzymy, nie zgadujemy)</strong><div class="opis">Kontrola po przebudowie stron: czy Google je przełknął, czy pozycje na frazy cenowe rosną, czy chronione strony nie ucierpiały — z progiem awaryjnego cofnięcia zmian.</div><div class="skala">21 stron × inspekcja + porównanie pozycji przed/po</div></td>
+<td class="num">12</td><td class="num">4</td></tr>
+<tr>
+<td class="data-col">2026-06-13</td>
+<td><span class="badge">SEO i treści</span><br><strong>Tabele danych technicznych na 357 stronach modeli (zawsze aktualne, z danych)</strong><div class="opis">Zamiast zamrożonych opisów AI każda strona modelu dostała tabelę danych technicznych (wymiary, zasięg, 0-100 km/h) generowaną wprost z aut w bazie, z podziałem na wersje — celuje w tysiące fraz typu '{model} wymiary/zasięg'. Po drodze naprawiono 106 ogłoszeń przypisanych do złych modeli.</div><div class="skala">357 stron, 106 przeniesionych ogłoszeń, 168+189 zgłoszeń do Google</div></td>
+<td class="num">60</td><td class="num">14</td></tr>
+<tr>
+<td class="data-col">2026-06-13..14</td>
+<td><span class="badge">SEO i treści</span><br><strong>Treści dla 14 świeżych stron modeli + tytuły 6 stron z największym potencjałem + 145 przekierowań</strong><div class="opis">Kolejna fala treści na strony bez opisów, chirurgiczna poprawa tytułów 6 stron z dużymi wyświetleniami a słabą klikalnością (zamiast planowanej masowej zmiany 30-50 — dane pokazały, że wystarczy 6) oraz 145 stałych przekierowań usuwających z Google 'puste strony udające działające'.</div><div class="skala">14+6 stron, pomiar 345 stron, 696 adresów zweryfikowanych, 145 reguł</div></td>
+<td class="num">30</td><td class="num">8</td></tr>
+<tr>
+<td class="data-col">2026-06-14</td>
+<td><span class="badge">SEO i treści</span><br><strong>Audyt kompletności zgłoszeń do Google — 355 stron zweryfikowanych, 124 dogłoszone</strong><div class="opis">Twarda kontrola wykazała dziury w ewidencji zgłoszeń (86 stron 'w limbo') — audyt wszystkich 355 stron w Google, dogłoszenie brakujących 124, kampania indeksacji domknięta w 100%.</div><div class="skala">355 adresów audytowanych, 124 zgłoszone, 603 historyczne zgłoszenia zrekonstruowane</div></td>
+<td class="num">16</td><td class="num">4</td></tr>
+<tr>
+<td class="data-col">2026-06-15..16</td>
+<td><span class="badge">Infrastruktura i utrzymanie</span><br><strong>Awaria dostawcy danych (3. raz w miesiącu) — reklamacja i wynegocjowana rekompensata</strong><div class="opis">Feed ogłoszeń z Chin przestał dostarczać auta, a dostawca po cichu podniósł cenę ze 100 do ~170 USD. Udokumentowano awarie dzień po dniu, wysłano reklamację — efekt: dostęp do zapasowego źródła (Che168) opłacony przez dostawcę do 15.07.</div><div class="skala">6 okresów awarii zmapowanych, negocjacje B2B</div></td>
+<td class="num">12</td><td class="num">4</td></tr>
+<tr>
+<td class="data-col">2026-06-16</td>
+<td><span class="badge">Drugie źródło (Che168)</span><br><strong>Drugie źródło aut (Che168) — import ręczny z pełną symulacją</strong><div class="opis">Zabezpieczenie przed awariami głównego feedu: sprzedawca wkleja numer ogłoszenia z Che168 i przed zapisem widzi pełną symulację, co trafi do bazy. Wrażliwy rdzeń importu pozostał nietknięty (architektura przepisana po pierwszej iteracji — bezpieczniejsza wygrała).</div><div class="skala">7 nowych komponentów, 2 iteracje architektury, testy na 6 realnych autach</div></td>
+<td class="num">50</td><td class="num">10</td></tr>
+<tr>
+<td class="data-col">2026-06-17</td>
+<td><span class="badge">Drugie źródło (Che168)</span><br><strong>Testy 20 aut z Che168 + tłumacz nazw 'przy wejściu'</strong><div class="opis">Wykryto fundamentalny problem: Che168 nazywa auta inaczej niż główne źródło (auta trafiałyby do złych kategorii). Spór rozstrzygnięto dowodem na 12 parach tych samych aut z obu źródeł, po czym wdrożono warstwę tłumaczącą nazwy przy wejściu — jedna poprawka w słowniku obsługuje odtąd oba źródła.</div><div class="skala">20 aut testowanych + 12 par dowodowych, pokrycie 17/20 i 35/41 zmierzone</div></td>
+<td class="num">40</td><td class="num">8</td></tr>
+<tr>
+<td class="data-col">2026-06-18</td>
+<td><span class="badge">Drugie źródło (Che168)</span><br><strong>Kalibracja końcowa Che168 i WŁĄCZENIE importu (8 wydań w 1 dzień)</strong><div class="opis">Domknięcie luk: ujednolicenie atrybutów (nadwozie, napęd — zero śmieciowych filtrów), odzyskanie danych technicznych (pokrycie z 47% do 75%), tytuły z wersją wyposażenia, onboarding nowej chińskiej marki rozszyfrowanej m.in. z numeru VIN. Import włączony — zapasowe źródło gotowe.</div><div class="skala">8 wydań, 35 wartości słownika (100%), +32 parametry techniczne</div></td>
+<td class="num">40</td><td class="num">10</td></tr>
+<tr>
+<td class="data-col">2026-06-19</td>
+<td><span class="badge">Drugie źródło (Che168)</span><br><strong>Che168 udostępnione sprzedawcy w menu Ogłoszeń</strong><div class="opis">Import z Che168 przeniesiony do zwykłego menu obok importu z głównego źródła — Ruslan może samodzielnie dodawać auta z obu giełd.</div><div class="skala">1 wydanie + weryfikacja uprawnień</div></td>
+<td class="num">6</td><td class="num">2</td></tr>
+<tr>
+<td class="data-col">2026-06-19</td>
+<td><span class="badge">Reklamy i analityka</span><br><strong>Reklamy dynamiczne rozszerzone na 140 modeli + remarketing z 90-dniową pamięcią</strong><div class="opis">Najtańszy kanał reklam (klik 0,59 zł) objął 2× więcej modeli, dodano 66 wykluczeń odcinających frazy bez intencji zakupu, a kampania przypominająca dostała odświeżony katalog 312 modeli i dłuższą pamięć odwiedzających.</div><div class="skala">Feed 58→140 stron, 66 wykluczeń, remarketing 312 pozycji + RLSA na 5 kampaniach</div></td>
+<td class="num">24</td><td class="num">6</td></tr>
+<tr>
+<td class="data-col">2026-06-19</td>
+<td><span class="badge">SEO i treści</span><br><strong>Scalenie 7 par zduplikowanych stron modeli + wpięcie 9 osieroconych + treść 12 stron</strong><div class="opis">7 modeli miało po dwie konkurujące strony rozmywające ruch — scalono ręcznie z przekierowaniami (automat panelu skasowałby złą wersję). Napływ ~700 nowych aut zostawił modele poza strukturą — wpięto, naprawiono auta w cudzych kategoriach (Denza pod Nissanem), 12 stron dostało treść.</div><div class="skala">7 scaleń (91 ogłoszeń), 9 wpięć, 12 stron treści, wszystko zgłoszone do Google</div></td>
+<td class="num">40</td><td class="num">10</td></tr>
+<tr>
+<td class="data-col">2026-06-14..25</td>
+<td><span class="badge">Infrastruktura i utrzymanie</span><br><strong>Roadmapa rozwoju — uporządkowany parking pomysłów</strong><div class="opis">Pomysły produktowe (pasek podobnych aut, zapisane wyszukiwania z alertami, blog) spisane w jedną roadmapę z opisami — nic nie ginie między sesjami, każdy pomysł gotowy do wyceny i decyzji.</div><div class="skala">27 pozycji rozwojowych opisanych</div></td>
+<td class="num">8</td><td class="num">4</td></tr>
+</tbody>
+<tfoot><tr><td colspan="2">Razem etap 2</td><td class="num">1550</td><td class="num">464</td></tr></tfoot>
+</table>
+
+<h2><span class="eno">Etap 3.</span> Plany rozwoju — wycena inwestycji</h2>
+<p class="lead">Uporządkowany parking pomysłów rozwojowych — każda pozycja z widełkami godzin. Kolumna 'rynkowo' = ile kosztowałoby to u klasycznego zespołu; kolumna 'realnie' = przewidywany czas zespołu Auranet z warsztatem AI (i taka baza może być podstawą rozliczenia).</p>
+<table>
+<thead><tr><th>Pozycja</th><th class="num">Rynkowo [h]</th><th class="num">Realnie [h]</th></tr></thead>
+<tbody>
+<tr>
+<td><strong>T-186 — Che168 jako pełne, automatyczne drugie źródło ogłoszeń</strong><div class="opis">Automatyczny import z drugiego chińskiego portalu równolegle do głównego — pełna dywersyfikacja na wypadek awarii dostawcy (feed padł 3× w czerwcu) i szersza oferta aut premium. Fundament ręczny już działa; to rozbudowa o pełny automat z deduplikacją aut widocznych na obu giełdach.</div><div class="skala">Status: spec gotowy, czeka na decyzję</div></td>
+<td class="num">240–280</td>
+<td class="num">85–100</td></tr>
+<tr>
+<td><strong>T-121 — Płatność online (BLIK/karta) za depozyt rezerwacyjny</strong><div class="opis">Klient wpłaca zwrotny depozyt od razu w kreatorze zamiast przelewu ręcznego — szybsze domknięcie rezerwacji, mniej porzuceń. Wymaga też rozstrzygnięcia prawnego w regulaminie.</div><div class="skala">Status: pomysł</div></td>
+<td class="num">85–100</td>
+<td class="num">40–50</td></tr>
+<tr>
+<td><strong>T-188 — Zapisane wyszukiwania + alerty mailowe o nowych autach</strong><div class="opis">Klient zapisuje kryteria (np. 'czarny Leopard 5 do 150 tys.') i dostaje maila, gdy pasujące auto pojawi się w imporcie. Newsletter oparty na intencji = powracający ruch i gotowa baza kontaktów.</div><div class="skala">Status: pomysł</div></td>
+<td class="num">100–120</td>
+<td class="num">50–60</td></tr>
+<tr>
+<td><strong>T-113 — Finansowanie/leasing jako alternatywa w umowie</strong><div class="opis">Klient wybiera: klasyczne pośrednictwo albo finansowanie — otwiera sprzedaż klientom bez gotówki na całość. Wymaga wzorca umowy i partnera finansującego.</div><div class="skala">Status: pomysł</div></td>
+<td class="num">85–100</td>
+<td class="num">40–50</td></tr>
+<tr>
+<td><strong>T-189 — Kalkulator raty finansowania na stronie oferty</strong><div class="opis">Widget: klient wpisuje wpłatę własną i okres, widzi szacunkową ratę — obniża barierę 'całość z góry', generuje leady 'zapytaj o finansowanie'.</div><div class="skala">Status: pomysł</div></td>
+<td class="num">17–20</td>
+<td class="num">8–10</td></tr>
+<tr>
+<td><strong>T-152 — Wystawianie ogłoszeń na Otomoto</strong><div class="opis">Automatyczna publikacja ofert na największym polskim portalu motoryzacyjnym — nowy kanał sprzedaży poza własną stroną.</div><div class="skala">Status: pomysł</div></td>
+<td class="num">100–120</td>
+<td class="num">40–50</td></tr>
+<tr>
+<td><strong>T-162 — Sekcja blogowa / baza wiedzy (rankingi, porównania, poradniki)</strong><div class="opis">Rankingi ('Top 20 SUV-ów z Chin'), porównania z europejskim premium, poradniki importu — autorytet, ruch z Google i cytowania w wyszukiwarkach AI.</div><div class="skala">Status: pomysł</div></td>
+<td class="num">120–140</td>
+<td class="num">50–60</td></tr>
+<tr>
+<td><strong>T-114 — Ulubione auta (schowek klienta)</strong><div class="opis">Klient zapisuje auta na własną listę i wraca do nich — wymusza rejestrację, buduje bazę pod mailing i remarketing.</div><div class="skala">Status: pomysł</div></td>
+<td class="num">40–50</td>
+<td class="num">17–20</td></tr>
+<tr>
+<td><strong>T-115 — Porównywarka aut</strong><div class="opis">Kilka aut w tabeli specyfikacji obok siebie — łatwiejszy wybór, dłuższy czas na stronie.</div><div class="skala">Status: pomysł</div></td>
+<td class="num">40–50</td>
+<td class="num">17–20</td></tr>
+<tr>
+<td><strong>T-116 — Zaawansowana wyszukiwarka (parametry techniczne)</strong><div class="opis">Filtrowanie po liczbie miejsc, przyspieszeniu, długości w zakresie — klient precyzyjnie dobiera auto.</div><div class="skala">Status: pomysł</div></td>
+<td class="num">75–90</td>
+<td class="num">35–40</td></tr>
+<tr>
+<td><strong>T-187 — Pasek podobnych aut tego samego modelu (mobile)</strong><div class="opis">Na stronie oferty (telefon) inne egzemplarze tego samego modelu — klient zostaje w ofercie zamiast wracać do wyszukiwarki.</div><div class="skala">Status: pomysł</div></td>
+<td class="num">14–16</td>
+<td class="num">7–8</td></tr>
+<tr>
+<td><strong>T-183 — Watchdog awarii feedu ogłoszeń</strong><div class="opis">Automatyczny alarm, gdy synchronizacja przestaje dowozić nowe auta (awarie dostawcy są ciche — dziś wychodzą po fakcie). Chroni świeżość oferty.</div><div class="skala">Status: otwarty</div></td>
+<td class="num">12–14</td>
+<td class="num">5–6</td></tr>
+<tr>
+<td><strong>Uruchomienie kampanii Facebook/Instagram</strong><div class="opis">Dokończenie weryfikacji firmy w Meta (po stronie Prima-Auto) + katalog pojazdów + zestaw reklam z pikselem — drugi płatny kanał obok Google Ads. Feed i pomiar już przygotowane.</div><div class="skala">Status: czeka na weryfikację firmy w Meta</div></td>
+<td class="num">35–40</td>
+<td class="num">17–20</td></tr>
+<tr>
+<td><strong>Import konwersji do Google Ads + cykliczny przegląd fraz</strong><div class="opis">Google Ads zacznie optymalizować stawki pod realne kontakty (telefon/WhatsApp/lead); przegląd fraz dosypuje słowa i wykluczenia — lepszy zwrot z każdej złotówki budżetu.</div><div class="skala">Status: otwarty</div></td>
+<td class="num">14–16</td>
+<td class="num">7–8</td></tr>
+<tr>
+<td><strong>Skonsolidowany dashboard marketingowy (KPI, koszt leada, ROAS)</strong><div class="opis">Jeden raport łączący SEO, Ads, analitykę i Metę: koszt kontaktu, zwrot z reklam, lejek — plus przekazywanie realnych rezerwacji do Google jako konwersji.</div><div class="skala">Status: pomysł</div></td>
+<td class="num">40–50</td>
+<td class="num">20–24</td></tr>
+<tr>
+<td><strong>Pipeline opisów v2 — automatyczna kontrola jakości treści AI</strong><div class="opis">Twarda weryfikacja faktów w generowanych opisach, filtr 'AI-bełkotu', panel statusów i automatyczne odświeżanie — treści zawsze aktualne bez ręcznej pracy.</div><div class="skala">Status: pomysł</div></td>
+<td class="num">170–200</td>
+<td class="num">70–80</td></tr>
+<tr>
+<td><strong>Ładne maile HTML do klientów</strong><div class="opis">Maile transakcyjne (statusy zamówienia, potwierdzenia) w brandowanym szablonie z logo — profesjonalny wizerunek w skrzynce klienta.</div><div class="skala">Status: otwarty</div></td>
+<td class="num">30–36</td>
+<td class="num">14–16</td></tr>
+<tr>
+<td><strong>Edytor danych technicznych auta w panelu</strong><div class="opis">Ręczna korekta specyfikacji z chińskiego API bezpośrednio w panelu — bez programisty.</div><div class="skala">Status: otwarty</div></td>
+<td class="num">35–40</td>
+<td class="num">15–18</td></tr>
+<tr>
+<td><strong>Pakiet higieny technicznej (baza, puste strony, schema, mobile)</strong><div class="opis">Zbiór mniejszych domknięć: prewencja puchnięcia bazy, automatyczne ukrywanie ~1900 pustych stron modeli przed Google, wzbogacenie danych strukturalnych ogłoszeń (silnik, skrzynia, kolor), szlify mobilne, systemowe tłumaczenie chińskich nazw miast, kontrola resztkowych 404, kolejna iteracja galerii klientów.</div><div class="skala">Status: otwarte drobiazgi (7 pozycji)</div></td>
+<td class="num">60–70</td>
+<td class="num">25–32</td></tr>
+</tbody>
+<tfoot><tr><td>Razem pełna roadmapa (widełki)</td><td class="num">1312–1552</td><td class="num">562–672</td></tr></tfoot>
+</table>
+
+<h2>Koszty zewnętrzne (poza godzinami)</h2>
+<p class="lead">Twarde koszty ponoszone przez Auranet na utrzymanie i rozwój platformy — niezależne od godzin pracy zespołu.</p>
+<table>
+<thead><tr><th>Pozycja</th><th class="num">Bieżąco</th><th class="num">Dotychczas</th></tr></thead>
+<tbody>
+<tr>
+<td><strong>Feed danych o autach (auto-api.com — giełda Dongchedi)</strong><div class="opis">Płatna subskrypcja API dostarczającego ogłoszenia, zdjęcia i specyfikacje z chińskiej giełdy. Wynegocjowana stawka startowa 100 USD/mc (cennik: 170 USD), od maja pełna stawka ~145 EUR/mc. Dostęp do drugiego źródła (Che168) na okres wdrożenia wynegocjowany na koszt dostawcy (do 15.07.2026).</div><ul class='hist'><li>18.03 — 18.04.2026: <strong>100 USD (~400 zł)</strong></li><li>18.04 — 18.05.2026: <strong>100 USD (~400 zł) — po interwencji, dostawca próbował naliczyć 140 EUR</strong></li><li>18.05 — 18.06.2026: <strong>145 EUR (~620 zł)</strong></li><li>18.06 — 18.07.2026: <strong>145 EUR (~620 zł)</strong></li></ul></td>
+<td class="num nowrap">~620 zł/mc</td>
+<td class="num nowrap">~2 040 zł</td></tr>
+<tr>
+<td><strong>Infrastruktura serwerowa i domeny</strong><div class="opis">Hosting produkcyjny (udział platformy w serwerze), domena primaauto.com.pl + utrzymanie starej asiaauto.pl na przekierowania, certyfikaty SSL, kopie zapasowe.</div></td>
+<td class="num nowrap">~60-80 zł/mc (szacunek, do potwierdzenia)</td>
+<td class="num nowrap">~250-300 zł</td></tr>
+<tr>
+<td><strong>Usługi AI do produkcji treści i tłumaczeń</strong><div class="opis">Generacja opisów marek/modeli (Gemini/Claude), tłumaczenia opisów aut (Gemini + DeepL jako zapasowy), generacja grafik hero. Koszt jednostkowy zoptymalizowany do ~0,06 EUR za stronę treści.</div></td>
+<td class="num nowrap">~30-60 zł/mc (zależnie od wolumenu treści)</td>
+<td class="num nowrap">~300-500 zł (szacunek, do potwierdzenia)</td></tr>
+<tr>
+<td><strong>Narzędzia badawcze SEO (dane o wyszukiwaniach)</strong><div class="opis">Płatne dane o wolumenach wyszukiwań, trendach i konkurencji (DataForSEO) — podstawa wszystkich decyzji contentowych 'na danych, nie na intuicji'.</div></td>
+<td class="num nowrap">wg zużycia (drobne)</td>
+<td class="num nowrap">~100-200 zł</td></tr>
+<tr>
+<td><strong>Warsztat AI Auranet (narzędzia deweloperskie)</strong><div class="opis">Subskrypcje zaawansowanych narzędzi AI (Claude), które pozwalają zespołowi Auranet dostarczać pracę o wartości rynkowej wielokrotnie wyższej niż fizyczny czas — to inwestycja Auranet we własny warsztat, nieprzenoszona wprost na klienta, ale realny koszt prowadzenia projektu.</div></td>
+<td class="num nowrap">pozycja informacyjna</td>
+<td class="num nowrap">—</td></tr>
+</tbody>
+</table>
+<div class="note">Budżety reklamowe Google Ads (~100 zł/dzień) opłacane są bezpośrednio z konta reklamowego Prima-Auto i nie są kosztem Auranet — dlatego nie ma ich w tym zestawieniu.</div>
+
+<footer>
+Dokument wygenerowany automatycznie z ewidencji prac projektu (repozytorium, dziennik wydań, rejestr decyzji, logi pracy). Wartości „rynkowo" są estymatą godzin klasycznego zespołu — mogą podlegać korekcie. Auranet · js@auranet.com.pl
+</footer>
+
+</div>
+</body>
+</html>

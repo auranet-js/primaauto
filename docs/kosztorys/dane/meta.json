@@ -1,0 +1,28 @@
+{
+  "projekt": "Prima Auto — platforma importu samochodów z Chin (primaauto.com.pl)",
+  "wygenerowano": null,
+  "metodologia": {
+    "godziny_rynkowe": "Wycena rynkowa: ile godzin zajęłoby wykonanie danej pracy klasycznemu zespołowi (programista senior, specjalista SEO, specjalista Google Ads, copywriter) pracującemu tradycyjnie, bez narzędzi AI. To miara WARTOŚCI wykonanej pracy — standard przy rozliczaniu projektów agencyjnych.",
+    "godziny_realne": "Faktyczny czas pracy: godziny Jana Schenka + godziny zespołu deweloperskiego pracującego równolegle (praca dwutorowa — prowadzenie projektu i wykonanie liczone osobno). Baza czasowa dla czerwca 2026 zmierzona z dokładnych logów pracy (aktywne okna 10-minutowe); dla wcześniejszych miesięcy odtworzona z gęstości commitów, wersji oprogramowania i dziennika prac.",
+    "uwaga": "Różnica między kolumnami pokazuje efekt inwestycji Auranet we własny, zautomatyzowany warsztat AI — klient otrzymuje pracę o wartości rynkowej wielokrotnie wyższej niż fizycznie spędzony czas."
+  },
+  "timeline_kluczowe": [
+    {"data": "2026-02/03", "wydarzenie": "Koncepcja platformy, research rynku i źródeł danych o autach z Chin"},
+    {"data": "2026-03-16", "wydarzenie": "Negocjacje z dostawcą danych auto-api.com (feed giełdy Dongchedi)"},
+    {"data": "2026-03-18", "wydarzenie": "Start subskrypcji API + instalacja platformy (asiaauto.pl)"},
+    {"data": "2026-03-25", "wydarzenie": "Pierwsze automatycznie zaimportowane ogłoszenia"},
+    {"data": "2026-04-08", "wydarzenie": "Prezentacja gotowej platformy u Ruslana (PRIMA-AUTO) — wycena inwestycji: 50 000 zł"},
+    {"data": "2026-04-16", "wydarzenie": "Pierwsze zamówienie klienta w systemie"},
+    {"data": "2026-04-21", "wydarzenie": "Rebranding i przeprowadzka na primaauto.com.pl"},
+    {"data": "2026-07-03", "wydarzenie": "Stan na dziś: 6 129 ogłoszeń w katalogu, 112 zamówień w systemie, 90 wydań oprogramowania od cutovera"}
+  ],
+  "liczby_projektu": {
+    "linie_kodu_15_04": 23050,
+    "commity_repo": 174,
+    "wydania_pluginu_po_cutover": 90,
+    "decyzje_architektoniczne_adr": 35,
+    "listings_w_bazie": 6129,
+    "zamowienia_w_systemie": 112,
+    "dni_sesyjne_repo": 39
+  }
+}

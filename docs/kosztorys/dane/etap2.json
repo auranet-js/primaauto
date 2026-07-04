@@ -1,0 +1,502 @@
+{
+  "nazwa": "Etap 2 — Uruchomienie produkcyjne, rozwój i prowadzenie (15.04 — dziś)",
+  "okres": "15 kwietnia — 3 lipca 2026",
+  "opis": "Od bootstrapu profesjonalnego warsztatu pracy, przez rebranding i przeprowadzkę na primaauto.com.pl, po nieprzerwany rozwój: 90 wydań oprogramowania, kampanie Google Ads, pełna analityka, ~500 podstron z treścią pod Google, drugie źródło ogłoszeń (Che168), dokumenty prawne, obsługa awarii dostawcy danych. 174 commity, 35 udokumentowanych decyzji architektonicznych, 39 dni sesyjnych.",
+  "taski": [
+    {
+      "data": "2026-04-15",
+      "obszar": "infra-utrzymanie",
+      "tytul": "Profesjonalizacja projektu — repozytorium i pełna dokumentacja systemu",
+      "opis": "Przeanalizowano i udokumentowano całą architekturę systemu (~23 tys. linii kodu), założono repozytorium z kolejką zadań i dziennikiem decyzji. Każda późniejsza zmiana ma ślad i uzasadnienie — projekt przestaje zależeć od pamięci jednej osoby.",
+      "skala": "Komplet dokumentacji architektonicznej + proces wdrożeń",
+      "godz_rynkowe": 24,
+      "godz_realne": 8
+    },
+    {
+      "data": "2026-04-16..17",
+      "obszar": "budowa-softu",
+      "tytul": "Przebudowa obsługi zamówień pod model agencyjny",
+      "opis": "Nowy przepływ zamówienia klienta: statusy, automatyczne maile, panel klienta, bezpieczne umowy PDF w załącznikach — proces od rezerwacji do dostawy auta dopasowany do faktycznego modelu biznesowego pośrednictwa.",
+      "skala": "3 wydania, największy moduł systemu",
+      "godz_rynkowe": 40,
+      "godz_realne": 14
+    },
+    {
+      "data": "2026-04-17..20",
+      "obszar": "import-sync",
+      "tytul": "Filtr lokalizacji importu — tylko miasta, w których Prima-Auto ma ludzi",
+      "opis": "Panel pozwala ograniczyć automatyczny import do wybranych chińskich miast i prowincji, w których Prima-Auto ma swoich przedstawicieli (zmapowano 31 miast z 4 prowincji na bazie ~80 stron giełdy). Do tego szybsze działanie panelu i automatyczne sprzątanie starych ofert po 7 dniach.",
+      "skala": "31 miast / 4 prowincje, konfigurator w panelu, 4 wydania",
+      "godz_rynkowe": 20,
+      "godz_realne": 8
+    },
+    {
+      "data": "2026-04-20..21",
+      "obszar": "infra-utrzymanie",
+      "tytul": "Rebranding na Prima-Auto i przeprowadzka na primaauto.com.pl",
+      "opis": "Zmiana marki widocznej dla klientów (maile, stopka, regulamin, WhatsApp) i przeniesienie całego serwisu na docelową domenę z przekierowaniami ze starej — operacja na żywym organizmie, bez przestoju.",
+      "skala": "Cutover produkcyjny: domena, baza, maile, przekierowania 301",
+      "godz_rynkowe": 24,
+      "godz_realne": 12
+    },
+    {
+      "data": "2026-04-21",
+      "obszar": "seo-content",
+      "tytul": "Fundament widoczności w Google — strony zbiorcze modeli",
+      "opis": "Powstały strony /samochody/marka/model/ grupujące oferty pod pozycjonowanie, automatyczne opisy zdjęć i podstawy przekazywania danych do analityki. Baza całego późniejszego ruchu z Google.",
+      "skala": "Routing dwupoziomowy + iteracyjne dopracowanie tytułów (6 poprawek)",
+      "godz_rynkowe": 24,
+      "godz_realne": 8
+    },
+    {
+      "data": "2026-04-21..22",
+      "obszar": "ads-analityka",
+      "tytul": "Pełna analityka: GA4, menedżer tagów, zgody cookies, pomiar kontaktów",
+      "opis": "Wdrożono Google Analytics 4 z menedżerem tagów i banerem zgód (Consent Mode v2, zgodność z RODO). Każde kliknięcie w telefon, WhatsApp i formularz liczone jako konwersja — bez tego nie da się ocenić skuteczności żadnej reklamy.",
+      "skala": "GTM + Complianz + 3 typy konwersji",
+      "godz_rynkowe": 20,
+      "godz_realne": 8
+    },
+    {
+      "data": "2026-04-22",
+      "obszar": "infra-utrzymanie",
+      "tytul": "Usunięcie podwójnych ogłoszeń i odchudzenie bazy z 640 do 141 MB",
+      "opis": "Zdiagnozowano przyczynę duplikatów (wyścig dwóch równoległych importów), usunięto je i wyczyszczono bazę z ponad 80 tys. zbędnych rekordów — strona i panel działają szybciej, kopie zapasowe robią się kilkukrotnie szybciej.",
+      "skala": "36 par duplikatów, 72 731 osieroconych plików, baza −78%",
+      "godz_rynkowe": 16,
+      "godz_realne": 8
+    },
+    {
+      "data": "2026-04-22",
+      "obszar": "ads-analityka",
+      "tytul": "Start kampanii Google Ads od zera (3 kampanie)",
+      "opis": "Zaprojektowano i zbudowano pełną strukturę reklam: kampania markowa, tematyczna 'import z Chin' i kampania na konkretne modele — z ~200 słowami kluczowymi, 23 reklamami i ~500 wykluczeniami odsiewającymi puste kliknięcia.",
+      "skala": "3 kampanie, 23 grupy, 200 słów kluczowych, 23 reklamy RSA, ~500 negatywów, własne generatory",
+      "godz_rynkowe": 40,
+      "godz_realne": 12
+    },
+    {
+      "data": "2026-04-22..23",
+      "obszar": "import-sync",
+      "tytul": "Wielka przebudowa nazewnictwa marek i modeli (mapowanie chińsko-europejskie)",
+      "opis": "263 chińskie modele dostały nazwy, pod którymi faktycznie szukają ich Polacy (6 iteracji koncepcji, 16 spornych przypadków rozstrzygniętych z klientem). Przebudowa całego katalogu: nazwy, adresy stron, przekierowania — na 930 ogłoszeniach.",
+      "skala": "263 wiersze mapowania, 90 zmian, migracja produkcyjna + przekierowania 301",
+      "godz_rynkowe": 50,
+      "godz_realne": 18
+    },
+    {
+      "data": "2026-04-23",
+      "obszar": "import-sync",
+      "tytul": "Stabilizacja synchronizacji — koniec duplikatów",
+      "opis": "Naprawiono u źródła wyścig w automatycznej synchronizacji, który tworzył zduplikowane oferty, i wyczyszczono istniejące duplikaty.",
+      "skala": "Blokada na poziomie bazy danych + czyszczenie 25 par",
+      "godz_rynkowe": 12,
+      "godz_realne": 4
+    },
+    {
+      "data": "2026-04-23",
+      "obszar": "seo-content",
+      "tytul": "Automat do produkcji treści na strony marek i modeli (AI + n8n)",
+      "opis": "Zbudowano pipeline generujący opisy i sekcje pytań na strony zbiorcze przy pomocy AI — treści powstają hurtowo (koszt ~0,06 EUR za stronę) zamiast być pisane ręcznie po kilkaset złotych.",
+      "skala": "2 workflow automatyzacji, 5 punktów integracji, centralny moduł SEO",
+      "godz_rynkowe": 40,
+      "godz_realne": 12
+    },
+    {
+      "data": "2026-04-24",
+      "obszar": "ux-front",
+      "tytul": "Autorski motyw graficzny — pozbycie się page-buildera",
+      "opis": "Zastąpienie ciężkiego Elementora własnym, szybkim motywem: strona ładuje się szybciej, wygląd pod pełną kontrolą, bez opłat licencyjnych i ryzyk aktualizacji. Przebudowa całego frontu w jeden dzień.",
+      "skala": "Kompletny motyw od zera + refactor strony oferty",
+      "godz_rynkowe": 60,
+      "godz_realne": 14
+    },
+    {
+      "data": "2026-04-24",
+      "obszar": "ads-analityka",
+      "tytul": "Sprytna restruktura Google Ads + własny klient API",
+      "opis": "37 osobnych grup reklam zastąpiono jedną z dynamicznym nagłówkiem — dodanie nowej marki to 1 wpis zamiast budowy całej grupy. Powstał własny zestaw narzędzi do zarządzania kampaniami skryptami (bez klikania).",
+      "skala": "6 narzędzi (~1200 linii), restruktura bez utraty historii",
+      "godz_rynkowe": 24,
+      "godz_realne": 8
+    },
+    {
+      "data": "2026-04-28",
+      "obszar": "budowa-softu",
+      "tytul": "Panel diagnostyczny — system sam wykrywa problemy z danymi",
+      "opis": "Nowy panel w adminie wykrywa brakujące zdjęcia, chińskie znaki, braki treści — i pozwala naprawić je jednym kliknięciem. Mniej ręcznego szukania błędów, tańsze utrzymanie.",
+      "skala": "6 wydań, 8-10 automatycznych kontroli, edytor tłumaczeń",
+      "godz_rynkowe": 32,
+      "godz_realne": 10
+    },
+    {
+      "data": "2026-04-28",
+      "obszar": "seo-content",
+      "tytul": "Migracja na RankMath Pro + sprint SEO technicznego (11 wydań w 1 dzień)",
+      "opis": "Profesjonalna wtyczka SEO + seria poprawek: właściwe strony w indeksie Google, wzbogacone dane strukturalne aut (cena, dostawa, producent), naprawione tłumaczenia i przekierowania.",
+      "skala": "11 wydań, dane strukturalne całego katalogu",
+      "godz_rynkowe": 40,
+      "godz_realne": 14
+    },
+    {
+      "data": "2026-04-28..29",
+      "obszar": "seo-content",
+      "tytul": "Sekcje 'Auta od ręki / W drodze' na stronie głównej + nocny sprint SEO",
+      "opis": "Strona główna pokazuje auta dostępne natychmiast i w transporcie — klient od razu widzi, co można kupić szybko. Do tego naprawa tytułów stron modeli, zgłoszenie map witryny do Google, przekierowania sprzedanych aut.",
+      "skala": "10 wydań w ~24h",
+      "godz_rynkowe": 36,
+      "godz_realne": 14
+    },
+    {
+      "data": "2026-04-29",
+      "obszar": "ads-analityka",
+      "tytul": "Wizytówka Google (Profil Firmy) — konfiguracja od zera",
+      "opis": "Kategorie, opis, 12 usług, auta z placu jako produkty, linki społecznościowe — wizytówka w Google Maps zaczyna pracować na lokalną widoczność firmy.",
+      "skala": "6 kategorii, 12 usług, 5 produktów",
+      "godz_rynkowe": 12,
+      "godz_realne": 6
+    },
+    {
+      "data": "2026-04-29..05-04",
+      "obszar": "import-sync",
+      "tytul": "Porządki w markach: scalenia GAC Trumpchi, iCAR, Galaxy + czyszczenie chińskich znaków",
+      "opis": "Pod-marki scalono z markami głównymi, żeby klienci i Google nie widzieli rozproszonych katalogów tego samego producenta. 15 nowych tłumaczeń — zero chińskich znaków w opublikowanych tytułach. Po drodze naprawa strony kontaktowej i 7 zapomnianych odnośników do starej domeny.",
+      "skala": "3 operacje scalania na żywej taksonomii + przekierowania",
+      "godz_rynkowe": 28,
+      "godz_realne": 12
+    },
+    {
+      "data": "2026-04-30..05-01",
+      "obszar": "ux-front",
+      "tytul": "Poprawki mobilne + prawidłowa moc silnika hybryd",
+      "opis": "Strona oferty na telefonie dostała przyklejony pasek z ceną, naprawiono karuzelę, a hybrydy plug-in pokazują pełną moc układu (nie zaniżoną o silnik elektryczny).",
+      "skala": "3 wydania",
+      "godz_rynkowe": 12,
+      "godz_realne": 4
+    },
+    {
+      "data": "2026-05-06",
+      "obszar": "import-sync",
+      "tytul": "Blokada 'martwych ofert' w imporcie",
+      "opis": "Import przestał publikować oferty z wygasłymi zdjęciami i danymi — klient nie trafia już na puste ogłoszenia.",
+      "skala": "Podwójna bramka + ostrzeżenie w imporcie ręcznym",
+      "godz_rynkowe": 12,
+      "godz_realne": 4
+    },
+    {
+      "data": "2026-05-06..07",
+      "obszar": "seo-content",
+      "tytul": "Audyt Search Console + automat odświeżający tytuły 333 stron co noc",
+      "opis": "Przegląd stanu w Google: czyszczenie map witryny, usunięcie zduplikowanych opisów, automat generujący tytuły stron zbiorczych z aktualną ceną i liczbą aut — odświeżane codziennie bez ręcznej pracy.",
+      "skala": "9 wydań, 333 strony objęte automatem",
+      "godz_rynkowe": 30,
+      "godz_realne": 10
+    },
+    {
+      "data": "2026-05-07",
+      "obszar": "seo-content",
+      "tytul": "Tuning treści 8 najgorętszych stron modeli wg realnego popytu + zgłoszenie 45 do Google",
+      "opis": "Na podstawie badania, czego Polacy faktycznie szukają (m.in. Zeekr 9X — wzrost wyszukiwań o 2400%), dopieszczono opisy, tytuły i sekcje pytań na najważniejszych stronach. Zidentyfikowano 4 modele o ogromnym popycie, których brakuje w ofercie.",
+      "skala": "8 stron pełny tuning + 1 od zera, badanie ~30 fraz, analiza konkurencji",
+      "godz_rynkowe": 24,
+      "godz_realne": 8
+    },
+    {
+      "data": "2026-05-13..16",
+      "obszar": "budowa-softu",
+      "tytul": "Poprawna wycena w umowach + ochrona ręcznie dodanych ogłoszeń",
+      "opis": "Naprawiono błąd zaniżający cenę w umowie względem katalogowej, umowa podaje prawnie bezpieczny 'rok pierwszej rejestracji' (chińskie źródło nie zna roku produkcji), a ogłoszenia dodane ręcznie przez sprzedawcę nie są już kasowane przez automat. Przy okazji: kopiowanie ogłoszenia nie przenosi już rezerwacji.",
+      "skala": "5 wydań, analiza 4 wariantów na 2101 ogłoszeniach, 81 ogłoszeń objętych ochroną",
+      "godz_rynkowe": 36,
+      "godz_realne": 12
+    },
+    {
+      "data": "2026-05-18",
+      "obszar": "seo-content",
+      "tytul": "Treści encyklopedyczne dla 25 stron modeli + wpięcie 49 osieroconych stron",
+      "opis": "Kolejna fala opisów na strony zbiorcze + naprawa stron modeli, które wypadły ze struktury nawigacji (niewidoczne dla Google).",
+      "skala": "25 stron treści + 49 napraw struktury",
+      "godz_rynkowe": 20,
+      "godz_realne": 6
+    },
+    {
+      "data": "2026-05-19",
+      "obszar": "seo-content",
+      "tytul": "Automatyczne zgłaszanie nowych ogłoszeń do Google (Indexing API)",
+      "opis": "Każde świeżo opublikowane ogłoszenie jest natychmiast zgłaszane Google — auta pojawiają się w wyszukiwarce w godziny zamiast tygodni, automatycznie obsługując ~150-200 publikacji dziennie.",
+      "skala": "Nowy moduł z kolejką ponawiania + 4 komendy serwisowe",
+      "godz_rynkowe": 24,
+      "godz_realne": 8
+    },
+    {
+      "data": "2026-05-19",
+      "obszar": "seo-content",
+      "tytul": "Nowe tytuły Google dla wszystkich 61 stron marek (z ceną i liczbą aut)",
+      "opis": "Dane pokazały, że ludzie szukają marek z dopiskiem 'cena', nie 'import' — przepisano tytuły wszystkich stron marek na wzór z ceną minimalną i liczbą ofert, z automatycznym nocnym odświeżaniem.",
+      "skala": "61/61 marek, 3 warianty przetestowane na danych",
+      "godz_rynkowe": 16,
+      "godz_realne": 6
+    },
+    {
+      "data": "2026-05-20",
+      "obszar": "seo-content",
+      "tytul": "Samonaprawiające przekierowania — sprzątnięcie ~1300 błędów 404 dziennie",
+      "opis": "Google trafiał codziennie na ~1300 nieistniejących adresów (stare linki do sprzedanych aut). Inteligentne przekierowania naprawiły 99% martwych adresów — budżet uwagi Google przestał się marnować.",
+      "skala": "677/683 adresów naprawionych, 3-warstwowy mechanizm",
+      "godz_rynkowe": 20,
+      "godz_realne": 6
+    },
+    {
+      "data": "2026-05-25",
+      "obszar": "ads-analityka",
+      "tytul": "Raporty lejka sprzedażowego GA4 + piksel Facebooka",
+      "opis": "Raporty pokazujące, gdzie klienci wypadają z lejka na stronie, oraz piksel Meta z konwersjami (zgodny z RODO — czeka na zgodę cookie). Fundament pod płatne kampanie na Facebooku/Instagramie z gotowym planem grup odbiorców.",
+      "skala": "5 tagów, plan kampanii Meta",
+      "godz_rynkowe": 24,
+      "godz_realne": 8
+    },
+    {
+      "data": "2026-05-27",
+      "obszar": "ads-analityka",
+      "tytul": "Odblokowywanie konta firmowego Meta (weryfikacja, role, katalog aut)",
+      "opis": "Przepchnięto proces weryfikacji firmy w Meta i rozpoznano wymogi katalogu pojazdów pod reklamy — blokady po stronie Meta udokumentowane z planem obejścia.",
+      "skala": "Audyt na 3 poziomach konta, 5 blokad rozpoznanych",
+      "godz_rynkowe": 10,
+      "godz_realne": 4
+    },
+    {
+      "data": "2026-05-28",
+      "obszar": "budowa-softu",
+      "tytul": "Formularz 'Dane do umowy' z automatyczną regeneracją PDF + uproszczenie formularza zamówienia",
+      "opis": "Administrator uzupełnia dane klienta w jednym formularzu, a umowa PDF regeneruje się sama. Z formularza zamówienia usunięto zbędne pola — kupujący wypełnia 10 pól zamiast 12, mniejsze ryzyko porzucenia.",
+      "skala": "3 wydania, zmiany w 4 modułach z zachowaniem starych umów",
+      "godz_rynkowe": 20,
+      "godz_realne": 8
+    },
+    {
+      "data": "2026-05-28",
+      "obszar": "ux-front",
+      "tytul": "Galeria klientów z odebranymi autami (/klienci/)",
+      "opis": "Strona z 47 zdjęciami zadowolonych klientów przy odbiorze aut — mocny dowód wiarygodności. Zrobiona tak, że sprzedawca sam dodaje i usuwa zdjęcia w panelu, bez programisty.",
+      "skala": "47 zdjęć, 2 iteracje wdrożenia (finalnie samoobsługowa)",
+      "godz_rynkowe": 16,
+      "godz_realne": 6
+    },
+    {
+      "data": "2026-05-30",
+      "obszar": "budowa-softu",
+      "tytul": "Usprawnienia obsługi zamówień: powiadomienia, klienci zagraniczni, własne umowy",
+      "opis": "Zamówienie nie przeskakuje samo do kolejnego etapu (sprzedawca dostaje powiadomienie i decyduje), formularz przyjmuje dane klientów zagranicznych, sprzedawca może wgrać własną wersję umowy. Ujednolicone słownictwo 'depozyt' w całym systemie.",
+      "skala": "7 wydań w 1 dzień",
+      "godz_rynkowe": 32,
+      "godz_realne": 12
+    },
+    {
+      "data": "2026-05-30..06-01",
+      "obszar": "seo-content",
+      "tytul": "Przebudowa ~93 stron modeli pod frazy 'cena / gdzie kupić'",
+      "opis": "Serwis wygrywał frazy 'import', ale oddawał konkurencji 'cena' i 'gdzie kupić'. Wypracowano metodę (pilot na BYD Leopard 5) i przebudowano ~93 strony: odpowiedź z ceną od razu na górze, rozbudowane sekcje wiedzy i pytań — z pilnowaniem prawdziwości ('dostępny w salonie' vs 'tylko z importu') sprawdzaną w internecie dla każdej marki i ochroną 3 najlepiej działających stron.",
+      "skala": "~93 strony, skan ~40 kandydatów, 122 zgłoszenia do Google",
+      "godz_rynkowe": 120,
+      "godz_realne": 20
+    },
+    {
+      "data": "2026-05-30..06-02",
+      "obszar": "prawne",
+      "tytul": "Weryfikacja i wdrożenie dokumentów prawnych od prawnika",
+      "opis": "Ocena merytoryczna regulaminów i polityki prywatności względem faktycznego modelu pośrednictwa (rozstrzygnięto spór — dokumenty prawnika były poprawne, błędne były stare strony), wdrożenie na stronę z poprawą zapisów o danych osobowych i faktyczną listą narzędzi śledzących.",
+      "skala": "3 dokumenty ocenione, 2 strony wdrożone z backupem",
+      "godz_rynkowe": 16,
+      "godz_realne": 8
+    },
+    {
+      "data": "2026-06-02",
+      "obszar": "budowa-softu",
+      "tytul": "Naprawa: podpisana umowa klienta pokazywała się jako 'brak'",
+      "opis": "Realny klient przesłał podpisaną umowę, a panel twierdził, że jej nie ma. Znaleziono przyczynę (błąd odczytu — dane były całe), naprawiono wyświetlanie wszystkich plików umów, także w 4 starszych zamówieniach.",
+      "skala": "Diagnoza + audyt całego systemu pod kątem tego wzorca",
+      "godz_rynkowe": 10,
+      "godz_realne": 4
+    },
+    {
+      "data": "2026-06-02..06",
+      "obszar": "ads-analityka",
+      "tytul": "Google Ads Faza 1: reklamy dynamiczne zamiast palącej budżet kampanii",
+      "opis": "Audyt 30 dni pokazał, że kampanie modelowe wydawały ~2700 zł/mc przy słabych efektach. Najgorszą wyłączono i zastąpiono reklamami dynamicznymi dopasowującymi się do stanu magazynu (58 stron modeli). Reklamę tematyczną przepisano tak, by odsiewała 'majsterkowiczów' chcących sprowadzić auto samodzielnie.",
+      "skala": "6 kampanii dotkniętych, feed 58 stron, analiza 30 dni",
+      "godz_rynkowe": 40,
+      "godz_realne": 12
+    },
+    {
+      "data": "2026-06-02..05",
+      "obszar": "budowa-softu",
+      "tytul": "Poprawki panelu zamówień i importu ręcznego",
+      "opis": "Import ręczny przestał tworzyć puste ogłoszenia-śmieci z wygasłych ofert; drobne naprawy panelu.",
+      "skala": "2 wydania",
+      "godz_rynkowe": 8,
+      "godz_realne": 2
+    },
+    {
+      "data": "2026-06-06..07",
+      "obszar": "seo-content",
+      "tytul": "Pełny audyt Search Console przez API — naprawa oznaczeń 4458 ofert",
+      "opis": "Kompleksowy audyt wykrył, że Google 'widział' jako produkty tylko 28 z ~4500 ofert — naprawiono oznaczenia danych strukturalnych całego katalogu i zepsuty mechanizm starych linków. Pozostałe punkty planu po twardej weryfikacji na produkcji świadomie odrzucono — zero ryzykownych zmian na ślepo.",
+      "skala": "4458 ofert objętych naprawą, plan 7-punktowy rozstrzygnięty, 80 adresów do reindeksu",
+      "godz_rynkowe": 40,
+      "godz_realne": 10
+    },
+    {
+      "data": "2026-06-07",
+      "obszar": "seo-content",
+      "tytul": "Wzmocnienie treści strony głównej wokół intencji importu",
+      "opis": "Badanie popytu pokazało ogromny ruch na frazach ogólnych ('chińskie samochody' — 22 200 wyszukiwań/mc), ale główny cel strony pozostał na frazie biznesowej 'import samochodów z Chin' (główne hasło nietknięte). Popularne frazy pokryto wtórnie w podtytułach, opisach sekcji i pytaniach — dodatkowy ruch bez rozmywania intencji importowej, która realnie konwertuje (potwierdzone później w Google Ads: m.in. 'importer samochodów z chin').",
+      "skala": "9 elementów strony głównej, research ~12 fraz",
+      "godz_rynkowe": 24,
+      "godz_realne": 6
+    },
+    {
+      "data": "2026-06-07",
+      "obszar": "seo-content",
+      "tytul": "Rozdzielenie intencji 9 stron informacyjnych",
+      "opis": "Strony 'jak sprowadzić', 'koszty', 'homologacja', 'gwarancja' konkurowały ze sobą w Google o te same frazy — rozdzielono je intencyjnie (każda celuje w inne pytanie klienta) i naprawiono strukturę nagłówków.",
+      "skala": "9 stron, badanie fraz per strona",
+      "godz_rynkowe": 20,
+      "godz_realne": 6
+    },
+    {
+      "data": "2026-06-06",
+      "obszar": "seo-content",
+      "tytul": "Reguła opłacalności treści + plan naprawy zduplikowanych stron modeli",
+      "opis": "Ustalono zasadę, które modele opłaca się promować treścią (tylko te z realną przewagą importu — np. wersje niedostępne w polskich salonach), co skróciło kolejkę o ~9 pozycji bez wartości. Zinwentaryzowano 8 par zduplikowanych stron z bezpieczną procedurą scalenia.",
+      "skala": "Kolejka 262 stron przeanalizowana, procedura scaleń",
+      "godz_rynkowe": 12,
+      "godz_realne": 4
+    },
+    {
+      "data": "2026-06-08",
+      "obszar": "seo-content",
+      "tytul": "Przebudowa 37 stron marek: pasek faktów i treść oparte na danych",
+      "opis": "Strony marek (BYD, Geely, XPeng…) dostały to, czego szukają klienci: liczbę modeli, zakres cen, informację czy marka jest w polskich salonach — z weryfikacją prawdziwości w internecie dla każdej marki osobno. 35 stron na żywo.",
+      "skala": "37 marek treść + badanie 27 marek, 5 fal produkcji",
+      "godz_rynkowe": 60,
+      "godz_realne": 10
+    },
+    {
+      "data": "2026-06-08..09",
+      "obszar": "infra-utrzymanie",
+      "tytul": "Odzyskanie 5,7 GB — naprawa wycieku zdjęć po usuwanych autach",
+      "opis": "Serwer zapychał się plikami: zdjęcia wycofanych aut nigdy nie były kasowane (przyczyna tkwiła w samym WordPressie). Naprawiono na przyszłość i bezpiecznie wyczyszczono 54 508 osieroconych zdjęć.",
+      "skala": "54,5 tys. plików / 5,7 GB / 254 tys. inode odzyskane",
+      "godz_rynkowe": 24,
+      "godz_realne": 6
+    },
+    {
+      "data": "2026-06-09..10",
+      "obszar": "seo-content",
+      "tytul": "Protokół pomiaru skuteczności przebudów (mierzymy, nie zgadujemy)",
+      "opis": "Kontrola po przebudowie stron: czy Google je przełknął, czy pozycje na frazy cenowe rosną, czy chronione strony nie ucierpiały — z progiem awaryjnego cofnięcia zmian.",
+      "skala": "21 stron × inspekcja + porównanie pozycji przed/po",
+      "godz_rynkowe": 12,
+      "godz_realne": 4
+    },
+    {
+      "data": "2026-06-13",
+      "obszar": "seo-content",
+      "tytul": "Tabele danych technicznych na 357 stronach modeli (zawsze aktualne, z danych)",
+      "opis": "Zamiast zamrożonych opisów AI każda strona modelu dostała tabelę danych technicznych (wymiary, zasięg, 0-100 km/h) generowaną wprost z aut w bazie, z podziałem na wersje — celuje w tysiące fraz typu '{model} wymiary/zasięg'. Po drodze naprawiono 106 ogłoszeń przypisanych do złych modeli.",
+      "skala": "357 stron, 106 przeniesionych ogłoszeń, 168+189 zgłoszeń do Google",
+      "godz_rynkowe": 60,
+      "godz_realne": 14
+    },
+    {
+      "data": "2026-06-13..14",
+      "obszar": "seo-content",
+      "tytul": "Treści dla 14 świeżych stron modeli + tytuły 6 stron z największym potencjałem + 145 przekierowań",
+      "opis": "Kolejna fala treści na strony bez opisów, chirurgiczna poprawa tytułów 6 stron z dużymi wyświetleniami a słabą klikalnością (zamiast planowanej masowej zmiany 30-50 — dane pokazały, że wystarczy 6) oraz 145 stałych przekierowań usuwających z Google 'puste strony udające działające'.",
+      "skala": "14+6 stron, pomiar 345 stron, 696 adresów zweryfikowanych, 145 reguł",
+      "godz_rynkowe": 30,
+      "godz_realne": 8
+    },
+    {
+      "data": "2026-06-14",
+      "obszar": "seo-content",
+      "tytul": "Audyt kompletności zgłoszeń do Google — 355 stron zweryfikowanych, 124 dogłoszone",
+      "opis": "Twarda kontrola wykazała dziury w ewidencji zgłoszeń (86 stron 'w limbo') — audyt wszystkich 355 stron w Google, dogłoszenie brakujących 124, kampania indeksacji domknięta w 100%.",
+      "skala": "355 adresów audytowanych, 124 zgłoszone, 603 historyczne zgłoszenia zrekonstruowane",
+      "godz_rynkowe": 16,
+      "godz_realne": 4
+    },
+    {
+      "data": "2026-06-15..16",
+      "obszar": "infra-utrzymanie",
+      "tytul": "Awaria dostawcy danych (3. raz w miesiącu) — reklamacja i wynegocjowana rekompensata",
+      "opis": "Feed ogłoszeń z Chin przestał dostarczać auta, a dostawca po cichu podniósł cenę ze 100 do ~170 USD. Udokumentowano awarie dzień po dniu, wysłano reklamację — efekt: dostęp do zapasowego źródła (Che168) opłacony przez dostawcę do 15.07.",
+      "skala": "6 okresów awarii zmapowanych, negocjacje B2B",
+      "godz_rynkowe": 12,
+      "godz_realne": 4
+    },
+    {
+      "data": "2026-06-16",
+      "obszar": "che168",
+      "tytul": "Drugie źródło aut (Che168) — import ręczny z pełną symulacją",
+      "opis": "Zabezpieczenie przed awariami głównego feedu: sprzedawca wkleja numer ogłoszenia z Che168 i przed zapisem widzi pełną symulację, co trafi do bazy. Wrażliwy rdzeń importu pozostał nietknięty (architektura przepisana po pierwszej iteracji — bezpieczniejsza wygrała).",
+      "skala": "7 nowych komponentów, 2 iteracje architektury, testy na 6 realnych autach",
+      "godz_rynkowe": 50,
+      "godz_realne": 10
+    },
+    {
+      "data": "2026-06-17",
+      "obszar": "che168",
+      "tytul": "Testy 20 aut z Che168 + tłumacz nazw 'przy wejściu'",
+      "opis": "Wykryto fundamentalny problem: Che168 nazywa auta inaczej niż główne źródło (auta trafiałyby do złych kategorii). Spór rozstrzygnięto dowodem na 12 parach tych samych aut z obu źródeł, po czym wdrożono warstwę tłumaczącą nazwy przy wejściu — jedna poprawka w słowniku obsługuje odtąd oba źródła.",
+      "skala": "20 aut testowanych + 12 par dowodowych, pokrycie 17/20 i 35/41 zmierzone",
+      "godz_rynkowe": 40,
+      "godz_realne": 8
+    },
+    {
+      "data": "2026-06-18",
+      "obszar": "che168",
+      "tytul": "Kalibracja końcowa Che168 i WŁĄCZENIE importu (8 wydań w 1 dzień)",
+      "opis": "Domknięcie luk: ujednolicenie atrybutów (nadwozie, napęd — zero śmieciowych filtrów), odzyskanie danych technicznych (pokrycie z 47% do 75%), tytuły z wersją wyposażenia, onboarding nowej chińskiej marki rozszyfrowanej m.in. z numeru VIN. Import włączony — zapasowe źródło gotowe.",
+      "skala": "8 wydań, 35 wartości słownika (100%), +32 parametry techniczne",
+      "godz_rynkowe": 40,
+      "godz_realne": 10
+    },
+    {
+      "data": "2026-06-19",
+      "obszar": "che168",
+      "tytul": "Che168 udostępnione sprzedawcy w menu Ogłoszeń",
+      "opis": "Import z Che168 przeniesiony do zwykłego menu obok importu z głównego źródła — Ruslan może samodzielnie dodawać auta z obu giełd.",
+      "skala": "1 wydanie + weryfikacja uprawnień",
+      "godz_rynkowe": 6,
+      "godz_realne": 2
+    },
+    {
+      "data": "2026-06-19",
+      "obszar": "ads-analityka",
+      "tytul": "Reklamy dynamiczne rozszerzone na 140 modeli + remarketing z 90-dniową pamięcią",
+      "opis": "Najtańszy kanał reklam (klik 0,59 zł) objął 2× więcej modeli, dodano 66 wykluczeń odcinających frazy bez intencji zakupu, a kampania przypominająca dostała odświeżony katalog 312 modeli i dłuższą pamięć odwiedzających.",
+      "skala": "Feed 58→140 stron, 66 wykluczeń, remarketing 312 pozycji + RLSA na 5 kampaniach",
+      "godz_rynkowe": 24,
+      "godz_realne": 6
+    },
+    {
+      "data": "2026-06-19",
+      "obszar": "seo-content",
+      "tytul": "Scalenie 7 par zduplikowanych stron modeli + wpięcie 9 osieroconych + treść 12 stron",
+      "opis": "7 modeli miało po dwie konkurujące strony rozmywające ruch — scalono ręcznie z przekierowaniami (automat panelu skasowałby złą wersję). Napływ ~700 nowych aut zostawił modele poza strukturą — wpięto, naprawiono auta w cudzych kategoriach (Denza pod Nissanem), 12 stron dostało treść.",
+      "skala": "7 scaleń (91 ogłoszeń), 9 wpięć, 12 stron treści, wszystko zgłoszone do Google",
+      "godz_rynkowe": 40,
+      "godz_realne": 10
+    },
+    {
+      "data": "2026-06-14..25",
+      "obszar": "infra-utrzymanie",
+      "tytul": "Roadmapa rozwoju — uporządkowany parking pomysłów",
+      "opis": "Pomysły produktowe (pasek podobnych aut, zapisane wyszukiwania z alertami, blog) spisane w jedną roadmapę z opisami — nic nie ginie między sesjami, każdy pomysł gotowy do wyceny i decyzji.",
+      "skala": "27 pozycji rozwojowych opisanych",
+      "godz_rynkowe": 8,
+      "godz_realne": 4
+    }
+  ]
+}
