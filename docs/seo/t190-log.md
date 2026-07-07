@@ -35,3 +35,24 @@
     - E: post bez marki → fallback stara ścieżka ✅
   - Smoke: homepage + huby aito/m8, geely/e5, byd/atto-3 = **200**; brak nowych wpisów w debug.log.
   - Pozostało do pełnej weryfikacji: realny import (ręczny lub feed po odmrożeniu) — kod przetestowany reflection 1:1, ale ścieżka end-to-end jeszcze nie przeszła.
+
+## 2026-07-07 · KROK 2 — audyt DFS całego mapowania (read-only)
+
+- **Co:** 364 huby (mapowanie ∪ baza) × 663 frazy PL, koszt **$0.11** (saldo ~$43.07). Raport: `https://auratest.pl/fe4f58fec53ctmp/primaauto-t190-dfs-audyt-2026-07-07.md`; rekoncyliacja: `…/primaauto-t190-rekoncyliacja-2026-07-07.md`.
+- **Kluczowe:** wzorzec sub-marek potwierdzony (`leopard 5` 2400 vs `byd leopard 5` 0; `geely galaxy m9` 390 vs `galaxy m9` 0); `gac m8`/`gac s7` 110 vs `gac trumpchi *` 0 → **decyzja Janka: drop „Trumpchi"**; +9 par duplikatów po NAZWIE pod tym samym make; 33 huby db-only bez mapowania (Qashqai 165k/mc); decyzje Janka: Lotus→`lotus`, Qiyuan→Changan, Fengyun→`chery-fulwin`, Shangjie→`shangjie` (zastępuje etykietę „SAIC Shangjie" z 06-18).
+
+## 2026-07-07 · KROK 3 — mapowanie v6.2 + merge 13 grup + repoint 102 aut + fold 6 marek ✅
+
+- **Backup:** `~/backups/primaauto/2026-07-07/taxonomy-pre-T190-krok3.sql` (4 tabele, zweryfikowany) + `brand-mapping-v6.1.php.bak-2026-07-07-t190-v62` + `class-asiaauto-redirects.php.bak-2026-07-07-t190-krok3`.
+- **Mapowanie v6.2** (plik `brand-mapping-v6.1.php` — nazwa celowo bez zmian, 6 referencji w strefie kruchej; wersja w nagłówku): 18 zmian — galaxy-* → kanoniczne (×11), drop Trumpchi (M8/S7/M6 + title_eu), Avatr `07`→`avatr-07`, Haval `h5`→`haval-h5`, IM `ls8`→`im-ls8`, „SAIC Shangjie"→„Shangjie". Diff: `https://auratest.pl/fe4f58fec53ctmp/primaauto-t190-mapping-v62.diff`. **Re-rekoncyliacja po: DRIFT-SLUG 0/273** (było 11).
+- **Skrypt:** `scratchpad/t190-merge-repoint.php` (dry-run→apply, problems=0). Wykonane:
+  - NOWY term 7177 „Galaxy M7" (slug m7, parent geely) — listing 383469 „Galaxy 银河M7" był na AITO M7 (5301).
+  - RE-PARENT/RENAME ×17: ForMe→lotus, Smart#5→smart, Evoque→land-rover, 3381→„M8", 3377→„M6", Eletre→lotus, Hyper GT/HT/HL/SSR/A800→GAC + „Aion Hyper X", Qiyuan E07/A06/A06 Classic/Q05/A05→Changan + drop „Changan".
+  - MERGE ×13 (src skasowany, listingi+meta przeniesione): 7160→3406, 7166→3397, 7164→6550, 6590→3400, 7159→7153, 6596→6516, 6585→3407, 7162→5739, 4614→6530, 6592→6249, 3993→6511, 6594→6569, 6512→6271.
+  - REPOINT kontaminacji: 26× AITO M8 (3381→5302), 9× Avatr 07 (5388→6906), 2× Denza N7, 2× Hongqi H6, 1× AITO M6, 1× Galaxy M9 (387316), 1× Galaxy M7 (383469).
+  - FOLD MAREK (listingi+meta+dzieci, pusty term skasowany): galaxy 6579→geely (39), lotus-cars 5665→lotus, gac-aion-hyper 5485→gac (24), chery-fengyun 5181→chery-fulwin, saic-shangjie 7157→shangjie, changan-qiyuan 4769→changan (8).
+  - DELETE puste skorupy: 6735, 6739, 6995, 4273. RECOUNT+REGEN tytułów: 40 termów.
+- **Redirecty** (`class-asiaauto-redirects.php`): V61 fix `changan-qiyuan`→`changan` (było `nevo`!) + dodane `saic-shangjie`→`shangjie`; V62 +5 (zeekr-8x, lynk-co-900, mazda-ez-60, volvo-xc70, li-l7). V62 geely galaxy-* i gac trumpchi-* JUŻ istniały (v0.32.41).
+- **Weryfikacja:** mismatch make↔serie-parent na całej bazie = **0** (było 21 wzorców / 102 auta); 9×301 na właściwe cele; 10 hubów 200 bez „Nie znaleziono modelu".
+- **Rollback:** SQL dump 4 tabel + 3 pliki .bak (patrz wyżej).
+- **Zostało (KROK 4 — routing marek):** BAIC×4+BAW/212 (+BJ30→BAIC 3600/mc), Yangwang→BYD, Maextro własna marka (zdjąć V61 `maextro`→`luxeed`), Dongfeng Fengxing, ~20 pustych sierot „Beijing *".
