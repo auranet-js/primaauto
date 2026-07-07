@@ -767,6 +767,9 @@ Podłączenie 4 zewnętrznych API: **GSC** (monitoring organic), **GA4** (attrib
 
 ## Zrealizowane (archiwum)
 
+- [x] **Audyt widoczności/SEO 2026-07-07** — GSC+GA4+Ads+DB; kliki +114% (1 563→3 347), Organic = kanał #1. Raport `tmp/seo-audyt-2026-07-07.md`. Rekomendacje: #1 homepage „importer" ✅ (commit 4ad8c08, v0.33.15), #2 striking-distance ✅, #3 huby bez opisu ✅.
+- [x] **#2 striking-distance — title/meta „cena" (2026-07-07)** — 4 huby (monjaro/z9-gt-dm-i/yu7/shark-6) na format „{Model} cena w Polsce 2026 — od X PLN | Prima-Auto" + `skip_regen=1` + re-index. leopard-7 pominięty (już zrobiony pilot). Log: `docs/seo/striking-distance-2026-07-07.md`, backup `~/backups/primaauto/2026-07-07/termmeta-pre-striking-distance.sql`. Otwarte: linkowanie wewnętrzne do tych hubów.
+- [x] **#3 huby bez opisu — wiki+FAQ+lead (2026-07-07)** — 14 modeli (byd-e7, changan-qiyuan-a06, dajiangjun-ev-pickup, es, ford-bronco, gx, haishi-07-dm, haval-h6l, honda-s7, lieshou, li-i6, li-l7→5739, song-ultra-ev, z7t), `rework=v1-2026-07-07`, content `tmp/content/*`.
 - [x] Pending 0: bump wersji 0.29.0-wip → 0.30.7 (2026-04-16)
 - [x] Pending 1: pipeline USD-centric — `calculateFromCifUsd()`, `BREAKDOWN_VERSION=2` (2026-04-16)
 - [x] ZADANIE 2: załączniki PDF do umowy (renderAttachment1/2), token bezpieczeństwa, nr umowy w tytule przelewu (0.30.8, 2026-04-17)
