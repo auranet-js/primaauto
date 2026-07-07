@@ -1,5 +1,28 @@
 # Historia wersji asiaauto-sync
 
+## 0.33.16 — 2026-07-07 (T-190: guard importera — make-aware serie)
+
+**Powód:** importer odtwarzał zmergowane duplikaty i kontaminował huby cudzych marek —
+lookup termu `serie` był globalny po slugu (bez marki), nowy term powstawał bez parenta
+(sieroty), a slug szedł ze stale mapowania. Skala: 19 wzorców / ~106 aut na złych termach,
+nawroty wszystkich 3 merge'ów galaxy-* z T-019 (diagnoza: `docs/seo/t190-log.md` KROK 0).
+
+**Zmiana (`includes/class-asiaauto-importer.php`, backup `.bak-2026-07-07-t190-guard`):**
+- nowe `setSerieTaxonomyAndMeta()` + `resolveSerieTermId()` + `isTokenSuffix()` — serie
+  szukane wśród DZIECI marki (slug → znormalizowana nazwa → jednoznaczny wariant
+  z/bez prefiksu sub-marki); nowy term zawsze z `parent`=make; meta `serie` = realny slug
+  termu; `_asiaauto_primary_make_slug` od pierwszego zapisu; niejednoznaczność = osobny
+  term + warning (bez zgadywania);
+- `computeTerms()` (dry-run Che168) — `exists` tym samym resolverem (dry-run == import);
+- `setTaxonomyAndMeta()` i pozostałe taksonomie NIETKNIĘTE; brak marki → fallback 1:1.
+- header `Version` zsynchronizowany ze stałą (drift 0.33.14/0.33.15 → oba 0.33.16).
+
+**Test:** 5/5 PASS (reflection, testowy draft, auto-cleanup) — AITO M8↛GAC, galaxy-e5→e5,
+Avatr 07↛WEY, nowy term z parentem, fallback. Smoke 200. ADR Galaxy:
+`docs/decyzje/2026-07-07-t190-galaxy-pod-geely.md`. Dziennik: `docs/seo/t190-log.md`.
+
+---
+
 ## 0.33.15 — 2026-07-07 (homepage hero-sub + /informacje/o-nas/ — encja „importer")
 
 **Powód:** audyt SEO 2026-07-07. „importer samochodów z chin" = najlepiej konwertujący topic-keyword

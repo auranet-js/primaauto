@@ -42,9 +42,18 @@
 - Hyper (cała linia GT/HL/HT/SSR/A800) → marka **GAC**, model „Aion Hyper X" (Aion=0 aut, uśpiony)
 - Beijing BJ30 → marka **BAIC**, model „Beijing BJ30"
 - Dongfeng Fengxing (Xinghai T5, Lingzhi EV) → marka **Dongfeng**
-- Galaxy → zostaje **Geely** (już jest), tylko merge duplikatów galaxy-* → kanoniczne
+- Galaxy → zostaje **Geely** — **POTWIERDZONE 2026-07-07 wieczór (Janek), wzorzec BYD Leopard**: make listingów=geely, nazwa „Galaxy X" w modelu, make term `galaxy` (6579) do wygaszenia, V61 301 zostaje. Zastępuje sprzeczny punkt otwarty z ADR T-019. ADR: `docs/decyzje/2026-07-07-t190-galaxy-pod-geely.md`
 
 **Warunki:** backup 4 tabel taksonomii (wzór `~/backups/primaauto/2026-07-07/taxonomy-pre-hubfix.sql`). Uruchomić gdy feed dongchedi aktywny (obecnie zamrożony, patrz [[project_dongchedi_feed_frozen_2026_07_07]]) — inaczej nie zweryfikujemy że guard trzyma. Skrypt-wzór merge: `tmp/hubfix-2026-07-07.php` + `tmp/honda-s7-fix-2026-07-07.php`.
+**Wymóg wykonawczy (Janek 07-07 wieczór):** strefa krucha — KAŻDY krok logowany w `docs/seo/t190-log.md` (dry-run output, term_id/listingi, plik backupu, skrypt, smoke), diff przed edycją importera/mapowania/redirects. Cel: przy regresji natychmiast widać, który krok ją wprowadził.
+
+**DIAGNOZA 2026-07-07 wieczór (sesja badawcza, raport: `auratest:primaauto-t190-diagnoza-2026-07-07.md`):**
+- Mechanizm potwierdzony w kodzie: `setTaxonomyAndMeta()` (importer l.622-640) — lookup termu po slugu GLOBALNIE (bez marki), nowy term BEZ parenta (sieroty), slug ze stale mapowania. Ręczny import = ta sama ścieżka + `force=true` omija filtr konfiguracji (modele spoza mapowania → fallback translateModel+slugify → nowy sierocy term). 13 listingów „bez źródła" z ostatnich 200 = duplikacje Ruslana (akcja Duplikuj czyści `_asiaauto_source`) — dziedziczą termy, NIE tworzą hubów.
+- **Nawroty T-019 potwierdzone:** galaxy-starship-8-phev ORPHAN 11 aut, galaxy-e5 7, galaxy-m9 6; kontaminacja AITO M8→GAC wróciła ×26, Denza N7→Nissan ×2.
+- **Skala złych przypisań (cała baza publish): 19 wzorców, ~106 aut.** Top: AITO→„Trumpchi M8" 26, Galaxy A7 EM-i (make galaxy vs parent geely) 21, Avatr→WEY „07" 9. Galaxy M9 rozbite na 3 termy.
+- **Kolizje slugów wpisane w mapowanie (6):** m8 (AITO+GAC), 07 (Avatr+WEY), n7 (Denza+Nissan), et5 (Exeed+NIO), h6, h5 (Haval+Hongqi) — kontaminacja gwarantowana do czasu guarda. W bazie 10 par termów serie o identycznym slugu (legalne przy różnych parentach — importer musi być make-aware).
+- **DFS (koszt $0.012, saldo $43.18):** „baic bj30" **3600/mc** (BJ30 siedzi źle jako „Beijing Off-road BJ30" — najwyższy priorytet SEO routingu), „baic bj40" 2900 vs „beijing bj40" 140 (BJ40 pod `baic` nazwany DOBRZE — czysty „BJ40"), wszystkie warianty „212" ~0 (212→BAW = porządek merytoryczny, bez presji SEO; UWAGA: puste marki `baw` 5547 i `212` 5687 już istnieją — kolizja przy konsolidacji).
+- **Kolejność fixu wg dźwigni: guard importera NAJPIERW** (bez niego każdy merge cofa się przy pierwszym imporcie), potem rekoncyliacja+v6.2, potem merge ~106 aut, potem routing (BAIC ×4 + BJ30→BAIC + 212→BAW + reszta decyzji), na końcu 49 redundantnych slugów.
 
 **Dodatkowe fasety wykryte 2026-07-07 (ten sam korzeń — fragmentacja termów):**
 - **49 hubów count>0 z make-prefiksowanym slugiem** (redundantne `/make/make-model/`, np. `haval/haval-h6l`, `mg/mg-cyberster`, `li-auto/li-auto-mega`). Normalizacja slugów (drop prefiks marki) — UWAGA: część zaindeksowana z treścią (Leapmotor Lafa5 14, MG Cyberster 8) → wymaga 301, NIE masowy rename na ślepo.
