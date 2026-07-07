@@ -1,5 +1,23 @@
 # Historia wersji asiaauto-sync
 
+## 0.33.15 — 2026-07-07 (homepage hero-sub + /informacje/o-nas/ — encja „importer")
+
+**Powód:** audyt SEO 2026-07-07. „importer samochodów z chin" = najlepiej konwertujący topic-keyword
+w Ads (4 konw./30 dni), a słowo „importer" padało 0× na stronie. SERP: konkurencja w topie na
+„importer aut/samochodów z chin", nasza domena #10 / brak top 10 (rankuje nasz Facebook). Wtręt
+addytywny — bez ruszania działającego „import".
+
+**Zmiana:**
+- `includes/class-asiaauto-homepage.php` (backup `.bak-2026-07-07-importer`) — hero-sub
+  „import chińskich samochodów" → „bezpośredni importer samochodów z Chin". H1/title/FAQPage nietknięte.
+- `/informacje/o-nas/` (post 198480, poza pluginem) — intro z encją „importer" + nowy H2
+  „Bezpośredni importer samochodów z Chin" + `rank_math_description`. „importer" 0 → 6×.
+
+**Uwaga:** model prawny = pośrednictwo/agencyjny; „importer" użyte jako opis funkcjonalny
+(„model agencyjny / na Twoją rzecz"), bez sprzeczności. ADR: `docs/decyzje/2026-07-07-homepage-onas-importer-encja.md`.
+
+---
+
 ## 0.33.14 — 2026-06-19 (Che168: import przeniesiony do menu Ogłoszeń + dostęp dla sprzedawcy)
 
 **Powód:** faza obserwacji domknięta, realny import che168 WŁĄCZONY (v0.33.11). Janek chce,
