@@ -56,3 +56,17 @@
 - **Weryfikacja:** mismatch make↔serie-parent na całej bazie = **0** (było 21 wzorców / 102 auta); 9×301 na właściwe cele; 10 hubów 200 bez „Nie znaleziono modelu".
 - **Rollback:** SQL dump 4 tabel + 3 pliki .bak (patrz wyżej).
 - **Zostało (KROK 4 — routing marek):** BAIC×4+BAW/212 (+BJ30→BAIC 3600/mc), Yangwang→BYD, Maextro własna marka (zdjąć V61 `maextro`→`luxeed`), Dongfeng Fengxing, ~20 pustych sierot „Beijing *".
+
+## 2026-07-07 · KROK 4 — routing marek: BAIC/BAW/212 + Yangwang + Maextro + Fengxing ✅
+
+- **Skrypt:** `scratchpad/t190-krok4-routing.php` (dry-run→apply, problems=0). Backup: dump z KROK 3 aktualny (żadnych zmian taksonomii między krokami) + `.bak` redirects z KROK 3.
+- **Serie:** 6603 „Beijing Off-road BJ30"→**„BJ30" slug `bj30` pod BAIC** (DFS 3600/mc); 5688 „T01"→**„212 T01" pod BAW** (slug `t01` zostaje); Yangwang U9/U8L (6607/6600)→parent BYD (nazwy/slugi bez zmian — wzorzec Leopard); Xinghai T5 + Lingzhi EV→parent Dongfeng; 5338 „Zunjie S800"→**„S800" slug `s800`** (Maextro zostaje własną marką).
+- **Fold marek** (listingi+meta, pusty term skasowany): beijing-off-road 4779→baic, beijing-212 6522→**baw 5547**, yangwang 5640→byd, dongfeng-fengxing 4675→dongfeng. Skasowane puste marki: beijing 5254, 212 5687. **Stan po: baic(11) + baw(8) + maextro(2), zero marek „Beijing*"**.
+- **Sieroty:** 23 puste termy (Beijing*/Lingzhi/Xinghai, count=0, parent=0) skasowane.
+- **Mapowanie:** `Beijing 212|T01` → mark_eu **BAW**, serie_eu „212 T01" (importer nie odtworzy marki Beijing 212). Yangwang już był pod BYD w mapowaniu; che168-map Beijing Off-Road już celował w BAIC.
+- **Redirecty V61/V62:** `212`→`baw` (było beijing-212), +`beijing-212`→`baw`, +`beijing`→`baic`, **USUNIĘTE `maextro`→`luxeed`** (301 szło do złego producenta — hub `/samochody/maextro/` znów żywy); V62 +`baic:beijing-off-road-bj30`→`bj30`, +`maextro:zunjie-s800`→`s800`.
+- **Weryfikacja:** 8×301 na właściwe cele, 8 hubów 200 bez „Nie znaleziono modelu" (w tym `/baic/bj30/`, `/baw/t01/`, `/maextro/s800/`, `/byd/yangwang-u9/`). **Niezmienniki globalne: mismatch=0, sieroty-z-autami=0, duplikaty-po-nazwie=0.**
+- **Znane ograniczenie (do obserwacji):** guard chroni serie, ale MAKE nadal tworzy się po slugify — niezmapowany import z marką „Yangwang"/„Beijing…" (np. ręczny che168 spoza che168-model-map) odtworzy markę. Ochrona = wpisy w mapowaniach; ewentualny mark-alias-guard to osobny, mały task.
+
+## STAN T-190 po 2026-07-07: guard ✅ · mapowanie v6.2 ✅ · merge+repoint ✅ · routing ✅
+**Otwarte resztki:** (a) normalizacja ~40 redundantnych slugów `make-model` z treścią/indeksem (301, niski priorytet); (b) domapowanie 33 hubów db-only z popytem (klucze CN z meta); (c) weryfikacja e2e guarda przy realnym imporcie (feed zamrożony); (d) ewent. mark-alias-guard.

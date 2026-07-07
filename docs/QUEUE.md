@@ -23,7 +23,7 @@
 
 ---
 
-## T-190 — Diagnostyka + porządek duplikatów serie (importer odtwarza merge'e) 🔴 NOWY 2026-07-07
+## T-190 — Diagnostyka + porządek duplikatów serie 🟢 WYKONANE 2026-07-07 wieczór (guard+v6.2+merge+routing; resztki: slugi redundantne, domapowanie db-only, e2e przy odmrożeniu feedu — patrz docs/seo/t190-log.md)
 
 > Geneza: sesja audytu SEO 2026-07-07 (naprawa hubów bez treści). Janek: „to nie Ruslan, to problem przy imporcie/mapowaniu, dotyczy dużo większej liczby". Potwierdzone.
 
