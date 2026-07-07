@@ -23,7 +23,21 @@
 
 ---
 
-## T-190 — Diagnostyka + porządek duplikatów serie 🟢 WYKONANE 2026-07-07 wieczór (guard+v6.2+merge+routing; resztki: slugi redundantne, domapowanie db-only, e2e przy odmrożeniu feedu — patrz docs/seo/t190-log.md)
+## T-191 — Domapowanie 27 modeli z popytem (huby bez wpisu w mapowaniu) 🔵 GOTOWE DO STARTU
+
+> Geneza: audyt DFS T-190 (2026-07-07) — 101 hubów „db-only" (istnieją w bazie, brak wpisu w mapowaniu → import leci fallbackiem `translateModel`), z czego **27 z realnym wolumenem** (zweryfikowane grepem, false-positive'y odrzucone: Volvo XC70, Exeed Yaoguang, Avatr 07 są zmapowane). 69 pozostałych = 0 vol, pomijamy (guard pilnuje wpięcia).
+
+**Wykonanie per pozycja:** klucz CN z meta listingów (`_asiaauto_mark/model_che168_raw` dla che168, tytuł oryginalny dla dongchedi) → wpis z CZYSTĄ EU-nazwą (np. „Bronco" nie „Ford Bronco") → przy okazji rename termu + normalizacja redundantnego sluga z 301 (zamyka resztkę „49 slugów" dla hubów z popytem).
+
+**Grupa A → `brand-mapping` (chińskie, klucze Dongchedi):** Yangwang U9 (4400; jest U7/U8, brak U9!) · Zeekr 8X (2900; źródło dzisiejszego dup) · Tank 500 + Hi4-Z (480) · smart #1/#3 (480/390; uwaga `#` w slugify) · HiPhi Z (480) · **Geely Galaxy M9/M7 (390; korzeń fragmentacji M9 ×3)** · Haval H9 (260) · Changan UNI-K/UNI-T (210/140) · Leapmotor B01 (170; 13 aut!) / C01 (110) · Li Auto MEGA (140; 8 aut) · Jetour X90 PLUS (110) · NIO EC7/ES7 (70/40).
+
+**Grupa B → `che168-model-map` (EU-marki, ręczne importy):** Nissan Qashqai (**165 000/mc**) · Toyota Corolla Cross (49 500) · Nissan X-Trail (40 500) · Ford Bronco (27 100) · Mazda MX-5 (22 200) · Nissan Pathfinder (8 100) · MG Cyberster (6 600) · MG 6 (1 600) · Ford EVOS (480) · Nissan Teana (320).
+
+Dane źródłowe: raport `auratest:primaauto-t190-dfs-audyt-2026-07-07.md` sekcja 4. Warunki: mapowanie = strefa krucha (`.bak` + diff), wzorzec edycji z T-190 (`scratchpad/t190-map-patch.py`).
+
+---
+
+## T-190 — Diagnostyka + porządek duplikatów serie 🟢 WYKONANE 2026-07-07 wieczór (guard+v6.2+merge+routing; resztki: slugi redundantne → częściowo w T-191, e2e przy odmrożeniu feedu — patrz docs/seo/t190-log.md)
 
 > Geneza: sesja audytu SEO 2026-07-07 (naprawa hubów bez treści). Janek: „to nie Ruslan, to problem przy imporcie/mapowaniu, dotyczy dużo większej liczby". Potwierdzone.
 
