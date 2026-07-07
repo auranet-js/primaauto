@@ -46,6 +46,12 @@
 
 **Warunki:** backup 4 tabel taksonomii (wzór `~/backups/primaauto/2026-07-07/taxonomy-pre-hubfix.sql`). Uruchomić gdy feed dongchedi aktywny (obecnie zamrożony, patrz [[project_dongchedi_feed_frozen_2026_07_07]]) — inaczej nie zweryfikujemy że guard trzyma. Skrypt-wzór merge: `tmp/hubfix-2026-07-07.php` + `tmp/honda-s7-fix-2026-07-07.php`.
 
+**Dodatkowe fasety wykryte 2026-07-07 (ten sam korzeń — fragmentacja termów):**
+- **49 hubów count>0 z make-prefiksowanym slugiem** (redundantne `/make/make-model/`, np. `haval/haval-h6l`, `mg/mg-cyberster`, `li-auto/li-auto-mega`). Normalizacja slugów (drop prefiks marki) — UWAGA: część zaindeksowana z treścią (Leapmotor Lafa5 14, MG Cyberster 8) → wymaga 301, NIE masowy rename na ślepo.
+- **Wiele termów MARKI dla jednej marki** — BAIC rozbite na 4: `baic`(9)/`beijing-off-road`(2)/`beijing`(0)/`beijing-212`(8). Konsolidacja do jednej + 301.
+- **Model-jako-marka / zła atrybucja:** `Beijing 212` (make, 8 aut, tytuły „Beijing 212 T01") — producent to **Beijing Auto Works (BAW / 北京汽车制造厂)**, wydzielony z BAIC = OSOBNA marka „BAW" (lub „212" standalone), **NIE model BAIC** (decyzja Janka 2026-07-07). Potwierdzić prezentację: make „BAW", model „212 T01". (Prawdopodobnie więcej złych atrybucji make — sprawdzić w rekoncyliacji.)
+- **Normalizacja nazw wg uzusu:** gdzie internet używa marki-rodzica, zdejmij sub-markę z nazwy modelu — np. **„Beijing BJ30" → „BJ30" pod BAIC** (= „BAIC BJ30"), bo tak szuka rynek. ~20 pustych sierot „Beijing *" do sprzątnięcia.
+
 **Powiązane:** T-019 (te merge'e), memory `feedback_additive_not_fragile_zone`, `reference_spec_hub_detector_dimension_variance`, ZADANIE 14 diag panel.
 
 ---
