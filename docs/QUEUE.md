@@ -1,6 +1,6 @@
 # Kolejka zadań — Prima Auto
 
-> Aktualizacja: 2026-07-03 (dopisany T-189 kalkulator finansowania — pomysł obok T-113)
+> Aktualizacja: 2026-07-09 (dopisana sekcja AUDYT 2026-07-09 — T-192…T-199 z promptami startowymi w tmp/)
 
 ---
 
@@ -34,6 +34,25 @@
 **Grupa B → `che168-model-map` (EU-marki, ręczne importy):** Nissan Qashqai (**165 000/mc**) · Toyota Corolla Cross (49 500) · Nissan X-Trail (40 500) · Ford Bronco (27 100) · Mazda MX-5 (22 200) · Nissan Pathfinder (8 100) · MG Cyberster (6 600) · MG 6 (1 600) · Ford EVOS (480) · Nissan Teana (320).
 
 Dane źródłowe: raport `auratest:primaauto-t190-dfs-audyt-2026-07-07.md` sekcja 4. Warunki: mapowanie = strefa krucha (`.bak` + diff), wzorzec edycji z T-190 (`scratchpad/t190-map-patch.py`).
+
+---
+
+## AUDYT 2026-07-09 — T-192…T-199 (SEO/GEO/AEO/Ads) 🔵 GOTOWE DO STARTU
+
+> Geneza: pełny audyt 4-obszarowy 2026-07-09 + faza weryfikacji każdego findingu o stan faktyczny i historię (4 agenty: serwer+DB+git+docs, GAQL, curl live). Pełny raport z werdyktami (POTWIERDZONY/OBALONY/ZNIUANSOWANY): `auratest:primaauto-taski-po-audycie-2026-07-09.md`. **Każdy task ma samowystarczalny prompt startowy w `tmp/PROMPT-t19X-*.md`** — odpalać w OSOBNYCH wątkach. Wspólne wymogi każdego taska: (1) re-weryfikacja stanu przed działaniem, (2) zakończenie = testy + dowody (raport na auratest) + **recheck wrzucony do Google Calendar** („Auranet Claude"), (3) subagenty z routingiem modeli: najbardziej wymagające=fable, średnie=opus, rutynowe=sonnet.
+
+**Kolejność wg dźwigni:**
+
+- [ ] **T-192 (P1) — Sitemapy: sieroty cache RankMath + cron regeneracji** — 5×404 (listings-sitemap17-21) + 2 stęchłe (22-23, ghosty 410 = błędy GSC) + index z cache 06-21; korzeń: pliki cache poza rejestrem `rank_math_sitemap_cache_files` (17 na dysku vs 5 w rejestrze). Historia: fix 06-08 był one-shot, trwały (cron) został w TODO memory i nigdy nie powstał. Prompt: `tmp/PROMPT-t192-sitemapy-cache-2026-07-09.md`. Recheck +7d.
+- [ ] **T-197 (P1) — Ads: pakiet decyzyjny + sync SKAG ze stanem magazynowym + recurring recheck** — odwrócone dławienie: DSA/SKAG-1/SKAG-2 ~2600 zł/30d przy 10 miękkich konw. i lost IS budget ~90%, Brand (CPA 6 zł) NIE dławiony budżetem (5,3%). 7 decyzji do akceptu + skrypt `ads-skag-stock-sync.py` (rotacja placu/transportu vs statyczne KW — wymóg Janka 07-09). Recheck CYKLICZNY co 2 tyg. w kalendarzu. Prompt: `tmp/PROMPT-t197-ads-pakiet-2026-07-09.md`.
+- [ ] **T-195 (P2) — llms.txt: regen + cron 05:30** — drift 4673 vs 3046 publish (−35%), pliki z 06-13; cron = zaległy TODO z 06-06/07 („DO DODANIA RĘCZNIE PRZEZ JANKA"), nigdy nie dodany. Generatory: `scripts/build-llms{,-full}.php`. Prompt: `tmp/PROMPT-t195-llms-cron-2026-07-09.md`. Recheck +4d (czy cron odpala).
+- [ ] **T-193 (P2) — FAQ hubów: backfill diakrytyk 153 termów (36 make + 117 serie)** — dane zepsute W BAZIE (`asiaauto_faq_json`; widoczny FAQ też, nie tylko schema; render czysty); korzeń: batche 05-30/06-08 nadinterpretowały „ASCII quotes" jako „cały tekst ASCII"; batche od 06-19 czyste. Prompt: `tmp/PROMPT-t193-faq-diakrytyki-2026-07-09.md`. Recheck +14d.
+- [ ] **T-194 (P2, GATE: decyzja demo-vs-301) — asiaauto.pl: PRZYWRÓCIĆ 301** — fix istniał (v0.32.33, 04.05, smoke PASS), skasowany 14.05 przy podmianie na wydmuszkę „oczekuje na przyszłe demo"; dziś 200/0 B. + sprostowanie CLAUDE.md/memory (wpis „public_html nie istnieje" z 05.06 nieprawdziwy). Prompt: `tmp/PROMPT-t194-asiaauto-301-2026-07-09.md`. Recheck +14d (w tym: czy nikt znów nie podmienił plików).
+- [ ] **T-198 (P2) — Striking distance: „byd shark" (3944 impr./poz. 9/CTR 1%) + monjaro cena / denza z9 gt cena / xiaomi yu7 cena** — wzorzec v2-striking z 07-07 (skip_regen, gotcha meta_key bez podkreślnika); dla byd shark sprawdzić kanibalizację hub marki vs shark-6. Prompt: `tmp/PROMPT-t198-striking-distance-2026-07-09.md`. Recheck +14d (pomiar GSC).
+- [ ] **T-196 (P3) — Homepage: dynamiczna liczba ofert w meta description** — widoczna treść OK (hero dynamiczne „3 048 ofert"), statyczne „1841" TYLKO w meta description (snippet SERP) + schema; string z 28.04 w `rank_math_description` posta 93629. Fix: filtr `rank_math/frontend/description` z transient. Prompt: `tmp/PROMPT-t196-homepage-metadesc-2026-07-09.md`. Recheck +10d.
+- [ ] **T-199 (P3) — Mikro `class-asiaauto-single.php`: „Prima Auto"→„Prima-Auto" (filterTitle l.603-613 + renderMeta) + drugi H1 sticky-headera → div role=heading** — decyzja o pisowni już zapadła (NAP v0.32.25), listingi nie objęte; zero kolizji z B1 (szablony mają unset site). Prompt: `tmp/PROMPT-t199-single-branding-h1-2026-07-09.md`. Recheck +7d.
+
+**Poza taskami (przy najbliższym commicie/okazji):** sprostowanie CLAUDE.md §1 (public_html asiaauto.pl istnieje — w T-194); dopisek do memory `project_dongchedi_feed_frozen_2026_07_07` (kurczący się katalog rozstroił sitemapy/llms/homepage-count — T-192/195/196 naprawiają trwale).
 
 ---
 
