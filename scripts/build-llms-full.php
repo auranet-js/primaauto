@@ -146,6 +146,16 @@ $out[] = "";
 
 $content = implode("\n", $out);
 $path = ABSPATH . 'llms-full.txt';
+
+// Sanity-gate (T-195): patrz build-llms.php — nie nadpisuj przy publish count <50% poprzedniego.
+$new_pub = (int) $tot_listings->publish;
+if (is_readable($path) && preg_match('/Łączna liczba ofert publikowanych: ([0-9]+)/u', (string) file_get_contents($path), $m)) {
+    $prev = (int) $m[1];
+    if ($prev > 0 && $new_pub < $prev * 0.5) {
+        fwrite(STDERR, "SKIP llms-full.txt: publish={$new_pub} < 50% poprzedniego ({$prev}) — możliwa awaria feedu/DB, plik NIE nadpisany.\n");
+        exit(2);
+    }
+}
 file_put_contents($path, $content);
 
 echo "OK: " . $path . "\n";

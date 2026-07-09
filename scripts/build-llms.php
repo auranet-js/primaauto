@@ -188,6 +188,17 @@ $o[] = "";
 
 $content = implode("\n", $o);
 $path = ABSPATH . 'llms.txt';
+
+// Sanity-gate (T-195): nie nadpisuj świeżym snapshotem, gdy publish count
+// runął <50% względem poprzedniego pliku — ochrona przed publikacją katalogu
+// w środku awarii feedu/DB (feed dongchedi bywa zamrażany, rotacja kasuje).
+if (is_readable($path) && preg_match('/Katalog liczy obecnie ([0-9]+) ofert/', (string) file_get_contents($path), $m)) {
+    $prev = (int) $m[1];
+    if ($prev > 0 && $tot_listings < $prev * 0.5) {
+        fwrite(STDERR, "SKIP llms.txt: publish={$tot_listings} < 50% poprzedniego ({$prev}) — możliwa awaria feedu/DB, plik NIE nadpisany.\n");
+        exit(2);
+    }
+}
 file_put_contents($path, $content);
 
 echo "OK: {$path}\n";
