@@ -12,7 +12,9 @@
 | `_asiaauto_pl_availability` | `import_only` / `salon_available` — prawdziwość leada | Ręcznie, wiedza rynkowa. Borderline → potwierdzić z Janek/Ruslan |
 | `_asiaauto_seo_rework` | Flaga wersji `v1-2026-05-30` | Do przyszłej analizy: które huby zmienione |
 | `asiaauto_wiki_body` | Treść (7 H2 intent-led, dane prawdziwe) | `{{LISTINGS_BAR}}` po intro; wp_kses_post |
-| `asiaauto_faq_json` | FAQ 5 Q (PAA), FAQPage JSON-LD | ASCII `"` (smart quotes łamią JSON) |
+| `asiaauto_faq_json` | FAQ 5 Q (PAA), FAQPage JSON-LD | ASCII dotyczy **WYŁĄCZNIE cudzysłowów** (`"` — smart quotes „" łamią `json_decode`); **tekst po polsku Z DIAKRYTYKAMI** (ą ć ę ł ń ó ś ź ż). Walidacja `REGEXP [ąćęłńóśźż]` przed `update_term_meta`. Patrz T-193 niżej. |
+
+> ⚠️ **Reguła ASCII = tylko cudzysłowy, NIGDY cały tekst** (utrwalone po T-193, 2026-07-09). Skrót „FAQ JSON: ASCII" z 05-30/06-08 był nadinterpretowany przez subagenty jako „cały tekst bez polskich znaków" → 152 termy `asiaauto_faq_json` (+ 132 `_asiaauto_lead` + 42 `asiaauto_wiki_body`) zapisane bez diakrytyk. Zawsze: polszczyzna z diakrytykami, ASCII tylko dla `"`. Twardy gate przy backfillu: zdejmij diakrytyki z wyniku → musi być znak-w-znak == wejście (gwarancja braku dryfu treści). Batche od `v1-2026-06-19` już czyste.
 
 ## Procedura per hub (sekwencyjnie, self-review przed deployem)
 
