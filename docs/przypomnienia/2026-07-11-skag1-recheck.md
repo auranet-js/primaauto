@@ -22,6 +22,16 @@ Sesja optymalizacji Ads. Brand domknięty ręcznie przez Janka. SKAG-1:
    python3 tmp/gads_client.py 9506068500 "SELECT ad_group.name, asset.name, metrics.impressions FROM ad_group_asset WHERE campaign.id=23803851563 AND ad_group_asset.field_type='AD_IMAGE' AND segments.date DURING LAST_7_DAYS"
    ```
 
+## RSA rework + sitelinki (wgrane 2026-07-10 wieczorem)
+Doszło po podpięciu zdjęć: **14 nowych RSA** (2/grupa — wariant z ceną + bez ceny, copy „od ręki"/wyposażenie),
+stare RSA usunięte, **4 dedykowane sitelinki** „od ręki" na poziomie kampanii. Skrypt: `tmp/gads_skag1_rsa_rework_2026_07_10.py`,
+dump: `~/backups/primaauto/2026-07-10-skag1/rsa-before.json`. Sprawdzić jutro:
+```
+python3 tmp/gads_client.py 9506068500 "SELECT ad_group.name, ad_group_ad.ad_strength, ad_group_ad.policy_summary.approval_status FROM ad_group_ad WHERE campaign.id=23803851563 AND ad_group_ad.status='ENABLED'"
+```
+— czy RSA APPROVED, jaki Ad Strength. Sitelinki: `campaign_asset` SITELINK primary_status.
+Po 1-2 tyg.: który wariant (A z ceną / B bez ceny) ma lepszy CTR/konwersje — i czy 0-konwersji SKAG-1 drgnęło.
+
 ## Decyzja
 - **APPROVED + impressions rosną** → cel osiągnięty (różne zdjęcia per model). Nic nie robić.
 - **APPROVED ale 0 impressions / Google ignoruje grupowe** → grupowe w search nie działają. Wybór z Jankiem:
