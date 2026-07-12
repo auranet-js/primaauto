@@ -29,3 +29,7 @@ exports/
 #  i JSON-y z placeholderami zacommitujemy do workflows/)
 tmp/primaauto-make-desc.json
 tmp/primaauto-serie-desc.json
+
+# Python
+__pycache__/
+*.pyc
