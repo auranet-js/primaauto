@@ -247,3 +247,113 @@ Lista converters (do ew. wykluczenia) ma **0** członków.
 - [x] ~~Automatyczne odświeżanie feedu (cron)~~ — **ZROBIONE 2026-07-12**, niedziela 06:00
 - [ ] Listy remarketingowe < 1000 dla search — wrócić do tematu audiencji w SKAG, gdy urosną
 - [ ] Frequency cap 4/dz — zostawiony; przy wzroście listy rozważyć ponownie
+
+
+---
+
+## 8. Sesja 2026-07-12, część druga — SKAG tylko dla nowych, pomiar, wykluczenie własnego ruchu
+
+### 8.1 KOREKTA wcześniejszej rekomendacji: powracających ze SKAG-1/2 JEDNAK wykluczamy
+
+W sekcji 4 napisałem „NIE wykluczać" — **to było błędne**, bo agregowałem cały Paid Search.
+Rozbicie per kampania pokazuje coś innego:
+
+| Kampania | Leady od NOWYCH | Leady od POWRACAJĄCYCH |
+|---|---|---|
+| [Brand] | 7 | **11** |
+| [SKAG-1] | 1 | **0** |
+| [SKAG-2] | 4 | **0** |
+| [DSA] | 2 | 2 |
+
+**Powracający w SKAG-1/2 dają ZERO leadów.** Te 48% powracających z Paid Search siedzi w **Brandzie**
+(którego nie ruszamy). Wykluczenie ich ze SKAG kosztuje 0 leadów.
+
+Argument dobijający (Janek): **SKAG-1/2 tracą 90% impresji przez BUDŻET** (IS=10%).
+Każdy klik powracającego (0 konwersji) zabiera budżet nowemu (który konwertuje). Plus: SKAG
+przyprowadzający wyłącznie nowych **szybciej rozbudowuje listę remarketingową** → więcej paliwa dla RMKT.
+
+**Wykonano:** wykluczone 4 listy na SKAG-1 i SKAG-2 (`All visitors` 9372622741, `Wszyscy odwiedzający`
+9414602400, `All Users` 9371902633 + nowa suma). Usunięto pozytywną (obserwacyjną) 9414602400.
+
+**Próg 1000 — obejście:** listy pojedynczo mają dla Search 740 / 550 / 970 (poniżej progu).
+Utworzono LOGICAL user list **9430077897** „Wszyscy odwiedzający (suma) — wykluczenie SKAG" (ANY z trzech).
+**TODO D+1: sprawdzić, czy przebiła 1000** (Google przelicza do 24h).
+
+**Dlaczego listy < 1000 mimo 4407 użytkowników/30d:** Display łapie 1800 (~41% userów), ale **Search
+tylko 740 (~17%)** — w wyszukiwarce Google musi rozpoznać zalogowane konto Google, w Display wystarczy
+identyfikator przeglądarki. Plus Consent Mode odcina brak zgody. Lista Display **jest** > 1000.
+
+Skrypt: `tmp/gads_skag_exclude_visitors_2026_07_12.py`
+
+### 8.2 Pomiar konwersji — naprawiony u źródła
+
+**Problem 1: liczenie.** Wszystkie key eventy w GA4 miały `ONCE_PER_EVENT` → user klikający WhatsApp 3×
+w sesji = 3 konwersje w Ads (14 konw. = 5 realnych osób). CPA zawyżony ~2× we **wszystkich** kampaniach.
+
+`counting_type` w Google Ads jest **IMMUTABLE** dla akcji `GOOGLE_ANALYTICS_4_CUSTOM` — naprawa musi iść
+przez **GA4 Admin API** (`keyEvent.countingMethod`).
+**Wykonano:** `generate_lead`, `click_whatsapp`, `click_phone` → **ONCE_PER_SESSION**.
+NIE ruszono `purchase` (e-commerce, wiele zakupów = poprawnie wiele konwersji).
+
+**Problem 2: wartość.** `generate_lead` miał wartość = **cenę auta** (tag wysyła `ecommerce.value`):
+4 leady = 980 000 zł „wartości konwersji" (śr. 245 tys./lead). Lead ≠ sprzedaż. Przy Manual CPC tylko
+zaburzało raporty, ale po przejściu na smart bidding Google optymalizowałby pod tę fikcję.
+**Wykonano:** wszystkie 3 akcje → `always_use_default_value=true`, `default_value=1`.
+
+**UWAGA: zmiany NIE są retroaktywne.** Porównania przed/po tylko na danych od 2026-07-12.
+
+Skrypty: `tmp/gads_conversion_fix_2026_07_12.py` (Ads, wartości), `tmp/ga4_counting_fix_2026_07_12.py` (GA4, liczenie).
+
+### 8.3 Wykluczenie własnego ruchu (Janek + Ruslan)
+
+**IP z logów (736k linii, 14 archiwów):**
+
+| IP | Geo (wg ip-api) | Operator | Kto | Stałe? |
+|---|---|---|---|---|
+| 85.28.166.159 | Tarnów | ZETO S.A. | **Janek** | TAK |
+| 185.227.190.89 | **Radgoszcz** | lokalny ISP | **Janek** | TAK |
+| 109.243.128.95 | „Chojnice" | P4 mobile | Ruslan? (10 045 wejść admin) | NIE |
+| 77.222.230.137 | „Zabrze" | Vectra **CGNAT** | Ruslan? (3 055 wejść admin) | NIE |
+
+> **Gotcha:** geolokalizacja IP mobilnych i CGNAT **kłamie** — adres jest przypisany do węzła operatora,
+> nie abonenta. Stąd „Zabrze"/„Chojnice" dla kogoś z Rzeszowa. **Nie identyfikuj ludzi po geoIP.**
+> CGNAT dodatkowo **współdzieli adres z obcymi ludźmi** → wykluczenie w Ads odcięłoby realnych klientów.
+
+**Wykonano — dwutorowo:**
+
+1. **GTM: blokada tagów dla zalogowanych do WP** (odporne na zmianę IP — działa dla Ruslana):
+   - zmienna JS `Is WP Logged In` (34) — regex na ciasteczku `wordpress_logged_in_<hash>`
+   - triggery-wyjątki: `BLOCK - WP zalogowany (pageview)` (35) i `(custom events)` (36, regex `.*`)
+   - podpięte jako `blockingTriggerId` do **wszystkich 11 tagów** (GA4, GADS, Meta Pixel ×5, RMKT dynamic)
+   - **opublikowane: wersja 9 LIVE**
+2. **Google Ads: wykluczenie IP** — 2 stałe adresy Janka × 6 kampanii ENABLED = 12 wykluczeń.
+   IP Ruslana **świadomie pominięte** (mobile/CGNAT — nieskuteczne i ryzykowne; jego łapie blokada z pkt 1).
+
+Skrypt: `tmp/gtm_block_logged_in_2026_07_12.py`
+
+### 8.4 Consent — sprawdzone, jeden realny problem
+
+**Consent Mode v2 DZIAŁA** — `gtag('consent', 'default')` + `update`, wszystkie 4 sygnały
+(`ad_storage`, `ad_user_data`, `ad_personalization`, `analytics_storage`), Complianz podpięty.
+Ruch „Unassigned" w GA4 = 75 sesji (0,9%) — nieistotne.
+
+**ALE — 70 ciasteczek jest NIESKLASYFIKOWANYCH w Complianz**, w tym kluczowe:
+`_gcl_au` (linker konwersji Google Ads), `_gcl_ls`, `_ga`, `_ga_F1NCC3D2HZ`, `_fbp` (Meta).
+Mają `serviceID = NULL` → brak przypisania do usługi i kategorii. Skategoryzowane są tylko 4 (jako „utility").
+
+To **nie blokuje zbierania list** (to robi Consent Mode, który działa), ale jest **problemem zgodności
+z RODO**: baner i polityka prywatności nie wymieniają, co realnie zapisujemy.
+**TODO: uruchomić skan Complianz i przypisać usługi/kategorie** (Google Analytics → statistics,
+Google Ads/Meta → marketing).
+
+## 9. TODO / recheck (aktualizacja)
+
+- [ ] **D+1 (2026-07-13):** czy lista sumaryczna 9430077897 przebiła 1000 członków dla Search
+- [ ] **D+1:** czy konwersje przestały się dublować (click_whatsapp: zdarzenia GA4 ≈ osoby)
+- [ ] **D+7 (2026-07-19):** czy stawka RMKT 0,45 wykorzystała zapas budżetu → dopiero wtedy budżet 22 zł
+- [ ] **D+7:** czy SKAG-1/2 po wykluczeniu powracających mają więcej leadów od nowych (uwolniony budżet)
+- [ ] **Complianz:** skan + kategoryzacja 70 ciasteczek (RODO)
+- [ ] **GA4 internal traffic filter** — Google NIE wystawia tego w API, tylko UI:
+      Administracja → Strumienie danych → Prima-Auto.pl → Ustawienia tagu → Zdefiniuj ruch wewnętrzny
+      → dodaj 85.28.166.159 i 185.227.190.89; potem Ustawienia danych → Filtry danych → Internal Traffic → Aktywny
+- [ ] **Logo 4:1** (min 512×128) — eksport od Janka
