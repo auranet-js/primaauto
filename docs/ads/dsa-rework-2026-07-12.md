@@ -37,9 +37,16 @@ Backup: `~/backups/primaauto/2026-07-12-dsa/` (before.json, apply-response.json,
 apply-response-ads.json). Skrypty: `tmp/gads_dsa_rework_2026_07_12.py`, `tmp/gads_dsa_ads_2026_07_12.py`
 (wzorzec: dump before → validateOnly → --apply).
 
+7. **Obrazki AD_IMAGE ×8** (zestaw A, wybór Janka z galerii
+   https://auratest.pl/fe4f58fec53ctmp/primaauto-dsa-kadry-2026-07-12.html):
+   4 kadry placowe PRIMA-AUTO × 2 formaty (1.91:1 + 1:1), reuse istniejących assetów
+   (355647966218/355733189269, 355810008228/355733195737, 355733195602/355647966467,
+   355810008213/355733189617) → ad_group_asset na grupie 197286896339.
+   Kadry per-model z SKAG-1 świadomie odrzucone (mismatch obrazek↔zapytanie w DSA).
+   Skrypt: `tmp/gads_dsa_images_2026_07_12.py`.
+
 ## Otwarte
 
-- Obrazki AD_IMAGE dla DSA — kadry grupowe do wyboru Janka (mechanizm potwierdzony w SKAG-1).
 - Przesunięcie 5 zł/dz do `[RMKT] Dynamic Remarketing` — przy sesji optymalizacji RMKT.
 - Recheck D+3/D+7: search terms po negatywach (czy SKAG przejął frazy), landingi po refreshu feedu,
   wpływ CPC 0,36 na IS/rank lost. Decyzja budżetowa (podniesienie) — po czystych danych.
