@@ -1,7 +1,7 @@
 {
   "nazwa": "Etap 2 — Uruchomienie produkcyjne, rozwój i prowadzenie (15.04 — dziś)",
-  "okres": "15 kwietnia — 3 lipca 2026",
-  "opis": "Od bootstrapu profesjonalnego warsztatu pracy, przez rebranding i przeprowadzkę na primaauto.com.pl, po nieprzerwany rozwój: 90 wydań oprogramowania, kampanie Google Ads, pełna analityka, ~500 podstron z treścią pod Google, drugie źródło ogłoszeń (Che168), dokumenty prawne, obsługa awarii dostawcy danych. 174 commity, 35 udokumentowanych decyzji architektonicznych, 39 dni sesyjnych.",
+  "okres": "15 kwietnia — 12 lipca 2026",
+  "opis": "Od bootstrapu profesjonalnego warsztatu pracy, przez rebranding i przeprowadzkę na primaauto.com.pl, po nieprzerwany rozwój: 92 wydania oprogramowania, kampanie Google Ads, pełna analityka, ~500 podstron z treścią pod Google, drugie źródło ogłoszeń (Che168), dokumenty prawne, obsługa awarii dostawcy danych. 198 commitów, 39 udokumentowanych decyzji architektonicznych, 46 dni sesyjnych.",
   "taski": [
     {
       "data": "2026-04-15",
@@ -497,6 +497,60 @@
       "skala": "27 pozycji rozwojowych opisanych",
       "godz_rynkowe": 8,
       "godz_realne": 4
+    },
+    {
+      "data": "2026-07-07",
+      "obszar": "import-sync",
+      "tytul": "Naprawa u źródła: koniec samopowielających się kategorii modeli",
+      "opis": "Wykryto, że import odtwarzał zduplikowane strony modeli po każdym scaleniu — wcześniejsze porządki cofały się same. Zabezpieczenie wbudowano w sam importer, zsynchronizowano słownik 273 mapowań nazw, przeniesiono 102 auta z błędnych kategorii i uporządkowano 10 marek (rozstrzygnięcia, które sub-marki prezentować pod producentem — wg tego, jak faktycznie szukają Polacy).",
+      "skala": "Zabezpieczenie w importerze + słownik v6.2 + 13 scaleń + 12 decyzji o markach, każdy krok logowany",
+      "godz_rynkowe": 50,
+      "godz_realne": 14
+    },
+    {
+      "data": "2026-07-07..08",
+      "obszar": "seo-content",
+      "tytul": "Audyt widoczności (+114% kliknięć z Google) + druga fala treści 'odpowiedź od razu'",
+      "opis": "Pomiar po 3 miesiącach pracy: ruch z Google ponad podwojony, wyszukiwarka to kanał nr 1 serwisu. Na tej podstawie: poprawa tytułów 4 stron z największym niewykorzystanym potencjałem, nowa treść na 35 stronach modeli odpowiadająca wprost na pytanie klienta (14 nakierowanych na kontakt), wzmocnienie strony głównej pod frazę 'importer samochodów z Chin'.",
+      "skala": "35+4 stron, pomiar 3-miesięczny, komplet zgłoszony do Google",
+      "godz_rynkowe": 40,
+      "godz_realne": 10
+    },
+    {
+      "data": "2026-07-09",
+      "obszar": "seo-content",
+      "tytul": "Pełny audyt 4 obszarów (SEO / treści / wyszukiwarki AI / reklamy) + naprawy tego samego dnia",
+      "opis": "Każde podejrzenie z audytu zweryfikowano o stan faktyczny, zanim trafiło do planu — część 'problemów' okazała się nieaktualna, zero pracy na ślepo. Wykonane od ręki: naprawa map witryny (Google dostawał błędy) z codziennym automatem odświeżającym, aktualizacja plików dla wyszukiwarek AI z automatem i bezpiecznikiem, przywrócenie polskich znaków w 326 sekcjach treści (pozostałość po starszych automatach), lepsze tytuły 3 kolejnych stron o wysokim potencjale.",
+      "skala": "8 zadań rozpisanych z dowodami, 4 wykonane tego samego dnia, 2 codzienne automaty dodane",
+      "godz_rynkowe": 50,
+      "godz_realne": 12
+    },
+    {
+      "data": "2026-07-09..11",
+      "obszar": "ads-analityka",
+      "tytul": "Przebudowa reklam dynamicznych i kampanii modelowej pod realny stan placu",
+      "opis": "Reklamy dynamiczne dostały świeży katalog 163 stron, skorygowaną stawkę, nowe teksty i 8 zdjęć aut z placu; kampania modelowa — reklamy 'auto od ręki' powiązane z autami fizycznie dostępnymi u Prima-Auto. Komunikat reklam zgodny z tym, co klient może obejrzeć od razu.",
+      "skala": "2 kampanie przebudowane, 8 grafik reklamowych, procedura cyklicznego przeglądu",
+      "godz_rynkowe": 30,
+      "godz_realne": 8
+    },
+    {
+      "data": "2026-07-12",
+      "obszar": "ads-analityka",
+      "tytul": "Naprawa pomiaru skuteczności reklam + remarketing z poprawnymi cenami",
+      "opis": "Wykryto, że kontakty z reklam liczyły się podwójnie (decyzje budżetowe zapadały na zawyżonych danych) oraz że katalog remarketingowy miał 99% nieaktualnych cen. Katalog wymieniono w całości z automatem odświeżającym, pomiar skorygowano, a ruch własny firmy wykluczono ze statystyk.",
+      "skala": "Katalog 312→272 pozycji + automat, korekta liczenia konwersji, nowa kreacja",
+      "godz_rynkowe": 24,
+      "godz_realne": 8
+    },
+    {
+      "data": "2026-07-12",
+      "obszar": "infra-utrzymanie",
+      "tytul": "Wykrycie i zablokowanie masowego kopiowania katalogu (anty-scraping)",
+      "opis": "Analiza logów serwera wykryła dwie operacje: urządzenie, które przejrzało 73% katalogu, oraz sieć ~6,6 tys. adresów monitorującą ceny ofert. Treści nie wykradziono; nałożono blokady serwerowe i udokumentowano zdarzenie z terminem ponownej kontroli.",
+      "skala": "Analiza 2 operacji, blokady serwerowe, dokumentacja + re-check w kalendarzu",
+      "godz_rynkowe": 16,
+      "godz_realne": 5
     }
   ]
 }

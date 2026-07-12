@@ -45,6 +45,7 @@ meta   = load('meta.json')
 etap1  = load('etap1.json')
 etap2  = load('etap2.json')
 etap3  = load('etap3.json')
+regularne = load('regularne.json')
 koszty = load('koszty.json')
 
 e1_r = sum(b['godz_rynkowe'] for b in etap1['bloki'])
@@ -55,6 +56,10 @@ e3_r_od = sum(p['rynkowo_od'] for p in etap3['pozycje'])
 e3_r_do = sum(p['rynkowo_do'] for p in etap3['pozycje'])
 e3_f_od = sum(p['realnie_od'] for p in etap3['pozycje'])
 e3_f_do = sum(p['realnie_do'] for p in etap3['pozycje'])
+reg_r_od = sum(p['rynkowo_od'] for p in regularne['pozycje'])
+reg_r_do = sum(p['rynkowo_do'] for p in regularne['pozycje'])
+reg_f_od = sum(p['realnie_od'] for p in regularne['pozycje'])
+reg_f_do = sum(p['realnie_do'] for p in regularne['pozycje'])
 
 # godziny per obszar (etap 2)
 per_obszar = {}
@@ -89,6 +94,15 @@ def rows_etap3():
         idtxt = f"{esc(p['id'])} — " if p.get('id') else ''
         out.append(f"""<tr>
 <td><strong>{idtxt}{esc(p['tytul'])}</strong><div class="opis">{esc(p['opis'])}</div><div class="skala">Status: {esc(p['status'])}</div></td>
+<td class="num">{p['rynkowo_od']}–{p['rynkowo_do']}</td>
+<td class="num">{p['realnie_od']}–{p['realnie_do']}</td></tr>""")
+    return '\n'.join(out)
+
+def rows_regularne():
+    out = []
+    for p in regularne['pozycje']:
+        out.append(f"""<tr>
+<td><strong>{esc(p['tytul'])}</strong><div class="opis">{esc(p['opis'])}</div></td>
 <td class="num">{p['rynkowo_od']}–{p['rynkowo_do']}</td>
 <td class="num">{p['realnie_od']}–{p['realnie_do']}</td></tr>""")
     return '\n'.join(out)
@@ -246,6 +260,17 @@ footer {{ margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line)
 <tfoot><tr><td>Razem pełna roadmapa (widełki)</td><td class="num">{e3_r_od}–{e3_r_do}</td><td class="num">{e3_f_od}–{e3_f_do}</td></tr></tfoot>
 </table>
 
+<h2>{esc(regularne['nazwa'])}</h2>
+<p class="lead">{esc(regularne['opis'])}</p>
+<table>
+<thead><tr><th>Zakres</th><th class="num">Rynkowo [h/mc]</th><th class="num">Realnie [h/mc]</th></tr></thead>
+<tbody>
+{rows_regularne()}
+</tbody>
+<tfoot><tr><td>Razem miesięcznie (widełki)</td><td class="num">{reg_r_od}–{reg_r_do}</td><td class="num">{reg_f_od}–{reg_f_do}</td></tr></tfoot>
+</table>
+<div class="note">{esc(regularne['uwaga'])}</div>
+
 <h2>Koszty zewnętrzne (poza godzinami)</h2>
 <p class="lead">{esc(koszty['opis'])}</p>
 <table>
@@ -271,6 +296,7 @@ print(f"OK: {OUT}")
 print(f"Etap 1: {e1_r} h rynkowo / {e1_f} h realnie ({len(etap1['bloki'])} bloków)")
 print(f"Etap 2: {e2_r} h rynkowo / {e2_f} h realnie ({len(etap2['taski'])} tasków)")
 print(f"Etap 3: {e3_r_od}-{e3_r_do} h rynkowo / {e3_f_od}-{e3_f_do} h realnie ({len(etap3['pozycje'])} pozycji)")
+print(f"Regularne: {reg_r_od}-{reg_r_do} h/mc rynkowo / {reg_f_od}-{reg_f_do} h/mc realnie ({len(regularne['pozycje'])} pozycji)")
 
 if '--deploy' in sys.argv:
     os.makedirs(DEPLOY_DIR, exist_ok=True)

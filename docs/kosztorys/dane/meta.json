@@ -14,15 +14,16 @@
     {"data": "2026-04-08", "wydarzenie": "Prezentacja gotowej platformy u Ruslana (PRIMA-AUTO) — wycena inwestycji: 50 000 zł"},
     {"data": "2026-04-16", "wydarzenie": "Pierwsze zamówienie klienta w systemie"},
     {"data": "2026-04-21", "wydarzenie": "Rebranding i przeprowadzka na primaauto.com.pl"},
-    {"data": "2026-07-03", "wydarzenie": "Stan na dziś: 6 129 ogłoszeń w katalogu, 112 zamówień w systemie, 90 wydań oprogramowania od cutovera"}
+    {"data": "2026-07-03", "wydarzenie": "6 129 ogłoszeń w katalogu, 112 zamówień w systemie, 90 wydań oprogramowania od cutovera"},
+    {"data": "2026-07-12", "wydarzenie": "Stan na dziś: 3 053 aktywne ogłoszenia (katalog odchudzony po zamrożeniu feedu dostawcy — tylko oferty ze świeżymi danymi), 128 zamówień w systemie, 92 wydania oprogramowania"}
   ],
   "liczby_projektu": {
     "linie_kodu_15_04": 23050,
-    "commity_repo": 174,
-    "wydania_pluginu_po_cutover": 90,
-    "decyzje_architektoniczne_adr": 35,
-    "listings_w_bazie": 6129,
-    "zamowienia_w_systemie": 112,
-    "dni_sesyjne_repo": 39
+    "commity_repo": 198,
+    "wydania_pluginu_po_cutover": 92,
+    "decyzje_architektoniczne_adr": 39,
+    "listings_w_bazie": 3053,
+    "zamowienia_w_systemie": 128,
+    "dni_sesyjne_repo": 46
   }
 }

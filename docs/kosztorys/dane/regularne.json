@@ -1,0 +1,31 @@
+{
+  "nazwa": "Prace regularne — stała obsługa miesięczna",
+  "opis": "Platforma nie jest projektem 'zrobione i zapomniane' — wymaga stałej opieki: kampanie reklamowe trzeba optymalizować pod zmieniający się stan placu i realne koszty kontaktu, import i widoczność w Google pilnować, a awarie dostawcy danych obsługiwać. Poniżej powtarzalny zakres miesięczny z widełkami godzin (kolumny jak wyżej: rynkowo = klasyczny zespół, realnie = zespół Auranet z warsztatem AI).",
+  "pozycje": [
+    {
+      "tytul": "Google Ads — regularna optymalizacja kampanii",
+      "opis": "Przegląd wyników co ~2 tygodnie: analiza fraz, które faktycznie sprowadzają klientów, i dosypywanie wykluczeń odcinających puste kliknięcia; korekty stawek i budżetów wg realnego kosztu kontaktu; odświeżanie katalogów reklam dynamicznych i remarketingu (ceny, dostępność); synchronizacja reklam ze stanem placu (auta 'od ręki'); testy tekstów i grafik reklamowych.",
+      "rynkowo_od": 14,
+      "rynkowo_do": 18,
+      "realnie_od": 6,
+      "realnie_do": 8
+    },
+    {
+      "tytul": "Opieka techniczna platformy",
+      "opis": "Monitoring automatycznego importu i reagowanie na awarie dostawcy danych (3 awarie w samym czerwcu), kopie zapasowe przed zmianami, aktualizacje oprogramowania, diagnostyka i drobne naprawy zgłaszane przez sprzedawcę, higiena bazy i serwera.",
+      "rynkowo_od": 10,
+      "rynkowo_do": 14,
+      "realnie_od": 4,
+      "realnie_do": 6
+    },
+    {
+      "tytul": "SEO — pielęgnacja widoczności w Google",
+      "opis": "Pomiary skuteczności wdrożonych zmian (protokół 'mierzymy, nie zgadujemy'), kontrola indeksacji i map witryny, treści dla nowych modeli wchodzących do oferty, porządki w kategoriach przy napływie aut, reagowanie na zmiany algorytmu i raporty Search Console.",
+      "rynkowo_od": 12,
+      "rynkowo_do": 16,
+      "realnie_od": 5,
+      "realnie_do": 7
+    }
+  ],
+  "uwaga": "Dotychczas (kwiecień—lipiec) ten zakres był wykonywany na bieżąco w ramach prac z etapu 2 — tabela wyżej go zawiera. Od momentu ustabilizowania platformy staje się osobną, przewidywalną pozycją miesięczną."
+}

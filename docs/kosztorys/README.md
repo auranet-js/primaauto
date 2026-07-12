@@ -8,7 +8,8 @@ w podziale na etapy + wycena roadmapy + koszty zewnętrzne.
 - `dane/meta.json` — timeline, liczby projektu, metodologia dwóch kolumn godzin
 - `dane/etap1.json` — bloki budowy platformy do prezentacji 08.04.2026 (12 bloków)
 - `dane/etap2.json` — chronologiczne taski od bootstrapu repo do dziś (~55 pozycji)
-- `dane/etap3.json` — roadmapa z widełkami godzin (20 pozycji)
+- `dane/etap3.json` — roadmapa z widełkami godzin (21 pozycji)
+- `dane/regularne.json` — prace regularne / stała obsługa miesięczna (widełki h/mc, w tym optymalizacja Google Ads)
 - `dane/koszty.json` — koszty zewnętrzne (feed auto-api, hosting, AI, narzędzia)
 - `build.py` — generator HTML (stdlib only)
 - `raport.html` — wygenerowany raport (commitowalny snapshot)

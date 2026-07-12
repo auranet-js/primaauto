@@ -201,6 +201,28 @@
       "status": "otwarty"
     },
     {
+      "id": "T-201",
+      "tytul": "Kanał YouTube: uruchomienie + produkcja filmów + kampanie wideo",
+      "opis": "Nowy kanał dotarcia: firmowy kanał YouTube z filmami o autach (prezentacje z placu / montaże z materiałów o modelach), regularna publikacja i kampanie reklamowe wideo na istniejącym koncie Google Ads. Wideo wzmacnia też remarketing i wiarygodność marki.",
+      "rozmiar": "L",
+      "rynkowo_od": 70,
+      "rynkowo_do": 90,
+      "realnie_od": 28,
+      "realnie_do": 36,
+      "status": "pomysł (do rozstrzygnięcia format produkcji filmów)"
+    },
+    {
+      "id": "T-202",
+      "tytul": "Rozbudowa kreatora zamówienia: galeria sprzedanych aut + elementy zaufania",
+      "opis": "Moment wpłaty depozytu to szczyt niepewności klienta — kreator zamówienia dostanie dowody wiarygodności: zdjęcia klientów z odebranymi autami (galeria już istnieje — do wpięcia), licznik sprowadzonych aut, kroki procesu z gwarancjami, sekcję pytań 'czy to bezpieczne'.",
+      "rozmiar": "M",
+      "rynkowo_od": 30,
+      "rynkowo_do": 40,
+      "realnie_od": 12,
+      "realnie_do": 16,
+      "status": "pomysł"
+    },
+    {
       "id": null,
       "tytul": "Pakiet higieny technicznej (baza, puste strony, schema, mobile)",
       "opis": "Zbiór mniejszych domknięć: prewencja puchnięcia bazy, automatyczne ukrywanie ~1900 pustych stron modeli przed Google, wzbogacenie danych strukturalnych ogłoszeń (silnik, skrzynia, kolor), szlify mobilne, systemowe tłumaczenie chińskich nazw miast, kontrola resztkowych 404, kolejna iteracja galerii klientów.",
