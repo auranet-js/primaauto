@@ -1,5 +1,20 @@
 # Historia wersji asiaauto-sync
 
+## 0.33.20 — 2026-07-13 (T-203/desc: meta description ofert v2 — pełny opis + „bezpośredni importer")
+
+**Decyzje Janka:** hubów NIE ruszamy (fix „1 egzemplarzy" w generatorze hubów ODRZUCONY — zostaje
+jako znany defekt); desc ofert maksymalnie długi, końcówka „Prima Auto — bezpośredni importer".
+Symulacja 100 ofert zaakceptowana przed wdrożeniem (`auratest .../primaauto-sym-desc-100-ofert-2026-07-13.html`).
+
+**Zmiana (`renderMeta()` w `includes/class-asiaauto-single.php`, backup `.bak-2026-07-13-desc`):**
+- wzorzec: `{base} — {FUEL_SHORT}, {moc} KM (gdy w extra_prep), {przebieg} km, {cena} PLN.
+  [Dostępny od ręki w Rzeszowie.] Prima Auto — bezpośredni importer samochodów z Chin.`
+- usunięte błędne „od {cena}" (konkretny egzemplarz ≠ zakres huba), paliwo skrótem (EV/EREV/PHEV —
+  pełne nazwy typu „elektryczny z range extenderem (erev)" rozsadzały limit 160 zn),
+  moc przez `AsiaAuto_Inventory::resolvePower()` na surowym extra_prep (bez translatora).
+- Symulacja na próbce: śr 128 zn (było ~100), max 163, 1/100 ponad 160, moc w 30/100 najnowszych
+  (świeże importy bez extra_prep — zamrożony feed; w starszej bazie pokrycie ~95%).
+
 ## 0.33.19 — 2026-07-13 (T-203/H1: różnicowanie H1 ofert kaskadą przebieg→cena)
 
 **Powód:** Screaming Frog Janka — 2 524 publish ofert dzieliło H1 z inną ofertą (H1 = `post_title`,
