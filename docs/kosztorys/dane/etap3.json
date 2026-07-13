@@ -3,6 +3,17 @@
   "opis": "Uporządkowany parking pomysłów rozwojowych — każda pozycja z widełkami godzin. Kolumna 'rynkowo' = ile kosztowałoby to u klasycznego zespołu; kolumna 'realnie' = przewidywany czas zespołu Auranet z warsztatem AI (i taka baza może być podstawą rozliczenia).",
   "pozycje": [
     {
+      "id": "T-187",
+      "tytul": "Inne egzemplarze modelu na stronie oferty + ścieżka do strony modelu na mobile",
+      "opis": "Na stronie oferty blok z innymi egzemplarzami tego samego modelu (karty z ceną, sort od najtańszego) z linkiem „wszystkie oferty i ceny” do strony modelu — na mobile, gdzie dziś nie ma żadnej widocznej drogi do strony modelu (breadcrumb celowo ukryty), i na desktopie. Do tego na stronie modelu blok wersji z linkami do najtańszych egzemplarzy. Podnosi konwersję (klient od razu widzi tańsze/inne wersje zamiast wracać do katalogu) i domyka strukturę SEO z T-203: jasna hierarchia model↔egzemplarz dla Google na frazy wersyjne, którymi konkurencja (tntcars.pl) zdobywa ruch.",
+      "rozmiar": "M",
+      "rynkowo_od": 40,
+      "rynkowo_do": 50,
+      "realnie_od": 17,
+      "realnie_do": 20,
+      "status": "przeanalizowany (T-203), czeka na decyzję"
+    },
+    {
       "id": "T-186",
       "tytul": "Che168 jako pełne, automatyczne drugie źródło ogłoszeń",
       "opis": "Automatyczny import z drugiego chińskiego portalu równolegle do głównego — pełna dywersyfikacja na wypadek awarii dostawcy (feed padł 3× w czerwcu) i szersza oferta aut premium. Fundament ręczny już działa; to rozbudowa o pełny automat z deduplikacją aut widocznych na obu giełdach.",
@@ -110,17 +121,6 @@
       "rynkowo_do": 90,
       "realnie_od": 35,
       "realnie_do": 40,
-      "status": "pomysł"
-    },
-    {
-      "id": "T-187",
-      "tytul": "Pasek podobnych aut tego samego modelu (mobile)",
-      "opis": "Na stronie oferty (telefon) inne egzemplarze tego samego modelu — klient zostaje w ofercie zamiast wracać do wyszukiwarki.",
-      "rozmiar": "S",
-      "rynkowo_od": 14,
-      "rynkowo_do": 16,
-      "realnie_od": 7,
-      "realnie_do": 8,
       "status": "pomysł"
     },
     {

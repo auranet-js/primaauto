@@ -1,5 +1,26 @@
 # Historia wersji asiaauto-sync
 
+## 0.33.17 — 2026-07-13 (T-203: title ofert v2 — wersja + cena, pilot 9 serii)
+
+**Powód:** analiza konkurencyjna tntcars.pl — frazy wersyjne (największy wolumen) przegrywane
+przez title z rotacji 10 szablonów (`inner_id % 10`): duplikaty title w obrębie tej samej wersji
+(6/10 na próbce YU7), prefiks „Używane" psujący intent, brak ceny/wyróżnika. Spec:
+`docs/seo/T-203-oferty-wersje-title-spec-2026-07-13.md`, baseline: `docs/seo/T-203-baseline-gsc-2026-07-13.md`.
+
+**Zmiana (`includes/class-asiaauto-single.php`, backup `.bak-2026-07-13-t203`):**
+- `filterTitle()`: gałąź v2 przed rotacją legacy — `{base} - {cena} PLN [, {przebieg} km przy
+  kolizji ceny][, dostępny od ręki dla on_lot] | Prima-Auto`; rotacja zostaje dla serii poza gate'em
+- nowe: `offerTitleV2()` (gate: option `asiaauto_offer_title_v2_series` = CSV term_id serie, `*` = wszystkie),
+  `buildTitleV2()`, `titlePriceCollides()` (1 query przy renderze single),
+  `detexturizeTitleV2()` na `document_title` prio 20 (wptexturize zamieniał ` - ` na półpauzę)
+- `renderMeta()`: og:title spójny z title v2 gdy gate aktywny
+- stock = `_asiaauto_reservation_status` = `on_lot` (parytet z inventory); **NIE** `stm_car_location`
+  (to miasto z feedu — pierwsza wersja się na tym przejechała, wykryte w smoke teście)
+
+**Pilot (option ustawiony):** `5149,5150,4824,6569,6581,3981,6558,5304,3581` = SU7, YU7, Zeekr 9X,
+Zeekr 8X, G700, Tank 700 Hi4-T, Preface, AITO M9, Arrizo 8 (~430 ofert). Rollback: option na `""`.
+Pomiar GSC ~2026-07-27; progi rollbacku w baseline.
+
 ## 0.33.16 — 2026-07-07 (T-190: guard importera — make-aware serie)
 
 **Powód:** importer odtwarzał zmergowane duplikaty i kontaminował huby cudzych marek —
