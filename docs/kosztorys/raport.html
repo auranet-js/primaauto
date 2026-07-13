@@ -76,8 +76,8 @@ footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line);
 </header>
 
 <div class="tiles">
-<div class="tile acc"><div class="v">2583 <small>h</small></div><div class="l">wartość rynkowa wykonanych prac (etapy 1-2), w godzinach klasycznego zespołu</div></div>
-<div class="tile"><div class="v">881 <small>h</small></div><div class="l">realny czas pracy zespołu Auranet (z warsztatem AI)</div></div>
+<div class="tile acc"><div class="v">2615 <small>h</small></div><div class="l">wartość rynkowa wykonanych prac (etapy 1-2), w godzinach klasycznego zespołu</div></div>
+<div class="tile"><div class="v">891 <small>h</small></div><div class="l">realny czas pracy zespołu Auranet (z warsztatem AI)</div></div>
 <div class="tile"><div class="v">92+</div><div class="l">wydań oprogramowania od startu na primaauto.com.pl</div></div>
 <div class="tile"><div class="v">3053</div><div class="l">ogłoszeń w katalogu · 128 zamówień w systemie</div></div>
 </div>
@@ -392,8 +392,12 @@ footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line);
 <td class="data-col">2026-07-12</td>
 <td><span class="badge">Infrastruktura i utrzymanie</span><br><strong>Wykrycie i zablokowanie masowego kopiowania katalogu (anty-scraping)</strong><div class="opis">Analiza logów serwera wykryła dwie operacje: urządzenie, które przejrzało 73% katalogu, oraz sieć ~6,6 tys. adresów monitorującą ceny ofert. Treści nie wykradziono; nałożono blokady serwerowe i udokumentowano zdarzenie z terminem ponownej kontroli.</div><div class="skala">Analiza 2 operacji, blokady serwerowe, dokumentacja + re-check w kalendarzu</div></td>
 <td class="num">16</td><td class="num">5</td></tr>
+<tr>
+<td class="data-col">2026-07-13</td>
+<td><span class="badge">seo</span><br><strong>Analiza konkurencji (tntcars.pl) + przebudowa meta wszystkich ofert (title, H1, opisy)</strong><div class="opis">Analiza nowego konkurenta wykazała, że wygrywa frazy modelowe stronami ofert, podczas gdy nasze oferty miały masowo powielone tytuły i nagłówki (ponad 1000 stron z identycznym tytułem — Google traktował je jako wymienne kopie). Przebudowano wszystkie ~3 400 ofert: tytuły z wersją i ceną, nagłówki rozróżniane przebiegiem, opisy z mocą, przebiegiem, ceną i oznaczeniem aut dostępnych od ręki w Rzeszowie. Naprawiono też 9 stron modeli z podwojoną nazwą marki w wynikach Google. Każda zmiana poprzedzona symulacją na 100 ofertach i zabezpieczona możliwością wycofania.</div><div class="skala">~3 400 ofert × 3 elementy; duplikaty tytułów 1012→95, nagłówków 2524→99; 4 wydania (v0.33.17-20); punkt odniesienia do pomiaru efektu za 2 tyg.</div></td>
+<td class="num">32</td><td class="num">10</td></tr>
 </tbody>
-<tfoot><tr><td colspan="2">Razem etap 2</td><td class="num">1760</td><td class="num">521</td></tr></tfoot>
+<tfoot><tr><td colspan="2">Razem etap 2</td><td class="num">1792</td><td class="num">531</td></tr></tfoot>
 </table>
 
 <h2><span class="eno">Etap 3.</span> Plany rozwoju — wycena inwestycji</h2>

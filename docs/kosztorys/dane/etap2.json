@@ -551,6 +551,15 @@
       "skala": "Analiza 2 operacji, blokady serwerowe, dokumentacja + re-check w kalendarzu",
       "godz_rynkowe": 16,
       "godz_realne": 5
+    },
+    {
+      "data": "2026-07-13",
+      "obszar": "seo",
+      "tytul": "Analiza konkurencji (tntcars.pl) + przebudowa meta wszystkich ofert (title, H1, opisy)",
+      "opis": "Analiza nowego konkurenta wykazała, że wygrywa frazy modelowe stronami ofert, podczas gdy nasze oferty miały masowo powielone tytuły i nagłówki (ponad 1000 stron z identycznym tytułem — Google traktował je jako wymienne kopie). Przebudowano wszystkie ~3 400 ofert: tytuły z wersją i ceną, nagłówki rozróżniane przebiegiem, opisy z mocą, przebiegiem, ceną i oznaczeniem aut dostępnych od ręki w Rzeszowie. Naprawiono też 9 stron modeli z podwojoną nazwą marki w wynikach Google. Każda zmiana poprzedzona symulacją na 100 ofertach i zabezpieczona możliwością wycofania.",
+      "skala": "~3 400 ofert × 3 elementy; duplikaty tytułów 1012→95, nagłówków 2524→99; 4 wydania (v0.33.17-20); punkt odniesienia do pomiaru efektu za 2 tyg.",
+      "godz_rynkowe": 32,
+      "godz_realne": 10
     }
   ]
 }
