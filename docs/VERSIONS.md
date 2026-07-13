@@ -1,5 +1,41 @@
 # Historia wersji asiaauto-sync
 
+## 0.33.19 — 2026-07-13 (T-203/H1: różnicowanie H1 ofert kaskadą przebieg→cena)
+
+**Powód:** Screaming Frog Janka — 2 524 publish ofert dzieliło H1 z inną ofertą (H1 = `post_title`,
+feed wozi po kilkadziesiąt egzemplarzy tej samej wersji). Decyzja Janka: różnicować od razu
+(pierwotnie KROK 3b czekał na pomiar).
+
+**Zmiana (`includes/class-asiaauto-single.php`, backup `.bak-2026-07-13-h1`):**
+- nowa `h1WithVariantSuffix()` — gdy inna publish-oferta ma identyczny `post_title`, H1 dostaje
+  ` - {przebieg} km`; gdy bliźniak ma też ten sam (lub zerowy) przebieg → dodatkowo `, {cena} PLN`.
+  Render-only: `post_title` w bazie nietknięty (umowy/feedy/dataLayer/WhatsApp bez zmian).
+- stickyHead renderuje H1 przez nową metodę (obie kopie: mobile+desktop); static cache per pid
+  (2 wywołania per stronę = 1 zestaw query). Gate: ten sam `offerTitleV2()` (obecnie `*`).
+- Efekt zmierzony SQL: duplikaty H1 2 524 → **99** (bliźniaki identyczne tytułem+przebiegiem+ceną
+  naraz — brak kolejnego sensownego wyróżnika; te same 95-99 sztuk dzieli też title/desc).
+- Smoke: para YU7 4WD Max (7 000 vs 30 000 km), czwórka AITO M5 z parami o identycznym przebiegu
+  (rozróżnione ceną), unikalny tytuł bez suffixu.
+
+## 0.33.18 — 2026-07-13 (rollout title v2 na WSZYSTKIE oferty + fix ensureBrandPrefix — 9 hubów)
+
+**Kontekst:** plan naprawy po ocenie szkód (duplikaty title/H1 nieobjęte żadnym audytem; rotacja
+title aktywna od v0.32.36/2026-05-06 bez weryfikacji unikalności — 1 012 ofert ze zdublowanym
+title poza pilotem, H1: 2 524 oferty/499 grup — otwarte jako KROK 3b w specu T-203).
+
+**Zmiany:**
+- **Rollout title v2**: option `asiaauto_offer_title_v2_series` = `*` (z pilotowego CSV) —
+  wszystkie ~4 500 ofert na wzorcu `{base} - {cena} PLN [...]`; likwiduje 1 012 duplikatów title,
+  resztki „Używane" i spam-szablonów. Bez zmian w kodzie. Rollback selektywny = wpis CSV term_id.
+- **Fix `ensureBrandPrefix()`** (`includes/class-asiaauto-hub-title-generator.php`, backup
+  `.bak-2026-07-13-brandprefix`): (1) `html_entity_decode` obu stron porównania — encja
+  `&amp;` w term name dublowała „Lynk & Co Lynk &amp; Co 03/06/07/08/10"; (2) porównanie
+  tokenowe pierwszego słowa — „IM LS7" vs marka „IM Motors" nie dublują już prefixu;
+  (3) mapa marek + `im-motors` → „IM Motors", `baw` → „BAW".
+- Regeneracja `rank_math_title` 8 hubów (regenerateForTerm) + ręczny fix termu 6601
+  (Lynk & Co 10 EM-P, count=0 → generator go pomija by design, stale meta poprawione str_replace).
+  Smoke live: lynk-co-03, im-ls7, baw/t01 — czyste.
+
 ## 0.33.17 — 2026-07-13 (T-203: title ofert v2 — wersja + cena, pilot 9 serii)
 
 **Powód:** analiza konkurencyjna tntcars.pl — frazy wersyjne (największy wolumen) przegrywane

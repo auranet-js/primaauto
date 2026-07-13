@@ -67,6 +67,8 @@ kolizja:  {base} - {price} PLN, {mileage} km | Prima-Auto
 
 **Pilot → rollout**: allowlist 9 serii — „TNT-battle" (YU7, SU7, Zeekr 9X, Zeekr 8X, G700) + „GSC-proven" (Tank 700, Geely Preface, AITO M9, Arrizo 8); pomiar 2–3 tyg. w GSC, potem globalnie. Gate: opcja `asiaauto_offer_title_v2_series` = CSV **term_id** taksonomii serie (`*` = wszystkie) — term_id, nie slug, bo slug `m9` jest niejednoznaczny (AITO M9 vs Galaxy M9).
 
+> **AKTUALIZACJA 2026-07-13 (ten sam dzień, decyzja Janka w planie naprawy):** rollout na `*` wykonany od razu — powód: odkrycie **1 012 ofert ze zdublowanym title** poza pilotem (rotacja daje identyczny title dla tej samej wersji w tym samym koszyku `inner_id % 10`); v2 z ceną likwiduje duplikaty natychmiast. Pomiar ~27.07 pozostaje (baseline niezależny od zasięgu rolloutu); rollback selektywny możliwy przez wpisanie CSV term_id z powrotem.
+
 ### ~~KROK 2 — sekcja „Wyposażenie tej wersji"~~ WYKREŚLONY (KROK 0: treść już jest)
 Oferty renderują pełny spec + wyposażenie z `extra_prep` przez `[asiaauto_tech_specs]` + `[asiaauto_equipment]`. Nic do dodania.
 
@@ -74,6 +76,15 @@ Oferty renderują pełny spec + wyposażenie z `extra_prep` przez `[asiaauto_tec
 Scalony z taskiem roadmapy **T-187 „Inne egzemplarze modelu na stronie oferty + ścieżka do strony modelu na mobile"** (kosztorys `dane/etap3.json`, pozycja 1, rozmiar M). Powód scalenia: ustalenie z 2026-07-13, że na mobile breadcrumb i „Wróć do wyników" są celowo ukryte (`asiaauto-single.css:209-210`), a strzałka sticky-head prowadzi do `/samochody/` — brak widocznej ścieżki oferta→hub; blok „inne egzemplarze" załatwia linkowanie + konwersję + mobile naraz. **Nie realizujemy teraz** — czeka na decyzję po stronie kosztorysu. Pierwotny opis kroku poniżej (jako wsad do T-187):
 - **Oferta → hub**: kontekstowy link nad/pod opisem z anchorem modelowym: „Xiaomi YU7 — cena w Polsce i wszystkie oferty" (breadcrumb już jest; to dodatkowy in-content).
 - **Hub → oferty**: dynamiczny blok „Wersje {model} w ofercie" — grupowanie publish-ofert po wersji (wersja = `post_title` minus make/model/rok — parser heurystyczny, **wersja nie jest osobnym polem** — gotcha), link do najtańszej oferty per wersja z anchorem wersyjnym („YU7 4WD Max od 280 000 zł"). Blok renderowany pod istniejącą sekcją ofert, nie rusza wiki/FAQ.
+
+### KROK 3b — duplikaty H1 ofert ✅ WDROŻONE 2026-07-13 (decyzja Janka: bez czekania na pomiar)
+`h1WithVariantSuffix()` w v0.33.19 — przy duplikacie `post_title` H1 dostaje ` - {przebieg} km`, przy bliźniaku z tym samym przebiegiem dodatkowo `, {cena} PLN`. Render-only, `post_title` nietknięty. Duplikaty H1: **2 524 → 99** (resztka = egzemplarze identyczne tytułem+przebiegiem+ceną — brak wyróżnika; dzielą też title/desc). Badanie GSC „Duplicate chose different canonical" pozostaje ciekawostką pomiaru ~27.07, nie blokerem. Pierwotny opis poniżej:
+
+### (pierwotnie) KROK 3b — audyt duplikatów H1 ofert (dodany 2026-07-13, zgłoszenie Janka po crawlu Screaming Frog)
+Stan faktyczny (SQL 2026-07-13): **2 524 publish ofert dzieli H1 z inną ofertą** (499 zduplikowanych tytułów; top: AITO M9 2024 Ultra ×49, Voyah Dream PHEV ×39, YU7 4WD Max ×30). Przyczyna strukturalna: H1 = `post_title`, a feed importuje wiele egzemplarzy tej samej wersji. Do zbadania/decyzji:
+- czy różnicować H1 dynamicznie przy renderze (stickyHead w `class-asiaauto-single.php`) tą samą kaskadą co title v2 (przebieg/kolor przy duplikacie) — **bez dotykania `post_title`** (używany w umowach/feedach);
+- czy duplikaty H1 + niemal identyczna treść (te same tabele spec dla tej samej wersji) nie są współprzyczyną „3 050 stron z impresjami i 0 klików" (Google wybiera jednego kanoniczna-reprezentanta, reszta nie rankuje) — sprawdzić w GSC „Duplicate, Google chose different canonical" dla próbki;
+- decyzja po pomiarze pilota title v2 (~27.07): jeśli title-cascade wystarczy, H1 może zostać.
 
 ### KROK 4 — pomiar
 - GSC po 2–3 tyg. od pilota: impresje/pozycje fraz wersyjnych + kontrola pozycji hubów na „cena" (regresja > 3 pozycje na dowolnym hubie pilota = rollback flagi).
