@@ -14,37 +14,48 @@
       "status": "plan gotowy (docs/roadmapa/T-204), odblokowuje T-114 i T-188"
     },
     {
+      "id": "T-212",
+      "tytul": "Wspólny komponent karty oferty (fundament techniczny)",
+      "opis": "Kafelek auta (zdjęcie, cena, parametry) jest dziś zapisany w kodzie trzykrotnie — osobno na stronie głównej, osobno w katalogu, osobno na stronach modeli. Cztery zaplanowane funkcje chcą do niego coś dołożyć: serce (ulubione), ratę miesięczną, pole porównania i blok innych egzemplarzy. Bez scalenia każdą z nich trzeba by wykonać trzy razy, w trzech kopiach, z ryzykiem że się rozjadą. Krótka porządkowa robota, która obniża koszt czterech kolejnych zadań.",
+      "rozmiar": "S",
+      "rynkowo_od": 8,
+      "rynkowo_do": 10,
+      "realnie_od": 3,
+      "realnie_do": 4,
+      "status": "plan gotowy (docs/roadmapa/T-212); fundament pod T-187, T-114, T-189, T-115"
+    },
+    {
       "id": "T-187",
       "tytul": "Inne egzemplarze modelu na stronie oferty + ścieżka do strony modelu na mobile",
       "opis": "Na stronie oferty blok z innymi egzemplarzami tego samego modelu (karty z ceną, sort od najtańszego) z linkiem „wszystkie oferty i ceny” do strony modelu — na mobile, gdzie dziś nie ma żadnej widocznej drogi do strony modelu, i na desktopie. Podnosi konwersję (klient od razu widzi tańsze/inne wersje zamiast wracać do katalogu) i domyka strukturę SEO z T-203. Przegląd kodu potwierdził: komponent karty i style już istnieją, a 97,8% ofert (2990 z 3056) ma co najmniej jeden inny egzemplarz do pokazania — stąd niższa wycena niż pierwotna.",
       "rozmiar": "M",
-      "rynkowo_od": 32,
-      "rynkowo_do": 40,
-      "realnie_od": 12,
-      "realnie_do": 16,
-      "status": "plan gotowy (docs/roadmapa/T-187), zero blokerów — gotowe do startu"
+      "rynkowo_od": 24,
+      "rynkowo_do": 30,
+      "realnie_od": 9,
+      "realnie_do": 12,
+      "status": "plan gotowy (docs/roadmapa/T-187); wymaga T-212"
     },
     {
       "id": "T-189",
       "tytul": "Kalkulator raty finansowania — rata widoczna na kartach ofert",
       "opis": "Klient widzi „od X zł/mc” już na liście aut, nie dopiero po wejściu w ofertę, i może dopasować parametry (okres, wpłata własna, wykup) — raty przeliczają się na całym katalogu od razu. Obniża barierę „całość z góry” i generuje leady „zapytaj o finansowanie”. Wszystkie parametry (w tym oprocentowanie) konfigurowalne z panelu — gdy pojawi się partner finansujący, podmieniamy liczby bez dotykania kodu. Wzorowane na rozwiązaniu konkurenta wskazanym przez klienta, ale z uczciwym wzorem (u konkurenta rata nie domyka się matematycznie).",
       "rozmiar": "M",
-      "rynkowo_od": 30,
-      "rynkowo_do": 40,
-      "realnie_od": 12,
-      "realnie_do": 16,
-      "status": "plan gotowy (docs/roadmapa/T-189), nie wymaga partnera — gotowe do startu"
+      "rynkowo_od": 35,
+      "rynkowo_do": 45,
+      "realnie_od": 14,
+      "realnie_do": 18,
+      "status": "plan gotowy (docs/roadmapa/T-189); wymaga T-212 — nie wymaga partnera finansującego"
     },
     {
       "id": "T-114",
       "tytul": "Ulubione auta (schowek klienta)",
-      "opis": "Klient zapisuje auta na własną listę i wraca do nich z dowolnego urządzenia — wymusza założenie konta, buduje bazę pod mailing i remarketing. Wycena spadła, bo po zbudowaniu panelu klienta (T-204) zostaje głównie warstwa interfejsu.",
+      "opis": "Klient zapisuje auta na własną listę i wraca do nich z dowolnego urządzenia. Nie chodzi tylko o wygodę — kliknięcie serca przez niezalogowanego prowadzi do założenia konta, a to buduje bazę kontaktów pod mailing i remarketing. Dlatego wycena obejmuje pełną ścieżkę (zapamiętanie intencji, panel, licznik), nie samą ikonę na kafelku.",
       "rozmiar": "S",
-      "rynkowo_od": 20,
-      "rynkowo_do": 25,
-      "realnie_od": 8,
-      "realnie_do": 10,
-      "status": "plan gotowy (docs/roadmapa/T-114), wymaga T-204"
+      "rynkowo_od": 28,
+      "rynkowo_do": 35,
+      "realnie_od": 11,
+      "realnie_do": 15,
+      "status": "plan gotowy (docs/roadmapa/T-114); wymaga T-204 i T-212"
     },
     {
       "id": "T-116",

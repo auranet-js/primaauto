@@ -411,17 +411,21 @@ footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line);
 
 <td class="num">18–24</td></tr>
 <tr>
-<td><strong>T-187 — Inne egzemplarze modelu na stronie oferty + ścieżka do strony modelu na mobile</strong><div class="opis">Na stronie oferty blok z innymi egzemplarzami tego samego modelu (karty z ceną, sort od najtańszego) z linkiem „wszystkie oferty i ceny” do strony modelu — na mobile, gdzie dziś nie ma żadnej widocznej drogi do strony modelu, i na desktopie. Podnosi konwersję (klient od razu widzi tańsze/inne wersje zamiast wracać do katalogu) i domyka strukturę SEO z T-203. Przegląd kodu potwierdził: komponent karty i style już istnieją, a 97,8% ofert (2990 z 3056) ma co najmniej jeden inny egzemplarz do pokazania — stąd niższa wycena niż pierwotna.</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-187), zero blokerów — gotowe do startu</div></td>
+<td><strong>T-212 — Wspólny komponent karty oferty (fundament techniczny)</strong><div class="opis">Kafelek auta (zdjęcie, cena, parametry) jest dziś zapisany w kodzie trzykrotnie — osobno na stronie głównej, osobno w katalogu, osobno na stronach modeli. Cztery zaplanowane funkcje chcą do niego coś dołożyć: serce (ulubione), ratę miesięczną, pole porównania i blok innych egzemplarzy. Bez scalenia każdą z nich trzeba by wykonać trzy razy, w trzech kopiach, z ryzykiem że się rozjadą. Krótka porządkowa robota, która obniża koszt czterech kolejnych zadań.</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-212); fundament pod T-187, T-114, T-189, T-115</div></td>
 
-<td class="num">12–16</td></tr>
+<td class="num">3–4</td></tr>
 <tr>
-<td><strong>T-189 — Kalkulator raty finansowania — rata widoczna na kartach ofert</strong><div class="opis">Klient widzi „od X zł/mc” już na liście aut, nie dopiero po wejściu w ofertę, i może dopasować parametry (okres, wpłata własna, wykup) — raty przeliczają się na całym katalogu od razu. Obniża barierę „całość z góry” i generuje leady „zapytaj o finansowanie”. Wszystkie parametry (w tym oprocentowanie) konfigurowalne z panelu — gdy pojawi się partner finansujący, podmieniamy liczby bez dotykania kodu. Wzorowane na rozwiązaniu konkurenta wskazanym przez klienta, ale z uczciwym wzorem (u konkurenta rata nie domyka się matematycznie).</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-189), nie wymaga partnera — gotowe do startu</div></td>
+<td><strong>T-187 — Inne egzemplarze modelu na stronie oferty + ścieżka do strony modelu na mobile</strong><div class="opis">Na stronie oferty blok z innymi egzemplarzami tego samego modelu (karty z ceną, sort od najtańszego) z linkiem „wszystkie oferty i ceny” do strony modelu — na mobile, gdzie dziś nie ma żadnej widocznej drogi do strony modelu, i na desktopie. Podnosi konwersję (klient od razu widzi tańsze/inne wersje zamiast wracać do katalogu) i domyka strukturę SEO z T-203. Przegląd kodu potwierdził: komponent karty i style już istnieją, a 97,8% ofert (2990 z 3056) ma co najmniej jeden inny egzemplarz do pokazania — stąd niższa wycena niż pierwotna.</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-187); wymaga T-212</div></td>
 
-<td class="num">12–16</td></tr>
+<td class="num">9–12</td></tr>
 <tr>
-<td><strong>T-114 — Ulubione auta (schowek klienta)</strong><div class="opis">Klient zapisuje auta na własną listę i wraca do nich z dowolnego urządzenia — wymusza założenie konta, buduje bazę pod mailing i remarketing. Wycena spadła, bo po zbudowaniu panelu klienta (T-204) zostaje głównie warstwa interfejsu.</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-114), wymaga T-204</div></td>
+<td><strong>T-189 — Kalkulator raty finansowania — rata widoczna na kartach ofert</strong><div class="opis">Klient widzi „od X zł/mc” już na liście aut, nie dopiero po wejściu w ofertę, i może dopasować parametry (okres, wpłata własna, wykup) — raty przeliczają się na całym katalogu od razu. Obniża barierę „całość z góry” i generuje leady „zapytaj o finansowanie”. Wszystkie parametry (w tym oprocentowanie) konfigurowalne z panelu — gdy pojawi się partner finansujący, podmieniamy liczby bez dotykania kodu. Wzorowane na rozwiązaniu konkurenta wskazanym przez klienta, ale z uczciwym wzorem (u konkurenta rata nie domyka się matematycznie).</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-189); wymaga T-212 — nie wymaga partnera finansującego</div></td>
 
-<td class="num">8–10</td></tr>
+<td class="num">14–18</td></tr>
+<tr>
+<td><strong>T-114 — Ulubione auta (schowek klienta)</strong><div class="opis">Klient zapisuje auta na własną listę i wraca do nich z dowolnego urządzenia. Nie chodzi tylko o wygodę — kliknięcie serca przez niezalogowanego prowadzi do założenia konta, a to buduje bazę kontaktów pod mailing i remarketing. Dlatego wycena obejmuje pełną ścieżkę (zapamiętanie intencji, panel, licznik), nie samą ikonę na kafelku.</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-114); wymaga T-204 i T-212</div></td>
+
+<td class="num">11–15</td></tr>
 <tr>
 <td><strong>T-116 — Zaawansowana wyszukiwarka (parametry techniczne + wyposażenie)</strong><div class="opis">Filtrowanie po przebiegu, mocy, pojemności, skrzyni, stanie, a docelowo też po wyposażeniu (szyberdach, skóra, kamera 360, podgrzewane fotele) i parametrach technicznych — klient precyzyjnie dobiera auto zamiast przewijać 3 tysiące ofert. Wymaga uporządkowania danych technicznych: dziś siedzą w nieindeksowalnym formacie, a chińskie opisy z głównego źródła są w bazie uszkodzone (widać je poprawnie tylko dzięki łatce przy wyświetlaniu) — przeniesienie ich do indeksowalnej tabeli jest jednocześnie naprawą tego długu.</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-116); warstwa wyposażenia zależy od losu głównego źródła danych</div></td>
 
@@ -495,7 +499,7 @@ footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line);
 
 <td class="num">20–26</td></tr>
 </tbody>
-<tfoot><tr><td>Razem pełna roadmapa (widełki)</td><td class="num">536–701</td></tr></tfoot>
+<tfoot><tr><td>Razem pełna roadmapa (widełki)</td><td class="num">541–708</td></tr></tfoot>
 </table>
 
 <h2>Prace regularne — stała obsługa miesięczna</h2>

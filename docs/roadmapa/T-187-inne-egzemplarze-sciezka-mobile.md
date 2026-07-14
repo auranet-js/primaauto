@@ -1,8 +1,8 @@
 # T-187 — Inne egzemplarze modelu na ofercie + ścieżka do huba modelu na mobile
 
-> Status: **gotowy do odpalenia** (zero blokerów) · Rozmiar: M
-> Godziny realnie: **12–16 h** (Janek ~2–3 h, AI ~10–13 h) · Rynkowo: 32–40 h
-> Zwiad: 2026-07-14. Poprzednia estymata 17–20 h — obniżona, bo komponent karty i CSS już istnieją.
+> Status: **gotowy do odpalenia** · Rozmiar: M · **wymaga T-212** (wspólny komponent karty)
+> Godziny realnie: **9–12 h** (Janek ~2 h, AI ~7–10 h) · Rynkowo: 24–30 h
+> Korekta 2026-07-14 (uwaga Janka): **obniżone z 12–16 h**, bo refaktor karty (3–4 h) został wydzielony do **T-212** — służy też T-114, T-189 i T-115, więc nie może obciążać tylko tego zadania.
 
 ## Po co
 
@@ -27,17 +27,17 @@ Wiązanie oferta→model: taksonomia `serie` (2699 termów), term `serie` ma `pa
 
 ## Plan (kroki)
 
-1. **Wyekstrahować kartę oferty do publicznego helpera.** Dziś ten sam markup jest zduplikowany w 3 miejscach (`brand-hub.php:357`, `homepage.php:216`, `inventory.php:934`). Nowy statyczny helper `AsiaAuto_Brand_Hub::renderCard(int $post_id, array $opts)` → wołany z hubów i z oferty. *Addytywnie — istniejące metody zostają, tylko delegują.*
-2. **Nowa metoda `otherUnits()` w `AsiaAuto_Single`** — WP_Query po `serie` bieżącej oferty, `post__not_in => [$pid]`, sort po cenie rosnąco, limit 4. Guard: `serie->count <= 1` → nie renderuj (66 ofert-unikatów).
-3. **Wpiąć w `render()`** między linię 94 a 95 (po wyposażeniu, przed „Inne modele marki").
-4. **Nagłówek bloku = ścieżka do huba:** „Inne egzemplarze {Model} ({n})" + CTA „Zobacz wszystkie ceny i wersje {Model} →" linkujące do `get_term_link($serie)`. **To załatwia mobile'a** — link jest w treści, nie w breadcrumbie.
-5. **Mobilna strzałka „←"** (`class-asiaauto-single.php:354`) — przepiąć z `/samochody/` na hub modelu. Fallback na `/samochody/` gdy brak termu.
-6. **Blok wersji na hubie modelu** (`taxonomy-serie.php`) — lista wersji/komplektacji z linkiem do najtańszego egzemplarza każdej.
+*(Wspólny komponent karty — patrz **T-212**. Zakładamy, że jest gotowy.)*
+
+1. **Nowa metoda `otherUnits()` w `AsiaAuto_Single`** — WP_Query po `serie` bieżącej oferty, `post__not_in => [$pid]`, sort po cenie rosnąco, limit 4. Guard: `serie->count <= 1` → nie renderuj (66 ofert-unikatów). Karty przez `AsiaAuto_Card::render()`.
+2. **Wpiąć w `render()`** między linię 94 a 95 (po wyposażeniu, przed „Inne modele marki").
+3. **Nagłówek bloku = ścieżka do huba:** „Inne egzemplarze {Model} ({n})" + CTA „Zobacz wszystkie ceny i wersje {Model} →" linkujące do `get_term_link($serie)`. **To załatwia mobile'a** — link jest w treści, nie w breadcrumbie.
+4. **Mobilna strzałka „←"** (`class-asiaauto-single.php:354`) — przepiąć z `/samochody/` na hub modelu. Fallback na `/samochody/` gdy brak termu.
+5. **Blok wersji na hubie modelu** (`taxonomy-serie.php`) — lista wersji/komplektacji z linkiem do najtańszego egzemplarza każdej.
 
 ## Strefy kruche
 
 - `class-asiaauto-single.php` — **nie ruszamy** `renderMeta()`, JSON-LD (`:884-926`), galerii ani `keySpecs()`. Dokładamy jedną linię w `render()` i jedną nową metodę.
-- Refaktor karty (krok 1) dotyka 3 miejsc na produkcji → **wymaga zgody przed startem** i osobnego commita (bit-for-bit ten sam HTML).
 
 ## Testy
 

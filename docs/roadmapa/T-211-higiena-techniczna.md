@@ -4,6 +4,20 @@
 > Godziny realnie: **20–26 h** (Janek ~3 h, AI ~17–23 h) · Rynkowo: 50–62 h
 > Obniżone z 25–32 h: jedna pozycja jest już zrobiona, dwie okazały się godzinami zamiast dni. **Ale największa z nich jest większa, niż sądziliśmy.**
 
+## ⚡ SZYBKIE ZYSKI — do wzięcia od ręki, bez czekania na cały pakiet
+
+Trzy rzeczy, które można zrobić natychmiast i niezależnie. Razem **~4–6 h**, a zwrot nieproporcjonalnie duży.
+
+| # | Co | Czas | Efekt |
+|---|---|---|---|
+| ⚡1 | **Ukryć 2633 puste strony przed Google** (noindex + wykluczenie z sitemapy) | 3–4 h | Przestają konkurować z realnymi stronami i przepalać budżet indeksowania |
+| ⚡2 | **Fix: kolor auta w danych strukturalnych** — kod pyta o taksonomię `color`, która **nie istnieje** (są `exterior-color` / `interior-color`) → kolor nie trafia do schematu **żadnej z 3056 ofert** | **1 linia** | Bogatszy wynik w Google dla całego katalogu |
+| ⚡3 | **20 nieprzetłumaczonych chińskich miast** (105 ofert pokazuje surowy chiński znak) | 0,5–1 h | Koniec z chińskimi krzakami na froncie |
+
+**Osobno, poza tym pakietem (należy do T-205/Meta):** cron regenerujący feed pojazdów **zniknął** — plik stoi na 01.06, sześć tygodni bez odświeżenia. Prawdopodobnie zginął przy nadpisaniu crontaba 12.07. ⚠️ Backup crontaba przed jakąkolwiek edycją.
+
+---
+
 ## Weryfikacja 7 pierwotnych pozycji
 
 | # | Pozycja | Werdykt po zwiadzie |

@@ -1,8 +1,22 @@
 # T-114 — Ulubione auta (schowek klienta / „parking")
 
-> Status: **gated na T-204** (panel klienta) · Rozmiar: S
-> Godziny realnie: **8–10 h** (Janek ~1 h, AI ~7–9 h) · Rynkowo: 20–25 h
+> Status: **gated na T-204** (panel klienta) + **T-212** (komponent karty) · Rozmiar: M
+> Godziny realnie: **11–15 h** (Janek ~1,5 h, AI ~9–13 h) · Rynkowo: 28–35 h
+> Korekta 2026-07-14 (uwaga Janka): **podniesione z 8–10 h.** Poprzednia estymata liczyła „samo serce na karcie" i pomijała pełną ścieżkę konwersji na konto — a to jest sedno tej funkcji.
 > Wzorzec: „parking" z mobile.de (życzenie Janka)
+
+## Rozbicie godzin
+
+| Czynność | h |
+|---|---|
+| Storage (user meta) + REST (dodaj/usuń/lista) + nonce | 2 |
+| Serce na karcie ofert (przez slot z T-212) + stan wypełnione/puste | 2 |
+| Serce na stronie oferty (sticky header + przy cenie) | 1 |
+| **Modal „zaloguj się" + zapamiętanie intencji** (klik → rejestracja → auto ląduje w ulubionych) | 2–3 |
+| Zakładka „Ulubione" w panelu + licznik w nagłówku strony | 2–3 |
+| Obsługa auta zarezerwowanego/usuniętego (wyszarzenie, etykieta) | 1 |
+| Testy + mobile | 1–2 |
+| **Razem** | **11–15** |
 
 ## Po co
 

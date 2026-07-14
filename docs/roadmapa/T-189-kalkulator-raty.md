@@ -1,8 +1,22 @@
 # T-189 — Kalkulator raty finansowania (rata na kartach ofert)
 
-> Status: **gotowy do odpalenia** (parametry konfigurowalne, partner niepotrzebny na start) · Rozmiar: S/M
-> Godziny realnie: **12–16 h** (Janek ~2 h, AI ~10–14 h) · Rynkowo: 30–40 h
-> Podniesione z 8–10 h: rata ma być **na kartach w listingu**, nie tylko na stronie oferty (wzorzec azjaauto.com, życzenie Ruslana).
+> Status: **gotowy do odpalenia** (parametry konfigurowalne, partner niepotrzebny na start) · Rozmiar: M · **wymaga T-212** (komponent karty)
+> Godziny realnie: **14–18 h** (Janek ~2 h, AI ~12–16 h) · Rynkowo: 35–45 h
+> Korekta 2026-07-14 (uwaga Janka): **podniesione z 12–16 h** — po rozbiciu na czynności wyszło, że było ciasno. To nie jest „widget z suwakiem", tylko konfigurator przeliczający cały katalog w locie.
+> *(Pierwotnie w kosztorysie: 8–10 h — wtedy zakładano ratę tylko na stronie oferty, bez kart w listingu.)*
+
+## Rozbicie godzin
+
+| Czynność | h |
+|---|---|
+| Sekcja konfiguracji w adminie (oprocentowanie, prowizja, zakresy suwaków, on/off) | 2–3 |
+| Wzór annuitetowy z wartością rezydualną — PHP + JS, ta sama liczba + testy | 1–2 |
+| Konfigurator: suwaki, przełącznik firma/osoba prywatna, sticky przycisk, responsywność | 4–5 |
+| **Przeliczanie rat na wszystkich kartach bez przeładowania** + zapamiętanie wyboru | 2–3 |
+| Rata na karcie (przez slot z T-212) | 1 |
+| Blok finansowania na stronie oferty + CTA „zapytaj o finansowanie" → lead | 2–3 |
+| Disclaimer prawny, testy, mobile | 1–2 |
+| **Razem** | **14–18** |
 
 ## Po co
 
