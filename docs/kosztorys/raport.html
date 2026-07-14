@@ -455,47 +455,47 @@ footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line);
 
 <td class="num">30–40</td></tr>
 <tr>
-<td><strong>T-183 — Watchdog awarii feedu ogłoszeń</strong><div class="opis">Automatyczny alarm, gdy synchronizacja przestaje dowozić nowe auta (awarie dostawcy są ciche — dziś wychodzą po fakcie). Chroni świeżość oferty.</div><div class="skala">Status: otwarty</div></td>
+<td><strong>T-183 — Watchdog awarii feedu ogłoszeń</strong><div class="opis">Automatyczny alarm, gdy synchronizacja przestaje dowozić nowe auta. Awaria dostawcy jest cicha — system raportuje 'ok', tylko nowych ofert nie ma. Trzy awarie w czerwcu i zamrożenie feedu od lipca wyszły po fakcie, przypadkiem. Dane do wykrycia problemu są już zbierane — brakuje tylko reguły i powiadomienia.</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-183) — PILNE: dokładnie ta awaria trwa teraz</div></td>
 
 <td class="num">5–6</td></tr>
 <tr>
-<td><strong>Uruchomienie kampanii Facebook/Instagram</strong><div class="opis">Dokończenie weryfikacji firmy w Meta (po stronie Prima-Auto) + katalog pojazdów + zestaw reklam z pikselem — drugi płatny kanał obok Google Ads. Feed i pomiar już przygotowane.</div><div class="skala">Status: czeka na weryfikację firmy w Meta</div></td>
+<td><strong>T-205 — Meta (Facebook/Instagram) — restart na nowym koncie</strong><div class="opis">Konto reklamowe zostało przejęte przez osoby trzecie 3.06 i mimo miesiąca zgłoszeń Meta go nie zwróciła — dziś nie mamy do niego żadnego dostępu. Plan: klient zakłada nową stronę i nowe portfolio biznesowe, a na starej stronie (16,7 tys. obserwujących, gdzie zachowaliśmy dostęp) publikujemy zaproszenie do nowej. Reklamy uruchamiamy na nowym koncie. Przygotowanie techniczne w większości przetrwało (pomiar zdarzeń, feed pojazdów, targeting) — trzeba je przepiąć. Uwaga: obserwujący i grupy odbiorców do remarketingu startują od zera. To koszt przejęcia konta, nie naszej pracy.</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-205); czeka na założenie nowej strony i portfolio przez klienta</div></td>
 
-<td class="num">17–20</td></tr>
+<td class="num">16–22</td></tr>
 <tr>
-<td><strong>Import konwersji do Google Ads + cykliczny przegląd fraz</strong><div class="opis">Google Ads zacznie optymalizować stawki pod realne kontakty (telefon/WhatsApp/lead); przegląd fraz dosypuje słowa i wykluczenia — lepszy zwrot z każdej złotówki budżetu.</div><div class="skala">Status: otwarty</div></td>
+<td><strong>T-206 — Google Ads — strategia licytacji oparta o konwersje + przegląd fraz</strong><div class="opis">Import konwersji do Google Ads jest już wykonany — system notuje 64 kontakty miesięcznie (telefon, WhatsApp, formularz). Zostaje druga część: przestawienie licytacji, żeby Google faktycznie używał tych danych, zamiast licytować ręcznymi stawkami. Uczciwe zastrzeżenie: ma to sens tylko w dwóch kampaniach (marka i remarketing) — pozostałe mają za mało konwersji, by algorytm się nauczył. Do tego cykliczne odsiewanie fraz, które przepalają budżet. Osobno wykryty problem: pomiar prawdopodobnie zaniża konwersje kilkukrotnie (zgody na cookies) — to trzeba zbadać najpierw.</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-206); sam import konwersji JUŻ ZROBIONY (lipiec)</div></td>
 
-<td class="num">7–8</td></tr>
+<td class="num">5–7</td></tr>
 <tr>
-<td><strong>Skonsolidowany dashboard marketingowy (KPI, koszt leada, ROAS)</strong><div class="opis">Jeden raport łączący SEO, Ads, analitykę i Metę: koszt kontaktu, zwrot z reklam, lejek — plus przekazywanie realnych rezerwacji do Google jako konwersji.</div><div class="skala">Status: pomysł</div></td>
+<td><strong>T-207 — Skonsolidowany dashboard marketingowy (KPI, koszt leada, ROAS)</strong><div class="opis">Jeden raport łączący SEO, reklamy, analitykę i dane z systemu zamówień: koszt kontaktu, skuteczność kampanii, lejek sprzedaży, wskaźnik anulowań. Dziś każdy taki raport liczony jest ręcznie i nigdzie nie zostaje — nie da się pokazać trendu, bo nie zbieramy historii. Narzędzia do odpytywania Google mamy gotowe; zbudować trzeba zbieranie, magazyn i prezentację. Zastrzeżenie: pełne przypisanie zamówienia do kampanii wymaga dodatkowej pracy (nie zapisujemy dziś źródła ruchu przy zamówieniu) — to osobna pozycja.</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-207)</div></td>
 
-<td class="num">20–24</td></tr>
+<td class="num">22–28</td></tr>
 <tr>
-<td><strong>Pipeline opisów v2 — automatyczna kontrola jakości treści AI</strong><div class="opis">Twarda weryfikacja faktów w generowanych opisach, filtr 'AI-bełkotu', panel statusów i automatyczne odświeżanie — treści zawsze aktualne bez ręcznej pracy.</div><div class="skala">Status: pomysł</div></td>
+<td><strong>T-208 — Kontrola jakości i odświeżanie treści (pipeline v2)</strong><div class="opis">Treści opisowe kategorii modeli i marek (455 stron) powstają automatycznie i mają już zabezpieczenie przed pustosłowiem. Brakuje trzech rzeczy. Po pierwsze: weryfikacji faktów — dziś nic nie sprawdza, czy podane w tekście zasięgi, moce i ceny zgadzają się z naszą bazą, a piszemy o autach za setki tysięcy złotych. Po drugie: odświeżania — najstarsze treści pochodzą z kwietnia i mówią o cenach oraz dostępności, które dawno się zmieniły. Po trzecie: panelu, w którym widać stan treści. Wycena obniżona, bo połowa fundamentów już stoi.</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-208) — obniżone po przeglądzie: fundamenty już działają</div></td>
 
-<td class="num">70–80</td></tr>
+<td class="num">40–55</td></tr>
 <tr>
-<td><strong>Ładne maile HTML do klientów</strong><div class="opis">Maile transakcyjne (statusy zamówienia, potwierdzenia) w brandowanym szablonie z logo — profesjonalny wizerunek w skrzynce klienta.</div><div class="skala">Status: otwarty</div></td>
+<td><strong>T-209 — Maile do klientów — dostarczalność i szablon graficzny</strong><div class="opis">Maile do klientów (17 rodzajów: potwierdzenia, statusy, umowa) są dziś czystym tekstem, bez logo i formatowania. Ale ważniejsze okazało się coś innego: domena nie ma pełnego uwierzytelnienia poczty (brak podpisu DKIM przy restrykcyjnej polityce), co oznacza, że część wiadomości może trafiać do spamu — łącznie z linkiem, przez który klient wchodzi w swoje zamówienie. Dlatego najpierw audyt dostarczalności, dopiero potem oprawa graficzna. Ładny mail w spamie jest wart zero.</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-209) — najpierw sprawdzamy, czy maile w ogóle docierają</div></td>
 
-<td class="num">14–16</td></tr>
+<td class="num">16–20</td></tr>
 <tr>
-<td><strong>Edytor danych technicznych auta w panelu</strong><div class="opis">Ręczna korekta specyfikacji z chińskiego API bezpośrednio w panelu — bez programisty.</div><div class="skala">Status: otwarty</div></td>
+<td><strong>T-210 — Edytor danych technicznych auta w panelu</strong><div class="opis">Ręczna korekta specyfikacji auta z chińskiego API bezpośrednio w panelu, bez programisty. Wycena wzrosła po przeglądzie kodu: obecna ochrona ręcznych zmian działa na całe ogłoszenie, nie na pojedyncze pole. Oznacza to, że poprawienie jednej literówki wyrzuciłoby auto z automatycznej synchronizacji na zawsze — przestałaby się aktualizować cena, a oferta nie zniknęłaby po sprzedaży w Chinach. Zanim damy narzędzie do edycji, trzeba przebudować ten mechanizm, żeby chronił tylko poprawione pola.</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-210) — podniesione: wymaga przebudowy ochrony zmian</div></td>
 
-<td class="num">15–18</td></tr>
+<td class="num">22–28</td></tr>
 <tr>
-<td><strong>T-201 — Kanał YouTube: uruchomienie + produkcja filmów + kampanie wideo</strong><div class="opis">Nowy kanał dotarcia: firmowy kanał YouTube z filmami o autach (prezentacje z placu / montaże z materiałów o modelach), regularna publikacja i kampanie reklamowe wideo na istniejącym koncie Google Ads. Wideo wzmacnia też remarketing i wiarygodność marki.</div><div class="skala">Status: pomysł (do rozstrzygnięcia format produkcji filmów)</div></td>
+<td><strong>T-201 — Assety wideo + kampania reklamowa wideo (YouTube jako kanał — osobna decyzja)</strong><div class="opis">Reklama wideo w Google Ads nie wymaga popularnego kanału — wystarczy kanał jako kontener i 2-3 krótkie filmy. Materiał już mamy: 53 tys. zdjęć ofertowych i gotowy generator grafik. To tania i mierzalna część. UWAGA — odkrycie: Prima-Auto ma już konto TikTok ze 127 filmami. Jeśli mamy do nich pliki źródłowe, pełny kanał YouTube robi się dużo tańszy (przepakowanie zamiast produkcji). Sam kanał organiczny to jednak inwestycja bez gwarancji zwrotu (konkurent z tej branży ma 21 filmów i 18 obserwujących) — do świadomej decyzji, osobno.</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-201); kanał organiczny = osobna decyzja Ruslana</div></td>
 
-<td class="num">28–36</td></tr>
+<td class="num">10–16</td></tr>
 <tr>
-<td><strong>T-202 — Rozbudowa kreatora zamówienia: galeria sprzedanych aut + elementy zaufania</strong><div class="opis">Moment wpłaty depozytu to szczyt niepewności klienta — kreator zamówienia dostanie dowody wiarygodności: zdjęcia klientów z odebranymi autami (galeria już istnieje — do wpięcia), licznik sprowadzonych aut, kroki procesu z gwarancjami, sekcję pytań 'czy to bezpieczne'.</div><div class="skala">Status: pomysł</div></td>
+<td><strong>T-202 — Rozbudowa kreatora zamówienia: galeria sprzedanych aut + elementy zaufania</strong><div class="opis">Moment wpłaty depozytu to szczyt niepewności klienta — a dziś nie ma tam ani jednego dowodu wiarygodności. Twarda liczba, która to uzasadnia: 33 ze 135 zamówień jest anulowanych (24%, co czwarty klient). Kreator dostanie: licznik sprowadzonych aut (37 dostarczonych, 25 w drodze), zdjęcia klientów z odebranymi autami, jasny opis co się stanie z pieniędzmi i wyraźną informację, że depozyt jest zwrotny.</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-202) — uzasadnione danymi: 24% zamówień anulowanych</div></td>
 
 <td class="num">12–16</td></tr>
 <tr>
-<td><strong>Pakiet higieny technicznej (baza, puste strony, schema, mobile)</strong><div class="opis">Zbiór mniejszych domknięć: prewencja puchnięcia bazy, automatyczne ukrywanie ~1900 pustych stron modeli przed Google, wzbogacenie danych strukturalnych ogłoszeń (silnik, skrzynia, kolor), szlify mobilne, systemowe tłumaczenie chińskich nazw miast, kontrola resztkowych 404, kolejna iteracja galerii klientów.</div><div class="skala">Status: otwarte drobiazgi (7 pozycji)</div></td>
+<td><strong>T-211 — Pakiet higieny technicznej (baza, puste strony, schema, mobile)</strong><div class="opis">Zbiór domknięć technicznych. Najważniejsze odkrycie: 2633 puste strony modeli i marek (bez ani jednej oferty) są w pełni widoczne dla Google i konkurują z naszymi realnymi stronami — do ukrycia. Do tego: błąd, przez który kolor auta nigdy nie trafiał do danych strukturalnych ogłoszeń (3056 ofert), 20 nieprzetłumaczonych chińskich nazw miast, porządki w bazie i rotacja logów. Pozycja 'galeria klientów' wykreślona — została już wykonana.</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-211); największa pozycja: puste strony w Google</div></td>
 
-<td class="num">25–32</td></tr>
+<td class="num">20–26</td></tr>
 </tbody>
-<tfoot><tr><td>Razem pełna roadmapa (widełki)</td><td class="num">583–737</td></tr></tfoot>
+<tfoot><tr><td>Razem pełna roadmapa (widełki)</td><td class="num">538–705</td></tr></tfoot>
 </table>
 
 <h2>Prace regularne — stała obsługa miesięczna</h2>

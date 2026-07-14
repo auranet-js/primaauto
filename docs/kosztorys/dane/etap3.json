@@ -137,112 +137,112 @@
     {
       "id": "T-183",
       "tytul": "Watchdog awarii feedu ogłoszeń",
-      "opis": "Automatyczny alarm, gdy synchronizacja przestaje dowozić nowe auta (awarie dostawcy są ciche — dziś wychodzą po fakcie). Chroni świeżość oferty.",
+      "opis": "Automatyczny alarm, gdy synchronizacja przestaje dowozić nowe auta. Awaria dostawcy jest cicha — system raportuje 'ok', tylko nowych ofert nie ma. Trzy awarie w czerwcu i zamrożenie feedu od lipca wyszły po fakcie, przypadkiem. Dane do wykrycia problemu są już zbierane — brakuje tylko reguły i powiadomienia.",
       "rozmiar": "S",
       "rynkowo_od": 12,
       "rynkowo_do": 14,
       "realnie_od": 5,
       "realnie_do": 6,
-      "status": "otwarty"
+      "status": "plan gotowy (docs/roadmapa/T-183) — PILNE: dokładnie ta awaria trwa teraz"
     },
     {
-      "id": null,
-      "tytul": "Uruchomienie kampanii Facebook/Instagram",
-      "opis": "Dokończenie weryfikacji firmy w Meta (po stronie Prima-Auto) + katalog pojazdów + zestaw reklam z pikselem — drugi płatny kanał obok Google Ads. Feed i pomiar już przygotowane.",
-      "rozmiar": "M",
-      "rynkowo_od": 35,
-      "rynkowo_do": 40,
-      "realnie_od": 17,
-      "realnie_do": 20,
-      "status": "czeka na weryfikację firmy w Meta"
-    },
-    {
-      "id": null,
-      "tytul": "Import konwersji do Google Ads + cykliczny przegląd fraz",
-      "opis": "Google Ads zacznie optymalizować stawki pod realne kontakty (telefon/WhatsApp/lead); przegląd fraz dosypuje słowa i wykluczenia — lepszy zwrot z każdej złotówki budżetu.",
-      "rozmiar": "S",
-      "rynkowo_od": 14,
-      "rynkowo_do": 16,
-      "realnie_od": 7,
-      "realnie_do": 8,
-      "status": "otwarty"
-    },
-    {
-      "id": null,
-      "tytul": "Skonsolidowany dashboard marketingowy (KPI, koszt leada, ROAS)",
-      "opis": "Jeden raport łączący SEO, Ads, analitykę i Metę: koszt kontaktu, zwrot z reklam, lejek — plus przekazywanie realnych rezerwacji do Google jako konwersji.",
+      "id": "T-205",
+      "tytul": "Meta (Facebook/Instagram) — restart na nowym koncie",
+      "opis": "Konto reklamowe zostało przejęte przez osoby trzecie 3.06 i mimo miesiąca zgłoszeń Meta go nie zwróciła — dziś nie mamy do niego żadnego dostępu. Plan: klient zakłada nową stronę i nowe portfolio biznesowe, a na starej stronie (16,7 tys. obserwujących, gdzie zachowaliśmy dostęp) publikujemy zaproszenie do nowej. Reklamy uruchamiamy na nowym koncie. Przygotowanie techniczne w większości przetrwało (pomiar zdarzeń, feed pojazdów, targeting) — trzeba je przepiąć. Uwaga: obserwujący i grupy odbiorców do remarketingu startują od zera. To koszt przejęcia konta, nie naszej pracy.",
       "rozmiar": "M",
       "rynkowo_od": 40,
       "rynkowo_do": 50,
-      "realnie_od": 20,
-      "realnie_do": 24,
-      "status": "pomysł"
+      "realnie_od": 16,
+      "realnie_do": 22,
+      "status": "plan gotowy (docs/roadmapa/T-205); czeka na założenie nowej strony i portfolio przez klienta"
     },
     {
-      "id": null,
-      "tytul": "Pipeline opisów v2 — automatyczna kontrola jakości treści AI",
-      "opis": "Twarda weryfikacja faktów w generowanych opisach, filtr 'AI-bełkotu', panel statusów i automatyczne odświeżanie — treści zawsze aktualne bez ręcznej pracy.",
+      "id": "T-206",
+      "tytul": "Google Ads — strategia licytacji oparta o konwersje + przegląd fraz",
+      "opis": "Import konwersji do Google Ads jest już wykonany — system notuje 64 kontakty miesięcznie (telefon, WhatsApp, formularz). Zostaje druga część: przestawienie licytacji, żeby Google faktycznie używał tych danych, zamiast licytować ręcznymi stawkami. Uczciwe zastrzeżenie: ma to sens tylko w dwóch kampaniach (marka i remarketing) — pozostałe mają za mało konwersji, by algorytm się nauczył. Do tego cykliczne odsiewanie fraz, które przepalają budżet. Osobno wykryty problem: pomiar prawdopodobnie zaniża konwersje kilkukrotnie (zgody na cookies) — to trzeba zbadać najpierw.",
+      "rozmiar": "S",
+      "rynkowo_od": 14,
+      "rynkowo_do": 16,
+      "realnie_od": 5,
+      "realnie_do": 7,
+      "status": "plan gotowy (docs/roadmapa/T-206); sam import konwersji JUŻ ZROBIONY (lipiec)"
+    },
+    {
+      "id": "T-207",
+      "tytul": "Skonsolidowany dashboard marketingowy (KPI, koszt leada, ROAS)",
+      "opis": "Jeden raport łączący SEO, reklamy, analitykę i dane z systemu zamówień: koszt kontaktu, skuteczność kampanii, lejek sprzedaży, wskaźnik anulowań. Dziś każdy taki raport liczony jest ręcznie i nigdzie nie zostaje — nie da się pokazać trendu, bo nie zbieramy historii. Narzędzia do odpytywania Google mamy gotowe; zbudować trzeba zbieranie, magazyn i prezentację. Zastrzeżenie: pełne przypisanie zamówienia do kampanii wymaga dodatkowej pracy (nie zapisujemy dziś źródła ruchu przy zamówieniu) — to osobna pozycja.",
+      "rozmiar": "M",
+      "rynkowo_od": 55,
+      "rynkowo_do": 70,
+      "realnie_od": 22,
+      "realnie_do": 28,
+      "status": "plan gotowy (docs/roadmapa/T-207)"
+    },
+    {
+      "id": "T-208",
+      "tytul": "Kontrola jakości i odświeżanie treści (pipeline v2)",
+      "opis": "Treści opisowe kategorii modeli i marek (455 stron) powstają automatycznie i mają już zabezpieczenie przed pustosłowiem. Brakuje trzech rzeczy. Po pierwsze: weryfikacji faktów — dziś nic nie sprawdza, czy podane w tekście zasięgi, moce i ceny zgadzają się z naszą bazą, a piszemy o autach za setki tysięcy złotych. Po drugie: odświeżania — najstarsze treści pochodzą z kwietnia i mówią o cenach oraz dostępności, które dawno się zmieniły. Po trzecie: panelu, w którym widać stan treści. Wycena obniżona, bo połowa fundamentów już stoi.",
       "rozmiar": "XL",
-      "rynkowo_od": 170,
-      "rynkowo_do": 200,
-      "realnie_od": 70,
-      "realnie_do": 80,
-      "status": "pomysł"
+      "rynkowo_od": 110,
+      "rynkowo_do": 140,
+      "realnie_od": 40,
+      "realnie_do": 55,
+      "status": "plan gotowy (docs/roadmapa/T-208) — obniżone po przeglądzie: fundamenty już działają"
     },
     {
-      "id": null,
-      "tytul": "Ładne maile HTML do klientów",
-      "opis": "Maile transakcyjne (statusy zamówienia, potwierdzenia) w brandowanym szablonie z logo — profesjonalny wizerunek w skrzynce klienta.",
+      "id": "T-209",
+      "tytul": "Maile do klientów — dostarczalność i szablon graficzny",
+      "opis": "Maile do klientów (17 rodzajów: potwierdzenia, statusy, umowa) są dziś czystym tekstem, bez logo i formatowania. Ale ważniejsze okazało się coś innego: domena nie ma pełnego uwierzytelnienia poczty (brak podpisu DKIM przy restrykcyjnej polityce), co oznacza, że część wiadomości może trafiać do spamu — łącznie z linkiem, przez który klient wchodzi w swoje zamówienie. Dlatego najpierw audyt dostarczalności, dopiero potem oprawa graficzna. Ładny mail w spamie jest wart zero.",
       "rozmiar": "M",
-      "rynkowo_od": 30,
-      "rynkowo_do": 36,
-      "realnie_od": 14,
-      "realnie_do": 16,
-      "status": "otwarty"
+      "rynkowo_od": 40,
+      "rynkowo_do": 48,
+      "realnie_od": 16,
+      "realnie_do": 20,
+      "status": "plan gotowy (docs/roadmapa/T-209) — najpierw sprawdzamy, czy maile w ogóle docierają"
     },
     {
-      "id": null,
+      "id": "T-210",
       "tytul": "Edytor danych technicznych auta w panelu",
-      "opis": "Ręczna korekta specyfikacji z chińskiego API bezpośrednio w panelu — bez programisty.",
+      "opis": "Ręczna korekta specyfikacji auta z chińskiego API bezpośrednio w panelu, bez programisty. Wycena wzrosła po przeglądzie kodu: obecna ochrona ręcznych zmian działa na całe ogłoszenie, nie na pojedyncze pole. Oznacza to, że poprawienie jednej literówki wyrzuciłoby auto z automatycznej synchronizacji na zawsze — przestałaby się aktualizować cena, a oferta nie zniknęłaby po sprzedaży w Chinach. Zanim damy narzędzie do edycji, trzeba przebudować ten mechanizm, żeby chronił tylko poprawione pola.",
       "rozmiar": "M",
-      "rynkowo_od": 35,
-      "rynkowo_do": 40,
-      "realnie_od": 15,
-      "realnie_do": 18,
-      "status": "otwarty"
+      "rynkowo_od": 55,
+      "rynkowo_do": 70,
+      "realnie_od": 22,
+      "realnie_do": 28,
+      "status": "plan gotowy (docs/roadmapa/T-210) — podniesione: wymaga przebudowy ochrony zmian"
     },
     {
       "id": "T-201",
-      "tytul": "Kanał YouTube: uruchomienie + produkcja filmów + kampanie wideo",
-      "opis": "Nowy kanał dotarcia: firmowy kanał YouTube z filmami o autach (prezentacje z placu / montaże z materiałów o modelach), regularna publikacja i kampanie reklamowe wideo na istniejącym koncie Google Ads. Wideo wzmacnia też remarketing i wiarygodność marki.",
+      "tytul": "Assety wideo + kampania reklamowa wideo (YouTube jako kanał — osobna decyzja)",
+      "opis": "Reklama wideo w Google Ads nie wymaga popularnego kanału — wystarczy kanał jako kontener i 2-3 krótkie filmy. Materiał już mamy: 53 tys. zdjęć ofertowych i gotowy generator grafik. To tania i mierzalna część. UWAGA — odkrycie: Prima-Auto ma już konto TikTok ze 127 filmami. Jeśli mamy do nich pliki źródłowe, pełny kanał YouTube robi się dużo tańszy (przepakowanie zamiast produkcji). Sam kanał organiczny to jednak inwestycja bez gwarancji zwrotu (konkurent z tej branży ma 21 filmów i 18 obserwujących) — do świadomej decyzji, osobno.",
       "rozmiar": "L",
-      "rynkowo_od": 70,
-      "rynkowo_do": 90,
-      "realnie_od": 28,
-      "realnie_do": 36,
-      "status": "pomysł (do rozstrzygnięcia format produkcji filmów)"
+      "rynkowo_od": 25,
+      "rynkowo_do": 40,
+      "realnie_od": 10,
+      "realnie_do": 16,
+      "status": "plan gotowy (docs/roadmapa/T-201); kanał organiczny = osobna decyzja Ruslana"
     },
     {
       "id": "T-202",
       "tytul": "Rozbudowa kreatora zamówienia: galeria sprzedanych aut + elementy zaufania",
-      "opis": "Moment wpłaty depozytu to szczyt niepewności klienta — kreator zamówienia dostanie dowody wiarygodności: zdjęcia klientów z odebranymi autami (galeria już istnieje — do wpięcia), licznik sprowadzonych aut, kroki procesu z gwarancjami, sekcję pytań 'czy to bezpieczne'.",
+      "opis": "Moment wpłaty depozytu to szczyt niepewności klienta — a dziś nie ma tam ani jednego dowodu wiarygodności. Twarda liczba, która to uzasadnia: 33 ze 135 zamówień jest anulowanych (24%, co czwarty klient). Kreator dostanie: licznik sprowadzonych aut (37 dostarczonych, 25 w drodze), zdjęcia klientów z odebranymi autami, jasny opis co się stanie z pieniędzmi i wyraźną informację, że depozyt jest zwrotny.",
       "rozmiar": "M",
       "rynkowo_od": 30,
       "rynkowo_do": 40,
       "realnie_od": 12,
       "realnie_do": 16,
-      "status": "pomysł"
+      "status": "plan gotowy (docs/roadmapa/T-202) — uzasadnione danymi: 24% zamówień anulowanych"
     },
     {
-      "id": null,
+      "id": "T-211",
       "tytul": "Pakiet higieny technicznej (baza, puste strony, schema, mobile)",
-      "opis": "Zbiór mniejszych domknięć: prewencja puchnięcia bazy, automatyczne ukrywanie ~1900 pustych stron modeli przed Google, wzbogacenie danych strukturalnych ogłoszeń (silnik, skrzynia, kolor), szlify mobilne, systemowe tłumaczenie chińskich nazw miast, kontrola resztkowych 404, kolejna iteracja galerii klientów.",
+      "opis": "Zbiór domknięć technicznych. Najważniejsze odkrycie: 2633 puste strony modeli i marek (bez ani jednej oferty) są w pełni widoczne dla Google i konkurują z naszymi realnymi stronami — do ukrycia. Do tego: błąd, przez który kolor auta nigdy nie trafiał do danych strukturalnych ogłoszeń (3056 ofert), 20 nieprzetłumaczonych chińskich nazw miast, porządki w bazie i rotacja logów. Pozycja 'galeria klientów' wykreślona — została już wykonana.",
       "rozmiar": "M",
-      "rynkowo_od": 60,
-      "rynkowo_do": 70,
-      "realnie_od": 25,
-      "realnie_do": 32,
-      "status": "otwarte drobiazgi (7 pozycji)"
+      "rynkowo_od": 50,
+      "rynkowo_do": 62,
+      "realnie_od": 20,
+      "realnie_do": 26,
+      "status": "plan gotowy (docs/roadmapa/T-211); największa pozycja: puste strony w Google"
     }
   ]
 }
