@@ -102,6 +102,17 @@
       "status": "plan gotowy (docs/roadmapa/T-162), strategia i pipeline gotowe — zero blokerów"
     },
     {
+      "id": "T-213",
+      "tytul": "Kalkulator kosztów importu + wpis (magnes na ruch z Google)",
+      "opis": "Narzędzie na stronie: klient wpisuje cenę auta w Chinach i widzi, ile realnie kosztuje sprowadzenie go do Polski — fracht, opłaty portowe, cło, akcyza (przy elektrykach zerowa), VAT, odprawa, homologacja, transport krajowy. Kalkulatory to treść, która zdobywa linki i jest chętnie cytowana przez wyszukiwarki AI — a przechwytuje pytania zadawane na długo przed wyborem konkretnego auta, czyli ruch, którego dziś nie mamy wcale. Do tego wpis wyjaśniający, jak liczy się to naprawdę: sprawdziliśmy kalkulator konkurencji i zaniża on koszt o kilka tysięcy złotych, bo nalicza podatki od samej ceny auta zamiast od wartości celnej z transportem. Klient, który mu zaufa, dopłaca różnicę na odprawie. To pokazuje naszą znajomość tematu i tłumaczy, dlaczego nasza cena 'pod klucz' jest uczciwa.",
+      "rozmiar": "M",
+      "rynkowo_od": 35,
+      "rynkowo_do": 45,
+      "realnie_od": 14,
+      "realnie_do": 18,
+      "status": "plan gotowy (docs/roadmapa/T-213); wariant zatwierdzony 14.07"
+    },
+    {
       "id": "T-186",
       "tytul": "Che168 jako pełne, automatyczne drugie źródło ogłoszeń",
       "opis": "Automatyczny import z drugiego chińskiego portalu — pełna dywersyfikacja i szersza oferta aut premium. Fundament już działa (ręczny import pojedynczych aut, mapowanie marek, tłumaczenia parametrów — 22 wydania pracy), ale automat to nie jest przełączenie przełącznika: mechanizm normalizacji chińskich danych jest dziś wpięty wyłącznie w import ręczny, a automatyczna synchronizacja ma zaszyte na sztywno jedno źródło. Do zbudowania: menedżer źródeł, wpięcie normalizacji w automat, wykrywanie duplikatów i panel zarządzania. Wycena potwierdzona po przeglądzie kodu.",
