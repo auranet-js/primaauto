@@ -1,31 +1,12 @@
-# T-209 — Maile do klientów: dostarczalność + szablon HTML
+# T-209 — Ładne maile HTML do klientów
 
 > Status: gotowy do odpalenia · Rozmiar: M
-> Godziny realnie: **16–20 h** (Janek ~2 h, AI ~14–18 h) · Rynkowo: 40–48 h
-> Podniesione z 14–16 h: **doszedł krok zerowy — audyt dostarczalności.**
+> Godziny realnie: **14–16 h** (Janek ~2 h, AI ~12–14 h) · Rynkowo: 30–36 h
+> Estymata z kosztorysu **potwierdzona** — bez zmian.
 
-## ⚠️ Krok zerowy: czy te maile w ogóle dochodzą (2–4 h)
+## Po co
 
-**To musi pójść PRZED ładnym szablonem. Ładny mail w spamie jest wart zero.**
-
-Stan DNS domeny `primaauto.com.pl` (sprawdzone 14.07):
-```
-SPF:   v=spf1 a mx include:spf.hostido.pl -all        ✅ jest
-DMARC: v=DMARC1; p=quarantine; adkim=s; aspf=s;       ⚠️ kwarantanna + ŚCISŁE dopasowanie
-DKIM:  brak odpowiedzi na typowych selektorach        ❌
-```
-
-**Dlaczego to groźne:** DMARC ustawiony na **kwarantannę** (czyli „wrzuć do spamu, jeśli nie przejdzie") ze **ścisłym dopasowaniem na obu osiach**, a DKIM nie odpowiada. Cała dostarczalność wisi na samym SPF. Gmail i Outlook od 2024 wymagają **SPF i DKIM**, nie „albo".
-
-**Co to znaczy w praktyce:** mail z magic linkiem — **jedyny sposób, w jaki klient wchodzi w swoje zamówienie** — może lądować w spamie już dziś.
-
-*(Uwaga: DKIM może być podpisywany przez hostido na niestandardowym selektorze, którego `dig` nie zgadnie. Dlatego krok pierwszy to sprawdzenie w panelu hostingu, a nie wyrokowanie z konsoli.)*
-
-**Do zrobienia:**
-1. Sprawdzić w panelu Hostido, czy DKIM jest włączony i na jakim selektorze.
-2. Jeśli nie ma — włączyć albo przejść na autoryzowany SMTP (wtyczka SMTP + dedykowana skrzynka).
-3. **Test dostarczalności** — wysyłka na Gmail/Outlook/WP, sprawdzenie, gdzie ląduje.
-4. Dopiero potem: szablon.
+Maile transakcyjne (potwierdzenia, statusy zamówienia, umowa) w brandowanym szablonie z logo — profesjonalny wizerunek w skrzynce klienta. Dziś to czysty tekst bez żadnej oprawy.
 
 ## Stan faktyczny maili
 
@@ -69,14 +50,13 @@ To tnie robotę drastycznie względem przepisywania każdego szablonu z osobna.
 - Wersja tekstowa (fallback) zawiera działający URL magic linku.
 
 **Półautomatyczne**
-- **Test dostarczalności:** wysyłka na Gmail, Outlook, WP, Onet → gdzie ląduje (skrzynka / oferty / spam). To jest test, który decyduje o sukcesie tego taska.
+- Render w prawdziwych skrzynkach (patrz niżej) — po zmianie na HTML sprawdzić, czy maile nadal docierają normalnie.
 - Render w klientach: Gmail (web + mobile), Outlook, Apple Mail. Outlook potrafi zniszczyć każdy layout — testujemy go zawsze.
 - Kontrola, że magic link działa po kliknięciu z maila HTML.
 
 ## Definicja zrobionego
 
-- Wiadomo, czy DKIM działa; jeśli nie działał — działa.
-- Maile docierają do skrzynki odbiorczej Gmaila i Outlooka (nie do spamu) — potwierdzone testem.
+- Maile docierają tak jak dotąd (zmiana na HTML niczego nie zepsuła).
 - 17 szablonów w brandowanym wrapperze, magic link jako przycisk.
 - Wersja tekstowa jako fallback.
 - Hasło nie leci już otwartym tekstem.

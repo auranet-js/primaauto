@@ -191,14 +191,14 @@
     },
     {
       "id": "T-209",
-      "tytul": "Maile do klientów — dostarczalność i szablon graficzny",
-      "opis": "Maile do klientów (17 rodzajów: potwierdzenia, statusy, umowa) są dziś czystym tekstem, bez logo i formatowania. Ale ważniejsze okazało się coś innego: domena nie ma pełnego uwierzytelnienia poczty (brak podpisu DKIM przy restrykcyjnej polityce), co oznacza, że część wiadomości może trafiać do spamu — łącznie z linkiem, przez który klient wchodzi w swoje zamówienie. Dlatego najpierw audyt dostarczalności, dopiero potem oprawa graficzna. Ładny mail w spamie jest wart zero.",
+      "tytul": "Ładne maile HTML do klientów",
+      "opis": "Maile transakcyjne do klientów (17 rodzajów: potwierdzenie zgłoszenia, zmiany statusu zamówienia, umowa, dane do przelewu) są dziś czystym tekstem — bez logo, bez formatowania, z gołymi adresami zamiast przycisków. Do zrobienia: jeden brandowany szablon graficzny obejmujący wszystkie wiadomości, z linkiem do zamówienia jako wyraźnym przyciskiem, plus podgląd szablonów w panelu. Treść merytoryczna maili jest dobra — zmieniamy wyłącznie oprawę.",
       "rozmiar": "M",
-      "rynkowo_od": 40,
-      "rynkowo_do": 48,
-      "realnie_od": 16,
-      "realnie_do": 20,
-      "status": "plan gotowy (docs/roadmapa/T-209) — najpierw sprawdzamy, czy maile w ogóle docierają"
+      "rynkowo_od": 30,
+      "rynkowo_do": 36,
+      "realnie_od": 14,
+      "realnie_do": 16,
+      "status": "plan gotowy (docs/roadmapa/T-209)"
     },
     {
       "id": "T-210",
