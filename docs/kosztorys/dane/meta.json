@@ -1,13 +1,16 @@
 {
   "projekt": "Prima Auto — platforma importu samochodów z Chin (primaauto.com.pl)",
   "wygenerowano": null,
+  "pokazuj_rynkowo": false,
+  "_komentarz_pokazuj_rynkowo": "Decyzja Janka 2026-07-14: kolumna 'rynkowo' UKRYTA w raporcie dla Ruslana (raport pokazuje wyłącznie godziny realne). Dane pozostają we wszystkich plikach dane/*.json i są nadal liczone — przywrócenie widoku = ustawienie tej flagi na true i przebudowa (python3 build.py --deploy). NIE kasować pól rynkowo_* / godz_rynkowe.",
   "metodologia": {
     "godziny_rynkowe": "Wycena rynkowa: ile godzin zajęłoby wykonanie danej pracy klasycznemu zespołowi (programista senior, specjalista SEO, specjalista Google Ads, copywriter) pracującemu tradycyjnie, bez narzędzi AI. To miara WARTOŚCI wykonanej pracy — standard przy rozliczaniu projektów agencyjnych.",
     "godziny_realne": "Faktyczny czas pracy: godziny Jana Schenka + godziny zespołu deweloperskiego pracującego równolegle (praca dwutorowa — prowadzenie projektu i wykonanie liczone osobno). Baza czasowa dla czerwca 2026 zmierzona z dokładnych logów pracy (aktywne okna 10-minutowe); dla wcześniejszych miesięcy odtworzona z gęstości commitów, wersji oprogramowania i dziennika prac.",
     "uwaga": "Różnica między kolumnami pokazuje efekt inwestycji Auranet we własny, zautomatyzowany warsztat AI — klient otrzymuje pracę o wartości rynkowej wielokrotnie wyższej niż fizycznie spędzony czas."
   },
   "timeline_kluczowe": [
-    {"data": "2026-02/03", "wydarzenie": "Koncepcja platformy, research rynku i źródeł danych o autach z Chin"},
+    {"data": "2026-01 (poł.)", "wydarzenie": "Narodziny koncepcji platformy — pomysł na sprzedaż aut z Chin oparty o automatyczny katalog zasilany chińskimi giełdami"},
+    {"data": "2026-02/03", "wydarzenie": "Research rynku, rozpoznanie źródeł danych o autach z Chin, model biznesowy i cenowy"},
     {"data": "2026-03-16", "wydarzenie": "Negocjacje z dostawcą danych auto-api.com (feed giełdy Dongchedi)"},
     {"data": "2026-03-18", "wydarzenie": "Start subskrypcji API + instalacja platformy (asiaauto.pl)"},
     {"data": "2026-03-25", "wydarzenie": "Pierwsze automatycznie zaimportowane ogłoszenia"},

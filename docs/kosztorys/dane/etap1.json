@@ -1,7 +1,7 @@
 {
   "nazwa": "Etap 1 — Koncepcja i budowa platformy (do prezentacji 08.04.2026)",
-  "okres": "luty — 8 kwietnia 2026",
-  "opis": "Od pomysłu do działającego produktu w ok. 6 tygodni: kompletna platforma sprzedaży aut importowanych z Chin — automatyczny katalog ~4-5 tys. ofert synchronizowany z chińską giełdą co 15 minut, tłumaczenia chińsko-polskie, kalkulator ceny 'pod klucz' (cło, akcyza, VAT), system zamówień z umowami PDF i panel dla sprzedawcy. Na dzień prezentacji: ~23 000 linii autorskiego kodu (bez bibliotek), zero gotowych szablonów.",
+  "okres": "połowa stycznia — 8 kwietnia 2026",
+  "opis": "Od narodzin koncepcji (połowa stycznia 2026) do działającego produktu w niespełna trzy miesiące — z czego sama budowa techniczna to ostatnie ok. 6 tygodni. Wcześniej: research rynku aut z Chin, rozpoznanie źródeł danych i negocjacje z dostawcą feedu. Efekt: kompletna platforma sprzedaży aut importowanych z Chin — automatyczny katalog ~4-5 tys. ofert synchronizowany z chińską giełdą co 15 minut, tłumaczenia chińsko-polskie, kalkulator ceny 'pod klucz' (cło, akcyza, VAT), system zamówień z umowami PDF i panel dla sprzedawcy. Na dzień prezentacji: ~23 000 linii autorskiego kodu (bez bibliotek), zero gotowych szablonów.",
   "referencja_wyceny": "Prezentacja u Ruslana 08.04.2026 — zadeklarowana wartość inwestycji: 50 000 zł",
   "bloki": [
     {

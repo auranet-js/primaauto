@@ -1,6 +1,6 @@
 {
   "nazwa": "Prace regularne — stała obsługa miesięczna",
-  "opis": "Platforma nie jest projektem 'zrobione i zapomniane' — wymaga stałej opieki: kampanie reklamowe trzeba optymalizować pod zmieniający się stan placu i realne koszty kontaktu, import i widoczność w Google pilnować, a awarie dostawcy danych obsługiwać. Poniżej powtarzalny zakres miesięczny z widełkami godzin (kolumny jak wyżej: rynkowo = klasyczny zespół, realnie = zespół Auranet z warsztatem AI).",
+  "opis": "Platforma nie jest projektem 'zrobione i zapomniane' — wymaga stałej opieki: kampanie reklamowe trzeba optymalizować pod zmieniający się stan placu i realne koszty kontaktu, import i widoczność w Google pilnować, a awarie dostawcy danych obsługiwać. Poniżej powtarzalny zakres miesięczny z widełkami godzin.",
   "pozycje": [
     {
       "tytul": "Google Ads — regularna optymalizacja kampanii",
@@ -25,6 +25,15 @@
       "rynkowo_do": 16,
       "realnie_od": 5,
       "realnie_do": 7
+    },
+    {
+      "tytul": "Baza wiedzy — regularna produkcja treści (8–12 artykułów/mc)",
+      "opis": "Uruchamiane po zbudowaniu sekcji blogowej (etap 3). Comiesięczna produkcja rankingów, porównań, poradników i newsów o premierach: research fraz, weryfikacja że temat nie kanibalizuje istniejących stron, przygotowanie treści, twardy fact-check danych (ceny, zasięgi, przepisy — piszemy o pieniądzach klienta), grafiki, publikacja, linkowanie do ofert i zgłoszenie do indeksacji. Kluczowy konkurent zbudował na tym ~14 800 wejść z Google miesięcznie — z czego dwie trzecie na treściach poradnikowych, nie ofertowych.",
+      "rynkowo_od": 50,
+      "rynkowo_do": 65,
+      "realnie_od": 20,
+      "realnie_do": 28,
+      "warunkowa": true
     }
   ],
   "uwaga": "Dotychczas (kwiecień—lipiec) ten zakres był wykonywany na bieżąco w ramach prac z etapu 2 — tabela wyżej go zawiera. Od momentu ustabilizowania platformy staje się osobną, przewidywalną pozycją miesięczną."

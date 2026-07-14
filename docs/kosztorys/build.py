@@ -48,6 +48,18 @@ etap3  = load('etap3.json')
 regularne = load('regularne.json')
 koszty = load('koszty.json')
 
+# Przełącznik kolumny "rynkowo". False = kolumna ukryta w raporcie (dane zostają w dane/*.json).
+# Decyzja Janka 2026-07-14. Przywrócenie: "pokazuj_rynkowo": true w meta.json + przebudowa.
+SHOW_R = bool(meta.get('pokazuj_rynkowo', True))
+
+def th_r(label):
+    """Nagłówek kolumny rynkowej — pusty string gdy ukryta."""
+    return f'<th class="num">{label}</th>' if SHOW_R else ''
+
+def td_r(value):
+    """Komórka kolumny rynkowej — pusty string gdy ukryta."""
+    return f'<td class="num">{value}</td>' if SHOW_R else ''
+
 e1_r = sum(b['godz_rynkowe'] for b in etap1['bloki'])
 e1_f = sum(b['godz_realne']  for b in etap1['bloki'])
 e2_r = sum(t['godz_rynkowe'] for t in etap2['taski'])
@@ -76,7 +88,7 @@ def rows_etap1():
     for b in etap1['bloki']:
         out.append(f"""<tr>
 <td><strong>{esc(b['nazwa'])}</strong><div class="opis">{esc(b['opis'])}</div><div class="skala">{esc(b['skala'])}</div></td>
-<td class="num">{fmt_h(b['godz_rynkowe'])}</td><td class="num">{fmt_h(b['godz_realne'])}</td></tr>""")
+{td_r(fmt_h(b['godz_rynkowe']))}<td class="num">{fmt_h(b['godz_realne'])}</td></tr>""")
     return '\n'.join(out)
 
 def rows_etap2():
@@ -85,7 +97,7 @@ def rows_etap2():
         out.append(f"""<tr>
 <td class="data-col">{esc(t['data'])}</td>
 <td><span class="badge">{esc(OBSZARY.get(t['obszar'], t['obszar']))}</span><br><strong>{esc(t['tytul'])}</strong><div class="opis">{esc(t['opis'])}</div><div class="skala">{esc(t['skala'])}</div></td>
-<td class="num">{fmt_h(t['godz_rynkowe'])}</td><td class="num">{fmt_h(t['godz_realne'])}</td></tr>""")
+{td_r(fmt_h(t['godz_rynkowe']))}<td class="num">{fmt_h(t['godz_realne'])}</td></tr>""")
     return '\n'.join(out)
 
 def rows_etap3():
@@ -94,7 +106,7 @@ def rows_etap3():
         idtxt = f"{esc(p['id'])} — " if p.get('id') else ''
         out.append(f"""<tr>
 <td><strong>{idtxt}{esc(p['tytul'])}</strong><div class="opis">{esc(p['opis'])}</div><div class="skala">Status: {esc(p['status'])}</div></td>
-<td class="num">{p['rynkowo_od']}–{p['rynkowo_do']}</td>
+{td_r(f"{p['rynkowo_od']}–{p['rynkowo_do']}")}
 <td class="num">{p['realnie_od']}–{p['realnie_do']}</td></tr>""")
     return '\n'.join(out)
 
@@ -103,18 +115,24 @@ def rows_regularne():
     for p in regularne['pozycje']:
         out.append(f"""<tr>
 <td><strong>{esc(p['tytul'])}</strong><div class="opis">{esc(p['opis'])}</div></td>
-<td class="num">{p['rynkowo_od']}–{p['rynkowo_do']}</td>
+{td_r(f"{p['rynkowo_od']}–{p['rynkowo_do']}")}
 <td class="num">{p['realnie_od']}–{p['realnie_do']}</td></tr>""")
     return '\n'.join(out)
 
 def rows_obszary():
     out = []
+    base = 'r' if SHOW_R else 'f'
+    mx = max(o[base] for o in per_obszar.values())
     for k, o in per_obszar.items():
-        pct = round(o['r'] / max_r * 100)
+        pct = round(o[base] / mx * 100)
+        if SHOW_R:
+            val = f"""{fmt_h(o['r'])} h <span class="obar-meta">rynkowo</span> · {fmt_h(o['f'])} h <span class="obar-meta">realnie</span>"""
+        else:
+            val = f"""{fmt_h(o['f'])} h"""
         out.append(f"""<div class="obar-row">
 <div class="obar-label">{esc(OBSZARY.get(k, k))} <span class="obar-meta">({o['n']} prac)</span></div>
 <div class="obar-track"><div class="obar-fill" style="width:{pct}%"></div></div>
-<div class="obar-val">{fmt_h(o['r'])} h <span class="obar-meta">rynkowo</span> · {fmt_h(o['f'])} h <span class="obar-meta">realnie</span></div>
+<div class="obar-val">{val}</div>
 </div>""")
     return '\n'.join(out)
 
@@ -138,6 +156,21 @@ def rows_koszty():
     return '\n'.join(out)
 
 nl = '\n'
+
+# --- warianty nagłówka/kafelków/noty zależne od SHOW_R ---
+if SHOW_R:
+    tiles_html = f"""<div class="tile acc"><div class="v">{fmt_h(e1_r + e2_r)} <small>h</small></div><div class="l">wartość rynkowa wykonanych prac (etapy 1-2), w godzinach klasycznego zespołu</div></div>
+<div class="tile"><div class="v">{fmt_h(e1_f + e2_f)} <small>h</small></div><div class="l">realny czas pracy zespołu Auranet (z warsztatem AI)</div></div>"""
+    nota_html = f"""{esc(meta['metodologia']['godziny_rynkowe'])}<br><br>{esc(meta['metodologia']['godziny_realne'])}<br><br>{esc(meta['metodologia']['uwaga'])}"""
+    footer_uwaga = ' Wartości „rynkowo" są estymatą godzin klasycznego zespołu — mogą podlegać korekcie.'
+    hdr_h, hdr_hmc = 'Godziny [h]', 'Godziny [h/mc]'
+else:
+    tiles_html = f"""<div class="tile acc"><div class="v">{fmt_h(e1_f + e2_f)} <small>h</small></div><div class="l">łączny czas pracy nad platformą (etapy 1-2)</div></div>
+<div class="tile"><div class="v">{len(etap1['bloki']) + len(etap2['taski'])}</div><div class="l">wykonanych prac: {len(etap1['bloki'])} bloków budowy + {len(etap2['taski'])} zadań rozwojowych</div></div>"""
+    nota_html = f"""{esc(meta['metodologia']['godziny_realne'])}"""
+    footer_uwaga = ''
+    hdr_h, hdr_hmc = 'Godziny [h]', 'Godziny [h/mc]'
+
 html_doc = f"""<!doctype html>
 <html lang="pl">
 <head>
@@ -216,13 +249,12 @@ footer {{ margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line)
 </header>
 
 <div class="tiles">
-<div class="tile acc"><div class="v">{fmt_h(e1_r + e2_r)} <small>h</small></div><div class="l">wartość rynkowa wykonanych prac (etapy 1-2), w godzinach klasycznego zespołu</div></div>
-<div class="tile"><div class="v">{fmt_h(e1_f + e2_f)} <small>h</small></div><div class="l">realny czas pracy zespołu Auranet (z warsztatem AI)</div></div>
+{tiles_html}
 <div class="tile"><div class="v">{meta['liczby_projektu']['wydania_pluginu_po_cutover'] }+</div><div class="l">wydań oprogramowania od startu na primaauto.com.pl</div></div>
 <div class="tile"><div class="v">{meta['liczby_projektu']['listings_w_bazie']}</div><div class="l">ogłoszeń w katalogu · {meta['liczby_projektu']['zamowienia_w_systemie']} zamówień w systemie</div></div>
 </div>
 
-<div class="note"><strong>Jak czytać godziny.</strong> {esc(meta['metodologia']['godziny_rynkowe'])}<br><br>{esc(meta['metodologia']['godziny_realne'])}<br><br>{esc(meta['metodologia']['uwaga'])}</div>
+<div class="note"><strong>Jak czytać godziny.</strong> {nota_html}</div>
 
 <h2>Oś czasu projektu</h2>
 <div class="timeline">
@@ -232,42 +264,42 @@ footer {{ margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line)
 <h2><span class="eno">Etap 1.</span> {esc(etap1['nazwa'].split('—',1)[1].strip() if '—' in etap1['nazwa'] else etap1['nazwa'])}</h2>
 <p class="lead">{esc(etap1['opis'])} <strong>{esc(etap1['referencja_wyceny'])}.</strong></p>
 <table>
-<thead><tr><th>Zakres prac</th><th class="num">Rynkowo [h]</th><th class="num">Realnie [h]</th></tr></thead>
+<thead><tr><th>Zakres prac</th>{th_r('Rynkowo [h]')}<th class="num">{hdr_h}</th></tr></thead>
 <tbody>
 {rows_etap1()}
 </tbody>
-<tfoot><tr><td>Razem etap 1</td><td class="num">{fmt_h(e1_r)}</td><td class="num">{fmt_h(e1_f)}</td></tr></tfoot>
+<tfoot><tr><td>Razem etap 1</td>{td_r(fmt_h(e1_r))}<td class="num">{fmt_h(e1_f)}</td></tr></tfoot>
 </table>
 
 <h2><span class="eno">Etap 2.</span> {esc(etap2['nazwa'].split('—',1)[1].strip() if '—' in etap2['nazwa'] else etap2['nazwa'])}</h2>
 <p class="lead">{esc(etap2['opis'])}</p>
 
 <table>
-<thead><tr><th>Data</th><th>Praca</th><th class="num">Rynkowo [h]</th><th class="num">Realnie [h]</th></tr></thead>
+<thead><tr><th>Data</th><th>Praca</th>{th_r('Rynkowo [h]')}<th class="num">{hdr_h}</th></tr></thead>
 <tbody>
 {rows_etap2()}
 </tbody>
-<tfoot><tr><td colspan="2">Razem etap 2</td><td class="num">{fmt_h(e2_r)}</td><td class="num">{fmt_h(e2_f)}</td></tr></tfoot>
+<tfoot><tr><td colspan="2">Razem etap 2</td>{td_r(fmt_h(e2_r))}<td class="num">{fmt_h(e2_f)}</td></tr></tfoot>
 </table>
 
 <h2><span class="eno">Etap 3.</span> Plany rozwoju — wycena inwestycji</h2>
 <p class="lead">{esc(etap3['opis'])}</p>
 <table>
-<thead><tr><th>Pozycja</th><th class="num">Rynkowo [h]</th><th class="num">Realnie [h]</th></tr></thead>
+<thead><tr><th>Pozycja</th>{th_r('Rynkowo [h]')}<th class="num">{hdr_h}</th></tr></thead>
 <tbody>
 {rows_etap3()}
 </tbody>
-<tfoot><tr><td>Razem pełna roadmapa (widełki)</td><td class="num">{e3_r_od}–{e3_r_do}</td><td class="num">{e3_f_od}–{e3_f_do}</td></tr></tfoot>
+<tfoot><tr><td>Razem pełna roadmapa (widełki)</td>{td_r(f'{e3_r_od}–{e3_r_do}')}<td class="num">{e3_f_od}–{e3_f_do}</td></tr></tfoot>
 </table>
 
 <h2>{esc(regularne['nazwa'])}</h2>
 <p class="lead">{esc(regularne['opis'])}</p>
 <table>
-<thead><tr><th>Zakres</th><th class="num">Rynkowo [h/mc]</th><th class="num">Realnie [h/mc]</th></tr></thead>
+<thead><tr><th>Zakres</th>{th_r('Rynkowo [h/mc]')}<th class="num">{hdr_hmc}</th></tr></thead>
 <tbody>
 {rows_regularne()}
 </tbody>
-<tfoot><tr><td>Razem miesięcznie (widełki)</td><td class="num">{reg_r_od}–{reg_r_do}</td><td class="num">{reg_f_od}–{reg_f_do}</td></tr></tfoot>
+<tfoot><tr><td>Razem miesięcznie (widełki)</td>{td_r(f'{reg_r_od}–{reg_r_do}')}<td class="num">{reg_f_od}–{reg_f_do}</td></tr></tfoot>
 </table>
 <div class="note">{esc(regularne['uwaga'])}</div>
 
@@ -282,7 +314,7 @@ footer {{ margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line)
 <div class="note">{esc(koszty['uwaga'])}</div>
 
 <footer>
-Dokument wygenerowany automatycznie z ewidencji prac projektu (repozytorium, dziennik wydań, rejestr decyzji, logi pracy). Wartości „rynkowo" są estymatą godzin klasycznego zespołu — mogą podlegać korekcie. Auranet · js@auranet.com.pl
+Dokument wygenerowany automatycznie z ewidencji prac projektu (repozytorium, dziennik wydań, rejestr decyzji, logi pracy).{footer_uwaga} Auranet · js@auranet.com.pl
 </footer>
 
 </div>
