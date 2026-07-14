@@ -9,16 +9,46 @@
     "uwaga": "Różnica między kolumnami pokazuje efekt inwestycji Auranet we własny, zautomatyzowany warsztat AI — klient otrzymuje pracę o wartości rynkowej wielokrotnie wyższej niż fizycznie spędzony czas."
   },
   "timeline_kluczowe": [
-    {"data": "2026-01 (poł.)", "wydarzenie": "Narodziny koncepcji platformy — pomysł na sprzedaż aut z Chin oparty o automatyczny katalog zasilany chińskimi giełdami"},
-    {"data": "2026-02/03", "wydarzenie": "Research rynku, rozpoznanie źródeł danych o autach z Chin, model biznesowy i cenowy"},
-    {"data": "2026-03-16", "wydarzenie": "Negocjacje z dostawcą danych auto-api.com (feed giełdy Dongchedi)"},
-    {"data": "2026-03-18", "wydarzenie": "Start subskrypcji API + instalacja platformy (asiaauto.pl)"},
-    {"data": "2026-03-25", "wydarzenie": "Pierwsze automatycznie zaimportowane ogłoszenia"},
-    {"data": "2026-04-08", "wydarzenie": "Prezentacja gotowej platformy u Ruslana (PRIMA-AUTO) — wycena inwestycji: 50 000 zł"},
-    {"data": "2026-04-16", "wydarzenie": "Pierwsze zamówienie klienta w systemie"},
-    {"data": "2026-04-21", "wydarzenie": "Rebranding i przeprowadzka na primaauto.com.pl"},
-    {"data": "2026-07-03", "wydarzenie": "6 129 ogłoszeń w katalogu, 112 zamówień w systemie, 90 wydań oprogramowania od cutovera"},
-    {"data": "2026-07-12", "wydarzenie": "Stan na dziś: 3 053 aktywne ogłoszenia (katalog odchudzony po zamrożeniu feedu dostawcy — tylko oferty ze świeżymi danymi), 128 zamówień w systemie, 92 wydania oprogramowania"}
+    {
+      "data": "2026-01 (poł.)",
+      "wydarzenie": "Narodziny koncepcji platformy — pomysł na sprzedaż aut z Chin oparty o automatyczny katalog zasilany chińskimi giełdami"
+    },
+    {
+      "data": "2026-02/03",
+      "wydarzenie": "Research rynku, rozpoznanie źródeł danych o autach z Chin, model biznesowy i cenowy"
+    },
+    {
+      "data": "2026-03-16",
+      "wydarzenie": "Negocjacje z dostawcą danych auto-api.com (feed giełdy Dongchedi)"
+    },
+    {
+      "data": "2026-03-18",
+      "wydarzenie": "Start subskrypcji API + instalacja platformy (asiaauto.pl)"
+    },
+    {
+      "data": "2026-03-25",
+      "wydarzenie": "Pierwsze automatycznie zaimportowane ogłoszenia"
+    },
+    {
+      "data": "2026-04-08",
+      "wydarzenie": "Prezentacja gotowej platformy u Ruslana (PRIMA-AUTO) — wycena inwestycji: 50 000 zł"
+    },
+    {
+      "data": "2026-04-16",
+      "wydarzenie": "Pierwsze zamówienie klienta w systemie"
+    },
+    {
+      "data": "2026-04-21",
+      "wydarzenie": "Rebranding i przeprowadzka na primaauto.com.pl"
+    },
+    {
+      "data": "2026-07-03",
+      "wydarzenie": "6 129 ogłoszeń w katalogu, 112 zamówień w systemie, 90 wydań oprogramowania od cutovera"
+    },
+    {
+      "data": "2026-07-12",
+      "wydarzenie": "Stan na dziś: 3 053 aktywne ogłoszenia (katalog odchudzony po zamrożeniu feedu dostawcy — tylko oferty ze świeżymi danymi), 39 zamówień od klientów (26 potwierdzonych i dalej), 61 aut sprowadzanych na stan, 92 wydania oprogramowania"
+    }
   ],
   "liczby_projektu": {
     "linie_kodu_15_04": 23050,
@@ -26,7 +56,9 @@
     "wydania_pluginu_po_cutover": 92,
     "decyzje_architektoniczne_adr": 39,
     "listings_w_bazie": 3053,
-    "zamowienia_w_systemie": 128,
-    "dni_sesyjne_repo": 46
+    "dni_sesyjne_repo": 46,
+    "zamowienia_klientow": 39,
+    "zamowienia_potwierdzone": 26,
+    "zamowienia_wewnetrzne": 61
   }
 }

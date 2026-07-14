@@ -251,7 +251,9 @@ footer {{ margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line)
 <div class="tiles">
 {tiles_html}
 <div class="tile"><div class="v">{meta['liczby_projektu']['wydania_pluginu_po_cutover'] }+</div><div class="l">wydań oprogramowania od startu na primaauto.com.pl</div></div>
-<div class="tile"><div class="v">{meta['liczby_projektu']['listings_w_bazie']}</div><div class="l">ogłoszeń w katalogu · {meta['liczby_projektu']['zamowienia_w_systemie']} zamówień w systemie</div></div>
+<div class="tile"><div class="v">{meta['liczby_projektu']['listings_w_bazie']}</div><div class="l">ogłoszeń w katalogu</div></div>
+<div class="tile acc"><div class="v">{meta['liczby_projektu']['zamowienia_klientow']} <small>/ {meta['liczby_projektu']['zamowienia_potwierdzone']}</small></div><div class="l">zamówień od klientów (bez anulowanych) · z tego <strong>{meta['liczby_projektu']['zamowienia_potwierdzone']} potwierdzonych</strong> i dalej w procesie</div></div>
+<div class="tile"><div class="v">{meta['liczby_projektu']['zamowienia_wewnetrzne']}</div><div class="l">zamówień wewnętrznych — auta sprowadzane na stan (w drodze, na placu, dostarczone)</div></div>
 </div>
 
 <div class="note"><strong>Jak czytać godziny.</strong> {nota_html}</div>
