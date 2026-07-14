@@ -33,3 +33,7 @@ tmp/primaauto-serie-desc.json
 # Python
 __pycache__/
 *.pyc
+
+# === Scratch sesji (konwencja: globalny CLAUDE.md sekcja 16) ===
+# Brudnopis. Wartosciowe destylowac do docs/ przed commitem. Retencja 14 dni.
+tmp/
