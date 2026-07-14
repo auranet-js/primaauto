@@ -258,13 +258,13 @@
     {
       "id": "T-211",
       "tytul": "Pakiet higieny technicznej (baza, puste strony, schema, mobile)",
-      "opis": "Zbiór domknięć technicznych. Najważniejsze odkrycie: 2633 puste strony modeli i marek (bez ani jednej oferty) są w pełni widoczne dla Google i konkurują z naszymi realnymi stronami — do ukrycia. Do tego: błąd, przez który kolor auta nigdy nie trafiał do danych strukturalnych ogłoszeń (3056 ofert), 20 nieprzetłumaczonych chińskich nazw miast, porządki w bazie i rotacja logów. Pozycja 'galeria klientów' wykreślona — została już wykonana.",
+      "opis": "Zbiór domknięć technicznych. Najciekawsze odkrycie: 100 stron modeli ma już napisaną treść (opis, pytania i odpowiedzi, 30 kart samochodów), ale są ukryte przed Google — bo akurat nie mamy tych aut na stanie. To auta, które sprowadzaliśmy i które się rozeszły; mogą wrócić w każdej chwili. Zapłaciliśmy za te treści i sami je schowaliśmy. Odsłaniamy je, dokładając uczciwy komunikat 'tego modelu nie mamy teraz na stanie — sprowadzimy go na zamówienie' z formularzem. To pasuje do modelu biznesowego: nie musimy mieć auta na placu, żeby je sprowadzić. Do tego: naprawa błędu, przez który kolor auta nigdy nie trafiał do danych strukturalnych ogłoszeń (dotyczy wszystkich 3056 ofert), 20 nieprzetłumaczonych chińskich nazw miast, porządki w bazie i rotacja logów.",
       "rozmiar": "M",
-      "rynkowo_od": 50,
-      "rynkowo_do": 62,
-      "realnie_od": 20,
-      "realnie_do": 26,
-      "status": "plan gotowy (docs/roadmapa/T-211); największa pozycja: puste strony w Google"
+      "rynkowo_od": 45,
+      "rynkowo_do": 58,
+      "realnie_od": 18,
+      "realnie_do": 24,
+      "status": "plan gotowy (docs/roadmapa/T-211); najpierw odsłonięcie 100 gotowych stron"
     }
   ]
 }

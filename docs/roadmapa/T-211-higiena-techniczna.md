@@ -4,13 +4,25 @@
 > Godziny realnie: **20–26 h** (Janek ~3 h, AI ~17–23 h) · Rynkowo: 50–62 h
 > Obniżone z 25–32 h: jedna pozycja jest już zrobiona, dwie okazały się godzinami zamiast dni. **Ale największa z nich jest większa, niż sądziliśmy.**
 
-## ⚡ SZYBKIE ZYSKI — do wzięcia od ręki, bez czekania na cały pakiet
+## ❌ SPROSTOWANIE (2026-07-14): „2633 puste strony indeksowalne" — TO BYŁ FAŁSZYWY ALARM
 
-Trzy rzeczy, które można zrobić natychmiast i niezależnie. Razem **~4–6 h**, a zwrot nieproporcjonalnie duży.
+Wcześniejszy zwiad twierdził, że puste huby są w pełni indeksowalne. **Nieprawda — zweryfikowane na żywych stronach.**
+
+- RankMath ma włączone **`noindex_empty_taxonomies = on`** → **każda** taksonomia z zerem ofert dostaje `noindex` automatycznie.
+- Sprawdzone 13 losowych pustych hubów (marki i modele) → **wszystkie zwracają `noindex`**.
+- Sitemapy zawierają wyłącznie termy z ofertami (`make`: 54 przy 56 z ofertami; `serie`: analogicznie).
+
+**Skąd wziął się błąd:** w kodzie pluginu `serie`/`make` faktycznie nie ma na liście `THIN_TAXONOMIES` — ale noindex leci z RankMath, nie z pluginu. Wniosek wyciągnięto z kodu, bez odpytania strony.
+
+**Nie ma tu nic do naprawy.**
+
+---
+
+## ⚡ SZYBKIE ZYSKI — do wzięcia od ręki
 
 | # | Co | Czas | Efekt |
 |---|---|---|---|
-| ⚡1 | **Ukryć 2633 puste strony przed Google** (noindex + wykluczenie z sitemapy) | 3–4 h | Przestają konkurować z realnymi stronami i przepalać budżet indeksowania |
+| ⚡1 | **Odsłonić 100 hubów z treścią** (patrz niżej — odwrotny problem) | 5–7 h | Odzyskujemy gotowe, bogate strony schowane przed Google |
 | ⚡2 | **Fix: kolor auta w danych strukturalnych** — kod pyta o taksonomię `color`, która **nie istnieje** (są `exterior-color` / `interior-color`) → kolor nie trafia do schematu **żadnej z 3056 ofert** | **1 linia** | Bogatszy wynik w Google dla całego katalogu |
 | ⚡3 | **20 nieprzetłumaczonych chińskich miast** (105 ofert pokazuje surowy chiński znak) | 0,5–1 h | Koniec z chińskimi krzakami na froncie |
 
@@ -18,11 +30,50 @@ Trzy rzeczy, które można zrobić natychmiast i niezależnie. Razem **~4–6 h*
 
 ---
 
+## 🔄 ODWROTNY PROBLEM: 100 gotowych stron schowanych przed Google (5–7 h)
+
+**Decyzja Janka 2026-07-14: odsłaniamy.**
+
+**100 modeli ma wygenerowaną treść wiki, ale zero ofert na stanie** → RankMath automatycznie daje im `noindex`.
+
+### Te strony NIE są puste — sprawdzone na żywo
+
+| Strona | Treść | Karty aut |
+|---|---|---|
+| `/samochody/volkswagen/golf/` | ~39 800 znaków | **30** |
+| `/samochody/mazda/cx-50/` | ~38 100 znaków | **30** |
+| `/samochody/denza/d9-ev/` | ~37 900 znaków | **30** |
+
+Każda ma H1, opis modelu, FAQ i 30 kart samochodów (alternatywnych, bo tego modelu akurat nie mamy). **To są pełnowartościowe strony** — RankMath patrzy tylko na licznik przypisanych ofert, nie na to, co się faktycznie renderuje.
+
+### Dlaczego warto je odsłonić
+
+1. **Zapłaciliśmy za tę treść i ją schowaliśmy.**
+2. **Te modele MIAŁY oferty** — generator wiki karmił się faktami z naszej bazy, więc nie napisałby opisu modelu, którego nigdy nie mieliśmy. To auta, które sprowadzaliśmy i które zrotowały. **Mogą wrócić na stan w każdej chwili** — a wtedy strona i tak się odsłoni. Trzymanie jej w ukryciu w międzyczasie = **utrata ciągłości indeksacji** (za każdym powrotem Google zaczyna od zera).
+3. To jest ruch informacyjny („{model} cena", „{model} z Chin"), a nasz model biznesowy to **import na zamówienie** — nie musimy mieć auta na placu, żeby je sprowadzić.
+
+### Plan
+
+1. **Warunek indeksacji nadpisujący RankMath:** strona idzie do indeksu, jeśli **ma treść wiki** ORAZ **renderuje karty** (choćby alternatywne). Zostaje ukryta, jeśli nie ma ani treści, ani czego pokazać → **2297 pustych modeli i 236 marek zostaje schowanych, i słusznie.**
+2. **Dopisać te huby do sitemapy.**
+3. **🔴 Uczciwy komunikat dla użytkownika (warunek konieczny):** jeśli klient wchodzi na stronę Golfa, a Golfa nie mamy — musi zobaczyć **jasny komunikat**: *„Tego modelu nie mamy teraz na stanie — sprowadzimy go na zamówienie"* + CTA/formularz. Dopiero pod tym alternatywne auta.
+   **Bez tego Google uzna stronę za mylącą — i będzie miał rację.** Tytuł mówi o Golfie, ofert Golfa nie ma.
+4. Zgłoszenie do indeksacji (⚠️ wspólna pula Indexing API — patrz zasady, `index-submit`).
+
+### Testy
+
+- Hub z wiki + 0 ofert → `index`, obecny w sitemapie, **z komunikatem o braku na stanie**.
+- Hub bez wiki + 0 ofert → nadal `noindex`, nieobecny w sitemapie (**regresja!**).
+- Hub z ofertami → bez zmian.
+- Po 3–4 tygodniach: GSC — czy te 100 stron zbiera wyświetlenia i czy nie generuje skarg na „cienką treść".
+
+---
+
 ## Weryfikacja 7 pierwotnych pozycji
 
 | # | Pozycja | Werdykt po zwiadzie |
 |---|---|---|
-| 1 | Puste strony modeli | 🔴 **WIĘKSZE: 2633 strony, zero noindex** |
+| 1 | Puste strony modeli | ❌ **NIE ISTNIEJE** — RankMath już je noindeksuje (patrz sprostowanie wyżej). Zamiast tego: odsłonić 100 hubów Z TREŚCIĄ |
 | 2 | Puchnięcie bazy | 🟡 aktualne, ale **inna przyczyna** niż zakładaliśmy |
 | 3 | Dane strukturalne (schema) | 🟢 **~85% zrobione**, został 1 bug |
 | 4 | Chińskie nazwy miast | 🟢 **105 ofert, nie 3000** → pół godziny |
@@ -31,20 +82,6 @@ Trzy rzeczy, które można zrobić natychmiast i niezależnie. Razem **~4–6 h*
 | 7 | Szlify mobilne | ⚠️ **niewyceniane bez zrzutu ekranu** |
 
 ---
-
-## 🔴 1. Puste strony modeli — 2633, wszystkie indeksowalne (~6–8 h)
-
-**To jest największa wartość w całym pakiecie.**
-
-- **2397 modeli** i **236 marek** ma **zero ofert** → razem **2633 puste strony**.
-- **Żadna nie ma noindex.** Sprawdzone: `class-asiaauto-seo.php:25` — lista „cienkich" taksonomii obejmuje kolor, skrzynię, napęd itd., ale **`serie` i `make` nie są na niej**.
-- Sitemap RankMath: **nic nie wykluczone**.
-
-Czyli 2633 puste strony konkurują w Google z naszymi realnymi stronami i rozcieńczają budżet indeksowania.
-
-**Fix jest tani:** warunek „zero ofert → noindex" w dwóch filtrach + wykluczenie z sitemapy.
-
-⚠️ **Jedna decyzja produktowa:** **100 pustych modeli ma napisaną treść wiki** (huby przygotowane pod auta, których nie mamy). Tam „noindex" oznacza wyrzucenie gotowej treści z Google. Do rozstrzygnięcia z Jankiem: schować czy zostawić jako treść bez oferty.
 
 ## 🟡 2. Puchnięcie bazy — przyczyna inna niż w opisie (~5–7 h)
 
@@ -93,7 +130,7 @@ W kolejce wisi wpis o różnicy w wyglądzie hubów na telefonie i poziomym prze
 
 ## Kolejność (od najwyższego zwrotu)
 
-1. **Puste huby (noindex)** — największy zysk SEO, 2633 strony.
+1. **Odsłonić 100 hubów z treścią** (+ komunikat „sprowadzimy na zamówienie") — 5–7 h.
 2. **Bug koloru w schemacie** — jedna linia, 3056 ofert.
 3. **Chińskie miasta** — pół godziny, 105 ofert.
 4. **Rotacja loga + baza** — zapobiega problemom, nie naprawia.
@@ -102,17 +139,20 @@ W kolejce wisi wpis o różnicy w wyglądzie hubów na telefonie i poziomym prze
 ## Testy
 
 **Automatyczne**
-- Pusty hub → nagłówek `noindex`, nieobecny w sitemapie. Hub z ofertami → bez zmian (**regresja!**).
+- Hub z wiki + 0 ofert → `index` + w sitemapie + komunikat o braku na stanie.
+- Hub bez wiki + 0 ofert → nadal `noindex`, poza sitemapą (**regresja!**).
+- Hub z ofertami → bez zmian (**regresja!**).
 - Schemat oferty waliduje się w narzędziu Google i **zawiera kolor**.
 - Zero chińskich znaków w nazwach miast na froncie.
 
 **Półautomatyczne**
-- Po wdrożeniu noindex: obserwacja w Search Console przez 2–4 tygodnie — czy liczba zindeksowanych stron spada (o puste), a wyświetlenia realnych stron rosną.
+- Po odsłonięciu: Search Console przez 3–4 tygodnie — czy te 100 stron zbiera wyświetlenia i czy nie pojawiają się ostrzeżenia o cienkiej treści.
 - Defragmentacja bazy: **kopia zapasowa przed**, pomiar rozmiaru przed/po.
 
 ## Definicja zrobionego
 
-- 2633 puste strony zniknęły z indeksu Google; realne huby nietknięte.
+- 100 hubów z treścią jest w indeksie i w sitemapie, z uczciwym komunikatem o braku na stanie i CTA „sprowadzimy na zamówienie".
+- Huby bez treści i bez ofert **pozostają ukryte**.
 - Kolor pojawia się w danych strukturalnych wszystkich ofert.
 - Żadna oferta nie pokazuje chińskiej nazwy miasta.
 - Log pluginu ma rotację; baza odzyskała miejsce.
