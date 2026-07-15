@@ -1,5 +1,82 @@
 # Historia wersji asiaauto-sync
 
+## 0.33.22 — 2026-07-14 (T-203 v4: hoist wersji tuż za nazwę modelu)
+
+**Po co:** sam przerzut rocznika (0.33.21) nie wystarczył — feed wstawia napęd/baterię PRZED wersję,
+więc fraza dalej się rozjeżdżała: `Xiaomi YU7 4WD Max` nie zawiera ciągu „xiaomi yu7 max" (6 600/mc),
+`Zeekr 8X 55kWh Ultra` nie zawiera „zeekr 8x ultra" (2 900/mc). Symulacja 120 ofert zaakceptowana
+(`auratest .../primaauto-t203-v4-hoist-symulacja-2026-07-14.html`).
+
+**`v4HoistTrim()`** — token wersji przesuwany tuż za nazwę modelu. **Kotwicą jest nazwa termu `serie`**
+(`YU7`, `8X`, `L9`, `Galaxy M9`, `212 T01`), nie heurystyka po liczbie tokenów — wiemy dokładnie,
+gdzie kończy się model. Wersja jedzie razem z doklejonym „Edition"/„Version", żeby nie zostawiać sierot.
+Efekt: `Xiaomi YU7 Max 4WD 2025`, `Zeekr 8X Ultra 55kWh 2026`, `Avatr 11 Max Facelift RWD EREV 2025`,
+`AITO M9 Ultra EREV 6-osobowy 2025`, `BYD Leopard 5 (Denza B5) Ultra 125KM 2025`.
+
+**`v4FindTrim()` — BUG wyłapany na smoke-teście, NIE puszczać naiwnego „pierwsze trafienie":**
+`Xiaomi YU7 2025 AWD **Ultra Long Range** … **Max Version**` → naiwny hoist brał „Ultra" (opis
+zasięgu baterii!) i produkował **`Xiaomi YU7 Ultra` — wersję, która NIE ISTNIEJE** (YU7 ma
+Standard/Pro/Max). Zmyślony wariant jest gorszy niż brak hoistu. Kolejność wyboru jest teraz jawna:
+1. trim + „Edition"/„Version" (najpewniejszy marker realnego wariantu: „Max Version"),
+2. samotny trim, ale NIE taki, po którym idzie „(Long) Range" ani myślnik („Ultra-long"),
+3. nic — tytuł zostaje nietknięty.
+
+**Świadomy kompromis:** `Xiaomi SU7 RWD **Standard** Long Range Edition` NIE dostaje hoistu, bo
+strażnik odrzuca każdy trim przed „Long Range" — a „Ultra Long Range" (zasięg) i „Standard Long
+Range" (wersja) są strukturalnie nieodróżnialne bez słownika wersji per model. Tracimy przyleganie
+na „su7 standard", ale nie ryzykujemy powtórki z „YU7 Ultra". Audyt całej bazy (765 par
+serie→przypisana wersja) — zero wymyślonych wariantów.
+
+**Zakres:** WYŁĄCZNIE oferty (`is_singular('listings')`). Huby jadą osobnym generatorem
+(`class-asiaauto-hub-title-generator.php`) i są NIETKNIĘTE — zweryfikowane na żywo po deployu.
+
+**⚠️ Kanibalizacja NIE jest rozwiązana i hoist ją ZAOSTRZA.** Wcześniej 30 ofert YU7 miało
+`Xiaomi YU7 4WD Max` (żadna nie pasowała exact do „xiaomi yu7 max"); teraz każda z 30 zawiera tę
+frazę idealnie → są dla Google równie trafne i tym mocniej biją się o nią nawzajem. Canonical tego
+NIE naprawi: każda oferta jest self-canonical i **słusznie** — to fizycznie różne auta (inny VIN,
+cena, przebieg), nie duplikaty; kanonikalizacja 29→1 wyrzuciłaby realny towar z long-taila.
+Lek = **strategia championa** (jedna oferta per wersja linkowana z huba anchorem „{model} {wersja}",
+reszta zostaje na frazach z ceną/przebiegiem). To NASTĘPNY task — bez niego v4 sam z siebie nie
+przełoży się na pozycje. Dowód skali: `li auto l9` = 5 naszych ofert po 1 impresji na poz. 29–63,
+TNT jedną stroną na #20.
+
+## 0.33.21 — 2026-07-14 (T-203 v3: szyk tytułu ofert {Marka} {Model} {Wersja} {Rok})
+
+**Geneza (dane, nie intuicja):** GSC 90 dni — frazy z WERSJĄ (max/ultra/hyper) = 3 413 impresji,
+z ROKIEM = 1 117, kombinacja „model + rok + wersja" = 303 (szum). Do tego ta sama wersja wraca
+w kilku rocznikach (Li Auto L9 Ultra: 2024 i 2025), więc rok jest **rozróżnikiem** — jego miejsce
+jest w ogonie, nie w środku. Stary szyk rozrywał frazę: „Zeekr 9X **2025** Ultra" nie zawiera ciągu
+„zeekr 9x ultra"; nowy („Zeekr 9X Ultra 55kWh 2025") zawiera. Symulacja 114 ofert zaakceptowana
+przed wdrożeniem (`auratest .../primaauto-t203-v3-szyk-symulacja-2026-07-14.html`).
+
+**Wdrożone w `class-asiaauto-single.php` (wszystko RENDER-ONLY, `post_title` w DB nietknięty):**
+- `v3YearLast()` — rocznik ze środka bazy na koniec. Regex `\b(19|20)\d{2}\b` nie łapie `2.0T`,
+  `4WD`, `70kWh`, `1400PS`. No-op gdy rocznik już na końcu albo baza to sam rocznik.
+- `v3BrandPrefix()` — marka z taksonomii `make`, gdy nie ma jej w tytule (**55 ofert publish**:
+  Geely 34 — cały Galaxy M9, BAW 8, Lynk & Co 3). Guardy przeniesione z `hub-title-generator`
+  (2026-07-13): `html_entity_decode` na encję `&amp;` + porównanie pierwszego tokenu („IM LS7"
+  vs marka „IM Motors" — marka de facto już jest w nazwie).
+- `V3_BRAND_ALIAS` — feed niesie inną nazwę tej samej marki: `Beijing 212 T01` + `make=BAW`
+  → **`BAW 212 T01`** (podmiana, nie doklejanie prefiksu). TNT rankuje #12 na „baw" (1 300/mc)
+  i #8 na „baw 212 gdzie kupić" (480/mc) — u nas token „BAW" nie występował nigdzie na stronie.
+- `v3StripCjk()` — chińskie znaki z importu Dongchedi (**40 ofert publish**), np.
+  `Beijing 212 T01 2024 2.0T 检阅官`, `Galaxy 银河A7 EM`, `MG Cyberster 580km Super 然致远`.
+- `titleBaseV3()` — kompozycja trzech wyżej + static cache per `$pid`.
+
+**Podpięte pod:** `buildTitleV2()` (meta title), `h1WithVariantSuffix()` (H1), `renderMeta()`
+(meta description + `og:title`). **NIE podpięte pod `dataLayer.item_name`** — karmi GA4 i katalog
+Meta, to nie warstwa SEO. Zapytania o duplikaty (`titlePriceCollides`, dupe-check w H1) nadal lecą
+po **oryginalnym** `post_title`, bo to on siedzi w `wp_posts` — v3 to warstwa wyświetlania.
+
+**Huby NIETKNIĘTE** (decyzja Janka z 2026-07-13 podtrzymana). Rollback: opcja
+`asiaauto_offer_title_v2_series` = `""`. Backup: `.bak-2026-07-14-t203v3`.
+
+**Znane, NIENAPRAWIONE (do decyzji):** feed czasem wstawia napęd/baterię PRZED oznaczenie wersji,
+więc na dwóch największych frazach przyleganie dalej nie wychodzi: `Xiaomi YU7 **4WD** Max 2025`
+(fraza „xiaomi yu7 max", 6 600/mc) i `Zeekr 8X **55kWh** Ultra 2026` („zeekr 8x ultra", 2 900/mc).
+Naprawa = hoist tokenu wersji tuż za nazwę serii z taksonomii — osobny task, wymaga symulacji.
+Osobno: jedna oferta ma tytuł zaczynający się od `[` (śmieć z feedu).
+
 ## 0.33.20 — 2026-07-13 (T-203/desc: meta description ofert v2 — pełny opis + „bezpośredni importer")
 
 **Decyzje Janka:** hubów NIE ruszamy (fix „1 egzemplarzy" w generatorze hubów ODRZUCONY — zostaje

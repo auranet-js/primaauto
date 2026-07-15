@@ -72,13 +72,13 @@ footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line);
 <header class="top">
 <h1>Prima Auto — historia inwestycji i kosztorys prac</h1>
 <div class="sub">Platforma importu samochodów z Chin · primaauto.com.pl · opracowanie: Auranet (Jan Schenk)</div>
-<div class="stamp">Stan na 14.07.2026 · dokument roboczy do rozmowy, aktualizowany wraz z postępem prac</div>
+<div class="stamp">Stan na 15.07.2026 · dokument roboczy do rozmowy, aktualizowany wraz z postępem prac</div>
 </header>
 
 <div class="tiles">
-<div class="tile acc"><div class="v">891 <small>h</small></div><div class="l">łączny czas pracy nad platformą (etapy 1-2)</div></div>
-<div class="tile"><div class="v">74</div><div class="l">wykonanych prac: 12 bloków budowy + 62 zadań rozwojowych</div></div>
-<div class="tile"><div class="v">92+</div><div class="l">wydań oprogramowania od startu na primaauto.com.pl</div></div>
+<div class="tile acc"><div class="v">900 <small>h</small></div><div class="l">łączny czas pracy nad platformą (etapy 1-2)</div></div>
+<div class="tile"><div class="v">75</div><div class="l">wykonanych prac: 12 bloków budowy + 63 zadań rozwojowych</div></div>
+<div class="tile"><div class="v">94+</div><div class="l">wydań oprogramowania od startu na primaauto.com.pl</div></div>
 <div class="tile"><div class="v">3053</div><div class="l">ogłoszeń w katalogu</div></div>
 <div class="tile acc"><div class="v">39 <small>/ 26</small></div><div class="l">zamówień od klientów (bez anulowanych) · z tego <strong>26 potwierdzonych</strong> i dalej w procesie</div></div>
 <div class="tile"><div class="v">61</div><div class="l">zamówień wewnętrznych — auta sprowadzane na stan (w drodze, na placu, dostarczone)</div></div>
@@ -399,8 +399,12 @@ footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line);
 <td class="data-col">2026-07-13</td>
 <td><span class="badge">seo</span><br><strong>Analiza konkurencji (tntcars.pl) + przebudowa meta wszystkich ofert (title, H1, opisy)</strong><div class="opis">Analiza nowego konkurenta wykazała, że wygrywa frazy modelowe stronami ofert, podczas gdy nasze oferty miały masowo powielone tytuły i nagłówki (ponad 1000 stron z identycznym tytułem — Google traktował je jako wymienne kopie). Przebudowano wszystkie ~3 400 ofert: tytuły z wersją i ceną, nagłówki rozróżniane przebiegiem, opisy z mocą, przebiegiem, ceną i oznaczeniem aut dostępnych od ręki w Rzeszowie. Naprawiono też 9 stron modeli z podwojoną nazwą marki w wynikach Google. Każda zmiana poprzedzona symulacją na 100 ofertach i zabezpieczona możliwością wycofania.</div><div class="skala">~3 400 ofert × 3 elementy; duplikaty tytułów 1012→95, nagłówków 2524→99; 4 wydania (v0.33.17-20); punkt odniesienia do pomiaru efektu za 2 tyg.</div></td>
 <td class="num">10</td></tr>
+<tr>
+<td class="data-col">2026-07-14</td>
+<td><span class="badge">seo</span><br><strong>Szyk tytułów ofert pod frazy modelowe + audyt indeksacji i stron modeli konkurenta</strong><div class="opis">Kontynuacja przebudowy z 13.07. Ustawiono kolejność w tytule i nagłówku ofert tak, by pasowała do tego, jak ludzie realnie szukają: marka, model, wersja, potem rocznik i cena (zweryfikowane danymi z Google — wersję auta wpisuje się w wyszukiwarkę trzy razy częściej niż rocznik). Nazwa wersji trafia teraz tuż za model, żeby zgadzała się z frazą 'xiaomi yu7 max' czy 'zeekr 8x ultra'. Przy okazji: dołożono brakującą markę do 55 ofert (m.in. cały model Galaxy M9 i marka BAW, które w ogóle nie miały nazwy marki w tytule) i usunięto chińskie znaki z 40 tytułów. Sprawdzono też, czy nasze auta w ogóle są w Google — 93% już jest. Zbadano konkurenta (TNT Cars): na czym zarabia i jak zbudowane są jego strony modeli.</div><div class="skala">~3 000 ofert; 2 wydania (v0.33.21-22); symulacje na 120 ofertach przed każdą zmianą; audyt indeksacji 280 ofert; audyt 9 stron modeli konkurenta; wykryto błąd (system wymyślał nieistniejącą wersję auta) i naprawiono przed wdrożeniem</div></td>
+<td class="num">9</td></tr>
 </tbody>
-<tfoot><tr><td colspan="2">Razem etap 2</td><td class="num">531</td></tr></tfoot>
+<tfoot><tr><td colspan="2">Razem etap 2</td><td class="num">540</td></tr></tfoot>
 </table>
 
 <h2><span class="eno">Etap 3.</span> Plany rozwoju — wycena inwestycji</h2>
@@ -501,11 +505,15 @@ footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line);
 
 <td class="num">12–16</td></tr>
 <tr>
-<td><strong>T-211 — Pakiet higieny technicznej (baza, puste strony, schema, mobile)</strong><div class="opis">Zbiór domknięć technicznych. Najciekawsze odkrycie: 100 stron modeli ma już napisaną treść (opis, pytania i odpowiedzi, 30 kart samochodów), ale są ukryte przed Google — bo akurat nie mamy tych aut na stanie. To auta, które sprowadzaliśmy i które się rozeszły; mogą wrócić w każdej chwili. Zapłaciliśmy za te treści i sami je schowaliśmy. Odsłaniamy je, dokładając uczciwy komunikat 'tego modelu nie mamy teraz na stanie — sprowadzimy go na zamówienie' z formularzem. To pasuje do modelu biznesowego: nie musimy mieć auta na placu, żeby je sprowadzić. Do tego: naprawa błędu, przez który kolor auta nigdy nie trafiał do danych strukturalnych ogłoszeń (dotyczy wszystkich 3056 ofert), 20 nieprzetłumaczonych chińskich nazw miast, porządki w bazie i rotacja logów.</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-211); najpierw odsłonięcie 100 gotowych stron</div></td>
+<td><strong>T-211 — Pakiet higieny technicznej (baza, puste strony, schema, mobile)</strong><div class="opis">Zbiór domknięć technicznych. Najciekawsze odkrycie: 100 stron modeli ma już napisaną treść (opis, pytania i odpowiedzi, 30 kart samochodów), ale są ukryte przed Google — bo akurat nie mamy tych aut na stanie. To auta, które sprowadzaliśmy i które się rozeszły; mogą wrócić w każdej chwili. Zapłaciliśmy za te treści i sami je schowaliśmy. Odsłaniamy je, dokładając uczciwy komunikat 'tego modelu nie mamy teraz na stanie — sprowadzimy go na zamówienie' z formularzem. To pasuje do modelu biznesowego: nie musimy mieć auta na placu, żeby je sprowadzić. Do tego: naprawa błędu, przez który kolor auta nigdy nie trafiał do danych strukturalnych ogłoszeń (dotyczy wszystkich 3056 ofert), 20 nieprzetłumaczonych chińskich nazw miast, porządki w bazie i rotacja logów. Dodatkowo po sesji 14.07: zgłoszenie 21 stron ofert do ponownego zaindeksowania, usunięcie jednego uszkodzonego tytułu z importu i odduplikowanie powtórzonego oznaczenia napędu (DM-i) w tytułach BYD Tang.</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-211); najpierw odsłonięcie 100 gotowych stron</div></td>
 
 <td class="num">18–24</td></tr>
+<tr>
+<td><strong>T-214 — Ujednolicenie i wzmocnienie stron modeli (hubów) pod frazy zakupowe</strong><div class="opis">Strony modeli to nasza najmocniejsza broń w Google — stoją na 1.-2. miejscu na frazy typu 'zeekr 9x cena'. Przegląd 14.07 wykazał trzy luki do domknięcia. (1) 34 z 302 stron modeli ma słabszy nagłówek — brakuje w nim słów 'cena w Polsce', bo powstały po ostatnim ujednoliceniu i nie dostały automatycznie tego dopisku; wśród nich ważne modele: Zeekr 9X, Zeekr 8X, Denza Z9 GT. (2) Strona modelu BAW wyświetla się w Google jako 'Beijing' zamiast 'BAW' — a to marka, której szuka 1300 osób miesięcznie; podobnie Zeekr 8X ma zbędny dopisek 'PHEV' rozmywający dopasowanie. (3) Strony modeli opisują wersje słownie, ale nie podają ceny osobno dla każdej wersji (np. 'Ultra od 426 tys.') — dane już mamy, wystarczy je pokazać. Pracujemy ostrożnie, pojedynczo, z pomiarem przed i po (strony z 1. miejsca mają najwięcej do stracenia), bo nadrzędna zasada brzmi: nie zepsuć tego, co już rankuje.</div><div class="skala">Status: znaleziska zapisane (docs/seo/znaleziska-huby-2026-07-14); wymaga pilota + progów wycofania z T-203-baseline</div></td>
+
+<td class="num">11–14</td></tr>
 </tbody>
-<tfoot><tr><td>Razem pełna roadmapa (widełki)</td><td class="num">553–724</td></tr></tfoot>
+<tfoot><tr><td>Razem pełna roadmapa (widełki)</td><td class="num">564–738</td></tr></tfoot>
 </table>
 
 <h2>Prace regularne — stała obsługa miesięczna</h2>
@@ -540,9 +548,9 @@ footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line);
 <thead><tr><th>Pozycja</th><th class="num">Bieżąco</th><th class="num">Dotychczas</th></tr></thead>
 <tbody>
 <tr>
-<td><strong>Feed danych o autach (auto-api.com — giełda Dongchedi)</strong><div class="opis">Płatna subskrypcja API dostarczającego ogłoszenia, zdjęcia i specyfikacje z chińskiej giełdy. Wynegocjowana stawka startowa 100 USD/mc (cennik: 170 USD), od maja pełna stawka ~145 EUR/mc. Dostęp do drugiego źródła (Che168) na okres wdrożenia wynegocjowany na koszt dostawcy (do 15.07.2026).</div><ul class='hist'><li>18.03 — 18.04.2026: <strong>100 USD (~400 zł)</strong></li><li>18.04 — 18.05.2026: <strong>100 USD (~400 zł) — po interwencji, dostawca próbował naliczyć 140 EUR</strong></li><li>18.05 — 18.06.2026: <strong>145 EUR (~620 zł)</strong></li><li>18.06 — 18.07.2026: <strong>145 EUR (~620 zł)</strong></li></ul></td>
-<td class="num nowrap">~620 zł/mc</td>
-<td class="num nowrap">~2 040 zł</td></tr>
+<td><strong>Feed danych o autach (auto-api.com — giełda Dongchedi)</strong><div class="opis">Płatna subskrypcja API dostarczającego ogłoszenia, zdjęcia i specyfikacje z chińskiej giełdy. Wynegocjowana stawka startowa 100 USD/mc (cennik: 170 USD), od maja pełna stawka ~145 EUR/mc. Od lipca dostawca automatyzuje dwa źródła (Che168 + Dongchedi) i na okres wdrożenia obniżył opłatę do 87 EUR/mc (faktura 07: EST-272067).</div><ul class='hist'><li>18.03 — 18.04.2026: <strong>100 USD (~400 zł)</strong></li><li>18.04 — 18.05.2026: <strong>100 USD (~400 zł) — po interwencji, dostawca próbował naliczyć 140 EUR</strong></li><li>18.05 — 18.06.2026: <strong>145 EUR (~620 zł)</strong></li><li>18.06 — 18.07.2026: <strong>145 EUR (~620 zł)</strong></li><li>18.07 — 18.08.2026 (faktura EST-272067, opłacona 15.07): <strong>87 EUR (~375 zł) — rabat na okres deweloperski (automatyzacja 2 źródeł: Che168 + Dongchedi)</strong></li></ul></td>
+<td class="num nowrap">~375 zł/mc (rabat deweloperski; standardowo ~620 zł)</td>
+<td class="num nowrap">~2 415 zł</td></tr>
 <tr>
 <td><strong>Infrastruktura serwerowa i domeny</strong><div class="opis">Hosting produkcyjny (udział platformy w serwerze), domena primaauto.com.pl + utrzymanie starej asiaauto.pl na przekierowania, certyfikaty SSL, kopie zapasowe.</div></td>
 <td class="num nowrap">~60-80 zł/mc (szacunek, do potwierdzenia)</td>
