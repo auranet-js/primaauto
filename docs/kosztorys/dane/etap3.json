@@ -234,6 +234,28 @@
    "status": "plan gotowy (docs/roadmapa/T-210) — podniesione: wymaga przebudowy ochrony zmian"
   },
   {
+   "id": "T-215",
+   "tytul": "Założenie kanału YouTube i przeniesienie istniejących filmów (fundament wideo)",
+   "opis": "Prima-Auto ma już 127 filmów na TikToku, ale nie ma kanału na YouTube — a to właśnie YouTube jest wyszukiwarką wideo, którą Google pokazuje w wynikach i który pracuje na markę latami, nie kilka dni jak TikTok. Zakładamy i porządnie ustawiamy kanał: branding (logo, opis, sekcje), przeniesienie i uporządkowanie obecnych filmów, jednolite nazewnictwo (marka + model + wersja, spójne z tym, jak ludzie szukają w Google), opisy z linkami do konkretnych stron modeli na primaauto.com.pl, tagi i miniatury. Efekt podwójny: nowy darmowy kanał ruchu i drugie miejsce, w którym marka pojawia się przy wyszukiwaniu modelu. To fundament pod dwa kolejne kroki — podłączenie filmów do stron modeli (T-216) i płatną kampanię wideo (T-201).",
+   "rozmiar": "M",
+   "rynkowo_od": 27,
+   "rynkowo_do": 33,
+   "realnie_od": 11,
+   "realnie_do": 13,
+   "status": "pomysł — nowy (14.07), do zaplanowania; fundament dla T-216 i T-201"
+  },
+  {
+   "id": "T-216",
+   "tytul": "Podłączenie filmów do stron modeli i ofert",
+   "opis": "Gdy kanał YouTube już działa (T-215), łączymy filmy z odpowiednimi stronami: film o danym modelu pojawia się na stronie tego modelu i na ofertach tego auta. Klient ogląda auto w ruchu, nie tylko na zdjęciach — a strona zyskuje treść wideo, którą Google lubi i którą może pokazać z miniaturą w wynikach. Technicznie: osobny mechanizm osadzania (element wielokrotnego użytku, który redakcyjnie przypina film do modelu) plus oznaczenie wideo w danych strukturalnych strony. Do rozstrzygnięcia na etapie realizacji, czy przypisanie film→model jest ręczne, czy półautomatyczne — stąd pozycja parkingowa, wyceniona orientacyjnie.",
+   "rozmiar": "S",
+   "rynkowo_od": 18,
+   "rynkowo_do": 22,
+   "realnie_od": 7,
+   "realnie_do": 9,
+   "status": "pomysł — przyszłość (14.07); wymaga T-215; rozwiązanie techniczne do wyboru (shortcode / inne)"
+  },
+  {
    "id": "T-201",
    "tytul": "Assety wideo + kampania reklamowa wideo (YouTube jako kanał — osobna decyzja)",
    "opis": "Reklama wideo w Google Ads nie wymaga popularnego kanału — wystarczy kanał jako kontener i 2-3 krótkie filmy. Materiał już mamy: 53 tys. zdjęć ofertowych i gotowy generator grafik. To tania i mierzalna część. UWAGA — odkrycie: Prima-Auto ma już konto TikTok ze 127 filmami. Jeśli mamy do nich pliki źródłowe, pełny kanał YouTube robi się dużo tańszy (przepakowanie zamiast produkcji). Sam kanał organiczny to jednak inwestycja bez gwarancji zwrotu (konkurent z tej branży ma 21 filmów i 18 obserwujących) — do świadomej decyzji, osobno.",

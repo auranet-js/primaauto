@@ -13,6 +13,16 @@ Tego nie było w żadnym dokumencie projektu. **Cała wycena T-201 zależy od je
 > - Jeśli **tak** → YouTube to przepakowanie istniejących materiałów (**10–16 h**).
 > - Jeśli **nie** (robiła to poprzednia agencja) → produkcja od zera (**30–46 h**).
 
+### Recon techniczny pobierania (2026-07-14) — sam zwiad, NIC nie pobrano poza 1 testem
+
+Sprawdzenie, czy w razie braku plików źródłowych da się odzyskać materiał wprost z TikToka:
+- **Profil `@primaauto.pl` publiczny** (`privateAccount: false`) — bez logowania. Wszystkie **127 filmów wylistowane** (yt-dlp `--flat-playlist`).
+- **Test pobrania 1 filmu OK:** `720×1280` (pion 9:16 = natywny YouTube Shorts), **bez znaku wodnego** (czysty stream, nie wersja „playwm"), ~4,6 MB / 51 s. Całość szacunkowo **~600–650 MB**.
+- **Tytuły opisowe** (marka + model + rok + wersja, np. „MAZDA EZ6 2025", „Leopard 7 AWD Ultra PHEV 2026") → gotowa baza pod nazewnictwo (T-215) i mapowanie film→model (T-216).
+- **Jakość = 720p, nie 1080p** — TikTok trzyma niższą rozdzielczość. Pliki źródłowe od montażysty nadal lepsze; re-download to plan B, ale **plan B działa i jest potwierdzony**.
+- Narzędzie: `yt-dlp` zainstalowane przez `python3 -m pip install --user` (konto host476470).
+- **Blokujące pytanie o oryginały 1080p nadal otwarte** — recon tylko potwierdził, że ścieżka awaryjna istnieje. Pełnego pobrania (127 szt.) NIE uruchomiono — czeka na decyzję.
+
 **Bez tej odpowiedzi nie wyceniamy T-201b.**
 
 ---
