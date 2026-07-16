@@ -23,7 +23,7 @@ Wcześniejszy zwiad twierdził, że puste huby są w pełni indeksowalne. **Niep
 | # | Co | Czas | Efekt |
 |---|---|---|---|
 | ⚡1 | **Odsłonić 100 hubów z treścią** (patrz niżej — odwrotny problem) | 5–7 h | Odzyskujemy gotowe, bogate strony schowane przed Google |
-| ⚡2 | **Fix: kolor auta w danych strukturalnych** — kod pyta o taksonomię `color`, która **nie istnieje** (są `exterior-color` / `interior-color`) → kolor nie trafia do schematu **żadnej z 3056 ofert** | **1 linia** | Bogatszy wynik w Google dla całego katalogu |
+| ⚡2 | ✅ **ZROBIONE 2026-07-16 (v0.33.27)** — `color` → `exterior-color` w `class-asiaauto-single.php:1047`. Pokrycie 2 906/3 058 ofert (95%). Smoke na 3 paliwach OK. | **1 linia** | ~~Bogatszy wynik w Google~~ → wdrożone |
 | ⚡3 | **20 nieprzetłumaczonych chińskich miast** (105 ofert pokazuje surowy chiński znak) | 0,5–1 h | Koniec z chińskimi krzakami na froncie |
 
 **Osobno, poza tym pakietem (należy do T-205/Meta):** cron regenerujący feed pojazdów **zniknął** — plik stoi na 01.06, sześć tygodni bez odświeżenia. Prawdopodobnie zginął przy nadpisaniu crontaba 12.07. ⚠️ Backup crontaba przed jakąkolwiek edycją.
@@ -75,7 +75,7 @@ Każda ma H1, opis modelu, FAQ i 30 kart samochodów (alternatywnych, bo tego mo
 |---|---|---|
 | 1 | Puste strony modeli | ❌ **NIE ISTNIEJE** — RankMath już je noindeksuje (patrz sprostowanie wyżej). Zamiast tego: odsłonić 100 hubów Z TREŚCIĄ |
 | 2 | Puchnięcie bazy | 🟡 aktualne, ale **inna przyczyna** niż zakładaliśmy |
-| 3 | Dane strukturalne (schema) | 🟢 **~85% zrobione**, został 1 bug |
+| 3 | Dane strukturalne (schema) | ✅ **ZAMKNIĘTE 2026-07-16 (v0.33.27)** — ostatni bug (kolor) naprawiony. Reszta schematu była zdrowa już wcześniej: `vehicleEngine`/`vehicleTransmission`/`driveWheelConfiguration`/`itemCondition`/`OfferShippingDetails` **są na produkcji**. Rzekome „utracone pola" (ZAD.12/13) = fałszywy alarm — backlog opisywał **martwą** funkcję `schema():632`, której nikt nie woła. Hipoteza „multi-type [Product,Car] blokuje" **obalona** URL Inspection API (huby i oferty: PASS jako „Opisy produktów"). |
 | 4 | Chińskie nazwy miast | 🟢 **105 ofert, nie 3000** → pół godziny |
 | 5 | Resztkowe 404 | 🟢 16 śmieciowych adresów, świadomie odłożone |
 | 6 | Galeria klientów | ✅ **ZROBIONE** (v0.32.57) — wykreślam |
