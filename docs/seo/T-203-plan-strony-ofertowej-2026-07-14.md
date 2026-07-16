@@ -119,6 +119,15 @@ egzemplarzem (VIN, cena, przebieg, dostępność). Pytanie Janka: **czy tam nie 
 która NIE ISTNIEJE** (są `exterior-color`/`interior-color`) → kolor nie trafia do schematu żadnej
 z 3 056 ofert; fix = 1 linia. Te trzy rzeczy warto zrobić jednym ruchem z powyższą analizą.
 
+**Dołączone do tego wątku (decyzja Janka 2026-07-16):** **T-199 resztka — „Prima Auto" → „Prima-Auto"**
+w `renderMeta():914`. Dziś title kończy się `| Prima-Auto`, a meta description mówi
+`Prima Auto — bezpośredni importer` — niespójność w obrębie JEDNEJ strony. Zysk SEO **zerowy**
+(Google dopasowuje encję niezależnie od myślnika), robimy wyłącznie dlatego, że to jeden string
+w tym samym pliku, co reszta 4b. **GBP i FB NIE ruszamy** — nazwa GBP z keywordem („Prima - Auto -
+Import Samochodów z Chin") to zamknięta decyzja Janka ([[feedback_gbp_name_keyword]]), FB
+(„PRIMA AUTO - Import aut Chiny Korea | Rzeszów") rządzi się swoim. Druga część T-199 (drugi H1
+→ `div role=heading`) — **zrobiona 2026-07-16 w v0.33.26**.
+
 **Status: DO DYSKUSJI — nic nie przesądzone, nic nie wdrożone.**
 
 ---
