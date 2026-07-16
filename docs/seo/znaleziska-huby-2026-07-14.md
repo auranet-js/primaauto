@@ -64,6 +64,38 @@ ofert danej wersji) — zero LLM. Rozszerzenie istniejącej sekcji, addytywne, n
 
 ---
 
+## Z4 (2026-07-16) — DWA huby z IDENTYCZNYM title: `_serie_full_title` gubi napęd
+
+**Wykryte przy T-203 pkt 8** (anchor breadcrumbu), potwierdzone na żywo. Ten sam korzeń, który w anchorze
+dawał kolizję (Sealion 5 DM i EV → oba „BYD Sealion 5") **już produkuje zduplikowane title hubów**:
+
+| Hub | title (live 2026-07-16) |
+|---|---|
+| `/samochody/byd/sealion-5-dm/` | **BYD Sealion 5** — od 126 000 PLN, 1 sztuka |
+| `/samochody/byd/sealion-5-ev/` | **BYD Sealion 5** — od 132 000 PLN, 13 sztuk |
+| `/samochody/byd/han-dm-i/` | **BYD Han** — od 132 000 PLN, 44 sztuki |
+| `/samochody/byd/han-ev/` | BYD Han EV — od 138 000 PLN, 9 sztuk |
+
+**Mechanizm:** `_serie_full_title` bywa niesymetryczny — raz **dokleja** napęd, którego nie ma w nazwie
+termu (`8X` → „Zeekr 8X PHEV", patrz Z2), raz **gubi** napęd, który w nazwie termu JEST
+(`Han DM-i` → „BYD Han"). Skala zgubienia: **13 serii**, w tym Han DM-i (44 oferty), Qin L DM-i (22),
+Sealion 8 DM-I (20), Song Pro DM-i (17), Song L DM-i (15), Sealion 5 EV (13).
+
+**Skutek:** dwa huby konkurują o tę samą frazę własnym title (Sealion 5 = pełny duplikat), a hub
+Han DM-i nie zawiera frazy „byd han dm-i", na którą powinien celować.
+
+**Naprawa (gdy zapadnie decyzja, track hubów):** symetryczna reguła — token napędu obecny w nazwie
+termu musi być w `_serie_full_title`. Logika gotowa i sprawdzona w
+`AsiaAuto_Shortcodes::serieAnchor()` (v0.33.23) — do przeniesienia na generator hubów.
+**UWAGA:** Han DM-i (44 oferty) i Sealion 5 EV (13) to huby z realnym stanem — zmiana title
+wymaga baseline GSC i progu rollback, jak każdy hub.
+
+**Stan pośredni po v0.33.23:** anchor breadcrumbu z ofert jest już poprawny („BYD Han DM-i"),
+czyli **precyzyjniejszy niż title hubu, do którego prowadzi** („BYD Han"). To niespójność
+in-plus (link celuje lepiej niż strona), ale docelowo hub powinien dogonić anchor.
+
+---
+
 ## Dwa wzorce title (kosmetyka, niski priorytet)
 
 `X — od NNN PLN, N szt. | Import z Chin | Prima-Auto` (generator, 6 hubów) vs

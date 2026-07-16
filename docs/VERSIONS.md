@@ -1,5 +1,130 @@
 # Historia wersji asiaauto-sync
 
+## 0.33.26 — 2026-07-16 (T-203: UX/dostępność sticky-heada + jeden H1 + desktop back→hub)
+
+**Geneza:** zrzut Janka z telefonu. „Trudno trafić palcem" — link „← {model}" miał `font-size: 12.5px`
+bez paddingu, czyli **target ~16px**, poniżej minimum WCAG 2.2 SC 2.5.8 (24×24) i daleko od
+Apple HIG (44). Auranet robi audyty EAA/WCAG — tym bardziej nie u nas.
+
+**Zmiany (`asiaauto-single.css` + `class-asiaauto-single.php`):**
+- **Target 44px** — nakładka `::after { inset: -14px -8px }` na `.aa-single__hubback`.
+  Palec dostaje 44px, layout **nie rośnie o piksel** (link zostaje w linii z badge'ami). Font 12.5→13px.
+- **Tytuł: 2 linie** (`-webkit-line-clamp: 2`) zamiast `nowrap`+ellipsis, 15→16px. **SEO bez zmian**
+  — ellipsis był czysto wizualny, pełny `post_title` zawsze był w DOM i Google go czytał. Ale przy
+  20+ egzemplarzach tego samego modelu **wersja** jest jedynym wyróżnikiem — i to ona wypadała
+  poza ellipsis („Xiaomi YU7 Max 4WD…"). Czysta decyzja UX/CTR, nie rankingowa.
+- **Cena 18→22px**, netto 12→13px, `z VAT` jako dopisek (`.aa-single__price-vat`, `.55em`, szary).
+  Cena > tytuł **świadomie** — klient zna model (z listy/H1/linku obok), przychodzi po cenę; wzorzec mobile.de.
+- **Pastylki**: padding 4/10→6/10, font 12→12.5px.
+- **pkt 1 — JEDEN H1**: `stickyHead()` dostał `bool $as_h1`. Kopia **mobilna** = `<h1>`,
+  desktopowa (sidebar) = `<div role="heading" aria-level="1">`. Powód: Google indeksuje mobile-first,
+  a kopia nieaktywna ma `display:none` — czyli wcześniej JEDEN z dwóch H1 był zawsze schowany
+  przed indekserem. Zweryfikowane: `<h1>` = 1, `role="heading"` = 1.
+- **Desktop `.aa-single__back`**: „Wróć do wyników" → `/samochody/` (cały katalog 3 000 aut = donikąd
+  konkretnie) → **„← Wszystkie oferty {model}"** → `hub#oferty`. Ta sama zasada co na mobile,
+  ten sam `serieAnchor()`. Fallback na /samochody/ gdy oferta bez taksonomii serie.
+  Target: `.aa-single__back` miał już `padding: 14px 0` = 44px, bez zmian.
+
+---
+
+## 0.33.25 — 2026-07-16 (T-203: kotwica #oferty na hubie + cache-bust themu)
+
+**Po co:** link „← {model}" z oferty rzucał klienta na górę hubu (H1 + lead + wiki + FAQ), a on
+przychodzi **z oferty tego modelu** — model zna, chce zobaczyć inne egzemplarze.
+
+- **`[asiaauto_hub_listings]` + atrybut `anchor`** (domyślnie pusty → pozostałe użycia, m.in. homepage,
+  bez zmian). Renderuje `id` na `.aa-hub__latest-wrap`.
+- **`taxonomy-serie.php`**: bar ofert dostaje `anchor="oferty"`. Na hubie są 4 takie bary
+  (oferty / w drodze / na placu) — **id dostaje tylko jeden**, zweryfikowane.
+- **`hubBackLink()`**: URL + `#oferty`.
+- **`hub.css`**: `scroll-margin-top: calc(var(--header-h) + 40px)` (+86px dla `body.admin-bar`) —
+  bez tego nagłówek „Oferty {model}" wlatuje pod sticky `.pa-header`.
+- **SEO bez zmian**: Google ignoruje fragment przy indeksacji (`/samochody/zeekr/8x/#oferty`
+  = ten sam URL), equity płynie do hubu tak samo. Fragment działa tylko u użytkownika.
+
+**⚠️ GOTCHA (kosztowała pół godziny): theme NIE ma cache-bustingu po `filemtime()`** — style idą
+z hardcodowanej stałej `PRIMAAUTO_THEME_VERSION` w `functions.php` (`hub.css?ver=1.0.8`).
+Zmiana CSS bez bumpu = przeglądarka serwuje starą kopię i zmiany „nie działają". Bump 1.0.8→**1.0.9**.
+**Każda zmiana w `themes/primaauto2026/assets/css/*` wymaga bumpu tej stałej.** Plugin busta się sam.
+
+---
+
+## 0.33.24 — 2026-07-16 (T-203: link do hubu w sticky navrow + „z VAT")
+
+**Pomysł Janka:** wstawić link do hubu w tę samą linię, co pastylki „Hybryda"/„W drodze" — wtedy
+jedzie ze sticky-headem (widoczny przez CAŁY scroll) i **nie kosztuje ani piksela wysokości**,
+bo rząd z badge'ami i tak tam był. Lepsze niż breadcrumb jako osobna linia (0.33.23) — na mobile
+nad tytułem jest ciasno.
+
+- **`hubBackLink()`** (nowa) — anchor z `AsiaAuto_Shortcodes::serieAnchor()`, ta sama funkcja co
+  breadcrumb i JSON-LD, żeby trzy miejsca nie mówiły trzech różnych rzeczy.
+- **`.aa-single__navrow`** — flex `[← {model}]` + `[badge'y]`; `min-width: 0` + `ellipsis` na spanie,
+  więc długie nazwy („BYD Leopard 5 (Denza B5)") skracają się zamiast rozpychać badge.
+  **Tylko `--mobile`** — desktop ma pełny breadcrumb, drugi link byłby duplikatem i rozjechałby sidebar.
+- **`.aa-single__sticky-back` usunięta z markupu** (prowadziła do `/samochody/`).
+  `grid-template-columns: 32px 1fr` → `1fr` — **tytuł odzyskał 42px**.
+- **Breadcrumb `<nav>` z powrotem `display:none` na mobile** (cofnięte z 0.33.23) — rolę przejął
+  navrow: ten sam URL i ten sam anchor, więc bez rozjazdu; `<nav>` zostaje w DOM + JSON-LD dla SERP.
+- **Cena: `246 000 PLN z VAT`** (`.aa-single__price-vat`) — prośba Janka.
+
+---
+
+## 0.33.23 — 2026-07-16 (T-203 pkt 7+8: breadcrumb kompakt na mobile + anchor pełną nazwą modelu)
+
+**Po co:** 3 056 ofert linkowało do hubów breadcrumbem ukrytym na mobile (`display:none`
+w `@media max-width:768px`) — a mobile to **79,6% sesji** (GA4 90d, memory
+`reference_mobile_share_and_offers_are_conversion_pages`). Do tego anchor był surowym
+`$serie->name`, czyli **258 z 302 modeli (2 908 ofert) linkowało do hubu napisem bez marki** („8X").
+Hub walczy o „zeekr 8x", a dostawał od 3 000 własnych podstron link „8X".
+Komentarz w CSS (`Hide breadcrumb … SEO intact`) był **mylący**: JSON-LD ratuje wygląd ścieżki
+w SERP, nie link equity.
+
+**`AsiaAuto_Shortcodes::serieAnchor()`** (nowa, `public static` — wołana z `renderBreadcrumb()`
+i z JSON-LD BreadcrumbList w `class-asiaauto-single.php:1061`, żeby się nie rozjechały).
+Baza = `_serie_full_title` (kuratorowane: bez nawiasów, bez dubletów marki, case marki,
+encje) + 3 korekty. **Zasada:** anchor prowadzi do HUBA, więc niesie frazę huba (`{model}`);
+frazę wersyjną niesie title/H1 oferty (decyzja Janka: „zeekr 8x → hub, zeekr 8x ultra → oferta").
+1. **zdejmij** napęd nieobecny w nazwie termu → `Zeekr 8X PHEV` = **`Zeekr 8X`**,
+2. **dopnij** napęd obecny w nazwie termu, a zgubiony przez full_title → `BYD Han` = **`BYD Han DM-i`**,
+3. **alias marki** (lustro `V3_BRAND_ALIAS`) → `Beijing 212 T01` = **`BAW 212 T01`**.
+Fallback dla 35 serii bez full_title: make+name z guardem antydubletowym („IM LS7" vs „IM Motors").
+
+**BUG wyłapany na symulacji 100 serii — bez kroku 2 sami tworzylibyśmy kanibalizację:**
+`Sealion 5 DM` i `Sealion 5 EV` to **dwa różne huby**, a `full_title` dawał obu identyczne
+„BYD Sealion 5". Kolizje anchora na całej puli: **1 → 0**. Symulacja:
+`auratest .../primaauto-t203-sym-anchor-100-2026-07-16.html`.
+
+**Breadcrumb kompakt (`asiaauto-single.css`, `@media max-width:768px`):** breadcrumb odsłonięty,
+ale zredukowany do JEDNEGO poziomu — link do hubu modelu (`--root`/`--make`/`--current`/`--sep`
+chowane, `--serie` z prefiksem `←`). **`aa-single__sticky-back` usunięta z mobile** (prowadziła do
+`/samochody/`, czyli do całego katalogu; nawigację przejął breadcrumb → hub modelu).
+`grid-template-columns: 32px 1fr` → `1fr` — **tytuł odzyskał 42px** (mniej ellipsis).
+`margin-top: -16px` → `0` (nad sticky-head jest teraz breadcrumb; -16px wciągałby go pod spód).
+Hub marki nie traci: dostaje link z każdego z 302 hubów modeli (`taxonomy-serie.php:71-95`).
+
+**Huby NIETKNIĘTE** — zweryfikowane grepem przed zmianą (`titleBaseV3`/`v4*`/`v3BrandPrefix`
+tylko w `class-asiaauto-single.php`; `ensureBrandPrefix` tylko w `class-asiaauto-hub-title-generator.php`;
+`[asiaauto_tech_specs]`/`[asiaauto_equipment]` wołane wyłącznie z `class-asiaauto-single.php:93-94`)
+i po deployu na żywo (title/H1 `/zeekr/8x/`, `/byd/han-dm-i/`, `/denza/n8l-dm/` bez zmian).
+
+**Znalezisko uboczne → `docs/seo/znaleziska-huby-2026-07-14.md` Z4:** ten sam defekt
+`_serie_full_title` **już produkuje zduplikowane title hubów** — `/byd/sealion-5-dm/` i
+`/byd/sealion-5-ev/` mają IDENTYCZNY title „BYD Sealion 5"; `/byd/han-dm-i/` = „BYD Han"
+(bez frazy „byd han dm-i"). 13 serii dotkniętych. Anchor jest teraz precyzyjniejszy niż hub,
+do którego prowadzi. Naprawa hubów = osobna decyzja (baseline + próg rollback).
+
+**Smoke:** 3 oferty różnych paliw (PHEV/EREV/benzyna) HTTP 200, anchor i JSON-LD BreadcrumbList
+zgodne; 6 kluczowych serii przez `serieAnchor()` na produkcji = wartości z symulacji.
+Backupy: `.bak-2026-07-16-t203-anchor` (×2), `.bak-2026-07-16-t203-bc` (CSS).
+
+**NIEZROBIONE z tego zakresu:** pkt 1 (drugi H1 → `div role=heading`; `stickyHead()` wołany
+2× — `:85` mobile i `:314` w `sidebar()`) — zaakceptowany, ale test mobile-first→desktop
+nie wykonany (Chrome nie dał mobilnego viewportu). Pkt 2 (NAP „Prima Auto"→„Prima-Auto"
+w `renderMeta()`) — do decyzji, zysk SEO zerowy. T-187 (box „inne oferty tego modelu")
+— świadomie osobno, wymaga T-212.
+
+---
+
 ## 0.33.22 — 2026-07-14 (T-203 v4: hoist wersji tuż za nazwę modelu)
 
 **Po co:** sam przerzut rocznika (0.33.21) nie wystarczył — feed wstawia napęd/baterię PRZED wersję,
