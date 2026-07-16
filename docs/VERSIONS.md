@@ -1,5 +1,64 @@
 # Historia wersji asiaauto-sync
 
+## 0.33.27 — 2026-07-16 (T-211 ⚡2: kolor w schemacie ofert)
+
+**Geneza:** wątek 4b. Blok Schema.org w `renderMeta()` pytał o taksonomię `color`, która
+**nie istnieje** — w bazie są `exterior-color` (13 termów) i `interior-color` (13). Wyrażenie
+zawsze zwracało `''`, a `array_filter` wycinał puste pole → **kolor nie trafiał do schematu
+żadnej z 3 058 ofert**. Reszta pluginu znała poprawną nazwę (linia 136 używa `exterior-color`
+od dawna) — to była literówka w jednym miejscu, nie świadomy wybór.
+
+**Zmiana (`class-asiaauto-single.php:1047`, 1 linia):**
+- `get_the_terms($pid, 'color')` → `get_the_terms($pid, 'exterior-color')`
+
+**Pokrycie:** 2 906 z 3 058 opublikowanych ofert (95%) ma przypisany `exterior-color`.
+Rozkład: Czarny 807, Biały 540, Ciemnoszary 423, Srebrny 347, Niebieski 296, Zielony 213,
+Fioletowy 129, Czerwony 65, pozostałe <35.
+
+**Smoke (3 paliwa, po deployu):** EV `byd-han-ev-2024-186099` → „Ciemnoszary";
+PHEV `denza-z9-dm-2024-94535` → „Ciemnoszary"; benzyna `hongqi-h5-2025-186609` → „Czarny".
+Pozostałe pola (`fuelType`, `vehicleTransmission`, `itemCondition`) bez zmian.
+
+**Backup:** `class-asiaauto-single.php.bak-2026-07-16-t211-color`
+
+### Ustalenia analityczne wątku 4b (bez zmian w kodzie)
+
+- **Hipoteza „multi-type [Product, Car] blokuje liczenie ofert jako Product" — OBALONA.**
+  URL Inspection API (3 huby + 4 oferty): **wszystkie PASS jako „Opisy produktów"**, oferty
+  również, z nazwą wersyjną. Multi-type nie przeszkadza. Nie ma tu czego naprawiać.
+- **„79 opisów produktów = tylko huby" — artefakt raportu, nie bug.** Raport rich resultów
+  pokazuje próbkę URL-i i liczy tylko przecrawlowane. Huby są stabilne, oferty rotują
+  (część URL-i z GSC jest martwa, 301 na hub).
+- **Huby jako Product + AggregateOffer (lowPrice/highPrice) = poprawny, celowy wzorzec.**
+  Daje „od X zł" w SERP na frazach „cena", gdzie huby stoją #1–2. Zostawiamy.
+- **ZAD.12/13 („utracone pola schema") — FAŁSZYWY ALARM z nieaktualnego backlogu.**
+  `vehicleEngine`, `vehicleTransmission`, `driveWheelConfiguration`, `itemCondition`
+  oraz `OfferShippingDetails` **są w kodzie żywym i lecą na produkcję** (potwierdzone curlem).
+  Backlog opisywał funkcję `schema()` (linia 632), która jest **martwym kodem** — nikt jej
+  nie woła (komentarz w 1043 stwierdza to wprost: Elementor używa pojedynczych shortcodów).
+- **WARNING GSC „brak review / aggregateRating"** na hubach i ofertach — pola opcjonalne.
+  **Nie dodajemy** — nie mamy prawdziwych recenzji, fabrykowanie = ryzyko manual action.
+
+### T-199 resztka „Prima Auto" → „Prima-Auto" — ODRZUCONE na danych (decyzja Janka)
+
+Punkt 4 promptu 4b zakładał ujednolicenie zapisu. **Nie robimy.** Powody:
+- **Myślnik jest dla Google separatorem słów, nie łącznikiem** — `Prima-Auto` tokenizuje się
+  jako „prima"+„auto". Zapis ze spacją i z myślnikiem są wyszukiwarkowo równoważne.
+- **Dowód empiryczny (GSC 90d, kliki brandowe):** `prima auto` (ze spacją) **343**,
+  `primaauto` 34, `prima-auto` 13. Zapytanie ze spacją rankuje **poz. 2,7** („prima auto
+  rzeszów" — 1,3) **mimo** że strona wszędzie pisze `Prima-Auto`. Gdyby myślnik sklejał
+  w jeden token, tych 343 klików by nie było.
+- **Wniosek:** zysk zerowy w obie strony; to wybór brandingowy, nie SEO. Janek preferuje
+  „Prima Auto" (2 encje) — desc już tak mówi, więc **najtańszy ruch to żaden**.
+  Niespójność title (`| Prima-Auto`) ↔ desc (`Prima Auto`) **zostawiona świadomie**.
+- **Unikać:** `Prima - Auto` ze spacjami wokół myślnika (czytane jak separator tytułu →
+  „Prima" + tagline „Auto").
+- **NIE odwracać kierunku na całości** (blogname, schema `seller.name`, title 3 056 ofert)
+  — duża zmiana bez zysku, ruszyłaby title w trakcie pomiaru do 27.07.
+- Znalezisko poboczne: „Prima Auto" występuje w **12 miejscach**, nie w jednym (jak mówił
+  prompt) — 10 z nich to szablony **title** (686-695), fallback aktywny gdy `offerTitleV2`
+  wyłączone. Nie ruszane. Do rozstrzygnięcia po pomiarze 27.07, jeśli w ogóle.
+
 ## 0.33.26 — 2026-07-16 (T-203: UX/dostępność sticky-heada + jeden H1 + desktop back→hub)
 
 **Geneza:** zrzut Janka z telefonu. „Trudno trafić palcem" — link „← {model}" miał `font-size: 12.5px`
