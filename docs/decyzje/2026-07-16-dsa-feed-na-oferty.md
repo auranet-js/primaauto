@@ -82,12 +82,31 @@ zero hubów, tracking template zdjęty, kampania ENABLED.
   landingu. Generator `scripts/build-dsa-offer-feed.php` dałby 194 modele (próg „min. 3 sztuki" traci sens,
   gdy celujemy w konkretną sztukę) — osobna decyzja.
 
-## Otwarte
+## Opisy reklam — decyzja Janka (16.07, po wdrożeniu feedu)
 
-- **Copy w opisach DSA nadal generyczne** — 4 zdania na wszystkie huby, bez ceny, egzemplarza i terminu.
-  Propozycje P1/P2/P3 przygotowane, **blokuje brak twardego terminu**: „90 dni" nie istnieje w żadnym
-  źródle, wiki mówi „kilka–kilkanaście tygodni" (3–16). W reklamie termin = zobowiązanie, potrzebna
-  liczba od Ruslana.
+Moje propozycje copy (P1/P2/P3, oparte na cenie pod klucz i terminie) **odrzucone**. Powód, którego
+nie widziałem: **cenę niesie już nagłówek** (title oferty), więc powtarzanie „cena pod klucz" w opisie
+marnuje miejsce. Opis ma mówić to, czego w nagłówku NIE ma — co robimy dla klienta i co ma zrobić dalej.
+
+Copy Janka:
+> „Zamów dla siebie — sprowadzimy i załatwimy formalności. Możliwy leasing." (72 zn.)
+> „Sprawdź podobne oferty tego modelu." (35 zn.)
+
+- **„Możliwy leasing"** — spójne z paskiem zaufania z v0.33.31.
+- **„Sprawdź podobne oferty"** — trafia w blok „Inne egzemplarze" (T-187), obecny na każdej ofercie,
+  więc reklama obiecuje dokładnie to, co czeka na landingu.
+- **Zero obietnicy terminu** — „90 dni" nie istnieje w żadnym źródle (wiki: „kilka–kilkanaście tygodni").
+
+**Wymieniona TYLKO jedna z dwóch reklam.** `816552895918` („Zarezerwuj teraz - auto weryfikujemy przed
+zakupem…") zaakceptowana przez Janka i **zostaje nietknięta — zachowuje historię i status APPROVED**.
+Wymieniona wyłącznie `816552895915` („Zamów online - bez salonu…") → nowa `817108048038`.
+
+Gotcha: **reklama w Google Ads jest immutable** — opisu nie da się zedytować, trzeba utworzyć nową
+i usunąć starą. Kolejność: **najpierw create, potem remove**, żeby grupa nie została bez reklamy.
+Nowa kreacja startuje z zerową historią i przechodzi ponowną weryfikację (`UNKNOWN` → `APPROVED`).
+Skrypt: `tmp/gads_dsa_rewrite_desc_2026_07_16.py`.
+
+## Otwarte
 - **20 hubów serwowało mimo niespełnienia gate** rocznika (`jetour/t2` 69 kl/30d) — temat zniknął wraz
   z przejściem na oferty, ale wróci przy decyzji o zakresie.
 - **`$NON_CHINESE` niekompletna** — zawiera Mazdę, MG, Nissana, ale nie Forda (`ford/ford-bronco`
