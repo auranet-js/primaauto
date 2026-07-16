@@ -1,5 +1,35 @@
 # Historia wersji asiaauto-sync
 
+## 0.33.29 — 2026-07-16 (T-187 fix: blok „Inne egzemplarze" na ofertach BEZ extra_prep)
+
+**Bug (znalazł Janek, przykład `/oferta/hongqi-h9-2024-387815/`):** blok wpięty w `renderTechSpecs()`
+dziedziczył jej early return — `if (empty($ep)) return '';` → **139 ofert (4,5%) nie dostawało bloku
+w ogóle**. Blok nigdy nie zależał od `extra_prep` (potrzebuje tylko taksonomii `serie`); to był
+skutek uboczny miejsca wpięcia.
+
+**Fix (`class-asiaauto-shortcodes.php`, 2 linie):** zamiast pustki — sam blok.
+```php
+if (empty($ep))       return $this->otherUnitsBlock($post_id);
+if (empty($sections)) return $this->otherUnitsBlock($post_id);
+```
+
+**Smoke:** `/oferta/hongqi-h9-2024-387815/` (0 sekcji tech) → „Inne egzemplarze Hongqi H9 (5)",
+4 karty, CTA OK. `/oferta/aito-m9-2024-217558/` (6 sekcji) → blok po 2., **1 wystąpienie** (brak
+duplikacji). Regresja hubów/homepage/katalogu: bez zmian (blok nie odpala się poza ofertą).
+
+### Dlaczego 139 ofert nie ma extra_prep — diagnoza (NIE naprawiane, decyzja Janka)
+
+Hipoteza „Ruslan dodawał ręcznie, powinno się podłączyć" **obalona danymi**: ręcznych jest **6**,
+z importu **133** (mają `_asiaauto_inner_id`), wszystkie z lipca 2026.
+
+Przyczyna = **awaria dostawcy auto-api od 01.07** ([[project_dongchedi_feed_frozen_2026_07_07]]):
+`/changes` daje dane częściowe BEZ extra_prep, pełną specyfikację dokłada `getOffer()` per oferta;
+gdy `getOffer()` pada → `importWithFullData` świadomie zapisuje partial + `WARN: getOffer failed…
+using partial data`. Kod syncu nietknięty od 16.05 — nasz kod OK, wina źródła.
+
+**Decyzja Janka (2026-07-16, podtrzymana z 07-07): NIE backfillować teraz** — najpierw wyświetlanie
+bloku, extra_prep osobno. Dane odzyskiwalne (`getOffer()` już odpowiada → re-sync uzupełni).
+
 ## 0.33.28 — 2026-07-16 (T-187: blok „Inne egzemplarze {Model}" na stronie oferty)
 
 **Po co:** klient na ofercie nie wiedział, że ten sam model stoi u nas w innych sztukach, często
