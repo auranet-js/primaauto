@@ -1,5 +1,22 @@
 # Historia wersji asiaauto-sync
 
+## 0.33.31 — 2026-07-16 (T-213: leasing w pasku zaufania + skrót treści)
+
+Treść paska `trustLine()` po korekcie Janka:
+> Cena zawiera cło, VAT, akcyzę, transport, odprawę celną, homologację i przygotowanie.
+> **Możliwy leasing.**
+
+- **Usunięte:** „— bez dopłat na odbiorze" (decyzja Janka).
+- **Dodane:** „Możliwy leasing." (`.aa-trustline__fin`, `--primary` + bold).
+
+**Zmiany:** `class-asiaauto-single.php` (`trustLine()`), `assets/css/asiaauto-single.css`
+(`.aa-trustline__fin`). Smoke: treść potwierdzona na produkcji.
+
+⚠️ **Dopisek o leasingu wyprzedza stan T-113** (plan: **GATED na partnerze finansującym**).
+Otwarte u Ruslana: czy jest partner i **czy finansuje auto importowane z Chin PRZED rejestracją
+w PL** (plan T-113: „kluczowe pytanie i realne ryzyko"). Jest na 3 058 ofertach — przy negatywnej
+odpowiedzi do zdjęcia lub przeformułowania.
+
 ## 0.33.30 — 2026-07-16 (T-213 resztka: zdanie zaufania na ofercie)
 
 **Wariant B** (decyzja Janka 2026-07-14). Wariant A (pełne rozbicie kosztów) odrzucony: konkurent
