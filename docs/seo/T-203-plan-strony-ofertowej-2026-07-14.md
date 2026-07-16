@@ -24,7 +24,24 @@ to NIE dźwignia — 259 stron już w indeksie i to nie one przegrywają. Higien
 
 ---
 
-## 2. PRIORYTET 1 — linkowanie oferta → hub (największy zwrot, hub nietknięty)
+## 2. PRIORYTET 1 — linkowanie oferta → hub ✅ WYKONANE 2026-07-16 (v0.33.23-26)
+
+Zrobione w całości i szerzej niż plan zakładał — szczegóły `docs/VERSIONS.md` 0.33.23-26:
+- **anchor pełną nazwą** (`serieAnchor()`, jedna funkcja dla breadcrumbu + JSON-LD + navrow).
+  Skala okazała się większa niż w planie: **258 z 302 modeli / 2 908 ofert** linkowało bez marki.
+  Symulacja 100 serii wyłapała kolizję (Sealion 5 DM/EV → ten sam anchor) PRZED wdrożeniem: 1 → 0.
+- **breadcrumb na mobile** — nie jako osobna linia (ciasno), tylko jako **link w sticky navrow**
+  w linii z badge'ami (pomysł Janka): jedzie przez cały scroll, zero dodatkowej wysokości.
+- **`#oferty`** — klient ląduje na liście egzemplarzy, nie na lead/wiki/FAQ hubu.
+- **desktop**: „Wróć do wyników" (`/samochody/`) → „← Wszystkie oferty {model}" → `hub#oferty`.
+- **UX/a11y**: target 44px (było ~16 = poniżej WCAG 2.2), tytuł 2 linie (widać wersję),
+  cena 22px + „z VAT", jeden H1 (mobile-first).
+
+**Pomiar:** efekt linkowania materializuje się tygodniami — sprawdzić razem z pomiarem
+title v3/v4 (~27.07) i ponownie ~15.08. Metryka: pozycje hubów na frazach broad (`{model}`
+bez „cena”) + kliki hubów. Baseline: `T-203-baseline-gsc-2026-07-13.md`.
+
+### (pierwotny opis P1)
 
 **Problem (zmierzony):** 3 056 ofert linkuje do hubów **tylko breadcrumbem `display:none` na mobile**
 (`asiaauto-single.css:209`). Google indeksuje mobile-first → te linki są dyskontowane. Hub, który ma
@@ -66,6 +83,43 @@ ma brać **HUB** (agregator = właściwy typ), oferty zostają na long-tailu z c
 - **Podwójne „DM-i"** BYD Tang (defekt feedu, hoist uwypuklił) — opcjonalny dedup. S.
 - **`SU7 RWD Standard Long Range`** bez hoistu (guard „Long Range") — świadomy kompromis; słownik wersji
   per model tylko jeśli model istotny. M.
+
+---
+
+## 4b. DO ANALIZY (zgłoszenie Janka 2026-07-16) — GSC widzi tylko 79 poprawnych „opisów produktów", i to HUBY
+
+**Obserwacja:** raport GSC „Opisy produktów" (Product snippets / Merchant listings) pokazuje
+**79 poprawnych** — a to są **huby**, nie oferty. Mamy **3 056 ofert**, każda z konkretnym
+egzemplarzem (VIN, cena, przebieg, dostępność). Pytanie Janka: **czy tam nie powinny być oferty?**
+
+**Dlaczego to nie jest oczywiste (do dyskusji, NIE przesądzać):**
+- Oferta = pojedynczy egzemplarz z ceną → wygląda na naturalnego kandydata na `Product`/`Offer`
+  (rich result z ceną i dostępnością w SERP = wyższy CTR).
+- Hub = agregator wielu egzemplarzy → raczej `ItemList`, a `Product` z ceną „od" bywa naciągane.
+- Ale: oferty mają **405 klików/90d na ~3 000 stron** i są stroną **konwersyjną, nie akwizycyjną**
+  (676 sesji organic vs 26 978 odsłon — memory `reference_mobile_share_and_offers_are_conversion_pages`).
+  Rich result na stronie, która nie rankuje, nie da ruchu. Huby rankują (5 600 klików).
+- Ryzyko odwrotne: `Product` na hubie z ceną „od" przy 44 egzemplarzach różnych cen może być
+  niezgodne z wytycznymi Google (cena musi dotyczyć konkretnego produktu).
+
+**Co ustalić PRZED decyzją (kolejność):**
+1. **Który raport GSC** — „Merchant listings" czy „Product snippets"? To dwa różne raporty
+   o różnych wymaganiach (Merchant wymaga m.in. `priceValidUntil`, `shippingDetails`, `returnPolicy`).
+2. **Co dziś emitują oferty** — recon 2026-07-16: `renderMeta()` (`class-asiaauto-single.php:867+`)
+   emituje schema; historycznie był fix **multi-type `[Product, Car]`**
+   (memory `project_session_2026_06_07_gsc_full_audit`). Sprawdzić, czy multi-type nie jest powodem,
+   dla którego GSC ich **nie liczy** jako Product.
+3. **Co emitują huby** — skąd te 79 (a nie 302)? Czemu akurat 79?
+4. **Czy 79 to nie jest po prostu „tyle ilu Google zdążył przecrawlować/uznać"** — sprawdzić daty.
+5. Dopiero potem: czy chcemy Product na ofertach, czy ItemList na hubach + Product na ofertach.
+
+**Powiązane resztki schema (ZAD.12/13, otwarte):** brak `OfferShippingDetails` w Car schema
+(gap vs west-motors); utracone przy dedupie 2026-04-24: `vehicleEngine` (KW), `vehicleTransmission`,
+`driveWheelConfiguration`, `color`, `itemCondition`. **Plus T-211 ⚡2: kod pyta o taksonomię `color`,
+która NIE ISTNIEJE** (są `exterior-color`/`interior-color`) → kolor nie trafia do schematu żadnej
+z 3 056 ofert; fix = 1 linia. Te trzy rzeczy warto zrobić jednym ruchem z powyższą analizą.
+
+**Status: DO DYSKUSJI — nic nie przesądzone, nic nie wdrożone.**
 
 ---
 
