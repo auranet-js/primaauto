@@ -119,8 +119,14 @@ ZASADY:
 - Przy >20 iteracjach: dry-run najpierw (feedback_dry_run_przed_batch).
 
 POZA SCOPE tego wątku (nie rozszerzaj):
-- T-212 (wspólny komponent karty, 3-4h) → odblokowuje T-187 (box „inne oferty tego modelu")
-  i T-189 (rata na karcie). Janek świadomie odłożył — box egzemplarzy robimy PO T-212.
+- T-212 (wspólny komponent karty, 3-4h) → odblokowuje T-187 (KAFLE „inne egzemplarze tego samego
+  modelu" na stronie oferty) i T-189 (rata na karcie). Janek świadomie odłożył — kafle robimy
+  PO T-212, inaczej powstanie czwarta kopia kafla.
+  ⚠️ Gdy przyjdzie kolej na kafle: CAŁY wsad merytoryczny (pomiary layoutu, 4 warianty umiejscowienia
+  + mockupy, pomysł Janka „wcisnąć między sekcje techniczne", gotcha z kotwiczeniem po indeksie
+  a nie po nazwie sekcji, rozstrzygnięcie sporu SEO-vs-UX) jest już zapisany w
+  docs/roadmapa/T-187-inne-egzemplarze-sciezka-mobile.md, sekcja „Ustalenia z sesji 2026-07-16".
+  NIE odkrywaj tego od nowa.
 - Znalezisko 3b (30 fraz, gdzie zdrowy hub nie rankuje) — czeka na pomiar 15.08, track hubów.
 - Znalezisko Z4 (docs/seo/znaleziska-huby-2026-07-14.md): /byd/sealion-5-dm/ i /byd/sealion-5-ev/
   mają IDENTYCZNY title „BYD Sealion 5"; /byd/han-dm-i/ = „BYD Han" bez frazy „byd han dm-i"

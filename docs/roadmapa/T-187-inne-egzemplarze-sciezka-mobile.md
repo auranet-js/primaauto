@@ -25,6 +25,76 @@ Dwie dziury naraz:
 
 Wiązanie oferta→model: taksonomia `serie` (2699 termów), term `serie` ma `parent` = term_id marki. Licznik egzemplarzy dostępny bez zapytania: `$serie->count`.
 
+## Ustalenia z sesji 2026-07-16 (T-203) — WSAD DO PLANU, nie odkrywać od nowa
+
+> Kontekst: `docs/sesje/2026-07-16-t203-oferty-linkowanie-do-hubow.md`.
+> **Część zadania już odpadła** — ścieżka oferta→hub na mobile ZROBIONA w v0.33.23-26
+> (sticky navrow „← {model}" + `#oferty`). Zostają **kafle innych egzemplarzy tego samego modelu**.
+> ⚠️ Nie mylić z istniejącym `relatedModels()` = „Inne modele {marka}" (pills do hubów INNYCH modeli).
+> Kafli egzemplarzy tego samego modelu **dziś NIE MA w ogóle** — to jest puste miejsce, nie przeniesienie.
+
+### Jest co pokazywać (SQL 2026-07-16)
+**2 526 z 3 058 ofert (83%) dzieli identyczny `post_title`** z inną ofertą — 499 grup.
+Top: AITO M9 2024 EREV Ultra 6-Seater **×49**, Voyah Dream PHEV ×39, NIO ET5 Touring ×30,
+Xiaomi YU7 4WD Max ×30. Cel Janka: **„żeby ludzie widzieli, że to nie jedyny egzemplarz, jaki mamy"**.
+
+### Zmierzony layout (oferta z pełnym extra_prep, `/oferta/denza-n8l-dm-2026-387849/`)
+Strona **7 690 px** / 257 tys. znaków HTML:
+
+| blok | pozycja | % |
+|---|---|---|
+| galeria | 202 px | 3% |
+| keySpecs | 919 px | 12% |
+| USP | 1 055 px | 14% |
+| opis (`post_content`, ~2 200 zn) | 1 385 px | 18% |
+| dane techniczne (start) | 2 153 px | 28% |
+| **wyposażenie (start)** | 4 541 px | 59% |
+| „Inne modele marki" | **7 065 px** | **92%** |
+
+**Samo wyposażenie to 120 tys. znaków = 47% HTML.** Cokolwiek wsadzimy za nim, jest martwe.
+
+### Warianty umiejscowienia (mockupy)
+`auratest:primaauto-t203-mockup-mobile-v2-2026-07-16.html` (W1–W4) oraz `…-mockup-mobile-2026-07-16.html`.
+
+- **W1** tylko link do hubu, kafle nisko — najbezpieczniejszy SEO, najsłabszy UX.
+- **W2** split: linia „Mamy 3 inne sztuki {model}" wysoko + kafle nisko.
+- **W3** pełen box po keySpecs (~14%) — najlepszy UX.
+- **W4** box po opisie, przed techniką (~28%).
+- **Pomysł Janka (2026-07-16): wcisnąć MIĘDZY sekcje techniczne** (np. po „Silnik", ≈39%) — logika:
+  „klient mobile już wie, że przewija zestawy danych, więc kolejny zestaw pasuje". Wykonalne, patrz niżej.
+
+### Rozstrzygnięcie sporu SEO (GA4 90d — NIE blokuj UX tym argumentem)
+Pierwotna obawa („kafle linkują do konkurencyjnych ofert → rozlewamy equity") **jest nieistotna**:
+`/oferta/` ma **26 978 odsłon vs 676 sesji organic** i 405 klików/90d na 3 000 stron — to strona
+**konwersyjna, nie akwizycyjna**. PageRank ofert jest znikomy, więc „rozlanie znikomego" nic nie kosztuje.
+Za to mobile = **79,6% sesji**. **UX wygrywa.** Memory: `reference_mobile_share_and_offers_are_conversion_pages`.
+Osobno: „czy robot nie wyjdzie ze strony" — **nie**, Googlebot pobiera cały HTML naraz i parsuje
+wszystkie linki niezależnie od kolejności; nie czyta liniowo.
+
+### Wykonalność (zweryfikowane w kodzie 2026-07-16)
+- **Huby BEZPIECZNE**: `[asiaauto_tech_specs]` i `[asiaauto_equipment]` są wołane **wyłącznie**
+  z `class-asiaauto-single.php:93-94`. Zero użycia na hubach (grep). Modyfikacja `renderTechSpecs()`
+  ich nie dotyka.
+- **Wstawienie MIĘDZY sekcje jest wykonalne** — `renderTechSpecs()` (`class-asiaauto-shortcodes.php:1674+`)
+  iteruje `foreach ($sections as $sec_id => $sec)`, więc `extra_prep` jest już pogrubowane (uwaga Janka
+  trafna). Wstawka po N-tej sekcji = jedno miejsce w pętli.
+- 🔴 **GOTCHA — kotwicz po INDEKSIE sekcji, NIE po jej tytule.** Sekcje są **warunkowe od paliwa**
+  (komentarz w kodzie: „Układ elektryczny — *only PHEV/EREV/EV*”) i puste są pomijane
+  (`if (empty($sec['rows'])) continue;`). Rozkład paliw (3 058 publish): **EV 969 (32%)**,
+  PHEV 755 (25%), EREV 540 (18%), **Benzyna+Diesel+HEV 733 (24%)**. Czyli „między Silnik a Układ
+  elektryczny" **nie istnieje dla ~połowy katalogu**. Kotwica po indeksie działa zawsze.
+- **Wariant najtańszy (bez dotykania shortcode'a):** wstawka między `[asiaauto_tech_specs]`
+  a `[asiaauto_equipment]` w `single.php:93-94` = granica bloków, **59% strony**. Dwie linijki.
+
+### Do decyzji przed budową
+1. Miejsce: po keySpecs (14%) / po opisie (28%) / **po N-tej sekcji technicznej (~39%, pomysł Janka)** /
+   granica tech|equipment (59%, najtańsza).
+2. Czy kafle + CTA do hubu, czy sama linia tekstowa (W2) — CTA do hubu ma nieść anchor
+   `serieAnchor()` (v0.33.23), spójnie z breadcrumbem i navrow.
+3. Reuse: `AsiaAuto_Inventory::renderCard()` — **dopiero po T-212**, inaczej czwarta kopia kafla.
+
+---
+
 ## Plan (kroki)
 
 *(Wspólny komponent karty — patrz **T-212**. Zakładamy, że jest gotowy.)*
