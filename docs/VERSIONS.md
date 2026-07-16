@@ -1,5 +1,41 @@
 # Historia wersji asiaauto-sync
 
+## 0.33.30 — 2026-07-16 (T-213 resztka: zdanie zaufania na ofercie)
+
+**Wariant B** (decyzja Janka 2026-07-14). Wariant A (pełne rozbicie kosztów) odrzucony: konkurent
+tym rozbiciem **zaniża podatki i ukrywa marżę w opłatach**, a wersja uczciwa **odsłaniałaby naszą
+marżę** i nie dawałaby ani jednego wejścia z Google.
+
+**Treść:** „Cena zawiera cło, VAT, akcyzę, transport, odprawę celną, homologację i przygotowanie —
+**bez dopłat na odbiorze**."
+
+**Umiejscowienie: między `keySpecs()` a `uspStrip()`** (~13% strony) — wariant C z mockupu
+`primaauto-t213-zdanie-zaufania-mockup-2026-07-16.html`. Powód: wysoko (tuż po cenie i danych),
+czyta się jak zdanie, a nie jak punkt listy; biały box z czerwoną krawędzią odcina się od
+czerwonego USP stripa.
+
+**Odrzucone warianty:**
+- **pod ceną w sticky headzie** — cofałoby v0.33.26 (walka o kompakt: tytuł 2 linie, target 44px).
+  Zdanie ma ~110 znaków = 3 linie na 375px, pasek rósłby ~2×. Sticky ma być skrótem, nie akapitem.
+- **podpis w kolumnie „Dlaczego my"** — ginie w czerwieni jako 13. pozycja listy haseł.
+
+**Zmiany:**
+- `class-asiaauto-single.php` — nowa `trustLine()`, wpięta w `render()` między keySpecs a uspStrip
+- `assets/css/asiaauto-single.css` — `.aa-trustline` (biały box, `border-left: 3px solid var(--accent)`, ikona tarczy SVG)
+
+**Kontekst:** `uspStrip()` ma hasło **„Transparentna cena"** — obietnicę bez pokrycia. To zdanie
+jest jej pokryciem. ⚠️ Do rozważenia: hasło pada teraz dwa razy pod rząd (pasek + punkt w USP) —
+ewentualnie usunąć je z USP.
+
+**⚠️ Link do kalkulatora NIE dopięty** — kalkulator (T-213 pkt 1, osobna strona) **nie istnieje**.
+`TODO` w kodzie; dopięcie to 1 linia, gdy powstanie.
+
+**Smoke:** 3 paliwa (PHEV/benzyna/EV) → 1 wystąpienie każde. Kolejność `trustline` przed `usp-strip`
+potwierdzona. CSS pluginu bustuje się sam (`filemtime`, `ver=1784216574`) — theme nietknięty,
+więc `PRIMAAUTO_THEME_VERSION` bez zmian.
+
+**Backupy:** `class-asiaauto-single.php.bak-2026-07-16-t213`, `asiaauto-single.css.bak-2026-07-16-t213`
+
 ## 0.33.29 — 2026-07-16 (T-187 fix: blok „Inne egzemplarze" na ofertach BEZ extra_prep)
 
 **Bug (znalazł Janek, przykład `/oferta/hongqi-h9-2024-387815/`):** blok wpięty w `renderTechSpecs()`
