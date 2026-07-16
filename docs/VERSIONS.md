@@ -1,5 +1,68 @@
 # Historia wersji asiaauto-sync
 
+## 0.33.28 — 2026-07-16 (T-187: blok „Inne egzemplarze {Model}" na stronie oferty)
+
+**Po co:** klient na ofercie nie wiedział, że ten sam model stoi u nas w innych sztukach, często
+taniej — musiał wracać do katalogu i szukać ręcznie. 2 526 z 3 058 ofert (83%) dzieli identyczny
+`post_title` z inną ofertą (499 grup; AITO M9 ×133, Voyah Dream ×39). Cel Janka: „żeby ludzie
+widzieli, że to nie jedyny egzemplarz, jaki mamy".
+
+**Zero nowego kodu renderującego — reuse istniejącego komponentu** (decyzja Janka: „mamy już te
+metody na stronie głównej i hubach, więc tylko odpytanie konkretnych ofert, nie pisz od nowa").
+
+### Zmiany
+
+**`class-asiaauto-brand-hub.php`** — 4 addytywne zmiany w `[asiaauto_hub_listings]`, wszystkie
+z pustymi domyślnymi → **hub i homepage bez zmian**:
+- nowe atrybuty: `make`, `serie` (fallback, gdy brak query var — poza hubem ich nie ma),
+  `exclude` (CSV → `post__not_in`), `orderby` (`price` = cena rosnąco)
+- `renderListingsCompact()` + parametry `$exclude`, `$orderby`
+
+**`class-asiaauto-shortcodes.php`**:
+- nowa `otherUnitsBlock(int $post_id)` — pobiera `make`/`serie` posta, guard `count-1 < 1`,
+  woła `do_shortcode('[asiaauto_hub_listings n=4 …]')`
+- `renderTechSpecs()` — licznik wyrenderowanych sekcji, wstawka **po 2.**, fallback na koniec
+
+### Decyzje
+
+- **Umiejscowienie: po 2. wyrenderowanej sekcji technicznej** (~39% strony) — pomysł Janka:
+  „klient mobile już wie, że przewija zestawy danych, więc kolejny zestaw pasuje". Janek:
+  „to nie ma znaczenia, bo jak już to mamy gotowe, to zawsze możemy przenieść".
+- 🔴 **Kotwica po INDEKSIE, nie po nazwie sekcji** — „Układ elektryczny" nie istnieje dla ~24%
+  katalogu (spalinowe). Potwierdzone smoke'em: EV ma 5 sekcji, spalinowe 6 — blok i tak po 2.
+- **H2 = `Inne egzemplarze {serieAnchor} ({n})`** — niesie frazę `{marka} {model}`, ta sama nazwa
+  co breadcrumb i sticky navrow (v0.33.23).
+- **CTA → zafiltrowany katalog** `/samochody/?marka=X&model=Y`, **nie hub**. Powód (dane, nie opinia):
+  hub pokazuje tylko ~11 kart przy 133 sztukach AITO M9, a **hub sam linkuje „Wszystkie (133) →"
+  właśnie na filtr** — powtarzamy istniejący wzorzec. Filtr = `noindex, follow` (equity przepływa).
+  Do huba klient ma już dwie drogi z góry strony (breadcrumb + navrow), trzecia byłaby powtórzeniem.
+- **Sort: cena rosnąco** — sens konwersyjny bloku to „jest taniej".
+
+### Smoke (po deployu)
+
+| paliwo | oferta | blok | pozycja |
+|---|---|---|---|
+| EV | BYD Han EV | „Inne egzemplarze BYD Han EV (8)" | po 2 z 5 sekcji |
+| benzyna | Hongqi H5 | „(93)" | po 2 z 6 |
+| PHEV | Denza Z9 DM-i | „(14)" | po 2 z 6 |
+| AITO M9 | 4 karty, ceny 283→297→302→304 tys. | cena rosnąco OK | CTA → `?marka=aito&model=m9` |
+
+- **Guard**: oferta-unikat (`serie.count=1`) → 0 wystąpień bloku, brak pustej ramki.
+- **`post__not_in`**: własny URL nie występuje w bloku (tylko oembed/share).
+- **Regresja**: homepage, katalog (s1/s3/filtr), hub-zeekr-8x, hub-aito-m9, hub-denza-d9 —
+  **HTML identyczny co do znaku** vs baseline sprzed zmiany.
+
+**Backupy:** `class-asiaauto-brand-hub.php.bak-2026-07-16-t187`, `class-asiaauto-shortcodes.php.bak-2026-07-16-t187`
+
+### 🐛 Znalezisko poboczne (NIE naprawiane) — niestabilne sortowanie kart marek
+
+Przy weryfikacji regresji wyszło, że `aa-brand-card` („modele marki" na hubach) ma **losową
+kolejność między pobraniami** — dwa `curl` pod rząd, **tym samym kodem**, dają 8 różnic
+(hub-hongqi-h9, hubmarka-zeekr/geely). Prawdopodobnie `ORDER BY count` bez tie-breakera →
+MySQL zwraca dowolną kolejność przy równych wartościach. **To nie jest regresja T-187** —
+potwierdzone testem `n1 vs n2` na niezmienionym kodzie. Karty ofert (`aa-home__car`) są stabilne.
+Skutek: diff HTML hubów jest niewiarygodny dla sekcji marek. Do rozważenia: tie-breaker po `term_id`.
+
 ## 0.33.27 — 2026-07-16 (T-211 ⚡2: kolor w schemacie ofert)
 
 **Geneza:** wątek 4b. Blok Schema.org w `renderMeta()` pytał o taksonomię `color`, która
