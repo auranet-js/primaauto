@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Prima Auto — postęp prac i plan rozwoju</title>
+<style>
+:root {
+  --ink: #1a2332; --ink-2: #4a5568; --ink-3: #8b95a5;
+  --accent: #1f4e79; --accent-soft: #e8eff6;
+  --surface: #ffffff; --bg: #f4f6f9; --line: #e2e7ee;
+  --green: #2e7d43; --green-soft: #e7f3ea;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font: 15px/1.55 -apple-system, "Segoe UI", Roboto, Arial, sans-serif; color: var(--ink); background: var(--bg); }
+.wrap { max-width: 900px; margin: 0 auto; padding: 32px 20px 80px; }
+header.top { border-bottom: 3px solid var(--accent); padding-bottom: 20px; margin-bottom: 28px; }
+header.top h1 { font-size: 26px; line-height: 1.25; }
+header.top .sub { color: var(--ink-2); margin-top: 6px; }
+header.top .stamp { color: var(--ink-3); font-size: 13px; margin-top: 10px; }
+h2 { font-size: 20px; margin: 44px 0 6px; }
+.lead { color: var(--ink-2); margin-bottom: 16px; max-width: 820px; }
+.note { background: var(--accent-soft); border-left: 4px solid var(--accent); border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 16px 0; color: var(--ink-2); font-size: 14px; }
+.wersje { color: var(--ink-3); font-size: 12px; font-weight: 400; }
+table { width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; margin: 14px 0; }
+th { text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: 0.4px; color: var(--ink-2); background: var(--accent-soft); padding: 10px 14px; border-bottom: 1px solid var(--line); }
+th.num, td.num { text-align: right; }
+td { padding: 12px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr:last-child td { border-bottom: none; }
+td.num { font-variant-numeric: tabular-nums; font-weight: 600; white-space: nowrap; }
+td.data-col { white-space: nowrap; color: var(--ink-2); font-size: 13px; font-variant-numeric: tabular-nums; }
+tfoot td { background: var(--accent-soft); font-weight: 700; }
+.opis { color: var(--ink-2); font-weight: 400; margin-top: 4px; font-size: 14px; }
+.skala { color: var(--ink-3); font-size: 12.5px; margin-top: 4px; }
+.rozmiar { color: var(--ink-3); font-size: 12px; font-weight: 400; white-space: nowrap; }
+.badge { display: inline-block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.4px; border-radius: 4px; padding: 2px 7px; }
+.badge.new { background: var(--green-soft); color: var(--green); }
+footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--ink-3); font-size: 12.5px; }
+@media (max-width: 720px) {
+  td.data-col { font-size: 11px; }
+}
+@media print {
+  body { background: #fff; }
+  .wrap { max-width: none; padding: 0; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+<h1>Prima Auto — postęp prac i plan rozwoju</h1>
+<div class="sub">Platforma importu samochodów z Chin · primaauto.com.pl · opracowanie: Auranet (Jan Schenk)</div>
+<div class="stamp">Stan na 17.07.2026 · dokument roboczy, aktualizowany na bieżąco wraz z postępem prac</div>
+</header>
+
+<h2>Co się zmieniło (od najnowszych)</h2>
+<p class="lead">Rejestr prac wykonanych od spotkania 16.07.2026, z godzinami liczonymi tak samo jak w kosztorysie (realny czas pracy zespołu).</p>
+<table>
+<thead><tr><th>Data</th><th>Praca</th><th class="num">Godziny [h]</th></tr></thead>
+<tbody>
+<tr>
+<td class="data-col">17.07.2026</td>
+<td><strong>Analiza wzorca umowy leasingowej</strong> <div class="opis">Przegląd wzorca „Umowy organizacji importu samochodu” pod leasing (konstrukcja trójstronna: Prima-Auto, firma leasingowa, klient). Zmapowane pola, kwoty i miejsca w systemie wymagające zmian — podstawa do wyceny zadania T-217. Uruchomiona też niniejsza strona postępu prac.</div></td>
+<td class="num">1</td></tr>
+<tr>
+<td class="data-col">16.07.2026</td>
+<td><strong>Blok „Inne egzemplarze tego modelu” na stronach ofert</strong> <span class='wersje'>v0.33.28–29</span><div class="opis">Każda oferta pokazuje teraz karty innych egzemplarzy tego samego modelu, posortowane od najtańszego, z przejściem do pełnej listy z cenami. Klient od razu widzi tańsze i inne wersje, zamiast wracać do katalogu. Działa na 2990+ ofertach, także na telefonie.</div></td>
+<td class="num">4</td></tr>
+<tr>
+<td class="data-col">16.07.2026</td>
+<td><strong>Elementy zaufania na stronie oferty</strong> <span class='wersje'>v0.33.30–31</span><div class="opis">Nad opisem auta pojawiło się zdanie o łącznej cenie „pod klucz” (bez ukrytych dopłat) oraz pasek atutów — m.in. „Możliwy leasing”. Moment oglądania oferty dostał pierwsze dowody wiarygodności.</div></td>
+<td class="num">2</td></tr>
+<tr>
+<td class="data-col">16.07.2026</td>
+<td><strong>Reklamy dynamiczne Google (DSA) — celowanie w najtańsze oferty</strong> <div class="opis">Feed reklam przestawiony ze stron modeli na najtańszą aktualną ofertę każdego modelu, z automatyczną codzienną aktualizacją. Do tego nowa treść reklamy (wymiana jednej z dwóch kreacji).</div></td>
+<td class="num">3</td></tr>
+</tbody>
+<tfoot><tr><td colspan="2">Razem od spotkania 16.07.2026</td><td class="num">10</td></tr></tfoot>
+</table>
+
+<h2>Lista zadań do zrobienia</h2>
+<p class="lead">Aktualny plan rozwoju platformy z widełkami godzin. Kolejność odzwierciedla zależności i priorytety — niektóre zadania są fundamentem, który obniża koszt kolejnych. Pozycje oznaczone „nowe” zostały dopisane po spotkaniu 16.07.2026.</p>
+<table>
+<thead><tr><th>Zadanie</th><th class="num">Godziny [h]</th></tr></thead>
+<tbody>
+<tr>
+<td><strong>T-186 — Che168 jako pełne, automatyczne drugie źródło ogłoszeń</strong> <span class='rozmiar'>skala: bardzo duża</span><div class="opis">Automatyczny import z drugiego chińskiego portalu — pełna dywersyfikacja i szersza oferta aut premium. Fundament już działa (ręczny import pojedynczych aut, mapowanie marek, tłumaczenia parametrów — 22 wydania pracy), ale automat to nie jest przełączenie przełącznika: mechanizm normalizacji chińskich danych jest dziś wpięty wyłącznie w import ręczny, a automatyczna synchronizacja ma zaszyte na sztywno jedno źródło. Do zbudowania: menedżer źródeł, wpięcie normalizacji w automat, wykrywanie duplikatów i panel zarządzania. Wycena potwierdzona po przeglądzie kodu.</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-186); PILNE: główne źródło (Dongchedi) od 1.07 praktycznie przestało dowozić auta — trwa wyjaśnianie z dostawcą</div></td>
+<td class="num">85–100</td></tr>
+<tr>
+<td><strong>T-217 — Umowa leasingowa jako drugi wzorzec w panelu zamówienia</strong> <div class="opis"><span class="badge new">nowe</span> Najprostszy wariant, bez zmian dla klienta: zamówienie i weryfikacja przebiegają jak dotąd (klient składa zamówienie, potwierdzenie, klient wypełnia dane do umowy — komplet danych już wystarcza, dla firm dochodzi tylko wymóg NIP i nazwy). Nowość po stronie panelu: obok obecnego „Wygeneruj PDF” dochodzi „Generuj umowę leasing” — drugi szablon umowy („Umowa organizacji importu samochodu”, konstrukcja trójstronna z firmą leasingową) z 2 załącznikami (specyfikacja auta, kalkulacja ceny w 4 pozycjach), inną kwotą i narracją depozytu (12 tys. zł, „depozyt zabezpieczający”). Możliwość wgrania indywidualnej umowy zostaje bez zmian. Bez nowych statusów zamówienia (do rozważenia w przyszłości).</div><div class="skala">Status: wzorzec przeanalizowany (17.07), wariant minimalny uzgodniony</div></td>
+<td class="num">8–12</td></tr>
+<tr>
+<td><strong>T-218 — Przebudowa panelu zamówień</strong> <div class="opis"><span class="badge new">nowe</span> Nowe filtry na liście zamówień, korekta istniejących filtrów oraz poprawa działania panelu na telefonie.</div><div class="skala">Status: do zaplanowania</div></td>
+<td class="num">4–5</td></tr>
+<tr>
+<td><strong>T-219 — Podstrona leasingowa (landing „Leasing samochodu z Chin”)</strong> <div class="opis"><span class="badge new">nowe</span> Osobna podstrona opisująca ścieżkę leasingową (jak to działa, współpraca z finansującym, kroki od zamówienia do wydania auta) + zalinkowanie jej w kilku miejscach serwisu pod SEO (pasek zaufania na ofertach, stopka, strony informacyjne). Fraza „leasing samochodu z chin” sprawdzona w bazie słów kluczowych: brak mierzalnego wolumenu — nisza dopiero powstaje, więc rankowanie będzie tanie, a strona pracuje głównie na konwersję i zaufanie. Kalkulator raty finansowania to osobne zadanie (T-189 — rata na kartach ofert).</div><div class="skala">Status: do zaplanowania; frazy zbadane 17.07</div></td>
+<td class="num">3–4</td></tr>
+<tr>
+<td><strong>T-204 — Panel klienta (konto zalogowanego) — fundament pod ulubione i alerty</strong> <span class='rozmiar'>skala: średnia</span><div class="opis">Dziś konto klienta powstaje wyłącznie przy składaniu zamówienia, a strona klienta jest atrapą — od razu przerzuca na zamówienie. Nie ma rejestracji, nie ma widoku 'moje zamówienia', nie ma gdzie trzymać ulubionych aut ani alertów. To fundament: raz zbudowany panel obniża koszt trzech kolejnych funkcji (ulubione, alerty, porównywarka) i buduje bazę kontaktów pod mailing i remarketing. Przy okazji naprawa: hasła nie będą już wysyłane mailem otwartym tekstem.</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-204), odblokowuje T-114 i T-188</div></td>
+<td class="num">18–24</td></tr>
+<tr>
+<td><strong>T-212 — Wspólny komponent karty oferty (fundament techniczny)</strong> <span class='rozmiar'>skala: mała</span><div class="opis">Kafelek auta (zdjęcie, cena, parametry) jest dziś zapisany w kodzie trzykrotnie — osobno na stronie głównej, osobno w katalogu, osobno na stronach modeli. Cztery zaplanowane funkcje chcą do niego coś dołożyć: serce (ulubione), ratę miesięczną, pole porównania i blok innych egzemplarzy. Bez scalenia każdą z nich trzeba by wykonać trzy razy, w trzech kopiach, z ryzykiem że się rozjadą. Krótka porządkowa robota, która obniża koszt czterech kolejnych zadań.</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-212); fundament pod T-187, T-114, T-189, T-115</div></td>
+<td class="num">3–4</td></tr>
+<tr>
+<td><strong>T-189 — Kalkulator raty finansowania — rata widoczna na kartach ofert</strong> <span class='rozmiar'>skala: średnia</span><div class="opis">Klient widzi „od X zł/mc” już na liście aut, nie dopiero po wejściu w ofertę, i może dopasować parametry (okres, wpłata własna, wykup) — raty przeliczają się na całym katalogu od razu. Obniża barierę „całość z góry” i generuje leady „zapytaj o finansowanie”. Wszystkie parametry (w tym oprocentowanie) konfigurowalne z panelu — gdy pojawi się partner finansujący, podmieniamy liczby bez dotykania kodu. Wzorowane na rozwiązaniu konkurenta wskazanym przez klienta, ale z uczciwym wzorem (u konkurenta rata nie domyka się matematycznie).</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-189); wymaga T-212 — nie wymaga partnera finansującego</div></td>
+<td class="num">14–18</td></tr>
+<tr>
+<td><strong>T-114 — Ulubione auta (schowek klienta)</strong> <span class='rozmiar'>skala: mała</span><div class="opis">Klient zapisuje auta na własną listę i wraca do nich z dowolnego urządzenia. Nie chodzi tylko o wygodę — kliknięcie serca przez niezalogowanego prowadzi do założenia konta, a to buduje bazę kontaktów pod mailing i remarketing. Dlatego wycena obejmuje pełną ścieżkę (zapamiętanie intencji, panel, licznik), nie samą ikonę na kafelku.</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-114); wymaga T-204 i T-212</div></td>
+<td class="num">11–15</td></tr>
+<tr>
+<td><strong>T-116 — Zaawansowana wyszukiwarka (parametry techniczne + wyposażenie)</strong> <span class='rozmiar'>skala: duża</span><div class="opis">Filtrowanie po przebiegu, mocy, pojemności, skrzyni, stanie, a docelowo też po wyposażeniu (szyberdach, skóra, kamera 360, podgrzewane fotele) i parametrach technicznych — klient precyzyjnie dobiera auto zamiast przewijać 3 tysiące ofert. Wymaga uporządkowania danych technicznych: dziś siedzą w nieindeksowalnym formacie, a chińskie opisy z głównego źródła są w bazie uszkodzone (widać je poprawnie tylko dzięki łatce przy wyświetlaniu) — przeniesienie ich do indeksowalnej tabeli jest jednocześnie naprawą tego długu.</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-116); warstwa wyposażenia zależy od losu głównego źródła danych</div></td>
+<td class="num">40–55</td></tr>
+<tr>
+<td><strong>T-115 — Porównywarka aut</strong> <span class='rozmiar'>skala: średnia</span><div class="opis">Kilka aut w tabeli specyfikacji obok siebie, z podświetleniem różnic — łatwiejszy wybór, dłuższy czas na stronie. Naturalne przedłużenie ulubionych („zaznacz 3 z listy → porównaj”). Wycena podniesiona: dochodzi kuratorska selekcja parametrów (nie da się pokazać 342 wierszy) i rozwiązanie tabeli na telefonie.</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-115), najtaniej po uporządkowaniu danych z T-116</div></td>
+<td class="num">20–28</td></tr>
+<tr>
+<td><strong>T-188 — Zapisane wyszukiwania + alerty mailowe o nowych autach</strong> <span class='rozmiar'>skala: duża</span><div class="opis">Klient zapisuje kryteria (np. 'czarny Leopard 5 do 150 tys.') i dostaje maila, gdy pasujące auto pojawi się w imporcie — od razu albo zbiorczo raz w tygodniu, do wyboru. Do tego alert 'auto, które obserwujesz, zostało zarezerwowane'. Newsletter oparty na intencji = powracający ruch i gotowa baza kontaktów. Wycena spadła dzięki fundamentowi z T-204 i temu, że kryteria bierzemy wprost z istniejącej wyszukiwarki.</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-188), wymaga T-204 + T-114</div></td>
+<td class="num">33–40</td></tr>
+<tr>
+<td><strong>T-162 — Sekcja blogowa / baza wiedzy — budowa (rankingi, porównania, poradniki)</strong> <span class='rozmiar'>skala: duża</span><div class="opis">Zbudowanie bazy wiedzy: szablony, kategorie tematyczne, dane strukturalne, automatyczne wstawianie realnych ofert do artykułów (przewaga, której nie ma konkurencyjny blog), pipeline treści z weryfikacją faktów i zabezpieczeniem przed konkurowaniem z własnymi stronami. Uzasadnienie liczbami: kluczowy konkurent to nie dealer, tylko wydawca — ma ~14 800 wejść z Google miesięcznie, z czego dwie trzecie na treściach poradnikowych. Uwaga: to wycena SILNIKA. Regularna produkcja artykułów jest osobną pozycją w pracach regularnych — wcześniejsza wycena mieszała jedno z drugim i dlatego nigdy się nie zgadzała.</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-162), strategia i pipeline gotowe — zero blokerów</div></td>
+<td class="num">35–45</td></tr>
+<tr>
+<td><strong>T-213 — Kalkulator kosztów importu + wpis (magnes na ruch z Google)</strong> <span class='rozmiar'>skala: średnia</span><div class="opis">Narzędzie na stronie: klient wpisuje cenę auta w Chinach i widzi, ile realnie kosztuje sprowadzenie go do Polski — fracht, opłaty portowe, cło, akcyza (przy elektrykach zerowa), VAT, odprawa, homologacja, transport krajowy. Kalkulatory to treść, która zdobywa linki i jest chętnie cytowana przez wyszukiwarki AI — a przechwytuje pytania zadawane na długo przed wyborem konkretnego auta, czyli ruch, którego dziś nie mamy wcale. Do tego wpis wyjaśniający, jak liczy się to naprawdę: sprawdziliśmy kalkulator konkurencji i zaniża on koszt o kilka tysięcy złotych, bo nalicza podatki od samej ceny auta zamiast od wartości celnej z transportem. Klient, który mu zaufa, dopłaca różnicę na odprawie. To pokazuje naszą znajomość tematu i tłumaczy, dlaczego nasza cena 'pod klucz' jest uczciwa.</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-213); wariant zatwierdzony 14.07</div></td>
+<td class="num">14–18</td></tr>
+<tr>
+<td><strong>T-152 — Wystawianie ogłoszeń na Otomoto</strong> <span class='rozmiar'>skala: duża</span><div class="opis">Automatyczna publikacja ofert na największym polskim portalu motoryzacyjnym — nowy kanał sprzedaży poza własną stroną, z dwukierunkowym zarządzaniem (widzimy w panelu, co jest wystawione i w jakim stanie; auto sprzedane znika z portalu). Wycena podniesiona po analizie: mamy działającą integrację Otomoto w innym projekcie Auranet (oszczędność na fundamencie), ale dochodzi mapowanie chińskich marek na słownik Otomoto i cykliczna synchronizacja statusów (portal nie wysyła powiadomień — trzeba odpytywać). Wymaga konta biznesowego Otomoto po stronie klienta i kluczy API (czas oczekiwania: dni–tygodnie). Osobno do wyjaśnienia: koszt pakietów ogłoszeń po stronie portalu.</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-152); wymaga rozpoznania na żywym API po otrzymaniu kluczy</div></td>
+<td class="num">45–65</td></tr>
+<tr>
+<td><strong>T-121 — Płatność online (BLIK/karta) za depozyt rezerwacyjny</strong> <span class='rozmiar'>skala: duża</span><div class="opis">Klient wpłaca depozyt (dziś 6 150 zł) od razu w kreatorze — BLIK-iem lub kartą, zamiast przepisywać numer konta do bankowości. Szybsze domknięcie rezerwacji, mniej porzuceń na ostatnim kroku. Platforma nie ma sklepu internetowego, więc nie skorzystamy z gotowej wtyczki — mechanizm płatności piszemy w całości, choć miejsce wpięcia w proces zamówienia jest już przygotowane. Do potwierdzenia przed startem: zgoda operatora płatności na schemat depozytu zwrotnego w modelu pośrednictwa (kwota nie jest problemem — charakter płatności wymaga opisania w umowie).</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-121); wymaga zgody operatora płatności + aktualizacji regulaminu</div></td>
+<td class="num">32–42</td></tr>
+<tr>
+<td><strong>T-113 — Finansowanie/leasing jako alternatywa w umowie</strong> <span class='rozmiar'>skala: duża</span><div class="opis">Klient wybiera w kreatorze: klasyczne pośrednictwo albo finansowanie — otwiera sprzedaż klientom bez gotówki na całość. Wymaga partnera finansującego i osobnego wzorca umowy (weryfikacja prawna). Kluczowe pytanie do partnera: czy w ogóle finansuje auto sprowadzane z Chin, którego nie ma jeszcze w kraju. Kalkulator raty (T-189) jest tańszym testem popytu — jeśli nikt nie klika 'zapytaj o finansowanie', ta pozycja wypada.</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-113); wymaga wskazania partnera finansującego przez klienta</div></td>
+<td class="num">30–40</td></tr>
+<tr>
+<td><strong>T-183 — Watchdog awarii feedu ogłoszeń</strong> <span class='rozmiar'>skala: mała</span><div class="opis">Automatyczny alarm, gdy synchronizacja przestaje dowozić nowe auta. Awaria dostawcy jest cicha — system raportuje 'ok', tylko nowych ofert nie ma. Trzy awarie w czerwcu i zamrożenie feedu od lipca wyszły po fakcie, przypadkiem. Dane do wykrycia problemu są już zbierane — brakuje tylko reguły i powiadomienia.</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-183) — PILNE: dokładnie ta awaria trwa teraz</div></td>
+<td class="num">5–6</td></tr>
+<tr>
+<td><strong>T-205 — Meta (Facebook/Instagram) — restart na nowym koncie</strong> <span class='rozmiar'>skala: średnia</span><div class="opis">Konto reklamowe zostało przejęte przez osoby trzecie 3.06 i mimo miesiąca zgłoszeń Meta go nie zwróciła — dziś nie mamy do niego żadnego dostępu. Plan: klient zakłada nową stronę i nowe portfolio biznesowe, a na starej stronie (16,7 tys. obserwujących, gdzie zachowaliśmy dostęp) publikujemy zaproszenie do nowej. Reklamy uruchamiamy na nowym koncie. Przygotowanie techniczne w większości przetrwało (pomiar zdarzeń, feed pojazdów, targeting) — trzeba je przepiąć. Uwaga: obserwujący i grupy odbiorców do remarketingu startują od zera. To koszt przejęcia konta, nie naszej pracy.</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-205); czeka na założenie nowej strony i portfolio przez klienta</div></td>
+<td class="num">16–22</td></tr>
+<tr>
+<td><strong>T-206 — Google Ads — strategia licytacji oparta o konwersje + przegląd fraz</strong> <span class='rozmiar'>skala: mała</span><div class="opis">Import konwersji do Google Ads jest już wykonany — system notuje 64 kontakty miesięcznie (telefon, WhatsApp, formularz). Zostaje druga część: przestawienie licytacji, żeby Google faktycznie używał tych danych, zamiast licytować ręcznymi stawkami. Uczciwe zastrzeżenie: ma to sens tylko w dwóch kampaniach (marka i remarketing) — pozostałe mają za mało konwersji, by algorytm się nauczył. Do tego cykliczne odsiewanie fraz, które przepalają budżet. Osobno wykryty problem: pomiar prawdopodobnie zaniża konwersje kilkukrotnie (zgody na cookies) — to trzeba zbadać najpierw.</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-206); sam import konwersji JUŻ ZROBIONY (lipiec)</div></td>
+<td class="num">5–7</td></tr>
+<tr>
+<td><strong>T-207 — Skonsolidowany dashboard marketingowy (KPI, koszt leada, ROAS)</strong> <span class='rozmiar'>skala: średnia</span><div class="opis">Jeden raport łączący SEO, reklamy, analitykę i dane z systemu zamówień: koszt kontaktu, skuteczność kampanii, lejek sprzedaży, wskaźnik anulowań. Dziś każdy taki raport liczony jest ręcznie i nigdzie nie zostaje — nie da się pokazać trendu, bo nie zbieramy historii. Narzędzia do odpytywania Google mamy gotowe; zbudować trzeba zbieranie, magazyn i prezentację. Zastrzeżenie: pełne przypisanie zamówienia do kampanii wymaga dodatkowej pracy (nie zapisujemy dziś źródła ruchu przy zamówieniu) — to osobna pozycja.</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-207)</div></td>
+<td class="num">22–28</td></tr>
+<tr>
+<td><strong>T-208 — Kontrola jakości i odświeżanie treści (pipeline v2)</strong> <span class='rozmiar'>skala: bardzo duża</span><div class="opis">Treści opisowe kategorii modeli i marek (455 stron) powstają automatycznie i mają już zabezpieczenie przed pustosłowiem. Brakuje trzech rzeczy. Po pierwsze: weryfikacji faktów — dziś nic nie sprawdza, czy podane w tekście zasięgi, moce i ceny zgadzają się z naszą bazą, a piszemy o autach za setki tysięcy złotych. Po drugie: odświeżania — najstarsze treści pochodzą z kwietnia i mówią o cenach oraz dostępności, które dawno się zmieniły. Po trzecie: panelu, w którym widać stan treści. Wycena obniżona, bo połowa fundamentów już stoi.</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-208) — obniżone po przeglądzie: fundamenty już działają</div></td>
+<td class="num">40–55</td></tr>
+<tr>
+<td><strong>T-209 — Ładne maile HTML do klientów</strong> <span class='rozmiar'>skala: średnia</span><div class="opis">Maile transakcyjne do klientów (17 rodzajów: potwierdzenie zgłoszenia, zmiany statusu zamówienia, umowa, dane do przelewu) są dziś czystym tekstem — bez logo, bez formatowania, z gołymi adresami zamiast przycisków. Do zrobienia: jeden brandowany szablon graficzny obejmujący wszystkie wiadomości, z linkiem do zamówienia jako wyraźnym przyciskiem, plus podgląd szablonów w panelu. Treść merytoryczna maili jest dobra — zmieniamy wyłącznie oprawę.</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-209)</div></td>
+<td class="num">14–16</td></tr>
+<tr>
+<td><strong>T-210 — Edytor danych technicznych auta w panelu</strong> <span class='rozmiar'>skala: średnia</span><div class="opis">Ręczna korekta specyfikacji auta z chińskiego API bezpośrednio w panelu, bez programisty. Wycena wzrosła po przeglądzie kodu: obecna ochrona ręcznych zmian działa na całe ogłoszenie, nie na pojedyncze pole. Oznacza to, że poprawienie jednej literówki wyrzuciłoby auto z automatycznej synchronizacji na zawsze — przestałaby się aktualizować cena, a oferta nie zniknęłaby po sprzedaży w Chinach. Zanim damy narzędzie do edycji, trzeba przebudować ten mechanizm, żeby chronił tylko poprawione pola.</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-210) — podniesione: wymaga przebudowy ochrony zmian</div></td>
+<td class="num">22–28</td></tr>
+<tr>
+<td><strong>T-215 — Założenie kanału YouTube i przeniesienie istniejących filmów (fundament wideo)</strong> <span class='rozmiar'>skala: średnia</span><div class="opis">Prima-Auto ma już 127 filmów na TikToku, ale nie ma kanału na YouTube — a to właśnie YouTube jest wyszukiwarką wideo, którą Google pokazuje w wynikach i który pracuje na markę latami, nie kilka dni jak TikTok. Zakładamy i porządnie ustawiamy kanał: branding (logo, opis, sekcje), przeniesienie i uporządkowanie obecnych filmów, jednolite nazewnictwo (marka + model + wersja, spójne z tym, jak ludzie szukają w Google), opisy z linkami do konkretnych stron modeli na primaauto.com.pl, tagi i miniatury. Efekt podwójny: nowy darmowy kanał ruchu i drugie miejsce, w którym marka pojawia się przy wyszukiwaniu modelu. To fundament pod dwa kolejne kroki — podłączenie filmów do stron modeli (T-216) i płatną kampanię wideo (T-201).</div><div class="skala">Status: pomysł — nowy (14.07), do zaplanowania; fundament dla T-216 i T-201</div></td>
+<td class="num">11–13</td></tr>
+<tr>
+<td><strong>T-216 — Podłączenie filmów do stron modeli i ofert</strong> <span class='rozmiar'>skala: mała</span><div class="opis">Gdy kanał YouTube już działa (T-215), łączymy filmy z odpowiednimi stronami: film o danym modelu pojawia się na stronie tego modelu i na ofertach tego auta. Klient ogląda auto w ruchu, nie tylko na zdjęciach — a strona zyskuje treść wideo, którą Google lubi i którą może pokazać z miniaturą w wynikach. Technicznie: osobny mechanizm osadzania (element wielokrotnego użytku, który redakcyjnie przypina film do modelu) plus oznaczenie wideo w danych strukturalnych strony. Do rozstrzygnięcia na etapie realizacji, czy przypisanie film→model jest ręczne, czy półautomatyczne — stąd pozycja parkingowa, wyceniona orientacyjnie.</div><div class="skala">Status: pomysł — przyszłość (14.07); wymaga T-215; rozwiązanie techniczne do wyboru (shortcode / inne)</div></td>
+<td class="num">7–9</td></tr>
+<tr>
+<td><strong>T-201 — Assety wideo + kampania reklamowa wideo (YouTube jako kanał — osobna decyzja)</strong> <span class='rozmiar'>skala: duża</span><div class="opis">Reklama wideo w Google Ads nie wymaga popularnego kanału — wystarczy kanał jako kontener i 2-3 krótkie filmy. Materiał już mamy: 53 tys. zdjęć ofertowych i gotowy generator grafik. To tania i mierzalna część. UWAGA — odkrycie: Prima-Auto ma już konto TikTok ze 127 filmami. Jeśli mamy do nich pliki źródłowe, pełny kanał YouTube robi się dużo tańszy (przepakowanie zamiast produkcji). Sam kanał organiczny to jednak inwestycja bez gwarancji zwrotu (konkurent z tej branży ma 21 filmów i 18 obserwujących) — do świadomej decyzji, osobno.</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-201); kanał organiczny = osobna decyzja Ruslana</div></td>
+<td class="num">10–16</td></tr>
+<tr>
+<td><strong>T-202 — Rozbudowa kreatora zamówienia: galeria sprzedanych aut + elementy zaufania</strong> <span class='rozmiar'>skala: średnia</span><div class="opis">Moment wpłaty depozytu to szczyt niepewności klienta — a dziś nie ma tam ani jednego dowodu wiarygodności. Twarda liczba, która to uzasadnia: 33 ze 135 zamówień jest anulowanych (24%, co czwarty klient). Kreator dostanie: licznik sprowadzonych aut (37 dostarczonych, 25 w drodze), zdjęcia klientów z odebranymi autami, jasny opis co się stanie z pieniędzmi i wyraźną informację, że depozyt jest zwrotny.</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-202) — uzasadnione danymi: 24% zamówień anulowanych</div></td>
+<td class="num">12–16</td></tr>
+<tr>
+<td><strong>T-211 — Pakiet higieny technicznej (baza, puste strony, schema, mobile)</strong> <span class='rozmiar'>skala: średnia</span><div class="opis">Zbiór domknięć technicznych. Najciekawsze odkrycie: 100 stron modeli ma już napisaną treść (opis, pytania i odpowiedzi, 30 kart samochodów), ale są ukryte przed Google — bo akurat nie mamy tych aut na stanie. To auta, które sprowadzaliśmy i które się rozeszły; mogą wrócić w każdej chwili. Zapłaciliśmy za te treści i sami je schowaliśmy. Odsłaniamy je, dokładając uczciwy komunikat 'tego modelu nie mamy teraz na stanie — sprowadzimy go na zamówienie' z formularzem. To pasuje do modelu biznesowego: nie musimy mieć auta na placu, żeby je sprowadzić. Do tego: naprawa błędu, przez który kolor auta nigdy nie trafiał do danych strukturalnych ogłoszeń (dotyczy wszystkich 3056 ofert), 20 nieprzetłumaczonych chińskich nazw miast, porządki w bazie i rotacja logów. Dodatkowo po sesji 14.07: zgłoszenie 21 stron ofert do ponownego zaindeksowania, usunięcie jednego uszkodzonego tytułu z importu i odduplikowanie powtórzonego oznaczenia napędu (DM-i) w tytułach BYD Tang.</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-211); najpierw odsłonięcie 100 gotowych stron</div></td>
+<td class="num">18–24</td></tr>
+<tr>
+<td><strong>T-214 — Ujednolicenie i wzmocnienie stron modeli (hubów) pod frazy zakupowe</strong> <span class='rozmiar'>skala: średnia</span><div class="opis">Strony modeli to nasza najmocniejsza broń w Google — stoją na 1.-2. miejscu na frazy typu 'zeekr 9x cena'. Przegląd 14.07 wykazał trzy luki do domknięcia. (1) 34 z 302 stron modeli ma słabszy nagłówek — brakuje w nim słów 'cena w Polsce', bo powstały po ostatnim ujednoliceniu i nie dostały automatycznie tego dopisku; wśród nich ważne modele: Zeekr 9X, Zeekr 8X, Denza Z9 GT. (2) Strona modelu BAW wyświetla się w Google jako 'Beijing' zamiast 'BAW' — a to marka, której szuka 1300 osób miesięcznie; podobnie Zeekr 8X ma zbędny dopisek 'PHEV' rozmywający dopasowanie. (3) Strony modeli opisują wersje słownie, ale nie podają ceny osobno dla każdej wersji (np. 'Ultra od 426 tys.') — dane już mamy, wystarczy je pokazać. Pracujemy ostrożnie, pojedynczo, z pomiarem przed i po (strony z 1. miejsca mają najwięcej do stracenia), bo nadrzędna zasada brzmi: nie zepsuć tego, co już rankuje.</div><div class="skala">Status: znaleziska zapisane (docs/seo/znaleziska-huby-2026-07-14); wymaga pilota + progów wycofania z T-203-baseline</div></td>
+<td class="num">11–14</td></tr>
+</tbody>
+<tfoot><tr><td>Razem pełna lista (widełki)</td><td class="num">588–769</td></tr></tfoot>
+</table>
+
+<footer>
+Dokument generowany automatycznie z ewidencji prac projektu (repozytorium, dziennik wydań, rejestr decyzji). Auranet · js@auranet.com.pl
+</footer>
+
+</div>
+</body>
+</html>
