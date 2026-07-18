@@ -1,5 +1,9 @@
 # Recheck DSA — czy 14 odblokowanych hubów faktycznie ruszyło
 
+> **✅ RECHECK #1 (17.07) ZROBIONY** — kampania stanęła: 104 impr vs ~1300/dz, oferty 0/133. Diagnoza: feed lepki + `landing_page_view` zawyżał (fałszywy trop „DSA serwuje /samochody/").
+> Memory: `project_dsa_start_na_ofertach_2026_07_17.md`, `reference_gads_landing_page_view_sitelink_inflation.md`.
+> **⏳ RECHECK #2 nadal OTWARTY — 2026-07-30** (czy pomogło).
+
 > Utworzone: 2026-07-16. Recheck #1: **2026-07-17** (czy ruszyło), recheck #2: **2026-07-30** (czy pomogło).
 > Kampania `[DSA] Import modele z Chin` (`23896725555`), konto `9506068500`, grupa `197286896339`.
 

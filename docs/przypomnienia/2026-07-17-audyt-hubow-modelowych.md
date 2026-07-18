@@ -1,5 +1,8 @@
 # PROMPT (nowy wątek) — Audyt hubów modelowych: ranking na „{model} cena w polsce" + gap vs west-motors
 
+> **✅ ZROBIONE 2026-07-17.** Huby ZDROWE (91% ruchu organicznego, obecność w AI Overview). Wersja v1 oparta wyłącznie o DataForSEO była BŁĘDNA — arbitrem jest GSC.
+> Memory: `project_audyt_huby_cena_gsc_2026_07_17.md` + `reference_seo_measurement_gsc_truth_dfs_semrush_lag.md`.
+
 **Data utworzenia:** 2026-07-17
 **Projekt:** primaauto · **DB:** `host476470_wp521`, prefix `wp7j_` · **Property GSC:** `https://primaauto.com.pl/`
 

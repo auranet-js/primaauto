@@ -1,5 +1,8 @@
 # Przypomnienie: szlif kosztorysu przed spotkaniem z Ruslanem (czwartek 16.07)
 
+> **✅ ZROBIONE.** Kosztorys doszlifowany i pokazany Ruslanowi na spotkaniu 2026-07-16. Deadline zamknięty.
+> Kontynuacja bieżąca: strona postępu prac (`build_postep.py --deploy`, memory `project_strona_postepu_ruslan_2026_07_17.md`).
+
 > Utworzone: 2026-07-12 · Termin: **wtorek 2026-07-14** · Projekt: primaauto
 > Deadline twardy: **czwartek 2026-07-16 — spotkanie Janek↔Ruslan**, kosztorys będzie pokazany na żywo
 > Raport live: https://auratest.pl/pa-kosztorys-3ee728365b3d1a5b895e/

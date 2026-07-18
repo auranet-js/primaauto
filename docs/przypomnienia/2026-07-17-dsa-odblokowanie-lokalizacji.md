@@ -1,5 +1,8 @@
 # PROMPT (nowy wątek) — DSA: odblokować lokalizację, żeby szybciej złapało
 
+> **✅ ZROBIONE 2026-07-17.** Geo DSA rozszerzone na całą Polskę; **hipoteza „geo = dławik" OBALONA** — przyczyną stallu był feed.
+> ADR w commicie 9270c30 · memory `project_dsa_start_na_ofertach_2026_07_17.md`.
+
 **Data utworzenia:** 2026-07-17
 **Projekt:** primaauto · **Konto Ads:** 9506068500 · **Kampania DSA:** `23896725555`
 

@@ -1,5 +1,9 @@
 # Recheck SKAG-1 — review zdjęć grupowych + stan placu
 
+> **✅ ZROBIONE 2026-07-16.** Zdjęcia z poziomu GRUPY działają w search (20 podpięć ELIGIBLE, 515 impr / 86 klik / 1 konw — Leopard 5).
+> Wynik: `docs/sesje/2026-07-16-rechecki-t195-skag1.md` · memory `project_skag1_stan_2026_07_16.md`.
+> Otwarte punkty (4 auta on_lot bez grupy, Jetour T2 0 impr, Ad Strength, A/B RSA) przeniesione do sesji — świadoma decyzja „nic nie ruszamy".
+
 > Utworzono: 2026-07-10 · Termin: 2026-07-11 10:00 · Projekt: primaauto
 > Konto Ads: 9506068500 (direct) · Kampania SKAG-1: 23803851563
 
