@@ -1,5 +1,90 @@
 # Historia wersji asiaauto-sync
 
+## 2026-07-18 — poprawka danych: `_asiaauto_primary_make_slug` na 6 hubach (bez zmian w kodzie)
+
+**Objaw:** 6 hubów miało `<link rel="canonical">` wskazujący poza siebie, w tym 3 na hub **innego
+samochodu**. Strona z ofertami oddawała swoje wyniki cudzej marce.
+
+| hub | canonical przed | ofert | impr/90d |
+|---|---|---|---|
+| `/samochody/haval/h6/` | → `/hongqi/h6/` (inne auto) | 5 | 74 |
+| `/samochody/wey/07/` | → `/avatr/07/` (inne auto) | 14 | 32 |
+| `/samochody/gac/m8/` | → `/aito/m8/` (inne auto) | 11 | 25 |
+| `/samochody/geely/a7-em/` | → `/galaxy/a7-em/` (301 z powrotem) | 38 | 12 |
+| `/samochody/gac/hyper-a800/` | → `/gac-aion-hyper/…` (301 z powrotem) | 2 | 2 |
+| `/samochody/chery-fulwin/fengyun-x3l/` | → `/chery-fengyun/…` (301 z powrotem) | 1 | 0 |
+
+**Korzeń:** osad po backfillu z kwietnia 2026 — dopasowywał termy po samym slugu, bez uwzględnienia
+rodzica, a slugi `h6`, `m8`, `07` istnieją pod kilkoma markami naraz. Importer robi to już poprawnie
+od v0.33.16 (T-190, z parenta — `importer.php:702`), ale te 6 nie było od tego czasu reimportowanych
+(feed stoi od 01.07; oferty modyfikowane ostatnio 30.04 / 08.06 / 30.06).
+
+Pole steruje trzema rzeczami: URL hubu (`cpt.php::filterSerieTermLink`), canonical (`seo.php`)
+i prefiksem marki w title (`hub-title-generator::ensureBrandPrefix`) — stąd tytuły
+„Hongqi Haval H6", „Avatr WEY 07", „AITO GAC M8".
+
+**Diagnoza — 3 niezależne dowody, że właściwy jest rodzic:** parent w taksonomii, marka
+opublikowanych ofert pod termem, oraz `_serie_api_value` („Haval H6", „Trumpchi Xiangwang M8").
+We wszystkich 6 przypadkach zgodne; odstawała wyłącznie meta.
+
+**Zmiana:** `primary_make := slug rodzica` na termach 3381, 4398, 5388, 6539, 6849, 6945.
+Backup + rollback SQL: `~/backups/primaauto/2026-07-18-primary-make-fix/`.
+
+**Dlaczego trwałe:** każda oferta pod tymi termami ma **dokładnie jedną** markę, więc gdy feed ruszy,
+`updateSerieprimaryMake()` zapisze tę samą wartość. Przekierowania są od tego pola niezależne —
+używają `dominantMakeSlug()` liczonej z ofert (v0.32.70, komentarz *„bywa nieaktualna"*).
+
+**Weryfikacja:** pełny re-skan 436 wariantów URL (każdy term pod adresem z mety ORAZ z rodzica) —
+rozjazdy **6 → 1**. Pozostały `/avatr/07/` → `/wey/07/` jest poprawny: pod `avatr` nie ma termu „07",
+to artefakt rewrite'u akceptującego dowolną markę w ścieżce (docelowo powinien dawać 301).
+Tytuły: z 423 porównanych zmieniło się 5 — 4 nasze + 1 aktualizacja ceny (`chery-fulwin/a8l`).
+Oferty nietknięte (własne permalinki, canonical self); zyskały poprawne linki wewnętrzne do hubów.
+Zgłoszone do Indexing API: 6/6 OK (z rezerwy, lista w `tmp/primary-make-fix-SUBMITTED-2026-07-18.txt`).
+
+⚠ Przy okazji odpalony ręcznie cron `asiaauto_regen_hub_titles_daily` — przeliczył 290 serie + 55 make,
+choć zlecenie obejmowało 6 wartości. Realny efekt pokrył się z zakresem (5 zmian), ale następnym razem
+regenerację trzeba rozdzielić od poprawki danych.
+
+## 0.33.32 — 2026-07-18 (WYCOFANE tego samego dnia — nieudana próba odblokowania hubów serii)
+
+**Kod wgrany, funkcja WYŁĄCZONA.** Stan robots identyczny jak w 0.33.31. Wpis zostaje jako
+dokumentacja błędu, żeby nikt nie powtórzył tego kryterium.
+
+**Punkt wyjścia:** 88 hubów serii z `count=0` siedziało na `noindex` (RankMath
+`noindex_empty_taxonomies=on`), mimo że renderowały oferty i miały title „N sztuk".
+
+**Co zrobiono:** `termQualifiesForIndex()` z kryterium „`asiaauto_wiki_body` ≥ 500 **LUB**
+`_asiaauto_spec_snapshot` ≥ 200" + worek marek. Odblokowało 68 hubów.
+
+**DLACZEGO TO BYŁO BŁĘDNE — weryfikacja po fakcie:**
+- **67 z 68 odblokowanych termów NIGDY nie miało ani jednej oferty** — zero wierszy w
+  `term_relationships` w całej historii. Tylko `ET5` (21) i `Galaxy E8` (6) miały cokolwiek.
+- 30 z 68 nie miało nawet danych technicznych — kwalifikowały się wyłącznie opisem z LLM,
+  dogenerowanym hurtem w kwietniu/maju do wszystkiego, co przyszło z feedu.
+- Wśród odblokowanych: `Omoda` (to nazwa marki, nie model — realne są Omoda 5 / Omoda 9),
+  `Hongqi HS7` (realny wariant to `HS7 PHEV`, count=10), `Jetour X90` (realne: `X90 PLUS`,
+  `X90 PRO`), `Geely ICON` (0 ofert w całej historii).
+- Efekt netto byłby odwrotny do zamierzonego: wpuszczenie do indeksu thin contentu i duplikatów
+  kanibalizujących huby, które realnie rankują (`Tiggo 8` vs `Tiggo 8 Pro` / `Tiggo 8 PLUS`).
+
+**Korzeń pomyłki:** przyjąłem, że skoro hub renderuje oferty i ma opis, to jest wartościowy.
+Hub renderuje oferty przez fuzzy match na nazwie/rodzicu, więc „widzę towar na stronie" NIE dowodzi,
+że term jest realnym modelem. Dowodem jest historia `term_relationships` — i tej nie sprawdziłem
+przed wdrożeniem, tylko po. Treść jest najsłabszym możliwym kryterium, bo opisy generowano hurtem.
+
+**Warunki poprawnego odblokowania (na przyszłość):** historia ofert > 0 **ORAZ** dane techniczne
+**ORAZ** dedupe wariantów w taksonomii. Punkt trzeci to osobna robota, nie filtr robots.
+
+**Nie zgłoszono niczego do Indexing API** — pula czekała na decyzję i nie została użyta.
+Sitemapa serii nietknięta przez cały epizod: 297.
+
+**Sitemapa świadomie NIE ruszana.** RankMath wycina `count=0` już na poziomie query (`hide_empty`),
+więc filtr `rank_math/sitemap/entry` ich nie widzi. Próba włączenia `tax_serie_include_empty`
+wpuszcza ~2700 termów i przy N+1 na term_meta generacja się nie domyka — sitemapa serii spadła
+297→63. **Cofnięte**, stan przywrócony. Trwałe wejście do sitemapy = osobny task (wymaga batchowania
+meta). Odblokowane huby idą do Google przez `~/bin/index-submit`; crawl i tak je odwiedza —
+mediana `lastCrawl` na próbce 48 hubów to 4 dni.
+
 ## 0.33.31 — 2026-07-16 (T-213: leasing w pasku zaufania + skrót treści)
 
 Treść paska `trustLine()` po korekcie Janka:

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Prima-Auto Sync
  * Description: Synchronizacja ogłoszeń z Dongchedi/Che168, pipeline cenowy, zamówienia, umowy PDF.
- * Version: 0.33.12
+ * Version: 0.33.32
  * Author: Auranet / Jan Schenk
  * Author URI: https://auranet.com.pl
  * Text Domain: asiaauto
@@ -13,7 +13,7 @@
 
 defined('ABSPATH') || exit;
 
-define('ASIAAUTO_VERSION', '0.33.12');
+define('ASIAAUTO_VERSION', '0.33.32');
 define('ASIAAUTO_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('ASIAAUTO_PLUGIN_URL', plugin_dir_url(__FILE__));
 
