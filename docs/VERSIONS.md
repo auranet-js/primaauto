@@ -27,6 +27,11 @@ numeru + automatyczny podgląd po DOMContentLoaded; wcześniejszy wariant odpala
 załadowaniem wp-util → ReferenceError, złapane w teście E2E). Test: browse → Podgląd → Pełna
 analiza → strona „Import z Che168" sama pokazuje dry-run (hub, tytuł, taksonomie).
 
+**Etykiety marek CJK:** `data/che168-mark-names.php` — 13 pewnych tłumaczeń (HIMA: AITO/Luxeed/
+Stelato/Maextro/Shangjie, Maxus, Chery QQ, Sinotruk, Shineray, Firefly NIO, AUDI SAIC, Kama,
+Yinlong); select przeglądarki sortowany po etykiecie (`Luxeed (Zhijie) · 智界`). Reszta CJK
+(kampery/ciężarówki) celowo bez tłumaczenia.
+
 ## 0.33.37 — 2026-07-20 (filtr modeli Che168 w konfiguratorze + domapowania, GATED na js)
 
 Element T-186. Zakładka „Filtry importu" dostaje subtabs Dongchedi | Che168 (widoczne **tylko dla
