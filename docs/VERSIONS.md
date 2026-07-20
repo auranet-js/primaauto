@@ -1,5 +1,19 @@
 # Historia wersji asiaauto-sync
 
+## 0.33.37 — 2026-07-20 (filtr modeli Che168 w konfiguratorze + domapowania, GATED na js)
+
+Element T-186. Zakładka „Filtry importu" dostaje subtabs Dongchedi | Che168 (widoczne **tylko dla
+loginów z `ASIAAUTO_CHE168_PREVIEW`** — faza testów, Ruslan nie widzi). Che168: marki z pełnego
+słownika API (`getFilters`, nowa klasa `AsiaAuto_Che168_Dictionary`, transient 7 dni + „Odśwież"),
+**blacklista modeli per marka** (`model_blacklist` w `asiaauto_import_config['che168']`), limity
+seedowane kopią dongchedi (2024+, ≤40 tys. km, ≥85 tys. ¥, 31 miast, 47 marek, enabled=true).
+Egzekwowanie: addytywny blok w `isAllowedByConfig()` (strefa krucha poza tym nietknięta); ręczny
+import per numer omija blacklistę. **Domapowania:** +25 aliasów `che168-model-map` + 8 nowych modeli
+`brand-mapping` v6.3 (Leapmotor T03, eπ007, WEY Gaoshan, Smart #1/#3, Lotus Eletre, Jetour Shanhai
+T1, BAIC BJ30) → trafialność ofert 2024-2026 w huby: 61% → ~81% (próbka 3550 ofert / 46 marek).
+Spec: `docs/superpowers/specs/2026-07-20-che168-model-filter-design.md`. Etap 2 (przeglądarka
+ofert „Przeglądaj Che168") — zaakceptowany mockup, do wdrożenia po testach etapu 1.
+
 ## 0.33.36 — 2026-07-20 (lista zamówień: 20 → 30 pozycji na stronę)
 
 Prośba Janka (+50%). Przy „Wszystkie" (102) daje 4 strony zamiast 6, przy domyślnym widoku
