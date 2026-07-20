@@ -15,12 +15,13 @@
 **v0.33.38 — przeglądarka „Przeglądaj Che168" (etap 2):**
 - Podstrona pod Ogłoszeniami (`class-asiaauto-admin-che168-browse.php`); pozycja menu rejestrowana tylko za gate'em.
 - Filtry: marka (pełny słownik 282+ marek, też spoza naszej listy), chipy modeli (max 5/zapytanie; nazwy kanoniczne, 🆕/⛔), rocznik od, cena od, miasta (całe Chiny / nasza lista). AJAX `asiaauto_che168_browse` → `getOffers` (mark+model+year server-side), miasta/cena u nas.
-- Karty ze zdjęciami → modal podglądu (hub, **wycena PLN** `cena_koncowa`, VIN, wyposażenie, zdjęcia, warningi) → „⬇ Importuj (draft)" (dwuklik-potwierdzenie, w miejscu, przez istniejący `asiaauto_che168_import`) **oraz** „📋 Pełna analiza →" (deep-link `?inner_id=` do „Dodaj z Che168" z prefill + auto-podglądem).
+- Karty ze zdjęciami; „🔍 Podgląd" = **deep-link w nowej karcie** do „Dodaj z Che168" z `?inner_id=` (prefill + auto-dry-run) — import stamtąd. Modal podglądu istniał przejściowo i został USUNIĘTY na życzenie Janka (rewizja 20.07 wieczór).
 
 ## Bugi złapane w testach E2E (Chrome MCP, sesja js)
 
 1. **Miniatury nie wstawały** — CDN Autohome (`2sc2.autoimg.cn`) tnie hotlinki po nagłówku Referer (błąd w ~300 ms). Fix: `<img referrerpolicy="no-referrer" loading="lazy">` zamiast CSS background-image (karty + modal). Po fixie 26/26 obrazków. **Nie dotyczy importu właściwego** — media pobiera serwer (bez browserowego Referera).
 2. **Auto-podgląd deep-linka wisiał** — `wp is not defined`: inline skrypt odpalał `doFetch()` przed załadowaniem `wp-util` ze stopki. Fix: `DOMContentLoaded` fallback.
+2b. **Deep-link lądował na liście ogłoszeń** — URL przez `esc_js()` → `&` zamienione na `&#038;`, `#` ucina URL jako fragment (pierwsza diagnoza „OPcache" BŁĘDNA). Fix: `esc_url_raw()`. Lekcja: URL-e do JS nigdy przez esc_js.
 3. `alert()`/`confirm()` usunięte ze strony browse (blokują automatyzację; komunikaty w pasku statusu, import przez dwuklik).
 
 ## Etykiety marek CJK w przeglądarce (feedback Janka, koniec sesji)

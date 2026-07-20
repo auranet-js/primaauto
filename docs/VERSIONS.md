@@ -21,11 +21,14 @@ załadowanych, 0 błędów (test E2E: strona → BYD → Szukaj → Podgląd z w
 usunięte `alert()`/`confirm()` (blokowały automatyzację; komunikaty w pasku statusu, import
 potwierdzany dwuklikiem „Potwierdź import").
 
-**Deep-link do pełnej analizy (feedback Janka):** modal podglądu w przeglądarce dostał przycisk
-„📋 Pełna analiza (Dodaj z Che168) →" — otwiera stronę ręcznego importu z `?inner_id=` (prefill
-numeru + automatyczny podgląd po DOMContentLoaded; wcześniejszy wariant odpalał `wp.ajax` przed
-załadowaniem wp-util → ReferenceError, złapane w teście E2E). Test: browse → Podgląd → Pełna
-analiza → strona „Import z Che168" sama pokazuje dry-run (hub, tytuł, taksonomie).
+**Podgląd = deep-link do pełnej analizy (rewizja po feedbacku Janka, 20.07 wieczór):** modal
+podglądu USUNIĘTY całkowicie. Przycisk „🔍 Podgląd" na karcie otwiera w nowej karcie stronę
+„Dodaj z Che168" z `?inner_id=` — prefill numeru + automatyczny dry-run (hub, tytuł, taksonomie,
+rozbicie ceny). Import robi się stamtąd, jak przy ręcznym wklejeniu numeru. Dwa bugi po drodze:
+(1) auto-podgląd odpalał `wp.ajax` przed załadowaniem wp-util (stopka) → ReferenceError, fix
+DOMContentLoaded; (2) URL budowany przez `esc_js()` — zamienia `&` na `&#038;`, a `#` ucina URL
+jako fragment → link lądował na liście ogłoszeń (wcześniejsza diagnoza „OPcache" była BŁĘDNA);
+fix `esc_url_raw()`. Test E2E po fixach: karta → Podgląd → pełna analiza ładuje się sama.
 
 **Etykiety marek CJK:** `data/che168-mark-names.php` — 13 pewnych tłumaczeń (HIMA: AITO/Luxeed/
 Stelato/Maextro/Shangjie, Maxus, Chery QQ, Sinotruk, Shineray, Firefly NIO, AUDI SAIC, Kama,
