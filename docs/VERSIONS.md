@@ -1,5 +1,28 @@
 # Historia wersji asiaauto-sync
 
+## 0.33.35 — 2026-07-20 (rotacja: ochrona ogłoszeń z aktywnym zamówieniem)
+
+**Problem:** rotacja kasowała trwale ogłoszenia, na które wskazywały niezakończone zamówienia —
+27 zamówień (16 aktywnych) straciło zdjęcie i nazwę auta. Stary strażnik `isReserved()` sprawdzał tylko
+meta rezerwacji, a rezerwację zakładają wyłącznie statusy z `LISTING_RESERVATION_MAP`
+(`zarezerwowane`/`zakupione`/`w_drodze`/`na_placu`/`w_dostawie`). Zamówienie w **weryfikacji,
+potwierdzone, umowa gotowa, podpisane** nie chroniło niczego.
+
+**Fix:** `AsiaAuto_Rotation::listingsWithActiveOrders()` — jedno zapytanie na przebieg zwracające
+ogłoszenia z zamówieniem w statusie innym niż `anulowane`/`odrzucone`; `deleteOldTrash()` je pomija
+(z wpisem WARN w logu). Trafia 28 ogłoszeń, z czego 5 leżało w koszu/draftach gotowych do skasowania.
+
+**Dlaczego NIE rozszerzyliśmy `LISTING_RESERVATION_MAP`** (pierwotny pomysł, odrzucony po analizie):
+rezerwacja steruje też sprzedażą — `listingIsBlockedForOrders()` w kreatorze i API pokazuje
+„Ten samochód jest już zarezerwowany". Dodanie tam `weryfikacji` blokowałoby auto dla wszystkich
+pozostałych klientów od momentu pierwszego zamówienia, przy ~46% anulat po stronie klientów
+(35 z 76). Chronimy przed **kasowaniem**, nie przed **sprzedażą**. `class-asiaauto-order.php` nietknięty.
+
+**Test e2e na produkcji** (sztuczna para ogłoszenie+zamówienie, posprzątana po teście):
+zamówienie aktywne → `Skipped permanent delete of post #387953 (in trash but has an active order)`,
+ogłoszenie przetrwało; po zmianie statusu na `anulowane` → `Permanently deleted 1 trashed posts`.
+Ochrona zwalnia się poprawnie. Kopia: `class-asiaauto-rotation.php.bak-2026-07-20`.
+
 ## 0.33.34 — 2026-07-20 (fix: biały ekran karty zamówienia dla usuniętych ogłoszeń)
 
 **Objaw:** wejście w 27 zamówień (16 aktywnych) kończyło się „W witrynie wystąpił krytyczny błąd".
