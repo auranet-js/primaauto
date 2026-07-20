@@ -1,5 +1,19 @@
 # Historia wersji asiaauto-sync
 
+## 0.33.38 — 2026-07-20 (przeglądarka „Przeglądaj Che168", GATED na js)
+
+Etap 2 specu filtra modeli. Nowa podstrona pod Ogłoszeniami (`asiaauto-che168-browse`,
+`class-asiaauto-admin-che168-browse.php`) — pozycja menu rejestrowana **tylko dla loginów
+z `ASIAAUTO_CHE168_PREVIEW`** (Ruslan nie widzi). Filtry: marka (pełny słownik giełdy, 282+ marek),
+chipy modeli (max 5 na zapytanie; nazwy kanoniczne, 🆕 bez huba, ⛔ na blackliście), rocznik od,
+cena od, miasta (całe Chiny / nasza lista). Wyniki: karty ze zdjęciami (permanentne URL-e che168),
+badge hub/orphan, „(w bazie)" dla już zaimportowanych; paginacja „Załaduj więcej". Podgląd = modal
+(hub, wycena PLN `cena_koncowa`, VIN, wyposażenie, zdjęcia, warningi) + import per klik — oba przez
+**istniejące** AJAX-y `asiaauto_che168_preview`/`asiaauto_che168_import` (ta sama ścieżka co „Dodaj
+z Che168", strefa krucha nietknięta). Nowy AJAX `asiaauto_che168_browse` → `getOffers` server-side
+(mark+model+year), miasta/cena filtrowane u nas. Smoke na żywym API: BYD Seal 14 ofert/strona,
+filtr miast 5/20, gate js=tak / primaauto=nie.
+
 ## 0.33.37 — 2026-07-20 (filtr modeli Che168 w konfiguratorze + domapowania, GATED na js)
 
 Element T-186. Zakładka „Filtry importu" dostaje subtabs Dongchedi | Che168 (widoczne **tylko dla

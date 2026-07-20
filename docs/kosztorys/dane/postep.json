@@ -8,9 +8,9 @@
   {
    "data": "20.07.2026",
    "tytul": "Che168: analiza danych i filtr modeli (etap testów)",
-   "opis": "Duża analiza danych giełdy Che168 pod kątem roczników 2024-2026: przekrój 3550 ofert z 46 marek. Wynik: przygotowany zaawansowany filtr importu — oprócz marek można wykluczać pojedyncze modele (niesprzedajne), z pełnym słownikiem modeli pobieranym z API. Do tego 33 nowe mapowania modeli na polskie nazwy i huby (m.in. Leapmotor T03, Li Auto L7/L8, Smart #1/#3, Xiaomi YU7, Jetour Traveller) — trafność automatycznego dopasowania ofert wzrosła z 61% do ok. 81%. Funkcja przechodzi teraz testy wewnętrzne; po okresie prób zostanie udostępniona w panelu. Zaprojektowana i zaakceptowana została też przeglądarka ofert Che168 (wybór marki i modelu, karty ze zdjęciami, import jednym kliknięciem) — wdrożenie w kolejnym etapie.",
-   "wersje": "v0.33.37",
-   "godz": 4
+   "opis": "Duża analiza danych giełdy Che168 pod kątem roczników 2024-2026: przekrój 3550 ofert z 46 marek. Wynik: przygotowany zaawansowany filtr importu — oprócz marek można wykluczać pojedyncze modele (niesprzedajne), z pełnym słownikiem modeli pobieranym z API. Do tego 33 nowe mapowania modeli na polskie nazwy i huby (m.in. Leapmotor T03, Li Auto L7/L8, Smart #1/#3, Xiaomi YU7, Jetour Traveller) — trafność automatycznego dopasowania ofert wzrosła z 61% do ok. 81%. Funkcja przechodzi teraz testy wewnętrzne; po okresie prób zostanie udostępniona w panelu. Wdrożona została też przeglądarka ofert Che168: wybór dowolnej marki z giełdy, zawężanie do modeli, karty ze zdjęciami, podgląd z wyceną w złotówkach i import jednym kliknięciem — również w testach wewnętrznych.",
+   "wersje": "v0.33.37, v0.33.38",
+   "godz": 5.5
   },
   {
    "data": "20.07.2026",
