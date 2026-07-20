@@ -30,6 +30,8 @@ Słownik giełdy ma 44 marki o chińskich nazwach. Nowy plik `data/che168-mark-n
 
 **Domapowanie G700 (feedback Janka, noc):** hub `/samochody/Jetour/G700/` istniał (5 aut, głównie stock ręczny), ale bez wpisu w brand-mappingu; che168 trzyma auto pod submarką `纵横` (Zongheng). Dodane: bm `Jetour|Jetour G700`, cm `纵横|纵横G700` → Jetour/G700, etykieta `纵横 → Zongheng (Jetour)`. Po fixie: `mapped=true`. Uwaga porządkowa: w taksonomii wisi pusty duplikat termu `Zongheng G700` (slug `zongheng-g700`, count 0) — kandydat do skasowania, zostawiony do decyzji.
 
+**Domapowanie Ford Evos:** che168 nazywa go czysto `Ford|Evos` (Ford = 44 modele, EN). Hub u nas istniał (make Ford 4 auta, serie EVOS 1 auto — stock), bez wpisu w bm. Dodany bm `Ford|Evos` → Ford/EVOS (slug evos); klucz = kształt che168, więc bez aliasu cm. Zweryfikowane: ✅ mapped.
+
 ## Fakty API (zweryfikowane, ważne dla T-186)
 
 - Dostęp che168 **żyje po 15.07** (zapis w T-186 o wygaśnięciu nieaktualny).
