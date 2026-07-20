@@ -23,7 +23,7 @@ import urllib.error
 
 SECRETS = "/home/host476470/secrets/google"
 PROPERTY = "534017542"
-DEST = "/home/host476470/domains/auratest.pl/public_html/fe4f58fec53ctmp/pa-live/data.json"
+DEST = "/home/host476470/domains/auratest.pl/public_html/pa-live-8aaf08d6ece0db176603/data.json"
 DATA_BASE = f"https://analyticsdata.googleapis.com/v1beta/properties/{PROPERTY}"
 
 KEY_EVENTS = ["generate_lead", "click_whatsapp", "click_phone"]

@@ -59,9 +59,13 @@ def rows_changelog():
     out = []
     for c in postep['changelog']:
         wersje = f"<span class='wersje'>{esc(c['wersje'])}</span>" if c.get('wersje') else ''
+        link = ''
+        if c.get('link'):
+            link = (f"<div class=\"opis\"><a href=\"{esc(c['link']['url'])}\" target=\"_blank\" "
+                    f"rel=\"noopener\">{esc(c['link']['tekst'])}</a></div>")
         out.append(f"""<tr>
 <td class="data-col">{esc(c['data'])}</td>
-<td><strong>{esc(c['tytul'])}</strong> {wersje}<div class="opis">{esc(c['opis'])}</div></td>
+<td><strong>{esc(c['tytul'])}</strong> {wersje}<div class="opis">{esc(c['opis'])}</div>{link}</td>
 <td class="num">{fmt_h(c.get('godz', 0))}</td></tr>""")
     return '\n'.join(out)
 

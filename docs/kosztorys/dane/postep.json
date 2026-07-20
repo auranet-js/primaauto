@@ -1,74 +1,92 @@
 {
- "_komentarz": "Dane strony 'Postęp prac i plan rozwoju' (build_postep.py). Changelog: najświeższe wpisy DOPISUJ NA POCZĄTEK listy, każdy z polem 'godz' (godziny realne jak w kosztorysie). todo_nowe: taski jeszcze bez wyceny (po wycenie przenieś do etap3.json). todo_ukryte_id: pozycje etap3 już zrealizowane/nieaktualne — znikają z listy na stronie.",
- "zamkniecie": {
-  "data": "16.07.2026",
-  "opis": "Rozliczenie godzin pracy do dnia spotkania 16.07.2026 zostało zamknięte i podsumowane w kosztorysie: etapy 1-2 łącznie 926 h. Poniższa strona rejestruje wszystko, co dzieje się od tego momentu."
- },
- "changelog": [
-  {
-   "data": "17.07.2026",
-   "tytul": "Analiza wzorca umowy leasingowej",
-   "opis": "Przegląd wzorca „Umowy organizacji importu samochodu” pod leasing (konstrukcja trójstronna: Prima-Auto, firma leasingowa, klient). Zmapowane pola, kwoty i miejsca w systemie wymagające zmian — podstawa do wyceny zadania T-217. Uruchomiona też niniejsza strona postępu prac.",
-   "godz": 1
+  "_komentarz": "Dane strony 'Postęp prac i plan rozwoju' (build_postep.py). Changelog: najświeższe wpisy DOPISUJ NA POCZĄTEK listy, każdy z polem 'godz' (godziny realne jak w kosztorysie). todo_nowe: taski jeszcze bez wyceny (po wycenie przenieś do etap3.json). todo_ukryte_id: pozycje etap3 już zrealizowane/nieaktualne — znikają z listy na stronie.",
+  "zamkniecie": {
+    "data": "16.07.2026",
+    "opis": "Rozliczenie godzin pracy do dnia spotkania 16.07.2026 zostało zamknięte i podsumowane w kosztorysie: etapy 1-2 łącznie 926 h. Poniższa strona rejestruje wszystko, co dzieje się od tego momentu."
   },
-  {
-   "data": "16.07.2026",
-   "tytul": "Blok „Inne egzemplarze tego modelu” na stronach ofert",
-   "opis": "Każda oferta pokazuje teraz karty innych egzemplarzy tego samego modelu, posortowane od najtańszego, z przejściem do pełnej listy z cenami. Klient od razu widzi tańsze i inne wersje, zamiast wracać do katalogu. Działa na 2990+ ofertach, także na telefonie.",
-   "wersje": "v0.33.28–29",
-   "godz": 4
-  },
-  {
-   "data": "16.07.2026",
-   "tytul": "Elementy zaufania na stronie oferty",
-   "opis": "Nad opisem auta pojawiło się zdanie o łącznej cenie „pod klucz” (bez ukrytych dopłat) oraz pasek atutów — m.in. „Możliwy leasing”. Moment oglądania oferty dostał pierwsze dowody wiarygodności.",
-   "wersje": "v0.33.30–31",
-   "godz": 2
-  },
-  {
-   "data": "16.07.2026",
-   "tytul": "Reklamy dynamiczne Google (DSA) — celowanie w najtańsze oferty",
-   "opis": "Feed reklam przestawiony ze stron modeli na najtańszą aktualną ofertę każdego modelu, z automatyczną codzienną aktualizacją. Do tego nowa treść reklamy (wymiana jednej z dwóch kreacji).",
-   "wersje": "",
-   "godz": 3
-  }
- ],
- "todo_nowe": [
-  {
-   "id": "T-217",
-   "tytul": "Umowa leasingowa jako drugi wzorzec w panelu zamówienia",
-   "opis": "Najprostszy wariant, bez zmian dla klienta: zamówienie i weryfikacja przebiegają jak dotąd (klient składa zamówienie, potwierdzenie, klient wypełnia dane do umowy — komplet danych już wystarcza, dla firm dochodzi tylko wymóg NIP i nazwy). Nowość po stronie panelu: obok obecnego „Wygeneruj PDF” dochodzi „Generuj umowę leasing” — drugi szablon umowy („Umowa organizacji importu samochodu”, konstrukcja trójstronna z firmą leasingową) z 2 załącznikami (specyfikacja auta, kalkulacja ceny w 4 pozycjach), inną kwotą i narracją depozytu (12 tys. zł, „depozyt zabezpieczający”). Możliwość wgrania indywidualnej umowy zostaje bez zmian. Bez nowych statusów zamówienia (do rozważenia w przyszłości).",
-   "status": "wzorzec przeanalizowany (17.07), wariant minimalny uzgodniony",
-   "realnie_od": 8,
-   "realnie_do": 12,
-   "rynkowo_od": 20,
-   "rynkowo_do": 30
-  },
-  {
-   "id": "T-218",
-   "tytul": "Przebudowa panelu zamówień",
-   "opis": "Nowe filtry na liście zamówień, korekta istniejących filtrów oraz poprawa działania panelu na telefonie.",
-   "status": "do zaplanowania",
-   "realnie_od": 4,
-   "realnie_do": 5,
-   "rynkowo_od": 10,
-   "rynkowo_do": 13
-  },
-  {
-   "id": "T-219",
-   "tytul": "Podstrona leasingowa (landing „Leasing samochodu z Chin”)",
-   "opis": "Osobna podstrona opisująca ścieżkę leasingową (jak to działa, współpraca z finansującym, kroki od zamówienia do wydania auta) + zalinkowanie jej w kilku miejscach serwisu pod SEO (pasek zaufania na ofertach, stopka, strony informacyjne). Fraza „leasing samochodu z chin” sprawdzona w bazie słów kluczowych: brak mierzalnego wolumenu — nisza dopiero powstaje, więc rankowanie będzie tanie, a strona pracuje głównie na konwersję i zaufanie. Kalkulator raty finansowania to osobne zadanie (T-189 — rata na kartach ofert).",
-   "status": "do zaplanowania; frazy zbadane 17.07",
-   "realnie_od": 3,
-   "realnie_do": 4,
-   "rynkowo_od": 8,
-   "rynkowo_do": 10
-  }
- ],
- "todo_ukryte_id": [
-  "T-187"
- ],
- "todo_pierwsze": [
-  "T-186"
- ]
+  "changelog": [
+    {
+      "data": "18.07.2026",
+      "tytul": "Porządki w widoczności stron modeli w Google",
+      "opis": "Naprawione adresy kanoniczne 6 stron modeli — część wskazywała Google model innego producenta (Haval H6 → Hongqi H6, Wey 07 → Avatr 07, GAC M8 → AITO M8); weryfikacja objęła 436 wariantów adresów. Usunięta zdublowana lista /oferta/ (sklejała pełne opisy kolejnych aut = duplikat treści) i strona-spis /informacje/, która konkurowała ze stroną główną o frazę „import samochodów z Chin”. Zgłoszone do Google 200 adresów (auta na placu i w drodze + świeże oferty) plus automat nadrabiający zaległe oferty. Audyt potwierdził, że strony modeli są zdrowe — dają 91% ruchu, Geely Monjaro pojawia się w odpowiedziach AI Google.",
+      "wersje": "v0.33.32",
+      "godz": 3
+    },
+    {
+      "data": "17.07.2026",
+      "tytul": "Reklamy dynamiczne — zasięg, stabilność i pomiar na żywo",
+      "opis": "Reklamy wyświetlały się tylko w 2 województwach i 6 miastach — rozszerzone na całą Polskę, bo auto dostarczamy pod dom w całym kraju. Zatrzymana codzienna rotacja reklamowanych ofert: automat podmieniał sztukę na „najtańszą”, ale w 6 na 7 przypadków różnica ceny wynosiła 0 zł (przerzucanie między bliźniakami), a każda podmiana kosztuje kilka dni przetwarzania po stronie Google — teraz oferta zostaje w reklamach, dopóki auto jest dostępne. Uruchomiony podgląd ruchu i kontaktów na żywo z podziałem na kampanie.",
+      "wersje": "",
+      "godz": 3,
+      "link": {
+        "url": "https://auratest.pl/pa-live-8aaf08d6ece0db176603/",
+        "tekst": "→ Podgląd ruchu na żywo"
+      }
+    },
+    {
+      "data": "17.07.2026",
+      "tytul": "Analiza wzorca umowy leasingowej",
+      "opis": "Przegląd wzorca „Umowy organizacji importu samochodu” pod leasing (konstrukcja trójstronna: Prima-Auto, firma leasingowa, klient). Zmapowane pola, kwoty i miejsca w systemie wymagające zmian — podstawa do wyceny zadania T-217. Uruchomiona też niniejsza strona postępu prac.",
+      "godz": 1
+    },
+    {
+      "data": "16.07.2026",
+      "tytul": "Blok „Inne egzemplarze tego modelu” na stronach ofert",
+      "opis": "Każda oferta pokazuje teraz karty innych egzemplarzy tego samego modelu, posortowane od najtańszego, z przejściem do pełnej listy z cenami. Klient od razu widzi tańsze i inne wersje, zamiast wracać do katalogu. Działa na 2990+ ofertach, także na telefonie.",
+      "wersje": "v0.33.28–29",
+      "godz": 4
+    },
+    {
+      "data": "16.07.2026",
+      "tytul": "Elementy zaufania na stronie oferty",
+      "opis": "Nad opisem auta pojawiło się zdanie o łącznej cenie „pod klucz” (bez ukrytych dopłat) oraz pasek atutów — m.in. „Możliwy leasing”. Moment oglądania oferty dostał pierwsze dowody wiarygodności.",
+      "wersje": "v0.33.30–31",
+      "godz": 2
+    },
+    {
+      "data": "16.07.2026",
+      "tytul": "Reklamy dynamiczne Google (DSA) — celowanie w najtańsze oferty",
+      "opis": "Feed reklam przestawiony ze stron modeli na najtańszą aktualną ofertę każdego modelu, z automatyczną codzienną aktualizacją. Do tego nowa treść reklamy (wymiana jednej z dwóch kreacji).",
+      "wersje": "",
+      "godz": 3
+    }
+  ],
+  "todo_nowe": [
+    {
+      "id": "T-217",
+      "tytul": "Umowa leasingowa jako drugi wzorzec w panelu zamówienia",
+      "opis": "Najprostszy wariant, bez zmian dla klienta: zamówienie i weryfikacja przebiegają jak dotąd (klient składa zamówienie, potwierdzenie, klient wypełnia dane do umowy — komplet danych już wystarcza, dla firm dochodzi tylko wymóg NIP i nazwy). Nowość po stronie panelu: obok obecnego „Wygeneruj PDF” dochodzi „Generuj umowę leasing” — drugi szablon umowy („Umowa organizacji importu samochodu”, konstrukcja trójstronna z firmą leasingową) z 2 załącznikami (specyfikacja auta, kalkulacja ceny w 4 pozycjach), inną kwotą i narracją depozytu (12 tys. zł, „depozyt zabezpieczający”). Możliwość wgrania indywidualnej umowy zostaje bez zmian. Bez nowych statusów zamówienia (do rozważenia w przyszłości).",
+      "status": "wzorzec przeanalizowany (17.07), wariant minimalny uzgodniony",
+      "realnie_od": 8,
+      "realnie_do": 12,
+      "rynkowo_od": 20,
+      "rynkowo_do": 30
+    },
+    {
+      "id": "T-218",
+      "tytul": "Przebudowa panelu zamówień",
+      "opis": "Nowe filtry na liście zamówień, korekta istniejących filtrów oraz poprawa działania panelu na telefonie.",
+      "status": "do zaplanowania",
+      "realnie_od": 4,
+      "realnie_do": 5,
+      "rynkowo_od": 10,
+      "rynkowo_do": 13
+    },
+    {
+      "id": "T-219",
+      "tytul": "Podstrona leasingowa (landing „Leasing samochodu z Chin”)",
+      "opis": "Osobna podstrona opisująca ścieżkę leasingową (jak to działa, współpraca z finansującym, kroki od zamówienia do wydania auta) + zalinkowanie jej w kilku miejscach serwisu pod SEO (pasek zaufania na ofertach, stopka, strony informacyjne). Fraza „leasing samochodu z chin” sprawdzona w bazie słów kluczowych: brak mierzalnego wolumenu — nisza dopiero powstaje, więc rankowanie będzie tanie, a strona pracuje głównie na konwersję i zaufanie. Kalkulator raty finansowania to osobne zadanie (T-189 — rata na kartach ofert).",
+      "status": "do zaplanowania; frazy zbadane 17.07",
+      "realnie_od": 3,
+      "realnie_do": 4,
+      "rynkowo_od": 8,
+      "rynkowo_do": 10
+    }
+  ],
+  "todo_ukryte_id": [
+    "T-187"
+  ],
+  "todo_pierwsze": [
+    "T-186"
+  ]
 }
