@@ -28,6 +28,8 @@
 
 Słownik giełdy ma 44 marki o chińskich nazwach. Nowy plik `data/che168-mark-names.php` — **13 pewnych etykiet** do UI (do API zawsze idzie klucz surowy): rodzina HIMA/Harmony (问界 AITO, 智界 Luxeed, 享界 Stelato, 尊界 Maextro, 尚界 Shangjie), 大通 Maxus (31 modeli!), 奇瑞QQ Chery QQ, 中国重汽 Sinotruk, 鑫源 Shineray, firefly萤火虫 Firefly (NIO), 奥迪AUDI AUDI (SAIC), 凯马 Kama, 银隆 Yinlong. Select sortowany po etykiecie, format `Luxeed (Zhijie) · 智界 (3)`. Pozostałe ~31 CJK = egzotyka (kampery 房车, ciężarówki) — celowo bez tłumaczenia (zła etykieta gorsza niż CJK); dorabiać w tym pliku w miarę potrzeb. Gotcha: PHP rzutuje numeryczny klucz `'212'` na int → w JS porównanie typów; fix `String()`.
 
+**Domapowanie G700 (feedback Janka, noc):** hub `/samochody/Jetour/G700/` istniał (5 aut, głównie stock ręczny), ale bez wpisu w brand-mappingu; che168 trzyma auto pod submarką `纵横` (Zongheng). Dodane: bm `Jetour|Jetour G700`, cm `纵横|纵横G700` → Jetour/G700, etykieta `纵横 → Zongheng (Jetour)`. Po fixie: `mapped=true`. Uwaga porządkowa: w taksonomii wisi pusty duplikat termu `Zongheng G700` (slug `zongheng-g700`, count 0) — kandydat do skasowania, zostawiony do decyzji.
+
 ## Fakty API (zweryfikowane, ważne dla T-186)
 
 - Dostęp che168 **żyje po 15.07** (zapis w T-186 o wygaśnięciu nieaktualny).
