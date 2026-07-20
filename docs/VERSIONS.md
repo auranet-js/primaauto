@@ -14,6 +14,13 @@ z Che168", strefa krucha nietknięta). Nowy AJAX `asiaauto_che168_browse` → `g
 (mark+model+year), miasta/cena filtrowane u nas. Smoke na żywym API: BYD Seal 14 ofert/strona,
 filtr miast 5/20, gate js=tak / primaauto=nie.
 
+**Hotfix zdjęć (ta sama wersja, po teście E2E w Chrome):** CDN Autohome (`2sc2.autoimg.cn`) tnie
+hotlinki po nagłówku Referer → miniatury nie wstawały. Fix: karty i modal renderują `<img
+referrerpolicy="no-referrer" loading="lazy">` zamiast CSS background-image. Po fixie 26/26 obrazków
+załadowanych, 0 błędów (test E2E: strona → BYD → Szukaj → Podgląd z wyceną PLN). Przy okazji
+usunięte `alert()`/`confirm()` (blokowały automatyzację; komunikaty w pasku statusu, import
+potwierdzany dwuklikiem „Potwierdź import").
+
 ## 0.33.37 — 2026-07-20 (filtr modeli Che168 w konfiguratorze + domapowania, GATED na js)
 
 Element T-186. Zakładka „Filtry importu" dostaje subtabs Dongchedi | Che168 (widoczne **tylko dla
