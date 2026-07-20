@@ -1,5 +1,32 @@
 # Historia wersji asiaauto-sync
 
+## 0.33.33 — 2026-07-20 (T-218: przebudowa listy zamówień)
+
+**Filtry.** Kafle statystyk usunięte (2 z 6 pokazywały stale 0 — `nowe`/`zarezerwowane` to statusy
+przelotowe; „Na placu" nie należy do panelu zamówień). W ich miejsce rząd trzech łączących się filtrów:
+typ (`Klientów` / `Wewnętrzne` / `Wszystkie`), status z pełnej listy 13 pozycji z licznikami,
+checkbox „Ukryj anulowane". Domyślne wejście: **zamówienia klientów bez anulat — 41 zamiast 140 pozycji**
+(anulowane + odrzucone = 38 z 140, po stronie klientów 35 z 76).
+
+Liczniki przy typie są dynamiczne — reagują na checkbox (41/61/102 ↔ 76/64/140). Wybór statusu anulowanego
+automatycznie wyłącza checkbox (inaczej wynik byłby zawsze pusty).
+
+**Kolumny.** „Depozyt" + „CIF" scalone w jedną „Wpłaty" (znaczniki D/C, kwota w tooltipie) — obie kolumny
+pokazywały w każdym wierszu tę samą wartość. Naprawiona szerokość ID (łamał numer na dwie linie).
+Wiersze anulowane wyszarzone.
+
+**Telefon (<782 px).** Tabela ustępuje kartom: zdjęcie, tytuł (przycięty do 2 linii), status, cena, klient,
+wpłata. Zero przewijania w bok, kontrolki 44–56 px. Usunięte stare reguły ukrywające kolumny przez
+`nth-child` (w tym jedna z błędnym komentarzem — opisywała ukrywanie daty, faktycznie ukrywała CIF).
+
+**Przy okazji:** wersja CSS panelu była zahardkodowana na `0.30.5`, więc przeglądarki trzymały plik z kwietnia
+mimo zmian. Podpięty `filemtime()` — każda edycja CSS sama unieważnia cache.
+
+**Strefa krucha nietknięta:** `class-asiaauto-order.php` bez zmian (mtime 2026-06-02). Filtr typu oparty
+o istniejący parametr `order_type` w `getOrders()`, „ukryj anulowane" o `status` jako tablicę (`IN`).
+Zmienione pliki: `includes/class-asiaauto-order-admin.php`, `assets/css/asiaauto-order-admin.css`.
+Kopie: `*.bak-2026-07-20`.
+
 ## 2026-07-18 — poprawka danych: `_asiaauto_primary_make_slug` na 6 hubach (bez zmian w kodzie)
 
 **Objaw:** 6 hubów miało `<link rel="canonical">` wskazujący poza siebie, w tym 3 na hub **innego

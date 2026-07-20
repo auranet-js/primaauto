@@ -61,6 +61,10 @@ footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line);
 <thead><tr><th>Data</th><th>Praca</th><th class="num">Godziny [h]</th></tr></thead>
 <tbody>
 <tr>
+<td class="data-col">20.07.2026</td>
+<td><strong>Przebudowa panelu zamówień</strong> <span class='wersje'>v0.33.33</span><div class="opis">Lista zamówień dostała trzy filtry działające razem: rodzaj zamówienia (klientów / wewnętrzne / wszystkie), status z pełnej listy oraz przełącznik „ukryj anulowane”, domyślnie włączony. Po wejściu w panel widać od razu 41 realnych zamówień klientów zamiast 140 pozycji zmieszanych z anulowanymi i magazynowymi — anulowane to dziś 38 ze 140 zamówień, a po stronie klientów aż 35 z 76. Liczniki przy filtrach same się przeliczają. Kolumny „depozyt” i „CIF” połączone w jedną czytelną (kwota po najechaniu kursorem), poprawione łamanie numeru zamówienia. Na telefonie zamiast rozjeżdżającej się tabeli — karty ze zdjęciem auta i kompletem informacji, bez przewijania na boki.</div></td>
+<td class="num">4</td></tr>
+<tr>
 <td class="data-col">18.07.2026</td>
 <td><strong>Porządki w widoczności stron modeli w Google</strong> <span class='wersje'>v0.33.32</span><div class="opis">Naprawione adresy kanoniczne 6 stron modeli — część wskazywała Google model innego producenta (Haval H6 → Hongqi H6, Wey 07 → Avatr 07, GAC M8 → AITO M8); weryfikacja objęła 436 wariantów adresów. Usunięta zdublowana lista /oferta/ (sklejała pełne opisy kolejnych aut = duplikat treści) i strona-spis /informacje/, która konkurowała ze stroną główną o frazę „import samochodów z Chin”. Zgłoszone do Google 200 adresów (auta na placu i w drodze + świeże oferty) plus automat nadrabiający zaległe oferty. Audyt potwierdził, że strony modeli są zdrowe — dają 91% ruchu, Geely Monjaro pojawia się w odpowiedziach AI Google.</div></td>
 <td class="num">3</td></tr>
@@ -85,7 +89,7 @@ footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line);
 <td><strong>Reklamy dynamiczne Google (DSA) — celowanie w najtańsze oferty</strong> <div class="opis">Feed reklam przestawiony ze stron modeli na najtańszą aktualną ofertę każdego modelu, z automatyczną codzienną aktualizacją. Do tego nowa treść reklamy (wymiana jednej z dwóch kreacji).</div></td>
 <td class="num">3</td></tr>
 </tbody>
-<tfoot><tr><td colspan="2">Razem od spotkania 16.07.2026</td><td class="num">16</td></tr></tfoot>
+<tfoot><tr><td colspan="2">Razem od spotkania 16.07.2026</td><td class="num">20</td></tr></tfoot>
 </table>
 
 <h2>Lista zadań do zrobienia</h2>
@@ -99,9 +103,6 @@ footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line);
 <tr>
 <td><strong>T-217 — Umowa leasingowa jako drugi wzorzec w panelu zamówienia</strong> <div class="opis"><span class="badge new">nowe</span> Najprostszy wariant, bez zmian dla klienta: zamówienie i weryfikacja przebiegają jak dotąd (klient składa zamówienie, potwierdzenie, klient wypełnia dane do umowy — komplet danych już wystarcza, dla firm dochodzi tylko wymóg NIP i nazwy). Nowość po stronie panelu: obok obecnego „Wygeneruj PDF” dochodzi „Generuj umowę leasing” — drugi szablon umowy („Umowa organizacji importu samochodu”, konstrukcja trójstronna z firmą leasingową) z 2 załącznikami (specyfikacja auta, kalkulacja ceny w 4 pozycjach), inną kwotą i narracją depozytu (12 tys. zł, „depozyt zabezpieczający”). Możliwość wgrania indywidualnej umowy zostaje bez zmian. Bez nowych statusów zamówienia (do rozważenia w przyszłości).</div><div class="skala">Status: wzorzec przeanalizowany (17.07), wariant minimalny uzgodniony</div></td>
 <td class="num">8–12</td></tr>
-<tr>
-<td><strong>T-218 — Przebudowa panelu zamówień</strong> <div class="opis"><span class="badge new">nowe</span> Nowe filtry na liście zamówień, korekta istniejących filtrów oraz poprawa działania panelu na telefonie.</div><div class="skala">Status: do zaplanowania</div></td>
-<td class="num">4–5</td></tr>
 <tr>
 <td><strong>T-219 — Podstrona leasingowa (landing „Leasing samochodu z Chin”)</strong> <div class="opis"><span class="badge new">nowe</span> Osobna podstrona opisująca ścieżkę leasingową (jak to działa, współpraca z finansującym, kroki od zamówienia do wydania auta) + zalinkowanie jej w kilku miejscach serwisu pod SEO (pasek zaufania na ofertach, stopka, strony informacyjne). Fraza „leasing samochodu z chin” sprawdzona w bazie słów kluczowych: brak mierzalnego wolumenu — nisza dopiero powstaje, więc rankowanie będzie tanie, a strona pracuje głównie na konwersję i zaufanie. Kalkulator raty finansowania to osobne zadanie (T-189 — rata na kartach ofert).</div><div class="skala">Status: do zaplanowania; frazy zbadane 17.07</div></td>
 <td class="num">3–4</td></tr>
@@ -181,7 +182,7 @@ footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line);
 <td><strong>T-214 — Ujednolicenie i wzmocnienie stron modeli (hubów) pod frazy zakupowe</strong> <span class='rozmiar'>skala: średnia</span><div class="opis">Strony modeli to nasza najmocniejsza broń w Google — stoją na 1.-2. miejscu na frazy typu 'zeekr 9x cena'. Przegląd 14.07 wykazał trzy luki do domknięcia. (1) 34 z 302 stron modeli ma słabszy nagłówek — brakuje w nim słów 'cena w Polsce', bo powstały po ostatnim ujednoliceniu i nie dostały automatycznie tego dopisku; wśród nich ważne modele: Zeekr 9X, Zeekr 8X, Denza Z9 GT. (2) Strona modelu BAW wyświetla się w Google jako 'Beijing' zamiast 'BAW' — a to marka, której szuka 1300 osób miesięcznie; podobnie Zeekr 8X ma zbędny dopisek 'PHEV' rozmywający dopasowanie. (3) Strony modeli opisują wersje słownie, ale nie podają ceny osobno dla każdej wersji (np. 'Ultra od 426 tys.') — dane już mamy, wystarczy je pokazać. Pracujemy ostrożnie, pojedynczo, z pomiarem przed i po (strony z 1. miejsca mają najwięcej do stracenia), bo nadrzędna zasada brzmi: nie zepsuć tego, co już rankuje.</div><div class="skala">Status: znaleziska zapisane (docs/seo/znaleziska-huby-2026-07-14); wymaga pilota + progów wycofania z T-203-baseline</div></td>
 <td class="num">11–14</td></tr>
 </tbody>
-<tfoot><tr><td>Razem pełna lista (widełki)</td><td class="num">588–769</td></tr></tfoot>
+<tfoot><tr><td>Razem pełna lista (widełki)</td><td class="num">584–764</td></tr></tfoot>
 </table>
 
 <footer>

@@ -6,6 +6,13 @@
   },
   "changelog": [
     {
+      "data": "20.07.2026",
+      "tytul": "Przebudowa panelu zamówień",
+      "opis": "Lista zamówień dostała trzy filtry działające razem: rodzaj zamówienia (klientów / wewnętrzne / wszystkie), status z pełnej listy oraz przełącznik „ukryj anulowane”, domyślnie włączony. Po wejściu w panel widać od razu 41 realnych zamówień klientów zamiast 140 pozycji zmieszanych z anulowanymi i magazynowymi — anulowane to dziś 38 ze 140 zamówień, a po stronie klientów aż 35 z 76. Liczniki przy filtrach same się przeliczają. Kolumny „depozyt” i „CIF” połączone w jedną czytelną (kwota po najechaniu kursorem), poprawione łamanie numeru zamówienia. Na telefonie zamiast rozjeżdżającej się tabeli — karty ze zdjęciem auta i kompletem informacji, bez przewijania na boki.",
+      "wersje": "v0.33.33",
+      "godz": 4
+    },
+    {
       "data": "18.07.2026",
       "tytul": "Porządki w widoczności stron modeli w Google",
       "opis": "Naprawione adresy kanoniczne 6 stron modeli — część wskazywała Google model innego producenta (Haval H6 → Hongqi H6, Wey 07 → Avatr 07, GAC M8 → AITO M8); weryfikacja objęła 436 wariantów adresów. Usunięta zdublowana lista /oferta/ (sklejała pełne opisy kolejnych aut = duplikat treści) i strona-spis /informacje/, która konkurowała ze stroną główną o frazę „import samochodów z Chin”. Zgłoszone do Google 200 adresów (auta na placu i w drodze + świeże oferty) plus automat nadrabiający zaległe oferty. Audyt potwierdził, że strony modeli są zdrowe — dają 91% ruchu, Geely Monjaro pojawia się w odpowiedziach AI Google.",
@@ -61,16 +68,6 @@
       "realnie_do": 12,
       "rynkowo_od": 20,
       "rynkowo_do": 30
-    },
-    {
-      "id": "T-218",
-      "tytul": "Przebudowa panelu zamówień",
-      "opis": "Nowe filtry na liście zamówień, korekta istniejących filtrów oraz poprawa działania panelu na telefonie.",
-      "status": "do zaplanowania",
-      "realnie_od": 4,
-      "realnie_do": 5,
-      "rynkowo_od": 10,
-      "rynkowo_do": 13
     },
     {
       "id": "T-219",
