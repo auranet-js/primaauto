@@ -1,5 +1,10 @@
 # Historia wersji asiaauto-sync
 
+## 0.33.36 — 2026-07-20 (lista zamówień: 20 → 30 pozycji na stronę)
+
+Prośba Janka (+50%). Przy „Wszystkie" (102) daje 4 strony zamiast 6, przy domyślnym widoku
+klientów (41) — 2 zamiast 3. Dotyczy też kart na telefonie.
+
 ## 0.33.35 — 2026-07-20 (rotacja: ochrona ogłoszeń z aktywnym zamówieniem)
 
 **Problem:** rotacja kasowała trwale ogłoszenia, na które wskazywały niezakończone zamówienia —
