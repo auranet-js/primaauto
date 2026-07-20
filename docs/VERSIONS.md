@@ -1,5 +1,26 @@
 # Historia wersji asiaauto-sync
 
+## 0.33.34 — 2026-07-20 (fix: biały ekran karty zamówienia dla usuniętych ogłoszeń)
+
+**Objaw:** wejście w 27 zamówień (16 aktywnych) kończyło się „W witrynie wystąpił krytyczny błąd".
+
+**Korzeń — błąd sprzed T-218, nie jego skutek** (identyczny kod w `*.bak-2026-07-20`):
+`renderOrderCard()` robiło `$data['listing_id'] ? get_edit_post_link($id) : ''`. Gdy ogłoszenie zostało
+usunięte przez rotację, `listing_id` nadal jest niezerowe, ale `get_edit_post_link()` zwraca **null**
+(a `get_permalink()` **false**) → `renderCardListing(array, string, string)` rzucało `TypeError`.
+T-218 tylko ujawniło problem: wcześniej te zamówienia trudno było znaleźć na liście.
+
+**Fix:** rzutowanie na `string` + wyraźny komunikat w karcie („Ogłoszenie #X nie istnieje już w bazie —
+usunięte przy rotacji ofert; dane zamówienia nienaruszone"). Auto pozostaje rozpoznawalne po
+`_order_source_url` (link do Dongchedi), który zamówienie przechowuje.
+
+**Znaleziona przy okazji luka systemowa (NIE naprawiona — wymaga decyzji, patrz QUEUE):**
+`AsiaAuto_Rotation::deleteOldTrash()` chroni ogłoszenia przez `isReserved()`, ale rezerwację zakłada
+tylko `LISTING_RESERVATION_MAP` = `zarezerwowane`/`zakupione`/`w_drodze`/`na_placu`/`w_dostawie`.
+Zamówienia w **weryfikacji, potwierdzone, umowa gotowa, podpisane** nie rezerwują ogłoszenia →
+po 30 dniach w koszu leci `wp_delete_post(force)`. Zamówienie traci zdjęcie i nazwę auta bezpowrotnie
+(brak snapshotu tytułu w meta zamówienia).
+
 ## 0.33.33 — 2026-07-20 (T-218: przebudowa listy zamówień)
 
 **Filtry.** Kafle statystyk usunięte (2 z 6 pokazywały stale 0 — `nowe`/`zarezerwowane` to statusy
