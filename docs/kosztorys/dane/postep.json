@@ -10,7 +10,7 @@
       "tytul": "Przebudowa panelu zamówień",
       "opis": "Lista zamówień dostała trzy filtry działające razem: rodzaj zamówienia (klientów / wewnętrzne / wszystkie), status z pełnej listy oraz przełącznik „ukryj anulowane”, domyślnie włączony. Po wejściu w panel widać od razu 41 realnych zamówień klientów zamiast 140 pozycji zmieszanych z anulowanymi i magazynowymi — anulowane to dziś 38 ze 140 zamówień, a po stronie klientów aż 35 z 76. Liczniki przy filtrach same się przeliczają. Kolumny „depozyt” i „CIF” połączone w jedną czytelną (kwota po najechaniu kursorem), poprawione łamanie numeru zamówienia. Na telefonie zamiast rozjeżdżającej się tabeli — karty ze zdjęciem auta i kompletem informacji, bez przewijania na boki. Na jednej stronie mieści się teraz 30 zamówień zamiast 20.",
       "wersje": "v0.33.33, v0.33.36",
-      "godz": 2.5
+      "godz": 3.5
     },
     {
       "data": "20.07.2026",
