@@ -21,6 +21,12 @@ załadowanych, 0 błędów (test E2E: strona → BYD → Szukaj → Podgląd z w
 usunięte `alert()`/`confirm()` (blokowały automatyzację; komunikaty w pasku statusu, import
 potwierdzany dwuklikiem „Potwierdź import").
 
+**Deep-link do pełnej analizy (feedback Janka):** modal podglądu w przeglądarce dostał przycisk
+„📋 Pełna analiza (Dodaj z Che168) →" — otwiera stronę ręcznego importu z `?inner_id=` (prefill
+numeru + automatyczny podgląd po DOMContentLoaded; wcześniejszy wariant odpalał `wp.ajax` przed
+załadowaniem wp-util → ReferenceError, złapane w teście E2E). Test: browse → Podgląd → Pełna
+analiza → strona „Import z Che168" sama pokazuje dry-run (hub, tytuł, taksonomie).
+
 ## 0.33.37 — 2026-07-20 (filtr modeli Che168 w konfiguratorze + domapowania, GATED na js)
 
 Element T-186. Zakładka „Filtry importu" dostaje subtabs Dongchedi | Che168 (widoczne **tylko dla
