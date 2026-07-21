@@ -42,12 +42,12 @@ def http_get(url, timeout=30, as_text=False):
     return json.loads(raw)
 
 
-def call_model(system_prompt, user_msg, max_tokens=None, retries=1):
+def call_model(system_prompt, user_msg, max_tokens=None, retries=1, model=None):
     """Generowanie przez `claude -p` (headless, abonament). Zwraca (text, usage)."""
     prompt = f"INSTRUKCJA SYSTEMOWA (stosuj bezwzględnie):\n{system_prompt}\n\n{'=' * 30}\n\n{user_msg}"
     for attempt in range(retries + 1):
         result = subprocess.run(
-            ["/bin/bash", "-lc", f"claude -p --model {MODEL} --output-format json"],
+            ["/bin/bash", "-lc", f"claude -p --model {model or MODEL} --output-format json"],
             input=prompt, capture_output=True, text=True, timeout=600,
         )
         try:

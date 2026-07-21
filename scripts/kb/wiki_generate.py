@@ -22,7 +22,7 @@ import kb_lib as kb
 SITE = "https://primaauto.com.pl"
 
 REVIEW_PROMPT = """Jesteś sceptycznym recenzentem technicznym motoryzacji elektrycznej. Dostajesz hasło encyklopedyczne o technologii w chińskich autach oraz KONTEKST FAKTOGRAFICZNY, na którym miało bazować.
-Sprawdź każde twierdzenie techniczne: (1) sprzeczne z kontekstem lub powszechną wiedzą inżynierską = błąd; (2) konkretna liczba/parametr, którego nie ma w kontekście i nie jest powszechnie ustaloną wiedzą = błąd (zmyślenie); (3) mylące uproszczenie istotne dla kupującego = błąd. Ogólniki i poprawne uproszczenia dydaktyczne są OK.
+Sprawdź twierdzenia techniczne: (1) sprzeczne z kontekstem lub powszechną wiedzą inżynierską = błąd; (2) konkretna liczba/parametr (moc, cena, pojemność, data), którego nie ma w kontekście i nie jest powszechnie ustaloną wiedzą = błąd (zmyślenie); (3) mylące uproszczenie istotne dla kupującego = błąd. NIE zgłaszaj: ogólników, poprawnych uproszczeń dydaktycznych, typowych zastosowań i przykładów wynikających z ogólnej wiedzy inżynierskiej, ani modeli aut wymienionych w sekcji PRZYKŁADOWE AUTA kontekstu.
 Zwróć czysty JSON: {"ok": true/false, "issues": ["konkretny problem", ...]}."""
 
 
@@ -32,23 +32,49 @@ def existing_slugs():
     return set(s for s in out.split("\n") if s)
 
 
+def db_examples(cfg, limit=6):
+    """Przykładowe auta z daną technologią z bazy (LIKE po _asiaauto_extra_prep)."""
+    conds = []
+    for key, val in cfg.get("term_keys", {}).items():
+        if val:
+            esc = json.dumps(val, ensure_ascii=True)[1:-1].replace("\\", "\\\\\\\\")
+            conds.append(f"m.meta_value LIKE '%\"{key}\":\"%{esc}%'")
+        else:
+            conds.append(f"(m.meta_value LIKE '%\"{key}\":\"%' AND m.meta_value NOT LIKE '%\"{key}\":\"\"%')")
+    if not conds:
+        return []
+    sql = ("SELECT p.post_title FROM wp7j_posts p "
+           "JOIN wp7j_postmeta m ON m.post_id=p.ID AND m.meta_key='_asiaauto_extra_prep' "
+           "WHERE p.post_type='listings' AND p.post_status='publish' AND ("
+           + " OR ".join(conds) + f") ORDER BY p.post_date DESC LIMIT {limit}")
+    try:
+        out = kb.wp("db", "query", sql, "--skip-column-names")
+        return [t for t in out.split("\n") if t.strip()]
+    except Exception as e:
+        print(f"    db_examples: {e}", flush=True)
+        return []
+
+
 def build_entry(cfg, system_prompt):
     kw_ctx = ""
     if cfg.get("main_kw"):
         kw_ctx = (f"FRAZA GŁÓWNA (DataForSEO): \"{cfg['main_kw']}\" — użyj jej naturalnie w definicji "
                   f"i przynajmniej raz w treści; frazy powiązane z wolumenami: {cfg.get('kw_variants', '')}. "
                   "Sformułuj 1. pytanie FAQ w brzmieniu, jakim ludzie realnie pytają (np. 'Co to jest ...').\n")
+    examples = db_examples(cfg)
+    ex_ctx = ("PRZYKŁADOWE AUTA Z TĄ TECHNOLOGIĄ Z NASZEJ BAZY (możesz przywołać modele, bez rocznikowych dopisków):\n- "
+              + "\n- ".join(examples) + "\n") if examples else ""
     user_msg = (f"HASŁO: {cfg['title']}\n{kw_ctx}"
-                f"KONTEKST Z NASZEJ BAZY (fakty do wykorzystania, nie cytuj dosłownie):\n{cfg['context']}\n\n"
+                f"KONTEKST Z NASZEJ BAZY (fakty do wykorzystania, nie cytuj dosłownie):\n{cfg['context']}\n{ex_ctx}\n"
                 "Napisz hasło zgodnie z instrukcją systemową. Zwróć czysty JSON.")
-    text, _ = kb.call_model(system_prompt, user_msg)
+    text, _ = kb.call_model(system_prompt, user_msg, model="opus")
     entry = kb.parse_json_response(kb.normalize_quotes(text))
 
     # Recenzja techniczna (sceptyk) — max 1 regeneracja z listą uwag
     for attempt in range(2):
         rtext, _ = kb.call_model(
             REVIEW_PROMPT,
-            f"KONTEKST FAKTOGRAFICZNY:\n{cfg['context']}\n\nHASŁO:\n{entry['definition']}\n"
+            f"KONTEKST FAKTOGRAFICZNY:\n{cfg['context']}\n{ex_ctx}\nHASŁO:\n{entry['definition']}\n"
             f"{kb.strip_html(entry['body_html'])}\nFAQ: {json.dumps(entry['faq'], ensure_ascii=False)}",
             max_tokens=1500,
         )
@@ -61,6 +87,7 @@ def build_entry(cfg, system_prompt):
                 system_prompt,
                 user_msg + "\n\nPOPRZEDNIA WERSJA MIAŁA BŁĘDY MERYTORYCZNE — popraw:\n"
                 + "\n".join("- " + i for i in verdict.get("issues", [])),
+                model="opus",
             )
             entry = kb.parse_json_response(kb.normalize_quotes(text))
         else:
