@@ -25,6 +25,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
 import kb_lib as kb
+from make_cover import make_cover
 
 FEEDS = [
     ("CarNewsChina", "https://carnewschina.com/feed/"),
@@ -162,6 +163,17 @@ def create_wp_draft(draft):
         f"--post_excerpt={draft['excerpt']}",
         "--porcelain",
     )
+    # Okładka brandowa (WebP 1200x675) jako featured image → og:image/Discover
+    try:
+        cover = str(kb.STATE_DIR / f"cover-{post_id}.webp")
+        make_cover(draft["title"], cover)
+        kb.wp("media", "import", cover, f"--post_id={post_id}", "--featured_image",
+              f"--title={draft['title']} — aktualności Prima-Auto",
+              f"--alt={draft['title']}", "--porcelain")
+        Path(cover).unlink(missing_ok=True)
+    except Exception as e:
+        print(f"    okładka nieudana (nie blokuje): {e}", flush=True)
+
     token = pysecrets.token_hex(20)
     kb.wp("post", "meta", "set", post_id, "_kb_source_name", draft["_source"])
     kb.wp("post", "meta", "set", post_id, "_kb_source_url", draft["_source_url"])
