@@ -1,5 +1,17 @@
 # Historia wersji asiaauto-sync
 
+## 0.34.0 — 2026-07-21 wieczór (T-214 F2/F3: Słownik live + cron newsowy; theme 1.1.2)
+
+Słownik: 10 haseł Tier 1 opublikowanych pod /wiki/ (Opus, frazy DFS, FAQ z PAA, H2 z frazami,
+research web dla Blade), index+follow, w llms.txt (build-llms.php + sekcje Słownik/Aktualności),
+11 URL zgłoszonych index-submit, menu „Słownik" + „Aktualności". Rename Leksykon→Słownik (labels).
+Newsy: 2 opublikowane z okładkami v2; cron 06:45 kb-news-daily.sh zarejestrowany (cron-install).
+Theme 1.1.1→1.1.2: design-pass v2 (eyebrow, FAQ-akordeon, definicja z akcentem, karty, indeks
+2-kolumnowy) + diagramy .pa-diagram/.pa-flow/.pa-bars (EREV/PHEV/800V) + zdjęcie z galerii w /wiki/lidar/
+(wzorzec: technologia widoczna = kadr z oferty + link). Okładki: v2 wycentrowane z siatką, tylko
+og:image/kafle (meta _kb_cover_auto wyłącza hero). Generator: single-pass claude -p (Opus, 3 równolegle,
+~2,5 min/hasło), research WebSearch/WebFetch, PAA w prompcie. Lekcje w docs/roadmapa/T-214.
+
 ## 0.34.0 — 2026-07-21 (T-214 F0: fundamenty działu wiedzy)
 
 Nowa klasa `includes/class-asiaauto-wiki.php` — CPT `asiaauto_wiki` (Leksykon, `/wiki/{haslo}/`,

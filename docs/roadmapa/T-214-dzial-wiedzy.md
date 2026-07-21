@@ -1,6 +1,8 @@
 # T-214 — Dział wiedzy: Leksykon + Magazyn newsowy + Blog (wspólny silnik, bez n8n)
 
-> Status: **plan ZAAKCEPTOWANY kierunkowo, decyzje D1–D6 rozstrzygnięte przez Janka 2026-07-21** — gotowy do startu F0
+> Status: **F0–F3 WDROŻONE 2026-07-21, zaakceptowane przez Janka („podoba mi się")**. Live: 10 haseł Słownika (/wiki/, index+follow, w llms.txt, zgłoszone do indeksacji) + 2 newsy (/aktualnosci/) + cron newsowy 06:45 (mail akceptacyjny) + menu Słownik/Aktualności. Pozostało: F2 Tier 2 (~80 haseł hurtowo generatorem), auto-linker (filtr w renderach ofert/hubów — strefa ZAWSZE PYTAJ), sekcje dynamiczne „auta z technologią" pod hasłami, F4 blog/rankingi.
+>
+> **Lekcje z wdrożenia 21.07 (WAŻNE dla Tier 2):** (1) generacja = JEDEN przebieg claude -p (draft+samokontrola+korekta w jednym prompcie, Opus, 3 równolegle ~2,5 min/hasło) — NIE osobne procesy na recenzję/korektę (15 min/hasło przez narzut startu); (2) research w sieci PRZED pisaniem obowiązkowy (claude -p --allowedTools WebSearch,WebFetch) — bez niego hasła typu Blade Battery nie znają generacji; (3) FAQ z realnych PAA (DFS SERP ~$0.002/hasło), nie syntetyczne; (4) H2 zawsze z frazą w odmianie, nigdy generyczne „Jak to działa"; (5) frazy główne z DFS przed generacją (hybryda plug in 9900 > phev 2400); (6) okładki brandowe = og:image i kafle, NIE hero w treści (dublują tytuł); zdjęcia w treści = kadry z galerii ofert (technologie widoczne) + diagramy HTML/CSS .pa-diagram (niewidoczne); (7) nazwa sekcji „Słownik" (nie „Leksykon").
 > Rozmiar: XL, fazowany · Godziny realnie: **76–102 h silnik (F0–F4)** + nadzór ~3–5 h/tydz na starcie
 > Pełny plan (analiza + liczby + architektura): https://auratest.pl/fe4f58fec53ctmp/primaauto-plan-dzial-wiedzy-2026-07-21.html
 > Nadrzędny wobec: **T-162** (blog — filar C tego planu, strategia D2/D3 z T-162 obowiązuje) · buduje fact-check z **T-208 §1**
