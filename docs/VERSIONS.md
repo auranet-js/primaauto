@@ -1,5 +1,21 @@
 # Historia wersji asiaauto-sync
 
+## 0.34.0 — 2026-07-21 (T-214 F0: fundamenty działu wiedzy)
+
+Nowa klasa `includes/class-asiaauto-wiki.php` — CPT `asiaauto_wiki` (Leksykon, `/wiki/{haslo}/`,
+archiwum `/wiki/`, meta `_wiki_aliases`/`_wiki_term_keys`/`_wiki_category`, 6 kategorii haseł).
+`class-asiaauto-seo.php` +filtr `kbSchema` (rank_math/json_ld): wpisy kategorii `aktualnosci` →
+NewsArticle z author=Organization „Redakcja Prima-Auto"; hasła wiki → DefinedTerm w DefinedTermSet.
+Poza pluginem (konfiguracja WP/RankMath): permalinki `/%category%/%postname%/` + strip category base,
+kategorie aktualnosci/rankingi/porownania/poradniki (7182-7185), user `redakcja` (ID 55,
+„Redakcja Prima-Auto"), moduł news-sitemap RankMath (publication Prima-Auto, post type post,
+`news-sitemap.xml` live), sitemap CPT wiki on, wiki tymczasowo noindex (do pierwszej treści F2),
+strona `/informacje/o-redakcji/` (388050), default_comment_status=closed.
+Theme 1.1.0: `single.php`, `category.php`, `archive-asiaauto_wiki.php`, `single-asiaauto_wiki.php`,
+`assets/css/kb.css`. Backup DB przed permalinkami: `~/backups/primaauto/2026-07-21/`.
+Odłożone do F2/F3: menu/footer „Wiedza" (po pierwszej treści), sekcje w generatorach llms.
+Plan: `docs/roadmapa/T-214-dzial-wiedzy.md`.
+
 ## 0.33.38 — 2026-07-20 (przeglądarka „Przeglądaj Che168", GATED na js)
 
 Etap 2 specu filtra modeli. Nowa podstrona pod Ogłoszeniami (`asiaauto-che168-browse`,
