@@ -172,16 +172,43 @@ def create_wp_draft(draft):
         f"--post_excerpt={draft['excerpt']}",
         "--porcelain",
     )
-    # Okładka brandowa (WebP 1200x675) jako featured image → og:image/Discover
+    # Okładka: 1) oficjalne zdjęcie prasowe z artykułu źródłowego (og:image, kredyt
+    # "fot. materiały prasowe {marka} (via {źródło})" — decyzja Janka 21.07: bierzemy
+    # oficjalne materiały producentów z podpisem, jak cała branża; NIE spy-shoty),
+    # 2) fallback: brandowa plansza typograficzna.
+    cover_done = False
     try:
-        cover = str(kb.STATE_DIR / f"cover-{post_id}.webp")
-        make_cover(draft["title"], cover)
-        kb.wp("media", "import", cover, f"--post_id={post_id}", "--featured_image",
-              f"--title={draft['title']} — aktualności Prima-Auto",
-              f"--alt={draft['title']}", "--porcelain")
-        Path(cover).unlink(missing_ok=True)
+        page = kb.http_get(draft["_source_url"], as_text=True)
+        m = re.search(r'property="og:image" content="([^"]+)"', page)
+        if m:
+            img_path = str(kb.STATE_DIR / f"press-{post_id}.jpg")
+            with open(img_path, "wb") as fh:
+                req = __import__("urllib.request", fromlist=["Request"])
+                r = req.urlopen(req.Request(m.group(1), headers={"User-Agent": kb.UA}), timeout=30)
+                fh.write(r.read())
+            webp = str(kb.STATE_DIR / f"press-{post_id}.webp")
+            subprocess_run = __import__("subprocess").run
+            subprocess_run(["magick", img_path, "-resize", "1200x", "-quality", "85", webp], check=True, capture_output=True)
+            brand = (draft.get("tags") or ["producenta"])[0]
+            kb.wp("media", "import", webp, f"--post_id={post_id}", "--featured_image",
+                  f"--title={draft['title']}", f"--alt={draft['title']}",
+                  f"--caption=fot. materiały prasowe {brand} (via {draft['_source']})", "--porcelain")
+            Path(img_path).unlink(missing_ok=True)
+            Path(webp).unlink(missing_ok=True)
+            cover_done = True
     except Exception as e:
-        print(f"    okładka nieudana (nie blokuje): {e}", flush=True)
+        print(f"    press-cover nieudany ({e}) — fallback typografia", flush=True)
+    if not cover_done:
+        try:
+            cover = str(kb.STATE_DIR / f"cover-{post_id}.webp")
+            make_cover(draft["title"], cover)
+            kb.wp("media", "import", cover, f"--post_id={post_id}", "--featured_image",
+                  f"--title={draft['title']} — aktualności Prima-Auto",
+                  f"--alt={draft['title']}", "--porcelain")
+            kb.wp("post", "meta", "set", post_id, "_kb_cover_auto", "1")
+            Path(cover).unlink(missing_ok=True)
+        except Exception as e:
+            print(f"    okładka nieudana (nie blokuje): {e}", flush=True)
 
     token = pysecrets.token_hex(20)
     kb.wp("post", "meta", "set", post_id, "_kb_source_name", draft["_source"])
