@@ -32,6 +32,32 @@ def existing_slugs():
     return set(s for s in out.split("\n") if s)
 
 
+def get_paa(keyword):
+    """Realne pytania People Also Ask z SERP (DataForSEO, ~$0.002/zapytanie)."""
+    import urllib.request
+    try:
+        auth = (Path.home() / "secrets/dataforseo/basic-auth-b64.txt").read_text().strip()
+        body = json.dumps([{"keyword": keyword, "location_code": 2616, "language_code": "pl",
+                            "people_also_ask_click_depth": 2, "depth": 10}]).encode()
+        req = urllib.request.Request(
+            "https://api.dataforseo.com/v3/serp/google/organic/live/advanced", data=body,
+            headers={"Authorization": f"Basic {auth}", "Content-Type": "application/json"})
+        with urllib.request.urlopen(req, timeout=40) as r:
+            d = json.loads(r.read())
+        questions = []
+        for res in d["tasks"][0].get("result") or []:
+            for item in res.get("items") or []:
+                if item.get("type") == "people_also_ask":
+                    for q in item.get("items") or []:
+                        t = (q.get("title") or "").strip()
+                        if t and t not in questions:
+                            questions.append(t)
+        return questions[:6]
+    except Exception as e:
+        print(f"    PAA nieudane ({e}) — FAQ bez PAA", flush=True)
+        return []
+
+
 def db_examples(cfg, limit=6):
     """Przykładowe auta z daną technologią z bazy (LIKE po _asiaauto_extra_prep)."""
     conds = []
@@ -64,42 +90,17 @@ def build_entry(cfg, system_prompt):
     examples = db_examples(cfg)
     ex_ctx = ("PRZYKŁADOWE AUTA Z TĄ TECHNOLOGIĄ Z NASZEJ BAZY (możesz przywołać modele, bez rocznikowych dopisków):\n- "
               + "\n- ".join(examples) + "\n") if examples else ""
+    paa = get_paa(cfg.get("main_kw") or cfg["title"])
+    paa_ctx = ("REALNE PYTANIA UŻYTKOWNIKÓW GOOGLE (People Also Ask) — FAQ zbuduj przede wszystkim "
+               "z nich (możesz przeredagować stylistycznie, dodaj max 1 własne pytanie):\n- "
+               + "\n- ".join(paa) + "\n") if paa else ""
     user_msg = (f"HASŁO: {cfg['title']}\n{kw_ctx}"
-                f"KONTEKST Z NASZEJ BAZY (fakty do wykorzystania, nie cytuj dosłownie):\n{cfg['context']}\n{ex_ctx}\n"
-                "Napisz hasło zgodnie z instrukcją systemową. Zwróć czysty JSON.")
+                f"KONTEKST Z NASZEJ BAZY (fakty do wykorzystania, nie cytuj dosłownie):\n{cfg['context']}\n{ex_ctx}{paa_ctx}\n"
+                "Napisz hasło zgodnie z instrukcją systemową (kroki 1-3 wewnętrznie). Zwróć czysty finalny JSON.")
+    # Jeden przebieg: draft + samo-recenzja + korekta w jednym prompcie (optymalizacja
+    # po feedbacku Janka 21.07 — 4 osobne procesy claude -p × narzut startu = kwadrans/hasło).
     text, _ = kb.call_model(system_prompt, user_msg, model="opus")
     entry = kb.parse_json_response(kb.normalize_quotes(text))
-
-    # Recenzja techniczna (sceptyk) — max 1 regeneracja z listą uwag
-    for attempt in range(2):
-        rtext, _ = kb.call_model(
-            REVIEW_PROMPT,
-            f"KONTEKST FAKTOGRAFICZNY:\n{cfg['context']}\n{ex_ctx}\nHASŁO:\n{entry['definition']}\n"
-            f"{kb.strip_html(entry['body_html'])}\nFAQ: {json.dumps(entry['faq'], ensure_ascii=False)}",
-            max_tokens=1500,
-        )
-        verdict = kb.parse_json_response(rtext)
-        if verdict.get("ok"):
-            break
-        if attempt == 0:
-            print(f"    recenzja: {len(verdict.get('issues', []))} uwag — regeneruję", flush=True)
-            text, _ = kb.call_model(
-                system_prompt,
-                user_msg + "\n\nPOPRZEDNIA WERSJA MIAŁA BŁĘDY MERYTORYCZNE — popraw:\n"
-                + "\n".join("- " + i for i in verdict.get("issues", [])),
-                model="opus",
-            )
-            entry = kb.parse_json_response(kb.normalize_quotes(text))
-        else:
-            raise RuntimeError("Recenzja techniczna nie przeszła: " + "; ".join(verdict.get("issues", [])[:3]))
-
-    # Korekta wydawnicza (proofing)
-    proofed, changes = kb.proofread({
-        "definition": entry["definition"], "body_html": entry["body_html"], "excerpt": entry["excerpt"],
-    })
-    entry.update(proofed)
-    if changes:
-        print(f"    korekta: {len(changes)} poprawek", flush=True)
 
     full_text = entry["definition"] + " " + entry["body_html"] + " " + json.dumps(entry["faq"], ensure_ascii=False)
     lint = kb.lint_text(full_text)
@@ -112,7 +113,10 @@ def build_entry(cfg, system_prompt):
     return entry
 
 
-def create_wiki_draft(cfg, entry):
+def create_wiki_entry(cfg, entry):
+    """Publikuje hasło od razu (sekcja /wiki/ jest noindex do akceptu Janka —
+    review odbywa się na żywym layoutcie, nie w mailu-atrapie)."""
+    from make_cover import make_cover
     faq_html = "".join(
         f"<details><summary>{f['q']}</summary><p>{f['a']}</p></details>"
         for f in entry["faq"]
@@ -120,12 +124,12 @@ def create_wiki_draft(cfg, entry):
     content = (f"<p class=\"wiki-definition\"><strong>{entry['definition']}</strong></p>\n"
                + entry["body_html"]
                + f"\n<h2>Najczęstsze pytania</h2>\n{faq_html}")
-    body_file = kb.STATE_DIR / "_wiki_body.html"
+    body_file = kb.STATE_DIR / f"_wiki_body-{cfg['slug']}.html"
     kb.STATE_DIR.mkdir(parents=True, exist_ok=True)
     body_file.write_text(content)
     post_id = kb.wp(
         "post", "create", str(body_file),
-        "--post_status=draft", "--post_type=asiaauto_wiki",
+        "--post_status=publish", "--post_type=asiaauto_wiki",
         "--post_author=55",
         f"--post_title={cfg['title']}",
         f"--post_name={cfg['slug']}",
@@ -136,29 +140,29 @@ def create_wiki_draft(cfg, entry):
     kb.wp("post", "meta", "set", post_id, "_wiki_aliases", cfg["aliases"])
     kb.wp("post", "meta", "set", post_id, "_wiki_term_keys", json.dumps(cfg["term_keys"], ensure_ascii=False))
     kb.wp("post", "meta", "set", post_id, "_kb_faq_json", json.dumps(entry["faq"], ensure_ascii=False))
-    token = pysecrets.token_hex(20)
-    kb.wp("post", "meta", "set", post_id, "_kb_publish_token", token)
-    publish_url = f"{SITE}/wp-json/asiaauto/v1/kb-publish?post={post_id}&token={token}"
-    return post_id, publish_url
+    try:
+        cover = str(kb.STATE_DIR / f"cover-wiki-{post_id}.webp")
+        make_cover(cfg["title"], cover, "LEKSYKON")
+        kb.wp("media", "import", cover, f"--post_id={post_id}", "--featured_image",
+              f"--title={cfg['title']} — Leksykon Prima-Auto", f"--alt={cfg['title']}", "--porcelain")
+        Path(cover).unlink(missing_ok=True)
+    except Exception as e:
+        print(f"    okładka nieudana (nie blokuje): {e}", flush=True)
+    live_url = f"{SITE}/wiki/{cfg['slug']}/"
+    return post_id, live_url
 
 
 def build_mail(results, failed):
     rows = []
     for r in results:
-        e = r["entry"]
-        faq_html = "".join(f"<p style='margin:4px 0'><b>{f['q']}</b><br>{f['a']}</p>" for f in e["faq"])
-        rows.append(f"""
-<div style="border:1px solid #ddd;border-radius:8px;padding:16px;margin:16px 0">
-  <p style="margin:0 0 4px;color:#888;font-size:12px">Leksykon · {r['cfg']['category']} · hasło #{r['post_id']}</p>
-  <h2 style="margin:0 0 8px;font-size:19px">{r['cfg']['title']}</h2>
-  <p style="font-weight:bold">{e['definition']}</p>
-  {e['body_html']}
-  <h3>FAQ</h3>{faq_html}
-  <p style="margin:14px 0 0"><a href="{r['publish_url']}" style="background:#1B2A4A;color:#fff;padding:10px 22px;border-radius:6px;text-decoration:none;font-weight:bold">✅ OPUBLIKUJ hasło</a></p>
-</div>""")
+        notes = r["entry"].get("_review_notes")
+        notes_html = (f"<br><span style='color:#b07a00;font-size:12px'>uwagi recenzenta (poprawione punktowo): {len(notes)}</span>" if notes else "")
+        rows.append(f"<li style='margin:8px 0'><a href='{r['live_url']}'>{r['cfg']['title']}</a>{notes_html}</li>")
     fail_html = ("<p style='color:#a00'>Nieudane: " + "; ".join(failed) + "</p>") if failed else ""
-    return ("<p>Hasła Leksykonu do akceptacji. Klik = publikacja pod /wiki/.</p>"
-            + "".join(rows) + fail_html)
+    return ("<p>Hasła Leksykonu opublikowane NA ŻYWO pod /wiki/ (sekcja noindex do Twojego akceptu) — "
+            "obejrzyj layout, okładki i treść bezpośrednio na stronie:</p><ul>"
+            + "".join(rows) + "</ul>"
+            + f"<p>Indeks całości: <a href='{SITE}/wiki/'>{SITE}/wiki/</a></p>" + fail_html)
 
 
 def main():
@@ -182,16 +186,24 @@ def main():
 
     system_prompt = (kb.KB_DIR / "prompts" / "wiki_system.txt").read_text()
     results, failed = [], []
-    for i, cfg in enumerate(cfgs, 1):
-        print(f"[{i}/{len(cfgs)}] {cfg['slug']}", flush=True)
-        try:
-            entry = build_entry(cfg, system_prompt)
-            post_id, publish_url = create_wiki_draft(cfg, entry)
-            results.append({"cfg": cfg, "entry": entry, "post_id": post_id, "publish_url": publish_url})
-            print(f"    OK draft #{post_id} ({len(entry['body_html'])}c, FAQ {len(entry['faq'])})", flush=True)
-        except Exception as e:
-            failed.append(f"{cfg['slug']}: {e}")
-            print(f"    FAIL: {e}", flush=True)
+
+    def run_one(cfg):
+        entry = build_entry(cfg, system_prompt)
+        post_id, live_url = create_wiki_entry(cfg, entry)
+        return {"cfg": cfg, "entry": entry, "post_id": post_id, "live_url": live_url}
+
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+    with ThreadPoolExecutor(max_workers=3) as pool:
+        futures = {pool.submit(run_one, cfg): cfg for cfg in cfgs}
+        for fut in as_completed(futures):
+            cfg = futures[fut]
+            try:
+                r = fut.result()
+                results.append(r)
+                print(f"OK  {r['live_url']} ({len(r['entry']['body_html'])}c, FAQ {len(r['entry']['faq'])})", flush=True)
+            except Exception as e:
+                failed.append(f"{cfg['slug']}: {e}")
+                print(f"FAIL {cfg['slug']}: {e}", flush=True)
 
     print(f"\nGotowe: {len(results)} OK, {len(failed)} błędów.")
     if results and not args.no_mail:

@@ -55,9 +55,10 @@
   "term_keys": {
    "battery_special_technology": "刀片"
   },
-  "context": "Autorska bateria LFP koncernu BYD (produkuje ją FinDreams) o ogniwach w formie długich 'ostrzy' montowanych bezpośrednio w pakiet (cell-to-pack). Słynny test nakłucia gwoździem bez pożaru. Montowana w BYD, Denza, Fangchengbao/Leopard i częściowo u innych producentów. W naszej bazie ~512 aut.",
+  "context": "Blade Battery = rodzina baterii LFP koncernu BYD (produkcja: FinDreams), ogniwa w formie dlugich 'ostrzy' montowanych bezposrednio w pakiet (cell-to-pack, w nowszych autach cell-to-body/CTB). Slynny test nakłucia gwoździem bez pożaru. UWAGA — RÓŻNE WERSJE pod jedną nazwą: (1) Generacja 1 (od 2020): ~140-150 Wh/kg, klasyczne ładowanie, montowana w większości BYD/Denza/Leopard do 2025. (2) Generacja 2 (zapowiedź 21.04.2025, produkcja masowa od 5.03.2026): 190-210 Wh/kg, ładowanie 8C przy platformie 1000V Super e-Platform (10->70% w ~5 min, szczytowo do 1000 kW 'Flash Charging'; 10->97% w ~9 min), koszt ~15% niższy od gen 1; pierwsze modele: Yangwang U7 i U8L, Denza Z9 GT (zasięg 1036 km CLTC) i N9, Fangchengbao/Leopard Titanium 3 i 7, Seal 07, Tang, Sea Lion 06, Song Ultra. (3) Osobno 'krótkie' ogniwa Blade LFP do hybryd DM-i 5.0 (mniejsze pakiety 15-45 kWh). Kupujący musi wiedzieć: rocznik/wersja auta determinuje generację baterii — 'Blade' w specyfikacji nie mówi jeszcze, która to. W naszej bazie ~512 aut z Blade różnych generacji.",
   "main_kw": "blade battery",
-  "kw_variants": "brak mierzalnego wolumenu — AEO"
+  "kw_variants": "brak mierzalnego wolumenu — AEO",
+  "research_sources": "electrive.com 2026-03-05, battery-news.de 2026-03-06, topelectricsuv.com"
  },
  {
   "title": "EREV — auto elektryczne z range extenderem",

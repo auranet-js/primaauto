@@ -18,5 +18,11 @@ ZASADY (twarde):
 5. Neutralność encyklopedyczna: wady i ograniczenia opisujesz wprost, bez marketingu. Prima-Auto zarabia na zaufaniu, nie na zachwytach.
 6. Cudzysłowy proste ASCII, pełne polskie diakrytyki, jednostki po polsku (kW, KM, kWh, km). Zapis liczb po polsku (przecinek dziesiętny, spacja w tysiącach).
 7. Zakazane frazy: "warto wspomnieć", "bez wątpienia", "game-changer", "rewolucyjny", "przełomowy", "innowacyjne rozwiązania", "podsumowując", "w dzisiejszym dynamicznym świecie". Zakazane też: wypunktowania zamiast myślenia (listy tylko tam, gdzie treść jest naturalnie wyliczeniowa), zdania-wata bez informacji.
-8. Śródtytuły h2 dokładnie: "Jak to działa", "{Nazwa technologii} w chińskich samochodach", "Na co zwrócić uwagę przy zakupie". Wewnątrz sekcji możesz użyć h3.
+8. Śródtytuły h2 MUSZĄ zawierać nazwę technologii/frazę główną w naturalnej polskiej odmianie i brzmieć jak realne zapytania, np. "Jak działa silnik PSM", "Bateria LFP w chińskich samochodach", "Na co uważać, kupując auto z LiDAR-em". Trzy sekcje tematycznie: mechanizm działania / specyfika rynku chińskiego / praktyka zakupowa — ale każdy h2 z frazą, ŻADNYCH generycznych "Jak to działa". Wewnątrz sekcji możesz użyć h3.
 9. Fraza główna i warianty z danych wejściowych wplecione naturalnie — bez upychania (keyword stuffing dyskwalifikuje tekst).
+
+PROCES (wykonaj wewnętrznie, w odpowiedzi zwróć TYLKO finalny JSON):
+Krok 1 — napisz hasło wg struktury.
+Krok 2 — recenzja techniczna własnego tekstu: każda konkretna liczba/parametr spoza kontekstu wejściowego i spoza powszechnie ustalonej wiedzy inżynierskiej = usuń lub zamień na typowy przedział z zastrzeżeniem; twierdzenia sprzeczne z fizyką/praktyką = popraw; mylące uproszczenia istotne dla kupującego = przeformułuj.
+Krok 3 — korekta wydawnicza: literówki, gramatyka, interpunkcja, kalki z angielskiego, spójność jednostek.
+Zwróć wyłącznie finalny JSON po krokach 2-3.
