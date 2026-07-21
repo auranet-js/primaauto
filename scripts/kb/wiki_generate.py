@@ -32,6 +32,25 @@ def existing_slugs():
     return set(s for s in out.split("\n") if s)
 
 
+RESEARCH_PROMPT = """Jesteś researcherem redakcji motoryzacyjnej. Zbierz z sieci AKTUALNE fakty o podanej technologii w kontekście chińskiej motoryzacji: generacje/wersje z datami, kluczowe parametry, producenci/dostawcy, przykładowe modele aut, znane problemy/kontrowersje. Priorytet: rzeczy, które zmieniały się w czasie (generacje!) i które kupujący auto z Chin musi wiedzieć.
+Zwróć czysty JSON: {"fakty": ["fakt z datą/parametrem", ...], "zrodla": ["url", ...]} — 6-12 faktów, tylko zweryfikowane w źródłach."""
+
+
+def research_facts(cfg):
+    """Research w sieci przed pisaniem hasła (źródło prawdy ≠ pamięć modelu)."""
+    try:
+        text, _ = kb.call_model(
+            RESEARCH_PROMPT,
+            f"TECHNOLOGIA: {cfg['title']} (kontekst wyjściowy: {cfg['context'][:400]})",
+            tools="WebSearch,WebFetch",
+        )
+        data = kb.parse_json_response(text)
+        return data.get("fakty", []), data.get("zrodla", [])
+    except Exception as e:
+        print(f"    research nieudany ({e}) — piszę bez", flush=True)
+        return [], []
+
+
 def get_paa(keyword):
     """Realne pytania People Also Ask z SERP (DataForSEO, ~$0.002/zapytanie)."""
     import urllib.request
@@ -90,17 +109,21 @@ def build_entry(cfg, system_prompt):
     examples = db_examples(cfg)
     ex_ctx = ("PRZYKŁADOWE AUTA Z TĄ TECHNOLOGIĄ Z NASZEJ BAZY (możesz przywołać modele, bez rocznikowych dopisków):\n- "
               + "\n- ".join(examples) + "\n") if examples else ""
+    facts, sources = research_facts(cfg)
+    facts_ctx = ("FAKTY Z RESEARCHU W SIECI (zweryfikowane, użyj ich — zwłaszcza generacji/wersji i dat):\n- "
+                 + "\n- ".join(facts) + "\n") if facts else ""
     paa = get_paa(cfg.get("main_kw") or cfg["title"])
     paa_ctx = ("REALNE PYTANIA UŻYTKOWNIKÓW GOOGLE (People Also Ask) — FAQ zbuduj przede wszystkim "
                "z nich (możesz przeredagować stylistycznie, dodaj max 1 własne pytanie):\n- "
                + "\n- ".join(paa) + "\n") if paa else ""
     user_msg = (f"HASŁO: {cfg['title']}\n{kw_ctx}"
-                f"KONTEKST Z NASZEJ BAZY (fakty do wykorzystania, nie cytuj dosłownie):\n{cfg['context']}\n{ex_ctx}{paa_ctx}\n"
+                f"KONTEKST Z NASZEJ BAZY (fakty do wykorzystania, nie cytuj dosłownie):\n{cfg['context']}\n{facts_ctx}{ex_ctx}{paa_ctx}\n"
                 "Napisz hasło zgodnie z instrukcją systemową (kroki 1-3 wewnętrznie). Zwróć czysty finalny JSON.")
     # Jeden przebieg: draft + samo-recenzja + korekta w jednym prompcie (optymalizacja
     # po feedbacku Janka 21.07 — 4 osobne procesy claude -p × narzut startu = kwadrans/hasło).
     text, _ = kb.call_model(system_prompt, user_msg, model="opus")
     entry = kb.parse_json_response(kb.normalize_quotes(text))
+    entry["_sources"] = sources
 
     full_text = entry["definition"] + " " + entry["body_html"] + " " + json.dumps(entry["faq"], ensure_ascii=False)
     lint = kb.lint_text(full_text)
@@ -140,6 +163,8 @@ def create_wiki_entry(cfg, entry):
     kb.wp("post", "meta", "set", post_id, "_wiki_aliases", cfg["aliases"])
     kb.wp("post", "meta", "set", post_id, "_wiki_term_keys", json.dumps(cfg["term_keys"], ensure_ascii=False))
     kb.wp("post", "meta", "set", post_id, "_kb_faq_json", json.dumps(entry["faq"], ensure_ascii=False))
+    if entry.get("_sources"):
+        kb.wp("post", "meta", "set", post_id, "_wiki_sources", json.dumps(entry["_sources"], ensure_ascii=False))
     try:
         cover = str(kb.STATE_DIR / f"cover-wiki-{post_id}.webp")
         make_cover(cfg["title"], cover, "LEKSYKON")

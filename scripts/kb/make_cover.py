@@ -19,31 +19,41 @@ W, H = 1200, 675
 def make_cover(title: str, out_path: str, label: str = "AKTUALNOŚCI") -> str:
     out = Path(out_path)
     out.parent.mkdir(parents=True, exist_ok=True)
+    # Siatka techniczna (blueprint) — subtelna tekstura zamiast pustego tła
+    grid = []
+    for x in range(0, W + 1, 60):
+        grid.append(f"line {x},0 {x},{H}")
+    for y in range(0, H + 1, 60):
+        grid.append(f"line 0,{y} {W},{y}")
     cmd = [
         "magick",
-        # tło: pionowy gradient granatu brandowego
-        "-size", f"{W}x{H}", "gradient:#24355A-#131E36",
-        # subtelna siatka/tekstura: przyciemniony pas dolny pod stopkę
-        "-fill", "#0E1728", "-draw", f"rectangle 0,{H-90} {W},{H}",
-        # czerwony akcent
-        "-fill", "#D63031", "-draw", "rectangle 72,150 152,162",
-        # etykieta sekcji
-        "-font", FONT_BOLD, "-pointsize", "30", "-fill", "#E8AC07",
-        "-annotate", "+72+120", label.upper(),
-        # tytuł (zawijany caption jako osobna warstwa)
+        "-size", f"{W}x{H}", "gradient:#22335A-#141F38",
+        "-stroke", "#2A3B63", "-strokewidth", "1", "-draw", " ".join(grid),
+        "-stroke", "none",
+        # lewy pionowy akcent czerwony na całej wysokości
+        "-fill", "#D63031", "-draw", f"rectangle 0,0 10,{H}",
+        # etykieta sekcji — wycentrowana nad tytułem
         "(",
-            "-size", "1020x340", "-background", "none",
-            "-font", FONT_BOLD, "-fill", "white",
-            "-pointsize", "58", "-interline-spacing", "8",
-            f"caption:{title}",
+            "-size", "1000x60", "-background", "none",
+            "-font", FONT_BOLD, "-fill", "#E8AC07", "-pointsize", "26",
+            "-gravity", "Center", f"caption:{label.upper()}",
         ")",
-        "-gravity", "West", "-geometry", "+72+30", "-composite",
-        "-gravity", "NorthWest",
-        # stopka brandowa
-        "-font", FONT_BOLD, "-pointsize", "26", "-fill", "white",
-        "-annotate", f"+72+{H-36}", "PRIMA-AUTO",
-        "-font", FONT_REG, "-pointsize", "24", "-fill", "#8DA0BC",
-        "-annotate", f"+248+{H-36}", "primaauto.com.pl — chińska motoryzacja bez tajemnic",
+        "-gravity", "Center", "-geometry", "+0-140", "-composite",
+        # tytuł — duży, wycentrowany w pionie i poziomie
+        "(",
+            "-size", "1000x300", "-background", "none",
+            "-font", FONT_BOLD, "-fill", "white",
+            "-pointsize", "64", "-interline-spacing", "6",
+            "-gravity", "Center", f"caption:{title}",
+        ")",
+        "-gravity", "Center", "-geometry", "+0+10", "-composite",
+        # stopka brandowa — wycentrowana
+        "(",
+            "-size", "1000x40", "-background", "none",
+            "-font", FONT_REG, "-fill", "#8DA0BC", "-pointsize", "24",
+            "-gravity", "Center", "caption:PRIMA-AUTO · primaauto.com.pl",
+        ")",
+        "-gravity", "South", "-geometry", "+0+28", "-composite",
         "-quality", "85", str(out),
     ]
     subprocess.run(cmd, check=True, capture_output=True, text=True)
