@@ -116,29 +116,26 @@ def build_draft(cand, makes, rate, system_prompt):
                 f"NASZA OFERTA: {offer_ctx}\n\n"
                 "Napisz artykuł zgodnie z instrukcją systemową. Zwróć czysty JSON.")
 
-    text, usage = kb.call_anthropic(system_prompt, user_msg)
-    total_cost = kb.cost_usd(usage)
+    text, usage = kb.call_model(system_prompt, user_msg)
     draft = kb.parse_json_response(kb.normalize_quotes(text))
 
     for attempt in range(2):
-        vtext, vusage = kb.call_anthropic(
+        vtext, vusage = kb.call_model(
             VERIFY_PROMPT,
             f"MATERIAŁ ŹRÓDŁOWY:\n{source_text[:12000]}\n\nKURS: 1 CNY = {rate:.3f} PLN\n\n"
             f"ARTYKUŁ:\nTYTUŁ: {draft['title']}\nLEAD: {draft['lead']}\n{kb.strip_html(draft['body_html'])}",
             max_tokens=1500,
         )
-        total_cost += kb.cost_usd(vusage)
         verdict = kb.parse_json_response(vtext)
         if verdict.get("ok"):
             break
         if attempt == 0:
             print(f"    fact-check: {len(verdict.get('issues', []))} problemów — regeneruję", flush=True)
-            text, usage = kb.call_anthropic(
+            text, usage = kb.call_model(
                 system_prompt,
                 user_msg + "\n\nPOPRZEDNIA WERSJA MIAŁA BŁĘDY FAKTOGRAFICZNE — popraw je:\n"
                 + "\n".join("- " + i for i in verdict.get("issues", [])),
             )
-            total_cost += kb.cost_usd(usage)
             draft = kb.parse_json_response(kb.normalize_quotes(text))
         else:
             raise RuntimeError("Fact-check nie przeszedł po regeneracji: " + "; ".join(verdict.get("issues", [])[:3]))
@@ -149,7 +146,6 @@ def build_draft(cand, makes, rate, system_prompt):
 
     draft["_source_url"] = cand["link"]
     draft["_source"] = cand["source"]
-    draft["_cost"] = round(total_cost, 4)
     return draft
 
 
@@ -180,7 +176,7 @@ def build_mail(results, skipped_info):
         d = r["draft"]
         rows.append(f"""
 <div style="border:1px solid #ddd;border-radius:8px;padding:16px;margin:16px 0">
-  <p style="margin:0 0 4px;color:#888;font-size:12px">{d['_source']} · koszt ${d['_cost']:.3f} · post #{r['post_id']}</p>
+  <p style="margin:0 0 4px;color:#888;font-size:12px">{d['_source']} · post #{r['post_id']}</p>
   <h2 style="margin:0 0 8px;font-size:19px">{d['title']}</h2>
   <p style="font-weight:bold">{d['lead']}</p>
   {d['body_html']}
@@ -228,13 +224,13 @@ def main():
     make_names = [m["name"] for m in makes]
 
     cand_list = "\n".join(f"{i}. [{c['source']}] {c['title']} — {c['desc'][:180]}" for i, c in enumerate(candidates))
-    sel_text, sel_usage = kb.call_anthropic(
+    sel_text, sel_usage = kb.call_model(
         SELECT_PROMPT.format(n=args.limit, makes=", ".join(make_names[:60])),
         f"KANDYDACI:\n{cand_list}\n\nWybierz {args.limit}.",
         max_tokens=800,
     )
     picks = kb.parse_json_response(sel_text)["picks"][:args.limit]
-    print(f"\nSelekcja (${kb.cost_usd(sel_usage):.3f}):", flush=True)
+    print("\nSelekcja:", flush=True)
     for p in picks:
         print(f"  -> [{candidates[p['idx']]['source']}] {candidates[p['idx']]['title']}\n     {p['why']}", flush=True)
 
@@ -251,7 +247,7 @@ def main():
             draft = build_draft(cand, makes, rate, system_prompt)
             post_id, publish_url = create_wp_draft(draft)
             results.append({"draft": draft, "post_id": post_id, "publish_url": publish_url})
-            print(f"    OK draft #{post_id} (${draft['_cost']:.3f})", flush=True)
+            print(f"    OK draft #{post_id}", flush=True)
         except Exception as e:
             failed.append(f"{cand['title']}: {e}")
             print(f"    FAIL: {e}", flush=True)

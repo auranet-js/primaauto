@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 """
-Biblioteka wspólna działu wiedzy (T-214): Anthropic API, HTTP, lint, WP-CLI.
-Wzorzec przeniesiony z hub-wiki-generate.py (odzyskany z backupu 2026-07-14).
+Biblioteka wspólna działu wiedzy (T-214): generowanie przez `claude -p`
+(headless Claude Code W RAMACH ABONAMENTU — zero kosztów API; decyzja Janka
+2026-07-21: nie używamy Anthropic API), HTTP, lint, WP-CLI, mail.
 """
 import html
 import json
 import re
+import shlex
 import subprocess
 import time
 import urllib.error
@@ -18,8 +20,7 @@ STATE_DIR = KB_DIR / "state"
 SECRETS = Path.home() / "secrets"
 WP_PATH = "/home/host476470/domains/primaauto.com.pl/public_html"
 
-ANTHROPIC_KEY = (SECRETS / "anthropic/api-key.txt").read_text().strip()
-MODEL = "claude-sonnet-4-5"
+MODEL = "sonnet"  # alias modelu dla claude -p (abonament)
 UA = "Mozilla/5.0 (X11; Linux x86_64) PrimaAutoKB/1.0 (+https://primaauto.com.pl/informacje/o-redakcji/)"
 
 FORBIDDEN_PHRASES = [
@@ -41,43 +42,25 @@ def http_get(url, timeout=30, as_text=False):
     return json.loads(raw)
 
 
-def call_anthropic(system_prompt, user_msg, max_tokens=6000, retries=2):
-    """Zwraca (text, usage). Prompt caching na system prompt."""
-    body = {
-        "model": MODEL,
-        "max_tokens": max_tokens,
-        "system": [{"type": "text", "text": system_prompt, "cache_control": {"type": "ephemeral"}}],
-        "messages": [{"role": "user", "content": user_msg}],
-    }
+def call_model(system_prompt, user_msg, max_tokens=None, retries=1):
+    """Generowanie przez `claude -p` (headless, abonament). Zwraca (text, usage)."""
+    prompt = f"INSTRUKCJA SYSTEMOWA (stosuj bezwzględnie):\n{system_prompt}\n\n{'=' * 30}\n\n{user_msg}"
     for attempt in range(retries + 1):
-        req = urllib.request.Request(
-            "https://api.anthropic.com/v1/messages",
-            data=json.dumps(body).encode("utf-8"),
-            headers={
-                "x-api-key": ANTHROPIC_KEY,
-                "anthropic-version": "2023-06-01",
-                "content-type": "application/json",
-            },
-            method="POST",
+        result = subprocess.run(
+            ["/bin/bash", "-lc", f"claude -p --model {MODEL} --output-format json"],
+            input=prompt, capture_output=True, text=True, timeout=600,
         )
         try:
-            with urllib.request.urlopen(req, timeout=240) as r:
-                resp = json.loads(r.read())
-                text = (resp.get("content") or [{}])[0].get("text", "")
-                return text, resp.get("usage", {})
-        except urllib.error.HTTPError as e:
-            err = e.read().decode("utf-8", errors="replace")[:400]
-            if attempt < retries and e.code in (429, 500, 502, 503, 529):
-                time.sleep((attempt + 1) * 15)
-                continue
-            raise RuntimeError(f"Anthropic HTTP {e.code}: {err}")
-
-
-def cost_usd(usage):
-    return (usage.get("input_tokens", 0) * 3
-            + usage.get("output_tokens", 0) * 15
-            + usage.get("cache_read_input_tokens", 0) * 0.30
-            + usage.get("cache_creation_input_tokens", 0) * 3.75) / 1_000_000
+            data = json.loads(result.stdout)
+        except json.JSONDecodeError:
+            data = None
+        if data and not data.get("is_error") and data.get("result"):
+            return data["result"], data.get("usage", {})
+        err = (data or {}).get("result") or result.stderr[:300] or result.stdout[:300]
+        if attempt < retries:
+            time.sleep(30)
+            continue
+        raise RuntimeError(f"claude -p error: {err}")
 
 
 def parse_json_response(text):
@@ -85,7 +68,14 @@ def parse_json_response(text):
     if s.startswith("```"):
         s = re.sub(r"^```(?:json)?\s*", "", s)
         s = re.sub(r"\s*```\s*$", "", s)
-    return json.loads(s)
+    try:
+        return json.loads(s)
+    except json.JSONDecodeError:
+        # Model czasem owija JSON prozą — wytnij od pierwszego '{' do ostatniego '}'
+        start, end = s.find("{"), s.rfind("}")
+        if start >= 0 and end > start:
+            return json.loads(s[start:end + 1])
+        raise
 
 
 def normalize_quotes(s):
@@ -114,7 +104,7 @@ def strip_html(s):
 def wp(*args, stdin=None):
     """WP-CLI w katalogu produkcji. Zwraca stdout, rzuca przy błędzie."""
     result = subprocess.run(
-        ["/bin/bash", "-lc", "cd %s && wp %s" % (WP_PATH, " ".join(a.replace("'", "'\\''") for a in args))],
+        ["/bin/bash", "-lc", "cd %s && wp %s" % (WP_PATH, " ".join(shlex.quote(a) for a in args))],
         capture_output=True, text=True, input=stdin,
     )
     if result.returncode != 0:

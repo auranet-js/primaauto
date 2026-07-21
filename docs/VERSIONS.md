@@ -23,8 +23,9 @@ przetestowane). Silnik w repo: `scripts/kb/` (kb_lib.py — Anthropic API + lint
 news_daily.py — radar 4 RSS → dedup state → selekcja Claude → draft PL → fact-check 2. przebiegiem →
 lint → draft WP + token → mail akceptacyjny; prompts/news_system.txt; kb-news-daily.sh — wrapper
 cronowy flock+kill-switch, NIEzarejestrowany w crontab do F3). Radar przetestowany: 58 świeżych
-kandydatów z 36h. **BLOCKER: konto Anthropic API bez środków** (HTTP 400 credit balance) —
-generowanie czeka na doładowanie.
+kandydatów z 36h. Generowanie: **`claude -p` headless w ramach abonamentu** (decyzja Janka —
+nie używamy płatnego Anthropic API; wzorzec jak warmupy w crontab). Skrzynka
+redakcja@primaauto.com.pl założona 21.07.
 
 ## 0.33.38 — 2026-07-20 (przeglądarka „Przeglądaj Che168", GATED na js)
 
