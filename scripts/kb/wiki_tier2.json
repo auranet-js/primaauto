@@ -1,0 +1,617 @@
+[
+ {
+  "title": "Bateria Kirin (CATL Qilin)",
+  "headword": "Bateria Kirin",
+  "slug": "bateria-kirin",
+  "category": "bateria",
+  "aliases": "Kirin, Qilin, 麒麟电池",
+  "term_keys": {
+   "battery_special_technology": "麒麟"
+  },
+  "main_kw": "bateria kirin",
+  "context": "Flagowa bateria CATL (CTP 3.0, premiera 2022, produkcja od 2023): upakowanie bez modułów, do ~255 Wh/kg w wariancie NMC (najwyższa gęstość w masowej produkcji), chłodzenie między ogniwami, ładowanie 4C. Montowana m.in. w Zeekr 001/009, Li Auto MEGA. W naszej bazie ~142 aut."
+ },
+ {
+  "title": "CATL — największy producent baterii na świecie",
+  "headword": "CATL",
+  "slug": "catl",
+  "category": "bateria",
+  "aliases": "CATL, Ningde Shidai, 宁德时代",
+  "term_keys": {
+   "battery_brand": "宁德时代"
+  },
+  "main_kw": "catl",
+  "context": "Chiński producent baterii nr 1 globalnie (ok. 35-38% rynku baterii EV, wielokrotnie więcej niż ktokolwiek inny), dostawca dla większości marek chińskich i wielu europejskich (Tesla, BMW, Mercedes). Rodziny produktów: Kirin (NMC premium), Shenxing (LFP superfast), baterie sodowe. W naszej bazie ~858 aut ma ogniwa CATL — najczęstszy producent.",
+  "kw_variants": "main [1900]"
+ },
+ {
+  "title": "FinDreams — baterie koncernu BYD",
+  "headword": "FinDreams",
+  "slug": "findreams",
+  "category": "bateria",
+  "aliases": "FinDreams, FDB, 弗迪电池",
+  "term_keys": {
+   "battery_brand": "弗迪"
+  },
+  "main_kw": "findreams battery",
+  "context": "Spółka bateryjna koncernu BYD (wydzielona 2019), producent Blade Battery (LFP). Zaopatruje BYD, Denza, Fangchengbao/Leopard, Yangwang, sprzedaje też innym producentom. Drugi największy producent baterii EV na świecie po CATL. W naszej bazie ~404 aut (plus ~158 oznaczonych wprost jako BYD)."
+ },
+ {
+  "title": "Bateria Shenxing (CATL)",
+  "headword": "Bateria Shenxing",
+  "slug": "bateria-shenxing",
+  "category": "bateria",
+  "aliases": "Shenxing, 神行电池, superfast charging",
+  "term_keys": {
+   "battery_special_technology": "神行"
+  },
+  "main_kw": "shenxing",
+  "context": "Rodzina szybkoładowalnych baterii LFP CATL: Shenxing (2023, 4C), Shenxing Plus (2024, zasięg 1000 km CLTC, 600 km w 10 min ładowania), Shenxing 3.0 (kwiecień 2026: 10-80% w 3 min 44 s, przy -30 st. C 20-98% w ok. 9 min, ponad 90% SoH po 1000 cykli ultraszybkiego ładowania). W naszej bazie ~54 auta."
+ },
+ {
+  "title": "Golden Brick — bateria Zeekr/Geely",
+  "headword": "Golden Brick",
+  "slug": "golden-brick",
+  "category": "bateria",
+  "aliases": "Golden Brick, 金砖电池, Jinzhuan",
+  "term_keys": {
+   "battery_special_technology": "金砖"
+  },
+  "main_kw": "golden brick battery",
+  "context": "Szybkoładowalna bateria LFP Geely/Zeekr (premiera XII 2023): 4,5C, 10-80% w ok. 15 min, upakowanie CTB. Montowana w Zeekr 007, X i innych modelach grupy Geely (Galaxy). W naszej bazie ~22 auta."
+ },
+ {
+  "title": "CTP i CTB — baterie bez modułów",
+  "headword": "CTP / CTB",
+  "slug": "ctp-ctb",
+  "category": "bateria",
+  "aliases": "cell-to-pack, cell-to-body, CTP, CTB",
+  "term_keys": {},
+  "main_kw": "cell to pack",
+  "context": "Technologie upakowania ogniw: CTP (cell-to-pack) eliminuje moduły — ogniwa idą wprost do pakietu (Blade BYD, Kirin CATL); CTB (cell-to-body) idzie dalej — pakiet jest elementem nośnym karoserii (BYD Seal, Zeekr). Efekt: wyższa gęstość na poziomie pakietu, sztywniejsze nadwozie, niżej środek ciężkości. Minus: trudniejsze naprawy i wymiana pojedynczych ogniw."
+ },
+ {
+  "title": "Złącze GB/T — chiński standard ładowania",
+  "headword": "Złącze GB/T",
+  "slug": "zlacze-gbt",
+  "category": "bateria",
+  "aliases": "GB/T, gniazdo chińskie, adapter GB/T CCS",
+  "term_keys": {},
+  "main_kw": "gb/t",
+  "context": "Chiński krajowy standard złącza ładowania (osobne gniazda AC i DC), niekompatybilny mechanicznie z europejskim Type 2/CCS2. Auto importowane z Chin ładuje się w PL przez adapter GB/T->Type 2 (AC) i GB/T->CCS2 (DC) — sprawdzone, dostępne w Polsce, my doradzamy przy zakupie. Nowy chiński standard ChaoJi w drodze. AC w Chinach 220V jednofazowe — kompatybilne z polską siecią. KLUCZOWY temat praktyczny dla importu.",
+  "kw_variants": "main [50]"
+ },
+ {
+  "title": "Pompa ciepła w samochodzie elektrycznym",
+  "headword": "Pompa ciepła",
+  "slug": "pompa-ciepla",
+  "category": "bateria",
+  "aliases": "pompa ciepła, heat pump",
+  "term_keys": {
+   "heat_pump_management_system": "标"
+  },
+  "main_kw": "pompa ciepła w samochodzie elektrycznym",
+  "context": "Ogrzewa kabinę ciepłem z otoczenia i odpadowym z napędu zamiast grzałką oporową — zimą potrafi ograniczyć spadek zasięgu o kilkanaście-20%. W chińskich EV coraz częściej standard (w naszej bazie ~923 auta). Przy zakupie do polskich zim — mocno wskazana."
+ },
+ {
+  "title": "Bateria LMFP (litowo-manganowo-żelazowo-fosforanowa)",
+  "headword": "Bateria LMFP",
+  "slug": "bateria-lmfp",
+  "category": "bateria",
+  "aliases": "LMFP, M3P, mangan LFP",
+  "term_keys": {
+   "battery_type": "锰"
+  },
+  "main_kw": "lmfp",
+  "context": "Rozwinięcie LFP z dodatkiem manganu: ok. 15-20% wyższa gęstość energii przy zachowaniu bezpieczeństwa i kosztów LFP. CATL (M3P), Sinowatt, Gotion rozwijają; pierwsze wdrożenia seryjne od 2023-2024. W naszej bazie na razie ~8 aut — technologia wschodząca."
+ },
+ {
+  "title": "Przekładnia DHT w chińskich hybrydach",
+  "headword": "DHT",
+  "slug": "dht",
+  "category": "naped",
+  "aliases": "DHT, dedicated hybrid transmission, EHS",
+  "term_keys": {},
+  "main_kw": "dht skrzynia",
+  "context": "Dedykowana przekładnia hybrydowa (Dedicated Hybrid Transmission) — serce chińskich super-hybryd: integruje 1-2 silniki elektryczne, sprzęgło i 1-3 przełożenia dla silnika spalinowego. Odmiany: BYD EHS (DM-i), Chery DHT (3 biegi), Great Wall Lemon DHT. Vs klasyczna e-CVT Toyoty: więcej jazdy czysto elektrycznej i sztywne przełożenie na trasie. W naszej bazie ~273 aut ma skrzynię opisaną wprost jako DHT."
+ },
+ {
+  "title": "E-CVT — przekładnia hybryd szeregowo-równoległych",
+  "headword": "E-CVT",
+  "slug": "e-cvt",
+  "category": "naped",
+  "aliases": "E-CVT, przekładnia planetarna hybrydy",
+  "term_keys": {
+   "gearbox_type": "E-CVT"
+  },
+  "main_kw": "e-cvt",
+  "context": "Elektroniczna bezstopniowa przekładnia hybryd (bez pasów jak w klasycznym CVT!) — najczęściej układ planetarny lub dwusilnikowy dzielący moc. Płynna, bezobsługowa, bardzo trwała. W chińskich autach oznaczenie bywa używane szeroko na przekładnie hybrydowe. W naszej bazie ~364 auta.",
+  "kw_variants": "main [480]"
+ },
+ {
+  "title": "Mokra skrzynia dwusprzęgłowa (DCT)",
+  "headword": "DCT (mokre)",
+  "slug": "dct-mokra",
+  "category": "naped",
+  "aliases": "DCT, dwusprzęgłowa, 湿式双离合",
+  "term_keys": {
+   "gearbox_type": "湿式"
+  },
+  "main_kw": "skrzynia dct",
+  "context": "Skrzynia dwusprzęgłowa ze sprzęgłami w kąpieli olejowej — lepsze chłodzenie i trwałość niż suche DCT (znane z problemów w tanich autach sprzed dekady). Standard w chińskich autach spalinowych i częściowo hybrydach (7DCT Chery, Great Wall). W naszej bazie ~406 aut. Serwis: wymiana oleju DCT co 60-80 tys. km.",
+  "kw_variants": "main [720]"
+ },
+ {
+  "title": "BYD DM-p — hybryda wydajnościowa",
+  "headword": "BYD DM-p",
+  "slug": "byd-dm-p",
+  "category": "naped",
+  "aliases": "DM-p, dual mode performance",
+  "term_keys": {},
+  "main_kw": "byd dm-p",
+  "context": "Wydajnościowa odmiana hybryd BYD (obok oszczędnościowej DM-i): dodatkowy silnik elektryczny na tylnej osi = AWD i osiągi (Han DM-p 3,7 s do setki), przy zachowaniu jazdy elektrycznej z wtyczki. Tang DM-p, Han DM-p, Leopard 5 (DMO — odmiana terenowa). Vs DM-i: więcej mocy, wyższe spalanie."
+ },
+ {
+  "title": "Chery Super Hybrid (CSH)",
+  "headword": "Chery Super Hybrid",
+  "slug": "chery-super-hybrid",
+  "category": "naped",
+  "aliases": "CSH, Kunpeng Super Hybrid, C-DM",
+  "term_keys": {},
+  "main_kw": "chery super hybrid",
+  "context": "Układ hybrydowy plug-in Chery (marki Chery, Jaecoo, Omoda; w Europie sprzedawany jako SHS - Super Hybrid System): silnik 1.5T o wysokiej sprawności + 3-biegowa przekładnia DHT + baterie 18-34 kWh. Jaecoo 7 SHS w Polsce oficjalnie. Zasięgi elektryczne 90-150 km CLTC, spalanie przy pustej baterii ok. 5-6 l."
+ },
+ {
+  "title": "Geely EM-i i EM-P (Galaxy)",
+  "headword": "Geely EM-i / EM-P",
+  "slug": "geely-em-i",
+  "category": "naped",
+  "aliases": "EM-i, EM-P, NordThor, Leishen",
+  "term_keys": {},
+  "main_kw": "geely em-i",
+  "context": "Hybrydy plug-in Geely nowej generacji (NordThor/Thor EM-i): silnik 1.5 o sprawności do 46,5%, jednobiegowa lub 3-biegowa DHT, wersje EM-i (oszczędna) i EM-P (wydajnościowa AWD). Galaxy Starship 7 EM-i, Galaxy L6/L7. Bezpośredni konkurent BYD DM-i 5.0."
+ },
+ {
+  "title": "Napęd tri-motor i quad-motor",
+  "headword": "Tri-motor / quad-motor",
+  "slug": "tri-motor",
+  "category": "naped",
+  "aliases": "trzy silniki, cztery silniki, 三电机, 四电机",
+  "term_keys": {
+   "driver_form": "三电机"
+  },
+  "main_kw": "tri motor",
+  "context": "Trzy silniki (1 przód + 2 tył lub odwrotnie) dają wektorowanie momentu na tylnej osi; cztery silniki (po jednym na koło, Yangwang U8/U9) — pełną niezależną kontrolę każdego koła: obrót w miejscu (tank turn), jazda bokiem, pływanie awaryjne U8. Moce 700-1300+ KM. W naszej bazie ~45 aut."
+ },
+ {
+  "title": "Elektryczny napęd 4x4 — bez wału napędowego",
+  "headword": "Elektryczny 4x4",
+  "slug": "elektryczny-4x4",
+  "category": "naped",
+  "aliases": "e-AWD, elektryczny AWD, 电四驱",
+  "term_keys": {
+   "fourwheel_drive_type": "电四驱"
+  },
+  "main_kw": "napęd 4x4 elektryczny",
+  "context": "AWD realizowany osobnymi silnikami na osiach — bez wału, sprzęgieł międzyosiowych i reduktorów. Reakcja w milisekundy, pełna kontrola rozdziału momentu, prostota mechaniczna. W terenie: brak fizycznych blokad zastępuje elektronika + ew. blokada tylnego dyferencjału (Leopard 5). Najpopularniejszy typ 4x4 w chińskich autach — w naszej bazie ~1077 aut."
+ },
+ {
+  "title": "Rekuperacja i jazda one-pedal",
+  "headword": "Rekuperacja",
+  "slug": "rekuperacja",
+  "category": "naped",
+  "aliases": "hamowanie odzyskowe, one-pedal, i-Pedal",
+  "term_keys": {},
+  "main_kw": "rekuperacja",
+  "context": "Odzysk energii przy hamowaniu — silnik pracuje jako generator. Poziomy regulowane, tryb one-pedal (auto zatrzymuje się po puszczeniu gazu) w większości chińskich EV. Praktyka: w mieście odzysk realnie wydłuża zasięg, tarcze hamulcowe rzadko używane potrafią korodować — okresowo hamować mechanicznie.",
+  "kw_variants": "main [27100]"
+ },
+ {
+  "title": "NOA — nawigacja autonomiczna po chińsku",
+  "headword": "NOA",
+  "slug": "noa",
+  "category": "adas",
+  "aliases": "NOA, Navigate on Autopilot, NCA, NGP, 领航辅助",
+  "term_keys": {
+   "navigation_assisted_driving_1": "标"
+  },
+  "main_kw": "noa autopilot",
+  "context": "Navigate on Autopilot — asystent prowadzący auto po trasie z nawigacji: zmiany pasów, zjazdy, wyprzedzanie; wersje highway i city (miejskie światła, ronda, skręty). Nazwy własne: NCA (Huawei), NGP (XPeng), NOA (Li Auto, BYD). WAŻNE dla importu: miejskie NOA wymaga chińskich map i chmury producenta — w Europie działa zwykle tylko podstawowy pakiet (ACC+LCC). W naszej bazie ~1662 aut z NOA."
+ },
+ {
+  "title": "Huawei ADS — system autonomiczny Huawei",
+  "headword": "Huawei ADS",
+  "slug": "huawei-ads",
+  "category": "adas",
+  "aliases": "ADS, Huawei ADS 3.0, 乾崑智驾",
+  "term_keys": {},
+  "main_kw": "huawei ads",
+  "context": "Zaawansowany system wspomagania Huawei (AITO, Avatr, Luxeed, Stelato, część Deepal): lidar + kamery + własny czip, wersje ADS SE/2.0/3.0/4.0 (2025: ADS 4 z jazdą bez map HD). Uważany w Chinach za lidera obok Tesli FSD i XPeng. W Europie funkcje miejskie nieaktywne — działa poziom L2.",
+  "kw_variants": "main [10]"
+ },
+ {
+  "title": "God's Eye — system BYD",
+  "headword": "God's Eye (BYD)",
+  "slug": "byd-gods-eye",
+  "category": "adas",
+  "aliases": "God's Eye, Tianshen Zhi Yan, 天神之眼, DiPilot",
+  "term_keys": {},
+  "main_kw": "byd god's eye",
+  "context": "System wspomagania BYD ogłoszony II 2025 jako STANDARD w niemal całej gamie (nawet Seagull): wersje A (3 lidary, Yangwang), B (1 lidar, premium), C (kamery, modele masowe). Highway NOA we wszystkich wersjach, city NOA w A/B. Przełom cenowy — autonomia L2+ w autach za równowartość 40 tys. zł."
+ },
+ {
+  "title": "Kamera 360° i przezroczyste podwozie",
+  "headword": "Kamera 360°",
+  "slug": "kamera-360",
+  "category": "adas",
+  "aliases": "kamera 360, panoramic camera, przezroczyste podwozie",
+  "term_keys": {
+   "panoramic_camera": "标"
+  },
+  "main_kw": "kamera 360 w samochodzie",
+  "context": "Obraz z 4+ kamer sklejany w widok z lotu ptaka; chińskie systemy dodają 'przezroczyste podwozie' (obraz spod auta z pamięci kamer) i widok 3D. W naszej bazie ~2761 aut — praktycznie standard. Jakość obrazu (rozdzielczość kamer) różni wersje wyposażenia."
+ },
+ {
+  "title": "Automatyczne parkowanie (APA, RPA, z pamięcią)",
+  "headword": "Auto-parkowanie",
+  "slug": "auto-parkowanie",
+  "category": "adas",
+  "aliases": "APA, RPA, memory parking, HPA, valet parking",
+  "term_keys": {
+   "memory_parking": "标"
+  },
+  "main_kw": "automatyczne parkowanie",
+  "context": "Poziomy: APA (auto parkuje samo, kierowca w środku), RPA (zdalnie z telefonu — przydatne w ciasnych miejscach), parkowanie z pamięcią/HPA (auto uczy się trasy np. w garażu podziemnym i parkuje samo bez kierowcy). W naszej bazie: auto-parkowanie ~2898 aut, z pamięcią ~1116.",
+  "kw_variants": "main [90]"
+ },
+ {
+  "title": "Tryb wartownika (sentinel mode)",
+  "headword": "Tryb wartownika",
+  "slug": "tryb-wartownika",
+  "category": "adas",
+  "aliases": "sentinel mode, sentry, 哨兵模式",
+  "term_keys": {
+   "sentinel_mode": "标"
+  },
+  "main_kw": "sentry mode",
+  "context": "Monitoring otoczenia zaparkowanego auta kamerami ADAS: wykrycie zbliżenia/uderzenia -> nagranie + alert w aplikacji. Pobór prądu ~1-2% baterii/dobę. W naszej bazie ~1941 aut. W PL uwaga na RODO przy publikowaniu nagrań."
+ },
+ {
+  "title": "Monitoring kierowcy (DMS)",
+  "headword": "DMS",
+  "slug": "dms",
+  "category": "adas",
+  "aliases": "DMS, driver monitoring, wykrywanie zmęczenia",
+  "term_keys": {
+   "active_dms_fatigue_detection": "标"
+  },
+  "main_kw": "dms monitoring kierowcy",
+  "context": "Kamera na podszybiu/słupku śledzi wzrok i powieki kierowcy: alarmy zmęczenia, kontrola uwagi przy aktywnym NOA (warunek działania asystentów). Od 2024 wymagany w nowych autach w UE (GSR2) — chińskie auta mają go seryjnie od lat. Bywa nadwrażliwy — do kalibracji w ustawieniach."
+ },
+ {
+  "title": "Poziomy autonomii jazdy (L0–L5)",
+  "headword": "Poziomy autonomii",
+  "slug": "poziomy-autonomii",
+  "category": "adas",
+  "aliases": "L2, L2+, L3, SAE levels, poziom autonomii",
+  "term_keys": {
+   "automatic_drive_level": "L2"
+  },
+  "main_kw": "poziomy autonomii jazdy",
+  "context": "Skala SAE: L0-L2 = wspomaganie (kierowca odpowiada zawsze), L3 = auto jedzie samo warunkowo, L4/L5 = pełna autonomia. Chińskie auta deklarują L2/L2+ (w naszej bazie ~2617 aut z L2) niezależnie od marketingu 'autonomii'. Prawnie w PL/UE kierowca zawsze odpowiada; certyfikacje L3 (Mercedes) to wyjątki."
+ },
+ {
+  "title": "Devialet — francuskie audio w chińskich autach",
+  "headword": "Devialet",
+  "slug": "devialet",
+  "category": "audio",
+  "aliases": "Devialet, 帝瓦雷",
+  "term_keys": {
+   "sound_brand": "帝瓦雷"
+  },
+  "main_kw": "devialet",
+  "context": "Francuska marka high-end audio (wzmacniacze Phantom) — w motoryzacji ekskluzywnie w grupie BYD: Denza (Z9 GT, N9 — do 26 głośników, 2000+ W), Yangwang U8. Systemy strojone przez inżynierów Devialet, tryby sceny dźwiękowej per fotel. W naszej bazie ~98 aut.",
+  "kw_variants": "main [1600]"
+ },
+ {
+  "title": "Dynaudio w samochodach",
+  "headword": "Dynaudio",
+  "slug": "dynaudio",
+  "category": "audio",
+  "aliases": "Dynaudio, 丹拿",
+  "term_keys": {
+   "sound_brand": "丹拿"
+  },
+  "main_kw": "dynaudio",
+  "context": "Duńska marka hi-fi z długą historią w autach (VW/Bugatti wcześniej) — dziś mocna w chińskich markach: Zeekr (001, 7X — do 21 głośników), Voyah, Hongqi. Naturalna, studyjna sygnatura brzmienia. W naszej bazie ~232 auta — druga najpopularniejsza marka audio premium.",
+  "kw_variants": "main [1600]"
+ },
+ {
+  "title": "HUAWEI SOUND",
+  "headword": "HUAWEI SOUND",
+  "slug": "huawei-sound",
+  "category": "audio",
+  "aliases": "Huawei Sound, 华为音响",
+  "term_keys": {
+   "sound_brand": "HUAWEI"
+  },
+  "main_kw": "huawei sound",
+  "context": "System audio Huawei w autach ekosystemu HIMA (AITO M5/M7/M9, Luxeed, Stelato): do 25 głośników, algorytmy przestrzenne Huawei, integracja z HarmonyOS (strefy dźwięku, kino w M9 z projektorem). Najczęstsza marka audio premium w naszej bazie — ~325 aut.",
+  "kw_variants": "main [40]"
+ },
+ {
+  "title": "Harman Kardon w chińskich autach",
+  "headword": "Harman Kardon",
+  "slug": "harman-kardon",
+  "category": "audio",
+  "aliases": "Harman Kardon, 哈曼卡顿",
+  "term_keys": {
+   "sound_brand": "哈曼"
+  },
+  "main_kw": "harman kardon",
+  "context": "Amerykańska marka (grupa Harman/Samsung) znana z BMW/Mercedes — w chińskich autach m.in. Lynk & Co, Geely premium, MG. Cieplejsze, efektowne strojenie. W naszej bazie ~26 aut.",
+  "kw_variants": "main [8100]"
+ },
+ {
+  "title": "Meridian w chińskich autach",
+  "headword": "Meridian",
+  "slug": "meridian",
+  "category": "audio",
+  "aliases": "Meridian, 英国之宝",
+  "term_keys": {
+   "sound_brand": "英国之宝"
+  },
+  "main_kw": "meridian audio",
+  "context": "Brytyjski pionier cyfrowego audio (znany z Jaguar Land Rover, McLaren) — w chińskich autach głównie Chery premium: Exeed (Yaoguang, RX), Jetour wyższe wersje. Technologie Trifield i cyfrowa korekcja. W naszej bazie ~45 aut.",
+  "kw_variants": "main [110]"
+ },
+ {
+  "title": "HarmonyOS Cockpit — system Huawei w aucie",
+  "headword": "HarmonyOS Cockpit",
+  "slug": "harmonyos",
+  "category": "audio",
+  "aliases": "HarmonyOS, Hongmeng, 鸿蒙座舱",
+  "term_keys": {},
+  "main_kw": "harmonyos",
+  "context": "System operacyjny kokpitu Huawei (AITO, Luxeed, Stelato, Avatr): płynność smartfonowej klasy, ekosystem aplikacji, przenoszenie zadań telefon-auto, asystent głosowy Xiaoyi. Uważany za najlepszy kokpit na chińskim rynku. Import: interfejs przełączalny na angielski, część usług chmurowych działa tylko w Chinach — omawiamy przy zakupie.",
+  "kw_variants": "main [880]"
+ },
+ {
+  "title": "Huawei HiCar",
+  "headword": "HiCar",
+  "slug": "hicar",
+  "category": "audio",
+  "aliases": "HiCar, 华为HiCar",
+  "term_keys": {},
+  "main_kw": "huawei hicar",
+  "context": "Odpowiednik CarPlay od Huawei — rzutowanie telefonu na ekran auta + integracja głębsza (kamery auta w nawigacji telefonu). Obecny w bardzo wielu chińskich autach (w naszej bazie ~1674) niezależnie od marki. Wymaga telefonu Huawei/Honor; dla innych telefonów zwykle jest CarLink/ICCOA."
+ },
+ {
+  "title": "CarPlay i Android Auto w autach z Chin",
+  "headword": "CarPlay / Android Auto",
+  "slug": "carplay-android-auto",
+  "category": "audio",
+  "aliases": "CarPlay, Android Auto, CarLink",
+  "term_keys": {},
+  "main_kw": "carplay",
+  "context": "Praktyka importowa: CarPlay ma ~20% chińskich aut (w naszej bazie ~591) — częściej marki globalne (Zeekr, MG, Volvo-Geely); Android Auto rzadkość (Google nie działa w Chinach) — zamiast niego HiCar/CarLink/ICCOA. Alternatywy: wbudowana nawigacja z polskim interfejsem po aktualizacji, uchwyt + telefon, moduły AA po rynku wtórnym. Sprawdzamy per model przed zakupem.",
+  "kw_variants": "main [14800]"
+ },
+ {
+  "title": "Aktualizacje OTA w chińskich autach",
+  "headword": "OTA",
+  "slug": "ota",
+  "category": "audio",
+  "aliases": "OTA, over-the-air, aktualizacje zdalne",
+  "term_keys": {
+   "ota_upgrade": "标"
+  },
+  "main_kw": "aktualizacja ota",
+  "context": "Zdalne aktualizacje oprogramowania (kokpit, ADAS, sterowniki napędu) — w chińskich autach standard (w naszej bazie ~2849 aut). Import: auta chińskie łączą się przez eSIM producenta — poza Chinami część aut wymaga aktywacji/konta; niektóre marki blokują OTA za granicą. Omawiamy status per marka przy zakupie.",
+  "kw_variants": "main [140]"
+ },
+ {
+  "title": "Fabryczny wideorejestrator",
+  "headword": "Wideorejestrator fabryczny",
+  "slug": "wideorejestrator",
+  "category": "audio",
+  "aliases": "dashcam, wideorejestrator, 行车记录仪",
+  "term_keys": {
+   "built_in_tachograph": "标"
+  },
+  "main_kw": "wideorejestrator",
+  "context": "Wbudowana kamera jazdy nagrywająca na pamięć auta/kartę — w Chinach niemal standard (w naszej bazie ~2439 aut), często zintegrowana z kamerami ADAS i trybem wartownika. W PL nagrania legalne na własny użytek; publikacja z twarzami/tablicami = RODO.",
+  "kw_variants": "main [14800]"
+ },
+ {
+  "title": "Karaoke w samochodzie",
+  "headword": "Karaoke",
+  "slug": "karaoke",
+  "category": "audio",
+  "aliases": "karaoke, 车载K歌",
+  "term_keys": {
+   "karaoke": "标"
+  },
+  "main_kw": "karaoke w samochodzie",
+  "context": "Chińska specjalność: fabryczna aplikacja karaoke + dedykowane mikrofony (w schowku/pod sufitem), tor wokalny przez system audio. W naszej bazie ~1866 aut. Po imporcie: aplikacje chińskie, ale mikrofony działają z uniwersalnymi apkami przez Bluetooth."
+ },
+ {
+  "title": "Keyless i klucz cyfrowy (BT/NFC/UWB)",
+  "headword": "Keyless / klucz cyfrowy",
+  "slug": "keyless",
+  "category": "komfort",
+  "aliases": "keyless, klucz cyfrowy, NFC, UWB, karta NFC",
+  "term_keys": {
+   "keyless_entry": "全车"
+  },
+  "main_kw": "keyless",
+  "context": "Chińskie auta poszły dalej niż klasyczny keyless: telefon jako klucz (Bluetooth — auto otwiera się gdy podchodzisz), karta NFC (zapasowa, przykładana do słupka), UWB (precyzyjna lokalizacja, bez relay attack). W naszej bazie keyless pełny ~2791 aut. Import: aplikacje producenta bywają chińskie — konfigurujemy przy wydaniu.",
+  "kw_variants": "main [1000]"
+ },
+ {
+  "title": "Chowane klamki",
+  "headword": "Chowane klamki",
+  "slug": "chowane-klamki",
+  "category": "komfort",
+  "aliases": "hidden door handles, 隐藏式门把手",
+  "term_keys": {
+   "hidden_door_handle": "标"
+  },
+  "main_kw": "chowane klamki",
+  "context": "Klamki wysuwane elektrycznie/elektronicznie (aero + design; w naszej bazie ~1587 aut). Kontrowersje: dostęp po wypadku/awarii zasilania — mechaniczne awaryjne otwarcie jest wymagane, ale bywa nieoczywiste; Chiny ogłosiły (2025-2026) przepisy wymuszające klamki z awaryjnym otwarciem mechanicznym w nowych modelach. Zimą mogą przymarzać — funkcja podgrzewania w części aut."
+ },
+ {
+  "title": "Drzwi bezramkowe",
+  "headword": "Drzwi bezramkowe",
+  "slug": "drzwi-bezramkowe",
+  "category": "komfort",
+  "aliases": "frameless doors, 无框车门",
+  "term_keys": {
+   "frameless_design_door": "标"
+  },
+  "main_kw": "drzwi bezramkowe",
+  "context": "Szyba bez ramki drzwi (coupe-look, Zeekr 001, Xiaomi SU7 i inne — w naszej bazie ~706 aut). Szyba przy otwieraniu opuszcza się o centymetr automatycznie. Praktyka: nieco wyższy hałas przy dużych prędkościach niż z ramką, uszczelki do pielęgnacji zimą."
+ },
+ {
+  "title": "Drzwi skrzydłowe i nożycowe",
+  "headword": "Drzwi skrzydłowe",
+  "slug": "drzwi-skrzydlowe",
+  "category": "komfort",
+  "aliases": "gullwing, scissor doors, 鸥翼门, 剪刀门",
+  "term_keys": {
+   "door_open_way": "鸥翼"
+  },
+  "main_kw": "drzwi skrzydłowe",
+  "context": "Elementy pokazowe chińskiego rynku premium: drzwi skrzydłowe (gullwing — unoszone do góry, w naszej bazie ~342 aut, np. minivany premium i HiPhi), nożycowe (supersporty), elektryczne przesuwne w minivanach (~147). Serwis siłowników i czujników przeszkód — punkt kontroli przy zakupie."
+ },
+ {
+  "title": "Fotele zero-gravity",
+  "headword": "Fotele zero-gravity",
+  "slug": "fotele-zero-gravity",
+  "category": "komfort",
+  "aliases": "zero gravity seat, fotel nieważkości, 零重力座椅",
+  "term_keys": {
+   "zero_gravity_seat": "标"
+  },
+  "main_kw": "fotele zero gravity",
+  "context": "Fotel rozkładany do pozycji 'nieważkości' (uda i plecy pod kątem odciążającym kręgosłup, jak w NASA) — elektrycznie, z podnóżkiem, zwykle 2. rząd minivanów i dużych SUV (AITO M9, Denza N9, Li Auto). W naszej bazie ~676 aut. Uwaga: w pozycji rozłożonej jazda tylko na postoju/wg instrukcji — airbagi projektowane do pozycji siedzącej."
+ },
+ {
+  "title": "Masaż foteli",
+  "headword": "Masaż foteli",
+  "slug": "masaz-foteli",
+  "category": "komfort",
+  "aliases": "fotele z masażem, seat massage",
+  "term_keys": {
+   "front_seat_massage_1": "标"
+  },
+  "main_kw": "fotele z masażem",
+  "context": "W chińskich autach masaż foteli występuje od klasy średniej wzwyż (w naszej bazie: przód ~1491, tył ~910 aut) — najczęściej pneumatyczny, 8-16 punktów, kilka programów. W Europie to wyposażenie klasy S/7 — w imporcie z Chin dostępne w autach za ułamek tej ceny."
+ },
+ {
+  "title": "Lodówka pokładowa",
+  "headword": "Lodówka pokładowa",
+  "slug": "lodowka",
+  "category": "komfort",
+  "aliases": "lodówka w aucie, car refrigerator, 车载冰箱",
+  "term_keys": {
+   "car_refrigerator": "标"
+  },
+  "main_kw": "lodówka samochodowa",
+  "context": "Fabryczna lodówka sprężarkowa (nie termoelektryczna!) w konsoli/podłokietniku: zakresy typowo od -6 do +50 st. C (chłodzi i podgrzewa), 4-10 l. Chińska specjalność klasy premium — w naszej bazie ~896 aut (AITO M9, Denza, Zeekr 009, Li Auto). Działa też na postoju z baterii trakcyjnej.",
+  "kw_variants": "main [12100]"
+ },
+ {
+  "title": "Frunk — przedni bagażnik",
+  "headword": "Frunk",
+  "slug": "frunk",
+  "category": "komfort",
+  "aliases": "frunk, front trunk, przedni bagażnik",
+  "term_keys": {},
+  "main_kw": "frunk",
+  "context": "Schowek pod przednią maską EV (po silniku spalinowym zostaje miejsce). W chińskich autach różnie: platformy dedykowane EV często mają (Zeekr, Xiaomi SU7 105 l), EREV-y zwykle nie (z przodu silnik-generator). Praktyczny na kable ładowania. Sprawdzisz w specyfikacji ogłoszenia."
+ },
+ {
+  "title": "Zawieszenie pneumatyczne w chińskich autach",
+  "headword": "Zawieszenie pneumatyczne",
+  "slug": "zawieszenie-pneumatyczne",
+  "category": "komfort",
+  "aliases": "air suspension, 空气悬架",
+  "term_keys": {
+   "air_suspension": "标"
+  },
+  "main_kw": "zawieszenie pneumatyczne",
+  "context": "Miechy powietrzne zamiast sprężyn: regulacja prześwitu (wjazd/teren/autostrada), komfort klasy premium. W chińskich autach od ~350 tys. juanów wzwyż niemal standard segmentu (w naszej bazie ~730 aut) — dostawcy krajowi (Baolong, Konghui) zbili ceny. Eksploatacja: miechy to część zużywalna (typowo 150-250 tys. km), koszty wymiany niższe niż w niemieckim premium.",
+  "kw_variants": "main [1600]"
+ },
+ {
+  "title": "Zawieszenie adaptacyjne (CDC)",
+  "headword": "Zawieszenie adaptacyjne CDC",
+  "slug": "zawieszenie-cdc",
+  "category": "komfort",
+  "aliases": "CDC, adaptive damping, 可变悬架, DiSus",
+  "term_keys": {
+   "variable_suspension": "软硬"
+  },
+  "main_kw": "zawieszenie adaptacyjne",
+  "context": "Amortyzatory o zmiennej sile tłumienia sterowane elektronicznie (continuous damping control) — auto czyta drogę i dostosowuje twardość w ms. W chińskich autach szeroko (w naszej bazie ~1242 aut z regulacją tłumienia, często razem z pneumatyką); BYD rozwija własny system DiSus (C/A/P — do skoków Yangwang U9). Tańsze w naprawie niż pneumatyka."
+ },
+ {
+  "title": "AR-HUD — wyświetlacz przezierny z rozszerzoną rzeczywistością",
+  "headword": "AR-HUD",
+  "slug": "ar-hud",
+  "category": "komfort",
+  "aliases": "AR-HUD, head-up display, wyświetlacz przezierny",
+  "term_keys": {
+   "ar_hud": "标"
+  },
+  "main_kw": "hud wyświetlacz przezierny",
+  "context": "HUD rzutujący na szybę obraz 'przyklejony' do drogi: strzałki nawigacji na właściwym pasie, podświetlanie aut/pieszych z ADAS, wielkość obrazu 40-70+ cali wirtualnych. W naszej bazie ~661 aut z AR-HUD (zwykłe HUD częstsze). Chińscy liderzy: Huawei (maxHUD w M9 — 75 cali), FUTURUS.",
+  "kw_variants": "main [70]"
+ },
+ {
+  "title": "CLTC vs WLTP — jak czytać zasięgi chińskich aut",
+  "headword": "CLTC vs WLTP",
+  "slug": "cltc-wltp",
+  "category": "normy",
+  "aliases": "CLTC, WLTP, NEDC, zasięg deklarowany",
+  "term_keys": {
+   "cltc_recharge_mileage": ""
+  },
+  "main_kw": "cltc",
+  "context": "CLTC — chiński cykl pomiarowy (łagodniejszy: niższe prędkości, dużo miasta) daje wyniki ok. 15-25% wyższe niż europejski WLTP; realna jazda mieszana zimą to często 60-70% CLTC. Reguła kciuka: CLTC x 0,78 ~ WLTP. Wszystkie zasięgi w chińskich specyfikacjach (i naszych ogłoszeniach z danych producenta) to CLTC — przeliczamy i tłumaczymy przy wycenie."
+ },
+ {
+  "title": "Norma emisji China VI",
+  "headword": "China VI",
+  "slug": "china-vi",
+  "category": "normy",
+  "aliases": "China 6, China VIb, 国六",
+  "term_keys": {
+   "environmental_standards": "国六"
+  },
+  "main_kw": "china 6 norma",
+  "context": "Chińska norma emisji spalin: China VI (6a od 2020, surowsza 6b w pełni od 2023) — limity porównywalne lub ostrzejsze niż Euro 6d. Praktyka importu: auto spalinowe/hybryda China VIb spełnia techniczne wymogi emisyjne rejestracji w PL po indywidualnym dopuszczeniu — obsługujemy homologację. W naszej bazie ~1950 aut ma wpisaną normę."
+ },
+ {
+  "title": "Moc w chińskich specyfikacjach: kW, KM i 马力",
+  "headword": "kW vs KM",
+  "slug": "kw-km",
+  "category": "normy",
+  "aliases": "kW, KM, konie mechaniczne, 马力, Ps",
+  "term_keys": {},
+  "main_kw": "kw na km",
+  "context": "Chińskie specyfikacje podają moc w kW (system SI); 马力 (mali) = koń mechaniczny PS. Przelicznik: 1 kW = 1,36 KM. W EV moc szczytowa (krótkotrwała) vs ciągła bywa mylona — chińscy producenci podają szczytową. W naszych ogłoszeniach moc tłumaczymy automatycznie na KM.",
+  "kw_variants": "main [12100]"
+ },
+ {
+  "title": "Rok modelowy w Chinach — czym różni się od rocznika produkcji",
+  "headword": "Rok modelowy",
+  "slug": "rok-modelowy",
+  "category": "normy",
+  "aliases": "rok modelowy, 款, model year",
+  "term_keys": {},
+  "main_kw": "rok modelowy",
+  "context": "Chińskie '2025 款' to rok MODELOWY (wersja/lifting), nie data produkcji — auto '2025 model' mogło zjechać z taśmy w 2024. W chińskim obrocie znaczenie ma data pierwszej rejestracji i wersja modelowa. W naszych ogłoszeniach rok = rok modelowy z danych źródłowych, a w umowie wpisujemy datę rejestracji z dokumentów auta — tłumaczymy tę różnicę każdemu klientowi, bo bywa źródłem nieporozumień przy imporcie."
+ }
+]

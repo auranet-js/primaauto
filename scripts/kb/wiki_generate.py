@@ -161,6 +161,12 @@ def create_wiki_entry(cfg, entry):
     )
     kb.wp("post", "meta", "set", post_id, "_wiki_category", cfg["category"])
     kb.wp("post", "meta", "set", post_id, "_wiki_aliases", cfg["aliases"])
+    if cfg.get("headword"):
+        kb.wp("post", "meta", "set", post_id, "_wiki_headword", cfg["headword"])
+    if cfg.get("main_kw"):
+        kb.wp("post", "meta", "set", post_id, "rank_math_focus_keyword", cfg["main_kw"])
+    if entry.get("excerpt"):
+        kb.wp("post", "meta", "set", post_id, "rank_math_description", entry["excerpt"])
     kb.wp("post", "meta", "set", post_id, "_wiki_term_keys", json.dumps(cfg["term_keys"], ensure_ascii=False))
     kb.wp("post", "meta", "set", post_id, "_kb_faq_json", json.dumps(entry["faq"], ensure_ascii=False))
     if entry.get("_sources"):
@@ -195,9 +201,10 @@ def main():
     ap.add_argument("--limit", type=int, default=10)
     ap.add_argument("--slugs", help="comma-separated")
     ap.add_argument("--no-mail", action="store_true")
+    ap.add_argument("--config", default="wiki_tier1.json", help="plik konfiguracji haseł")
     args = ap.parse_args()
 
-    cfgs = json.loads((kb.KB_DIR / "wiki_tier1.json").read_text())
+    cfgs = json.loads((kb.KB_DIR / args.config).read_text())
     done = existing_slugs()
     if args.slugs:
         want = set(args.slugs.split(","))
