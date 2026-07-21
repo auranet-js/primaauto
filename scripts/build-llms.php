@@ -155,6 +155,32 @@ foreach ($models as $md) {
     $o[] = "- [{$full}]({$url}): {$md->count} ofert{$tail}";
 }
 $o[] = "";
+// --- Dział wiedzy (T-214): Słownik + Aktualności ---
+$wiki_entries = get_posts(['post_type' => 'asiaauto_wiki', 'posts_per_page' => -1, 'orderby' => 'title', 'order' => 'ASC']);
+if ($wiki_entries) {
+    $o[] = "## Słownik chińskiej motoryzacji (technologie wyjaśnione)";
+    $o[] = "";
+    foreach ($wiki_entries as $we) {
+        $exc = trim(wp_strip_all_tags((string) $we->post_excerpt));
+        $tail = $exc !== '' ? ": {$exc}" : '';
+        $o[] = "- [" . get_the_title($we) . "](" . get_permalink($we) . "){$tail}";
+    }
+    $o[] = "";
+    $o[] = "Indeks słownika: [https://primaauto.com.pl/wiki/](https://primaauto.com.pl/wiki/)";
+    $o[] = "";
+}
+$news = get_posts(['post_type' => 'post', 'category_name' => 'aktualnosci', 'posts_per_page' => 10]);
+if ($news) {
+    $o[] = "## Aktualności z chińskiego rynku motoryzacyjnego (ostatnie)";
+    $o[] = "";
+    foreach ($news as $np) {
+        $o[] = "- [" . get_the_title($np) . "](" . get_permalink($np) . ") (" . get_the_date('Y-m-d', $np) . ")";
+    }
+    $o[] = "";
+    $o[] = "Sekcja aktualności: [https://primaauto.com.pl/aktualnosci/](https://primaauto.com.pl/aktualnosci/)";
+    $o[] = "";
+}
+
 $o[] = "## Procedury i informacje (FAQ)";
 $o[] = "";
 $o[] = "- [Proces zamawiania](https://primaauto.com.pl/informacje/proces-zamawiania/): pełna ścieżka od zapytania do odbioru auta";
