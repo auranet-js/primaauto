@@ -141,6 +141,15 @@ def build_draft(cand, makes, rate, system_prompt):
         else:
             raise RuntimeError("Fact-check nie przeszedł po regeneracji: " + "; ".join(verdict.get("issues", [])[:3]))
 
+    # Korekta wydawnicza (proofing)
+    proofed, changes = kb.proofread({
+        "title": draft["title"], "lead": draft["lead"],
+        "body_html": draft["body_html"], "excerpt": draft["excerpt"],
+    })
+    draft.update(proofed)
+    if changes:
+        print(f"    korekta: {len(changes)} poprawek", flush=True)
+
     lint = kb.lint_text(draft["title"] + " " + draft["lead"] + " " + draft["body_html"])
     if lint:
         raise RuntimeError("Lint: " + "; ".join(lint))

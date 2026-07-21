@@ -124,6 +124,24 @@ def save_state(name, data):
     (STATE_DIR / name).write_text(json.dumps(data, ensure_ascii=False, indent=1))
 
 
+PROOF_PROMPT = """Jesteś korektorem wydawniczym polskiego serwisu motoryzacyjnego. Dostajesz pola tekstowe artykułu (JSON).
+Popraw WYŁĄCZNIE: literówki, ortografię, gramatykę, interpunkcję, kalki z angielskiego, niespójne jednostki (km, kW, KM, kWh), podwójne spacje. NIE zmieniaj sensu, struktury HTML, liczb ani stylu.
+Zwróć czysty JSON: {"fields": {<te same klucze z poprawionym tekstem>}, "changes": ["krótki opis każdej poprawki", ...]} — jeśli nic do poprawy, "changes": []."""
+
+
+def proofread(fields: dict):
+    """Korekta wydawnicza pól tekstowych. Zwraca (poprawione_pola, lista_zmian)."""
+    text, _ = call_model(PROOF_PROMPT, json.dumps(fields, ensure_ascii=False), max_tokens=6000)
+    data = parse_json_response(text)
+    fixed = data.get("fields") or {}
+    # Bezpiecznik: korekta nie może zgubić pola ani drastycznie skrócić treści
+    out = {}
+    for k, v in fields.items():
+        new = fixed.get(k)
+        out[k] = new if (isinstance(new, str) and len(new) >= 0.7 * len(v)) else v
+    return out, data.get("changes", [])
+
+
 def send_mail(subject, html_body):
     """Mail do Janka przez autoryzowany kanał send-to-jan."""
     tmp = STATE_DIR / "_mail_body.html"

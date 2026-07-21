@@ -21,6 +21,10 @@ import kb_lib as kb
 
 SITE = "https://primaauto.com.pl"
 
+REVIEW_PROMPT = """Jesteś sceptycznym recenzentem technicznym motoryzacji elektrycznej. Dostajesz hasło encyklopedyczne o technologii w chińskich autach oraz KONTEKST FAKTOGRAFICZNY, na którym miało bazować.
+Sprawdź każde twierdzenie techniczne: (1) sprzeczne z kontekstem lub powszechną wiedzą inżynierską = błąd; (2) konkretna liczba/parametr, którego nie ma w kontekście i nie jest powszechnie ustaloną wiedzą = błąd (zmyślenie); (3) mylące uproszczenie istotne dla kupującego = błąd. Ogólniki i poprawne uproszczenia dydaktyczne są OK.
+Zwróć czysty JSON: {"ok": true/false, "issues": ["konkretny problem", ...]}."""
+
 
 def existing_slugs():
     out = kb.wp("post", "list", "--post_type=asiaauto_wiki", "--post_status=any",
@@ -29,11 +33,46 @@ def existing_slugs():
 
 
 def build_entry(cfg, system_prompt):
-    user_msg = (f"HASŁO: {cfg['title']}\n"
+    kw_ctx = ""
+    if cfg.get("main_kw"):
+        kw_ctx = (f"FRAZA GŁÓWNA (DataForSEO): \"{cfg['main_kw']}\" — użyj jej naturalnie w definicji "
+                  f"i przynajmniej raz w treści; frazy powiązane z wolumenami: {cfg.get('kw_variants', '')}. "
+                  "Sformułuj 1. pytanie FAQ w brzmieniu, jakim ludzie realnie pytają (np. 'Co to jest ...').\n")
+    user_msg = (f"HASŁO: {cfg['title']}\n{kw_ctx}"
                 f"KONTEKST Z NASZEJ BAZY (fakty do wykorzystania, nie cytuj dosłownie):\n{cfg['context']}\n\n"
                 "Napisz hasło zgodnie z instrukcją systemową. Zwróć czysty JSON.")
     text, _ = kb.call_model(system_prompt, user_msg)
     entry = kb.parse_json_response(kb.normalize_quotes(text))
+
+    # Recenzja techniczna (sceptyk) — max 1 regeneracja z listą uwag
+    for attempt in range(2):
+        rtext, _ = kb.call_model(
+            REVIEW_PROMPT,
+            f"KONTEKST FAKTOGRAFICZNY:\n{cfg['context']}\n\nHASŁO:\n{entry['definition']}\n"
+            f"{kb.strip_html(entry['body_html'])}\nFAQ: {json.dumps(entry['faq'], ensure_ascii=False)}",
+            max_tokens=1500,
+        )
+        verdict = kb.parse_json_response(rtext)
+        if verdict.get("ok"):
+            break
+        if attempt == 0:
+            print(f"    recenzja: {len(verdict.get('issues', []))} uwag — regeneruję", flush=True)
+            text, _ = kb.call_model(
+                system_prompt,
+                user_msg + "\n\nPOPRZEDNIA WERSJA MIAŁA BŁĘDY MERYTORYCZNE — popraw:\n"
+                + "\n".join("- " + i for i in verdict.get("issues", [])),
+            )
+            entry = kb.parse_json_response(kb.normalize_quotes(text))
+        else:
+            raise RuntimeError("Recenzja techniczna nie przeszła: " + "; ".join(verdict.get("issues", [])[:3]))
+
+    # Korekta wydawnicza (proofing)
+    proofed, changes = kb.proofread({
+        "definition": entry["definition"], "body_html": entry["body_html"], "excerpt": entry["excerpt"],
+    })
+    entry.update(proofed)
+    if changes:
+        print(f"    korekta: {len(changes)} poprawek", flush=True)
 
     full_text = entry["definition"] + " " + entry["body_html"] + " " + json.dumps(entry["faq"], ensure_ascii=False)
     lint = kb.lint_text(full_text)
