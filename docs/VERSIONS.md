@@ -1,5 +1,15 @@
 # Historia wersji asiaauto-sync
 
+## 0.34.1 — 2026-07-22 (T-214: menu Wiedza + teaser aktualności na homepage)
+
+Menu Header: nowy dropdown "Wiedza" (Aktualności + Słownik jako dzieci), pozycja
+przed Kontaktem (nie za nim). `class-asiaauto-homepage.php` +renderKbTeaser():
+sekcja "Aktualności z chińskiego rynku motoryzacyjnego" (3 najnowsze karty +
+link do /wiki/) między Topic FAQ a CTA — cel: link z najwyższego autorytetu
+strony przyspiesza indeksację i buduje ruch top-funnel (Indexing API/sitemap
+wystarczają do samej indeksacji, nie do dystrybucji linku). Backup:
+class-asiaauto-homepage.php.bak-2026-07-22.
+
 ## 0.34.0 — 2026-07-21 wieczór (T-214 F2/F3: Słownik live + cron newsowy; theme 1.1.2)
 
 Słownik: 10 haseł Tier 1 opublikowanych pod /wiki/ (Opus, frazy DFS, FAQ z PAA, H2 z frazami,
