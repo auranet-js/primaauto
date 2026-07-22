@@ -24,6 +24,7 @@ return [
             'label' => 'Dane podstawowe',
             'icon'  => 'dashicons-info-outline',
             'keys'  => [
+                'measured_acceleration', 'measured_braking', 'first_owner_warranty',
                 'jb', 'car_body_struct', 'body_struct', 'sub_brand_name',
                 'official_price', 'market_time', 'period',
                 'environmental_standards', 'maintain_cost',
@@ -34,6 +35,7 @@ return [
             'label' => 'Wymiary i masa',
             'icon'  => 'dashicons-image-crop',
             'keys'  => [
+                'trailer_weight',
                 'length', 'width', 'height', 'wheelbase',
                 'front_track', 'rear_track', 'min_clearance',
                 'curb_weight', 'full_load_weight',
@@ -46,6 +48,7 @@ return [
             'label' => 'Silnik',
             'icon'  => 'dashicons-admin-tools',
             'keys'  => [
+                'system_max_power',
                 'engine_description', 'engine_model', 'capacity_l',
                 'cylinder_volume_ml', 'cylinder_nums', 'cylinder_arrangement',
                 'valves_per_cylinder_nums', 'compression_ratio_s',
@@ -267,6 +270,7 @@ return [
             'label' => 'Nadwozie',
             'icon'  => 'dashicons-car',
             'keys'  => [
+                'approach_angle', 'departure_angle',
                 'door_open_way', 'rear_exhaust', 'roof_racks',
                 'electric_back_door', 'hidden_door_handle',
                 'frameless_design_door', 'electric_spoiler',
@@ -281,6 +285,8 @@ return [
             'label' => 'Napęd elektryczny / hybryda',
             'icon'  => 'dashicons-superhero',
             'keys'  => [
+                'electric_total_horsepower',
+                'fast_charge_time', 'battery_energy_density', 'battery_swap', 'wltc_combined_range', 'nedc_recharge_mileage', 'measured_range',
                 'electric_description', 'electric_type', 'electric_drive_number',
                 'electric_layout', 'fourwheel_drive_type',
                 'total_electric_power', 'total_electric_torque',
@@ -365,6 +371,22 @@ return [
 
     // ─── Key → Polish label ──────────────────────────────────────────────
     'labels' => [
+
+        // ── Che168 2026-07-22 (T-186): parametry, których dongchedi nie przysyła ──
+        'fast_charge_time'        => 'Czas ładowania (szybkie)',
+        'electric_total_horsepower' => 'Moc układu elektrycznego (KM)',
+        'system_max_power'        => 'Moc maksymalna układu (kW)',
+        'approach_angle'          => 'Kąt natarcia',
+        'departure_angle'         => 'Kąt zejścia',
+        'trailer_weight'          => 'Maks. masa przyczepy',
+        'battery_energy_density'  => 'Gęstość energii baterii',
+        'battery_swap'            => 'Wymiana baterii',
+        'wltc_combined_range'     => 'Zasięg łączny (WLTC)',
+        'nedc_recharge_mileage'   => 'Zasięg elektryczny (NEDC)',
+        'measured_acceleration'   => '0-100 km/h (pomiar redakcji)',
+        'measured_braking'        => 'Hamowanie 100-0 km/h (pomiar)',
+        'measured_range'          => 'Zasięg rzeczywisty (pomiar)',
+        'first_owner_warranty'    => 'Gwarancja pierwszego właściciela',
         // Basic
         'jb'                          => 'Klasa pojazdu',
         'car_body_struct'             => 'Typ nadwozia',
@@ -1605,6 +1627,20 @@ return [
 
     // ─── Units (appended to value after translation) ─────────────────────
     'units' => [
+
+        // ── Che168 2026-07-22 ──
+        'approach_angle'         => '°',
+        'departure_angle'        => '°',
+        'trailer_weight'         => 'kg',
+        'battery_energy_density' => 'Wh/kg',
+        'wltc_combined_range'    => 'km',
+        'nedc_recharge_mileage'  => 'km',
+        'measured_range'         => 'km',
+        'measured_acceleration'  => 's',
+        'measured_braking'       => 'm',
+        'fast_charge_time'       => 'h',
+        'electric_total_horsepower' => 'KM',
+        'system_max_power'       => 'kW',
         'length'                      => 'mm',
         'width'                       => 'mm',
         'height'                      => 'mm',
