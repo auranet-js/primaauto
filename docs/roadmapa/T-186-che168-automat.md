@@ -1,8 +1,9 @@
 # T-186 — Che168 jako pełne, automatyczne drugie źródło
 
-> Status: **GATED** — czeka na odpowiedź auto-api (mail wysłany 2026-07-14) · Rozmiar: XL
-> Godziny realnie: **85–100 h** (Janek ~10–12 h, AI ~75–88 h) · Rynkowo: 240–280 h
-> Estymata **potwierdzona po zwiadzie** — nie jest przeszacowana.
+> Status: **Fazy 1-2 ZROBIONE (2026-07-22, v0.34.2)** — sync wpięty w automat, 45 ofert w szkicach,
+> oba źródła wyłączone. **BLOKADA: czekamy na odpowiedź auto-api** w sprawie pełnej konfiguracji
+> che168 (`/offer` oddaje 6-7 grup technicznych, brak wyposażenia — patrz sekcja poniżej).
+> Domknięcie sesji: `docs/sesje/2026-07-22-che168-sync-wpiecie.md`.
 
 ## ⚠️ Kontekst decyzyjny (2026-07-14)
 
@@ -26,6 +27,31 @@
 | Spec architektury | ✅ `docs/superpowers/specs/2026-06-01-che168-second-source-design.md` (448 l.) |
 
 **22 commity, praca 01–19.06.** Ruslan wie, że ręczny import działa — narracja „fundament stoi, płacisz za automat" jest uczciwa.
+
+## Stan po 2026-07-22 (v0.34.2)
+
+**Zrobione:** adapter wpięty w ścieżkę automatyczną (`Sync::importWithFullData` + `changed`),
+osobne wyłączniki i status importu per źródło + toggle w panelu, guard niezmapowanych z kolejką
+`asiaauto_che168_unmapped`, filtr wstępny na `/changes` przed `getOffer()`, cron po obu źródłach.
+Pomiary: kanał che168 20-31 tys. zdarzeń/dobę → **60-100 ofert/dobę** spełnia kryteria; filtr przed
+wpięciem adaptera przepuszczał **0/730**, po wpięciu **89/730**. 45 ofert zaimportowanych jako szkice,
+wszystkie w istniejących hubach, kolejka domapowań: 4 pozycje.
+
+**Zostało z pierwotnego planu:** dedup po VIN, panel „Źródła" (jest uproszczony toggle w Status),
+go-live (`publish` + włączenie wyłącznika).
+
+**Blokada — konfiguracja che168.** `/offer` nie zwraca `extra_prep` ani `equipment` (dongchedi ma je
+na najwyższym poziomie, 340-370 atrybutów). Zamiast tego `extra.configuration.paramtypeitems` z 6-7
+grupami technicznymi. Publiczny katalog Autohome dla tego samego `extra.configuration.specid` ma
+11-12 grup — z fotelami, bezpieczeństwem i pakietami opcji. Zweryfikowane na trzech ofertach
+(73545 6→11, 66867 7→12, 66792 6→11). Zapytanie wysłane do auto-api 22.07. Fallback, jeśli odmówią:
+dziedziczenie z bliźniaczych ofert w wariancie konsensusu (wyposażenie 14,5 → 67,7 pozycji na ofertę)
+— zmierzone, niewdrożone. Szczegóły: memory `reference_che168_api_obcina_wyposazenie`.
+
+**Decyzja czekająca na Ruslana:** filtr 31 miast ucina 81% dobrej podaży che168 (388 z 477 ofert
+w próbce). Największe wolumeny poza listą: Szanghaj, Wuhan, Chongqing, Chengdu, Shijiazhuang.
+Lista 31 miast to zasięg fizycznych oględzin (docs/QUEUE.md, Zadanie 6), więc zmiana = decyzja
+operacyjna, nie ustawienie w panelu.
 
 ## Czego BRAKUJE (to jest te 85–100 h)
 
