@@ -100,7 +100,7 @@ def db_examples(cfg, limit=6):
         return []
 
 
-def build_entry(cfg, system_prompt):
+def build_entry(cfg, system_prompt, model="sonnet"):
     kw_ctx = ""
     if cfg.get("main_kw"):
         kw_ctx = (f"FRAZA GŁÓWNA (DataForSEO): \"{cfg['main_kw']}\" — użyj jej naturalnie w definicji "
@@ -109,7 +109,10 @@ def build_entry(cfg, system_prompt):
     examples = db_examples(cfg)
     ex_ctx = ("PRZYKŁADOWE AUTA Z TĄ TECHNOLOGIĄ Z NASZEJ BAZY (możesz przywołać modele, bez rocznikowych dopisków):\n- "
               + "\n- ".join(examples) + "\n") if examples else ""
-    facts, sources = research_facts(cfg)
+    if cfg.get("skip_research"):
+        facts, sources = [], []
+    else:
+        facts, sources = research_facts(cfg)
     facts_ctx = ("FAKTY Z RESEARCHU W SIECI (zweryfikowane, użyj ich — zwłaszcza generacji/wersji i dat):\n- "
                  + "\n- ".join(facts) + "\n") if facts else ""
     paa = get_paa(cfg.get("main_kw") or cfg["title"])
@@ -121,7 +124,7 @@ def build_entry(cfg, system_prompt):
                 "Napisz hasło zgodnie z instrukcją systemową (kroki 1-3 wewnętrznie). Zwróć czysty finalny JSON.")
     # Jeden przebieg: draft + samo-recenzja + korekta w jednym prompcie (optymalizacja
     # po feedbacku Janka 21.07 — 4 osobne procesy claude -p × narzut startu = kwadrans/hasło).
-    text, _ = kb.call_model(system_prompt, user_msg, model="opus")
+    text, _ = kb.call_model(system_prompt, user_msg, model=model)
     entry = kb.parse_json_response(kb.normalize_quotes(text))
     entry["_sources"] = sources
 
@@ -136,7 +139,7 @@ def build_entry(cfg, system_prompt):
     return entry
 
 
-def create_wiki_entry(cfg, entry):
+def create_wiki_entry(cfg, entry, model="sonnet"):
     """Publikuje hasło od razu (sekcja /wiki/ jest noindex do akceptu Janka —
     review odbywa się na żywym layoutcie, nie w mailu-atrapie)."""
     from make_cover import make_cover
@@ -161,6 +164,7 @@ def create_wiki_entry(cfg, entry):
     )
     kb.wp("post", "meta", "set", post_id, "_wiki_category", cfg["category"])
     kb.wp("post", "meta", "set", post_id, "_wiki_aliases", cfg["aliases"])
+    kb.wp("post", "meta", "set", post_id, "_wiki_gen_model", model)
     if cfg.get("headword"):
         kb.wp("post", "meta", "set", post_id, "_wiki_headword", cfg["headword"])
     if cfg.get("main_kw"):
@@ -202,6 +206,7 @@ def main():
     ap.add_argument("--slugs", help="comma-separated")
     ap.add_argument("--no-mail", action="store_true")
     ap.add_argument("--config", default="wiki_tier1.json", help="plik konfiguracji haseł")
+    ap.add_argument("--model", default="sonnet", help="model do generacji (opus/sonnet) — sonnet ~2x szybszy, porównywalna jakość (test A/B 22.07)")
     args = ap.parse_args()
 
     cfgs = json.loads((kb.KB_DIR / args.config).read_text())
@@ -220,12 +225,12 @@ def main():
     results, failed = [], []
 
     def run_one(cfg):
-        entry = build_entry(cfg, system_prompt)
-        post_id, live_url = create_wiki_entry(cfg, entry)
+        entry = build_entry(cfg, system_prompt, model=args.model)
+        post_id, live_url = create_wiki_entry(cfg, entry, model=args.model)
         return {"cfg": cfg, "entry": entry, "post_id": post_id, "live_url": live_url}
 
     from concurrent.futures import ThreadPoolExecutor, as_completed
-    with ThreadPoolExecutor(max_workers=3) as pool:
+    with ThreadPoolExecutor(max_workers=6) as pool:
         futures = {pool.submit(run_one, cfg): cfg for cfg in cfgs}
         for fut in as_completed(futures):
             cfg = futures[fut]

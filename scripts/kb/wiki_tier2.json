@@ -458,7 +458,8 @@
    "hidden_door_handle": "标"
   },
   "main_kw": "chowane klamki",
-  "context": "Klamki wysuwane elektrycznie/elektronicznie (aero + design; w naszej bazie ~1587 aut). Kontrowersje: dostęp po wypadku/awarii zasilania — mechaniczne awaryjne otwarcie jest wymagane, ale bywa nieoczywiste; Chiny ogłosiły (2025-2026) przepisy wymuszające klamki z awaryjnym otwarciem mechanicznym w nowych modelach. Zimą mogą przymarzać — funkcja podgrzewania w części aut."
+  "context": "Klamki wysuwane elektrycznie/elektronicznie (aero + design; w naszej bazie ~1587 aut). Kontrowersje: dostęp po wypadku/awarii zasilania — mechaniczne awaryjne otwarcie jest wymagane, ale bywa nieoczywiste; Chiny ogłosiły (2025-2026) przepisy wymuszające klamki z awaryjnym otwarciem mechanicznym w nowych modelach. Zimą mogą przymarzać — funkcja podgrzewania w części aut.",
+  "skip_research": true
  },
  {
   "title": "Drzwi bezramkowe",
@@ -470,7 +471,8 @@
    "frameless_design_door": "标"
   },
   "main_kw": "drzwi bezramkowe",
-  "context": "Szyba bez ramki drzwi (coupe-look, Zeekr 001, Xiaomi SU7 i inne — w naszej bazie ~706 aut). Szyba przy otwieraniu opuszcza się o centymetr automatycznie. Praktyka: nieco wyższy hałas przy dużych prędkościach niż z ramką, uszczelki do pielęgnacji zimą."
+  "context": "Szyba bez ramki drzwi (coupe-look, Zeekr 001, Xiaomi SU7 i inne — w naszej bazie ~706 aut). Szyba przy otwieraniu opuszcza się o centymetr automatycznie. Praktyka: nieco wyższy hałas przy dużych prędkościach niż z ramką, uszczelki do pielęgnacji zimą.",
+  "skip_research": true
  },
  {
   "title": "Drzwi skrzydłowe i nożycowe",
@@ -482,7 +484,8 @@
    "door_open_way": "鸥翼"
   },
   "main_kw": "drzwi skrzydłowe",
-  "context": "Elementy pokazowe chińskiego rynku premium: drzwi skrzydłowe (gullwing — unoszone do góry, w naszej bazie ~342 aut, np. minivany premium i HiPhi), nożycowe (supersporty), elektryczne przesuwne w minivanach (~147). Serwis siłowników i czujników przeszkód — punkt kontroli przy zakupie."
+  "context": "Elementy pokazowe chińskiego rynku premium: drzwi skrzydłowe (gullwing — unoszone do góry, w naszej bazie ~342 aut, np. minivany premium i HiPhi), nożycowe (supersporty), elektryczne przesuwne w minivanach (~147). Serwis siłowników i czujników przeszkód — punkt kontroli przy zakupie.",
+  "skip_research": true
  },
  {
   "title": "Fotele zero-gravity",
@@ -494,7 +497,8 @@
    "zero_gravity_seat": "标"
   },
   "main_kw": "fotele zero gravity",
-  "context": "Fotel rozkładany do pozycji 'nieważkości' (uda i plecy pod kątem odciążającym kręgosłup, jak w NASA) — elektrycznie, z podnóżkiem, zwykle 2. rząd minivanów i dużych SUV (AITO M9, Denza N9, Li Auto). W naszej bazie ~676 aut. Uwaga: w pozycji rozłożonej jazda tylko na postoju/wg instrukcji — airbagi projektowane do pozycji siedzącej."
+  "context": "Fotel rozkładany do pozycji 'nieważkości' (uda i plecy pod kątem odciążającym kręgosłup, jak w NASA) — elektrycznie, z podnóżkiem, zwykle 2. rząd minivanów i dużych SUV (AITO M9, Denza N9, Li Auto). W naszej bazie ~676 aut. Uwaga: w pozycji rozłożonej jazda tylko na postoju/wg instrukcji — airbagi projektowane do pozycji siedzącej.",
+  "skip_research": true
  },
  {
   "title": "Masaż foteli",
@@ -506,7 +510,8 @@
    "front_seat_massage_1": "标"
   },
   "main_kw": "fotele z masażem",
-  "context": "W chińskich autach masaż foteli występuje od klasy średniej wzwyż (w naszej bazie: przód ~1491, tył ~910 aut) — najczęściej pneumatyczny, 8-16 punktów, kilka programów. W Europie to wyposażenie klasy S/7 — w imporcie z Chin dostępne w autach za ułamek tej ceny."
+  "context": "W chińskich autach masaż foteli występuje od klasy średniej wzwyż (w naszej bazie: przód ~1491, tył ~910 aut) — najczęściej pneumatyczny, 8-16 punktów, kilka programów. W Europie to wyposażenie klasy S/7 — w imporcie z Chin dostępne w autach za ułamek tej ceny.",
+  "skip_research": true
  },
  {
   "title": "Lodówka pokładowa",
@@ -519,7 +524,8 @@
   },
   "main_kw": "lodówka samochodowa",
   "context": "Fabryczna lodówka sprężarkowa (nie termoelektryczna!) w konsoli/podłokietniku: zakresy typowo od -6 do +50 st. C (chłodzi i podgrzewa), 4-10 l. Chińska specjalność klasy premium — w naszej bazie ~896 aut (AITO M9, Denza, Zeekr 009, Li Auto). Działa też na postoju z baterii trakcyjnej.",
-  "kw_variants": "main [12100]"
+  "kw_variants": "main [12100]",
+  "skip_research": true
  },
  {
   "title": "Frunk — przedni bagażnik",
@@ -529,7 +535,8 @@
   "aliases": "frunk, front trunk, przedni bagażnik",
   "term_keys": {},
   "main_kw": "frunk",
-  "context": "Schowek pod przednią maską EV (po silniku spalinowym zostaje miejsce). W chińskich autach różnie: platformy dedykowane EV często mają (Zeekr, Xiaomi SU7 105 l), EREV-y zwykle nie (z przodu silnik-generator). Praktyczny na kable ładowania. Sprawdzisz w specyfikacji ogłoszenia."
+  "context": "Schowek pod przednią maską EV (po silniku spalinowym zostaje miejsce). W chińskich autach różnie: platformy dedykowane EV często mają (Zeekr, Xiaomi SU7 105 l), EREV-y zwykle nie (z przodu silnik-generator). Praktyczny na kable ładowania. Sprawdzisz w specyfikacji ogłoszenia.",
+  "skip_research": true
  },
  {
   "title": "Zawieszenie pneumatyczne w chińskich autach",
@@ -542,7 +549,8 @@
   },
   "main_kw": "zawieszenie pneumatyczne",
   "context": "Miechy powietrzne zamiast sprężyn: regulacja prześwitu (wjazd/teren/autostrada), komfort klasy premium. W chińskich autach od ~350 tys. juanów wzwyż niemal standard segmentu (w naszej bazie ~730 aut) — dostawcy krajowi (Baolong, Konghui) zbili ceny. Eksploatacja: miechy to część zużywalna (typowo 150-250 tys. km), koszty wymiany niższe niż w niemieckim premium.",
-  "kw_variants": "main [1600]"
+  "kw_variants": "main [1600]",
+  "skip_research": true
  },
  {
   "title": "Zawieszenie adaptacyjne (CDC)",
@@ -554,7 +562,8 @@
    "variable_suspension": "软硬"
   },
   "main_kw": "zawieszenie adaptacyjne",
-  "context": "Amortyzatory o zmiennej sile tłumienia sterowane elektronicznie (continuous damping control) — auto czyta drogę i dostosowuje twardość w ms. W chińskich autach szeroko (w naszej bazie ~1242 aut z regulacją tłumienia, często razem z pneumatyką); BYD rozwija własny system DiSus (C/A/P — do skoków Yangwang U9). Tańsze w naprawie niż pneumatyka."
+  "context": "Amortyzatory o zmiennej sile tłumienia sterowane elektronicznie (continuous damping control) — auto czyta drogę i dostosowuje twardość w ms. W chińskich autach szeroko (w naszej bazie ~1242 aut z regulacją tłumienia, często razem z pneumatyką); BYD rozwija własny system DiSus (C/A/P — do skoków Yangwang U9). Tańsze w naprawie niż pneumatyka.",
+  "skip_research": true
  },
  {
   "title": "AR-HUD — wyświetlacz przezierny z rozszerzoną rzeczywistością",
@@ -567,7 +576,8 @@
   },
   "main_kw": "hud wyświetlacz przezierny",
   "context": "HUD rzutujący na szybę obraz 'przyklejony' do drogi: strzałki nawigacji na właściwym pasie, podświetlanie aut/pieszych z ADAS, wielkość obrazu 40-70+ cali wirtualnych. W naszej bazie ~661 aut z AR-HUD (zwykłe HUD częstsze). Chińscy liderzy: Huawei (maxHUD w M9 — 75 cali), FUTURUS.",
-  "kw_variants": "main [70]"
+  "kw_variants": "main [70]",
+  "skip_research": true
  },
  {
   "title": "CLTC vs WLTP — jak czytać zasięgi chińskich aut",
@@ -579,7 +589,8 @@
    "cltc_recharge_mileage": ""
   },
   "main_kw": "cltc",
-  "context": "CLTC — chiński cykl pomiarowy (łagodniejszy: niższe prędkości, dużo miasta) daje wyniki ok. 15-25% wyższe niż europejski WLTP; realna jazda mieszana zimą to często 60-70% CLTC. Reguła kciuka: CLTC x 0,78 ~ WLTP. Wszystkie zasięgi w chińskich specyfikacjach (i naszych ogłoszeniach z danych producenta) to CLTC — przeliczamy i tłumaczymy przy wycenie."
+  "context": "CLTC — chiński cykl pomiarowy (łagodniejszy: niższe prędkości, dużo miasta) daje wyniki ok. 15-25% wyższe niż europejski WLTP; realna jazda mieszana zimą to często 60-70% CLTC. Reguła kciuka: CLTC x 0,78 ~ WLTP. Wszystkie zasięgi w chińskich specyfikacjach (i naszych ogłoszeniach z danych producenta) to CLTC — przeliczamy i tłumaczymy przy wycenie.",
+  "skip_research": true
  },
  {
   "title": "Norma emisji China VI",
@@ -591,7 +602,8 @@
    "environmental_standards": "国六"
   },
   "main_kw": "china 6 norma",
-  "context": "Chińska norma emisji spalin: China VI (6a od 2020, surowsza 6b w pełni od 2023) — limity porównywalne lub ostrzejsze niż Euro 6d. Praktyka importu: auto spalinowe/hybryda China VIb spełnia techniczne wymogi emisyjne rejestracji w PL po indywidualnym dopuszczeniu — obsługujemy homologację. W naszej bazie ~1950 aut ma wpisaną normę."
+  "context": "Chińska norma emisji spalin: China VI (6a od 2020, surowsza 6b w pełni od 2023) — limity porównywalne lub ostrzejsze niż Euro 6d. Praktyka importu: auto spalinowe/hybryda China VIb spełnia techniczne wymogi emisyjne rejestracji w PL po indywidualnym dopuszczeniu — obsługujemy homologację. W naszej bazie ~1950 aut ma wpisaną normę.",
+  "skip_research": true
  },
  {
   "title": "Moc w chińskich specyfikacjach: kW, KM i 马力",
@@ -602,7 +614,8 @@
   "term_keys": {},
   "main_kw": "kw na km",
   "context": "Chińskie specyfikacje podają moc w kW (system SI); 马力 (mali) = koń mechaniczny PS. Przelicznik: 1 kW = 1,36 KM. W EV moc szczytowa (krótkotrwała) vs ciągła bywa mylona — chińscy producenci podają szczytową. W naszych ogłoszeniach moc tłumaczymy automatycznie na KM.",
-  "kw_variants": "main [12100]"
+  "kw_variants": "main [12100]",
+  "skip_research": true
  },
  {
   "title": "Rok modelowy w Chinach — czym różni się od rocznika produkcji",
@@ -612,6 +625,7 @@
   "aliases": "rok modelowy, 款, model year",
   "term_keys": {},
   "main_kw": "rok modelowy",
-  "context": "Chińskie '2025 款' to rok MODELOWY (wersja/lifting), nie data produkcji — auto '2025 model' mogło zjechać z taśmy w 2024. W chińskim obrocie znaczenie ma data pierwszej rejestracji i wersja modelowa. W naszych ogłoszeniach rok = rok modelowy z danych źródłowych, a w umowie wpisujemy datę rejestracji z dokumentów auta — tłumaczymy tę różnicę każdemu klientowi, bo bywa źródłem nieporozumień przy imporcie."
+  "context": "Chińskie '2025 款' to rok MODELOWY (wersja/lifting), nie data produkcji — auto '2025 model' mogło zjechać z taśmy w 2024. W chińskim obrocie znaczenie ma data pierwszej rejestracji i wersja modelowa. W naszych ogłoszeniach rok = rok modelowy z danych źródłowych, a w umowie wpisujemy datę rejestracji z dokumentów auta — tłumaczymy tę różnicę każdemu klientowi, bo bywa źródłem nieporozumień przy imporcie.",
+  "skip_research": true
  }
 ]
