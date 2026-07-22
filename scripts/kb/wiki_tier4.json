@@ -1,0 +1,22 @@
+[
+  {
+    "title": "Samochód elektryczny (EV/BEV) — co oznacza w chińskich specyfikacjach",
+    "headword": "Samochód elektryczny (EV)",
+    "slug": "samochod-elektryczny-ev",
+    "category": "naped",
+    "aliases": "EV, BEV, battery electric vehicle, samochód elektryczny, auto elektryczne, w pełni elektryczny, elektryk, 纯电动",
+    "term_keys": {"fuel_form": "纯电动"},
+    "main_kw": "samochod elektryczny z chin",
+    "context": "Najliczniejsza kategoria naszej oferty (ok. 966 aut). W nazewnictwie Prima-Auto używamy konsekwentnie skrótu EV (taksonomia napędów: 'Elektryczny (EV)'), a nie BEV — mimo że w anglojęzycznych materiałach branżowych i chińskich statystykach częściej pojawia się BEV (battery electric vehicle). Hasło ma tłumaczyć różnicę wobec dwóch pozostałych kategorii z chińskiego parasola NEV: PHEV (hybryda plug-in, ładowana z gniazdka, ma też silnik spalinowy napędzający koła) oraz EREV (napęd wyłącznie elektryczny, spalinowy generator tylko doładowuje baterię). Warto wyjaśnić, że chińskie NEV (new energy vehicle) to kategoria REGULACYJNA obejmująca BEV + PHEV + wodorowe, więc statystyki 'sprzedaży NEV' nie oznaczają samych elektryków. Praktyczne dla polskiego kupującego: homologacja, brak akcyzy dla EV, ładowanie AC/DC, zasięg w cyklu CLTC vs WLTP."
+  },
+  {
+    "title": "NEV — chińska kategoria pojazdów nowej energii",
+    "headword": "NEV",
+    "slug": "nev",
+    "category": "normy",
+    "aliases": "NEV, new energy vehicle, pojazdy nowej energii, 新能源",
+    "term_keys": {},
+    "main_kw": "nev co to znaczy",
+    "context": "Termin REGULACYJNY, nie techniczny: chińskie NEV (new energy vehicle, 新能源汽车) obejmuje samochody elektryczne (BEV/EV), hybrydy plug-in (PHEV) oraz pojazdy wodorowe (FCEV) — NIE obejmuje klasycznych hybryd HEV ani mild-hybrid. Od przynależności do NEV zależą w Chinach dopłaty, zielone tablice rejestracyjne i dostęp do miast z ograniczeniami rejestracji (Pekin, Szanghaj). Dlatego chińskie statystyki 'sprzedaży NEV' (publikowane m.in. przez CPCA) obejmują też hybrydy plug-in i nie są tożsame ze sprzedażą samych elektryków — to najczęstsze nieporozumienie przy czytaniu danych z chińskiego rynku. W nazewnictwie Prima-Auto rozbijamy tę kategorię na EV, PHEV i EREV."
+  }
+]
