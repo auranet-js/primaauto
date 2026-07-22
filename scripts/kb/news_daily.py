@@ -130,6 +130,7 @@ def build_draft(cand, makes, rate, system_prompt):
             else:
                 raise
 
+    fact_check_note = None
     for attempt in range(2):
         vtext, vusage = kb.call_model(
             VERIFY_PROMPT,
@@ -137,7 +138,15 @@ def build_draft(cand, makes, rate, system_prompt):
             f"ARTYKUŁ:\nTYTUŁ: {draft['title']}\nLEAD: {draft['lead']}\n{kb.strip_html(draft['body_html'])}",
             max_tokens=1500,
         )
-        verdict = kb.parse_json_response(vtext)
+        try:
+            verdict = kb.parse_json_response(vtext)
+        except Exception as e:
+            # Zepsuty JSON weryfikatora ≠ zły draft — nie wyrzucamy gotowego artykułu
+            # z tego powodu. Publikacja i tak wymaga ręcznego kliknięcia Janka w mailu,
+            # więc "niepotwierdzone" oznaczamy w mailu zamiast tracić cały bieg.
+            print(f"    fact-check: zepsuty JSON weryfikatora ({e}) — pomijam, oznaczam jako niepotwierdzony", flush=True)
+            fact_check_note = "fact-check nie zwrócił poprawnej odpowiedzi — sprawdź liczby ręcznie przed publikacją"
+            break
         if verdict.get("ok"):
             break
         if attempt == 0:
@@ -150,6 +159,8 @@ def build_draft(cand, makes, rate, system_prompt):
             draft = kb.parse_json_response(kb.normalize_quotes(text))
         else:
             raise RuntimeError("Fact-check nie przeszedł po regeneracji: " + "; ".join(verdict.get("issues", [])[:3]))
+    if fact_check_note:
+        draft["_fact_check_note"] = fact_check_note
 
     # Korekta wydawnicza (proofing)
     proofed, changes = kb.proofread({
@@ -232,9 +243,12 @@ def build_mail(results, skipped_info):
     rows = []
     for r in results:
         d = r["draft"]
+        warn = (f"<p style='background:#fff3cd;color:#856404;padding:8px 12px;border-radius:6px;font-size:13px;margin:0 0 10px'>"
+                f"⚠️ {d['_fact_check_note']}</p>") if d.get("_fact_check_note") else ""
         rows.append(f"""
 <div style="border:1px solid #ddd;border-radius:8px;padding:16px;margin:16px 0">
   <p style="margin:0 0 4px;color:#888;font-size:12px">{d['_source']} · post #{r['post_id']}</p>
+  {warn}
   <h2 style="margin:0 0 8px;font-size:19px">{d['title']}</h2>
   <p style="font-weight:bold">{d['lead']}</p>
   {d['body_html']}

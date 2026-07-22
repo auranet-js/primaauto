@@ -132,9 +132,15 @@ Zwróć czysty JSON: {"fields": {<te same klucze z poprawionym tekstem>}, "chang
 
 
 def proofread(fields: dict):
-    """Korekta wydawnicza pól tekstowych. Zwraca (poprawione_pola, lista_zmian)."""
-    text, _ = call_model(PROOF_PROMPT, json.dumps(fields, ensure_ascii=False), max_tokens=6000)
-    data = parse_json_response(text)
+    """Korekta wydawnicza pól tekstowych. Zwraca (poprawione_pola, lista_zmian).
+    Korekta to wzbogacenie, nie krok krytyczny — jeśli model zwróci niepoprawny
+    JSON (ucięta odpowiedź itp.), publikujemy tekst bez korekty zamiast tracić
+    cały artykuł/hasło."""
+    try:
+        text, _ = call_model(PROOF_PROMPT, json.dumps(fields, ensure_ascii=False), max_tokens=6000)
+        data = parse_json_response(text)
+    except Exception:
+        return dict(fields), []
     fixed = data.get("fields") or {}
     # Bezpiecznik: korekta nie może zgubić pola ani drastycznie skrócić treści
     out = {}
