@@ -1,5 +1,39 @@
 # Historia wersji asiaauto-sync
 
+## 0.34.2 — 2026-07-22 (T-186: sync Che168 wpięty w automat, faza szkiców)
+
+Adapter Che168 wpięty w ścieżkę automatyczną — dotąd `Che168_Adapter::normalize()`
+miał jedno wywołanie w kodzie produkcyjnym (import ręczny), a `Sync::run()` podawał
+importerowi surowy dialekt. Zmierzone przed zmianą: **0 z 730 ofert** przechodziło
+filtr (surowy rekord che168 nie ma pola `city` — lokalizacja siedzi w `address`),
+po wpięciu **89 z 730 (12%)**. `importListing()` i niżej — nietknięte (ADR
+2026-06-17-che168-normalize-at-entry).
+
+- `Sync::isEnabledForSource()` / `statusForSource()` — osobne wyłączniki per źródło
+  (`asiaauto_sync_enabled_{source}`, brak wpisu = dziedziczy po globalnym) + status
+  importu per źródło (che168 startuje na `draft`). Toggle w panelu Status.
+- Cron przechodzi po obu źródłach niezależnie (lock/kursor/historia były per-source).
+- Guard niezmapowanych: oferta bez huba nie wchodzi automatem, ląduje w kolejce
+  `asiaauto_che168_unmapped`. Chroni przed CJK w tytułach i modelami spoza segmentu
+  (spalinowe, marki wycofane). Kolejność: filtr konfigu → guard, inaczej kolejka
+  zapełnia się BMW/Mercedesami z całych Chin.
+- Filtr wstępny na danych z `/changes` przed `getOffer()` — che168 wypuszcza 7–11 tys.
+  nowych ofert na dobę przy ~1% trafień, bez tego każde zdarzenie kosztowałoby
+  wywołanie API. `Importer::isAllowedByConfig()` zmieniona z private na public
+  (sama logika bez zmian).
+- Mapping: indeks `serie_eu` bez marki dla marek foldowanych (Yangwang → `mark_eu`
+  BYD) z wykluczeniem nazw niejednoznacznych (H6 Haval/Hongqi). Domapowania:
+  `BYD|L EV`→Song L EV, `L DM-i`→Song L DM-i, `海豹06`→Seal 6 DM-i,
+  `海豹06 DM-i旅行版`→Seal 6 DM Wagon, nowy `Leapmotor|零跑B01`→B01.
+- Adapter: interpunkcja pełnoszerokościowa z `param_93` (（）， ) → ASCII; usuwało
+  to „… LiDAR ）" z tytułów AITO.
+- Tłumaczenia miast +17 (15 z 31 miast filtra importu nie miało tłumaczenia →
+  102 listingi pokazywały chińską nazwę miasta; backfill wykonany).
+
+Pierwszy bieg automatu (2000 zdarzeń, 336 s): 10 ofert w szkicach, wszystkie
+trafiły w istniejące huby, kolejka domapowań pusta. Plan i pomiary:
+`docs/superpowers/plans/2026-07-22-che168-sync-wpiecie.md`.
+
 ## 0.34.1 — 2026-07-22 (T-214: menu Wiedza + teaser aktualności na homepage)
 
 Menu Header: nowy dropdown "Wiedza" (Aktualności + Słownik jako dzieci), pozycja

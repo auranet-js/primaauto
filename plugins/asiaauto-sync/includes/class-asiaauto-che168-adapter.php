@@ -82,6 +82,12 @@ class AsiaAuto_Che168_Adapter {
         if (empty($data['complectation']) && $name93 !== '' && mb_strpos($name93, '款') !== false) {
             $parts = explode('款', $name93);
             $trim  = trim((string) end($parts));
+            // Interpunkcja pełnoszerokościowa (２０２５款 Ultra（激光雷达）) przechodziła
+            // do tytułu jako "… LiDAR ）" — zamiana na ASCII i usunięcie osieroconych
+            // nawiasów po wycięciu CJK przez translateComplectation. (T-186, 2026-07-22)
+            $trim = strtr($trim, ['（' => '(', '）' => ')', '，' => ',', '、' => ',', '　' => ' ']);
+            $trim = preg_replace(['/\(\s+/u', '/\s+\)/u', '/\(\s*\)/u'], ['(', ')', ''], $trim);
+            $trim = trim(preg_replace('/\s{2,}/u', ' ', (string) $trim));
             if ($trim !== '') {
                 $data['complectation'] = $trim;
             }

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Prima-Auto Sync
  * Description: Synchronizacja ogłoszeń z Dongchedi/Che168, pipeline cenowy, zamówienia, umowy PDF.
- * Version: 0.33.32
+ * Version: 0.34.2
  * Author: Auranet / Jan Schenk
  * Author URI: https://auranet.com.pl
  * Text Domain: asiaauto
@@ -13,7 +13,7 @@
 
 defined('ABSPATH') || exit;
 
-define('ASIAAUTO_VERSION', '0.33.32');
+define('ASIAAUTO_VERSION', '0.34.2');
 define('ASIAAUTO_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('ASIAAUTO_PLUGIN_URL', plugin_dir_url(__FILE__));
 
@@ -28,6 +28,7 @@ require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-logger.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-mapping.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-che168-adapter.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-che168-log.php';
+require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-che168-dictionary.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-api.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-price.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-translator.php';
@@ -40,9 +41,14 @@ require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-taxonomy.php';
 
 // Classes with hooks (no-arg constructors)
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-cpt.php';
+require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-wiki.php';
+require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-kb-publish.php';
+require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-autolink.php';
+require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-wiki-cars.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-admin.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-admin-manual-import.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-admin-che168-import.php';
+require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-admin-che168-browse.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-admin-listings-views.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-order-content.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-order.php';
@@ -136,7 +142,17 @@ add_action('asiaauto_sync_changes', function () {
     }
     $api  = new AsiaAuto_API(ASIAAUTO_API_KEY, ASIAAUTO_API_BASE_URL);
     $sync = new AsiaAuto_Sync($api);
-    $sync->run('dongchedi');
+
+    // T-186 (2026-07-22): każde źródło ma własny wyłącznik
+    // (`asiaauto_sync_enabled_{source}`); brak wpisu = dziedziczy po globalnym.
+    // Lock, kursor change_id i historia są per-source od początku — pad jednego
+    // źródła nie dotyka drugiego.
+    foreach (['dongchedi', 'che168'] as $src) {
+        if (!AsiaAuto_Sync::isEnabledForSource($src)) {
+            continue;
+        }
+        $sync->run($src);
+    }
 });
 
 // ─── Cron handler: asiaauto_daily_cleanup ────────────────────────────
@@ -149,6 +165,10 @@ add_action('asiaauto_daily_cleanup', function () {
 add_action('plugins_loaded', function () {
     // Frontend + backend hook classes (no-arg constructors)
     new AsiaAuto_CPT();
+    new AsiaAuto_Wiki();
+    new AsiaAuto_KB_Publish();
+    new AsiaAuto_Autolink();
+    new AsiaAuto_Wiki_Cars();
     new AsiaAuto_Order();
     new AsiaAuto_Order_API();
     new AsiaAuto_Order_Wizard();
@@ -170,6 +190,7 @@ add_action('plugins_loaded', function () {
         new AsiaAuto_Admin();
         new AsiaAuto_Admin_Manual_Import();
         new AsiaAuto_Admin_Che168_Import();
+        new AsiaAuto_Admin_Che168_Browse();
         new AsiaAuto_Admin_Listings_Views();
         new AsiaAuto_Order_Admin();
         new AsiaAuto_Listing_Editor();
