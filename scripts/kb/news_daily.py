@@ -4,8 +4,10 @@ Codzienny pipeline newsowy działu wiedzy (T-214 F1/F3).
 
 Etapy: radar RSS -> dedup -> selekcja (Claude) -> research (pełny artykuł
 źródłowy + kontekst naszej oferty + kurs CNY) -> draft PL (Claude) ->
-weryfikacja faktów (Claude, drugi przebieg) -> lint -> draft w WP ->
-mail akceptacyjny do Janka z tokenowym linkiem "Opublikuj".
+weryfikacja faktów (Claude, drugi przebieg) -> lint -> publikacja w WP ->
+mail informacyjny do Janka z linkami do opublikowanych newsów (decyzja
+Janka 2026-07-22: bez akceptacji mailem — publikacja od razu, on zgłasza
+uwagi post factum jeśli coś się rzuci w oczy).
 
 Użycie:
   python3 news_daily.py --dry-run          # tylko radar + selekcja, bez generowania
@@ -18,7 +20,6 @@ import datetime as dt
 import email.utils
 import json
 import re
-import secrets as pysecrets
 import sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
@@ -180,43 +181,184 @@ def build_draft(cand, makes, rate, system_prompt):
     return draft
 
 
-def create_wp_draft(draft):
-    """Draft posta w WP + token publikacji. Zwraca (post_id, publish_url)."""
-    content = f"<!-- wp:paragraph --><p><strong>{draft['lead']}</strong></p><!-- /wp:paragraph -->\n" + draft["body_html"]
+def extract_gallery_images(html):
+    """Zdjęcia treści artykułu (WP galeria/inline, klasa wp-image-N) — bez avatarów
+    i kafli 'related posts'. Obsługuje zarówno klasyczny <img class="wp-image-N" src="...">
+    (CarNewsChina), jak i lazy-load <picture class="wp-image-N">...</picture><noscript><img
+    src="..."></noscript> (CNEVPost i inni z lazy-loadingiem — bez tego src to placeholder
+    data:image/svg, nie prawdziwy URL). Zwraca URL-e w kolejności występowania, bez
+    duplikatów (te same zdjęcie w różnych rozmiarach srcset liczy się raz)."""
+    if not html:
+        return []
+    urls, seen = [], set()
+
+    def add(url):
+        if not url or url.startswith("data:"):
+            return
+        key = re.sub(r"-\d+x\d+(?=\.\w+$)", "", url)  # ignoruj sufiks rozmiaru (-800x450)
+        if key in seen:
+            return
+        seen.add(key)
+        urls.append(url)
+
+    for m in re.finditer(r"<img\b[^>]*>", html):
+        tag = m.group(0)
+        cls = re.search(r'class="([^"]*)"', tag)
+        if not cls or not re.search(r"\bwp-image-\d+\b", cls.group(1)):
+            continue
+        src = re.search(r'\bsrc="([^"]+)"', tag)
+        if src:
+            add(src.group(1))
+
+    for m in re.finditer(r'<picture\b[^>]*class="[^"]*\bwp-image-\d+\b[^"]*"[^>]*>(.*?)</picture>', html, re.S):
+        nm = re.search(r'<noscript>\s*<img\b[^>]*\bsrc="([^"]+)"', m.group(1))
+        if nm:
+            add(nm.group(1))
+
+    return urls
+
+
+def _credit_from_text(text):
+    m = re.search(r"credit:\s*(.+?)\s*$", text, re.I)
+    return m.group(1).strip() if m else None
+
+
+def extract_verified_credit(html, image_url):
+    """Sprawdza, czy DANY obraz ma jawny kredyt producenta w danych źródła — dwa wzorce
+    branżowe: (1) schema.org JSON-LD ImageObject 'caption' (CarNewsChina), (2) klasyczny
+    podpis WordPress <figcaption class="wp-caption-text"> zaraz po <img> (CNEVPost i inni).
+    Bez zgadywania — jeśli źródło nie deklaruje wprost kto jest autorem/właścicielem zdjęcia,
+    zwraca None (decyzja Janka 22.07: nie podpisujemy zdjęć jako 'materiały prasowe {marka}'
+    bez potwierdzenia)."""
+    if not html:
+        return None
+    key = re.sub(r"-\d+x\d+(?=\.\w+$)", "", image_url)
+    for m in re.finditer(r'"contentUrl":"([^"]+)"[^{}]*?"caption":"([^"]*)"', html):
+        url = m.group(1).replace("\\/", "/")
+        if re.sub(r"-\d+x\d+(?=\.\w+$)", "", url) == key:
+            credit = _credit_from_text(m.group(2))
+            if credit:
+                return credit
+    for m in re.finditer(r'<img\b[^>]*\bsrc="([^"]+)"[^>]*>.{0,400}?<figcaption[^>]*>([^<]*)</figcaption>', html, re.S):
+        url = m.group(1)
+        if re.sub(r"-\d+x\d+(?=\.\w+$)", "", url) == key:
+            credit = _credit_from_text(m.group(2))
+            if credit:
+                return credit
+    return None
+
+
+def pick_spaced(items, n):
+    """Wybiera do n elementów rozłożonych równomiernie po liście (unika klastra duplikatów z początku)."""
+    if not items:
+        return []
+    if len(items) <= n:
+        return list(items)
+    picks = []
+    for k in range(n):
+        idx = min(int((k + 1) * len(items) / (n + 1)), len(items) - 1)
+        if items[idx] not in picks:
+            picks.append(items[idx])
+    return picks
+
+
+def insert_figures(body_html, figures):
+    """Wstawia bloki <figure> w treść, rozłożone po granicach akapitów (</p>), pomijając
+    pierwszy i ostatni akapit żeby nie łamać leadu ani zakończenia."""
+    if not figures:
+        return body_html
+    blocks = re.split(r"(</p>)", body_html)
+    p_ends = [i for i, b in enumerate(blocks) if b == "</p>"]
+    usable = p_ends[1:-1] if len(p_ends) > 2 else p_ends
+    if not usable:
+        return body_html + "".join(figures)
+    step = max(1, len(usable) // (len(figures) + 1))
+    slots = [usable[min((k + 1) * step - 1, len(usable) - 1)] for k in range(len(figures))]
+    for slot, fig in sorted(zip(slots, figures), key=lambda x: -x[0]):
+        blocks.insert(slot + 1, fig)
+    return "".join(blocks)
+
+
+def publish_wp_post(draft):
+    """Publikuje news w WP od razu (bez etapu draft+akceptacja). Zwraca (post_id, url)."""
+    source_html = None
+    try:
+        source_html = kb.http_get(draft["_source_url"], as_text=True)
+    except Exception as e:
+        print(f"    fetch źródła dla obrazków nieudany ({e})", flush=True)
+
+    cover_url = None
+    if source_html:
+        m = re.search(r'property="og:image" content="([^"]+)"', source_html)
+        cover_url = m.group(1) if m else None
+    cover_credit = extract_verified_credit(source_html, cover_url) if cover_url else None
+
+    # Dodatkowe zdjęcia z galerii źródła (poza okładką) — do 2, rozłożone po treści,
+    # żeby news miał więcej niż samo zdjęcie okładkowe (feedback Janka 22.07). Podpis
+    # "materiały prasowe {marka}" TYLKO gdy źródło jawnie deklaruje kredyt (Credit: X w
+    # danych źródła) — bez tego zdjęcie jest z artykułu, ale nie potwierdzone jako oficjalny
+    # materiał prasowy (może być np. z leaku homologacyjnego), więc podpisujemy neutralnie
+    # samym źródłem, żeby nie nadinterpretować pochodzenia (decyzja Janka 22.07).
+    body_html = draft["body_html"]
+    extra_att_ids = []
+    if source_html:
+        gallery = [u for u in extract_gallery_images(source_html) if u != cover_url]
+        extra_figures = []
+        slug = draft.get("slug") or "news"
+        for i, url in enumerate(pick_spaced(gallery, 2), start=1):
+            credit = extract_verified_credit(source_html, url)
+            caption = (f"fot. materiały prasowe {credit} (via {draft['_source']})" if credit
+                       else f"fot. {draft['_source']}")
+            webp = kb.download_webp(url, str(kb.STATE_DIR / f"extra-{slug}-{i}"))
+            if not webp:
+                continue
+            att_id = kb.wp(
+                "media", "import", webp,
+                f"--title={draft['title']}", f"--alt={draft['title']}",
+                f"--caption={caption}", "--porcelain",
+            )
+            Path(webp).unlink(missing_ok=True)
+            att_url = kb.wp("post", "list", f"--post__in={att_id}", "--post_type=attachment", "--field=guid").strip()
+            if att_url:
+                extra_att_ids.append(att_id)
+                extra_figures.append(
+                    f'<figure class="wp-block-image size-large"><img src="{att_url}" alt="{draft["title"]}" />'
+                    f"<figcaption>{caption}</figcaption></figure>"
+                )
+        if extra_figures:
+            body_html = insert_figures(body_html, extra_figures)
+            print(f"    +{len(extra_figures)} zdjęć z galerii źródła osadzonych w treści", flush=True)
+
+    content = f"<!-- wp:paragraph --><p><strong>{draft['lead']}</strong></p><!-- /wp:paragraph -->\n" + body_html
     body_file = kb.STATE_DIR / "_post_body.html"
     body_file.write_text(content)
     post_id = kb.wp(
         "post", "create", str(body_file),
-        "--post_status=draft", "--post_type=post",
+        "--post_status=publish", "--post_type=post",
         "--post_category=aktualnosci", "--post_author=55",
         f"--post_title={draft['title']}",
         f"--post_excerpt={draft['excerpt']}",
         "--porcelain",
     )
-    # Okładka: 1) oficjalne zdjęcie prasowe z artykułu źródłowego (og:image, kredyt
-    # "fot. materiały prasowe {marka} (via {źródło})" — decyzja Janka 21.07: bierzemy
-    # oficjalne materiały producentów z podpisem, jak cała branża; NIE spy-shoty),
+    for att_id in extra_att_ids:
+        kb.wp("post", "update", att_id, f"--post_parent={post_id}")
+    # Okładka: 1) oficjalne zdjęcie prasowe z artykułu źródłowego (og:image), podpis
+    # "materiały prasowe {marka}" tylko przy potwierdzonym kredycie w źródle (Credit: X),
+    # inaczej neutralnie "fot. {źródło}" — decyzja Janka 21.07/22.07: bierzemy oficjalne
+    # materiały producentów z podpisem, jak cała branża, NIE zgadujemy pochodzenia,
     # 2) fallback: brandowa plansza typograficzna.
     cover_done = False
+    cover_caption = (f"fot. materiały prasowe {cover_credit} (via {draft['_source']})" if cover_credit
+                      else f"fot. {draft['_source']}")
     try:
-        page = kb.http_get(draft["_source_url"], as_text=True)
-        m = re.search(r'property="og:image" content="([^"]+)"', page)
-        if m:
-            img_path = str(kb.STATE_DIR / f"press-{post_id}.jpg")
-            with open(img_path, "wb") as fh:
-                req = __import__("urllib.request", fromlist=["Request"])
-                r = req.urlopen(req.Request(m.group(1), headers={"User-Agent": kb.UA}), timeout=30)
-                fh.write(r.read())
-            webp = str(kb.STATE_DIR / f"press-{post_id}.webp")
-            subprocess_run = __import__("subprocess").run
-            subprocess_run(["magick", img_path, "-resize", "1200x", "-quality", "85", webp], check=True, capture_output=True)
-            brand = (draft.get("tags") or ["producenta"])[0]
-            kb.wp("media", "import", webp, f"--post_id={post_id}", "--featured_image",
-                  f"--title={draft['title']}", f"--alt={draft['title']}",
-                  f"--caption=fot. materiały prasowe {brand} (via {draft['_source']})", "--porcelain")
-            Path(img_path).unlink(missing_ok=True)
-            Path(webp).unlink(missing_ok=True)
-            cover_done = True
+        if cover_url:
+            webp = kb.download_webp(cover_url, str(kb.STATE_DIR / f"press-{post_id}"))
+            if webp:
+                kb.wp("media", "import", webp, f"--post_id={post_id}", "--featured_image",
+                      f"--title={draft['title']}", f"--alt={draft['title']}",
+                      f"--caption={cover_caption}", "--porcelain")
+                Path(webp).unlink(missing_ok=True)
+                cover_done = True
     except Exception as e:
         print(f"    press-cover nieudany ({e}) — fallback typografia", flush=True)
     if not cover_done:
@@ -231,12 +373,10 @@ def create_wp_draft(draft):
         except Exception as e:
             print(f"    okładka nieudana (nie blokuje): {e}", flush=True)
 
-    token = pysecrets.token_hex(20)
     kb.wp("post", "meta", "set", post_id, "_kb_source_name", draft["_source"])
     kb.wp("post", "meta", "set", post_id, "_kb_source_url", draft["_source_url"])
-    kb.wp("post", "meta", "set", post_id, "_kb_publish_token", token)
-    publish_url = f"{SITE}/wp-json/asiaauto/v1/kb-publish?post={post_id}&token={token}"
-    return post_id, publish_url
+    url = kb.wp("post", "list", f"--post__in={post_id}", "--field=url").strip()
+    return post_id, url
 
 
 def build_mail(results, skipped_info):
@@ -249,13 +389,11 @@ def build_mail(results, skipped_info):
 <div style="border:1px solid #ddd;border-radius:8px;padding:16px;margin:16px 0">
   <p style="margin:0 0 4px;color:#888;font-size:12px">{d['_source']} · post #{r['post_id']}</p>
   {warn}
-  <h2 style="margin:0 0 8px;font-size:19px">{d['title']}</h2>
+  <h2 style="margin:0 0 8px;font-size:19px"><a href="{r['url']}">{d['title']}</a></h2>
   <p style="font-weight:bold">{d['lead']}</p>
-  {d['body_html']}
   <p style="font-size:12px;color:#888">Źródło: <a href="{d['_source_url']}">{d['_source_url']}</a></p>
-  <p style="margin:14px 0 0"><a href="{r['publish_url']}" style="background:#1B2A4A;color:#fff;padding:10px 22px;border-radius:6px;text-decoration:none;font-weight:bold">✅ OPUBLIKUJ ten news</a></p>
 </div>""")
-    return (f"<p>Dzisiejsze newsy z chińskiego rynku — do akceptacji. Klik w przycisk = publikacja na primaauto.com.pl.</p>"
+    return (f"<p>Newsy opublikowane dziś na primaauto.com.pl (bez akceptacji — zgłoś, jeśli coś się rzuci w oczy).</p>"
             + "".join(rows)
             + (f"<p style='color:#888;font-size:12px'>{skipped_info}</p>" if skipped_info else ""))
 
@@ -317,9 +455,9 @@ def main():
         print(f"\n=== {cand['title']}", flush=True)
         try:
             draft = build_draft(cand, makes, rate, system_prompt)
-            post_id, publish_url = create_wp_draft(draft)
-            results.append({"draft": draft, "post_id": post_id, "publish_url": publish_url})
-            print(f"    OK draft #{post_id}", flush=True)
+            post_id, url = publish_wp_post(draft)
+            results.append({"draft": draft, "post_id": post_id, "url": url})
+            print(f"    OK opublikowano #{post_id} -> {url}", flush=True)
         except Exception as e:
             failed.append(f"{cand['title']}: {e}")
             print(f"    FAIL: {e}", flush=True)
@@ -330,7 +468,7 @@ def main():
 
     if results and not args.no_mail:
         skipped = f"Nieudane: {len(failed)}" if failed else ""
-        kb.send_mail(f"[primaauto] Newsy do akceptacji ({len(results)}) — {dt.date.today():%d.%m}",
+        kb.send_mail(f"[primaauto] Newsy opublikowane ({len(results)}) — {dt.date.today():%d.%m}",
                      build_mail(results, skipped))
         print(f"\nMail wysłany ({len(results)} newsów).", flush=True)
     elif failed and not args.no_mail:

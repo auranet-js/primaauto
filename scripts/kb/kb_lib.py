@@ -103,6 +103,24 @@ def strip_html(s):
     return re.sub(r"\s+", " ", s).strip()
 
 
+def download_webp(url, out_stub, width=1200, quality=85):
+    """Pobiera obraz spod url, konwertuje do WebP (ImageMagick). Zwraca ścieżkę webp albo None."""
+    raw_path = f"{out_stub}.src"
+    webp_path = f"{out_stub}.webp"
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": UA})
+        with urllib.request.urlopen(req, timeout=30) as r:
+            with open(raw_path, "wb") as fh:
+                fh.write(r.read())
+        subprocess.run(["magick", raw_path, "-resize", f"{width}x", "-quality", str(quality), webp_path],
+                        check=True, capture_output=True)
+        return webp_path
+    except Exception:
+        return None
+    finally:
+        Path(raw_path).unlink(missing_ok=True)
+
+
 def wp(*args, stdin=None):
     """WP-CLI w katalogu produkcji. Zwraca stdout, rzuca przy błędzie."""
     result = subprocess.run(
