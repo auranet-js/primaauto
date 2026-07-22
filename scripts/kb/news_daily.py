@@ -42,6 +42,9 @@ Z listy kandydatów (newsy z ostatnich 36h z serwisów EN) wybierz {n} najlepsze
 
 Kryteria (w kolejności): (1) premiery/presale/ceny NOWYCH chińskich modeli, (2) marki obecne w Polsce lub w naszej ofercie: {makes}, (3) technologie (baterie, ładowanie, ADAS), (4) twarde dane rynkowe. Odrzucaj: USA-centryczne, opinie/felietony, tematy nie-chińskie, duplikaty tego samego wydarzenia (wybierz lepsze źródło).
 
+JUŻ OPUBLIKOWALIŚMY (nie wybieraj tematów opisujących TO SAMO wydarzenie, nawet jeśli kandydat pochodzi z innego serwisu i ma inny tytuł):
+{published}
+
 Zwróć czysty JSON: {{"picks": [{{"idx": <numer kandydata>, "why": "1 zdanie"}}]}}"""
 
 VERIFY_PROMPT = """Jesteś weryfikatorem faktów. Porównaj ARTYKUŁ z MATERIAŁEM ŹRÓDŁOWYM.
@@ -78,8 +81,37 @@ def parse_feed(name, url):
     return items
 
 
+def source_post_date(cand, max_days_back=5):
+    """
+    Data wpisu = data publikacji artykułu ŹRÓDŁOWEGO (czas lokalny serwera).
+
+    Uczciwsza niż losowy rozrzut: news o wydarzeniu z 19.07 dostaje 19.07, więc
+    kolejność w archiwum odpowiada kolejności wydarzeń. Przycięte do okna
+    [dziś - max_days_back, teraz - 1h] — nic z przyszłości i nic starszego niż okno.
+    """
+    ts = dt.datetime.fromisoformat(cand["ts"]).astimezone()
+    now = dt.datetime.now().astimezone()
+    oldest = now - dt.timedelta(days=max_days_back)
+    newest = now - dt.timedelta(hours=1)
+    ts = max(oldest, min(ts, newest))
+    return ts.strftime("%Y-%m-%d %H:%M:%S")
+
+
+def recent_published_titles(n=40):
+    """Tytuły ostatnich newsów — dla selekcji, żeby nie opisać drugi raz tego samego
+    wydarzenia z innego serwisu (dedup po GUID feedu tego nie łapie)."""
+    try:
+        out = kb.wp("post", "list", "--post_type=post", "--post_status=publish",
+                    "--category_name=aktualnosci", f"--posts_per_page={n}",
+                    "--fields=post_title", "--format=json")
+        return [p["post_title"] for p in json.loads(out)]
+    except Exception as e:
+        print(f"    UWAGA: nie udało się pobrać listy opublikowanych ({e})", flush=True)
+        return []
+
+
 def get_our_makes():
-    out = kb.wp("term", "list", "make", "--fields=name,slug", "--format=json", "--number=0")
+    out = kb.wp("term", "list", "make", "--fields=name,slug,count", "--format=json", "--number=0")
     return json.loads(out)
 
 
@@ -94,14 +126,98 @@ def get_cny_rate():
 def match_our_offer(title, makes):
     """Zwraca (make_name, hub_url) jeśli marka z tytułu jest w naszej taksonomii."""
     tl = title.lower()
+    hits = []
     for m in makes:
         name = m["name"].lower()
-        if len(name) >= 3 and re.search(r"\b" + re.escape(name) + r"\b", tl):
-            return m["name"], f"{SITE}/samochody/{m['slug']}/"
-    return None, None
+        pos = None
+        mm = re.search(r"\b" + re.escape(name) + r"\b", tl)
+        if len(name) >= 3 and mm:
+            pos = mm.start()
+        if pos is not None and int(m.get("count") or 0) > 0:
+            hits.append((pos, m))
+    if not hits:
+        return None, None
+    # Tytuł często zawiera DWIE nasze marki: koncern i submarkę ("BYD Denza Z9S",
+    # "Great Wall Motors' Tank 300"). U nas Denza i Tank są osobnymi markami, więc
+    # link ma iść do nich, nie do koncernu. Konwencja nazewnicza stawia submarkę tuż
+    # przed modelem — bierzemy więc trafienie stojące NAJPÓŹNIEJ w tytule (przy remisie
+    # to o większym stanie). Bez tego news o Denzie Z9S linkował do hubu BYD, a news
+    # o Tanku 300 do hubu GWM (realne przypadki 20-21.07).
+    # ...ale tylko wśród marek stojących na POCZĄTKU tytułu (podmiot newsa). Bez tego
+    # "Voyah Passion S rival to Xiaomi YU7" wybrałoby Xiaomi, bo stoi później — a news
+    # jest o Voyah. Ta sama reguła okna co w match_our_model().
+    head = [(p, m) for p, m in hits if len(tl[:p].split()) <= 3]
+    pool = head or hits
+    best_pos = max(p for p, _ in pool)
+    best = max((m for p, m in pool if p == best_pos), key=lambda m: int(m.get("count") or 0))
+    return best["name"], f"{SITE}/samochody/{best['slug']}/"
 
 
-def build_draft(cand, makes, rate, system_prompt):
+def get_our_series():
+    """Modele (taksonomia `serie`) z liczbą aut i URL-em hubu — do gate'u D2."""
+    php = ('$out=[];'
+           'foreach (get_terms(["taxonomy"=>"serie","hide_empty"=>true]) as $t) {'
+           '  $l = get_term_link($t); if (is_wp_error($l)) continue;'
+           '  $mk = ""; $p = wp_get_object_terms('
+           '    get_objects_in_term($t->term_id,"serie",["number"=>1]) ?: [0], "make");'
+           '  if (!is_wp_error($p) && $p) $mk = $p[0]->name;'
+           '  $out[] = ["name"=>$t->name,"make"=>$mk,"url"=>$l,"count"=>(int)$t->count];'
+           '} echo wp_json_encode($out);')
+    try:
+        return json.loads(kb.wp("eval", php))
+    except Exception as e:
+        print(f"    UWAGA: nie udało się pobrać listy modeli ({e}) — gate D2 nieaktywny", flush=True)
+        return []
+
+
+def match_our_model(title, series):
+    """
+    Gate antykanibalizacyjny (zasada D2 z T-162: jedna fraza = jeden URL).
+
+    Wykrywa, czy news dotyczy modelu, który MAMY w ofercie — bo wtedy jego hub
+    /samochody/{marka}/{model}/ już odpowiada na zapytania "cena / import / gdzie kupić",
+    a news napisany w tym samym ramowaniu odbierałby mu te frazy.
+
+    Krótkie nazwy modeli (E5, 007, L6) wymagają obecności marki w tytule — inaczej
+    "E5" złapałoby się w dowolnym ciągu znaków (patrz reguła marka≠model w PL).
+    Zwraca najdłuższe dopasowanie albo None.
+    """
+    tl = title.lower()
+    best, best_len = None, 0
+    for s in series:
+        name = (s.get("name") or "").strip().lower()
+        make = (s.get("make") or "").strip().lower()
+        if len(name) < 2:
+            continue
+
+        # Szukamy najpierw PEŁNEJ frazy "marka model" ("tank 300"), bo nazwa terminu bywa
+        # samym numerem. Bez tego news "Great Wall Motors' Tank 300 expands lineup" nie
+        # wykrywał naszego modelu: "300" stało za czterema słowami i wypadało na regule
+        # pozycji, choć "Tank 300" stoi tuż na początku (realny przypadek, 21.07).
+        phrases = []
+        if make and not name.startswith(make):
+            phrases.append(f"{make} {name}")
+        phrases.append(name)
+
+        for phrase in phrases:
+            m = re.search(r"(?<![\w-])" + re.escape(phrase) + r"(?![\w-])", tl)
+            if not m:
+                continue
+            # Model musi być PODMIOTEM newsa, nie wzmianką w tle. W nagłówkach branżowych
+            # podmiot stoi na początku ("BYD Qin L facelift..."), a modele porównawcze dalej
+            # ("Voyah Passion S rival to Xiaomi YU7" — news jest o Voyah, nie o YU7).
+            if len(tl[:m.start()].split()) > 3:
+                continue
+            # Sam numer/skrót bez marki w tytule = za słabe dopasowanie.
+            if phrase == name and len(name) < 4 and not (make and make in tl):
+                continue
+            if len(phrase) > best_len:
+                best, best_len = s, len(phrase)
+            break
+    return best
+
+
+def build_draft(cand, makes, rate, system_prompt, series=None):
     """Research + draft + verify. Zwraca dict albo rzuca."""
     try:
         page = kb.http_get(cand["link"], as_text=True)
@@ -111,8 +227,39 @@ def build_draft(cand, makes, rate, system_prompt):
         print(f"    fetch źródła nieudany ({e}) — używam opisu RSS", flush=True)
 
     make_name, hub_url = match_our_offer(cand["title"], makes)
-    offer_ctx = (f"Markę {make_name} MAMY w ofercie — hub: {hub_url}"
-                 if make_name else "Tego modelu/marki NIE mamy w ofercie — nie wspominaj o ofercie.")
+    model_hit = match_our_model(cand["title"], series or [])
+
+    # W7 (audyt 22.07): news o wadzie/wycofaniu/awarii NIE dostaje zdania o naszej ofercie.
+    # Realny przypadek: "GAC Aion S — awarie baterii CALB w 213 tys. egzemplarzy" z linkiem
+    # "u nas kupisz" do /samochody/gac/ (32 auta, w tym 10 Aionów). Technicznie poprawne,
+    # reputacyjnie prowadzi klienta z tekstu o wadliwych ogniwach wprost do naszej oferty.
+    negative = bool(re.search(
+        r"\b(recall|recalls|recalled|defect|defects|fault|faulty|fire risk|catch fire|"
+        r"lawsuit|sues|investigation|probe|halt|halts|suspend|scandal|complaint|"
+        r"safety issue|malfunction|failure|failures)\b", cand["title"], re.I))
+
+    if negative:
+        offer_ctx = ("Ten news dotyczy problemu/wady/wycofania. NIE wspominaj o naszej ofercie, "
+                     "NIE wstawiaj linku do katalogu ani zachęty do zakupu — relacjonuj wyłącznie fakty.")
+    elif model_hit:
+        # Gate D2: hub modelu ma już historię zapytań na "cena/import/gdzie kupić".
+        # News o tym samym modelu musi opowiadać WYDARZENIE, nie powtarzać oferty,
+        # i oddać frazę pieniężną hubowi anchorem.
+        offer_ctx = (
+            f"Model {model_hit['name']} MAMY w ofercie ({model_hit['count']} aut) — "
+            f"hub modelu: {model_hit['url']}\n"
+            "RAMOWANIE (obowiązkowe): pisz WYŁĄCZNIE o wydarzeniu — co konkretnie się zmieniło, "
+            "kiedy, dla kogo, czym się różni od poprzednika. NIE opisuj procesu importu do Polski, "
+            "NIE odpowiadaj na 'ile kosztuje sprowadzenie', NIE pisz 'gdzie kupić' — na te pytania "
+            "odpowiada hub modelu i nie wolno mu tych fraz odbierać.\n"
+            f"ZAKOŃCZ jednym zdaniem z linkiem do hubu, w którym anchor zawiera nazwę modelu "
+            f"i słowo 'cena' lub 'oferta' (np. <a href=\"{model_hit['url']}\">"
+            f"{model_hit['name']} — ceny i dostępne egzemplarze</a>)."
+        )
+    elif make_name:
+        offer_ctx = f"Markę {make_name} MAMY w ofercie — hub: {hub_url}"
+    else:
+        offer_ctx = "Tego modelu/marki NIE mamy w ofercie — nie wspominaj o ofercie."
 
     user_msg = (f"MATERIAŁ ŹRÓDŁOWY ({cand['source']}, {cand['link']}):\n{source_text}\n\n"
                 f"KURS NBP: 1 CNY = {rate:.3f} PLN\n"
@@ -218,12 +365,34 @@ def extract_gallery_images(html):
     return urls
 
 
-def _credit_from_text(text):
+# Portale/agregatory, które podpisują cudze zdjęcia własną nazwą po "Credit:".
+# Kredyt od nich NIE jest materiałem prasowym producenta (audyt 22.07: 6 z 9 atrybucji
+# "materiały prasowe X" było fałszywych — CnEVPost, CNC, Autohome, Xcar).
+CREDIT_NOT_PRESS = {
+    "cnevpost", "cnc", "carnewschina", "autohome", "xcar", "yiche", "dongchedi",
+    "sohu", "weibo", "electrive", "insideevs", "reuters", "bloomberg", "ithome",
+    "pcauto", "36kr", "cls", "jiemian", "cailianshe",
+}
+
+
+def _credit_from_text(text, source_name=None):
     m = re.search(r"credit:\s*(.+?)\s*$", text, re.I)
-    return m.group(1).strip() if m else None
+    if not m:
+        return None
+    credit = m.group(1).strip()
+    if not credit:
+        return None
+    norm = re.sub(r"[^a-z0-9]", "", credit.lower())
+    if norm in CREDIT_NOT_PRESS:
+        return None
+    # Kredyt równy nazwie serwisu źródłowego = serwis podpisał sam siebie
+    # ("fot. materiały prasowe CnEVPost (via CNEVPost)" — masło maślane na produkcji).
+    if source_name and norm == re.sub(r"[^a-z0-9]", "", source_name.lower()):
+        return None
+    return credit
 
 
-def extract_verified_credit(html, image_url):
+def extract_verified_credit(html, image_url, source_name=None):
     """Sprawdza, czy DANY obraz ma jawny kredyt producenta w danych źródła — dwa wzorce
     branżowe: (1) schema.org JSON-LD ImageObject 'caption' (CarNewsChina), (2) klasyczny
     podpis WordPress <figcaption class="wp-caption-text"> zaraz po <img> (CNEVPost i inni).
@@ -236,13 +405,13 @@ def extract_verified_credit(html, image_url):
     for m in re.finditer(r'"contentUrl":"([^"]+)"[^{}]*?"caption":"([^"]*)"', html):
         url = m.group(1).replace("\\/", "/")
         if re.sub(r"-\d+x\d+(?=\.\w+$)", "", url) == key:
-            credit = _credit_from_text(m.group(2))
+            credit = _credit_from_text(m.group(2), source_name)
             if credit:
                 return credit
     for m in re.finditer(r'<img\b[^>]*\bsrc="([^"]+)"[^>]*>.{0,400}?<figcaption[^>]*>([^<]*)</figcaption>', html, re.S):
         url = m.group(1)
         if re.sub(r"-\d+x\d+(?=\.\w+$)", "", url) == key:
-            credit = _credit_from_text(m.group(2))
+            credit = _credit_from_text(m.group(2), source_name)
             if credit:
                 return credit
     return None
@@ -279,8 +448,11 @@ def insert_figures(body_html, figures):
     return "".join(blocks)
 
 
-def publish_wp_post(draft):
-    """Publikuje news w WP od razu (bez etapu draft+akceptacja). Zwraca (post_id, url)."""
+def publish_wp_post(draft, post_date=None):
+    """Publikuje news w WP od razu (bez etapu draft+akceptacja). Zwraca (post_id, url).
+
+    post_date (str "YYYY-MM-DD HH:MM:SS", czas lokalny) — używane przy uzupełnianiu
+    archiwum, żeby wpis miał datę wydarzenia, a nie datę wygenerowania."""
     source_html = None
     try:
         source_html = kb.http_get(draft["_source_url"], as_text=True)
@@ -291,7 +463,7 @@ def publish_wp_post(draft):
     if source_html:
         m = re.search(r'property="og:image" content="([^"]+)"', source_html)
         cover_url = m.group(1) if m else None
-    cover_credit = extract_verified_credit(source_html, cover_url) if cover_url else None
+    cover_credit = extract_verified_credit(source_html, cover_url, draft.get('_source')) if cover_url else None
 
     # Dodatkowe zdjęcia z galerii źródła (poza okładką) — do 2, rozłożone po treści,
     # żeby news miał więcej niż samo zdjęcie okładkowe (feedback Janka 22.07). Podpis
@@ -306,7 +478,7 @@ def publish_wp_post(draft):
         extra_figures = []
         slug = draft.get("slug") or "news"
         for i, url in enumerate(pick_spaced(gallery, 2), start=1):
-            credit = extract_verified_credit(source_html, url)
+            credit = extract_verified_credit(source_html, url, draft.get('_source'))
             caption = (f"fot. materiały prasowe {credit} (via {draft['_source']})" if credit
                        else f"fot. {draft['_source']}")
             webp = kb.download_webp(url, str(kb.STATE_DIR / f"extra-{slug}-{i}"))
@@ -329,17 +501,24 @@ def publish_wp_post(draft):
             body_html = insert_figures(body_html, extra_figures)
             print(f"    +{len(extra_figures)} zdjęć z galerii źródła osadzonych w treści", flush=True)
 
+    # Model bywa, że zwraca w JSON podwójnie zescapowane cudzysłowy w atrybutach HTML
+    # (<a href=\\"URL\\">) — po json.loads zostaje href=\\" i link NIE DZIAŁA (przeglądarka
+    # widzi href="\\"). Realny przypadek #389278 z biegu 22.07. Prostujemy przed zapisem.
+    body_html = body_html.replace('\\"', '"')
     content = f"<!-- wp:paragraph --><p><strong>{draft['lead']}</strong></p><!-- /wp:paragraph -->\n" + body_html
     body_file = kb.STATE_DIR / "_post_body.html"
     body_file.write_text(content)
-    post_id = kb.wp(
+    create_args = [
         "post", "create", str(body_file),
         "--post_status=publish", "--post_type=post",
         "--post_category=aktualnosci", "--post_author=55",
         f"--post_title={draft['title']}",
         f"--post_excerpt={draft['excerpt']}",
         "--porcelain",
-    )
+    ]
+    if post_date:
+        create_args.insert(-1, f"--post_date={post_date}")
+    post_id = kb.wp(*create_args)
     for att_id in extra_att_ids:
         kb.wp("post", "update", att_id, f"--post_parent={post_id}")
     # Okładka: 1) oficjalne zdjęcie prasowe z artykułu źródłowego (og:image), podpis
@@ -403,6 +582,10 @@ def main():
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--limit", type=int, default=2)
     ap.add_argument("--no-mail", action="store_true")
+    ap.add_argument("--max-age-h", type=int, default=MAX_AGE_H,
+                    help="okno wieku kandydatów w godzinach (default 36; większe = uzupełnianie archiwum)")
+    ap.add_argument("--backdate", action="store_true",
+                    help="data wpisu = data artykułu źródłowego (do uzupełniania archiwum)")
     args = ap.parse_args()
 
     if (kb.STATE_DIR / "DISABLED").exists():
@@ -420,7 +603,7 @@ def main():
         items = parse_feed(name, url)
         fresh = [i for i in items
                  if i["guid"] not in seen_set
-                 and (now - dt.datetime.fromisoformat(i["ts"])).total_seconds() < MAX_AGE_H * 3600]
+                 and (now - dt.datetime.fromisoformat(i["ts"])).total_seconds() < args.max_age_h * 3600]
         print(f"  [{name}] {len(items)} w feedzie, {len(fresh)} świeżych nowych", flush=True)
         candidates += fresh
 
@@ -432,12 +615,17 @@ def main():
 
     makes = get_our_makes()
     make_names = [m["name"] for m in makes]
+    series = get_our_series()   # gate D2 — patrz match_our_model()
 
     cand_list = "\n".join(f"{i}. [{c['source']}] {c['title']} — {c['desc'][:180]}" for i, c in enumerate(candidates))
     sel_text, sel_usage = kb.call_model(
-        SELECT_PROMPT.format(n=args.limit, makes=", ".join(make_names[:60])),
+        SELECT_PROMPT.format(
+            n=args.limit,
+            makes=", ".join(make_names[:60]),
+            published="\n".join("- " + t for t in recent_published_titles()) or "(brak)",
+        ),
         f"KANDYDACI:\n{cand_list}\n\nWybierz {args.limit}.",
-        max_tokens=800,
+        max_tokens=max(800, 220 * args.limit),
     )
     picks = kb.parse_json_response(sel_text)["picks"][:args.limit]
     print("\nSelekcja:", flush=True)
@@ -454,8 +642,8 @@ def main():
         cand = candidates[p["idx"]]
         print(f"\n=== {cand['title']}", flush=True)
         try:
-            draft = build_draft(cand, makes, rate, system_prompt)
-            post_id, url = publish_wp_post(draft)
+            draft = build_draft(cand, makes, rate, system_prompt, series)
+            post_id, url = publish_wp_post(draft, source_post_date(cand) if args.backdate else None)
             results.append({"draft": draft, "post_id": post_id, "url": url})
             print(f"    OK opublikowano #{post_id} -> {url}", flush=True)
         except Exception as e:

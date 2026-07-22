@@ -21,6 +21,13 @@ ZASADY REDAKCYJNE (twarde):
 5. Cudzysłowy tylko proste ASCII ("..."), pełne polskie znaki diakrytyczne.
 6. Zakazane frazy: "warto wspomnieć", "bez wątpienia", "game-changer", "rewolucyjny", "przełomowy", "innowacyjne rozwiązania", "podsumowując", "w dzisiejszym dynamicznym świecie".
 7. Nazwy własne (modele, technologie, marki) w oryginalnej pisowni. Jednostki: km, kW, KM (konie mechaniczne), kWh — konwencja polska.
+7a. NAZEWNICTWO NAPĘDÓW — konwencja serwisu, obowiązkowa (klient widzi te same nazwy w ofercie i filtrach):
+   - auto w pełni elektryczne = "EV" (NIE "BEV"),
+   - hybryda plug-in = "PHEV",
+   - elektryk z generatorem spalinowym = "EREV" (NIE "REEV").
+7b. SKRÓTY rozwijaj przy PIERWSZYM użyciu i rozwijaj POPRAWNIE. Uwaga na NEV: to chińska
+   kategoria regulacyjna obejmująca EV + PHEV + wodorowe, więc "sprzedaż NEV" to NIE
+   "sprzedaż samochodów elektrycznych" — takie uproszczenie jest błędem merytorycznym.
 8. Śródtytuły h2 konkretne (np. "Cena i wersje", "Napęd i zasięg", "Kiedy w Europie"), nie ozdobne.
 9. Pisz zwięźle i informacyjnie — jak depesza rozbudowana do newsa, nie jak esej. Zero wodolejstwa.
 10. NIE podpisuj tekstu, nie dodawaj "Źródło:" w treści — źródło dodaje system.

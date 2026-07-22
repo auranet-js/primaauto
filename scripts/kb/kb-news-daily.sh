@@ -25,6 +25,10 @@ fi
 echo "[$(date '+%F %T')] start" >> "$LOG"
 if python3 "$KB_DIR/news_daily.py" --limit 2 >> "$LOG" 2>&1; then
     echo "[$(date '+%F %T')] OK" >> "$LOG"
+    # Kontrola jakości po publikacji (audyt 22.07): walidator sam sprawdza świeże wpisy
+    # i pisze do Janka TYLKO gdy coś odstaje — bieg bez uwag nie generuje maila.
+    python3 "$KB_DIR/news_qa.py" --limit 6 --mail >> "$LOG" 2>&1 \
+        || echo "[$(date '+%F %T')] QA nie wykonało się (nie blokuje)" >> "$LOG"
 else
     echo "[$(date '+%F %T')] BŁĄD (exit $?)" >> "$LOG"
     ~/bin/send-to-jan -s "[primaauto] kb-news-daily: BŁĄD biegu" \
