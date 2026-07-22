@@ -1,0 +1,38 @@
+[
+  {
+    "title": "Zawracanie w miejscu (tank turn / zero-radius turn)",
+    "headword": "Zawracanie w miejscu",
+    "slug": "zawracanie-w-miejscu",
+    "category": "naped",
+    "aliases": "tank turn, zero-radius turn, zawracanie czołgowe, obrót w miejscu",
+    "term_keys": {
+      "tank_turn": "标配"
+    },
+    "main_kw": "zawracanie w miejscu auto elektryczne",
+    "context": "Funkcja dostępna w niektórych autach elektrycznych z niezależnym sterowaniem momentem obrotowym każdego koła (zwykle napęd na 4 koła z osobnymi silnikami) — koła po jednej stronie auta kręcą się do przodu, po drugiej do tyłu, dzięki czemu pojazd obraca się praktycznie wokół własnej osi bez ruchu do przodu/tyłu. Przydatne przy zawracaniu w ciasnych, terenowych warunkach. Bardziej zaawansowany wariant tej technologii, crab walk (jazda po przekątnej dzięki niezależnie skrętnym kołom), znany jest m.in. z modeli Denza N8L, N9 i Z9 GT (auta z architekturą 3-4 silników elektrycznych na koło) — mamy takie modele w ofercie (Denza N8L, Z9 GT), choć nasze dane techniczne z importu nie zawsze precyzyjnie oznaczają tę konkretną funkcję jako osobne pole, więc traktuj ją jako charakterystykę modelu/wariantu, nie każdego konkretnego egzemplarza z osobna. Samo 'zawracanie w miejscu' jako pole ma w naszej bazie ok. 181 aut."
+  },
+  {
+    "title": "Lusterka kamerowe (streaming media mirror)",
+    "headword": "Lusterka kamerowe",
+    "slug": "lusterka-kamerowe",
+    "category": "komfort",
+    "aliases": "kamery zamiast lusterek, streaming media mirror, wirtualne lusterka, cyfrowe lusterka boczne",
+    "term_keys": {
+      "streaming_media_side_mirror": "支持"
+    },
+    "main_kw": "kamery zamiast lusterek",
+    "context": "Zamiast klasycznych lusterek bocznych auto ma niewielkie kamery, a obraz wyświetlany jest na ekranach wewnątrz kabiny (zwykle w rogach deski rozdzielczej lub na miejscu klasycznych lusterek wewnętrznych). Zaleta: mniejszy opór powietrza i brak martwego pola przy dobrej kalibracji, wada: przyzwyczajenie oka do patrzenia na ekran zamiast na fizyczne lusterko oraz dodatkowe soczewki do czyszczenia zimą. Rozwiązanie znane też z Audi e-tron czy Hondy, w chińskich autach (np. wybrane wersje Denza) pojawia się częściej jako element wizerunkowy 'auta przyszłości'. W naszej bazie ok. 74 aut ma tę funkcję."
+  },
+  {
+    "title": "Wysuwany podnóżek (rozkładany fotel z ottomanem)",
+    "headword": "Wysuwany podnóżek",
+    "slug": "wysuwany-podnozek",
+    "category": "komfort",
+    "aliases": "podnóżek, ottoman, footrest, fotel relaks, tryb VIP",
+    "term_keys": {
+      "side_footrest": "支持"
+    },
+    "main_kw": "wysuwany podnozek w samochodzie",
+    "context": "Elektrycznie wysuwany podnóżek montowany zwykle w fotelu pasażera z przodu lub na tylnej kanapie — w połączeniu z odchylanym oparciem i funkcją zero-gravity pozwala rozłożyć fotel niemal jak leżankę. Częste w chińskich autach o pozycjonowaniu 'domowy salon na kołach', gdzie tylna kanapa bywa traktowana jako miejsce VIP (np. dla pasażera podczas ładowania czy postoju), rzadziej spotykane w europejskich odpowiednikach cenowych. W naszej bazie ok. 199 aut ma tę funkcję."
+  }
+]

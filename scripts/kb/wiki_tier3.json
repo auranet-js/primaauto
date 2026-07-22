@@ -1,0 +1,86 @@
+[
+  {
+    "title": "Materiały tapicerki w chińskich autach — skóra naturalna vs ekoskóra",
+    "headword": "Materiały tapicerki",
+    "slug": "materialy-tapicerki",
+    "category": "komfort",
+    "aliases": "tapicerka, skóra naturalna, ekoskóra, sztuczna skóra, nubuk, 真皮, 仿皮",
+    "term_keys": {
+      "seat_material": "皮"
+    },
+    "main_kw": "tapicerka skora czy eko skora",
+    "context": "W chińskich specyfikacjach tapicerka opisywana jest wprost jako 真皮 (zhenpi — skóra naturalna) albo 仿皮 (fangpi — skóra syntetyczna/ekoskóra, PU), często w wersjach mieszanych (真皮+仿皮) lub jako 翻毛皮 (nubuk/zamsz syntetyczny). Ekoskóra dominuje w tańszych wersjach wyposażenia, jest bardziej odporna na zarysowania i łatwiejsza w czyszczeniu niż skóra naturalna, którą chińscy producenci rezerwują zwykle dla topowych wariantów. W naszej bazie ok. 2483 aut ma opisane materiały foteli."
+  },
+  {
+    "title": "Rozpoznawanie głosu bez słowa budzącego (wake-free voice control)",
+    "headword": "Rozpoznawanie głosu bez wybudzania",
+    "slug": "rozpoznawanie-glosu-bez-wybudzania",
+    "category": "adas",
+    "aliases": "wake-free voice, sterowanie głosem, asystent głosowy, komendy głosowe",
+    "term_keys": {
+      "voice_wake_up_free": "支持"
+    },
+    "main_kw": "sterowanie glosem w aucie",
+    "context": "Chińskie auta są dużo bardziej zaawansowane w sterowaniu głosowym niż europejskie odpowiedniki — zamiast klasycznego słowa budzącego (jak 'Hej Siri') system stale nasłuchuje i rozpoznaje polecenia w naturalnym języku bez wcześniejszej aktywacji, często z rozpoznawaniem, kto z pasażerów mówi (multi-strefowe komendy, np. kierowca otwiera swoje okno, pasażer swoje). To jeden z częściej podkreślanych w Chinach argumentów sprzedażowych 'smart cockpit'. W naszej bazie ok. 2494 aut ma tę funkcję."
+  },
+  {
+    "title": "Rozpoznawanie twarzy w samochodzie",
+    "headword": "Rozpoznawanie twarzy",
+    "slug": "rozpoznawanie-twarzy",
+    "category": "adas",
+    "aliases": "facial recognition, rozpoznawanie twarzy, logowanie biometryczne",
+    "term_keys": {
+      "facial_recognition": "支持"
+    },
+    "main_kw": "rozpoznawanie twarzy samochod",
+    "context": "Kamera w kabinie identyfikuje kierowcę po twarzy i automatycznie ładuje jego profil — pozycję foteli, lusterek, kierownicy, ulubione stacje radiowe czy trasy w nawigacji, a w niektórych modelach służy też do autoryzacji płatności (np. za ładowanie) lub odblokowania funkcji pojazdu. To rozszerzenie systemów monitoringu kierowcy (DMS), popularne w chińskich autach segmentu smart cockpit, rzadkie w europejskich odpowiednikach cenowych. W naszej bazie ok. 1706 aut ma tę funkcję."
+  },
+  {
+    "title": "Oczyszczacz powietrza w kabinie (filtracja PM2.5)",
+    "headword": "Oczyszczacz powietrza",
+    "slug": "oczyszczacz-powietrza",
+    "category": "komfort",
+    "aliases": "car purifier, filtr PM2.5, jonizacja powietrza, jakość powietrza w kabinie",
+    "term_keys": {
+      "car_purifier": "支持"
+    },
+    "main_kw": "oczyszczacz powietrza w samochodzie",
+    "context": "Chińscy producenci mocno inwestują w filtrację powietrza w kabinie (filtry PM2.5, czasem z jonizacją lub czujnikiem jakości powietrza) — to bezpośredni skutek dużej wagi, jaką chiński rynek przykłada do smogu i jakości powietrza w miastach. Marketingowo bywa określane jako 'zdrowa kabina' (health cabin). Funkcja rzadziej spotykana jako standard w europejskich autach tej klasy. W naszej bazie ok. 1691 aut ma tę funkcję."
+  },
+  {
+    "title": "Mapy wysokiej precyzji (HD maps) w systemach ADAS",
+    "headword": "Mapy wysokiej precyzji",
+    "slug": "mapy-wysokiej-precyzji",
+    "category": "adas",
+    "aliases": "HD maps, mapy HD, mapy o wysokiej precyzji, high precision map",
+    "term_keys": {
+      "high_precision_map": "支持"
+    },
+    "main_kw": "mapy hd adas",
+    "context": "Mapy wysokiej precyzji (HD maps) to znacznie dokładniejsze niż zwykła nawigacja odwzorowanie drogi — z dokładnością do kilkunastu centymetrów, z zapisanymi pasami ruchu, krawężnikami, znakami i sygnalizacją. Systemy autonomicznej jazdy (NOA, Huawei ADS, God's Eye) korzystają z nich do planowania trasy i pozycjonowania pojazdu tam, gdzie same kamery i radary nie wystarczą — to element infrastruktury 'inteligentnej jazdy', nie tylko nawigacji dla kierowcy. W naszej bazie ok. 314 aut ma tę funkcję."
+  },
+  {
+    "title": "V2X — komunikacja pojazdu z otoczeniem",
+    "headword": "V2X",
+    "slug": "v2x",
+    "category": "naped",
+    "aliases": "V2X, vehicle to everything, V2V, V2I, V2G",
+    "term_keys": {
+      "v2x_communication": "支持"
+    },
+    "main_kw": "v2x samochod",
+    "context": "V2X (Vehicle-to-Everything) to szersza kategoria niż znane już V2L (zasilanie urządzeń z auta) — obejmuje komunikację pojazdu z innymi autami (V2V), infrastrukturą drogową jak sygnalizacja świetlna (V2I) oraz siecią energetyczną (V2G, dwukierunkowe oddawanie energii do sieci). W praktyce w chińskich autach na obecnym etapie to głównie zaplecze pod przyszłe funkcje (komunikacja z inteligentną infrastrukturą drogową w chińskich miastach) niż codziennie używana funkcja w Polsce, gdzie taka infrastruktura na razie nie istnieje. W naszej bazie ok. 132 aut ma tę funkcję zadeklarowaną."
+  },
+  {
+    "title": "Elektryczny spoiler",
+    "headword": "Elektryczny spoiler",
+    "slug": "elektryczny-spoiler",
+    "category": "komfort",
+    "aliases": "elektryczny spoiler, aktywny spoiler, active spoiler",
+    "term_keys": {
+      "electric_spoiler": "支持"
+    },
+    "main_kw": "elektryczny spoiler auto",
+    "context": "Spoiler wysuwany lub zmieniający kąt automatycznie w zależności od prędkości — poprawia docisk aerodynamiczny przy szybkiej jeździe i chowa się przy niskich prędkościach dla lepszej estetyki i niższego oporu powietrza. Częściej spotykany w sportowo pozycjonowanych modelach elektrycznych i hybrydowych z chińskich koncernów jako element wizerunkowy 'smart performance'. W naszej bazie ok. 214 aut ma tę funkcję."
+  }
+]
