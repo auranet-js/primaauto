@@ -7,13 +7,6 @@
  "changelog": [
   {
    "data": "22.07.2026",
-   "tytul": "Drugie źródło ofert (Che168) podłączone do automatu — testowo, na szkicach",
-   "opis": "Dotąd auta z giełdy Che168 dało się dodawać wyłącznie ręcznie, sztuka po sztuce. Dziś platforma nauczyła się pobierać je automatycznie, tak samo jak z Dongchedi, który od początku lipca praktycznie przestał dowozić nowe ogłoszenia (około 2 na dobę wobec kilkuset wcześniej). Pomiar na żywym strumieniu Che168 pokazał 20–31 tys. zmian na dobę, z czego kryteria Prima Auto (rocznik od 2024, do 40 tys. km, cena od 85 tys. ¥, 31 miast na południu Chin) spełnia około 60–100 nowych aut dziennie. Automat sam odrzuca auta spoza segmentu i takie, których nie umie przypisać do właściwej kategorii — zamiast wpuszczać je z chińskimi nazwami, odkłada je na listę do sprawdzenia. Zaimportowano testowo 45 ofert jako szkice (niewidoczne dla klientów) do oceny jakości. Przy okazji naprawiono usterkę widoczną dla klientów: 102 oferty pokazywały chińską nazwę miasta zamiast polskiej, bo 15 z 31 miast z listy nie miało tłumaczenia. Rozszerzono też opis techniczny aut z Che168 o 29 parametrów, które giełda przysyłała, a platforma ich nie rozpoznawała (m.in. zasięg w cyklach CLTC i WLTC, moment obrotowy, czas szybkiego ładowania, kąt natarcia i zejścia, gęstość energii baterii). Ustalono również, że dostawca danych przekazuje dla Che168 tylko techniczną część specyfikacji — bez wyposażenia (fotele, bezpieczeństwo, multimedia), mimo że dane te są u źródła dostępne. Wysłano do niego zapytanie; od odpowiedzi zależy, czy oferty z Che168 będą miały pełny opis wyposażenia, czy trzeba go uzupełniać z bliźniaczych aut w naszej bazie.",
-   "wersje": "0.34.2",
-   "godz": 7
-  },
-  {
-   "data": "22.07.2026",
    "tytul": "Leksykon rozbudowany do 74 haseł i spięty z ofertą",
    "opis": "Hasła dobierane nie „z głowy”, tylko z realnych danych: policzyliśmy, ile aut w naszej bazie faktycznie ma daną funkcję (np. sterowanie głosem bez wybudzania — 2494 auta, rozpoznawanie twarzy — 1706, mapy HD — 314) i o tych funkcjach napisaliśmy. Najważniejsza zmiana to powiązanie wiedzy ze sprzedażą w obie strony: fachowe pojęcie pojawiające się w opisie oferty staje się teraz automatycznie linkiem do wyjaśnienia w Leksykonie, a na stronie hasła wyświetla się sekcja „auta z tą technologią” z kartami konkretnych ofert z magazynu. Klient czytający, czym jest dana funkcja, jednym kliknięciem widzi auta, które ją mają. Doszły też okruszki nawigacyjne na stronach haseł i poprawiony tytuł działu w wynikach Google.",
    "wersje": "v0.34.0",
