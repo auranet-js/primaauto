@@ -6,6 +6,27 @@
  },
  "changelog": [
   {
+   "data": "22.07.2026",
+   "tytul": "Leksykon rozbudowany do 74 haseł i spięty z ofertą",
+   "opis": "Hasła dobierane nie „z głowy”, tylko z realnych danych: policzyliśmy, ile aut w naszej bazie faktycznie ma daną funkcję (np. sterowanie głosem bez wybudzania — 2494 auta, rozpoznawanie twarzy — 1706, mapy HD — 314) i o tych funkcjach napisaliśmy. Najważniejsza zmiana to powiązanie wiedzy ze sprzedażą w obie strony: fachowe pojęcie pojawiające się w opisie oferty staje się teraz automatycznie linkiem do wyjaśnienia w Leksykonie, a na stronie hasła wyświetla się sekcja „auta z tą technologią” z kartami konkretnych ofert z magazynu. Klient czytający, czym jest dana funkcja, jednym kliknięciem widzi auta, które ją mają. Doszły też okruszki nawigacyjne na stronach haseł i poprawiony tytuł działu w wynikach Google.",
+   "wersje": "v0.34.0",
+   "godz": 4
+  },
+  {
+   "data": "22.07.2026",
+   "tytul": "Aktualności: pełna automatyzacja i kontrola jakości",
+   "opis": "Newsy publikują się teraz same, bez akceptacji mailem — mail przychodzi już tylko jako podsumowanie tego, co poszło na stronę. Do artykułów wchodzą dodatkowe zdjęcia dobrane z galerii źródła, a podpis pod zdjęciem podaje autora tylko wtedy, gdy źródło go jawnie deklaruje — nigdy „na wyczucie”. Przed włączeniem automatu na noc przepuściliśmy przez niego 12 archiwalnych newsów jako próbkę i wyłapaliśmy siedem rodzajów usterek, każdą naprawiono: linki prowadzące do koncernu zamiast do właściwej submarki (BYD Denza, Great Wall Tank), błędne przypisanie autorstwa zdjęć (6 z 9 podpisów było źle), zachęta do zakupu doklejana do newsa o wadzie fabrycznej, niespójne nazewnictwo skrótów. Powstał też automatyczny kontroler, który po każdej publikacji sprawdza artykuł w dziewięciu punktach i zgłasza odstępstwa. Sprawdzone zostało również, jak newsy widzi Google: mapa strony dla wiadomości została jawnie zgłoszona w Search Console, dane strukturalne artykułów są kompletne, pierwsze artykuły zaindeksowały się w ciągu doby.",
+   "wersje": "v0.34.0",
+   "godz": 5
+  },
+  {
+   "data": "21.07.2026",
+   "tytul": "Nowy dział wiedzy: Leksykon i Aktualności",
+   "opis": "Serwis dostał dwie zupełnie nowe sekcje, obie zaprojektowane pod wyszukiwarkę i pod klienta, który dopiero poznaje chińskie auta. Leksykon (/wiki/) — słownik pojęć, które pojawiają się w opisach naszych aut, a których polski kupujący zwykle nie zna: rodzaje baterii, systemy asystujące, normy, technologie napędu. Każde hasło to pełne wyjaśnienie (4-7 tys. znaków), sekcja pytań i odpowiedzi zbudowana z realnych pytań zadawanych w Google, zdjęcie z galerii auta, które tę funkcję faktycznie ma. Hasła powstają automatycznie, ale każde przechodzi recenzję techniczną i korektę językową, zanim trafi na stronę. Aktualności — codzienny automat: o 6:45 przegląda branżowe źródła z Chin, wybiera newsy dotyczące marek z naszej oferty, przygotowuje polski tekst z okładką z oficjalnych materiałów prasowych i weryfikuje fakty (ceny, wymiary, moce) ze źródłem, zanim cokolwiek opublikuje. Do tego: pozycja „Wiedza” w menu, zajawka najnowszych artykułów na stronie głównej, obie sekcje dopisane do pliku dla robotów AI (llms.txt), własny układ graficzny stron.",
+   "wersje": "v0.34.0, motyw 1.1.0-1.1.1",
+   "godz": 9
+  },
+  {
    "data": "20.07.2026",
    "tytul": "Che168: analiza danych i filtr modeli (etap testów)",
    "opis": "Duża analiza danych giełdy Che168 pod kątem roczników 2024-2026: przekrój 3550 ofert z 46 marek. Wynik: przygotowany zaawansowany filtr importu — oprócz marek można wykluczać pojedyncze modele (niesprzedajne), z pełnym słownikiem modeli pobieranym z API. Do tego 33 nowe mapowania modeli na polskie nazwy i huby (m.in. Leapmotor T03, Li Auto L7/L8, Smart #1/#3, Xiaomi YU7, Jetour Traveller) — trafność automatycznego dopasowania ofert wzrosła z 61% do ok. 81%. Funkcja przechodzi teraz testy wewnętrzne; po okresie prób zostanie udostępniona w panelu. Wdrożona została też przeglądarka ofert Che168: wybór dowolnej marki z giełdy, zawężanie do modeli, karty ze zdjęciami, podgląd z wyceną w złotówkach i import jednym kliknięciem — również w testach wewnętrznych.",
