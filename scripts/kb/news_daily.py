@@ -47,7 +47,8 @@ VERIFY_PROMPT = """Jesteś weryfikatorem faktów. Porównaj ARTYKUŁ z MATERIAŁ
 Sprawdź KAŻDĄ liczbę i fakt w artykule (ceny, moce, zasięgi, wymiary, daty, nazwy wersji):
 - czy występuje w źródle lub jest z niego wprost przeliczalna (przeliczenie yuan->PLN po podanym kursie, zaokrąglone, ze słowem "około", jest OK),
 - czy artykuł nie dopisuje faktów, których w źródle nie ma.
-Zwróć czysty JSON: {"ok": true/false, "issues": ["konkretny problem 1", ...]}. Drobne zaokrąglenia i pominięcia to nie błąd; błędem jest liczba/fakt sprzeczny ze źródłem albo nieobecny w nim."""
+Zwróć czysty JSON: {"ok": true/false, "issues": ["konkretny problem 1", ...]}. Drobne zaokrąglenia i pominięcia to nie błąd; błędem jest liczba/fakt sprzeczny ze źródłem albo nieobecny w nim.
+DOZWOLONE (nie zgłaszaj): końcowe zdanie o dostępności marki/modelu w ofercie Prima-Auto z linkiem — pochodzi z naszych danych, nie ze źródła; przeliczenia walut po podanym kursie; neutralne przeformułowania."""
 
 
 def parse_feed(name, url):
@@ -117,8 +118,17 @@ def build_draft(cand, makes, rate, system_prompt):
                 f"NASZA OFERTA: {offer_ctx}\n\n"
                 "Napisz artykuł zgodnie z instrukcją systemową. Zwróć czysty JSON.")
 
-    text, usage = kb.call_model(system_prompt, user_msg)
-    draft = kb.parse_json_response(kb.normalize_quotes(text))
+    draft = None
+    for attempt in range(2):
+        text, usage = kb.call_model(system_prompt, user_msg)
+        try:
+            draft = kb.parse_json_response(kb.normalize_quotes(text))
+            break
+        except Exception as e:
+            if attempt == 0:
+                print(f"    zepsuty JSON draftu ({e}) — powtarzam wywołanie", flush=True)
+            else:
+                raise
 
     for attempt in range(2):
         vtext, vusage = kb.call_model(
