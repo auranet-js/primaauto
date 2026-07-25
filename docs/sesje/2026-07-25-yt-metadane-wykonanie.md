@@ -44,7 +44,21 @@ Zakres zatwierdzony przez Janka (quiz): **wszystkie 8 filmów — opisy + tagi**
 - usunięty pusty przechwał („Szeroki wybór… Znajdź swój wymarzony samochód"), skrócone bloki
   wyliczeń, żeby zmieścić się w limicie 1000 znaków
 - emoji **zostały** (decyzja: bez zmian)
-- brand **„Prima Auto" ze spacją** — zgodnie z zamkniętym sporem z 16.07, nie ujednolicamy
+- brand: początkowo „Prima Auto" ze spacją, **zmienione tego samego dnia na `Prima-Auto`** —
+  patrz sekcja 3a
+
+### 3a. Nazwa kanału i zapis brandu — ZMIENIONE (decyzja Janka 25.07)
+
+`Prima - Auto - Import Samochodów z Chin` → **`Prima-Auto - Import Samochodów z Chin`**.
+Uzasadnienie Janka: *„w logo jest kreska"* (logo: PRIMA-AUTO). Te same dwa wystąpienia w opisie
+kanału również na `Prima-Auto`. Efekt uboczny: zniknęła forma ze spacjami wokół myślnika — jedyna
+realnie gorsza dla Google (czytana jak separator tytułu → „Prima" + tagline).
+
+Zakres: **wyłącznie kanał YouTube.** Reguła „nie ujednolicaj zapisu na stronie" (decyzja 16.07
+na danych GSC) obowiązuje dalej — tu argument jest brandingowy, nie SEO. Hashtagi `#PrimaAuto`
+bez zmian (hashtag nie przyjmuje myślnika).
+
+**Limit YouTube: nazwę kanału można zmienić 2 razy w ciągu 14 dni** — jedna zmiana zużyta 25.07.
 
 **Linki na kanale:** doszedł piąty — „Auta od ręki — plac Rzeszów" → `/w-rzeszowie/`.
 Próba przeciągnięcia go na 1. pozycję (link eksponowany na banerze) **nie wyszła** — drag&drop
@@ -106,7 +120,6 @@ Koszt ~0, ryzyko 0.
 | Rzecz | Dlaczego |
 |---|---|
 | `defaultLanguage` kanału = `pl` | Studio nie wystawia tego jako zwykłego pola; ustawia się przez wersje językowe („Dodaj język"), co zakłada wprowadzanie tłumaczeń. Kraj = PL już jest, wszystkie filmy mają `pl`. Wartość marginalna — odłożone. |
-| Nazwa kanału `Prima - Auto - …` → `Prima Auto — …` | Wymaga osobnej zgody Janka. **Realna wada:** spacje wokół myślnika to jedyna gorsza forma zapisu (Google czyta ją jak separator tytułu → „Prima" + tagline). YouTube limituje zmiany nazwy do 2 na 14 dni. |
 | Przestawienie `/w-rzeszowie/` na 1. link kanału | drag&drop w Studio nie działa pod automatyzacją — do ręcznego kliknięcia. |
 | Tytuły i miniatury | Świadomie nietknięte (fala organiczna Shortsów). |
 | Stare 11 Shortsów | Zakaz Janka — bez zmian. |
