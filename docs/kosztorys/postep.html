@@ -14,13 +14,16 @@
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font: 15px/1.55 -apple-system, "Segoe UI", Roboto, Arial, sans-serif; color: var(--ink); background: var(--bg); }
-.wrap { max-width: 900px; margin: 0 auto; padding: 32px 20px 80px; }
+.wrap { max-width: none; margin: 0; padding: 32px 40px 80px; }
+.cols { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 40px; align-items: start; }
+.cols > section { min-width: 0; }
+.cols h2 { margin-top: 0; }
 header.top { border-bottom: 3px solid var(--accent); padding-bottom: 20px; margin-bottom: 28px; }
 header.top h1 { font-size: 26px; line-height: 1.25; }
 header.top .sub { color: var(--ink-2); margin-top: 6px; }
 header.top .stamp { color: var(--ink-3); font-size: 13px; margin-top: 10px; }
 h2 { font-size: 20px; margin: 44px 0 6px; }
-.lead { color: var(--ink-2); margin-bottom: 16px; max-width: 820px; }
+.lead { color: var(--ink-2); margin-bottom: 16px; }
 .note { background: var(--accent-soft); border-left: 4px solid var(--accent); border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 16px 0; color: var(--ink-2); font-size: 14px; }
 .wersje { color: var(--ink-3); font-size: 12px; font-weight: 400; }
 table { width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; margin: 14px 0; }
@@ -33,11 +36,22 @@ td.data-col { white-space: nowrap; color: var(--ink-2); font-size: 13px; font-va
 tfoot td { background: var(--accent-soft); font-weight: 700; }
 .opis { color: var(--ink-2); font-weight: 400; margin-top: 4px; font-size: 14px; }
 .skala { color: var(--ink-3); font-size: 12.5px; margin-top: 4px; }
+.linki { margin-top: 8px; font-size: 13.5px; }
+.linki a { color: var(--accent); font-weight: 600; }
+.pytania { margin-top: 8px; padding: 8px 12px; background: var(--accent-soft); border-radius: 6px; font-size: 13.5px; color: var(--ink-2); }
+.pytania strong { font-size: 12.5px; }
+.pytania ul { margin: 4px 0 0; padding-left: 18px; }
+.pytania li { margin: 2px 0; }
 .rozmiar { color: var(--ink-3); font-size: 12px; font-weight: 400; white-space: nowrap; }
 .badge { display: inline-block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.4px; border-radius: 4px; padding: 2px 7px; }
 .badge.new { background: var(--green-soft); color: var(--green); }
 footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--ink-3); font-size: 12.5px; }
+@media (max-width: 1100px) {
+    .cols { grid-template-columns: 1fr; gap: 8px; }
+    .cols > section + section h2 { margin-top: 36px; }
+}
 @media (max-width: 720px) {
+    .wrap { padding: 24px 16px 60px; }
   td.data-col { font-size: 11px; }
 }
 @media print {
@@ -52,14 +66,20 @@ footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line);
 <header class="top">
 <h1>Prima Auto — postęp prac i plan rozwoju</h1>
 <div class="sub">Platforma importu samochodów z Chin · primaauto.com.pl · opracowanie: Auranet (Jan Schenk)</div>
-<div class="stamp">Stan na 25.07.2026 · dokument roboczy, aktualizowany na bieżąco wraz z postępem prac</div>
+<div class="stamp">Stan na 27.07.2026 · dokument roboczy, aktualizowany na bieżąco wraz z postępem prac</div>
 </header>
 
-<h2>Co się zmieniło (od najnowszych)</h2>
+<div class="cols">
+<section>
+<h2>Zrealizowane</h2>
 <p class="lead">Rejestr prac wykonanych od spotkania 16.07.2026, z godzinami liczonymi tak samo jak w kosztorysie (realny czas pracy zespołu).</p>
 <table>
 <thead><tr><th>Data</th><th>Praca</th><th class="num">Godziny [h]</th></tr></thead>
 <tbody>
+<tr>
+<td class="data-col">27.07.2026</td>
+<td><strong>Umowa leasingowa i aneks VIN — analiza dokumentów, regulamin usługi i strona o depozycie</strong> <div class="opis">Przeanalizowaliśmy podpisany egzemplarz umowy leasingowej oraz wzorzec aneksu VIN i ustaliliśmy, jak obie rzeczy mają działać w systemie: drugi szablon umowy generowany obok obecnego (treść bez zmian, tylko nasz skład), aneks VIN uzupełniający już wygenerowaną umowę oraz osobny status informujący o nim klienta. Przy okazji prac nad płatnością online sprawdziliśmy dokumenty prawne na stronie — okazało się, że oba regulaminy od prawnika dotyczą wyłącznie korzystania ze strony, a opublikowany mówi wprost, że usługi są nieodpłatne. Nie ma dokumentu opisującego samą usługę i depozyt, co blokuje uruchomienie płatności BLIK/kartą. Przygotowaliśmy treść regulaminu usługi oraz stronę wyjaśniającą klientowi depozyt (czym jest, kiedy wraca, komu płaci, faktura VAT) — obie czekają na akceptację i weryfikację prawnika. Zaplanowaliśmy też, jak ma wyglądać płatność depozytu: przycisk pojawia się od razu po potwierdzeniu zamówienia, z informacją, że zgłoszenia z opłaconym depozytem realizujemy w pierwszej kolejności.</div></td>
+<td class="num">6</td></tr>
 <tr>
 <td class="data-col">25.07.2026</td>
 <td><strong>Nowe kampanie na YouTube: budowa, naprawa kierowania i zasady doboru kanałów</strong> <div class="opis">Uruchomiliśmy dwie nowe kampanie wideo na YouTube — bez powiększania budżetu, przez przesunięcie pieniędzy z reklam dynamicznych. Pierwsza celuje w świeży ruch: ludzi, którzy szukają haseł o imporcie aut z Chin i odwiedzają strony konkurencji, z wykluczeniem osób, które już były na naszej stronie (tych obsługuje remarketing, nie chcemy płacić dwa razy za tę samą osobę). Druga pokazuje nasze filmy bezpośrednio przy materiałach konkretnych kanałów motoryzacyjnych. Do obu przygotowane reklamy wideo z linkiem do konkretnej oferty oraz reklama karuzelowa z czterema autami z placu.
@@ -135,10 +155,13 @@ Efekt bez wsparcia reklamowego: w dwie doby filmy zebrały ponad 3800 wyświetle
 <td><strong>Reklamy dynamiczne Google (DSA) — celowanie w najtańsze oferty</strong> <div class="opis">Feed reklam przestawiony ze stron modeli na najtańszą aktualną ofertę każdego modelu, z automatyczną codzienną aktualizacją. Do tego nowa treść reklamy (wymiana jednej z dwóch kreacji).</div></td>
 <td class="num">3</td></tr>
 </tbody>
-<tfoot><tr><td colspan="2">Razem od spotkania 16.07.2026</td><td class="num">61</td></tr></tfoot>
+<tfoot><tr><td colspan="2">Razem od spotkania 16.07.2026</td><td class="num">67</td></tr></tfoot>
 </table>
 
-<h2>Lista zadań do zrobienia</h2>
+</section>
+
+<section>
+<h2>W kolejce</h2>
 <p class="lead">Aktualny plan rozwoju platformy z widełkami godzin. Kolejność odzwierciedla zależności i priorytety — niektóre zadania są fundamentem, który obniża koszt kolejnych. Pozycje oznaczone „nowe” zostały dopisane po spotkaniu 16.07.2026.</p>
 <table>
 <thead><tr><th>Zadanie</th><th class="num">Godziny [h]</th></tr></thead>
@@ -147,11 +170,20 @@ Efekt bez wsparcia reklamowego: w dwie doby filmy zebrały ponad 3800 wyświetle
 <td><strong>T-186 — Che168 jako pełne, automatyczne drugie źródło ogłoszeń</strong> <span class='rozmiar'>skala: bardzo duża</span><div class="opis">Automatyczny import z drugiego chińskiego portalu — pełna dywersyfikacja i szersza oferta aut premium. Fundament już działa (ręczny import pojedynczych aut, mapowanie marek, tłumaczenia parametrów — 22 wydania pracy), ale automat to nie jest przełączenie przełącznika: mechanizm normalizacji chińskich danych jest dziś wpięty wyłącznie w import ręczny, a automatyczna synchronizacja ma zaszyte na sztywno jedno źródło. Do zbudowania: menedżer źródeł, wpięcie normalizacji w automat, wykrywanie duplikatów i panel zarządzania. Wycena potwierdzona po przeglądzie kodu.</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-186); PILNE: główne źródło (Dongchedi) od 1.07 praktycznie przestało dowozić auta — trwa wyjaśnianie z dostawcą</div></td>
 <td class="num">85–100</td></tr>
 <tr>
-<td><strong>T-217 — Umowa leasingowa jako drugi wzorzec w panelu zamówienia</strong> <div class="opis"><span class="badge new">nowe</span> Najprostszy wariant, bez zmian dla klienta: zamówienie i weryfikacja przebiegają jak dotąd (klient składa zamówienie, potwierdzenie, klient wypełnia dane do umowy — komplet danych już wystarcza, dla firm dochodzi tylko wymóg NIP i nazwy). Nowość po stronie panelu: obok obecnego „Wygeneruj PDF” dochodzi „Generuj umowę leasing” — drugi szablon umowy („Umowa organizacji importu samochodu”, konstrukcja trójstronna z firmą leasingową) z 2 załącznikami (specyfikacja auta, kalkulacja ceny w 4 pozycjach), inną kwotą i narracją depozytu (12 tys. zł, „depozyt zabezpieczający”). Możliwość wgrania indywidualnej umowy zostaje bez zmian. Bez nowych statusów zamówienia (do rozważenia w przyszłości).</div><div class="skala">Status: wzorzec przeanalizowany (17.07), wariant minimalny uzgodniony</div></td>
+<td><strong>T-217 — Umowa leasingowa jako drugi wzorzec w panelu zamówienia</strong> <div class="opis"><span class="badge new">nowe</span> Najprostszy wariant, bez zmian dla klienta: zamówienie i weryfikacja przebiegają jak dotąd (klient składa zamówienie, potwierdzenie, klient wypełnia dane do umowy — dla firm dochodzi NIP i nazwa). Nowość po stronie panelu: obok obecnego „Wygeneruj PDF” dochodzi „Generuj umowę leasing” — drugi szablon („Umowa organizacji importu samochodu”, konstrukcja trójstronna z firmą leasingową) wraz z załącznikiem ze specyfikacją auta. Ustalenie z 27.07: treści prawnej NIE zmieniamy — odtwarzamy dokument 1:1, dostosowujemy wyłącznie skład i szatę graficzną do naszego wyglądu. Depozyt zabezpieczający zostaje tak, jak jest w umowie — 10% wartości samochodu; to osobna rzecz niż depozyt zwrotny ustawiony w panelu, który klient wpłaca wcześniej i który przy realizacji umowy zostanie mu od depozytu zabezpieczającego odliczony. Załącznik nr 2 (kalkulacja ceny) pomijamy — cała kwota wynika z umowy. Rachunek do przelewu w umowie leasingowej: numer z podpisanego egzemplarza (końcówka 1603) — dochodzi jako osobne ustawienie w panelu, obecny rachunek przy umowie pośrednictwa zostaje bez zmian. Możliwość wgrania indywidualnej umowy bez zmian. Bez nowych statusów zamówienia.</div><div class="skala">Status: wzorzec przeanalizowany (17.07), egzemplarz podpisany przeanalizowany (27.07), zakres uzgodniony</div></td>
 <td class="num">8–12</td></tr>
 <tr>
 <td><strong>T-219 — Podstrona leasingowa (landing „Leasing samochodu z Chin”)</strong> <div class="opis"><span class="badge new">nowe</span> Osobna podstrona opisująca ścieżkę leasingową (jak to działa, współpraca z finansującym, kroki od zamówienia do wydania auta) + zalinkowanie jej w kilku miejscach serwisu pod SEO (pasek zaufania na ofertach, stopka, strony informacyjne). Fraza „leasing samochodu z chin” sprawdzona w bazie słów kluczowych: brak mierzalnego wolumenu — nisza dopiero powstaje, więc rankowanie będzie tanie, a strona pracuje głównie na konwersję i zaufanie. Kalkulator raty finansowania to osobne zadanie (T-189 — rata na kartach ofert).</div><div class="skala">Status: do zaplanowania; frazy zbadane 17.07</div></td>
 <td class="num">3–4</td></tr>
+<tr>
+<td><strong>T-220 — Aneks VIN do umowy — generowanie, status i wysyłka do klienta</strong> <div class="opis"><span class="badge new">nowe</span> Umowa bywa podpisywana, zanim znany jest numer VIN — w umowie leasingowej jest to zapisane wprost („VIN zostanie dodany aneksem po weryfikacji auta”). Dziś aneks powstaje ręcznie poza systemem. Po zmianie: w karcie zamówienia, przy dokumentach, dochodzi przycisk „Generuj aneks VIN” — aktywny dopiero gdy numer VIN jest wpisany. Powstaje gotowy PDF w szacie Prima-Auto; samo wygenerowanie niczego nie wysyła. Osobno, obok statusu zamówienia, pojawia się pole „Aneks VIN” (brak / wygenerowany / wysłany) — przełączasz je ręcznie, gdy aneks jest gotowy, a klient dostaje wtedy powiadomienie i pobiera aneks w tym samym miejscu co umowę. Zamówienie nie traci przy tym swojego etapu (auto „w drodze” dalej jest „w drodze”). Aneks to ścieżka wyjątkowa: przy płatności depozytu online klient wiąże się przed umową, więc VIN zwykle znamy już przy jej generowaniu i umowa wychodzi od razu z numerem. Zakres aneksu na teraz: wyłącznie numer VIN (potwierdzone 27.07) — ale generator budujemy tak, żeby w przyszłości dało się dołożyć aneksy do innych pól (cena, termin, specyfikacja) bez przebudowy. Jeden szablon obsługuje obie umowy (pośrednictwa i leasingową) — różni je tylko odwołanie do zmienianego punktu. Dodatkowo: gdy umowa jest generowana bez VIN-u, w polu VIN drukuje się „Numer VIN zostanie uzupełniony w formie aneksu do niniejszej umowy” zamiast dzisiejszej kreski.</div><div class="skala">Status: wzorzec aneksu przeanalizowany (27.07), zakres i sposób działania uzgodnione — gotowe do budowy</div></td>
+<td class="num">5–7</td></tr>
+<tr>
+<td><strong>T-221 — Regulamin usługi i strona o depozycie — warunek uruchomienia płatności online (T-121)</strong> <div class="opis"><span class="badge new">nowe</span> Przy okazji prac nad płatnościami online sprawdziliśmy dokumenty na stronie. Od prawnika są dwa regulaminy i oba dotyczą wyłącznie korzystania ze strony internetowej — ten opublikowany mówi wprost, że usługi są nieodpłatne. Nie istnieje żaden dokument regulujący samą usługę: depozyt, zasady i terminy zwrotu, reklamację usługi, odstąpienie konsumenta. Bez tego operator płatności nie dopuści przyjmowania zwrotnych depozytów — ocenia wniosek właśnie pod kątem procedury zwrotów. Przygotowaliśmy więc treść regulaminu usługi (w konwencji dokumentów prawnika, żeby domykał jego pakiet, a nie przepisywał jego pracy) oraz stronę wyjaśniającą klientowi, czym jest depozyt, kiedy wraca i komu dokładnie płaci. Strona o depozycie trafi w okolice przycisku płatności w kreatorze zamówienia — dokładnie w momencie, w którym klient decyduje o wpłacie i ma najwięcej wątpliwości; odpowiada tam wprost, czy depozyt wraca, komu klient płaci i kiedy podpisujemy umowę, więc pracuje na zaufanie zamiast zostawiać klienta z samym formularzem płatności. Obie strony są już napisane i opublikowane pod własnymi adresami (na razie bez linków i bez indeksowania) — ta praca jest rozliczona w sekcji „Zrealizowane”. Pozostałe godziny obejmują wyłącznie to, co przed nami: poprawki po akceptacji, dopisanie operatora płatności do polityki prywatności, korektę strony „Finansowanie”, udostępnienie stron w serwisie oraz przygotowanie i prowadzenie wniosku do operatora płatności.</div><div class="linki">Do obejrzenia: <a href="https://primaauto.com.pl/regulamin-uslugi/" target="_blank" rel="noopener">Regulamin usługi</a> · <a href="https://primaauto.com.pl/depozyt/" target="_blank" rel="noopener">Strona o depozycie</a></div><div class="pytania"><strong>Do potwierdzenia z Tobą:</strong><ul><li>Na depozyt wystawiana jest pełna faktura VAT. Do potwierdzenia przez księgowość, czy depozyt jest księgowany jako kaucja zabezpieczająca (co do zasady poza VAT), czy jako zaliczka na poczet usługi — od tego zależy sposób dokumentowania zwrotu.</li><li>Strona „Finansowanie” obiecuje model „30% zaliczki przy podpisaniu + 70% na 10 dni przed portem”, którego nie ma w żadnej z umów. Który model jest aktualny? Poprawimy treść pod odpowiedź.</li></ul></div><div class="skala">Status: regulamin usługi i strona o depozycie NAPISANE i opublikowane 27.07 (na razie bez linków w serwisie i bez indeksowania) — czekają na Twoją akceptację; blokują uruchomienie płatności online (T-121)</div></td>
+<td class="num">4–6</td></tr>
+<tr>
+<td><strong>T-121 — Płatność online (BLIK/karta) za depozyt rezerwacyjny</strong> <span class='rozmiar'>skala: duża</span><div class="opis">Klient wpłaca depozyt zwrotny od razu w kreatorze — BLIK-iem lub kartą, zamiast przepisywać numer konta do bankowości. Ustalenie z 27.07: przycisk płatności pojawia się już po potwierdzeniu zamówienia, czyli PRZED umową — dzięki temu klient wiąże się wcześniej, a my możemy jechać sprawdzić konkretny egzemplarz i wystawić umowę od razu z numerem VIN. Pod przyciskiem informacja, że zgłoszenia z opłaconym depozytem realizujemy w pierwszej kolejności, oraz odnośnik do strony wyjaśniającej depozyt. Przelew zostaje jako alternatywa. Kwota pobierana jest ta zamrożona na zamówieniu, więc nie rozjedzie się z umową ani z mailem. Platforma nie ma sklepu internetowego, więc mechanizm płatności piszemy w całości, choć miejsce wpięcia w proces zamówienia jest już przygotowane. WARUNEK WEJŚCIA: zadanie „Regulamin usługi i strona o depozycie” (T-221) — bez opublikowanych dokumentów operator płatności nie dopuści przyjmowania zwrotnych depozytów.</div><div class="skala">Status: plan gotowy i uzupełniony o decyzje z 27.07; czeka na T-221 (dokumenty) i zgodę operatora płatności</div></td>
+<td class="num">24–32</td></tr>
 <tr>
 <td><strong>T-204 — Panel klienta (konto zalogowanego) — fundament pod ulubione i alerty</strong> <span class='rozmiar'>skala: średnia</span><div class="opis">Dziś konto klienta powstaje wyłącznie przy składaniu zamówienia, a strona klienta jest atrapą — od razu przerzuca na zamówienie. Nie ma rejestracji, nie ma widoku 'moje zamówienia', nie ma gdzie trzymać ulubionych aut ani alertów. To fundament: raz zbudowany panel obniża koszt trzech kolejnych funkcji (ulubione, alerty, porównywarka) i buduje bazę kontaktów pod mailing i remarketing. Przy okazji naprawa: hasła nie będą już wysyłane mailem otwartym tekstem.</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-204), odblokowuje T-114 i T-188</div></td>
 <td class="num">18–24</td></tr>
@@ -182,9 +214,6 @@ Efekt bez wsparcia reklamowego: w dwie doby filmy zebrały ponad 3800 wyświetle
 <tr>
 <td><strong>T-152 — Wystawianie ogłoszeń na Otomoto</strong> <span class='rozmiar'>skala: duża</span><div class="opis">Automatyczna publikacja ofert na największym polskim portalu motoryzacyjnym — nowy kanał sprzedaży poza własną stroną, z dwukierunkowym zarządzaniem (widzimy w panelu, co jest wystawione i w jakim stanie; auto sprzedane znika z portalu). Wycena podniesiona po analizie: mamy działającą integrację Otomoto w innym projekcie Auranet (oszczędność na fundamencie), ale dochodzi mapowanie chińskich marek na słownik Otomoto i cykliczna synchronizacja statusów (portal nie wysyła powiadomień — trzeba odpytywać). Wymaga konta biznesowego Otomoto po stronie klienta i kluczy API (czas oczekiwania: dni–tygodnie). Osobno do wyjaśnienia: koszt pakietów ogłoszeń po stronie portalu.</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-152); wymaga rozpoznania na żywym API po otrzymaniu kluczy</div></td>
 <td class="num">45–65</td></tr>
-<tr>
-<td><strong>T-121 — Płatność online (BLIK/karta) za depozyt rezerwacyjny</strong> <span class='rozmiar'>skala: duża</span><div class="opis">Klient wpłaca depozyt (dziś 6 150 zł) od razu w kreatorze — BLIK-iem lub kartą, zamiast przepisywać numer konta do bankowości. Szybsze domknięcie rezerwacji, mniej porzuceń na ostatnim kroku. Platforma nie ma sklepu internetowego, więc nie skorzystamy z gotowej wtyczki — mechanizm płatności piszemy w całości, choć miejsce wpięcia w proces zamówienia jest już przygotowane. Do potwierdzenia przed startem: zgoda operatora płatności na schemat depozytu zwrotnego w modelu pośrednictwa (kwota nie jest problemem — charakter płatności wymaga opisania w umowie).</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-121); wymaga zgody operatora płatności + aktualizacji regulaminu</div></td>
-<td class="num">32–42</td></tr>
 <tr>
 <td><strong>T-113 — Finansowanie/leasing jako alternatywa w umowie</strong> <span class='rozmiar'>skala: duża</span><div class="opis">Klient wybiera w kreatorze: klasyczne pośrednictwo albo finansowanie — otwiera sprzedaż klientom bez gotówki na całość. Wymaga partnera finansującego i osobnego wzorca umowy (weryfikacja prawna). Kluczowe pytanie do partnera: czy w ogóle finansuje auto sprowadzane z Chin, którego nie ma jeszcze w kraju. Kalkulator raty (T-189) jest tańszym testem popytu — jeśli nikt nie klika 'zapytaj o finansowanie', ta pozycja wypada.</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-113); wymaga wskazania partnera finansującego przez klienta</div></td>
 <td class="num">30–40</td></tr>
@@ -228,8 +257,10 @@ Efekt bez wsparcia reklamowego: w dwie doby filmy zebrały ponad 3800 wyświetle
 <td><strong>T-214 — Ujednolicenie i wzmocnienie stron modeli (hubów) pod frazy zakupowe</strong> <span class='rozmiar'>skala: średnia</span><div class="opis">Strony modeli to nasza najmocniejsza broń w Google — stoją na 1.-2. miejscu na frazy typu 'zeekr 9x cena'. Przegląd 14.07 wykazał trzy luki do domknięcia. (1) 34 z 302 stron modeli ma słabszy nagłówek — brakuje w nim słów 'cena w Polsce', bo powstały po ostatnim ujednoliceniu i nie dostały automatycznie tego dopisku; wśród nich ważne modele: Zeekr 9X, Zeekr 8X, Denza Z9 GT. (2) Strona modelu BAW wyświetla się w Google jako 'Beijing' zamiast 'BAW' — a to marka, której szuka 1300 osób miesięcznie; podobnie Zeekr 8X ma zbędny dopisek 'PHEV' rozmywający dopasowanie. (3) Strony modeli opisują wersje słownie, ale nie podają ceny osobno dla każdej wersji (np. 'Ultra od 426 tys.') — dane już mamy, wystarczy je pokazać. Pracujemy ostrożnie, pojedynczo, z pomiarem przed i po (strony z 1. miejsca mają najwięcej do stracenia), bo nadrzędna zasada brzmi: nie zepsuć tego, co już rankuje.</div><div class="skala">Status: znaleziska zapisane (docs/seo/znaleziska-huby-2026-07-14); wymaga pilota + progów wycofania z T-203-baseline</div></td>
 <td class="num">11–14</td></tr>
 </tbody>
-<tfoot><tr><td>Razem pełna lista (widełki)</td><td class="num">584–764</td></tr></tfoot>
+<tfoot><tr><td>Razem pełna lista (widełki)</td><td class="num">585–767</td></tr></tfoot>
 </table>
+</section>
+</div>
 
 <footer>
 Dokument generowany automatycznie z ewidencji prac projektu (repozytorium, dziennik wydań, rejestr decyzji). Auranet · js@auranet.com.pl

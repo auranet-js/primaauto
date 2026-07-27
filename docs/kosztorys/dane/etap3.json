@@ -137,13 +137,13 @@
   {
    "id": "T-121",
    "tytul": "Płatność online (BLIK/karta) za depozyt rezerwacyjny",
-   "opis": "Klient wpłaca depozyt (dziś 6 150 zł) od razu w kreatorze — BLIK-iem lub kartą, zamiast przepisywać numer konta do bankowości. Szybsze domknięcie rezerwacji, mniej porzuceń na ostatnim kroku. Platforma nie ma sklepu internetowego, więc nie skorzystamy z gotowej wtyczki — mechanizm płatności piszemy w całości, choć miejsce wpięcia w proces zamówienia jest już przygotowane. Do potwierdzenia przed startem: zgoda operatora płatności na schemat depozytu zwrotnego w modelu pośrednictwa (kwota nie jest problemem — charakter płatności wymaga opisania w umowie).",
+   "opis": "Klient wpłaca depozyt zwrotny od razu w kreatorze — BLIK-iem lub kartą, zamiast przepisywać numer konta do bankowości. Ustalenie z 27.07: przycisk płatności pojawia się już po potwierdzeniu zamówienia, czyli PRZED umową — dzięki temu klient wiąże się wcześniej, a my możemy jechać sprawdzić konkretny egzemplarz i wystawić umowę od razu z numerem VIN. Pod przyciskiem informacja, że zgłoszenia z opłaconym depozytem realizujemy w pierwszej kolejności, oraz odnośnik do strony wyjaśniającej depozyt. Przelew zostaje jako alternatywa. Kwota pobierana jest ta zamrożona na zamówieniu, więc nie rozjedzie się z umową ani z mailem. Platforma nie ma sklepu internetowego, więc mechanizm płatności piszemy w całości, choć miejsce wpięcia w proces zamówienia jest już przygotowane. WARUNEK WEJŚCIA: zadanie „Regulamin usługi i strona o depozycie” (T-221) — bez opublikowanych dokumentów operator płatności nie dopuści przyjmowania zwrotnych depozytów.",
    "rozmiar": "L",
-   "rynkowo_od": 85,
-   "rynkowo_do": 100,
-   "realnie_od": 32,
-   "realnie_do": 42,
-   "status": "plan gotowy (docs/roadmapa/T-121); wymaga zgody operatora płatności + aktualizacji regulaminu"
+   "rynkowo_od": 60,
+   "rynkowo_do": 80,
+   "realnie_od": 24,
+   "realnie_do": 32,
+   "status": "plan gotowy i uzupełniony o decyzje z 27.07; czeka na T-221 (dokumenty) i zgodę operatora płatności"
   },
   {
    "id": "T-113",

@@ -1,7 +1,19 @@
 # T-121 — Płatność online (BLIK/karta) za depozyt rezerwacyjny
 
-> Status: **GATED na zgodę PayU** · Priorytet: przesunięty dalej (decyzja Janka 2026-07-14) · Rozmiar: L
-> Godziny realnie: **spike 3–4 h + wdrożenie 32–42 h** (Janek ~6–8 h, AI ~28–36 h) · Rynkowo: 85–100 h
+> Status: **GATED na T-221 (regulamin usługi) → potem wniosek do PayU** · Rozmiar: L
+> Godziny realnie: **24–32 h** (Janek ~5–6 h, AI ~19–26 h) · Rynkowo: 60–80 h
+
+## ⬆️ Decyzje 2026-07-27 (Janek) — nadpisują części opisu niżej
+
+| # | Decyzja | Wpływ |
+|---|---|---|
+| D1 | **Przycisk PayU pojawia się już przy statusie `potwierdzone`** (krok 3 kreatora, „Dane do umowy") i zostaje widoczny w kroku 4, dopóki depozyt nie jest opłacony. Przelew zostaje jako alternatywa | zmienia plan §6 („UI w kroku 4") — płatność wchodzi **przed** umową |
+| D2 | Pod przyciskiem komunikat: **„Zgłoszenia z opłaconym depozytem zwrotnym realizujemy w pierwszej kolejności"** + link „Poczytaj więcej" → nowa strona `/depozyt/` (T-221) | nowy element UI + zależność treściowa |
+| D3 | **Dotyczy wyłącznie depozytu ZWROTNEGO** — stała kwota z configu (dziś 6 150 zł), niezależna od ceny auta, zamrażana na zamówieniu (`class-asiaauto-order.php:452`), czyli **przed** krokiem 3 — spójne z D1. ⚠️ **Nie mylić z depozytem zabezpieczającym** z umowy leasingowej (% wartości auta, w Agw Moto 10% = 23 200 zł) — ten żyje w treści umowy, nie w PayU. Przy realizacji umowy depozyt zwrotny zostaje odliczony od zabezpieczającego. Rozpiska: [T-217](T-217-umowa-leasingowa-szablon.md) | wymóg 🔒 bez zmian; PayU pobiera **tylko** depozyt zwrotny |
+| D4 | **Blocker regulaminowy potwierdzony pomiarem, nie przypuszczeniem** — dzisiejszy `/regulamin/` mówi, że usługi są *nieodpłatne*; nie ma dokumentu regulującego usługę, depozyt ani zwrot. → **T-221 idzie pierwsze** | „Bloker #2 — regulamin" niżej awansuje na #1 |
+| D5 | Zwrot depozytu = **model kosztowy** (§4 ust. 4–5 umowy: 3 dni bez kosztów / 7 dni po potrąceniu), **dla sytuacji, w której nie dojdzie do rezerwacji auta** — czyli dokładnie dla momentu, w którym klient płaci online (krok 3, przed rezerwacją). Etapy po rezerwacji reguluje umowa, regulamin ich nie dubluje | określa zakres procedury refundu we wniosku do PayU |
+
+Szczegóły: [T-221](T-221-pakiet-prawny-payu.md), [punkty dla Ruslana](../biznes/2026-07-27-punkty-do-weryfikacji-ruslan.md).
 
 ## Po co
 
@@ -45,9 +57,9 @@ PayU takie schematy akceptuje, ale wymaga opisania ich w umowie akceptanta, a zw
 
 **Krok zero — pytamy PayU o SCHEMAT I WIDEŁKI, nie o kwotę:** depozyt zwrotny, model pośrednictwa, transakcje rzędu kilku–kilkunastu tysięcy, kwota ustalana per zamówienie z panelu. ~1–2 h Janka + czekanie.
 
-## Bloker #2 — regulamin
+## Bloker #2 — regulamin ✅ ZDJĘTY 2026-07-27 (T-221)
 
-Depozyt zwrotny przyjmowany przez operatora płatności = zmiana w regulaminie i polityce zwrotów. Do przejrzenia z prawnikiem (dokumenty: `docs/legal/`, `docs/20260521_Prima-Auto_Regulamin*.docx`).
+Regulamin usługi i strona o depozycie **napisane i opublikowane** (`/regulamin-uslugi/`, `/depozyt/` — na razie `noindex`, bez linków). Procedura zwrotu z terminami 3/7 dni siedzi pod kotwicą `primaauto.com.pl/regulamin-uslugi/#zwrot` — ten adres podajemy we wniosku. Bez prawnika, minimum funkcjonalne (decyzja Janka). Zostaje: zdjęcie noindex + podlinkowanie, PayU w polityce prywatności — patrz T-221.
 
 ## Stan faktyczny
 
@@ -61,7 +73,7 @@ Depozyt zwrotny przyjmowany przez operatora płatności = zmiana w regulaminie i
 | Status „czeka na depozyt" | `podpisane` + meta `_order_deposit_paid = '0'` (nie ma osobnego statusu) |
 | Stan bazy | 120 zamówień bez depozytu, 15 z opłaconym; 134 × 6 150 zł |
 
-**Konsekwencja braku WooCommerce: nie ma gotowej wtyczki. Piszemy integrację w całości sami.** To jest źródło tych 32–42 h.
+**Konsekwencja braku WooCommerce: nie ma gotowej wtyczki. Piszemy integrację w całości sami.** To jest źródło tych 24–32 h.
 
 ## Plan (kroki)
 
@@ -69,7 +81,7 @@ Depozyt zwrotny przyjmowany przez operatora płatności = zmiana w regulaminie i
 1. Zapytanie do PayU o dopuszczalność (depozyt zwrotny, 30 tys., pośrednictwo).
 2. Test sandbox: utworzenie zamówienia PayU + odbiór notyfikacji na testowym endpoincie. Potwierdzenie, że BLIK i karta działają w tym schemacie.
 
-**Etap 1 — wdrożenie (32–42 h)**
+**Etap 1 — wdrożenie (24–32 h)**
 3. Klasa `AsiaAuto_PayU` — OAuth, tworzenie zamówienia (`POST /api/v2_1/orders`), weryfikacja podpisu notyfikacji.
 4. REST: `POST /order/{id}/pay` → tworzy płatność, zwraca `redirectUri`. Guard: tylko właściciel zamówienia, tylko status `podpisane`, tylko gdy `_order_deposit_paid = 0`.
 5. **Webhook notyfikacji** → weryfikacja podpisu → `markDepositPaid()`. **Idempotentnie** (PayU potrafi wysłać notyfikację kilka razy — podwójne zaksięgowanie = katastrofa).

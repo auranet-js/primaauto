@@ -49,8 +49,11 @@ wszystkie = {p['id']: p for p in roadmapa}
 wszystkie.update({t['id']: t for t in postep['todo_nowe']})
 pierwsze = [wszystkie[i] for i in pierwsze_ids if i in wszystkie]
 nowe = [t for t in postep['todo_nowe'] if t['id'] not in pierwsze_ids]
-reszta = [p for p in roadmapa if p['id'] not in pierwsze_ids]
-todo_lista = pierwsze + nowe + reszta
+# pozycje z roadmapy wyciągnięte tuż pod nowe (np. zadanie zależne od nowego)
+po_nowych_ids = [i for i in postep.get('todo_po_nowych', []) if i in wszystkie and i not in pierwsze_ids]
+po_nowych = [wszystkie[i] for i in po_nowych_ids]
+reszta = [p for p in roadmapa if p['id'] not in pierwsze_ids and p['id'] not in po_nowych_ids]
+todo_lista = pierwsze + nowe + po_nowych + reszta
 nowe_ids = {t['id'] for t in postep['todo_nowe']}
 
 today = datetime.date.today().strftime('%d.%m.%Y')
@@ -81,8 +84,17 @@ def row_task(p, nowy=False):
         godz = f"{fmt_h(p['realnie_od'])}–{fmt_h(p['realnie_do'])}"
     else:
         godz = '—'
+    linki = ''
+    if p.get('linki'):
+        li = ' · '.join(f'<a href="{esc(l["url"])}" target="_blank" rel="noopener">{esc(l["tekst"])}</a>'
+                        for l in p['linki'])
+        linki = f'<div class="linki">Do obejrzenia: {li}</div>'
+    pytania = ''
+    if p.get('pytania'):
+        li = ''.join(f'<li>{esc(q)}</li>' for q in p['pytania'])
+        pytania = f'<div class="pytania"><strong>Do potwierdzenia z Tobą:</strong><ul>{li}</ul></div>'
     return f"""<tr>
-<td><strong>{idtxt}{esc(p['tytul'])}</strong> {rozmiar}<div class="opis">{badge}{esc(p['opis'])}</div><div class="skala">Status: {esc(p['status'])}</div></td>
+<td><strong>{idtxt}{esc(p['tytul'])}</strong> {rozmiar}<div class="opis">{badge}{esc(p['opis'])}</div>{linki}{pytania}<div class="skala">Status: {esc(p['status'])}</div></td>
 <td class="num">{godz}</td></tr>"""
 
 def rows_todo():
@@ -107,13 +119,16 @@ html_doc = f"""<!doctype html>
 }}
 * {{ box-sizing: border-box; margin: 0; padding: 0; }}
 body {{ font: 15px/1.55 -apple-system, "Segoe UI", Roboto, Arial, sans-serif; color: var(--ink); background: var(--bg); }}
-.wrap {{ max-width: 900px; margin: 0 auto; padding: 32px 20px 80px; }}
+.wrap {{ max-width: none; margin: 0; padding: 32px 40px 80px; }}
+.cols {{ display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 40px; align-items: start; }}
+.cols > section {{ min-width: 0; }}
+.cols h2 {{ margin-top: 0; }}
 header.top {{ border-bottom: 3px solid var(--accent); padding-bottom: 20px; margin-bottom: 28px; }}
 header.top h1 {{ font-size: 26px; line-height: 1.25; }}
 header.top .sub {{ color: var(--ink-2); margin-top: 6px; }}
 header.top .stamp {{ color: var(--ink-3); font-size: 13px; margin-top: 10px; }}
 h2 {{ font-size: 20px; margin: 44px 0 6px; }}
-.lead {{ color: var(--ink-2); margin-bottom: 16px; max-width: 820px; }}
+.lead {{ color: var(--ink-2); margin-bottom: 16px; }}
 .note {{ background: var(--accent-soft); border-left: 4px solid var(--accent); border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 16px 0; color: var(--ink-2); font-size: 14px; }}
 .wersje {{ color: var(--ink-3); font-size: 12px; font-weight: 400; }}
 table {{ width: 100%; border-collapse: collapse; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; margin: 14px 0; }}
@@ -126,11 +141,22 @@ td.data-col {{ white-space: nowrap; color: var(--ink-2); font-size: 13px; font-v
 tfoot td {{ background: var(--accent-soft); font-weight: 700; }}
 .opis {{ color: var(--ink-2); font-weight: 400; margin-top: 4px; font-size: 14px; }}
 .skala {{ color: var(--ink-3); font-size: 12.5px; margin-top: 4px; }}
+.linki {{ margin-top: 8px; font-size: 13.5px; }}
+.linki a {{ color: var(--accent); font-weight: 600; }}
+.pytania {{ margin-top: 8px; padding: 8px 12px; background: var(--accent-soft); border-radius: 6px; font-size: 13.5px; color: var(--ink-2); }}
+.pytania strong {{ font-size: 12.5px; }}
+.pytania ul {{ margin: 4px 0 0; padding-left: 18px; }}
+.pytania li {{ margin: 2px 0; }}
 .rozmiar {{ color: var(--ink-3); font-size: 12px; font-weight: 400; white-space: nowrap; }}
 .badge {{ display: inline-block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.4px; border-radius: 4px; padding: 2px 7px; }}
 .badge.new {{ background: var(--green-soft); color: var(--green); }}
 footer {{ margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--ink-3); font-size: 12.5px; }}
+@media (max-width: 1100px) {{
+    .cols {{ grid-template-columns: 1fr; gap: 8px; }}
+    .cols > section + section h2 {{ margin-top: 36px; }}
+}}
 @media (max-width: 720px) {{
+    .wrap {{ padding: 24px 16px 60px; }}
   td.data-col {{ font-size: 11px; }}
 }}
 @media print {{
@@ -148,7 +174,9 @@ footer {{ margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line)
 <div class="stamp">Stan na {today} · dokument roboczy, aktualizowany na bieżąco wraz z postępem prac</div>
 </header>
 
-<h2>Co się zmieniło (od najnowszych)</h2>
+<div class="cols">
+<section>
+<h2>Zrealizowane</h2>
 <p class="lead">Rejestr prac wykonanych od spotkania {esc(postep['zamkniecie']['data'])}, z godzinami liczonymi tak samo jak w kosztorysie (realny czas pracy zespołu).</p>
 <table>
 <thead><tr><th>Data</th><th>Praca</th><th class="num">Godziny [h]</th></tr></thead>
@@ -158,7 +186,10 @@ footer {{ margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line)
 <tfoot><tr><td colspan="2">Razem od spotkania {esc(postep['zamkniecie']['data'])}</td><td class="num">{fmt_h(ch_sum)}</td></tr></tfoot>
 </table>
 
-<h2>Lista zadań do zrobienia</h2>
+</section>
+
+<section>
+<h2>W kolejce</h2>
 <p class="lead">Aktualny plan rozwoju platformy z widełkami godzin. Kolejność odzwierciedla zależności i priorytety — niektóre zadania są fundamentem, który obniża koszt kolejnych. Pozycje oznaczone „nowe” zostały dopisane po spotkaniu {esc(postep['zamkniecie']['data'])}.</p>
 <table>
 <thead><tr><th>Zadanie</th><th class="num">Godziny [h]</th></tr></thead>
@@ -167,6 +198,8 @@ footer {{ margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line)
 </tbody>
 <tfoot><tr><td>Razem pełna lista (widełki)</td><td class="num">{fmt_h(todo_od)}–{fmt_h(todo_do)}</td></tr></tfoot>
 </table>
+</section>
+</div>
 
 <footer>
 Dokument generowany automatycznie z ewidencji prac projektu (repozytorium, dziennik wydań, rejestr decyzji). Auranet · js@auranet.com.pl
