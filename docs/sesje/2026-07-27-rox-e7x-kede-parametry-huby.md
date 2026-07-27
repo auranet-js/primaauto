@@ -70,6 +70,27 @@ więc akapity o wyposażeniu trzeba było potem przepisać (`scripts/patch-wiki-
 Liczby (wymiary, moce, zasięgi, ceny) się nie zmieniły — bliźniak ich nie koryguje — ale
 wyposażenie owszem: ROX z 71 pozycjami standardowymi, KEDE z 34.
 
+## Decyzja: marka hubu Audi zostaje bez zmian (2026-07-27)
+
+Rozważane: zmiana marki z `Audi` na `Audi SAIC`, żeby nikt się nie doczepił. **Zostawiamy `Audi`.**
+
+Ustalenia:
+- Pod marką `audi` są trzy oferty i **wszystkie trzy to modele AUDI ze spółki z SAIC**
+  (E7X + 2× E5 Sportback, `sub_brand_name` = `上汽奥迪`) — nie ma mieszanki z europejskimi Audi,
+  więc nic się nie rozjeżdża przy żadnym wariancie.
+- Auto jest fabrycznie oznaczone napisem AUDI, a marka AUDI należy do Audi AG — użycie nazwy
+  do opisu egzemplarza tej marki to normalne użycie opisowe w handlu. Zmiana etykiety na
+  „Audi SAIC" nie zdejmuje ryzyka (nazwę AUDI nadal się używa); ryzykiem jest sugestia
+  autoryzowanego dealerstwa lub europejskiej wersji modelu — a to jest już zaadresowane treścią
+  (lead + wiki mówią wprost: spółka SAIC Audi, model tylko na Chiny, polskie salony Audi go nie mają).
+- Koszt zmiany: `/samochody/audi/e7x/` → `/samochody/audi-saic/e7x/` (301 na trzech ofertach
+  i hubie marki) plus utrata przylegania frazy w title i H1 przy łącznym popycie **1270/mc**
+  (`audi e7x` 390 + `audi e5 sportback` 880). Nieproporcjonalne do zysku.
+
+Niewdrożone pomysły z tej rozmowy (do rozważenia osobno): zdanie porządkujące na hubie marki
+`/samochody/audi/`, widoczny disclaimer o braku autoryzacji i gwarancji chińskiej na kartach
+ofert, opcjonalna sygnatura w nazwie modelu (`E7X (AUDI SAIC)`) w konwencji `ROX 01 (PolarStone 01)`.
+
 ## Otwarte
 
 1. Puste termy po starym nazewnictwie ROX: `extreme-stone-01` (#7198) i `jishi-01` (#5083,
