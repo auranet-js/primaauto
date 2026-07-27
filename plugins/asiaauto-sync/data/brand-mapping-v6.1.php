@@ -2009,4 +2009,118 @@ return array (
     'title_eu' => 'BAIC BJ30',
     'slug' => 'bj30',
   ),
+
+  // ─── v6.4 — 2026-07-25 T-186 (sonda kanału che168) ───
+  // 7 modeli, których para mark_eu|serie_eu nie istniała w brand-mappingu. Bez nich
+  // aliasy z che168-model-map.php są martwe: adapter (canonicalKeyForSource) tłumaczy entry
+  // z powrotem na literalny klucz CN przez sigToKey(), a przy braku sygnatury zwraca surowe
+  // mark/model → guard odrzuca ofertę jako orphan. Zweryfikowane: 11/18 orphanów mapowało się
+  // bez tej sekcji, 7 dopiero z nią.
+  // Wyłącznie NOWE klucze — żaden istniejący wpis nie zmieniony, więc regresja dongchedi = zero.
+  // Slugi celują w zasiedlone termy taksonomii `serie` (a7-em 38 listingów, li-auto-mega 8,
+  // frigate-07 4, gx 2, menglong 3), żeby nie rozbijać podaży na równoległe huby.
+  'Galaxy|Galaxy A7 EM-i' =>
+  array (
+    'mark_eu' => 'Geely',
+    'serie_eu' => 'Galaxy A7 EM-i',
+    'title_eu' => 'Geely Galaxy A7 EM-i',
+    'slug' => 'a7-em',
+  ),
+  'Li Auto|Li Auto MEGA' =>
+  array (
+    'mark_eu' => 'Li Auto',
+    'serie_eu' => 'Li Auto MEGA',
+    'title_eu' => 'Li Auto MEGA',
+    'slug' => 'li-auto-mega',
+  ),
+  'BYD|Frigate 07' =>
+  array (
+    'mark_eu' => 'BYD',
+    'serie_eu' => 'Frigate 07',
+    'title_eu' => 'BYD Frigate 07',
+    'slug' => 'frigate-07',
+  ),
+  'BYD|Seal 07 EV' =>
+  array (
+    'mark_eu' => 'BYD',
+    'serie_eu' => 'Seal 07 EV',
+    'title_eu' => 'BYD Seal 07 EV',
+    'slug' => 'seal-07-ev',
+  ),
+  // 小鹏GX — premiera 2026-05-20, EV + EREV. Term 'gx' już zasiedlony 2 ofertami z che168.
+  'XPeng|XPeng GX' =>
+  array (
+    'mark_eu' => 'XPENG',
+    'serie_eu' => 'GX',
+    'title_eu' => 'XPENG GX',
+    'slug' => 'gx',
+  ),
+  // 哈弗猛龙新能源 Hi4 (PHEV) — osobny hub od 'Haval Menglong ICE', mieszanie ICE z PHEV
+  // dawałoby błędną specyfikację na karcie.
+  'Haval|Haval Menglong New Energy' =>
+  array (
+    'mark_eu' => 'Haval',
+    'serie_eu' => 'Menglong Hi4',
+    'title_eu' => 'Haval Menglong Hi4',
+    'slug' => 'menglong-hi4',
+  ),
+  // Konwencja Tanka w tym pliku to serie bez marki ('400 Hi4-T', '700 Hi4-T').
+  'Tank|Tank 500 Hi4-T' =>
+  array (
+    'mark_eu' => 'Tank',
+    'serie_eu' => '500 Hi4-T',
+    'title_eu' => 'Tank 500 Hi4-T',
+    'slug' => '500-hi4-t',
+  ),
+
+  // ─── v6.5 — 2026-07-27 (ROX 01 + AUDI E7X) ───
+  // Nazewnictwo rozstrzygnięte danymi DFS (Google Ads Keyword Planner, PL/pl, 2026-07-27),
+  // bo oba źródła podają nazwy martwe w wyszukiwarce:
+  //   dongchedi 'Jishi 01' (pinyin 极石01) = 10/mc, che168 'Extreme Stone 01' (kalka) = 0/mc,
+  //   'Polestones 01' = 0/mc  →  rynkowe 'ROX 01' = 170/mc (SERP PL: tntcars.pl #1,
+  //   autopunktmlawa.pl #2 — polscy sprzedawcy już na tej nazwie).
+  //   'ROX Adamas' (70/mc) to LIFTING (2025款 ADAMAS) — świadomie NIE tutaj; osobny hub,
+  //   gdy wpadnie egzemplarz po liftingu.
+  // Serie bez marki ('01') jak Avatr 06/07 czy Deepal 03 — termy numeryczne są tu konwencją.
+  'ROX|Jishi 01' =>
+  array (
+    'mark_eu' => 'ROX',
+    'serie_eu' => '01',
+    'title_eu' => 'ROX 01',
+    'slug' => '01',
+  ),
+  // AUDI E7X (上汽奥迪, premiera 2026.05) — dongchedi tego modelu NIE MA (kontrola 2026-07-27:
+  // 57 modeli Audi, najnowszy 'Audi E5 Sportback'), więc klucz jest syntetyczny, w kształcie
+  // dongchedi ('Audi|Audi <model>') — pełni tu rolę sygnatury dla sigToKey(), patrz sekcja v6.4.
+  // Podaż wyłącznie z che168. DFS: 'audi e7x' 390/mc (szczyt 1600 w 04.2026), SERP top8 bez
+  // ani jednej oferty sprzedażowej (media + Wikipedia + AI Overview) = luka komercyjna.
+  'Audi|Audi E7X' =>
+  array (
+    'mark_eu' => 'Audi',
+    'serie_eu' => 'E7X',
+    'title_eu' => 'Audi E7X',
+    'slug' => 'e7x',
+  ),
+
+  // ─── v6.6 — 2026-07-27 (Kedi Shanchuan M7 — luksus na zamówienie, decyzja Ruslana) ───
+  // 克蒂汽车 to chiński karosernik przerabiający Toyotę Alphard na wersje VIP; dongchedi trzyma
+  // markę jako 'Kedi' (8 modeli: Shanchuan, Shengmufeng, Shanhe, Xueduibai, Diya, Bach, WALD,
+  // 翔翼 — reszta do domapowania, gdy Ruslan je weźmie), che168 romanizuje markę jako 'Kurti'.
+  // ŚWIADOMIE NIE pod marką Toyota: (a) to nie fabryczna Toyota, (b) che168 wrzucał to
+  // w term `serie` 'M7' współdzielony z 59 listingami (AITO M7 i inne) = skażony hub.
+  // DFS 2026-07-27 (PL/pl): 'kedi m7', 'kedi shanchuan', 'alphard chiny', 'toyota alphard
+  // chiny' = wszystkie bez danych; 'kedi' 390/mc to szum (tureckie „kot", film dokumentalny).
+  // Hub istnieje więc dla katalogu i sprzedaży na zamówienie, nie pod ruch z wyszukiwarki.
+  // DECYZJA JANKA 2026-07-27: marka zostaje **Toyota**, a 'Kedi Shanchuan' jest modelem —
+  // to nadal Alphard po przeróbce, a marka Toyota ma popyt ('toyota alphard' 2400/mc,
+  // 'alphard' 480/mc), którego 'Kedi' nie ma. Model NIE jest 'M7' (term `serie` 'M7' ma
+  // 59 listingów innych marek — hub mieszałby marki), więc własny term 'kedi-shanchuan'.
+  // Serie na poziomie MODELU, bez wersji: complectation ofert i tak wnosi „M7 3.5L …".
+  'Kedi|Kedi Shanchuan' =>
+  array (
+    'mark_eu' => 'Toyota',
+    'serie_eu' => 'Kedi Shanchuan',
+    'title_eu' => 'Toyota Kedi Shanchuan',
+    'slug' => 'kedi-shanchuan',
+  ),
 );

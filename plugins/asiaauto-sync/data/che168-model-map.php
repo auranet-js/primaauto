@@ -678,4 +678,192 @@ return array (
     'title_eu' => 'Exeed TXL Lingyun',
     'slug' => 'txl',
   ),
+
+  // ─── T-186 sonda kanału 2026-07-25: 16 orphanów z 59 811 zdarzeń (38 ofert) ───
+  // Każdy wpis celuje w entry brand-mappingu albo w zasiedlony term taksonomii `serie`,
+  // NIE w nazwę termu-sieroty — inaczej oferty che168 wylądowałyby w innym hubie niż
+  // te same modele z dongchedi. Wersje rozstrzygnięte po param_93 (车型名称), nie „na oko".
+
+  // 海狮06 2025款 DM-i → brand-mapping 'BYD|Haishi 06 DM'
+  'BYD|海狮06' =>
+  array (
+    'mark_eu' => 'BYD',
+    'serie_eu' => 'Sealion 6 DM',
+    'title_eu' => 'BYD Sealion 6',
+    'slug' => 'sealion-6-dm',
+  ),
+  // → brand-mapping 'BYD|Haishi 05 EV'
+  'BYD|海狮05 EV' =>
+  array (
+    'mark_eu' => 'BYD',
+    'serie_eu' => 'Sealion 5 EV',
+    'title_eu' => 'BYD Sealion 5',
+    'slug' => 'sealion-5-ev',
+  ),
+  // 汉L 2025款 EV — sprawdzone na wszystkich 3 sztukach z sondy, każda EV (nie DM).
+  'BYD|汉L' =>
+  array (
+    'mark_eu' => 'BYD',
+    'serie_eu' => 'Han L EV',
+    'title_eu' => 'BYD Han L EV',
+    'slug' => 'han-l-ev',
+  ),
+  // 唐新能源 2025款 DM-i 115KM → Tang DM-i (32 listingi). UWAGA: to NIE Sealion 8 —
+  // Sealion 8 to Tang L, osobny model z własnymi termami.
+  'BYD|Tang New Energy' =>
+  array (
+    'mark_eu' => 'BYD',
+    'serie_eu' => 'Tang DM-i',
+    'title_eu' => 'BYD Tang',
+    'slug' => 'tang-dm-i',
+  ),
+  // 护卫舰07 2024款 荣耀版 DM-i → zasiedlony term Frigate 07 (4 listingi)
+  'BYD|Frigate 07' =>
+  array (
+    'mark_eu' => 'BYD',
+    'serie_eu' => 'Frigate 07',
+    'title_eu' => 'BYD Frigate 07',
+    'slug' => 'frigate-07',
+  ),
+  // 海豹07 DM-i 2025款 → brand-mapping 'BYD|Seal 07 DM' = serie 'Seal 7 DM' (4 listingi);
+  // pusty term 'Seal 07 DM' zostaje sierotą.
+  'BYD|Seal 07 DM-i' =>
+  array (
+    'mark_eu' => 'BYD',
+    'serie_eu' => 'Seal 7 DM',
+    'title_eu' => 'BYD Seal 7 DM',
+    'slug' => 'seal-7-dm',
+  ),
+  'BYD|Seal 07 EV' =>
+  array (
+    'mark_eu' => 'BYD',
+    'serie_eu' => 'Seal 07 EV',
+    'title_eu' => 'BYD Seal 07 EV',
+    'slug' => 'seal-07-ev',
+  ),
+  // 宋PLUS新能源 2025款 EV 520km → brand-mapping 'BYD|Song PLUS EV' (5 listingów).
+  // che168 skraca 宋PLUS新能源 do 'PLUS New Energy' (ten sam wzorzec co 'L EV'/'L DM-i').
+  'BYD|PLUS New Energy' =>
+  array (
+    'mark_eu' => 'BYD',
+    'serie_eu' => 'Song PLUS EV',
+    'title_eu' => 'BYD Song PLUS EV',
+    'slug' => 'song-plus-ev',
+  ),
+  // Zasiedlony term 'Li Auto MEGA' (8 listingów) — świadomie łamie konwencję serie-bez-marki
+  // (L6/L7/i6), bo hub już ma content; nowy 'MEGA' rozbiłby podaż na dwa huby.
+  'Li Auto|Li MEGA' =>
+  array (
+    'mark_eu' => 'Li Auto',
+    'serie_eu' => 'Li Auto MEGA',
+    'title_eu' => 'Li Auto MEGA',
+    'slug' => 'li-auto-mega',
+  ),
+  // 小鹏G7 2025款 702 超长续航 Ultra → brand-mapping 'XPeng|XPeng G7' = serie 'G7'
+  // (18 listingów); pusty term 'XPeng G7' zostaje sierotą.
+  'XPeng|小鹏G7' =>
+  array (
+    'mark_eu' => 'XPENG',
+    'serie_eu' => 'G7',
+    'title_eu' => 'XPENG G7',
+    'slug' => 'g7',
+  ),
+  // 小鹏GX 2026款 增程 1585四驱Ultra — model premiera 2026-05-20 (EV + EREV, 6 miejsc).
+  // Term 'GX' (slug gx) już zasiedlony 2 listingami XPenga.
+  'XPeng|小鹏GX' =>
+  array (
+    'mark_eu' => 'XPENG',
+    'serie_eu' => 'GX',
+    'title_eu' => 'XPENG GX',
+    'slug' => 'gx',
+  ),
+  // Zasiedlony term 'Galaxy A7 EM-i' (37 listingów, slug a7-em)
+  'Galaxy|银河A7 EM' =>
+  array (
+    'mark_eu' => 'Geely',
+    'serie_eu' => 'Galaxy A7 EM-i',
+    'title_eu' => 'Geely Galaxy A7 EM-i',
+    'slug' => 'a7-em',
+  ),
+  // → brand-mapping 'Galaxy|Galaxy Starship 7 EM-i'
+  'Galaxy|银河星舰7' =>
+  array (
+    'mark_eu' => 'Geely',
+    'serie_eu' => 'Galaxy Starship 7 EM-i',
+    'title_eu' => 'Geely Galaxy Starship 7 EM-i',
+    'slug' => 'starship-7-em-i',
+  ),
+  // 瑞虎8L 2024款 2.0T 两驱尊贵版 → brand-mapping 'Chery|Tiggo 8L' (slug tiggo-9, 18 listingów)
+  'Chery|瑞虎8L' =>
+  array (
+    'mark_eu' => 'Chery',
+    'serie_eu' => 'Tiggo 9 (Tiggo 8L)',
+    'title_eu' => 'Chery Tiggo 9',
+    'slug' => 'tiggo-9',
+  ),
+  // → brand-mapping 'Hongqi|Hongqi Tiangong 06' = serie 'Tiangong 06' (3 listingi)
+  'Hongqi|红旗天工06' =>
+  array (
+    'mark_eu' => 'Hongqi',
+    'serie_eu' => 'Tiangong 06',
+    'title_eu' => 'Hongqi Tiangong 06',
+    'slug' => 'tiangong-06',
+  ),
+  // 哈弗大狗 PLUS → wariant Big Dog / Dargo, brand-mapping 'Haval|Haval Big Dog' (9 listingów)
+  'Haval|哈弗大狗 PLUS' =>
+  array (
+    'mark_eu' => 'Haval',
+    'serie_eu' => 'Big Dog',
+    'title_eu' => 'Haval Big Dog Dargo',
+    'slug' => 'big-dog',
+  ),
+  // 哈弗猛龙新能源 2024款 Hi4 145 穿越版 — PHEV. W bazie jest tylko 'Haval Menglong ICE'
+  // (3 listingi), więc wersja Hi4 dostaje własny hub (mieszanie ICE z PHEV byłoby błędem).
+  'Haval|Menglong New Energy' =>
+  array (
+    'mark_eu' => 'Haval',
+    'serie_eu' => 'Menglong Hi4',
+    'title_eu' => 'Haval Menglong Hi4',
+    'slug' => 'menglong-hi4',
+  ),
+  // 坦克500新能源 2024款 Hi4-T — konwencja brand-mappingu dla Tanka to serie bez marki
+  // ('400 Hi4-T', '700 Hi4-T'), więc '500 Hi4-T'; sieroty 'Tank 500*' zostają nietknięte.
+  'Tank|Tank 500 New Energy' =>
+  array (
+    'mark_eu' => 'Tank',
+    'serie_eu' => '500 Hi4-T',
+    'title_eu' => 'Tank 500 Hi4-T',
+    'slug' => '500-hi4-t',
+  ),
+
+  // --- 2026-07-27: ROX 01 + AUDI E7X (para do sekcji v6.5 brand-mappingu) ---
+  // 极石01 — che168 tłumaczy nazwę dosłownie ('Extreme Stone 01'), dongchedi pinyinem
+  // ('Jishi 01'); obie martwe w wyszukiwarce (0 i 10/mc). Rynkowa nazwa to ROX 01 (170/mc),
+  // pod nią sprzedają już polscy dealerzy. Oba źródła zbiegają się w term 'ROX 01' (slug 01).
+  'ROX|Extreme Stone 01' =>
+  array (
+    'mark_eu' => 'ROX',
+    'serie_eu' => '01',
+    'title_eu' => 'ROX 01',
+    'slug' => '01',
+  ),
+  // 奥迪AUDI|奥迪E7X — marka i model czysto-CJK: strip w resolveChe168() zostawia model z CJK,
+  // więc reverse-index nigdy nie trafi. Override jest jedyną drogą (klucz surowy, z CJK).
+  '奥迪AUDI|奥迪E7X' =>
+  array (
+    'mark_eu' => 'Audi',
+    'serie_eu' => 'E7X',
+    'title_eu' => 'Audi E7X',
+    'slug' => 'e7x',
+  ),
+  // 克蒂山川 — che168 podaje markę jako 'Kurti' (dongchedi: 'Kedi'), model czysto-CJK, więc
+  // reverse-index nie ma czego trafić. Bez override'u oferta lądowała jako Toyota|M7 (błędna
+  // marka + term 'M7' współdzielony z 59 listingami). Para do sekcji v6.6 brand-mappingu.
+  'Kurti|克蒂山川' =>
+  array (
+    'mark_eu' => 'Toyota',
+    'serie_eu' => 'Kedi Shanchuan',
+    'title_eu' => 'Toyota Kedi Shanchuan',
+    'slug' => 'kedi-shanchuan',
+  ),
 );

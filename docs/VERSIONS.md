@@ -1,5 +1,163 @@
 # Historia wersji asiaauto-sync
 
+## 0.34.5 — 2026-07-27 (Toyota Kedi Shanchuan + trzy huby LIVE z ofertą)
+
+Domknięcie 0.34.4: trzeci model domapowany i wszystkie trzy huby wyszły z pustego stanu —
+po jednej ofercie każdy (aktywacja szkiców, bez importu nowych sztuk).
+
+**Toyota Kedi Shanchuan** — luksusowe MPV na zamówienie (Ruslan). 克蒂汽车 to chiński
+karosernik przerabiający Toyotę Alphard na wersje VIP. Nazwy w źródłach się rozjeżdżają:
+dongchedi `Kedi|Kedi Shanchuan`, che168 `Kurti|克蒂山川` (model czysto-CJK).
+
+**Marka = Toyota (decyzja Janka 2026-07-27).** Pierwsza wersja tego wpisu szła pod marką
+`Kedi` — błąd, wycofany tego samego dnia. Powód decyzji: to nadal Alphard po przeróbce,
+a `Toyota` ma popyt, którego `Kedi` nie ma (DFS PL/pl: `toyota alphard` 2400/mc,
+`alphard` 480/mc, natomiast `kedi m7`, `kedi shanchuan`, `alphard chiny`,
+`toyota alphard chiny` = **wszystkie bez danych**; `kedi` 390/mc to szum — tureckie „kot"
+i film dokumentalny).
+
+**Model = `Kedi Shanchuan`, NIE `M7`.** Term `serie` `M7` ma 59 listingów innych marek
+(AITO M7 i inne), więc hub `/samochody/toyota/m7/` mieszałby marki. Serie na poziomie
+modelu, bez wersji — `complectation` ofert i tak wnosi „M7 3.5L …".
+
+Zmiany w danych:
+- `data/brand-mapping-v6.1.php` — sekcja **v6.6**: `Kedi|Kedi Shanchuan` →
+  `Toyota Kedi Shanchuan` (serie `Kedi Shanchuan`, slug `kedi-shanchuan`).
+  293 → 294 wpisy, **0 zmienionych, 0 usuniętych**.
+- `data/che168-model-map.php` — override `Kurti|克蒂山川` (model czysto-CJK, reverse-index
+  nie ma czego trafić).
+- `data/translations-complectations.php` — `阿尔法36周年纪念版` → `Alphard 36th Anniversary`.
+  Bez tego segmentu z wersji zostawało w tytule samo „36".
+
+Weryfikacja: che168 `58275243` → `Toyota Kedi Shanchuan`, guard `isMappedForImport()` =
+`true`; dongchedi `23589815` i `24522589` → ten sam hub.
+
+**Trzy huby LIVE (każdy z 1 ofertą, HTTP 200):**
+
+| Hub | Oferta | Cena |
+|---|---|---|
+| `/samochody/rox/01/` | `/oferta/rox-01-2025-390560/` | 260 000 PLN |
+| `/samochody/audi/e7x/` | `/oferta/audi-e7x-2026-390551/` | 303 000 PLN |
+| `/samochody/toyota/kedi-shanchuan/` | `/oferta/toyota-kedi-shanchuan-2026-390186/` | 513 000 PLN |
+
+Przy publikacji:
+- #390186 (ten sam post, nic nie kasowane): `Toyota`/`M7` → `Toyota`/`Kedi Shanchuan`,
+  tytuł „Toyota Kedi Shanchuan 2026 M7 3.5L Alphard 36th Anniversary", 14 zdjęć nietknięte.
+  Nowy term `serie` #7201 `Kedi Shanchuan` pod `toyota`.
+- **Kolizja slugów:** slug `kedi-shanchuan` był już zajęty przez pusty term #7046 zasiany
+  z filtrów API (bez parenta, bez meta, 0 ofert) → WP zunikalnił nowy term na
+  `kedi-shanchuan-2`. #7046 usunięty, slug #7201 poprawiony na `kedi-shanchuan`,
+  `meta serie` posta zsynchronizowana. Usunięty też pusty #7200 `Shanchuan` (0 ofert,
+  artefakt wycofanej wersji „marka Kedi").
+- Slugi ofert poprawione po publikacji; stare URL-e (`toyota-m7-2026-390186`,
+  `kedi-shanchuan-2026-390186`, `rox-extreme-stone-01-2025-390560`) dają **301 na właściwy
+  hub** — warstwa redirectów pluginu je łapie, więc żadna nie została na 404.
+  Nowe URL-e dosłane do Indexing API (`pushOrQueue`), kolejka retry pusta.
+- `_serie_full_title` ustawione na wszystkich trzech termach (`ROX 01`, `Audi E7X`,
+  `Toyota Kedi Shanchuan`) — bez tego theme (`taxonomy-serie.php:44`) bierze surową nazwę
+  termu i H1 wychodzi bez marki („01 — import z Chin"), znany bug z 2026-07-13.
+  Term `serie` zostaje przy gołym modelu (`01`, `E7X`) zgodnie z konwencją pliku
+  (Avatr `06`, iCAR `03`, WEY `07`); marka doklejana jest wyłącznie w warstwie
+  wyświetlania (`_serie_full_title` / `ensureBrandPrefix()`).
+- `AsiaAuto_HubTitleGenerator::regenerateForTerm()` ×3 + `regenerateForMakeTerm()` dla
+  `rox`/`kedi`/`audi`/`toyota` → `<title>` i meta description hubów wypełnione.
+
+Backup taksonomii przed zmianami: `~/backups/primaauto/2026-07-27/taxonomy-przed-rox-audi.sql`.
+Backupy plików: `.bak-2026-07-27-roxaudi`, `.bak-2026-07-27-kedi`, `.bak-2026-07-27-toyotakedi`.
+
+## 0.34.4 — 2026-07-27 (ROX 01 + AUDI E7X — nazwy hubów rozstrzygnięte danymi DFS)
+
+Wyłącznie pliki danych (`data/*.php`), zero zmian w kodzie. Dwa nowe modele domapowane
+pod nazwy **rynkowe**, nie te z API — oba źródła podają dla nich nazwy martwe w wyszukiwarce.
+
+**ROX 01** (极石01, EREV, mid-large SUV). Źródła nie zgadzają się co do nazwy modelu:
+dongchedi `ROX|Jishi 01` (pinyin), che168 `ROX|Extreme Stone 01` (kalka dosłowna).
+DFS (Google Ads Keyword Planner, PL/pl, 2026-07-27): `rox 01` **170/mc**, `rox adamas` 70,
+`rox 01 cena` 50, `rox motor` 40, `jishi 01` **10**, `extreme stone 01` i `polestones 01`
+**bez danych**. SERP PL dla „rox 01" jest komercyjny — #1 tntcars.pl, #2 autopunktmlawa.pl
+(polscy sprzedawcy już na tej nazwie). Oba źródła zbiegają się więc w term `01` / slug `01`
+(konwencja serie-bez-marki jak Avatr `06`, iCAR `03`, WEY `07`), title `ROX 01`.
+`ROX Adamas` (70/mc) to **lifting** (2025款 ADAMAS) — świadomie osobny hub w przyszłości.
+
+**Audi E7X** (上汽奥迪, premiera 2026.05, BEV). Dongchedi tego modelu **nie ma w ogóle**
+(kontrola 2026-07-27: 57 modeli Audi, najnowszy `Audi E5 Sportback`) — podaż wyłącznie
+z che168, klucz w brand-mappingu jest syntetyczny i pełni rolę sygnatury dla `sigToKey()`.
+DFS: `audi e7x` **390/mc** (szczyt 1600 w 04.2026, fala premierowa opada), SERP top8 bez
+ani jednej oferty sprzedażowej (media + Wikipedia PL + AI Overview) = luka komercyjna.
+
+Zmiany:
+- `data/brand-mapping-v6.1.php` — sekcja **v6.5**: `ROX|Jishi 01` → `ROX 01` (serie `01`),
+  `Audi|Audi E7X` → `Audi E7X` (serie `E7X`). Kontrola dyfem względem backupu:
+  291 → 293 wpisy, **0 zmienionych, 0 usuniętych** → regresja dongchedi zero.
+  Brak kolizji sygnatur (`ROX|01`, `Audi|E7X` unikalne) i slugów (`01` tylko ROX).
+- `data/che168-model-map.php` — para override'ów dla surowych kluczy che168:
+  `ROX|Extreme Stone 01` i `奥迪AUDI|奥迪E7X` (marka i model czysto-CJK, więc reverse-index
+  nigdy by nie trafił — override to jedyna droga).
+
+Weryfikacja pełną ścieżką adaptera (`getOffer` → `Che168_Adapter::normalize` → `getEuForCn`),
+nie na surowych danych: 3 oferty ROX i 1 E7X z che168 + 2 ROX z dongchedi → wszystkie
+`ROX 01` / `Audi E7X`, guard `Sync::isMappedForImport()` = `true` dla wszystkich.
+
+Na produkcji przy okazji (backup taksonomii: `~/backups/primaauto/2026-07-27/`):
+term `serie` **奥迪E7X → E7X** (slug `e7x` bez zmian), nowy term `01` pod `rox`,
+oraz przepięcie dwóch szkiców — #390560 `ROX 01 2025 Premium 6-osobowy Standard`,
+#390551 `Audi E7X 2026 Pioneer quattro`.
+
+**Otwarte:** puste termy `serie` po starym nazewnictwie ROX — `extreme-stone-01` (#7198)
+i `jishi-01` (#5083, ma zapisane `rank_math_title` + `_asiaauto_spec_snapshot` po hubie
+z czasów, gdy stała tam 1 oferta). Nie kasowane — do decyzji, czy 301 na `/samochody/rox/01/`.
+
+## 0.34.3 — 2026-07-25 (T-186: mapowania z sondy kanału — 100% trafialności w huby)
+
+Wyłącznie pliki danych (`data/*.php`) — **zero zmian w kodzie**, więc zero ryzyka
+regresji w strefie kruchej. Materiał wejściowy: sonda całej zaległości kanału che168
+(59 811 zdarzeń, 246 ofert przechodzących filtr) wykonana **read-only**, bez importu,
+bez pobierania zdjęć i bez tłumaczeń AI. Domknięcie: `docs/sesje/2026-07-25-che168-sonda-mapowania.md`.
+
+**Mapowania modeli — trafialność w huby 85% → 98,4%** (pozostałe 1,6% to świadome
+skipy ICE: Nissan Teana, Qashqai). Gate ze speca (`<5% orphanów`) przechodzi.
+
+- `che168-model-map.php` — **16 aliasów** (95 → 111 wpisów). Wersje rozstrzygnięte
+  po `param_93` (车型名称), nie „na oko": `海狮06` = DM-i → `Sealion 6 DM`,
+  `汉L` = EV na wszystkich 3 sztukach → `Han L EV`, `Tang New Energy` = 唐新能源 DM-i
+  → `Tang DM-i` (**nie** Sealion 8 — to Tang L, osobny model), `PLUS New Energy`
+  = 宋PLUS新能源 EV → `Song PLUS EV`, `瑞虎8L` = 2.0T → `Tiggo 9 (Tiggo 8L)`.
+- `brand-mapping-v6.1.php` — sekcja **v6.4, 7 nowych kluczy** (284 → 291).
+  Powód niebanalny: adapter (`canonicalKeyForSource`) tłumaczy entry z model-mapy
+  **z powrotem** na literalny klucz CN brand-mappingu przez `sigToKey()`, więc alias
+  bez istniejącej sygnatury `mark_eu|serie_eu` jest martwy — guard dalej odrzuca ofertę.
+  Zmierzone: bez tej sekcji mapowało się 11/18 orphanów, z nią **18/18**.
+  Nowe: `Galaxy A7 EM-i`, `Li Auto MEGA`, `Frigate 07`, `Seal 07 EV`, `GX` (XPeng GX,
+  premiera 2026-05-20), `Menglong Hi4`, `500 Hi4-T`. Slugi celują w **zasiedlone termy**
+  (a7-em 38 listingów, li-auto-mega 8, frigate-07 4, gx 2), żeby nie rozbijać podaży
+  na równoległe huby. Kontrola regresji vs backup: **0 wpisów zmienionych, 0 usuniętych**.
+
+**Parametry — nieznane `param_*` 457 → 194 wystąpień**, a te 194 to wyłącznie dwa
+celowo pominięte klucze (`92` wymiary = duplikat `length/width/height`, `93` nazwa
+modelu = źródło tytułu). Audyt na 97 ofertach (po jednej na każdy unikalny model).
+
+- `che168-param-map.php` — **20 id** (111 → 131 wpisów). Cztery celują w klucze, które
+  dongchedi już ma (`compression_ratio_s`, `engine_unique_tech`, `electric_total_horsepower`
+  dla id 102 i 140 — ta sama wartość w dwóch grupach, wzorzec 84/105). Pozostałe 16 to
+  nowe wielkości; **żaden wpis nie nadpisuje istniejącego klucza**, bo każdy różni się
+  warunkiem pomiaru albo jednostką: `130` prześwit **bez** ładunku vs `min_clearance`
+  (满载, z pełnym), `149` zasięg NEDC **łączny** vs `nedc_recharge_mileage` (czysto
+  elektryczny), `141` moc **układu** w KM vs `102` moc **silników** w KM, `136` nachylenie
+  w **%** vs `137` w **stopniach**, `99`/`113` **pomiar** vs wartości katalogowe.
+- `translations-extra-prep.php` — 16 etykiet PL + 14 jednostek + przypisania do kategorii
+  (dimensions, body, engine, gearbox, fuel, ev). Bez kategorii adapter zapisałby wartość,
+  ale render by ją ukrył jako nieskategoryzowaną.
+- **Ubocznie naprawiony istniejący błąd:** `translateExtraPrep()` pomija wiersz, gdy wartość
+  po tłumaczeniu nadal ma CJK („frontend never shows raw Chinese"). Wartość `支持` nie
+  miała wpisu w `values`, więc **`quick_charge_interface` cicho znikał z karty w 26 z 30
+  ofert próbki** (podobnie `battery_swap`). Dodane: `支持`→Tak, `不支持`→Nie oraz 5 struktur
+  dyferencjału centralnego (`多片离合器`→Sprzęgło wielotarczowe itd.).
+
+Weryfikacja końcowa przez `translateExtraPrep()` (widok klienta): 104 i 107 wierszy
+specyfikacji, **zero CJK**, nowe pola z polskimi etykietami i jednostkami we właściwych
+kategoriach. Miasta: **0 bez tłumaczenia** na 18 miastach z przechodzących ofert.
+Backupy: `data/*.bak-2026-07-25-sonda` (4 pliki).
+
 ## 0.34.2 — 2026-07-22 (T-186: sync Che168 wpięty w automat, faza szkiców)
 
 Adapter Che168 wpięty w ścieżkę automatyczną — dotąd `Che168_Adapter::normalize()`
