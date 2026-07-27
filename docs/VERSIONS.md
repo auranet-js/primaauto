@@ -1,5 +1,45 @@
 # Historia wersji asiaauto-sync
 
+## 0.34.7 — 2026-07-27 (katalog Autohome jako źródło wyposażenia che168 + rebranding Passion)
+
+**Blokada wyposażenia che168 rozstrzygnięta.** auto-api odpisało 27.07: pełnej konfiguracji
+**nie ma i nie będzie** na żadnym planie (nie zbierają tych grup, oferty płatnej brak). Odesłali
+do publicznego katalogu Autohome po `specid`. Zbudowaliśmy tę ścieżkę:
+
+1. **`specid` stemplowany przy imporcie** — `class-asiaauto-che168-adapter.php` wyciąga
+   `extra.configuration.specid` do `$data['spec_id']`, `class-asiaauto-importer.php` zapisuje
+   `_asiaauto_spec_id` (obie ścieżki: pojedyncza i batch). Backfill: 99 ze 120 ofert
+   (21 zwraca 404 — wygasły u źródła), 89 unikalnych specidów.
+2. **`scripts/autohome-catalog-fetch.js`** — pobiera stronę katalogu i **zdejmuje obfuskację**.
+   Autohome podmienia ~46% nazw i ~4% wartości na `<span class='hs_kwNN_*'>`, z numeracją losową
+   per żądanie; deszyfrator to zaciemniony inline-JS, który blokuje odczyt przez `getComputedStyle`,
+   ale nie chroni generatora reguł CSS. Uruchomienie go w Node ze stubem DOM daje mapę znaków:
+   **292 parametry, zero nieodszyfrowanych**. Bez przeglądarki.
+3. **`data/autohome-catalog-map.php`** — most **nazwa CN → klucz `extra_prep`** (126 nazw → 129
+   kluczy). Po nazwie, NIE po ID: przestrzenie ID katalogu i auto-api są rozłączne (1 wspólny ID
+   na ~270, i to z inną semantyką).
+4. **`data/translations-extra-prep.php`** — +9 etykiet PL, wartość `选配` → „Opcja", klucze wpięte
+   w 6 istniejących kategorii.
+5. **`scripts/autohome-catalog-merge.php`** — dolewa wyłącznie brakujące klucze, stempluje
+   `_asiaauto_spec_catalog_*`.
+
+**Efekt:** oferta 390681 `extra_prep` 90 → 196 (**88 pozycji wyposażenia po polsku**),
+390697: 104 → 173 (**71 pozycji**). Wcześniej zero. Bez dotykania szablonów.
+
+**Katalog wykrył błąd danych dostawcy:** auto-api dla `岚图追光` (Voyah Passion) zwraca w polu
+`model` dosłownie **„Zeekr"** — importer założył serię „Zeekr" pod marką Voyah (usunięta).
+Alias `VOYAH|Zeekr` w `che168-model-map.php` + sygnatury w `brand-mapping-v6.1.php`.
+
+**Rebranding Zhuiguang → Passion** (nazwa eksportowa 追光). `追光L` = Passion L to **osobny model**
+(seriesid 8259, premiera XII 2025), nie wersja Passion (seriesid 6915). Podstawa: GSC 90 dni — hub
+`voyah-zhuiguang-l` miał 0 impresji, „zhuiguang" 1, „passion" 19 + klik. Termy 5081/5078/5079 →
+`passion-l`/`passion-phev`/`passion-ev` + 301 w `V62_SERIE_REDIRECTS`; treści hubów, tytuły 11 ofert,
+meta `serie`, alt 107 zdjęć, `post_content` 4 ofert, 210 przemianowanych plików zdjęć.
+`translations-models.php`: `岚图追光L`/`岚图追光 L` (che168 podaje ze spacją) → `Passion L`.
+Hub 5078 uzupełniony o brakujące meta reworku v3 (`_asiaauto_lead`, `_asiaauto_h1_suffix`).
+
+**Slugi ofert dongchedi celowo nietknięte** (mogą być zaindeksowane; zwracają 200).
+
 ## 0.34.6 — 2026-07-27 (korekta nazw: KEDE + PolarStone 01, treść 3 hubów)
 
 **Dwie korekty nazewnictwa po weryfikacji u źródła (zgłoszone przez Janka):**

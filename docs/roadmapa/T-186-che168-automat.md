@@ -1,13 +1,16 @@
 # T-186 — Che168 jako pełne, automatyczne drugie źródło
 
-> Status: **Fazy 1-2 ZROBIONE + mapowania domknięte (2026-07-25, v0.34.3)** — sync wpięty
-> w automat, 69 ofert w szkicach, oba źródła wyłączone. **Trafialność w huby 98,4%** (gate
-> ze speca `<5% orphanów` PRZECHODZI), miasta bez tłumaczenia: 0, nieznane parametry: tylko
-> 2 celowo pominięte klucze. **BLOKADA: auto-api nadal nie odpisało** (zapytanie 22.07)
-> w sprawie pełnej konfiguracji che168 — `/offer` oddaje 7 grup technicznych i zero grup
-> wyposażenia, potwierdzone na 97 ofertach.
+> Status: **Fazy 1-2 ZROBIONE + mapowania domknięte + BLOKADA WYPOSAŻENIA ROZSTRZYGNIĘTA
+> (2026-07-27)** — sync wpięty w automat, oba źródła wyłączone. **Trafialność w huby 98,4%**
+> (gate ze speca `<5% orphanów` PRZECHODZI), miasta bez tłumaczenia: 0.
+> **auto-api ODPISAŁO 27.07: pełnej konfiguracji che168 NIE MA i nie będzie** na żadnym planie
+> — nie zbierają tych grup, oferty płatnej brak. Odesłali nas do publicznego katalogu Autohome
+> po `specid`. **Sonda potwierdziła, że to działa** (292 parametry zamiast 105, obfuskacja
+> zdejmowana automatycznie), ścieżka jest zaimplementowana i przetestowana na jednej ofercie
+> na produkcji. Patrz sekcja „Wyposażenie — rozstrzygnięcie 2026-07-27".
 > Domknięcia sesji: `docs/sesje/2026-07-22-che168-sync-wpiecie.md`,
-> `docs/sesje/2026-07-25-che168-sonda-mapowania.md`.
+> `docs/sesje/2026-07-25-che168-sonda-mapowania.md`,
+> `docs/sesje/2026-07-27-katalog-autohome-wyposazenie.md`.
 
 ## Stan po 2026-07-25 (v0.34.3) — grunt pod wpięcie przygotowany
 
@@ -66,13 +69,86 @@ wszystkie w istniejących hubach, kolejka domapowań: 4 pozycje.
 **Zostało z pierwotnego planu:** dedup po VIN, panel „Źródła" (jest uproszczony toggle w Status),
 go-live (`publish` + włączenie wyłącznika).
 
-**Blokada — konfiguracja che168.** `/offer` nie zwraca `extra_prep` ani `equipment` (dongchedi ma je
-na najwyższym poziomie, 340-370 atrybutów). Zamiast tego `extra.configuration.paramtypeitems` z 6-7
-grupami technicznymi. Publiczny katalog Autohome dla tego samego `extra.configuration.specid` ma
-11-12 grup — z fotelami, bezpieczeństwem i pakietami opcji. Zweryfikowane na trzech ofertach
-(73545 6→11, 66867 7→12, 66792 6→11). Zapytanie wysłane do auto-api 22.07. Fallback, jeśli odmówią:
-dziedziczenie z bliźniaczych ofert w wariancie konsensusu (wyposażenie 14,5 → 67,7 pozycji na ofertę)
-— zmierzone, niewdrożone. Szczegóły: memory `reference_che168_api_obcina_wyposazenie`.
+**Blokada — konfiguracja che168. ROZSTRZYGNIĘTA 2026-07-27, patrz sekcja niżej.** `/offer` nie
+zwraca `extra_prep` ani `equipment` (dongchedi ma je na najwyższym poziomie, 340-370 atrybutów).
+Zamiast tego `extra.configuration.paramtypeitems` z 6-7 grupami technicznymi. Publiczny katalog
+Autohome dla tego samego `extra.configuration.specid` ma 11-12 grup — z fotelami, bezpieczeństwem
+i pakietami opcji. Zweryfikowane na trzech ofertach (73545 6→11, 66867 7→12, 66792 6→11).
+Zapytanie wysłane do auto-api 22.07, odpowiedź 27.07 = odmowa. Szczegóły: memory
+`reference_che168_api_obcina_wyposazenie`.
+
+## Wyposażenie — rozstrzygnięcie 2026-07-27
+
+**Odpowiedź auto-api (mail [156], 27.07 14:38):** pełnej konfiguracji che168 **nie ma i nie będzie**
+— nie zbierają tych grup, więc żaden endpoint ani plan tego nie da, a nasze 404 są zachowaniem
+zgodnym z projektem. Na pytanie o dodanie i o warunki płatne — **brak oferty**. Sugestia: pobierać
+z publicznego katalogu Autohome po `specid` i cache'ować („konfiguracja to cecha wersji, nie
+egzemplarza"). O obciętym `extra_prep` dongchedi (>inner_id ~24,34M) **nie odpowiedzieli**.
+
+**Sonda katalogu — wykonalne, z dwoma niespodziankami:**
+
+- `car.autohome.com.cn/config/spec/{specid}.html` → HTTP 200 wprost z Elary, bez proxy, 440-620 KB,
+  2-6 s. **23 grupy / 261-292 parametry** wobec 6-7 grup / 74-107 z API. Dane w czystym JSON
+  (`var config` / `var option`), struktura `paramtypeitems→paramitems→valueitems` **identyczna z API**.
+- **Niespodzianka 1: przestrzenie ID są rozłączne.** ID katalogu ≠ ID auto-api (1 wspólny ID na ~270,
+  i to z inną semantyką: 53 = `备胎规格` w API, `级别` w katalogu). `che168-param-map.php` się NIE
+  przenosi → most idzie po **nazwie CN**, nie po ID. Nazwy są stabilne (0 rozjazdów na 200 nazw
+  wspólnych dla 3 stron).
+- **Niespodzianka 2: obfuskacja — i da się ją zdjąć w całości.** ~46% nazw i ~4% wartości podmienione
+  na `<span class='hs_kwNN_*'>`, numeracja i sufiks **losowe per żądanie** (`configbc`/`configmy`,
+  `optionIA`/`optionaj`/`optionRK`). Deszyfrator to zaciemniony inline-JS; podmienia `getComputedStyle`,
+  żeby zablokować odczyt przez automatyzację przeglądarki, **ale generatora reguł CSS nie chroni**.
+  Uruchomienie tych bloków w Node ze stubem DOM i przechwycenie wstawianych reguł daje mapę
+  `hs_kwNN → znaki`: **292 parametry, zero nieodszyfrowanych znaków**. Bez przeglądarki, bez headless.
+
+**Skala (pomiar na 120 ofertach che168 w bazie):**
+
+| sytuacja | ofert | udział |
+|---|---|---|
+| bliźniak dongchedi z pełnym `extra_prep` (≥200 pól) → dziedziczenie wystarczy | 63 | 52,5% |
+| **brak bliźniaka → katalog Autohome jedynym źródłem** | **57** | **47,5%** |
+
+Argument dostawcy o „rzędach wielkości mniej specidów niż ofert" **nie potwierdza się**: 89 unikalnych
+`specid` na 99 ofert = 1,11 oferty na specid. Dla aut używanych prawie każdy egzemplarz to inna wersja
+lub rocznik. Cache pomaga mało teraz, więcej z czasem. Kontekst: napływ dongchedi runął (czerwiec 1809
+ofert → lipiec 81), che168 wzrósł (21 → 105) — udział „bez bliźniaka" będzie rósł, bo nowe modele
+z definicji nie mają odpowiednika w zamrożonej bazie dongchedi.
+
+**Wdrożone 2026-07-27:**
+
+| Element | Stan |
+|---|---|
+| Stemplowanie `specid` przy imporcie (ręcznym i sync) | ✅ adapter → `$data['spec_id']`, importer → `_asiaauto_spec_id` (obie ścieżki zapisu) |
+| Backfill istniejących ofert | ✅ 99 ze 120 (21 zwraca 404 — wygasły u źródła), 89 unikalnych specid |
+| Mapa katalog → `extra_prep` | ✅ `data/autohome-catalog-map.php` — 126 nazw CN → 129 kluczy |
+| Słownik | ✅ +9 etykiet PL, +wartość `选配 → Opcja` w `translations-extra-prep.php` |
+| Dolewka do oferty | ✅ `scripts/autohome-catalog-merge.php` (dolewa tylko brakujące, stempluje `_asiaauto_spec_catalog_*`) |
+| Test end-to-end na produkcji | ✅ oferta 390681: `extra_prep` 90 → 196, **88 pozycji wyposażenia po polsku** na karcie |
+
+**NIE wdrożone (świadomie, do decyzji po uruchomieniu synca):** skrypt fetch+decode jako plik w repo
+(dziś w scratchpadzie sesji), cache per `specid`, cron uzupełniania, wpięcie czegokolwiek w automat.
+
+**Reguła decyzyjna (uzgodniona, niezaimplementowana) — kolejność od najtańszego:**
+
+1. `extra_prep` ≥200 pól → nie ruszamy.
+2. Bliźniak exact (marka+seria+wersja+rocznik) z pełnym `extra_prep` → **dziedziczenie**. Zero
+   requestów i bogatsze: bliźniak Passion L miał **378 kluczy wobec 292 z katalogu**.
+3. Jest `_asiaauto_spec_id` → **katalog Autohome**. Dokładnie ta wersja, węższy zakres, koszt requestu.
+4. Brak obu → zostaje jak jest lub dziedziczenie luźne z konsensusem.
+
+⚠️ **Uwaga do planowania:** dziedziczenie **NIE jest wpięte w import ani sync** — nie ma po nim śladu
+w kodzie pluginu, `scripts/merge-spec-from-twin.php` odpala się ręcznie przez `wp eval-file`. Po
+włączeniu synca oferty che168 wpadną z samą techniką (~100 pól, zero wyposażenia), dopóki ktoś
+ręcznie czegoś nie odpali. Fetch katalogu świadomie NIE w trakcie importu: 450 KB, ~6 s, wymaga Node,
+może paść przy zmianie zabezpieczeń u źródła — nie może wywracać synca.
+
+**Katalog jako arbiter tożsamości modelu — nowe zastosowanie, natychmiast opłacalne.** auto-api dla
+`岚图追光` (Voyah Passion) zwraca w polu `model` dosłownie **„Zeekr"** — obcą markę. Importer wziął to
+dosłownie i założył serię „Zeekr" pod marką Voyah. Wykryte tylko dlatego, że katalog dla `specid` 59292
+pokazał `岚图追光 2024款 PHEV 四驱超长续航旗舰版` (seriesid 6915). Tytuł strony katalogu zawiera pełną
+nazwę wersji, więc przy każdym pobraniu dostajemy darmowy test spójności z nazwą od dostawcy —
+**warto logować rozjazd, zamiast ufać `model` z API**. Przy 105 ofertach che168/miesiąc to samo w sobie
+uzasadnia stemplowanie `specid`.
 
 **Decyzja czekająca na Ruslana:** filtr 31 miast ucina 81% dobrej podaży che168 (388 z 477 ofert
 w próbce). Największe wolumeny poza listą: Szanghaj, Wuhan, Chongqing, Chengdu, Shijiazhuang.
