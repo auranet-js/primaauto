@@ -2085,8 +2085,8 @@ return array (
   'ROX|Jishi 01' =>
   array (
     'mark_eu' => 'ROX',
-    'serie_eu' => '01',
-    'title_eu' => 'ROX 01',
+    'serie_eu' => '01 (PolarStone 01)',
+    'title_eu' => 'ROX 01 (PolarStone 01)',
     'slug' => '01',
   ),
   // AUDI E7X (上汽奥迪, premiera 2026.05) — dongchedi tego modelu NIE MA (kontrola 2026-07-27:
@@ -2102,25 +2102,28 @@ return array (
     'slug' => 'e7x',
   ),
 
-  // ─── v6.6 — 2026-07-27 (Kedi Shanchuan M7 — luksus na zamówienie, decyzja Ruslana) ───
-  // 克蒂汽车 to chiński karosernik przerabiający Toyotę Alphard na wersje VIP; dongchedi trzyma
-  // markę jako 'Kedi' (8 modeli: Shanchuan, Shengmufeng, Shanhe, Xueduibai, Diya, Bach, WALD,
-  // 翔翼 — reszta do domapowania, gdy Ruslan je weźmie), che168 romanizuje markę jako 'Kurti'.
-  // ŚWIADOMIE NIE pod marką Toyota: (a) to nie fabryczna Toyota, (b) che168 wrzucał to
-  // w term `serie` 'M7' współdzielony z 59 listingami (AITO M7 i inne) = skażony hub.
-  // DFS 2026-07-27 (PL/pl): 'kedi m7', 'kedi shanchuan', 'alphard chiny', 'toyota alphard
-  // chiny' = wszystkie bez danych; 'kedi' 390/mc to szum (tureckie „kot", film dokumentalny).
-  // Hub istnieje więc dla katalogu i sprzedaży na zamówienie, nie pod ruch z wyszukiwarki.
-  // DECYZJA JANKA 2026-07-27: marka zostaje **Toyota**, a 'Kedi Shanchuan' jest modelem —
-  // to nadal Alphard po przeróbce, a marka Toyota ma popyt ('toyota alphard' 2400/mc,
-  // 'alphard' 480/mc), którego 'Kedi' nie ma. Model NIE jest 'M7' (term `serie` 'M7' ma
-  // 59 listingów innych marek — hub mieszałby marki), więc własny term 'kedi-shanchuan'.
-  // Serie na poziomie MODELU, bez wersji: complectation ofert i tak wnosi „M7 3.5L …".
+  // ─── v6.6 — 2026-07-27 (Toyota KEDE Shanchuan — luksus na zamówienie, decyzja Ruslana) ───
+  // 克蒂汽车 = **KEDE** (własna nazwa angielska producenta, kede-auto.com; dawniej KRYSTAL,
+  // przejęte 2016) — chiński karosernik budujący luksusowe wersje VIP na bazie Toyoty.
+  // Oba API romanizują markę po swojemu i OBA błędnie: dongchedi 'Kedi', che168 'Kurti'.
+  // Dongchedi zna 8 modeli marki (Shanchuan, Shengmufeng, Shanhe, Xueduibai, Diya, Bach,
+  // WALD, 翔翼) — reszta do domapowania, gdy Ruslan je weźmie.
+  //
+  // Marka = **Toyota** (decyzja Janka): logo Toyoty jest na atrapie i na klapie (weryfikacja
+  // na zdjęciach oferty #390186), a 'toyota alphard' ma 2400/mc i 'alphard' 480/mc, kiedy
+  // każdy wariant 'kedi *' / 'kede *' = brak danych w DFS (PL/pl, 2026-07-27).
+  // Model NIE jest 'M7' — term `serie` 'M7' ma 59 listingów innych marek (AITO M7 i inne),
+  // hub mieszałby marki. Serie na poziomie MODELU, bez wersji: complectation ofert i tak
+  // wnosi „M7 3.5L …".
+  //
+  // NIE Alphard (korekta 2026-07-27): 阿尔法 = 'Alpha' (seria KEDE), Alphard po chińsku to
+  // 埃尔法. Dane to potwierdzają — napęd na tył, rozstaw osi 3210 mm, drzwi przesuwne =
+  // baza Hiace/Granvia (Alphard: przód napędowy, rozstaw 3000 mm).
   'Kedi|Kedi Shanchuan' =>
   array (
     'mark_eu' => 'Toyota',
-    'serie_eu' => 'Kedi Shanchuan',
-    'title_eu' => 'Toyota Kedi Shanchuan',
-    'slug' => 'kedi-shanchuan',
+    'serie_eu' => 'KEDE Shanchuan',
+    'title_eu' => 'Toyota KEDE Shanchuan',
+    'slug' => 'kede-shanchuan',
   ),
 );

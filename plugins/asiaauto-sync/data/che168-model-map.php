@@ -843,8 +843,8 @@ return array (
   'ROX|Extreme Stone 01' =>
   array (
     'mark_eu' => 'ROX',
-    'serie_eu' => '01',
-    'title_eu' => 'ROX 01',
+    'serie_eu' => '01 (PolarStone 01)',
+    'title_eu' => 'ROX 01 (PolarStone 01)',
     'slug' => '01',
   ),
   // 奥迪AUDI|奥迪E7X — marka i model czysto-CJK: strip w resolveChe168() zostawia model z CJK,
@@ -856,14 +856,14 @@ return array (
     'title_eu' => 'Audi E7X',
     'slug' => 'e7x',
   ),
-  // 克蒂山川 — che168 podaje markę jako 'Kurti' (dongchedi: 'Kedi'), model czysto-CJK, więc
+  // 克蒂山川 — che168 podaje markę jako 'Kurti', dongchedi 'Kedi' — marka to KEDE, model czysto-CJK, więc
   // reverse-index nie ma czego trafić. Bez override'u oferta lądowała jako Toyota|M7 (błędna
   // marka + term 'M7' współdzielony z 59 listingami). Para do sekcji v6.6 brand-mappingu.
   'Kurti|克蒂山川' =>
   array (
     'mark_eu' => 'Toyota',
-    'serie_eu' => 'Kedi Shanchuan',
-    'title_eu' => 'Toyota Kedi Shanchuan',
-    'slug' => 'kedi-shanchuan',
+    'serie_eu' => 'KEDE Shanchuan',
+    'title_eu' => 'Toyota KEDE Shanchuan',
+    'slug' => 'kede-shanchuan',
   ),
 );

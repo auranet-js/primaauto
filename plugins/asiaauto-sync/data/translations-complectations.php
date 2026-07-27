@@ -70,7 +70,7 @@ return array (
   '曜黑版' => 'Black Edition',
   '冠军纪念版' => 'Champion Edition',
   // Kedi Shanchuan (2026-07-27): bez tego segmentu zostawało samo „36" w tytule oferty.
-  '阿尔法36周年纪念版' => 'Alphard 36th Anniversary',
+  '阿尔法36周年纪念版' => 'Alpha 36th Anniversary',
   '冠军版' => 'Champion',
   '荣耀版' => 'Glory',
   '首发限量版' => 'First Edition Limited',

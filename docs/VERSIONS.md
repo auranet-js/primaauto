@@ -1,5 +1,43 @@
 # Historia wersji asiaauto-sync
 
+## 0.34.6 — 2026-07-27 (korekta nazw: KEDE + PolarStone 01, treść 3 hubów)
+
+**Dwie korekty nazewnictwa po weryfikacji u źródła (zgłoszone przez Janka):**
+
+1. **KEDE, nie Kedi.** Własna nazwa angielska producenta 克蒂汽车 to **KEDE** (kede-auto.com;
+   dawniej KRYSTAL, przejęte 2016). Oba API romanizują ją błędnie i różnie: dongchedi `Kedi`,
+   che168 `Kurti`. Hub: `/samochody/toyota/kedi-shanchuan/` → **`/samochody/toyota/kede-shanchuan/`**.
+2. **To nie Alphard.** `阿尔法` = `Alpha` (seria KEDE); Alphard po chińsku to `埃尔法`. Dane
+   potwierdzają: napęd na tył, rozstaw osi 3210 mm, drzwi przesuwne = baza Hiace/Granvia
+   (Alphard ma przód napędowy i rozstaw 3000 mm). Logo Toyoty jest na atrapie i klapie
+   (weryfikacja na zdjęciach oferty), więc marka `Toyota` zostaje.
+   `translations-complectations.php`: `Alphard 36th Anniversary` → **`Alpha 36th Anniversary`**.
+3. **PolarStone 01 w nawiasie** (decyzja Ruslana/Janka): `ROX 01` to nazwa międzynarodowa,
+   `PolarStone 01` (极石01) chińska. Konwencja jak `Leopard 5 (Denza B5)` — serie
+   `01 (PolarStone 01)`, slug `01` bez zmian.
+
+**Treść 3 hubów wg `docs/seo/hub-rework-method-2026-05-30.md`** (`_asiaauto_lead`,
+`_asiaauto_h1_suffix` = `cena w Polsce i import z Chin`, `_asiaauto_pl_availability` =
+`import_only` ×3, `asiaauto_wiki_body` z `{{LISTINGS_BAR}}`, `asiaauto_faq_json`,
+`_asiaauto_seo_rework` = `v1-2026-07-27`). Skrypt: `scripts/hub-content-rox-e7x-kede-2026-07-27.php`
+(gate przed zapisem: brak `"` w FAQ, `json_decode` przechodzi, diakrytyki obecne w FAQ/wiki/lead,
+token `{{LISTINGS_BAR}}` obecny). Tabela spec **nie** jest w wiki — renderuje się live
+z `extra_prep` (`class-asiaauto-spec`), zgodnie z reworkiem z 06-13.
+
+| Hub | lead | wiki | FAQ | H2 | title |
+|---|---|---|---|---|---|
+| ROX 01 (PolarStone 01) | 451 zn. | 4688 zn. | 6 Q | 12 | od 260 000 PLN |
+| Audi E7X | 398 zn. | 3979 zn. | 5 Q | 11 | od 303 000 PLN |
+| Toyota KEDE Shanchuan | 425 zn. | 4395 zn. | 5 Q | 12 | od 513 000 PLN |
+
+Smoke test curlem ×3: H1 z marką i sufiksem cenowym, lead widoczny, FAQPage parsuje
+(6/5/5 `acceptedAnswer`), token `{{LISTINGS_BAR}}` nie wycieka, tabela spec obecna.
+Stare URL-e (`kedi-shanchuan`) → 301 na nowe. Indexing: 3 URL-e hubów przez
+`~/bin/index-submit --project primaauto --yes` (świadome wejście w rezerwę o 3, ledger 103/100),
+oferty zgłoszone wcześniej hookiem publikacji.
+
+Backupy: `.bak-2026-07-27-kede` (3 pliki), `~/backups/primaauto/2026-07-27/termmeta-przed-trescia-hubow.sql`.
+
 ## 0.34.5 — 2026-07-27 (Toyota Kedi Shanchuan + trzy huby LIVE z ofertą)
 
 Domknięcie 0.34.4: trzeci model domapowany i wszystkie trzy huby wyszły z pustego stanu —
