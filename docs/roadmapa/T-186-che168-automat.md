@@ -1,9 +1,35 @@
 # T-186 — Che168 jako pełne, automatyczne drugie źródło
 
-> Status: **Fazy 1-2 ZROBIONE (2026-07-22, v0.34.2)** — sync wpięty w automat, 45 ofert w szkicach,
-> oba źródła wyłączone. **BLOKADA: czekamy na odpowiedź auto-api** w sprawie pełnej konfiguracji
-> che168 (`/offer` oddaje 6-7 grup technicznych, brak wyposażenia — patrz sekcja poniżej).
-> Domknięcie sesji: `docs/sesje/2026-07-22-che168-sync-wpiecie.md`.
+> Status: **Fazy 1-2 ZROBIONE + mapowania domknięte (2026-07-25, v0.34.3)** — sync wpięty
+> w automat, 69 ofert w szkicach, oba źródła wyłączone. **Trafialność w huby 98,4%** (gate
+> ze speca `<5% orphanów` PRZECHODZI), miasta bez tłumaczenia: 0, nieznane parametry: tylko
+> 2 celowo pominięte klucze. **BLOKADA: auto-api nadal nie odpisało** (zapytanie 22.07)
+> w sprawie pełnej konfiguracji che168 — `/offer` oddaje 7 grup technicznych i zero grup
+> wyposażenia, potwierdzone na 97 ofertach.
+> Domknięcia sesji: `docs/sesje/2026-07-22-che168-sync-wpiecie.md`,
+> `docs/sesje/2026-07-25-che168-sonda-mapowania.md`.
+
+## Stan po 2026-07-25 (v0.34.3) — grunt pod wpięcie przygotowany
+
+Sonda całej zaległości kanału **read-only** (59 811 zdarzeń, 14 min, zero zapisów do bazy,
+zero zdjęć, zero AI) → 246 ofert przechodzących filtr, z tego 208 w hubach (85%).
+Po domknięciu mapowań: **242/246 (98,4%)**, resztę stanowią świadome skipy ICE (Nissan).
+
+- **16 aliasów** w `che168-model-map.php` + **7 sygnatur** w `brand-mapping-v6.1.php` (v6.4).
+  Wszystkie 18 orphanów rozstrzygnięte pełną chińską nazwą wersji (`param_93`), nie „na oko".
+- **20 id parametrów** w `che168-param-map.php` + etykiety/kategorie/jednostki
+  w `translations-extra-prep.php`. Nieznane `param_*`: **457 → 194 wystąpień** (tylko celowe 92/93).
+- Naprawiony istniejący błąd: `支持` bez wpisu w `values` powodowało ciche znikanie
+  `quick_charge_interface` z karty (26/30 ofert próbki) — render wyrzuca wiersze z CJK.
+- Weryfikacja przez `translateExtraPrep()`: 104–107 wierszy specyfikacji, **zero CJK**.
+
+**⚠ Pułapka architektoniczna do zapamiętania:** alias w `che168-model-map.php` sam nie
+odblokowuje guardu. Adapter (`canonicalKeyForSource`) tłumaczy entry **z powrotem** na literalny
+klucz CN brand-mappingu przez `sigToKey()` — bez istniejącej sygnatury `mark_eu|serie_eu`
+zwraca surowe mark/model i guard odrzuca ofertę. Zmierzone: 11/18 bez sekcji v6.4, 18/18 z nią.
+
+**Kanał che168: ~19,5 tys. zdarzeń/dobę** (23.07: 19 780, 24.07: 19 111). Główny hamulec podaży
+to **filtr miast**, nie mapowania — `miasto` występuje niemal w każdej kombinacji powodów odrzutu.
 
 ## ⚠️ Kontekst decyzyjny (2026-07-14)
 

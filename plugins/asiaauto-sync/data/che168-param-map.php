@@ -155,4 +155,51 @@ return [
     89  => 'measured_braking',                   // 实测100-0km/h制动(m)
     107 => 'measured_range',                     // 实测续航里程(km)
     110 => 'first_owner_warranty',               // 首任车主质保政策
+
+    // ══ T-186 sonda kanału 2026-07-25: 20 id z audytu 97 ofert (457 wystąpień) ══
+    // Weryfikacja semantyczna przed zapisem: żaden wpis nie nadpisuje istniejącego klucza.
+    // Cztery id celują w klucze, które dongchedi JUŻ ma (nie dublujemy słownika);
+    // pozostałe 16 to nowe wielkości z etykietami dodanymi w translations-extra-prep.php.
+    // Świadomie BEZ mapowania (jak dotąd): 92 (长*宽*高 — duplikuje length/width/height),
+    // 93 (车型名称 — źródło tytułu i wersji, obsługiwane osobno w adapterze).
+
+    // ── Celują w istniejące klucze dongchedi ──
+    9   => 'compression_ratio_s',                // 压缩比 → 'Stopień sprężania' (klucz istnieje)
+    12  => 'engine_unique_tech',                 // 发动机特有技术 → 'Technologia silnika' (istnieje)
+    102 => 'electric_total_horsepower',          // 电动机(Ps), grupa 基本参数 — moc elektryczna w KM;
+                                                 // odpowiednik total_electric_power (id 59) w kW
+    140 => 'electric_total_horsepower',          // 电动机总功率(Ps), grupa 电动机 — ta sama wartość
+                                                 // co id 102, inna grupa (wzorzec 84/105)
+
+    // ── Nowe wielkości: moc i ładowanie ──
+    141 => 'electric_system_horsepower',         // 系统综合功率(Ps) — moc CAŁEGO układu w KM;
+                                                 // NIE electric_total_horsepower (to moc silników),
+                                                 // odpowiednik electric_system_power (id 77) w kW
+    147 => 'hv_fast_charge',                     // 高压快充 (支持) — ładowanie WYSOKONAPIĘCIOWE;
+                                                 // quick_charge_interface (id 145) to 快充功能
+    99  => 'measured_fast_charge_time',          // 实测快充时间(小时) — POMIAR; fast_charge_time
+                                                 // (id 84/105) to wartość katalogowa
+
+    // ── Nowe wielkości: zasięg i zużycie ──
+    149 => 'nedc_combined_range',                // NEDC综合续航(km) — zasięg ŁĄCZNY;
+                                                 // nedc_recharge_mileage (153/61) to czysto elektryczny
+    95  => 'nedc_fuel_consumption',              // NEDC综合油耗(L/100km)
+    113 => 'measured_fuel_consumption',          // 实测油耗(L/100km) — POMIAR (wzorzec measured_*)
+
+    // ── Nowe wielkości: nadwozie i terenowe ──
+    130 => 'min_clearance_unloaded',             // 空载最小离地间隙(mm) — prześwit BEZ ładunku;
+                                                 // min_clearance (id 34) to 满载 = z pełnym ładunkiem
+    132 => 'front_baggage_volume',               // 前备厢容积(L) — bagażnik PRZEDNI (frunk);
+                                                 // baggage_volume (id 39) to tylny
+    138 => 'max_wading_depth',                   // 最大涉水深度(mm)
+    135 => 'rampover_angle',                     // 纵向通过角(°) — obok approach_angle/departure_angle
+    136 => 'max_gradient_percent',               // 最大爬坡度(%) — nachylenie w PROCENTACH
+    137 => 'max_gradient_angle',                 // 最大爬坡角度(°) — ta sama cecha w STOPNIACH
+
+    // ── Nowe wielkości: silnik i napęd ──
+    7   => 'cylinder_bore',                      // 缸径(mm)
+    8   => 'piston_stroke',                      // 行程(mm)
+    63  => 'center_diff_struct',                 // 中央差速器结构 (多片离合器) — STRUKTURA;
+                                                 // center_diff_lock to blokada, inna cecha
+    127 => 'acceleration_time_50',               // 官方0-50km/h加速(s); acceleration_time (97) to 0-100
 ];

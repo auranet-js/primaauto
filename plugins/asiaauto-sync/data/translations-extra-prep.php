@@ -38,8 +38,10 @@ return [
                 'trailer_weight',
                 'length', 'width', 'height', 'wheelbase',
                 'front_track', 'rear_track', 'min_clearance',
+                'min_clearance_unloaded',
                 'curb_weight', 'full_load_weight',
                 'door_nums', 'seat_count', 'baggage_volume',
+                'front_baggage_volume',
                 'min_turning_radius', 'drag_coefficient',
             ],
         ],
@@ -51,6 +53,7 @@ return [
                 'system_max_power',
                 'engine_description', 'engine_model', 'capacity_l',
                 'cylinder_volume_ml', 'cylinder_nums', 'cylinder_arrangement',
+                'cylinder_bore', 'piston_stroke',
                 'valves_per_cylinder_nums', 'compression_ratio_s',
                 'gas_form', 'air_supply', 'oil_supply',
                 'cylinder_material', 'cylinder_head_material',
@@ -68,6 +71,8 @@ return [
             'keys'  => [
                 'fuel_form', 'fuel_label', 'oil_tank_volume',
                 'fuel_comprehensive', 'max_speed', 'acceleration_time',
+                'acceleration_time_50', 'nedc_fuel_consumption',
+                'measured_fuel_consumption',
             ],
         ],
 
@@ -78,7 +83,7 @@ return [
                 'gearbox_description', 'gearbox_type', 'stalls',
                 'driver_form', 'park_brake_type',
                 'gear_shift_mode_2', 'gear_shift_mode_6',
-                'engine_layout_form', 'center_diff_lock',
+                'engine_layout_form', 'center_diff_lock', 'center_diff_struct',
             ],
         ],
 
@@ -270,7 +275,8 @@ return [
             'label' => 'Nadwozie',
             'icon'  => 'dashicons-car',
             'keys'  => [
-                'approach_angle', 'departure_angle',
+                'approach_angle', 'departure_angle', 'rampover_angle',
+                'max_gradient_percent', 'max_gradient_angle', 'max_wading_depth',
                 'door_open_way', 'rear_exhaust', 'roof_racks',
                 'electric_back_door', 'hidden_door_handle',
                 'frameless_design_door', 'electric_spoiler',
@@ -291,6 +297,8 @@ return [
                 'electric_layout', 'fourwheel_drive_type',
                 'total_electric_power', 'total_electric_torque',
                 'electric_system_power', 'electric_system_torque',
+                'electric_system_horsepower', 'hv_fast_charge',
+                'measured_fast_charge_time', 'nedc_combined_range',
                 'front_electric_max_power', 'front_electric_max_torque',
                 'front_electric_max_horsepower',
                 'rear_electric_max_power', 'rear_electric_max_torque',
@@ -387,6 +395,26 @@ return [
         'measured_braking'        => 'Hamowanie 100-0 km/h (pomiar)',
         'measured_range'          => 'Zasięg rzeczywisty (pomiar)',
         'first_owner_warranty'    => 'Gwarancja pierwszego właściciela',
+
+        // ── Che168 2026-07-25 (sonda kanału, 16 nowych kluczy) ──
+        // Nazwy celowo rozróżniają warunek pomiaru, bo dane niosą oba warianty:
+        // prześwit bez/z ładunkiem, zasięg łączny/elektryczny, wartość katalogowa/pomiar.
+        'min_clearance_unloaded'     => 'Prześwit (bez ładunku)',
+        'front_baggage_volume'       => 'Bagażnik przedni (frunk)',
+        'rampover_angle'             => 'Kąt przejazdu',
+        'max_gradient_percent'       => 'Maks. nachylenie podjazdu',
+        'max_gradient_angle'         => 'Maks. kąt podjazdu',
+        'max_wading_depth'           => 'Głębokość brodzenia',
+        'cylinder_bore'              => 'Średnica cylindra',
+        'piston_stroke'              => 'Skok tłoka',
+        'center_diff_struct'         => 'Dyferencjał centralny',
+        'acceleration_time_50'       => '0-50 km/h',
+        'nedc_fuel_consumption'      => 'Spalanie (NEDC)',
+        'measured_fuel_consumption'  => 'Spalanie (pomiar)',
+        'electric_system_horsepower' => 'Moc układu (KM)',
+        'hv_fast_charge'             => 'Ładowanie wysokonapięciowe',
+        'measured_fast_charge_time'  => 'Czas ładowania szybkiego (pomiar)',
+        'nedc_combined_range'        => 'Zasięg łączny (NEDC)',
         // Basic
         'jb'                          => 'Klasa pojazdu',
         'car_body_struct'             => 'Typ nadwozia',
@@ -837,6 +865,20 @@ return [
         '标配'          => 'Tak',
         // '选配' (optional on new-car spec) is SKIPPED in translator code —
         // meaningless for used cars (unknown if car actually has the feature).
+
+        // ── Che168 2026-07-25: wartości bez tłumaczenia GINĄ w renderze ──
+        // translateExtraPrep() pomija wiersz, jeśli po tłumaczeniu wartość nadal ma CJK
+        // („frontend never shows raw Chinese"). Brak tych wpisów kosztował ciche znikanie
+        // gotowych już kluczy: 支持 stoi przy quick_charge_interface (26/30 ofert próbki),
+        // battery_swap i hv_fast_charge.
+        '支持'          => 'Tak',
+        '不支持'        => 'Nie',
+        // 中央差速器结构 (id 63) — struktura dyferencjału centralnego
+        '多片离合器'     => 'Sprzęgło wielotarczowe',
+        '电控多片离合器' => 'Sprzęgło wielotarczowe (sterowane elektronicznie)',
+        '托森式'        => 'Torsen',
+        '牙嵌式'        => 'Mechanizm zębaty',
+        '开放式'        => 'Otwarty',
 
         // Fuel
         '汽油'          => 'Benzyna',
@@ -1641,6 +1683,22 @@ return [
         'fast_charge_time'       => 'h',
         'electric_total_horsepower' => 'KM',
         'system_max_power'       => 'kW',
+
+        // ── Che168 2026-07-25 (sonda kanału, 16 nowych kluczy) ──
+        'min_clearance_unloaded'     => 'mm',
+        'front_baggage_volume'       => 'L',
+        'rampover_angle'             => '°',
+        'max_gradient_percent'       => '%',
+        'max_gradient_angle'         => '°',
+        'max_wading_depth'           => 'mm',
+        'cylinder_bore'              => 'mm',
+        'piston_stroke'              => 'mm',
+        'acceleration_time_50'       => 's',
+        'nedc_fuel_consumption'      => 'L/100km',
+        'measured_fuel_consumption'  => 'L/100km',
+        'electric_system_horsepower' => 'KM',
+        'measured_fast_charge_time'  => 'h',
+        'nedc_combined_range'        => 'km',
         'length'                      => 'mm',
         'width'                       => 'mm',
         'height'                      => 'mm',
