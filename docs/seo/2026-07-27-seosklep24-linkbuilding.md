@@ -94,7 +94,12 @@ Nie wysyłamy pytań doprecyzowujących o parametry usługi (dofollow, beztermin
 - model działania: pośrednictwo, nie komis i nie salon
 
 Treść maila (HTML): `https://auratest.pl/fe4f58fec53ctmp/primaauto-seosklep24-wytyczne-2026-07-27.html`
-Wysłany przez Janka 2026-07-27 jako `Re:` na wątek zamówienia.
+
+**Wysłany 2026-07-27 16:53** przez Janka jako `RE:` na wątek zamówienia (`kontakt@seosklep24.pl`).
+Zdjęcia z placu przekazane od razu jako link do folderu Google Drive:
+`https://drive.google.com/drive/folders/1cAsi0U7PZCMGmHh3YmmyPXOzGMv7JlLp?usp=sharing`
+
+Stan: czekamy na przyjęcie zlecenia i na teksty do akceptu przed publikacją.
 
 ## Pomiar
 
