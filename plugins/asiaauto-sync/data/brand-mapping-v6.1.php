@@ -688,13 +688,11 @@ return array (
     'title_eu' => 'Denza Z9 GT EV',
     'slug' => 'z9-gt-ev',
   ),
-  'Denza|N8L DM' => 
-  array (
-    'mark_eu' => 'Denza',
-    'serie_eu' => 'N8L',
-    'title_eu' => 'Denza N8L',
-    'slug' => 'n8l',
-  ),
+  // USUNIĘTY 2026-07-27: 'Denza|N8L DM' → serie_eu 'N8L' łapał ścieżkę /offers (lista podaje
+  // model „N8L DM") w kroku 0a resolveChe168 i kierował do pustego hubu /denza/n8l/ zamiast
+  // rankującego /denza/n8l-dm/. Bez tego wpisu krok 3 dokleja wariant napędu i kandydat
+  // „N8L DM" trafia przez reverse-index w 'Denza|Denza N8L DM' (serie_eu 'N8L DM'), czyli
+  // tam gdzie oferty dongchedi. Jeden hub na oba źródła.
   'Dongfeng Fengxing|Xinghai V9' => 
   array (
     'mark_eu' => 'Dongfeng',
@@ -2125,5 +2123,81 @@ return array (
     'serie_eu' => 'KEDE Shanchuan',
     'title_eu' => 'Toyota KEDE Shanchuan',
     'slug' => 'kede-shanchuan',
+  ),
+
+  // ─── 2026-07-27: Voyah Passion (追光) — sygnatury dla sigToKey() ───
+  // 追光 = Voyah Passion (nazwa eksportowa; wcześniej w projekcie pinyin „Zhuiguang").
+  // 追光L = Passion L — OSOBNY model (premiera XII 2025, seriesid 8259), nie wersja Passion.
+  'Voyah|岚图追光L' =>
+  array (
+    'mark_eu' => 'Voyah',
+    'serie_eu' => 'Passion L',
+    'title_eu' => 'Voyah Passion L',
+    'slug' => 'passion-l',
+  ),
+  'Voyah|岚图追光' =>
+  array (
+    'mark_eu' => 'Voyah',
+    'serie_eu' => 'Passion PHEV',
+    'title_eu' => 'Voyah Passion PHEV',
+    'slug' => 'passion-phev',
+  ),
+
+  // --- v6.7 (2026-07-28): Lynk & Co — sygnatury pod aliasy che168 ---------------------
+  // Guard importu (Sync::isMappedForImport → getEuForCn) czyta WYŁĄCZNIE ten plik, a miał
+  // tu tylko '900'. Huby 03/06/07 EM-P powstały fallbackiem translateModel z dongchedi
+  // (bez guarda), więc marka była na stronie, a sync che168 ją odrzucał.
+  // serie_eu = nazwa istniejących termów po rename 2026-07-28 (krótka, bez marki) —
+  // resolveSerieTermId trafia w nie po znormalizowanej nazwie, więc slugi lynk-co-03
+  // i lynk-co-08-em-p zostają nietknięte (zaindeksowane). 06 EM-P i Z10 utworzą się nowe.
+  'Lynk & Co|Lynk & Co 03' =>
+  array (
+    'mark_eu' => 'Lynk & Co',
+    'serie_eu' => '03',
+    'title_eu' => 'Lynk & Co 03',
+    'slug' => '03',
+  ),
+  'Lynk & Co|Lynk & Co 06 EM-P' =>
+  array (
+    'mark_eu' => 'Lynk & Co',
+    'serie_eu' => '06 EM-P',
+    'title_eu' => 'Lynk & Co 06 EM-P',
+    'slug' => '06-em-p',
+  ),
+  'Lynk & Co|Lynk & Co 08 EM-P' =>
+  array (
+    'mark_eu' => 'Lynk & Co',
+    'serie_eu' => '08 EM-P',
+    'title_eu' => 'Lynk & Co 08 EM-P',
+    'slug' => '08-em-p',
+  ),
+  'Lynk & Co|Lynk & Co Z10' =>
+  array (
+    'mark_eu' => 'Lynk & Co',
+    'serie_eu' => 'Z10',
+    'title_eu' => 'Lynk & Co Z10',
+    'slug' => 'z10',
+  ),
+  'Lynk & Co|Lynk & Co 07 EM-P' =>
+  array (
+    'mark_eu' => 'Lynk & Co',
+    'serie_eu' => '07 EM-P',
+    'title_eu' => 'Lynk & Co 07 EM-P',
+    'slug' => '07-em-p',
+  ),
+  'Lynk & Co|Lynk & Co Z20' =>
+  array (
+    'mark_eu' => 'Lynk & Co',
+    'serie_eu' => 'Z20',
+    'title_eu' => 'Lynk & Co Z20',
+    'slug' => 'z20',
+  ),
+  // Sygnatura pod alias che168 '领克10' (900 ma własną sygnaturę wyżej, w sekcji sprzed v6.7).
+  'Lynk & Co|Lynk & Co 10 EM-P' =>
+  array (
+    'mark_eu' => 'Lynk & Co',
+    'serie_eu' => '10 EM-P',
+    'title_eu' => 'Lynk & Co 10 EM-P',
+    'slug' => '10-em-p',
   ),
 );

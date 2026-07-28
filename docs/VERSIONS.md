@@ -1,5 +1,33 @@
 # Historia wersji asiaauto-sync
 
+## 0.34.8 — 2026-07-28 (Lynk & Co: mapowania + rename hubów, domknięcie luki 92 ofert, tr_val, naprawa JSON)
+
+**Mapowania Lynk & Co — 15 wpisów.** Brand-mapping miał tylko `900`; pozostałe huby powstały
+fallbackiem `translateModel` z dongchedi (bez guarda), więc marka była na stronie, a sync che168
+ją odrzucał. Dodane `03`, `06/07/08 EM-P`, `Z10`, `Z20` + aliasy CJK `领克900` i `领克10`
+(che168 podaje te dwa modele po chińsku, `领克` nie ma w `cnPrefix` resolvera — stąd sieroty).
+Mapy: `che168-model-map.php` 115→123, `brand-mapping-v6.1.php` 295→302, **0 wpisów zmienionych
+i usuniętych** (regresja dongchedi zero).
+
+**Rename hubów Lynk bez ryzyka SEO.** Filtr pokazuje `$term->name`, a H1/breadcrumb biorą
+`_serie_full_title` (fallback na nazwę), title/description są literalne w termmeta — więc
+skrócenie nazw (`03` zamiast „Lynk & Co 03") zmienia wyłącznie etykietę w filtrze. Slug nietknięty,
+zero 301. Przy okazji naprawiona podwojona marka w 2 tytułach (`ensureBrandPrefix` nie rozpoznawał
+marki w nazwie z encją `&amp;`).
+
+**Domknięcie luki: 92 oferty, 0 błędów** (`--pages=18`; przy domyślnych 6 stronach monitor
+pokazywał tylko 46). che168 publish 58→151. Huby: `900` 9→16, `03` 2→24, `08 EM-P` 1→8,
+`10 EM-P` 0→4, `Z20` 0→2.
+
+**`tr_val()` — częściowe dopasowanie tylko dla kluczy CJK.** Mapa ma jednoznakowe klucze
+łacińskie `L`/`V`/`H`/`W`, które trafiały w każdą wartość z tą literą (`800V` → „Widlasty (V)").
+Zasięg funkcji: `gearbox_description` i `car_body_struct` na spec-hubach.
+
+**14 ofert z nieparsowalnym `extra_prep`** odzyskanych parserem `fixBrokenFlatJson()` —
+5551 kluczy, 12 439 escape'ów, zapis przez `wp_slash` + `JSON_UNESCAPED_UNICODE`.
+
+Sesja: `docs/sesje/2026-07-28-che168-lynk-domkniecie-luki-trval.md`.
+
 ## 0.34.7 — 2026-07-27 (katalog Autohome jako źródło wyposażenia che168 + rebranding Passion)
 
 **Blokada wyposażenia che168 rozstrzygnięta.** auto-api odpisało 27.07: pełnej konfiguracji

@@ -88,6 +88,26 @@ return array (
     'title_eu' => 'Voyah Dream PHEV',
     'slug' => 'dream-phev',
   ),
+  // 2026-07-27: BŁĄD DANYCH auto-api — dla 岚图追光 (Voyah Passion) pole `model` zwraca
+  //             dosłownie "Zeekr" (obca marka). Zweryfikowane katalogiem: specid 59292 =
+  //             岚图追光 2024款 PHEV 四驱超长续航旗舰版, seriesid 6915 (Passion, nie Passion L 8259).
+  //             Bez tego aliasu importer zakłada serię "Zeekr" pod marką Voyah.
+  //             Override ślepy na napęd (jak VOYAH|Dreamer) — wariant EV wymagałby engine_type.
+  'VOYAH|Zeekr' =>
+  array (
+    'mark_eu' => 'Voyah',
+    'serie_eu' => 'Passion PHEV',
+    'title_eu' => 'Voyah Passion PHEV',
+    'slug' => 'passion-phev',
+  ),
+  // che168 podaje nazwę CN ze spacją przed literą wersji (dongchedi bez).
+  'VOYAH|岚图追光 L' =>
+  array (
+    'mark_eu' => 'Voyah',
+    'serie_eu' => 'Passion L',
+    'title_eu' => 'Voyah Passion L',
+    'slug' => 'passion-l',
+  ),
   // --- Aliasy nazw domowych — fala 2 (T-186, 2026-06-17, kolejne 50 ogłoszeń). ---
   'Li Auto|Li L6' =>
   array (
@@ -174,13 +194,14 @@ return array (
     'title_eu' => 'Denza Z9 GT DM-i',
     'slug' => 'z9-gt-dm-i',
   ),
-  'Denza|腾势N8L' =>
-  array (
-    'mark_eu' => 'Denza',
-    'serie_eu' => 'N8L',
-    'title_eu' => 'Denza N8L',
-    'slug' => 'n8l',
-  ),
+  // USUNIĘTY 2026-07-27: override 'Denza|腾势N8L' → serie_eu 'N8L' short-circuitował krok 0
+  // resolveChe168() i nie dopuszczał do kroku 3 (warianty napędu). Efekt: che168 budował
+  // drugi hub /samochody/denza/n8l/ (0 impresji w GSC) obok rankującego /n8l-dm/ (170 imp,
+  // poz. 4,4 na „denza n8l cena"), zasilanego przez dongchedi. Autohome nie zna serii
+  // „N8L DM" — 车型名称 to „腾势N8L 2025款 旗舰型", napęd siedzi w engine_type. Bez override
+  // ścieżka jest poprawna: strip 腾势 → 'N8L', engine plug-in hybrid → kandydat 'N8L DM'
+  // → reverse-index serie_eu trafia we wpis brand-mappingu 'Denza|Denza N8L DM'.
+  // N8L nie ma wariantu EV, więc rozbicie per-napęd i tak jest jednoelementowe.
   // che168 wariant nazwy "New Energy" (hybryda/EREV) → konsolidacja do istniejącego huba Tank 300.
   'Tank|Tank 300 New Energy' =>
   array (
@@ -865,5 +886,74 @@ return array (
     'serie_eu' => 'KEDE Shanchuan',
     'title_eu' => 'Toyota KEDE Shanchuan',
     'slug' => 'kede-shanchuan',
+  ),
+
+  // --- Lynk & Co (2026-07-28) — brand-mapping miał TYLKO '900', więc każda oferta che168
+  // na pozostałych modelach wypadała jako sierota (log: „niezmapowany model 'Lynk & Co|08 EM-P'").
+  // Klucze zweryfikowane przez getOffer(): che168 podaje model bez CJK ('03', '08 EM-P'),
+  // identycznie na /offers i /offer — brak rozjazdu endpointów jak przy N8L.
+  // Para dla każdego wpisu w brand-mappingu (sekcja v6.7) — bez niej guard i tak odrzuca.
+  'Lynk & Co|03' =>
+  array (
+    'mark_eu' => 'Lynk & Co',
+    'serie_eu' => '03',
+    'title_eu' => 'Lynk & Co 03',
+    'slug' => '03',
+  ),
+  'Lynk & Co|06 EM-P' =>
+  array (
+    'mark_eu' => 'Lynk & Co',
+    'serie_eu' => '06 EM-P',
+    'title_eu' => 'Lynk & Co 06 EM-P',
+    'slug' => '06-em-p',
+  ),
+  'Lynk & Co|08 EM-P' =>
+  array (
+    'mark_eu' => 'Lynk & Co',
+    'serie_eu' => '08 EM-P',
+    'title_eu' => 'Lynk & Co 08 EM-P',
+    'slug' => '08-em-p',
+  ),
+  'Lynk & Co|Z10' =>
+  array (
+    'mark_eu' => 'Lynk & Co',
+    'serie_eu' => 'Z10',
+    'title_eu' => 'Lynk & Co Z10',
+    'slug' => 'z10',
+  ),
+  // Klucze potwierdzone kolejką `asiaauto_che168_unmapped` (strumień 2026-07-27) — nie zgadywane.
+  'Lynk & Co|07 EM-P' =>
+  array (
+    'mark_eu' => 'Lynk & Co',
+    'serie_eu' => '07 EM-P',
+    'title_eu' => 'Lynk & Co 07 EM-P',
+    'slug' => '07-em-p',
+  ),
+  'Lynk & Co|Z20' =>
+  array (
+    'mark_eu' => 'Lynk & Co',
+    'serie_eu' => 'Z20',
+    'title_eu' => 'Lynk & Co Z20',
+    'slug' => 'z20',
+  ),
+  // che168 podaje 900 i 10 po CHIŃSKU (reszta gamy po angielsku). Resolver nie ma '领克'
+  // w liście cnPrefix (krok 1), więc model zostaje z CJK i wypada jako sierota — mimo że
+  // '900' ma sygnaturę w brand-mappingu od dawna. Skutek: hub /lynk-co/900/ (2172 imp,
+  // 84 kliki w GSC 90 dni) miał wyłącznie oferty dongchedi, a 7 ofert che168 stało pod filtrem.
+  // Sonda 18 stron magazynu 2026-07-28: 领克900 = 28 szt (7 przez filtr), 领克10 = 17 szt (4).
+  'Lynk & Co|领克900' =>
+  array (
+    'mark_eu' => 'Lynk & Co',
+    'serie_eu' => '900',
+    'title_eu' => 'Lynk & Co 900',
+    'slug' => '900',
+  ),
+  // 领克10 = sedan PHEV „10 EM-P" (wiki hubu: 5050 mm, 1.0 163 KM + 367 KM elektryczne).
+  'Lynk & Co|领克10' =>
+  array (
+    'mark_eu' => 'Lynk & Co',
+    'serie_eu' => '10 EM-P',
+    'title_eu' => 'Lynk & Co 10 EM-P',
+    'slug' => '10-em-p',
   ),
 );
