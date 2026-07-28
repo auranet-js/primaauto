@@ -99,7 +99,34 @@ Treść maila (HTML): `https://auratest.pl/fe4f58fec53ctmp/primaauto-seosklep24-
 Zdjęcia z placu przekazane od razu jako link do folderu Google Drive:
 `https://drive.google.com/drive/folders/1cAsi0U7PZCMGmHh3YmmyPXOzGMv7JlLp?usp=sharing`
 
-Stan: czekamy na przyjęcie zlecenia i na teksty do akceptu przed publikacją.
+## Przebieg korespondencji
+
+**2026-07-28 11:33 — odpowiedź dostawcy.** Zaproponowali wybór modelu realizacji:
+
+- **wariant A** — przyjmują nasze tematy i anchory, teksty piszą ich agenci AI, przed
+  publikacją przysyłają do poprawek;
+- **wariant B** — własny research long-tail na bazie naszych tematyk, sami dobierają tematy
+  (ich standardowy model realizacji).
+
+Przyznali wprost, że treści pisze AI i „mogą zdarzyć się informacje niepotwierdzone lub
+błędne" — korekta faktograficzna po naszej stronie niezależnie od wariantu. Zdjęcia przyjmą
+jako grafiki wyróżniające.
+
+**2026-07-28 18:04 — wybraliśmy wariant A.** Uzasadnienie: research long-tail dostawcy
+optymalizuje artykuł pod frazy, na które zarankuje **ich** portal — ten ruch trafia do nich,
+nie do nas. Z tego zakupu potrzebujemy kontekstu semantycznego wokół linku: pięć tekstów
+o markach wokół linku do `/marki/`, pięć o imporcie wokół linku do strony głównej. Oddanie
+doboru tematów oznaczałoby dziesięć wariantów „jak sprowadzić auto z Chin" i anchor
+`chińskie marki samochodów` w poradniku o cle.
+
+W odpowiedzi poprosiliśmy o: wykorzystanie ich researchu **wewnątrz** naszych tematów (frazy
+poboczne, śródtytuły), zachowanie przypisania anchor → URL 1:1, zdjęcia także w treści
+artykułu (nie tylko jako grafika wyróżniająca). Treść:
+`https://auratest.pl/fe4f58fec53ctmp/primaauto-seosklep24-odpowiedz-wariant-a-2026-07-28.html`
+
+Stan: czekamy na teksty do weryfikacji. Zadeklarowany zwrot: 1–2 dni robocze. Przy weryfikacji
+sprawdzamy warstwę faktograficzną (przypisanie modeli do marek, struktura właścicielska
+koncernów, dostępność modeli w Polsce) **oraz czy każdy anchor trafił pod właściwy URL**.
 
 ## Pomiar
 
