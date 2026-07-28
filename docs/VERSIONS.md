@@ -1,5 +1,109 @@
 # Historia wersji asiaauto-sync
 
+## 0.34.10 — 2026-07-28 (rodzina GAC: Aion Hyper → Hyptec, rename rozstrzygnięty wolumenami)
+
+**Decyzja nazewnicza podjęta na zachowaniu użytkowników, nie na rebrandingu producenta.**
+To rozróżnienie jest sednem wpisu: fakt, że GAC przemianował 昊铂 z „Aion Hyper" na „Hyptec",
+niczego sam nie dowodzi — ludzie nie muszą iść za producentem. Dowodem są **zliczone zapytania**
+(Google Ads search volume, PL, 2026-07-28):
+
+| model | warianty „Hyptec" | warianty „Aion Hyper / Hyper" |
+|---|---|---|
+| HT | 2300 | 50 |
+| HL | 890 | 30 |
+| SSR | 280 | 170 |
+| GT | 40 | 40 |
+| A800 | 30 | 0 |
+| **razem** | **3540/mc** | **210/mc** |
+
+Trend 12 mies. pokazuje samą **migrację zachowań**, nie stan: „aion hyper ssr" 70→10 przy
+jednoczesnym „hyptec ssr" 40→320. Szczyt „gac hyptec ht" = 3600 we wrześniu 2025 (premiera PL),
+dziś 390–880/mc. Kontrole niezależne: Wikipedia PL ma osobne hasła Hyptec HT/HL/SSR/GT;
+west-motors (konkurent w tym samym modelu biznesowym) pisze „GAC Hyptec HL **z Chin**";
+SERP na „gac aion hyper ht" zwraca wyłącznie strony z „Hyptec" w tytule.
+
+**Dlaczego 0.34.9 poszło w drugą stronę:** oparłem się na GSC, gdzie „hyptec" miało 0 wyświetleń.
+To błędne koło — GSC pokazuje tylko frazy, na których **już się wyświetlamy**, a nie wyświetlaliśmy
+się na „hyptec", bo nie mieliśmy tak nazwanych hubów. **Reguła na przyszłość: GSC nie odpowiada
+na pytanie „jak nazwać coś, czego jeszcze nie mamy" — do tego służą wolumeny rynkowe.**
+
+**Zakres:** 5 termów (nazwa + slug `hyper-*`→`hyptec-*` + `_serie_full_title`), 12 tytułów ofert,
+`postmeta.serie`, treść termmeta (wiki/FAQ/lead/seo_desc/schema Brand), oba pliki mapowań
+(18 + 15 podmian, klucze CN **nietknięte** — z API nadal przychodzi `GAC Aion Hyper|Hyper *`
+i `Hyper|HT`), regen title hubów. Backup: `~/backups/primaauto/2026-07-28-hyptec-rename/`.
+
+**Alias zachowany świadomie.** Do wiki 4 hubów dopisany akapit „GAC Hyptec X a GAC Aion Hyper X —
+czy to ten sam samochód?". Przy SSR (170/mc) i GT (40/mc) stara nazwa nadal ma realny wolumen,
+bo tam żyje archiwum wideo sprzed rebrandingu. GT nie ma `wiki_body` — pominięty, do fali treści.
+
+**Redirecty:** V62 odwrócone (`hyper-*` → `hyptec-*`, 5 wpisów), V63 `hyper/ht` przecelowane.
+Dodatkowo V63 dla `gac-aion-hyper/hyper-*` — bez tego stare URL-e z GSC (m.in. `/gac-aion-hyper/hyper-ssr/`,
+16 wyświetleń) robiły **łańcuch 301→301** przez V61. Teraz jeden skok.
+
+**Smoke test:** 5 nowych hubów 200, 10 starych ścieżek 301 pojedynczym skokiem, oferty z tytułem
+„GAC Hyptec …", sitemapy wyłącznie z `hyptec-*`, alias renderuje się w treści, iCAR nietknięty.
+Kontrola resztek: 0 postów ze starą nazwą, 0 metadanych `serie` ze starym slugiem.
+
+**Znalezisko poboczne (NIE naprawione, czeka na decyzję):** `_asiaauto_spec_snapshot` ma
+**rozwalony JSON we wszystkich 341 termach** — `update_term_meta()` przepuszcza wartość przez
+`wp_unslash()`, co zjada backslashe z `wp_json_encode()` (`\"` → `"`). To ten sam mechanizm co
+przy escape'ach unicode. Skutek: `AsiaAuto_Spec::getSnapshot()` zwraca null wszędzie, więc fallback
+dla hubów z `count=0` nie działa. Gate indeksacji jest bezpieczny — mierzy `strlen()`, nie parsuje.
+Stan zastany, potwierdzony w backupie sprzed renamu.
+
+## 0.34.9 — 2026-07-28 (GAC Aion Hyper: scalenie efemerycznej marki „Hyper", 5 mapowań, kolejność V63/V61)
+
+> **UWAGA — uzasadnienie nazewnicze w tym wpisie zostało obalone tego samego dnia.**
+> Kierunek scalenia (`hyper-*` jako kanoniczny) oparłem na GSC, co było błędnym kołem.
+> Rozstrzygnięcie na danych o zachowaniu użytkowników: patrz **0.34.10**. Wpis zostaje
+> jako zapis przebiegu, nie jako obowiązujący stan.
+
+**Punkt wejścia:** oferta che168 `hyper-ht-2025-390660` wylądowała pod własną marką „Hyper"
+zamiast pod GAC. Przyczyna: che168 podaje tę markę **zlatynizowaną** (`mark='Hyper'`,
+`model='HT'`, nie CJK), a mapowania jej nie znały → sierota. Ofertę wprowadzono **ręcznie
+z panelu**, a ta ścieżka (`Admin_Che168_Import::ajaxImport`) liczy flagę `mapped` i wyświetla
+„❌ sierota", ale **nie blokuje** importu — bramkami są tylko `importEnabled`, duplikat
+i `isEmptyShell`. Sync ma guard (`isMappedForImport`) i by tego nie wpuścił; niezależnie od tego
+kanał che168 i tak stoi na filtrach konfiguracyjnych. Automat nie mógł tego zrobić — zrobił to
+ręczny import na sierocie.
+
+**Cała rodzina Aion Hyper była sierotą brand-mappingu.** Jedyny wpis (`GAC Aion Hyper|Hyptec HT`)
+celował w slug `hyptec-ht`, którego nie używał żaden listing. Skutek uboczny: importer budował
+`post_title` z surowego mark+model, stąd **9 tytułów z duplikacją** „GAC Aion Hyper **Hyper** HT".
+
+**Kierunek scalenia rozstrzygnięty danymi, nie nazwą producenta.** Międzynarodowo marka to
+dziś Hyptec, ale w GSC (90 dni) „hyptec" ma **0 zapytań**, a „aion hyper ht" / „gac aion hyper"
+12 wyświetleń; `hyper-ht` ma 5 ofert i wygenerowaną treść hubu, `hyptec-ht` miał 0 ofert.
+Kanoniczny jest więc `hyper-*`, a `hyptec-ht` poszedł do kasacji.
+
+**Mapowania (+10 wpisów, 0 zmienionych, 0 usuniętych):** `brand-mapping-v6.1.php` sekcja v6.8 —
+`GAC Aion Hyper|Hyper {HT,HL,GT,SSR,A800}` → GAC / `Aion Hyper *`; `che168-model-map.php` —
+`Hyper|{HT,HL,GT,SSR,A800}` (5 aliasów prewencyjnych, nie tylko HT z bieżącej oferty).
+Stary wpis `Hyptec HT` przeniesiony **na koniec pliku** i przecelowany na `hyper-ht`: `sigToKey()`
+bierze PIERWSZY klucz dla sygnatury `GAC|Aion Hyper HT`, więc kolejność w pliku decyduje,
+czym adapter che168 podmienia mark/model.
+
+**DB:** listing 390660 → make `gac` + serie `hyper-ht` (relacje, meta, title); 9 tytułów
+`REPLACE('GAC Aion Hyper Hyper ')` + 2 warianty `GAC Hyper HL` → `GAC Aion Hyper HL`;
+skasowane termy `serie/HT` (7202), `make/Hyper` (7174), `serie/Hyptec HT` (6529).
+Recount: GAC 32→33, Aion Hyper HT 4→5. Backup: `~/backups/primaauto/2026-07-28-hyper-gac-merge/`.
+
+**Redirecty + zmiana kolejności hooków.** `V61['hyper'=>'gac']`, `V62['gac']['hyptec-ht'=>'hyper-ht']`,
+`V63['hyper']['ht'=>['gac','hyper-ht']]`. Przy okazji wyszła **pułapka projektowa**:
+`redirectV63MakeSerieMoves` był rejestrowany PO `redirectV61Brands` (oba priorytet 0), więc
+marka obecna w obu mapach traciła człon serii — `/samochody/hyper/ht/` poleciałoby na
+`/samochody/gac/ht/` (404). V63 przeniesiony na **priorytet -1** (reguła bardziej szczegółowa
+przed ogólną). iCAR nietknięty — jego `old_make` (`chery`) nie występuje w V61, smoke test 301 OK.
+
+**Smoke test:** `/oferta/hyper-ht-2025-390660/` 200 (title „GAC Aion Hyper HT Max 825 2025"),
+`/samochody/gac/hyper-ht/` 200 (5 sztuk po `regen_hub_titles`), `/samochody/hyper/ht/` →
+`gac/hyper-ht` 301, `/samochody/hyper/` → `gac` 301, `/samochody/gac/hyptec-ht/` → `gac/hyper-ht` 301,
+`/samochody/chery/icar-03/` → `icar/03` 301. Sitemapy taksonomii: zero martwych URL-i.
+
+**Zostawione świadomie:** slug oferty `hyper-ht-2025-390660` bez zmian (URL zgłoszony do Indexing
+API 27.07 — rename oznaczałby zbędny 301); treść wiki/FAQ hubu `hyper-ht` nadal mówi
+„4 egzemplarzy" (LLM-content z 28.04, do fali regeneracji, nie do ręcznej łatki).
+
 ## 0.34.8 — 2026-07-28 (Lynk & Co: mapowania + rename hubów, domknięcie luki 92 ofert, tr_val, naprawa JSON)
 
 **Mapowania Lynk & Co — 15 wpisów.** Brand-mapping miał tylko `900`; pozostałe huby powstały
