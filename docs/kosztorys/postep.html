@@ -66,7 +66,7 @@ footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line);
 <header class="top">
 <h1>Prima Auto — postęp prac i plan rozwoju</h1>
 <div class="sub">Platforma importu samochodów z Chin · primaauto.com.pl · opracowanie: Auranet (Jan Schenk)</div>
-<div class="stamp">Stan na 27.07.2026 · dokument roboczy, aktualizowany na bieżąco wraz z postępem prac</div>
+<div class="stamp">Stan na 29.07.2026 · dokument roboczy, aktualizowany na bieżąco wraz z postępem prac</div>
 </header>
 
 <div class="cols">
@@ -76,6 +76,16 @@ footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line);
 <table>
 <thead><tr><th>Data</th><th>Praca</th><th class="num">Godziny [h]</th></tr></thead>
 <tbody>
+<tr>
+<td class="data-col">29.07.2026</td>
+<td><strong>Auta dodane ręcznie 28.07 — uporządkowanie marek, uzupełnienie danych i strony modeli</strong> <div class="opis">Sprawdziliśmy jedenaście aut dodanych ręcznie poprzedniego dnia. Cztery z nich trafiły pod nieistniejące marki i ich strony modeli nie otwierały się wcale — Google widziało komunikat o braku strony. Przyczyna: przy autach marek, których wcześniej nie mieliśmy w bazie, system zakłada markę sam, z chińskiej nazwy. Naprawione i zabezpieczone na przyszłość: te marki są już opisane w słowniku systemu, więc kolejne auta wejdą poprawnie.
+
+Przy okazji poprawiliśmy nazwy modeli pod to, czego ludzie realnie szukają w Google. Dwa pickupy Fotona były opisane chińską nazwą Mars — na eksport te same auta nazywają się Tunland V9 i V7, a tej nazwy szuka się w Polsce kilkadziesiąt razy częściej. Rozdzieliliśmy też auto Dongfenga: strona modelu stała pod marką Mengshi, której prawie nikt nie wpisuje, podczas gdy nazwy M-Hero szuka się regularnie. Stare adresy przekierowane, żeby nic nie zginęło z dotychczasowej pozycji w Google.
+
+Uzupełniliśmy dane techniczne wszystkich jedenastu aut. Chiński dostawca przy autach dostawczych i pickupach oddaje niemal puste specyfikacje — jedno auto miało dosłownie jedną pozycję. Pobraliśmy pełne dane z katalogu producenta i rozszerzyliśmy słownik tłumaczeń parametrów, dzięki czemu auta użytkowe mają teraz od 43 do 93 pozycji zamiast kilku, a osobowe od 120 do 181. To działa również dla wszystkich przyszłych aut.
+
+Osiem nowych stron modeli dostało pełny opis: wstęp z ceną, sekcje o dostępności w Polsce, wyposażeniu i porównaniu z europejską konkurencją oraz pytania i odpowiedzi. Przy Mercedesie EQE SUV pokazujemy wprost różnicę: w polskim salonie od 436 400 zł, u nas 262 000 zł. Przy vanie Toyoty opisaliśmy jawnie, że nadwozie ma podwyższony dach od chińskiego producenta zabudów — kupujący powinien to wiedzieć przed obejrzeniem auta. Wszystkie zmienione strony zgłoszone do Google.</div></td>
+<td class="num">1</td></tr>
 <tr>
 <td class="data-col">27.07.2026</td>
 <td><strong>Umowa leasingowa i aneks VIN — analiza dokumentów, regulamin usługi i strona o depozycie</strong> <div class="opis">Przeanalizowaliśmy podpisany egzemplarz umowy leasingowej oraz wzorzec aneksu VIN i ustaliliśmy, jak obie rzeczy mają działać w systemie: drugi szablon umowy generowany obok obecnego (treść bez zmian, tylko nasz skład), aneks VIN uzupełniający już wygenerowaną umowę oraz osobny status informujący o nim klienta. Przy okazji prac nad płatnością online sprawdziliśmy dokumenty prawne na stronie — okazało się, że oba regulaminy od prawnika dotyczą wyłącznie korzystania ze strony, a opublikowany mówi wprost, że usługi są nieodpłatne. Nie ma dokumentu opisującego samą usługę i depozyt, co blokuje uruchomienie płatności BLIK/kartą. Przygotowaliśmy treść regulaminu usługi oraz stronę wyjaśniającą klientowi depozyt (czym jest, kiedy wraca, komu płaci, faktura VAT) — obie czekają na akceptację i weryfikację prawnika. Zaplanowaliśmy też, jak ma wyglądać płatność depozytu: przycisk pojawia się od razu po potwierdzeniu zamówienia, z informacją, że zgłoszenia z opłaconym depozytem realizujemy w pierwszej kolejności.</div></td>
@@ -155,7 +165,7 @@ Efekt bez wsparcia reklamowego: w dwie doby filmy zebrały ponad 3800 wyświetle
 <td><strong>Reklamy dynamiczne Google (DSA) — celowanie w najtańsze oferty</strong> <div class="opis">Feed reklam przestawiony ze stron modeli na najtańszą aktualną ofertę każdego modelu, z automatyczną codzienną aktualizacją. Do tego nowa treść reklamy (wymiana jednej z dwóch kreacji).</div></td>
 <td class="num">3</td></tr>
 </tbody>
-<tfoot><tr><td colspan="2">Razem od spotkania 16.07.2026</td><td class="num">67</td></tr></tfoot>
+<tfoot><tr><td colspan="2">Razem od spotkania 16.07.2026</td><td class="num">68</td></tr></tfoot>
 </table>
 
 </section>
