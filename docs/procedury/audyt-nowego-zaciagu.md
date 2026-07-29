@@ -184,6 +184,24 @@ Zysk zmierzony 29.07 (mapa 125 → 218 nazw): oferty użytkowe 1–12 → 43–9
 
 Brak `spec_id` = niepełna odpowiedź API („pusta wydmuszka") → oferta do ponownego zaciągu.
 
+### Wersja egzemplarza — z tego samego katalogu
+
+Te same oferty, które mają chude wyposażenie, nie mają też **wersji** (`_asiaauto_complectation`),
+bo che168 jej nie podaje. Objaw: tytuł kończy się na roczniku („Maxus V70 2026") zamiast nieść
+wersję. Źródłem jest **tytuł strony katalogu Autohome**:
+
+```
+【{seria} {rok}款 {WERSJA}参数配置表】价格单_{marka}_汽车之家
+```
+
+Tłumacz ręcznie — `translateComplectation()` nie zna słownictwa użytkowego:
+`长箱` = długa skrzynia, `短轴低顶` = krótki rozstaw / niski dach, `启航版` = Launch,
+`标轴旗舰型` = standardowy rozstaw / Flagship.
+
+Po uzupełnieniu przelicz tytuły. **Trzymaj meta title w 61–73 znakach** — tyle ma zastana baza po
+T-203 v3/v4; rozwlekła wersja wypycha tytuł do 86–90 i Google go przycina. Wersja **nie wchodzi
+do sluga** (`sanitize_title(marka serie rok)`), więc jej zmiana nie generuje 301.
+
 ---
 
 ## Krok 4 — treść hubów
@@ -224,6 +242,7 @@ Pipeline: `tmp/deploy-hub.php <config.json>` (wiki + FAQ + lead + `pl_availabili
 | huby: HTTP + render | 200, brak „Nie znaleziono", `aa-spec`, `FAQPage` |
 | H1 | `{Marka} {Model} — cena w Polsce i import z Chin` |
 | title | `{Marka} {Model} — od X PLN, N sztuk \| Import z Chin \| Prima-Auto` |
+| tytuł oferty | niesie wersję, nie kończy się na roczniku; meta title 61–73 znaków |
 | stare URL-e | 301, nie 404 |
 | mapowania | `getOffer → normalize → getEuForCn` zwraca EU dla wszystkich |
 | mapy | wobec backupu: zmienionych 0, usuniętych 0 |
