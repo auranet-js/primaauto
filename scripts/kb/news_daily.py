@@ -328,21 +328,44 @@ def build_draft(cand, makes, rate, system_prompt, series=None):
     return draft
 
 
-def extract_gallery_images(html):
+def extract_gallery_images(html, cover_url=None):
     """Zdjęcia treści artykułu (WP galeria/inline, klasa wp-image-N) — bez avatarów
     i kafli 'related posts'. Obsługuje zarówno klasyczny <img class="wp-image-N" src="...">
     (CarNewsChina), jak i lazy-load <picture class="wp-image-N">...</picture><noscript><img
     src="..."></noscript> (CNEVPost i inni z lazy-loadingiem — bez tego src to placeholder
     data:image/svg, nie prawdziwy URL). Zwraca URL-e w kolejności występowania, bez
-    duplikatów (te same zdjęcie w różnych rozmiarach srcset liczy się raz)."""
+    duplikatów (te same zdjęcie w różnych rozmiarach srcset liczy się raz).
+
+    Trzecia ścieżka (28.07): CNEVPost przestał znakować galerię klasą wp-image — zdjęcia
+    siedzą w gołym <figure> bez klasy, więc obie ścieżki wyżej zwracały pustkę i news
+    "oficjalne zdjęcia Da Han" wyszedł z samym coverem. Sam <figure> to za mało jako
+    kryterium (electrive trzyma tak logo i teasery cudzych artykułów), dlatego bierzemy
+    wyłącznie zdjęcia z TEJ SAMEJ PARTII co cover: ten sam katalog uploadów i wspólny
+    prefiks nazwy >= 10 znaków (2026072708452271 vs 2026072708452528; byd_da_han_official
+    vs byd_da_han_official-1..5). Zweryfikowane 28.07 na CNEVPost 5/5, CarNewsChina 5/5,
+    electrive 0/3 (poprawnie odrzucone teasery), InsideEVs bez <figure> — bez zmian."""
     if not html:
         return []
     urls, seen = [], set()
 
+    def full_size(url):
+        return re.sub(r"-\d+x\d+(?=\.\w+$)", "", url)  # miniatura -480x270 -> oryginał
+
+    def same_batch(a, b, minlen=10):
+        if a.rsplit("/", 1)[0] != b.rsplit("/", 1)[0]:
+            return False
+        stem = lambda u: u.rsplit("/", 1)[-1].split("?")[0].rsplit(".", 1)[0]
+        n = 0
+        for x, y in zip(stem(a), stem(b)):
+            if x != y:
+                break
+            n += 1
+        return n >= minlen
+
     def add(url):
         if not url or url.startswith("data:"):
             return
-        key = re.sub(r"-\d+x\d+(?=\.\w+$)", "", url)  # ignoruj sufiks rozmiaru (-800x450)
+        key = full_size(url)  # ignoruj sufiks rozmiaru (-800x450)
         if key in seen:
             return
         seen.add(key)
@@ -361,6 +384,24 @@ def extract_gallery_images(html):
         nm = re.search(r'<noscript>\s*<img\b[^>]*\bsrc="([^"]+)"', m.group(1))
         if nm:
             add(nm.group(1))
+
+    # Galeria w gołym <figure> (CNEVPost od ~07.2026) — tylko partia covera, patrz docstring
+    if cover_url:
+        base = full_size(cover_url)
+        for m in re.finditer(r"<figure\b[^>]*>(.*?)</figure>", html, re.S):
+            blk = m.group(1)
+            nm = re.search(r'<noscript>\s*<img\b[^>]*\bsrc="([^"]+)"', blk)
+            src = nm.group(1) if nm else None
+            if not src:
+                for im in re.finditer(r'<img\b[^>]*\bsrc="([^"]+)"', blk):
+                    if not im.group(1).startswith("data:"):
+                        src = im.group(1)
+                        break
+            if not src or src.lower().split("?")[0].endswith(".svg"):
+                continue
+            src = full_size(src)
+            if same_batch(base, src):
+                add(src)
 
     return urls
 
@@ -474,7 +515,7 @@ def publish_wp_post(draft, post_date=None):
     body_html = draft["body_html"]
     extra_att_ids = []
     if source_html:
-        gallery = [u for u in extract_gallery_images(source_html) if u != cover_url]
+        gallery = [u for u in extract_gallery_images(source_html, cover_url) if u != cover_url]
         extra_figures = []
         slug = draft.get("slug") or "news"
         for i, url in enumerate(pick_spaced(gallery, 2), start=1):
@@ -586,6 +627,9 @@ def main():
                     help="okno wieku kandydatów w godzinach (default 36; większe = uzupełnianie archiwum)")
     ap.add_argument("--backdate", action="store_true",
                     help="data wpisu = data artykułu źródłowego (do uzupełniania archiwum)")
+    ap.add_argument("--url", nargs="+", metavar="URL",
+                    help="publikuj wskazane artykuły zamiast radaru+selekcji LLM (temat na życzenie). "
+                         "Pomija filtr seen i okno wieku; URL musi być obecny w którymś z feedów RSS.")
     args = ap.parse_args()
 
     if (kb.STATE_DIR / "DISABLED").exists():
@@ -599,15 +643,33 @@ def main():
     seen_set = set(seen["guids"])
 
     candidates = []
-    for name, url in FEEDS:
-        items = parse_feed(name, url)
-        fresh = [i for i in items
-                 if i["guid"] not in seen_set
-                 and (now - dt.datetime.fromisoformat(i["ts"])).total_seconds() < args.max_age_h * 3600]
-        print(f"  [{name}] {len(items)} w feedzie, {len(fresh)} świeżych nowych", flush=True)
-        candidates += fresh
+    if args.url:
+        # Tryb ręczny: Janek wskazuje konkretny temat. Bez filtra seen (chcemy móc wrócić
+        # do newsa odrzuconego wcześniej przez fact-check) i bez okna wieku.
+        pool = []
+        for name, url in FEEDS:
+            pool += parse_feed(name, url)
+        by_link = {i["link"].rstrip("/"): i for i in pool}
+        for u in args.url:
+            item = by_link.get(u.rstrip("/"))
+            if item:
+                candidates.append(item)
+            else:
+                print(f"  BRAK w feedach RSS: {u}", flush=True)
+        print(f"  wskazano {len(args.url)}, dopasowano {len(candidates)}", flush=True)
+    else:
+        for name, url in FEEDS:
+            items = parse_feed(name, url)
+            fresh = [i for i in items
+                     if i["guid"] not in seen_set
+                     and (now - dt.datetime.fromisoformat(i["ts"])).total_seconds() < args.max_age_h * 3600]
+            print(f"  [{name}] {len(items)} w feedzie, {len(fresh)} świeżych nowych", flush=True)
+            candidates += fresh
 
     if not candidates:
+        if args.url:
+            print("Żaden ze wskazanych URL-i nie ma odpowiednika w feedach RSS — koniec.")
+            return
         print("Brak nowych kandydatów.")
         if not args.no_mail and not args.dry_run:
             kb.send_mail("[primaauto] Newsy: brak kandydatów dziś", "<p>Radar RSS nie znalazł dziś nowych tematów (36h).</p>")
@@ -617,17 +679,20 @@ def main():
     make_names = [m["name"] for m in makes]
     series = get_our_series()   # gate D2 — patrz match_our_model()
 
-    cand_list = "\n".join(f"{i}. [{c['source']}] {c['title']} — {c['desc'][:180]}" for i, c in enumerate(candidates))
-    sel_text, sel_usage = kb.call_model(
-        SELECT_PROMPT.format(
-            n=args.limit,
-            makes=", ".join(make_names[:60]),
-            published="\n".join("- " + t for t in recent_published_titles()) or "(brak)",
-        ),
-        f"KANDYDACI:\n{cand_list}\n\nWybierz {args.limit}.",
-        max_tokens=max(800, 220 * args.limit),
-    )
-    picks = kb.parse_json_response(sel_text)["picks"][:args.limit]
+    if args.url:
+        picks = [{"idx": i, "why": "wskazany ręcznie (--url)"} for i in range(len(candidates))]
+    else:
+        cand_list = "\n".join(f"{i}. [{c['source']}] {c['title']} — {c['desc'][:180]}" for i, c in enumerate(candidates))
+        sel_text, sel_usage = kb.call_model(
+            SELECT_PROMPT.format(
+                n=args.limit,
+                makes=", ".join(make_names[:60]),
+                published="\n".join("- " + t for t in recent_published_titles()) or "(brak)",
+            ),
+            f"KANDYDACI:\n{cand_list}\n\nWybierz {args.limit}.",
+            max_tokens=max(800, 220 * args.limit),
+        )
+        picks = kb.parse_json_response(sel_text)["picks"][:args.limit]
     print("\nSelekcja:", flush=True)
     for p in picks:
         print(f"  -> [{candidates[p['idx']]['source']}] {candidates[p['idx']]['title']}\n     {p['why']}", flush=True)
