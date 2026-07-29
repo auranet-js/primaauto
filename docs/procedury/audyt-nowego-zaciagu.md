@@ -1,5 +1,9 @@
 # Procedura: audyt nowego zaciągu ofert
 
+> **Wywołanie: `/zaciag`** (skill projektowy `.claude/skills/zaciag/`). Odpala się też na
+> „Ruslan dodał auta", „sprawdź nowe oferty", „nowe auta z wczoraj".
+> Pierwszy krok: `wp eval-file scripts/zaciag-recon.php [YYYY-MM-DD]` — read-only pomiar z flagami.
+
 > Utworzona 2026-07-29 na podstawie audytu 11 ofert dodanych ręcznie przez Ruslana 28.07.
 > Dotyczy sytuacji, w której do bazy wchodzą **nowe marki i modele**, a nie kolejne egzemplarze
 > modeli już obecnych. Baza modeli jest w miarę kompletna, więc to będzie coraz częstszy przypadek.
