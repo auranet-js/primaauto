@@ -9,11 +9,12 @@
 - **Repo:** `primaauto` (GitHub: `auranet-js/primaauto`)
 - **Produkcja:** `primaauto.com.pl` (cutover 2026-04-21 z asiaauto.pl)
 - **Legacy domain `asiaauto.pl`:** **NIE ISTNIEJE** — instalacja WP (`~/domains/asiaauto.pl/public_html/`) została **usunięta** (zostały tylko `awstats` + `logs`). Brak kopii rollbackowej, brak lustra do synchronizacji. Każda zmiana dotyka **wyłącznie** `primaauto.com.pl`. NIE zakładaj istnienia katalogu/strony asiaauto.pl ani potrzeby syncu legacy. (Potwierdzone 2026-06-05.)
-- **Plugin:** `asiaauto-sync` v0.32.68
-- **Child theme:** `asiaauto` (slug zostaje; display name `Prima-Auto`)
+- **Plugin:** `asiaauto-sync` v0.34.14
+- **AKTYWNY theme:** **`primaauto2026`** („Prima-Auto 2026", standalone bez Elementora, od 2026-04-24). Szablony hubów: `themes/primaauto2026/taxonomy-make.php`, `taxonomy-serie.php`.
+- **`asiaauto` = theme NIEAKTYWNY** (child `hello-elementor`, poprzednik). Ma bliźniacze pliki `taxonomy-*.php` — **łatwo pomylić i edytować martwy plik**. Przed każdą edycją szablonu: `wp theme list --status=active`. (Pomyłka zaliczona 2026-07-30.)
 - **Klient:** Ruslan Prima, PRIMA-AUTO — agencja importu aut z Chin
 
-**Dlaczego slugi zostały `asiaauto-*`:** Klasy `AsiaAuto_*`, CPT `listings`/`asiaauto_order`, meta `_asiaauto_*`, shortcody `[asiaauto_*]`, role `asiaauto_customer`/`primaauto`, slug pluginu `asiaauto-sync`, katalog theme `themes/asiaauto/`, katalog `uploads/asiaauto/`, REST namespace `asiaauto/v1/` — **wszystko zostaje**. Rebranding 2026-04-21 objął wyłącznie **stringi user-facing** (subjecty maili, From Name, stopka, title, regulamin, WhatsApp prefilled message → „Prima-Auto"). Rename pluginu/CPT/meta/klasy = osobny, świadomy projekt — **nigdy mimochodem**.
+**Dlaczego slugi zostały `asiaauto-*`:** Klasy `AsiaAuto_*`, CPT `listings`/`asiaauto_order`, meta `_asiaauto_*`, shortcody `[asiaauto_*]`, role `asiaauto_customer`/`primaauto`, slug pluginu `asiaauto-sync`, katalog `uploads/asiaauto/`, REST namespace `asiaauto/v1/` — **wszystko zostaje**. (Theme jest wyjątkiem — przeszedł na `primaauto2026` 2026-04-24, patrz wyżej.) Rebranding 2026-04-21 objął wyłącznie **stringi user-facing** (subjecty maili, From Name, stopka, title, regulamin, WhatsApp prefilled message → „Prima-Auto"). Rename pluginu/CPT/meta/klasy = osobny, świadomy projekt — **nigdy mimochodem**.
 
 ---
 
@@ -22,7 +23,8 @@
 **Serwer produkcyjny** jest jedynym źródłem kodu. Repo jest kontekstowe (dokumentacja, skrypty, kolejka).
 
 - Plugin: `~/domains/primaauto.com.pl/public_html/wp-content/plugins/asiaauto-sync/`
-- Theme: `~/domains/primaauto.com.pl/public_html/wp-content/themes/asiaauto/`
+- Theme (AKTYWNY): `~/domains/primaauto.com.pl/public_html/wp-content/themes/primaauto2026/`
+- ~~`themes/asiaauto/`~~ — nieaktywny, **nie edytuj** (patrz sekcja 1)
 - DB: `host476470_wp521`, prefix `wp7j_`
 - ~~Legacy (rollback) `~/domains/asiaauto.pl/public_html/`~~ — **usunięty** (patrz sekcja 1). Brak lustra: deploy idzie tylko na primaauto, bez kopiowania na asiaauto.pl.
 
