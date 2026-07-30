@@ -91,12 +91,15 @@ i ręczne wgrywanie PDF nietknięte — dowód w testach regresji (niżej).
   załączników i plików, liczniki AA=28/UL=0, 0 meta leasingowych na prawdziwych zamówieniach,
   rezerwacje na listingach nietknięte, ręczny PDF na #390039 na miejscu. Skrypt poprawiony —
   zamiast czyścić rezerwację na oślep sprawdza read-only, czy w ogóle powstała.
-- **Luka wykryta przy odbiorze: paliwa NIE da się nadpisać na zamówieniu.** Wartość idzie
-  wprost z taksonomii `fuel` listingu; nie ma pola override (pakiet §9 błędnie założył, że
-  „pole edytowalne to obchodzi" — paliwa nie ma na liście pól z §4). Skutek: dla GAC Hyptec HL
-  wydrukuje się „Elektryczny z range extenderem (EREV)", a podpisany egzemplarz #072426-1
-  mówi „Hybryda plug-in (PHEV)". Do decyzji: dorobić czwarte pole edytowalne obok roku
-  produkcji / kraju / stanu technicznego.
+- **Paliwo świadomie NIE jest edytowalne na zamówieniu** — i tak zostaje. Wartość idzie z
+  taksonomii `fuel` listingu, która **napędza akcyzę** w pipeline cenowym
+  (`class-asiaauto-order.php:827-835`: benzyna/diesel 3,1%, hybryda/MHEV 1,55%,
+  PHEV/EV/EREV 0%). Override per-umowa rozjechałby dokument z wyliczeniem, które ustaliło cenę —
+  w umowie pośrednictwa widać to wprost, bo Załącznik nr 2 drukuje slug paliwa obok akcyzy.
+  Błędne paliwo poprawia się na **ogłoszeniu** (term taksonomii), bo tam poprawia się
+  jednocześnie treść dokumentu i cena.
+  Wystąpienia paliwa: §2 lit. b) (nasza rekonstrukcja — w podpisanym egzemplarzu lista zaczyna
+  się od `e)`) oraz wiersz „Paliwo" w Załączniku nr 1 (z podpisanego egzemplarza).
 
 **Poza zakresem (świadomie):** zmiana etykiety istniejącego pola depozytu, korekta końcówki
 maili statusowych, guard VIN w umowie pośrednictwa, T-220/T-221/T-121/T-113.

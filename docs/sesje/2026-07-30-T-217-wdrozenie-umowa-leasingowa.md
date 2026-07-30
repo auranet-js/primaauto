@@ -107,16 +107,27 @@ AA=28/UL=0, 0 meta leasingowych na prawdziwych zamówieniach, rezerwacje nietkni
 na #390039 na miejscu). Skrypt poprawiony — zamiast czyścić rezerwację na oślep sprawdza
 read-only, czy w ogóle powstała (przy `umowa_gotowa` `syncListingReservation` nic nie zapisuje).
 
-## 3b. Luka wykryta przy odbiorze: paliwo nie jest edytowalne
+## 3b. Paliwo — świadomie nieedytowalne (i dlaczego to NIE jest luka)
 
-Paliwo w umowie leasingowej idzie **wprost z taksonomii `fuel` listingu** — nie ma pola override
-na zamówieniu (`grep` po `META_FUEL|order_fuel|leasing_fuel` = zero trafień). Pakiet §9 założył,
-że „pole edytowalne to obchodzi", ale paliwa nie ma na liście pól z §4.
+Paliwo idzie wprost z taksonomii `fuel` ogłoszenia; nie ma pola override na zamówieniu i **nie ma
+go dorabiać**. Powód: ten sam term **napędza akcyzę** w pipeline cenowym
+(`class-asiaauto-order.php:827-835` — benzyna/diesel 3,1%, hybryda/MHEV 1,55%, PHEV/EV/EREV 0%).
+Nadpisanie tekstu na zamówieniu rozjechałoby dokument z wyliczeniem, które ustaliło cenę; w umowie
+pośrednictwa byłoby to widoczne w jednym dokumencie, bo Załącznik nr 2 drukuje slug paliwa obok
+akcyzy. Błędne paliwo poprawia się na **ogłoszeniu** — tam poprawia się jednocześnie treść umowy
+i cena.
 
-Skutek praktyczny: dla GAC Hyptec HL wydrukuje się „Elektryczny z range extenderem (EREV)",
-a podpisany egzemplarz #072426-1 mówi „Hybryda plug-in (PHEV)". To pierwsze, co Ruslan zobaczy
-przy porównaniu z papierem. **Do decyzji:** dorobić czwarte pole edytowalne obok roku produkcji,
-kraju i stanu technicznego (ten sam wzorzec, ~15 min z testem).
+Wystąpienia paliwa w umowie leasingowej: **§2 lit. b)** (`:1451`) i wiersz „Paliwo" w **Załączniku
+nr 1** (`:1646`). Proweniencja: wiersz w załączniku pochodzi z podpisanego egzemplarza, linia w §2
+jest **naszą rekonstrukcją** (w podpisanym egzemplarzu lista zaczyna się od `e)`), a sama wartość
+to nasz term taksonomii. W §2 lit. a–d mamy więc wolną rękę co do zestawu i brzmienia parametrów —
+to jedyne takie miejsce w tym dokumencie.
+
+**Sprostowanie wobec pakietu §9 i wcześniejszego zapisu tej sesji:** notka o „rozjeździe paliwa"
+(podpisany egzemplarz mówi PHEV, my EREV) była nadinterpretacją. GAC Hyptec HL jest EREV, więc
+nasza wartość jest poprawna, a PHEV to **literówka Ruslana w jego własnym wordowym egzemplarzu** —
+dane, nie treść prawna, więc nigdy nie weszły do wzorca. Nie ma tu ani rozjazdu w systemie, ani
+sprawy do decyzji. Punkt wykreślony z listy otwartych.
 
 ## 4. Decyzje zrealizowane bez odstępstw
 
@@ -152,9 +163,10 @@ w gałęzi leasingowej), D5 (cena 0 nie blokuje).
   na `vin_verified` w `renderHTML()` i `renderAttachment1()`. Czeka na świadomą decyzję,
   bo zmienia treść działającego dokumentu.
 - Czy **10% depozytu** to reguła Prima-Auto, czy ustalenie z jednym klientem?
-- **Paliwo:** podpisana umowa mówi „Hybryda plug-in (PHEV)", nasze dane „Elektryczny
-  z range extenderem (EREV)" — GAC Hyptec HL to EREV, rozjazd wynika z dokumentu.
-  Pole jest edytowalne, ale warto, żeby wiedział.
+- ~~Paliwo PHEV vs EREV~~ — **wykreślone, patrz §3b.** GAC Hyptec HL jest EREV, więc nasza
+  wartość jest poprawna, a PHEV to literówka w wordowym egzemplarzu Ruslana (dane, nie treść
+  prawna — nie weszły do wzorca). Nie wymaga niczego. Paliwo nie jest i nie ma być edytowalne,
+  bo term taksonomii napędza akcyzę.
 - **§2 lit. a–d** zrekonstruowane (w podpisanym egzemplarzu lista zaczyna się od `e)`) —
   do potwierdzenia u Ruslana.
 - Czy **Finansujący / opłata wstępna** mają trafić do treści umowy (punkt 5.2 wyżej).
