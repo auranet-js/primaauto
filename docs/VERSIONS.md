@@ -1,5 +1,75 @@
 # Historia wersji asiaauto-sync
 
+## 0.34.14 — 2026-07-30 (T-217: drugi wzorzec umowy — wariant leasingowy)
+
+**Co doszło.** Generator PDF umiał jeden wzorzec — pośrednictwo, §1–§9. Doszedł drugi:
+„Umowa organizacji importu samochodu" (§1–§16 + Załącznik nr 1), treść 1:1 z podpisanego
+egzemplarza **#072426-1** (Agw Moto, 24.07.2026). Kasuje robotę w Wordzie i rozjazd numeracji
+— Ruslan obchodził brak wzorca przez „Wgraj własną (zastąpi)".
+
+**Zasada wdrożenia: addytywnie, zero zmian w działających umowach.** Umowa pośrednictwa
+i ręczne wgrywanie PDF nietknięte — dowód w testach regresji (niżej).
+
+### `class-asiaauto-order.php`
+- Nowe meta: `_order_contract_type` (**brak wartości = pośrednictwo**, więc 150 istniejących
+  zamówień bez zmian; celowo NIE `_order_type`, który trzyma `customer`/`stock`),
+  `_order_year_production`, `_order_origin_country`, `_order_tech_condition`,
+  `_order_leasing_financier`, `_order_leasing_initial_fee`, `_order_leasing_deposit_amount`,
+  `_order_leasing_deposit_percent`.
+- Nowy config: `contract_prefix_leasing` = `UL`, `bank_account_number_leasing`
+  = `72 2490 0005 0000 4530 0075 1603` (Alior, z podpisanej umowy), `leasing_deposit_percent` = 10.
+  Świadomie **nowe klucze** — `deposit_percent` liczy depozyt dla wszystkich zamówień
+  (dziś 0 + min 6150), a `contract_prefix` trzyma pulę AA.
+- Osobna pula numeracji: `CONTRACT_COUNTER_LEASING_PREFIX`, `generateLeasingContractNumber()`,
+  `previewNextLeasingContractNumber()`, `generateContractNumberForOrder()` (rozgałęzia wg typu).
+  `changeStatus()` woła teraz wariant per-order — zamówienie bez typu idzie do AA jak dotąd.
+- `bumpContractCounterFromManual()` rozszerzone o pulę UL (ręcznie wpisany `UL/...`
+  przy wgrywaniu własnej umowy podbija właściwy licznik).
+- `getLeasingDepositAmount()` — kwota **zamrażana** przy generowaniu PDF; zmiana ceny
+  jej nie przelicza (klient ma podpisany dokument na konkretną kwotę).
+
+### `class-asiaauto-contract.php` (1345 → 1928 linii)
+- `generate()` — jedno rozgałęzienie na wejściu. Ścieżka pośrednictwa woła
+  `renderHTML()` + `renderPDF()` bez zmian; leasing ma własne `renderLeasingHTML()`,
+  `renderLeasingAttachment1()`, `renderLeasingPDF()`.
+- **Załącznik nr 2 dla leasingu nie powstaje** — wzorzec ma jeden załącznik, koszty
+  reguluje trójstronna umowa sprzedaży.
+- `collectData()` / `getVehicleData()` rozszerzone **wyłącznie addytywnie** (nowe klucze,
+  istniejące bez zmian).
+- **Guard VIN — tylko w gałęzi leasingowej.** `isValidVin()` (`^[A-HJ-NPR-Z0-9]{17}$`)
+  wypełnia nowy klucz `vin_verified`; wartość niepełna = traktowana jak brak i w umowie
+  drukuje się klauzula wzorca o aneksie. che168 maskuje VIN w ogłoszeniu (14 z 267 listingów,
+  np. `HACRA0B3XS1S...`). Klucz `vin` nietknięty, więc **umowa pośrednictwa dalej drukuje
+  zamaskowaną wartość** — naprawa tam zmienia treść działającego dokumentu, czeka na decyzję.
+- Odwzorowanie wzorca: §2 lit. a–d zrekonstruowane (w podpisanym egzemplarzu lista zaczyna się
+  od `e)`), ustępy §2 numerowane od 2 — inaczej odesłanie „o którym mowa w ust. 2" wskazywałoby
+  samo siebie. Limit odpowiedzialności z §11 ust. 4 (10 000 zł) jako stała, nie parametr.
+
+### `class-asiaauto-order-admin.php`
+- Metabox „Dane umowy": selektor wzorca + sekcja leasingowa odsłaniana po jego wybraniu
+  (rok produkcji, kraj, stan techniczny, procent i kwota depozytu, Finansujący, opłata wstępna),
+  z podpowiedziami z ogłoszenia. Etykieta nowego pola: „Depozyt zabezpieczający — leasing".
+- Ustawienia: nowa karta „Umowa leasingowa" (prefix, rachunek, procent) obok istniejących.
+- **Ręczne wgrywanie PDF (linie 1766–1881 przed zmianą) nietknięte** — potwierdzone diffem
+  całego bloku wobec kopii sprzed wdrożenia. Handler uploadu nie zna typu umowy.
+
+### Testy
+- **Regresja pośrednictwa (T-01/T-02/T-24):** 5 zamówień (#390039, #387788, #387071, #362513,
+  #360448) renderowanych read-only przed i po wdrożeniu → tekst PDF **identyczny co do znaku**.
+  #390039 nadal drukuje zamaskowany VIN = potwierdzenie, że zachowanie się nie zmieniło.
+- **Wariant leasingowy:** 42 asercje zaliczone, 0 niezaliczonych (T-04, T-10..T-16, T-20..T-23,
+  T-30..T-33, T-40..T-43, T-50..T-53, T-60..T-62) — 11 stron, §1–§16, depozyt 10% = 23 200 zł
+  z 232 000, rachunek leasingowy w §4, brak Załącznika nr 2, guard VIN w §2 i załączniku,
+  brak sierot `§`, stopka na każdej stronie, kwota zamrożona po zmianie ceny 232→300 tys.
+- **T-03:** 0 zamówień z typem leasing w bazie, sekcja leasingowa ukryta, pośrednictwo
+  preselektowane, etykieta istniejącego depozytu i wszystkie stare pola bez zmian.
+- Liczniki po testach przywrócone: **AA = 28** (następny 0029), **UL = 0** (następny 0001).
+  Zero sierot w `uploads/contracts`, zero załączników, zero meta leasingowych na prawdziwych
+  zamówieniach. Skrypty: `tmp/T-217-regresja-posrednictwo.php`, `tmp/T-217-testy-leasing.php`.
+
+**Poza zakresem (świadomie):** zmiana etykiety istniejącego pola depozytu, korekta końcówki
+maili statusowych, guard VIN w umowie pośrednictwa, T-220/T-221/T-121/T-113.
+
 ## 0.34.13 — 2026-07-30 (T-222: override che168 świadomy napędu — `by_engine`)
 
 **Objaw** (zgłoszenie Janka): `/oferta/byd-song-plus-ev-2025-396835/` — oferta z wersją **DM-i**
