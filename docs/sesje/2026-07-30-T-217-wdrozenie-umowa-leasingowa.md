@@ -73,6 +73,51 @@ Dodatkowo negatywna asercja „nie ma słowa Używany" łapała się wewnątrz `
 z treści prawnej §2. Poprawione zostały **asercje**, nie kod — treść PDF była poprawna
 od pierwszego biegu.
 
+## 3a. E2E + test w przeglądarce (dopisane tego samego dnia)
+
+**E2E przez prawdziwe API — 22/22 zaliczonych** (`tmp/T-217-e2e-status-i-zalacznik.php`).
+Uzupełnia bateria z §3, która testowała sam render:
+
+| Zakres | Wynik |
+|---|---|
+| E2E-1 | `changeStatus('umowa_gotowa')` przechodzi → `UL/2026/0001`, licznik AA nietknięty, cron zaplanowany, `deferredGenerate()` dowozi PDF, załącznik `UL-2026-0001-27a24546.pdf` (183 KB, 11 stron), tytuł „Umowa UL/2026/0001", parent = zamówienie, mime `application/pdf`, depozyt 23 200 zł zamrożony w meta |
+| E2E-2 | zamówienie stockowe + wzorzec leasingowy — bez konfliktu, oba wymiary niezależne |
+| E2E-3 | zamówienie **bez** typu → `AA/2026/0029`, §1–§9 + Załącznik nr 2, depozyt 6 150 zł, brak §16 |
+| MAIL | **4 maile zablokowane** filtrem `pre_wp_mail`, w tym `agwswiebodzin@gmail.com` „umowa gotowa do podpisu" |
+
+Wyciszenie poczty było kluczowe: klikanie tej ścieżki w panelu wysłałoby prawdziwemu klientowi
+maila o umowie, której nie zamawiał. Dlatego E2E poszło skryptem, nie kliknięciami.
+
+**Test w przeglądarce (Chrome MCP), read-only na produkcji.** Karta zamówienia #390039 i strona
+Ustawień. Trzy rzeczy, których harness nie mógł pokazać:
+1. Selektor **nie zapisuje się sam** — po reloadzie wraca „Pośrednictwo". Ruslan może bezpiecznie
+   klikać i oglądać.
+2. Podpowiedzi liczą się na żywo z prawdziwych danych (rok 2025, „Używany" z 3 800 km, 23 200 zł).
+3. **Defekt VIN widać też w panelu:** pole pokazuje `HACRA0B3XS1S...` z podpowiedzią „zapisz, żeby
+   utrwalić". Guard chroni treść umowy leasingowej, ale nie chroni pola — jedno kliknięcie
+   „Zapisz" utrwala zamaskowaną wartość w meta zamówienia.
+
+Poprawiona jedna wada kosmetyczna: podpowiedź przy kwocie depozytu wychodziła z komórki tabeli
+(`<small>` inline → `<p class="description">` pod polem). Zweryfikowane wzrokowo po poprawce.
+
+**Wpadka:** sprzątanie po E2E wywaliło się w połowie na prywatnej `clearListingReservation()` —
+zostały 3 zamówienia testowe, 2 osierocone załączniki i podbite liczniki. Doczyszczone ręcznie,
+produkcja zweryfikowana w każdym wymiarze (0 zamówień testowych, 0 osieroconych plików,
+AA=28/UL=0, 0 meta leasingowych na prawdziwych zamówieniach, rezerwacje nietknięte, ręczny PDF
+na #390039 na miejscu). Skrypt poprawiony — zamiast czyścić rezerwację na oślep sprawdza
+read-only, czy w ogóle powstała (przy `umowa_gotowa` `syncListingReservation` nic nie zapisuje).
+
+## 3b. Luka wykryta przy odbiorze: paliwo nie jest edytowalne
+
+Paliwo w umowie leasingowej idzie **wprost z taksonomii `fuel` listingu** — nie ma pola override
+na zamówieniu (`grep` po `META_FUEL|order_fuel|leasing_fuel` = zero trafień). Pakiet §9 założył,
+że „pole edytowalne to obchodzi", ale paliwa nie ma na liście pól z §4.
+
+Skutek praktyczny: dla GAC Hyptec HL wydrukuje się „Elektryczny z range extenderem (EREV)",
+a podpisany egzemplarz #072426-1 mówi „Hybryda plug-in (PHEV)". To pierwsze, co Ruslan zobaczy
+przy porównaniu z papierem. **Do decyzji:** dorobić czwarte pole edytowalne obok roku produkcji,
+kraju i stanu technicznego (ten sam wzorzec, ~15 min z testem).
+
 ## 4. Decyzje zrealizowane bez odstępstw
 
 D1 (kwota depozytu zamrażana, nie przelicza się), D2 (numer zostaje przy przełączeniu typu),

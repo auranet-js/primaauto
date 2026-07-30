@@ -67,6 +67,37 @@ i ręczne wgrywanie PDF nietknięte — dowód w testach regresji (niżej).
   Zero sierot w `uploads/contracts`, zero załączników, zero meta leasingowych na prawdziwych
   zamówieniach. Skrypty: `tmp/T-217-regresja-posrednictwo.php`, `tmp/T-217-testy-leasing.php`.
 
+### Uzupełnienie tego samego dnia — E2E, test w przeglądarce, poprawka kosmetyczna
+
+- **E2E przez prawdziwe API (22/22 zaliczonych),** `tmp/T-217-e2e-status-i-zalacznik.php`:
+  `changeStatus('umowa_gotowa')` → numer `UL/2026/0001` z właściwej puli przy nietkniętym
+  liczniku AA → cron zaplanowany → `deferredGenerate()` → załącznik `UL-2026-0001-*.pdf`
+  (183 KB, 11 stron, tytuł „Umowa UL/2026/0001", parent = zamówienie) → depozyt 23 200 zł
+  zamrożony w meta. Kontrolne zamówienie **bez** typu poszło ścieżką pośrednictwa:
+  `AA/2026/0029`, §1–§9 + Załącznik nr 2, depozyt 6 150 zł. Stock + leasing bez konfliktu.
+  Poczta wyciszona filtrem `pre_wp_mail` — **4 maile zablokowane**, w tym jeden do prawdziwego
+  klienta („umowa gotowa do podpisu"). Bez tego filtru klikanie w panelu wysłałoby go na serio.
+- **T-63 — pakiet opisywał zachowanie, którego nie ma.** Oczekiwanie „nowy plik, poprzedni
+  zostaje w bibliotece mediów" jest błędne: `regenerate()` woła `wp_delete_attachment(force=true)`,
+  więc stary plik i załącznik przepadają. Zero wersjonowania — regeneracja po podpisaniu
+  = utrata egzemplarza klienta. Zachowanie sprzed T-217, nie regresja; do decyzji osobno.
+- **Test w przeglądarce (Chrome MCP):** karta zamówienia i strona Ustawień obejrzane na
+  produkcji. Selektor nie zapisuje się sam (reload wraca do „Pośrednictwo"), podpowiedzi
+  liczą się z prawdziwych danych, sekcja odsłania się poprawnie. Poprawiona jedna wada
+  kosmetyczna: podpowiedź przy kwocie depozytu wychodziła z komórki tabeli
+  (`<small>` inline → `<p class="description">` pod polem).
+- **Sprzątanie po E2E wywaliło się w połowie** na prywatnej `clearListingReservation()`.
+  Doczyszczone ręcznie, produkcja zweryfikowana: 0 zamówień testowych, 0 osieroconych
+  załączników i plików, liczniki AA=28/UL=0, 0 meta leasingowych na prawdziwych zamówieniach,
+  rezerwacje na listingach nietknięte, ręczny PDF na #390039 na miejscu. Skrypt poprawiony —
+  zamiast czyścić rezerwację na oślep sprawdza read-only, czy w ogóle powstała.
+- **Luka wykryta przy odbiorze: paliwa NIE da się nadpisać na zamówieniu.** Wartość idzie
+  wprost z taksonomii `fuel` listingu; nie ma pola override (pakiet §9 błędnie założył, że
+  „pole edytowalne to obchodzi" — paliwa nie ma na liście pól z §4). Skutek: dla GAC Hyptec HL
+  wydrukuje się „Elektryczny z range extenderem (EREV)", a podpisany egzemplarz #072426-1
+  mówi „Hybryda plug-in (PHEV)". Do decyzji: dorobić czwarte pole edytowalne obok roku
+  produkcji / kraju / stanu technicznego.
+
 **Poza zakresem (świadomie):** zmiana etykiety istniejącego pola depozytu, korekta końcówki
 maili statusowych, guard VIN w umowie pośrednictwa, T-220/T-221/T-121/T-113.
 
