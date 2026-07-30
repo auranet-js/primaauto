@@ -243,8 +243,8 @@ Zmiany crontaba **wyłącznie przez `~/bin/cron-install`** (strażnik po incyden
 
 | # | Ryzyko | Reakcja |
 |---|---|---|
-| **R1** | **Po 15.08 nie ma czym weryfikować resztek dongchedi.** Tryb `verify` zdejmie sporo do 15.08, ale reszta zostanie bez możliwości sprawdzenia. | Decyzja do podjęcia przed 15.08: reguła wieku (brak potwierdzenia >N dni → `draft`) albo twarde wygaszenie całej reszty. **Nie rozstrzygnięte w tym specu.** |
-| **R2** | **Podaż che168 przy 57 markach nieznana.** Zakładamy ~90–100/dobę, nie zmierzyliśmy. Jeśli wyjdzie mniej, 15.08 zostajemy ze skurczoną ofertą. | Pomiar `che168-podaz-marki.php` po pierwszej dobie od rozszerzenia. Awaryjnie: przedłużenie subskrypcji dongchedi o miesiąc. |
+| **R1** | **Po 15.08 nie ma czym weryfikować resztek dongchedi.** Tryb `verify` zdejmie sporo do 15.08, ale reszta zostanie bez możliwości sprawdzenia. | **Termin ustalony: weryfikacja 10.08** (5 dni zapasu na wykonanie, nie na podjęcie decyzji). Warianty A/reguła wieku ÷ B/twarde wygaszenie ÷ C/przedłużenie subskrypcji, komendy pomiarowe i „jak wygląda zrobione" w `docs/przypomnienia/2026-08-10-t222-decyzja-o-resztkach-dongchedi.md`. Event na kalendarzu „Auranet Claude". |
+| ~~**R2**~~ | ~~Podaż che168 przy 60 markach nieznana.~~ | **ZAAKCEPTOWANE przez Janka 30.07** („będzie dobrze"). Nie blokuje. Liczba i tak zostaje w krokach pomiarowych przypomnienia z 10.08, bo od niej zależy wybór wariantu w R1. |
 | **R3** | **Antyscraping Autohome.** Katalog obchodzi ochronę przez uruchomienie deszyfratora ze stubem DOM. Blokada = utrata jedynego źródła wyposażenia che168. | Cache per `spec_id` jest warstwą odporności — raz pobrane zostaje nasze. Przy blokadzie fallback: tablica mapowań 113 par (D4, świadomie odłożona). |
 | **R4** | **57 marek naraz gubi sondę jakości** (D5, świadomy koszt). | `che168-monitor.php` po pierwszej dobie: rozjazdy hubów, orphany mapowania, kompletność spec. |
 | **R5** | Kolejka spec rośnie szybciej, niż sync ją przerabia. | Krok 2 konserwatora zapasu dosprząta nadmiar nocą. Przy przepełnieniu: podnieść batch z 5. |
