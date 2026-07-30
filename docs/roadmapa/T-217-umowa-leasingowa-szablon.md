@@ -1,7 +1,10 @@
 # T-217 — Drugi wzorzec umowy (leasing) w generatorze PDF
 
 > Status: **gotowe do budowy** · Rozmiar: M
-> Godziny realnie: **14–20 h** (Janek ~3 h, AI ~11–17 h)
+> Godziny realnie: **8–12 h** (Janek ~2 h, AI ~6–10 h) — urealnione 2026-07-29 po weryfikacji
+> na produkcji: szata PDF, oba załączniki, numeracja umów i kwoty słownie **już istnieją**,
+> dokładamy szablon §1–§16 i wariant Załącznika nr 1. Poprzedni szacunek 14–20 h zakładał
+> budowę od zera. Rewizja planu i scenariusze: `docs/sesje/2026-07-29-T-217-rewizja-planu-i-testy.md`
 > Źródła: `docs/biznes/2026-07-17-umowa-organizacji-importu-leasing-analiza.md` (wzorzec), `docs/biznes/2026-07-17-umowa-efl-leasing-analiza.md` (partner finansujący)
 > Powiązane: T-220 (aneks VIN — musi znać typ umowy), T-113 (ścieżka finansowania w kreatorze), T-121 (depozyt)
 
