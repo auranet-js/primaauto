@@ -6,6 +6,13 @@
   },
   "changelog": [
     {
+      "data": "30.07.2026",
+      "tytul": "Umowa leasingowa generowana z panelu — drugi wzorzec obok umowy pośrednictwa",
+      "opis": "Umowa leasingowa jest już generowana przez system. Do tej pory trzeba ją było składać ręcznie w Wordzie, a numer nadawać poza kolejnością — od teraz wybiera się ją na karcie zamówienia jednym polem „Wzorzec umowy” i dokument powstaje tak samo jak umowa pośrednictwa: z danymi z zamówienia, w naszej szacie graficznej, z załącznikiem ze specyfikacją auta.\n\nTreść prawna jest odtworzona z podpisanego egzemplarza co do słowa — zmieniliśmy wyłącznie skład i wygląd. Umowy leasingowe mają własną numerację (UL/2026/0001 i dalej), niezależną od dotychczasowej — dzięki temu w żadnej z dwóch numeracji nie robią się dziury. Dochodzi też osobny rachunek bankowy do depozytu leasingowego, ustawiany w panelu obok dotychczasowego; rachunek przy umowie pośrednictwa zostaje bez zmian. Depozyt zabezpieczający podpowiada się jako 10% ceny auta i można go poprawić ręcznie na konkretnym zamówieniu.\n\nDoszła też ochrona przed pomyłką w numerze VIN. Zdarza się, że dostawca podaje numer ucięty (np. „HACRA0B3XS1S…”) — wcześniej taka wartość wchodziła do dokumentu jako prawdziwy numer nadwozia. Teraz umowa leasingowa rozpoznaje numer niepełny i wpisuje w to miejsce zapis z wzorca o uzupełnieniu numeru aneksem po weryfikacji auta.\n\nCała dotychczasowa ścieżka została sprawdzona pod kątem tego, czy nic się nie zepsuło: umowy pośrednictwa generują się dokładnie tak samo jak przed zmianą (porównane znak po znaku na pięciu zamówieniach), a możliwość wgrania własnej umowy zamiast generowanej działa bez zmian, również przy zamówieniach leasingowych.",
+      "wersje": "",
+      "godz": 9
+    },
+    {
       "data": "29.07.2026",
       "tytul": "Auta dodane ręcznie 28.07 — uporządkowanie marek, uzupełnienie danych i strony modeli",
       "opis": "Sprawdziliśmy jedenaście aut dodanych ręcznie poprzedniego dnia. Cztery z nich trafiły pod nieistniejące marki i ich strony modeli nie otwierały się wcale — Google widziało komunikat o braku strony. Przyczyna: przy autach marek, których wcześniej nie mieliśmy w bazie, system zakłada markę sam, z chińskiej nazwy. Naprawione i zabezpieczone na przyszłość: te marki są już opisane w słowniku systemu, więc kolejne auta wejdą poprawnie.\n\nPrzy okazji poprawiliśmy nazwy modeli pod to, czego ludzie realnie szukają w Google. Dwa pickupy Fotona były opisane chińską nazwą Mars — na eksport te same auta nazywają się Tunland V9 i V7, a tej nazwy szuka się w Polsce kilkadziesiąt razy częściej. Rozdzieliliśmy też auto Dongfenga: strona modelu stała pod marką Mengshi, której prawie nikt nie wpisuje, podczas gdy nazwy M-Hero szuka się regularnie. Stare adresy przekierowane, żeby nic nie zginęło z dotychczasowej pozycji w Google.\n\nUzupełniliśmy dane techniczne wszystkich jedenastu aut. Chiński dostawca przy autach dostawczych i pickupach oddaje niemal puste specyfikacje — jedno auto miało dosłownie jedną pozycję. Pobraliśmy pełne dane z katalogu producenta i rozszerzyliśmy słownik tłumaczeń parametrów, dzięki czemu auta użytkowe mają teraz od 43 do 93 pozycji zamiast kilku, a osobowe od 120 do 181. To działa również dla wszystkich przyszłych aut.\n\nOsiem nowych stron modeli dostało pełny opis: wstęp z ceną, sekcje o dostępności w Polsce, wyposażeniu i porównaniu z europejską konkurencją oraz pytania i odpowiedzi. Przy Mercedesie EQE SUV pokazujemy wprost różnicę: w polskim salonie od 436 400 zł, u nas 262 000 zł. Przy vanie Toyoty opisaliśmy jawnie, że nadwozie ma podwyższony dach od chińskiego producenta zabudów — kupujący powinien to wiedzieć przed obejrzeniem auta. Wszystkie zmienione strony zgłoszone do Google.",
@@ -143,16 +150,6 @@
     }
   ],
   "todo_nowe": [
-    {
-      "id": "T-217",
-      "tytul": "Umowa leasingowa jako drugi wzorzec w panelu zamówienia",
-      "opis": "Najprostszy wariant, bez zmian dla klienta: zamówienie i weryfikacja przebiegają jak dotąd (klient składa zamówienie, potwierdzenie, klient wypełnia dane do umowy — dla firm dochodzi NIP i nazwa). Nowość po stronie panelu: obok obecnego „Wygeneruj PDF” dochodzi „Generuj umowę leasing” — drugi szablon („Umowa organizacji importu samochodu”, konstrukcja trójstronna z firmą leasingową) wraz z załącznikiem ze specyfikacją auta. Ustalenie z 27.07: treści prawnej NIE zmieniamy — odtwarzamy dokument 1:1, dostosowujemy wyłącznie skład i szatę graficzną do naszego wyglądu. Depozyt zabezpieczający zostaje tak, jak jest w umowie — 10% wartości samochodu; to osobna rzecz niż depozyt zwrotny ustawiony w panelu, który klient wpłaca wcześniej i który przy realizacji umowy zostanie mu od depozytu zabezpieczającego odliczony. Załącznik nr 2 (kalkulacja ceny) pomijamy — cała kwota wynika z umowy. Rachunek do przelewu w umowie leasingowej: numer z podpisanego egzemplarza (końcówka 1603) — dochodzi jako osobne ustawienie w panelu, obecny rachunek przy umowie pośrednictwa zostaje bez zmian. Możliwość wgrania indywidualnej umowy bez zmian. Bez nowych statusów zamówienia.",
-      "status": "wzorzec przeanalizowany (17.07), egzemplarz podpisany przeanalizowany (27.07), zakres uzgodniony",
-      "realnie_od": 8,
-      "realnie_do": 12,
-      "rynkowo_od": 20,
-      "rynkowo_do": 30
-    },
     {
       "id": "T-219",
       "tytul": "Podstrona leasingowa (landing „Leasing samochodu z Chin”)",

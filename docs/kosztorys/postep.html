@@ -66,7 +66,7 @@ footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line);
 <header class="top">
 <h1>Prima Auto — postęp prac i plan rozwoju</h1>
 <div class="sub">Platforma importu samochodów z Chin · primaauto.com.pl · opracowanie: Auranet (Jan Schenk)</div>
-<div class="stamp">Stan na 29.07.2026 · dokument roboczy, aktualizowany na bieżąco wraz z postępem prac</div>
+<div class="stamp">Stan na 30.07.2026 · dokument roboczy, aktualizowany na bieżąco wraz z postępem prac</div>
 </header>
 
 <div class="cols">
@@ -76,6 +76,16 @@ footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line);
 <table>
 <thead><tr><th>Data</th><th>Praca</th><th class="num">Godziny [h]</th></tr></thead>
 <tbody>
+<tr>
+<td class="data-col">30.07.2026</td>
+<td><strong>Umowa leasingowa generowana z panelu — drugi wzorzec obok umowy pośrednictwa</strong> <div class="opis">Umowa leasingowa jest już generowana przez system. Do tej pory trzeba ją było składać ręcznie w Wordzie, a numer nadawać poza kolejnością — od teraz wybiera się ją na karcie zamówienia jednym polem „Wzorzec umowy” i dokument powstaje tak samo jak umowa pośrednictwa: z danymi z zamówienia, w naszej szacie graficznej, z załącznikiem ze specyfikacją auta.
+
+Treść prawna jest odtworzona z podpisanego egzemplarza co do słowa — zmieniliśmy wyłącznie skład i wygląd. Umowy leasingowe mają własną numerację (UL/2026/0001 i dalej), niezależną od dotychczasowej — dzięki temu w żadnej z dwóch numeracji nie robią się dziury. Dochodzi też osobny rachunek bankowy do depozytu leasingowego, ustawiany w panelu obok dotychczasowego; rachunek przy umowie pośrednictwa zostaje bez zmian. Depozyt zabezpieczający podpowiada się jako 10% ceny auta i można go poprawić ręcznie na konkretnym zamówieniu.
+
+Doszła też ochrona przed pomyłką w numerze VIN. Zdarza się, że dostawca podaje numer ucięty (np. „HACRA0B3XS1S…”) — wcześniej taka wartość wchodziła do dokumentu jako prawdziwy numer nadwozia. Teraz umowa leasingowa rozpoznaje numer niepełny i wpisuje w to miejsce zapis z wzorca o uzupełnieniu numeru aneksem po weryfikacji auta.
+
+Cała dotychczasowa ścieżka została sprawdzona pod kątem tego, czy nic się nie zepsuło: umowy pośrednictwa generują się dokładnie tak samo jak przed zmianą (porównane znak po znaku na pięciu zamówieniach), a możliwość wgrania własnej umowy zamiast generowanej działa bez zmian, również przy zamówieniach leasingowych.</div></td>
+<td class="num">9</td></tr>
 <tr>
 <td class="data-col">29.07.2026</td>
 <td><strong>Auta dodane ręcznie 28.07 — uporządkowanie marek, uzupełnienie danych i strony modeli</strong> <div class="opis">Sprawdziliśmy jedenaście aut dodanych ręcznie poprzedniego dnia. Cztery z nich trafiły pod nieistniejące marki i ich strony modeli nie otwierały się wcale — Google widziało komunikat o braku strony. Przyczyna: przy autach marek, których wcześniej nie mieliśmy w bazie, system zakłada markę sam, z chińskiej nazwy. Naprawione i zabezpieczone na przyszłość: te marki są już opisane w słowniku systemu, więc kolejne auta wejdą poprawnie.
@@ -165,7 +175,7 @@ Efekt bez wsparcia reklamowego: w dwie doby filmy zebrały ponad 3800 wyświetle
 <td><strong>Reklamy dynamiczne Google (DSA) — celowanie w najtańsze oferty</strong> <div class="opis">Feed reklam przestawiony ze stron modeli na najtańszą aktualną ofertę każdego modelu, z automatyczną codzienną aktualizacją. Do tego nowa treść reklamy (wymiana jednej z dwóch kreacji).</div></td>
 <td class="num">3</td></tr>
 </tbody>
-<tfoot><tr><td colspan="2">Razem od spotkania 16.07.2026</td><td class="num">68</td></tr></tfoot>
+<tfoot><tr><td colspan="2">Razem od spotkania 16.07.2026</td><td class="num">77</td></tr></tfoot>
 </table>
 
 </section>
@@ -179,9 +189,6 @@ Efekt bez wsparcia reklamowego: w dwie doby filmy zebrały ponad 3800 wyświetle
 <tr>
 <td><strong>T-186 — Che168 jako pełne, automatyczne drugie źródło ogłoszeń</strong> <span class='rozmiar'>skala: bardzo duża</span><div class="opis">Automatyczny import z drugiego chińskiego portalu — pełna dywersyfikacja i szersza oferta aut premium. Fundament już działa (ręczny import pojedynczych aut, mapowanie marek, tłumaczenia parametrów — 22 wydania pracy), ale automat to nie jest przełączenie przełącznika: mechanizm normalizacji chińskich danych jest dziś wpięty wyłącznie w import ręczny, a automatyczna synchronizacja ma zaszyte na sztywno jedno źródło. Do zbudowania: menedżer źródeł, wpięcie normalizacji w automat, wykrywanie duplikatów i panel zarządzania. Wycena potwierdzona po przeglądzie kodu.</div><div class="skala">Status: plan gotowy (docs/roadmapa/T-186); PILNE: główne źródło (Dongchedi) od 1.07 praktycznie przestało dowozić auta — trwa wyjaśnianie z dostawcą</div></td>
 <td class="num">85–100</td></tr>
-<tr>
-<td><strong>T-217 — Umowa leasingowa jako drugi wzorzec w panelu zamówienia</strong> <div class="opis"><span class="badge new">nowe</span> Najprostszy wariant, bez zmian dla klienta: zamówienie i weryfikacja przebiegają jak dotąd (klient składa zamówienie, potwierdzenie, klient wypełnia dane do umowy — dla firm dochodzi NIP i nazwa). Nowość po stronie panelu: obok obecnego „Wygeneruj PDF” dochodzi „Generuj umowę leasing” — drugi szablon („Umowa organizacji importu samochodu”, konstrukcja trójstronna z firmą leasingową) wraz z załącznikiem ze specyfikacją auta. Ustalenie z 27.07: treści prawnej NIE zmieniamy — odtwarzamy dokument 1:1, dostosowujemy wyłącznie skład i szatę graficzną do naszego wyglądu. Depozyt zabezpieczający zostaje tak, jak jest w umowie — 10% wartości samochodu; to osobna rzecz niż depozyt zwrotny ustawiony w panelu, który klient wpłaca wcześniej i który przy realizacji umowy zostanie mu od depozytu zabezpieczającego odliczony. Załącznik nr 2 (kalkulacja ceny) pomijamy — cała kwota wynika z umowy. Rachunek do przelewu w umowie leasingowej: numer z podpisanego egzemplarza (końcówka 1603) — dochodzi jako osobne ustawienie w panelu, obecny rachunek przy umowie pośrednictwa zostaje bez zmian. Możliwość wgrania indywidualnej umowy bez zmian. Bez nowych statusów zamówienia.</div><div class="skala">Status: wzorzec przeanalizowany (17.07), egzemplarz podpisany przeanalizowany (27.07), zakres uzgodniony</div></td>
-<td class="num">8–12</td></tr>
 <tr>
 <td><strong>T-219 — Podstrona leasingowa (landing „Leasing samochodu z Chin”)</strong> <div class="opis"><span class="badge new">nowe</span> Osobna podstrona opisująca ścieżkę leasingową (jak to działa, współpraca z finansującym, kroki od zamówienia do wydania auta) + zalinkowanie jej w kilku miejscach serwisu pod SEO (pasek zaufania na ofertach, stopka, strony informacyjne). Fraza „leasing samochodu z chin” sprawdzona w bazie słów kluczowych: brak mierzalnego wolumenu — nisza dopiero powstaje, więc rankowanie będzie tanie, a strona pracuje głównie na konwersję i zaufanie. Kalkulator raty finansowania to osobne zadanie (T-189 — rata na kartach ofert).</div><div class="skala">Status: do zaplanowania; frazy zbadane 17.07</div></td>
 <td class="num">3–4</td></tr>
@@ -267,7 +274,7 @@ Efekt bez wsparcia reklamowego: w dwie doby filmy zebrały ponad 3800 wyświetle
 <td><strong>T-214 — Ujednolicenie i wzmocnienie stron modeli (hubów) pod frazy zakupowe</strong> <span class='rozmiar'>skala: średnia</span><div class="opis">Strony modeli to nasza najmocniejsza broń w Google — stoją na 1.-2. miejscu na frazy typu 'zeekr 9x cena'. Przegląd 14.07 wykazał trzy luki do domknięcia. (1) 34 z 302 stron modeli ma słabszy nagłówek — brakuje w nim słów 'cena w Polsce', bo powstały po ostatnim ujednoliceniu i nie dostały automatycznie tego dopisku; wśród nich ważne modele: Zeekr 9X, Zeekr 8X, Denza Z9 GT. (2) Strona modelu BAW wyświetla się w Google jako 'Beijing' zamiast 'BAW' — a to marka, której szuka 1300 osób miesięcznie; podobnie Zeekr 8X ma zbędny dopisek 'PHEV' rozmywający dopasowanie. (3) Strony modeli opisują wersje słownie, ale nie podają ceny osobno dla każdej wersji (np. 'Ultra od 426 tys.') — dane już mamy, wystarczy je pokazać. Pracujemy ostrożnie, pojedynczo, z pomiarem przed i po (strony z 1. miejsca mają najwięcej do stracenia), bo nadrzędna zasada brzmi: nie zepsuć tego, co już rankuje.</div><div class="skala">Status: znaleziska zapisane (docs/seo/znaleziska-huby-2026-07-14); wymaga pilota + progów wycofania z T-203-baseline</div></td>
 <td class="num">11–14</td></tr>
 </tbody>
-<tfoot><tr><td>Razem pełna lista (widełki)</td><td class="num">585–767</td></tr></tfoot>
+<tfoot><tr><td>Razem pełna lista (widełki)</td><td class="num">577–755</td></tr></tfoot>
 </table>
 </section>
 </div>
