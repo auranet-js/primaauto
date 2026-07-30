@@ -1,5 +1,119 @@
 # Historia wersji asiaauto-sync
 
+## 0.34.13 — 2026-07-30 (T-222: override che168 świadomy napędu — `by_engine`)
+
+**Objaw** (zgłoszenie Janka): `/oferta/byd-song-plus-ev-2025-396835/` — oferta z wersją **DM-i**
+(`fuel=phev`) wylądowała w hubie **EV**.
+
+**Przyczyna — ten sam short-circuit co casus N8L z 27.07.** `resolveChe168()` **przyjmuje**
+`$engine`, ale krok 0 (ręczne override'y) zwracał przed jego sprawdzeniem:
+
+```php
+if (isset($override["{$mark}|{$model}"])) {
+    return $override["{$mark}|{$model}"];   // $engine nigdy nie użyty
+}
+```
+
+Che168 trzyma warianty EV i DM-i **pod jedną nazwą modelu** (`Han`, `海豹06`,
+`PLUS New Energy` = skrót od `宋PLUS新能源`), a nasze huby są rozbite po napędzie — rozbicie jest
+NASZE, nie źródłowe. Override był więc płaski i celował w wariant dominujący; komentarz w mapie
+mówił wprost „engine-agnostyczny … celuje w wariant DM-i (dominujący)". Wariant mniejszościowy
+zawsze trafiał do cudzego huba.
+
+**Poprawka — opcjonalny klucz `by_engine`** w `data/che168-model-map.php`, konsultowany w kroku 0:
+
+```php
+'BYD|PLUS New Energy' => [
+    'serie_eu' => 'Song PLUS EV', ...,                 // domyślny (dominujący)
+    'by_engine' => ['plug-in hybrid' => ['serie_eu' => 'Seal U DM-I (Song Plus)', ...]],
+],
+```
+
+Dopasowanie przez `self::ci()` (case/spacje-insensitive). **Wstecznie zgodne** — wpisy bez
+`by_engine` zachowują się identycznie; potwierdzone testem `engine=(brak)` → wariant domyślny.
+Objęte 3 override'y: `BYD|Han` (default DM-i, 52 oferty → EV), `BYD|海豹06` (default DM-i → EV),
+`BYD|PLUS New Energy` (default EV → DM-i).
+
+**Sprzątnięte 6 ofert sprzed poprawki** (`scripts/fix-rozjazd-napedu-2026-07-30.php`, guard na
+`fuel` przed przepięciem) + przeliczone tytuły/slugi (`scripts/odswiez-tytuly-ofert.php`).
+Stare URL-e żyją przez natywny `_wp_old_slug` — zweryfikowane: `byd-song-plus-ev-2025-396835`
+→ **301** → `byd-seal-u-dm-i-song-plus-2025-396835` → **200**.
+
+**Skala i weryfikacja.** Nowy `scripts/detektor-rozjazdu-napedu.php` porównuje napęd oferty
+(`fuel`) z napędem deklarowanym w nazwie serii; zwraca kod 1 gdy są rozjazdy, więc nadaje się
+do crona. Przed: 6 rozjazdów na 704 oferty (0,9%), wszystkie che168, wszystkie BYD.
+Po: **705/705 zgodnych, 0 rozjazdów**. Kandydat do wciągnięcia do `scripts/che168-monitor.php` —
+dziś monitor łapie rozjazdy po `车型名称`, ale nie po napędzie.
+
+Backupy: `data/che168-model-map.php.bak-2026-07-30-byengine`,
+`includes/class-asiaauto-mapping.php.bak-2026-07-30-byengine`.
+
+## 0.34.12 — 2026-07-30 (T-222: tryb `verify` dla dongchedi + parytet filtrów che168)
+
+**Tryb pracy synca per źródło.** Nowa opcja `asiaauto_sync_mode_{source}` (`full` | `verify`,
+domyślnie `full`) + `AsiaAuto_Sync::modeForSource()` / `isVerifyOnly()`. W trybie `verify` sync
+**nie importuje nowych ofert**, ale nadal aktualizuje ceny istniejących i wycofuje zdjęte
+u źródła (`markRemoved()` → `draft` → 301 na hub modelu).
+
+Po co: dongchedi jest wygaszane przed końcem opłaconego okresu auto-api (**15.08.2026**), ale
+odcięcie API od razu pozbawiłoby nas jedynego sposobu sprawdzenia, które z ~1500 żywych ofert
+jeszcze istnieją — zapas zgniłby jako ogłoszenia aut już sprzedanych. Oferta na dongchedi żyje
+2–4 tygodnie (rozkład wieku martwych z przemiału 29.07: 15–30 dni → 800 szt.).
+
+**Dwie furtki, nie jedna.** Zablokowanie samego `case 'added'` nie wystarcza — zdarzenie
+`changed` na ofercie, której nie ma lokalnie, wpada w gałąź „treat as new" i też importuje.
+`changed` to ~42% strumienia. Obie zamknięte pod tą samą flagą.
+
+Zweryfikowane na produkcji: bieg 08:36 (przed flagą) `added=4`, bieg 08:40 (po) `added=0`,
+`removed` dalej działa (3 i 2 w biegach 07:48 i 08:19).
+
+**Filtry che168 → parytet z dongchedi.** `asiaauto_import_config['che168']['marks']` **12 → 60**
+= suma 57 marek dongchedi + 3 własne che168 (**BAW, Lynk & Co, Volvo**). Uwaga: prosta podmiana
+listy skasowałaby te trzy — wymagane **scalenie**, nie przypisanie. `model_blacklist` che168
+(2 wpisy, w tym 22 modele Volvo) nietknięty. Pozostałe kryteria były już identyczne: rocznik
+≥2024, przebieg ≤40 000 km, cena ≥85 000 ¥, te same 31 miast.
+
+Backup opcji: `asiaauto_import_config_backup_2026_07_30`.
+Spec: `docs/superpowers/specs/2026-07-30-t222-migracja-dongchedi-che168-design.md`.
+
+## 0.34.11 — 2026-07-29 (sieroty z kanału dongchedi: Passion L + Fulwin T10; stare URL-e ofert)
+
+**Guard mapowania działa wyłącznie dla che168.** `AsiaAuto_Sync::normalizeForSource()` otwiera się
+linią `if ($source !== 'che168') return $data;` — kanał **dongchedi nie ma żadnego guarda**, więc
+niezmapowana para `mark|model` wchodzi i importer buduje taksonomię fallbackiem. To koryguje
+dotychczasowe założenie „ręczny import bez guarda, sync ma": sync dongchedi też go nie ma.
+
+Klucze zmierzone ścieżką `getOffer() → getEuForCn()` (nie zgadywane) — wszystkie wracały NULL:
+`Voyah|Voyah Zhuiguang L`, `Chery Fengyun|Fengyun T10`, `Chery Fengyun|Fengyun X3L`.
+
+**Kierunek scalenia rozstrzygnięty dwoma źródłami**, nie samym istnieniem 301 z 27.07:
+
+| kierunek | DFS PL | GSC 90 dni |
+|---|---|---|
+| `chery fulwin` vs `chery fengyun` | 90 vs 30/mc | **91 imp / 3 kliki** vs 4 / 0 |
+| `voyah passion` vs `zhuiguang` | 320 vs —/mc | **39 imp / 2 kliki** vs 1 / 0 |
+
+Nazwa `T10` (nie `Fengyun T10`) — DFS nie ma danych dla żadnego wariantu, więc rozstrzyga
+konwencja większości pod tą marką: T8, T9, T11, A8L, A9L, X3 PLUS. Przy okazji zlikwidowany
+duplikat `fengyun-x3l` wobec pustego `x3l` i pusty term `fengyun-x3`.
+
+**Naprawa uboczna, ujawniona przy testach — stare URL-e ofert lądowały na hubie.**
+`detectListingNotFound()` wisi na `template_redirect` z priorytetem **1**, a natywny
+`wp_old_slug_redirect` dopiero z **10** — więc przy każdej zmianie slugu oferty nasz hook
+wyprzedzał mechanizm WP i użytkownik z linku do konkretnego auta trafiał na listę modelu.
+Dodana metoda `resolveMovedListingUrl()` (addytywnie, przed dotychczasową ścieżką): działa
+tylko dla ofert `publish` ze zmienionym slugiem, więc equity transfer dla sprzedanych
+(draft/trash → hub) jest nietknięty — zweryfikowane na `aito-m7-2024-390514`.
+
+Wyposażenie: bank specyfikacji uzupełnił 35 ofert o **+10 763 pola**. Sam Voyah 394247 wskoczył
+41 → 399 dopiero **po** naprawie taksonomii — klucz banku `voyah|passion-l|4wd ultra|2026` (378 pól)
+nie trafiał, dopóki oferta siedziała pod termem `voyah-zhuiguang-l`. To praktyczny dowód, że
+kolejność procedury (taksonomia → mapowania → wyposażenie) nie jest akademicka.
+
+Indexing: 8 URL (huby modeli i marek + 3 oferty ze zmienionym slugiem), lista w
+`tmp/indexing/fulwin-passion-SUBMITTED-2026-07-29.txt`. Hub `T10` **świadomie pominięty** —
+nie ma jeszcze FAQ, zgłoszenie przed treścią paliłoby budżet drugi raz na tym samym URL-u.
+
 ## 0.34.10 — 2026-07-28 (rodzina GAC: Aion Hyper → Hyptec, rename rozstrzygnięty wolumenami)
 
 **Decyzja nazewnicza podjęta na zachowaniu użytkowników, nie na rebrandingu producenta.**
