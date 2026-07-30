@@ -20,6 +20,7 @@ import datetime as dt
 import email.utils
 import json
 import re
+import subprocess
 import sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
@@ -458,6 +459,48 @@ def extract_verified_credit(html, image_url, source_name=None):
     return None
 
 
+def _upload_batch_key(image_url):
+    """Bazowa nazwa uploadu bez sufiksów WP: '.../xiaomi_skynomad_presales-3-800x450.jpg'
+    -> 'xiaomi_skynomad_presales'. Pozwala rozpoznać zdjęcia z JEDNEGO zestawu wgranego
+    do CMS-a źródła (WP rozbija taki zestaw na -1, -2, -3...)."""
+    name = image_url.rsplit("/", 1)[-1]
+    name = re.sub(r"\.\w+$", "", name)
+    name = re.sub(r"-\d+x\d+$", "", name)      # -800x450 (rozmiar WP)
+    name = re.sub(r"-\d+$", "", name)          # -3 (kolejny plik z tej samej wysyłki)
+    return name
+
+
+def inherit_credit_from_batch(html, image_url, source_name=None):
+    """Kredyt dziedziczony w obrębie JEDNEGO zestawu prasowego.
+
+    Źródła (CarNewsChina, CNEVPost) kredytują zwykle tylko jedno zdjęcie z artykułu —
+    to, które idzie na og:image — a reszta galerii to ten sam materiał prasowy wgrany
+    hurtem (te same nazwy plików z sufiksem -1, -2, ...). Bez tego zdjęcie producenta
+    dostaje podpis 'fot. {serwis}', co sugeruje autorstwo serwisu (feedback Janka 30.07:
+    zdjęcia mają być jawnie od producenta).
+
+    To NIE jest zgadywanie: dziedziczymy wyłącznie w obrębie tej samej nazwy uploadu.
+    Zdjęcie z innego zestawu (kadr z wideo, spy-shot, avatar autora) ma inną nazwę pliku
+    i kredytu nie dostanie — wraca do neutralnego podpisu."""
+    if not html or not image_url:
+        return None
+    key = _upload_batch_key(image_url)
+    if not key:
+        return None
+    for m in re.finditer(r'"contentUrl":"([^"]+)"[^{}]*?"caption":"([^"]*)"', html):
+        url = m.group(1).replace("\\/", "/")
+        if _upload_batch_key(url) == key:
+            credit = _credit_from_text(m.group(2), source_name)
+            if credit:
+                return credit
+    for m in re.finditer(r'<img\b[^>]*\bsrc="([^"]+)"[^>]*>.{0,400}?<figcaption[^>]*>([^<]*)</figcaption>', html, re.S):
+        if _upload_batch_key(m.group(1)) == key:
+            credit = _credit_from_text(m.group(2), source_name)
+            if credit:
+                return credit
+    return None
+
+
 def pick_spaced(items, n):
     """Wybiera do n elementów rozłożonych równomiernie po liście (unika klastra duplikatów z początku)."""
     if not items:
@@ -487,6 +530,37 @@ def insert_figures(body_html, figures):
     for slot, fig in sorted(zip(slots, figures), key=lambda x: -x[0]):
         blocks.insert(slot + 1, fig)
     return "".join(blocks)
+
+
+def submit_to_indexing(url):
+    """Zgłasza świeżo opublikowany news do Google Indexing API.
+
+    Auto-indexing pluginu (class-asiaauto-indexing.php) ma zaszyte POST_TYPE='listings'
+    i przepuszcza WYŁĄCZNIE oferty — newsy i hasła Słownika nigdy przez niego nie
+    przechodzą. Bez tego news trafiał do Google dopiero przez sitemapę (audyt 30.07:
+    28/29 newsów zaindeksowanych, ale z opóźnieniem crawla zamiast w godzinach).
+
+    Wyłącznie przez ~/bin/index-submit (wymóg globalny — wrapper prowadzi liczydło
+    wspólnej puli 200/dobę). Kod wyjścia 2 = budżet ad-hoc wyczerpany: to NIE jest
+    błąd publikacji, news zostaje opublikowany i wejdzie sitemapą, więc tylko logujemy."""
+    submit = str(Path.home() / "bin" / "index-submit")
+    if not Path(submit).exists():
+        print("    indexing: brak ~/bin/index-submit — pomijam", flush=True)
+        return
+    try:
+        r = subprocess.run(
+            [submit, "--project", "primaauto", "--type", "URL_UPDATED", "--url", url],
+            capture_output=True, text=True, timeout=120,
+        )
+    except Exception as e:
+        print(f"    indexing: nie udało się uruchomić wrappera ({e})", flush=True)
+        return
+    if r.returncode == 0:
+        print("    indexing: zgłoszono", flush=True)
+    elif r.returncode == 2:
+        print("    indexing: budżet ad-hoc wyczerpany — nie zgłoszono (news wejdzie sitemapą)", flush=True)
+    else:
+        print(f"    indexing: błąd rc={r.returncode} {(r.stderr or '').strip()[:160]}", flush=True)
 
 
 def publish_wp_post(draft, post_date=None):
@@ -519,7 +593,8 @@ def publish_wp_post(draft, post_date=None):
         extra_figures = []
         slug = draft.get("slug") or "news"
         for i, url in enumerate(pick_spaced(gallery, 2), start=1):
-            credit = extract_verified_credit(source_html, url, draft.get('_source'))
+            credit = (extract_verified_credit(source_html, url, draft.get('_source'))
+                      or inherit_credit_from_batch(source_html, url, draft.get('_source')))
             caption = (f"fot. materiały prasowe {credit} (via {draft['_source']})" if credit
                        else f"fot. {draft['_source']}")
             webp = kb.download_webp(url, str(kb.STATE_DIR / f"extra-{slug}-{i}"))
@@ -711,6 +786,7 @@ def main():
             post_id, url = publish_wp_post(draft, source_post_date(cand) if args.backdate else None)
             results.append({"draft": draft, "post_id": post_id, "url": url})
             print(f"    OK opublikowano #{post_id} -> {url}", flush=True)
+            submit_to_indexing(url)
         except Exception as e:
             failed.append(f"{cand['title']}: {e}")
             print(f"    FAIL: {e}", flush=True)
