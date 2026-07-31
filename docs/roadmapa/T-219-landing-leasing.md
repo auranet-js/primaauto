@@ -276,9 +276,10 @@ z treścią zawierającą `<script>`/`<style>` musi mieć `--user=1`.**
 
 | Element | Stan |
 |---|---|
-| **B — blok na 317 hubach serie** | Nie ruszone. Nagłówek: **`{full_title} leasing`** (patrz korekta w §3A). Priorytet wg GSC: Zeekr 9X (24 imp), Geely Monjaro (10), Zeekr 8X i Xiaomi YU7 (po 3). |
+| ~~**B — blok na 317 hubach serie**~~ | ✅ **WDROŻONE 31.07** (theme 1.2.0) — nowy plik `hub-leasing-block.php`, do `taxonomy-serie.php` weszły 3 linie. Bez liczb: bez cen, bez liczby ofert, bez procentu depozytu — decyzje D10-D14 niżej. |
 | **C — formularz leadowy** | Nie ruszone. **Dług:** CTA na landingu prowadzi dziś do `/kontakt/`, czyli do `mailto:` — spec zakładał formularz osadzony na stronie (§3A pkt 9). Landing bez formularza = landing bez mierzalnej konwersji. |
 | **Pasek zaufania na ofertach** | Nie ruszone — dotyka `class-asiaauto-single.php` (ZAWSZE PYTAJ). |
+| **Autolinker działu wiedzy** | Nie ruszone — hasło „leasing” jeszcze nie prowadzi na landing (osobny punkt z §3B). |
 | **Rozjazd depozytu z §4 umowy** | Wydzielony do **T-223**, czeka na odpowiedź Ruslana (punkt 8 w `docs/biznes/2026-07-27-punkty-do-weryfikacji-ruslan.md`). |
 
 ## 11. Decyzje zapadłe — ciąg dalszy
@@ -288,3 +289,20 @@ z treścią zawierającą `<script>`/`<style>` musi mieć `--user=1`.**
 | D7 | Szyk nagłówka na hubach: **`{model} leasing`**, nie `Leasing {model}` — GSC 90 dni: 54 imp vs 4 imp. Spójne z T-203 | 2026-07-31 |
 | D8 | Poprawki Ruslana wchodzą **1:1**, łącznie z „pracujemy z najlepszymi" (zamiast konkretu o leasingodawcy finansującym auta spoza UE). Rozjazd z umową idzie do T-223, nie blokuje publikacji | 2026-07-31 |
 | D9 | Leasingodawcy **nie nazywamy z nazwy** — Ruslan sam wybrał sformułowanie bez nazwy. Zamyka pytanie 9.0 | 2026-07-31 |
+
+## 12. Decyzje zapadłe — część B
+
+| # | Decyzja | Kiedy |
+|---|---|---|
+| D10 | **Zero cen w bloku hubowym.** Kwoty renderują się poprawnie, ale wyjeżdżają do cache'u modeli językowych i wracają jako nieaktualne („Zeekr 9X od 431 000 zł") pół roku później. Do tego 10% liczone od najtańszego egzemplarza skacze, gdy ten zniknie z oferty. Widełki są wyżej na tej samej stronie, w barze ofert, gdzie się aktualizują | 2026-07-31 |
+| D11 | **Zero liczby ofert.** 87 z 317 hubów ma jedną ofertę — „przy 1 dostępnym egzemplarzu" brzmi słabo i zmienia się z dnia na dzień | 2026-07-31 |
+| D12 | **Zero procentu depozytu.** `leasing_deposit_percent` to nastawa w `asiaauto_order_config`, zmieniana ad hoc ([[reference_order_config_is_operational_knob]]). Hardkod w 317 stron = 317 kłamstw po jej zmianie. Warunki finansowe wyłącznie na landingu, w jednym miejscu | 2026-07-31 |
+| D13 | **Anchor bez nazwy modelu**, trzy warianty sformułowania. Anchor „Leasing Zeekr 9X →" prowadzący na stronę ogólną obiecywałby treść o modelu, której tam nie ma | 2026-07-31 |
+| D14 | **Logika w osobnym pliku** `hub-leasing-block.php`, nie w `taxonomy-serie.php` — strefa krucha dostaje 3 linie zamiast 30 ([[feedback_additive_not_fragile_zone]]) | 2026-07-31 |
+
+### Dług odnotowany przy okazji
+
+Na **landingu** procent depozytu (10%) jest wpisany na sztywno w pięciu miejscach: akapicie,
+tabeli, dwóch pytaniach FAQ, schemie oraz w `llms-full.txt`. Jedno miejsce zamiast 317, więc
+problem nieporównanie mniejszy — ale przy zmianie nastawy strona nadal będzie mówiła swoje.
+Do rozstrzygnięcia razem z **T-223** (tam i tak ustalamy mechanikę depozytu).

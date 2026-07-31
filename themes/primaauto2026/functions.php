@@ -1,7 +1,7 @@
 <?php
 defined('ABSPATH') || exit;
 
-const PRIMAAUTO_THEME_VERSION = '1.0.7';
+const PRIMAAUTO_THEME_VERSION = '1.2.0';
 
 add_action('after_setup_theme', function () {
     add_theme_support('title-tag');
@@ -30,6 +30,10 @@ add_action('wp_enqueue_scripts', function () {
     wp_enqueue_style('primaauto-header', "$base/css/header.css", ['primaauto-base'], PRIMAAUTO_THEME_VERSION);
     wp_enqueue_style('primaauto-footer', "$base/css/footer.css", ['primaauto-base'], PRIMAAUTO_THEME_VERSION);
     wp_enqueue_style('primaauto-hub',    "$base/css/hub.css",    ['primaauto-base'], PRIMAAUTO_THEME_VERSION);
+    // Dział wiedzy (T-214): artykuły, kategorie, Leksykon
+    if (is_singular(['post', 'asiaauto_wiki']) || is_category() || is_post_type_archive('asiaauto_wiki') || is_home()) {
+        wp_enqueue_style('primaauto-kb', "$base/css/kb.css", ['primaauto-base'], PRIMAAUTO_THEME_VERSION);
+    }
     wp_enqueue_script('primaauto-nav',   "$base/js/nav.js", [], PRIMAAUTO_THEME_VERSION, ['strategy' => 'defer', 'in_footer' => true]);
 });
 
@@ -67,3 +71,19 @@ add_filter('template_include', function ($template) {
     }
     return $template;
 }, 99);
+
+/**
+ * Polski tytuł strony 404 (WCAG 2.2 — audyt 2026-07-31, punkt AA8).
+ * Domyślny "Page Not Found" jest po angielsku przy lang="pl-PL".
+ * Filtr RankMath dla instalacji z wtyczką + fallback na rdzeń WP.
+ */
+add_filter('rank_math/frontend/title', function ($title) {
+    return is_404() ? 'Nie znaleziono strony - Prima-Auto - Import Samochodów z Chin' : $title;
+}, 20);
+
+add_filter('document_title_parts', function ($parts) {
+    if (is_404()) {
+        $parts['title'] = 'Nie znaleziono strony';
+    }
+    return $parts;
+}, 20);

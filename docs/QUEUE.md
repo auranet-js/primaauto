@@ -22,7 +22,7 @@ T-217 (wzorzec leasingowy) ──┬──→ T-220 (aneks VIN)
 |---|---|---|---|
 | **T-221** — pakiet prawny pod PayU | 🔵 gotowe do startu | **blokuje T-121** | 12–18 h |
 | **T-217** — drugi wzorzec umowy (leasing) | ✅ **DONE 2026-07-30** (v0.34.14 LIVE) | odblokował T-220 i T-219 | — |
-| **T-219** — landing „Leasing samochodu z Chin" + blok na hubach | 🟡 **część A + D DONE 31.07** (strona LIVE, sitemapa, stopka, `/finansowanie/`, llms, indexing); zostaje **B** (317 hubów) i **C** (formularz) | niezależny; źródło treści = wzorzec z T-217 | 7–10 h (pozostało) |
+| **T-219** — landing „Leasing samochodu z Chin" + blok na hubach | 🟡 **A + B + D DONE 31.07** (strona LIVE, blok na 317 hubach — theme 1.2.0, sitemapa, stopka, `/finansowanie/`, llms, indexing); zostaje **C** (formularz leadowy) | niezależny; źródło treści = wzorzec z T-217 | 5–7 h (pozostało) |
 | **T-223** — rozjazd depozytu: strona vs §4 umowy | ⏸️ czeka na Ruslana (punkt 8 w liście weryfikacyjnej) | wynik decyduje, czy ruszamy §4 wzorca (strefa krucha) | 1–4 h |
 | **T-220** — aneks VIN | 🔵 gotowe do budowy | zależy od T-217 (szablon per typ) | 8–12 h |
 | **T-121** — płatność PayU za depozyt | ⚠️ gated na T-221 | po regulaminie i zgodzie PayU | 32–42 h |
