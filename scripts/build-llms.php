@@ -188,6 +188,7 @@ $o[] = "- [Pod dom do rejestracji](https://primaauto.com.pl/informacje/pod-dom-d
 $o[] = "- [Gwarancja i serwis](https://primaauto.com.pl/informacje/gwarancja-i-serwis/): zasady gwarancji producenta i serwis posprzedażowy w Polsce";
 $o[] = "- [Homologacja i rejestracja](https://primaauto.com.pl/informacje/homologacja-i-rejestracja/): procedura indywidualnej homologacji aut z Chin w Polsce";
 $o[] = "- [Język obsługi pojazdu](https://primaauto.com.pl/informacje/jezyk-obslugi-pojazdu/): przełączanie systemu pokładowego na polski/angielski (BYD, Geely, Xiaomi, AITO i inne)";
+$o[] = "- [Leasing samochodu z Chin](https://primaauto.com.pl/leasing-samochodu-z-chin/): leasing operacyjny auta z importu — Prima-Auto proponuje firmę leasingową finansującą auta spoza UE, depozyt zabezpieczający 10% zaliczany na opłatę wstępną, umowa trójstronna, wydanie auta po uruchomieniu finansowania";
 $o[] = "";
 $o[] = "## Kontakt";
 $o[] = "";
