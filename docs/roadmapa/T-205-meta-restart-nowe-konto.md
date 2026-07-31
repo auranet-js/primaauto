@@ -1,8 +1,30 @@
 # T-205 — Meta: restart na nowym koncie (Facebook/Instagram)
 
-> Status: **czeka na Ruslana** (założenie nowej strony + portfolio) · Rozmiar: M
-> Godziny realnie: **16–22 h** (Janek ~4–5 h, AI ~12–17 h) · Rynkowo: 40–50 h
-> Zastępuje pozycję „Uruchomienie kampanii Facebook/Instagram" (17–20 h) — tamta zakładała, że mamy dostęp do konta. Nie mamy.
+> Status: **ODBLOKOWANE — mamy dostęp od 2026-07-31** · Rozmiar: M
+> Godziny pozostałe: **12–16 h** (z pierwotnych 16–22 h; Ruslan wykonał konfigurację portfolio sam)
+> **Plan wykonawczy: [`T-205-plan-wykonawczy-2026-07-31.md`](T-205-plan-wykonawczy-2026-07-31.md)**
+> Zastępuje pozycję „Uruchomienie kampanii Facebook/Instagram" (17–20 h) — tamta zakładała, że mamy dostęp do konta.
+
+## Stan na 2026-07-31 — dostęp odzyskany
+
+Ruslan wykonał instrukcję ([`T-205-instrukcja-dla-ruslana.md`](T-205-instrukcja-dla-ruslana.md)) i przysłał token Systemu Użytkownika (dwoma mailami, połówki). Token sklejony i zapisany: `~/secrets/meta/tokens/primaauto-portfolio-ruslan.txt` (600, bezterminowy).
+
+**Zweryfikowane na żywo (`debug_token` + wywołania Graph API v21.0):**
+
+| Element | Wartość |
+|---|---|
+| System User | „Auranet API" `122094804249428678`, rola **ADMIN** |
+| Aplikacja | **„Prima-Auto API" `1533997951805022`** — nowa, **Marketing API DZIAŁA** |
+| Scope | `ads_management`, `ads_read`, `business_management`, `pages_show_list`, `pages_read_engagement`, `pages_manage_ads`, `catalog_management` |
+| Portfolio | „Prima Auto" `1486783363131026` (to puste z 11.06) — `not_verified` |
+| Konto reklamowe | `act_1038563008906171` „Prima-Auto" — utworzone 31.07, **PLN + Europe/Warsaw**, aktywne, 0 wydane, 0 kampanii |
+| Strona | „Prima-Auto" `1146829831857839` — opublikowana, kat. „Sprzedaż samochodów", opis + `primaauto.com.pl` wpisane, **0 obserwujących** |
+
+⚠️ **Blokada API dotyczyła aplikacji, nie tokena** — stara appka „Auranet API" `1012248818452132` pozostaje zablokowana i nie należy jej używać. Wszystko idzie przez nową `1533997951805022`. (Implikacja cross-project: przy Victorini w `~/secrets/meta/accounts.json` figuruje stara appka — tam Marketing API nadal będzie martwe.)
+
+✅ Nieodwracalne nastawy — **waluta PLN i strefa Europe/Warsaw** — wyszły poprawnie. To był najgroźniejszy gotcha instrukcji (stare konto miało UAH/Berlin).
+
+**Zerowe / brakujące:** dataset (piksel) `0`, katalog produktów `0`, Instagram `0`, metoda płatności brak (`funding_source` puste), weryfikacja firmy i UE niezrobione.
 
 ## Dlaczego restart, a nie odzyskiwanie
 
