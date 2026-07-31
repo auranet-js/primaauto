@@ -9,22 +9,23 @@
 
 ## 1. Podsumowanie
 
-Znaleziono **17 rodzajów naruszeń** w ok. **290 wystąpieniach** wykrywalnych na przebadanej próbce stron.
+Znaleziono **16 rodzajów naruszeń** w ok. **290 wystąpieniach** wykrywalnych na przebadanej próbce stron.
+
+> **Korekta 2026-07-31:** pierwotnie raport mówił o 17 rodzajach i 4 blokujących. Punkt A4 („brak `h1` na karcie auta") okazał się **błędnym ustaleniem** i został wycofany — szczegóły w sekcji 6a. Poniższe liczby są już poprawione.
 
 | Poziom | Rodzajów naruszeń | Wystąpień |
 |---|---|---|
-| **A** (blokujące) | 9 | ~35 |
+| **A** (blokujące) | 8 | ~35 |
 | **AA** | 8 | ~255 |
-| Razem | **17** | **~290** |
+| Razem | **16** | **~290** |
 
-**Blokujących korzystanie: 4.** Są to naruszenia, które realnie odcinają użytkownika klawiatury albo czytnika ekranu od funkcji serwisu, a nie tylko utrudniają odbiór:
+**Blokujących korzystanie: 3.** Są to naruszenia, które realnie odcinają użytkownika klawiatury albo czytnika ekranu od funkcji serwisu, a nie tylko utrudniają odbiór:
 
-1. **Skip link nie działa** — użytkownik klawiatury nie może ominąć nawigacji (dotyczy każdej strony)
-2. **Karta auta nie ma `h1` na desktopie** — brak punktu wejścia w treść dla czytnika (dotyczy ~2752 stron ofert)
-3. **Komunikaty błędów w kreatorze zamówienia nie są ogłaszane ani powiązane z polami** — użytkownik czytnika nie dowiaduje się, że i dlaczego zamówienie nie przeszło
-4. **Paginacja listingu gubi focus** — po zmianie strony focus spada na `<body>`, przeglądanie oferty klawiaturą wymaga przetabowania całej strony od nowa
+1. ~~**Skip link nie działa**~~ — użytkownik klawiatury nie może ominąć nawigacji (dotyczy każdej strony). **NAPRAWIONE 2026-07-31**, patrz sekcja 9a
+2. **Komunikaty błędów w kreatorze zamówienia nie są ogłaszane ani powiązane z polami** — użytkownik czytnika nie dowiaduje się, że i dlaczego zamówienie nie przeszło
+3. **Paginacja listingu gubi focus** — po zmianie strony focus spada na `<body>`, przeglądanie oferty klawiaturą wymaga przetabowania całej strony od nowa
 
-**Uwaga o skali liczby wystąpień.** ~253 z ~290 wystąpień to kontrast kolorów, a liczba ta skaluje się z liczbą wyświetlonych rekordów: sam listing generuje 72 wystąpienia na 24 kafle. Naprawa dotyczy jednak nie 253 miejsc, tylko **pięciu tokenów kolorystycznych w CSS**. Liczba wystąpień opisuje zasięg problemu, nie pracochłonność.
+**Uwaga o skali liczby wystąpień.** ~253 z ~290 wystąpień to kontrast kolorów, a liczba ta skaluje się z liczbą wyświetlonych rekordów: sam listing generuje 72 wystąpienia na 24 kafle. Naprawa nie dotyczy jednak 253 osobnych miejsc — chodzi o **dziesięć par kolorów**, ale rozsianych po **125 hardkodach hex w ~20 plikach** (patrz sekcja 3). Liczba wystąpień w DOM opisuje zasięg problemu dla użytkownika, liczba hardkodów — pracochłonność naprawy.
 
 **Czego NIE ma w serwisie, mimo że było w zakresie audytu:** formularza kontaktowego (strona `/kontakt/` to dane teleadresowe + `tel:`/`mailto:`/WhatsApp, bez `<form>`) oraz formularza zapytania o pojazd innego niż kreator zamówienia. To nie jest brak dostępności — to korekta zakresu.
 
@@ -39,7 +40,7 @@ Znaleziono **17 rodzajów naruszeń** w ok. **290 wystąpieniach** wykrywalnych 
 | A1 | **2.4.1 Bypass Blocks** | Skip link przewija stronę, ale nie przenosi focusu — `activeElement` zostaje `BODY`, kolejny Tab wraca na początek | `themes/primaauto2026/header.php:18` (`<a class="skip-link" href="#pa-content">`), cel `#pa-content` to `<div>` bez `tabindex` | 1 × każda strona | Dodać `tabindex="-1"` do `#pa-content`, albo przekierować skip link na `<main class="pa-main">` i tam dodać `tabindex="-1"` | 15 min |
 | A2 | **2.4.4 + 4.1.2** | Logo w stopce to link bez żadnej nazwy dostępnej (brak tekstu, `aria-label`, `title`) | `themes/primaauto2026/footer.php`, `.pa-footer__logo > a` | 1 × każda strona | `aria-label="Prima-Auto strona główna"` — dokładnie tak jak już jest w `header.php:25` i `:66` | 5 min |
 | A3 | **4.1.2 Name, Role, Value** | Trzy `<select>` bez etykiety | `#aa-home-make`, `#aa-home-model` (strona główna); `.aa-sort__select` (listing) | 3 | `<label class="screen-reader-text">` lub `aria-label` („Marka", „Model", „Sortowanie") | 30 min |
-| A4 | **1.3.1 Info and Relationships** | Karta auta nie ma `h1` na desktopie. Tytuł renderuje się jako `<div class="aa-single__title">`, jedyny `<h1>` siedzi w `.aa-single__sticky-head--mobile`, ukrytym `display:none` powyżej 768px | `plugins/asiaauto-sync/includes/class-asiaauto-single.php`, CSS `assets/css/asiaauto-single.css:204` | ~2752 strony ofert | Zamienić `<div>` na `<h1>` w wariancie `--desktop`, a w wariancie `--mobile` zejść do `<p>`/`<div>` — tak, by na obu szerokościach istniał dokładnie jeden `h1` | 1–2 h |
+| ~~A4~~ | ~~**1.3.1** — brak `h1` na karcie auta~~ | **USTALENIE WYCOFANE 2026-07-31 — patrz sekcja 6a.** Desktopowy tytuł to `<div role="heading" aria-level="1">`, czyli poprawny nagłówek poziomu 1 w drzewie dostępności. Nie jest to naruszenie. | — | — | Nic do naprawy | — |
 | A5 | **1.3.1** | Strona 404 nie ma `h1` — hierarchia startuje od `H2` | `themes/primaauto2026/404.php` | 1 | Podnieść nagłówek komunikatu do `h1` | 15 min |
 | A6 | **1.3.1** | Dwie tabele danych bez komórek nagłówkowych — 0 × `<th>`, brak `<caption>` | `/kontakt/`, `table.aa-contact__hours-table` (godziny), `table.aa-contact__data-table` (dane firmy) | 2 | Zamienić pierwszą kolumnę/wiersz na `<th scope="row">`/`<th scope="col">`, dodać `<caption>` | 30 min |
 | A7 | **1.3.1 + 3.3.2 Labels or Instructions** | Pola filtrów listingu bez etykiet — nazwę niesie wyłącznie `placeholder`, który znika po wpisaniu treści | `/samochody/`: `.aa-price-inputs__input` × 2 (`placeholder="95 000"` / `"1 070 000"`), `.aa-search__input` (`placeholder="Szukaj marki, modelu..."`) | 3 | Dodać `<label>` (może być wizualnie ukryta) — „Cena od", „Cena do", „Szukaj marki lub modelu" | 1 h |
@@ -122,12 +123,11 @@ Konsekwencje dla planu naprawy:
 | A1 — skip link (`tabindex="-1"`) | A | 15 min |
 | A2 — `aria-label` na logo w stopce | A | 5 min |
 | A3 — etykiety trzech `<select>` | A | 30 min |
-| A4 — `h1` na karcie auta | A | 1–2 h |
 | A8 — błędy walidacji kreatora | A | 2 h |
 | A9 — focus po paginacji | A | 1 h |
-| **Razem** | | **~5–6 h** |
+| **Razem** | | **~4 h** |
 
-Uzasadnienie kolejności: A1, A2 i A3 to łącznie 50 minut i zdejmują trzy naruszenia poziomu A z **każdej** strony serwisu. Najlepszy stosunek efektu do nakładu w całym audycie. A4 dotyczy najliczniejszego typu strony i jednocześnie strony konwersyjnej. A8 blokuje domknięcie zamówienia, czyli jedyną ścieżkę przychodu.
+Uzasadnienie kolejności: A1, A2 i A3 to łącznie 50 minut i zdejmują trzy naruszenia poziomu A z **każdej** strony serwisu — najlepszy stosunek efektu do nakładu w całym audycie. A8 blokuje domknięcie zamówienia, czyli jedyną ścieżkę przychodu, więc idzie zaraz po nich.
 
 ### Koszyk 2 — naruszenia AA
 
@@ -175,12 +175,11 @@ Zmiany odwracalne, ale zasięg regresji wykracza poza 12 przebadanych typów str
 - **A3, A7** — szablon strony głównej + listing (etykiety)
 - **A6** — szablon `/kontakt/` (`<th scope>`, `<caption>`)
 - **AA5** — `footer.php` + szablony listingu i oferty
-- **A4** — `class-asiaauto-single.php` + `asiaauto-single.css` — **strefa krucha** (pipeline oferty), wymaga `.bak`, `php -l` i smoke testu wg checklisty deployu
 - **A8** — `asiaauto-order-wizard.js` (`validateRequired`)
 - **A9, AA3** — `asiaauto-inventory.js`, `asiaauto-order-wizard.js`, galeria w `class-asiaauto-shortcodes.php`
 - **AA6, AA7** — galeria w `class-asiaauto-shortcodes.php`, `nav.js`
 
-Ryzyko: średnie przy A4 i AA6 (dotykają renderu oferty i galerii). Reszta punktowa.
+Ryzyko: średnie przy AA6 (dotyka galerii na wszystkich ofertach). Reszta punktowa.
 
 ### 5c. Wymaga decyzji projektowej (nie ruszam bez Twojej zgody)
 
@@ -218,6 +217,13 @@ Zapisane, żeby nie wracać do obalonych hipotez:
 - **„`button.aa-search__clear` to fałszywy alarm axe, bo ma `display:none`"** — nieprawda. W stanie początkowym jest ukryty, ale po interakcji z wyszukiwarką renderuje się jako `display:flex` o wymiarach **20×20 px**. Naruszenie 2.5.8 jest realne.
 - **„Theme nie ma reguł `:focus`"** — błąd mojego skryptu przy pierwszym przejściu CSSOM. Theme **ma** globalny wskaźnik: `:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 2px }` w `base.css`. Problemem nie jest brak obrysu, tylko jego kontrast na ciemnym tle (AA2).
 - **„Pole tekstowe bez etykiety w kreatorze zamówienia"** — to honeypot antyspamowy `_hp`, poprawnie ukryty przez `aria-hidden="true"` + `tabindex="-1"`. Nie jest naruszeniem.
+- **„Karta auta nie ma `h1` na desktopie" (punkt A4, pierwotnie oznaczony jako BLOKUJĄCY)** — **nieprawda, ustalenie wycofane.** Desktopowy tytuł renderuje się jako `<div class="aa-single__title" role="heading" aria-level="1">`, czyli pełnoprawny nagłówek poziomu 1 w drzewie dostępności. Czytnik ekranu ogłasza go jako „nagłówek poziom 1". Błąd wziął się stąd, że moja sonda DOM wypisywała tylko `tagName` i `className`, bez atrybutu `role` — zobaczyłem `DIV` i wyciągnąłem wniosek, że to nie nagłówek.
+
+  Mechanizm jest **świadomy i udokumentowany** w `class-asiaauto-single.php:409-412`: tytuł renderuje się dwukrotnie (wariant `--mobile` i `--desktop`, przełączane CSS-em), a prawdziwy `<h1>` dostaje kopia mobilna, bo Google indeksuje mobile-first. Kopia nieaktywna ma `display:none`, więc znika także z drzewa dostępności — w każdej szerokości ekranu wystawiony jest dokładnie jeden nagłówek poziomu 1. Rozwiązanie jest poprawne pod WCAG i pod SEO; zamiana na „prawdziwy `<h1>` na desktopie" **zepsułaby** ich mechanikę mobile-first.
+
+  Potwierdzenie pośrednie: axe nigdy nie zgłosił na ofercie reguły `page-has-heading-one` — bo nagłówek jest.
+
+  **Skutek dla podsumowania:** blokujących 4 → **3**, rodzajów naruszeń poziomu A 9 → **8**, łącznie 17 → **16**. Na karcie auta zostaje z hierarchii wyłącznie skok „poziom 1 → `h3.aa-usp-col__title`" (punkt AA5c) — kolumny USP powinny być `h2`.
 
 ---
 
