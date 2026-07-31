@@ -1,5 +1,40 @@
 # Historia wersji asiaauto-sync
 
+## 0.34.15 — 2026-07-31 (che168: override'y ślepe na napęd + martwy klucz `by_engine`)
+
+**Objaw.** Oferta `che168:59161281` (`汉L 2025款 DM-p`, plug-in hybryda) wylądowała w hubie
+`Han L EV`. Audyt całej bazy (serie z sufiksem napędu vs term `fuel` oferty) wykazał
+**2 rozjazdy** i **1 uśpiony** — wszystkie z tej samej przyczyny: che168 trzyma warianty EV
+i DM/PHEV pod jedną nazwą modelu, a nasze huby są rozbite po napędzie.
+
+### `data/che168-model-map.php`
+- `BYD|汉L` — dodane `by_engine: ['phev' => Han L DM]`. Domyślny zostaje EV (27 ofert, sonda
+  widziała 3/3 EV). Łacińskie `Han L` z che168 rozpoznawało napęd samo (algorytm sufiksów,
+  krok 3 resolvera) — trafiał tam tylko klucz CJK, który short-circuitował na kroku 0.
+- `VOYAH|Dreamer` — dodane `by_engine: ['electric' => Dream EV]`. Komentarz przy wpisie
+  zapowiadał to „gdy pojawi się EV Dreamer" — pojawił się (oferta 398795,
+  `岚图梦想家 2025款 EV 四驱尊贵鲲鹏版`, `fuel_form=纯电动`).
+- `BYD|PLUS New Energy` — klucz `by_engine` poprawiony z `'plug-in hybrid'` na `'phev'`.
+  **Wpis z 30.07 (T-222) był martwy**: `normalizeEnums()` w adapterze normalizuje
+  `engine_type` PRZED kanonizacją mark/model, więc surowa nazwa che168 nigdy nie docierała
+  do porównania. Hub `song-plus-ev` jest dziś czysty tylko dlatego, że oferty przepięto
+  ręcznie — przy następnym imporcie DM-i wróciłyby do niego.
+
+### `includes/class-asiaauto-mapping.php`
+- Nowa `engineKey()` — normalizacja obu końców porównania `by_engine` (`plug-in hybrid`/`dm-i`/
+  `dm` → `phev`, `bev` → `electric`, `range extender`/`reev` → `erev`). Siatka bezpieczeństwa,
+  żeby kolejny wpis pisany surową nazwą che168 nie umarł po cichu jak ten z 30.07.
+- `resolveChe168()` woła `engineKey()` zamiast `ci()` przy dopasowaniu wariantu. Reszta
+  resolvera nietknięta.
+
+**Weryfikacja.** 15 przypadków resolvera (`汉L`/`Han L`/`Dreamer`/`PLUS New Energy`/`Han`/`海豹06`
+× electric/phev/brak) — wszystkie zgodne, zero regresji na wpisach z 30.07. Audyt bazy po
+zmianie: **0 rozjazdów** napęd vs hub.
+
+**Przepięte oferty** (backup stanu: `tmp/backup-repin-2026-07-31.json`):
+- #399083 `Han L EV` → `Han L DM`, tytuł/slug przeliczone (`byd-han-l-dm-2026-399083`, stary URL 301)
+- #398795 `Dream PHEV` → `Dream EV`, `voyah-dream-ev-2024-398795`
+
 ## 0.34.14 — 2026-07-30 (T-217: drugi wzorzec umowy — wariant leasingowy)
 
 **Co doszło.** Generator PDF umiał jeden wzorzec — pośrednictwo, §1–§9. Doszedł drugi:
