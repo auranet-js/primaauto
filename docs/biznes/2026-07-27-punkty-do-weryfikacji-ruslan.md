@@ -72,3 +72,13 @@ Bez tego dokumentu nie wystartujemy z płatnościami online (PayU/BLIK).
 Rozumiemy, że aneks dotyczy **wyłącznie numeru VIN** i uzupełnia umowę podpisaną, zanim auto zostało zweryfikowane. Dotyczy obu wzorców — pośrednictwa i leasingowego.
 
 **Pytanie:** czy przewidujesz w przyszłości aneksy do innych pól (cena, termin, specyfikacja)? Jeśli tak, zbudujemy generator od razu tak, żeby dało się je dołożyć bez przebudowy.
+
+## 8. Depozyt leasingowy — zwrot czy zaliczenie na opłatę wstępną? (dopisane 2026-07-31)
+
+W poprawkach do landingu leasingowego zapisałeś: *„Kwota depozytu jest zaliczana na poczet opłaty wstępnej leasingu"* — i usunąłeś wiersz o zwrocie po dojściu transakcji do skutku.
+
+Umowa leasingowa (§4, z podpisanego egzemplarza #072426-1) mówi odwrotnie: depozyt **wraca na konto klienta w 7 dni roboczych** od otrzymania pełnej ceny od Finansującego, *„chyba że Strony uzgodnią na piśmie inne rozliczenie"* — czyli zaliczenie na opłatę wstępną jest tam wyjątkiem wymagającym osobnego dokumentu.
+
+**Pytanie:** czy depozyt **zawsze** idzie na opłatę wstępną u firmy leasingowej, czy bywa też zwracany klientowi na konto? Jeśli zawsze — kto go przekazuje: Wy przelewacie go leasingodawcy jako wkład własny klienta, czy leasingodawca płaci Wam o tę kwotę mniej?
+
+Od odpowiedzi zależy, czy poprawiamy §4 wzorca umowy (żeby zgadzał się ze stroną), czy stronę (żeby zgadzała się z umową). Dziś strona mówi to, co napisałeś. Szczegóły: `docs/roadmapa/T-223-depozyt-rozjazd-strona-umowa.md`.

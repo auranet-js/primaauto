@@ -14,6 +14,13 @@
 wolumenu (badanie 2026-07-17) i to się nie zmieni z dnia na dzień. Uzasadnienie jest inne
 i trzyma się trzech nóg:
 
+> **Korekta 2026-07-31 (GSC, 90 dni):** teza „popytu nie ma" jest prawdziwa **tylko dla frazy
+> ogólnej**. Na poziomie modelu popyt ISTNIEJE i już generuje impresje bez żadnej treści
+> o leasingu po naszej stronie: `zeekr 9x leasing` 24 imp, `geely monjaro leasing` 10,
+> `zeekr 8x leasing` 3, `xiaomi yu7 leasing` 3, `leapmotor c16 leasing` 1 imp / **1 klik**.
+> Razem 24 frazy / 69 imp. **Konsekwencja: część B (blok na hubach) ma mocniejsze uzasadnienie
+> niż sam landing** — pierwszy rzut kierować na huby, które już te impresje zbierają.
+
 1. **Pokrycie encji dla modeli językowych.** Gdy ktoś pyta ChatGPT/Perplexity „czy chińskie
    auto da się wziąć w leasing", „leasing Zeekr 9X" — musi istnieć zaindeksowany, cytowalny
    dokument, który mówi *tak, oto jak*. Dziś takiego dokumentu nie ma. Mamy już do tego
@@ -109,7 +116,11 @@ Struktura sekcji (H1 + H2), źródło treści w nawiasach:
 Nowe H2 w `themes/primaauto2026/taxonomy-serie.php`, **między sekcją FAQ a `aa-hub__bottom-cta`**
 (linie ~232–246). Marek **nie ruszamy** (decyzja: tylko serie).
 
-- Nagłówek: `Leasing {full_title}` (np. „Leasing BYD Leopard 7")
+- Nagłówek: `{full_title} leasing` (np. „BYD Leopard 7 leasing") — **szyk potwierdzony GSC
+  2026-07-31** (`tmp/gsc-leasing-szyk-2026-07-31.py`, 90 dni): frazy `{model} leasing` = 16 fraz
+  / **54 imp**, frazy `leasing {model}` = 3 frazy / 4 imp. Trzynaście do jednego. Spójne
+  z decyzją T-203 (marka i model pierwsze, kwalifikator na końcu). Poprzedni zapis
+  („Leasing {full_title}") był kalką z nagłówków hubu, bez pokrycia w danych — **wycofany**.
 - 2–3 zdania **zmienne per model** — nazwa modelu + widełki cenowe z hubu, jeśli dostępne;
   **nie identyczny boilerplate ×317** (inaczej to 317 kopii jednego akapitu = ryzyko thin content)
 - Link: „Jak działa leasing samochodu z Chin →" → `/leasing-samochodu-z-chin/`
@@ -231,3 +242,49 @@ w `docs/kosztorys/dane/postep.json` przy najbliższym przebudowaniu strony post�
    (dotyka `class-asiaauto-single.php` = strefa ZAWSZE PYTAJ)
 3. **Osoby prywatne** — landing wspomina, że leasing operacyjny to firmy. Czy opisujemy
    ścieżkę dla osób prywatnych (kredyt/najem), czy zostawiamy na `/finansowanie/`?
+
+---
+
+## 10. Stan wykonania (2026-07-31, wieczór)
+
+### Zrobione
+
+| Element | Szczegóły |
+|---|---|
+| **A — strona** | `/leasing-samochodu-z-chin/` ID **398850**, publish. Treść po przeglądzie Ruslana (mail 31.07). Schema `FAQPage` (12 pytań) + `Service` z `provider` → `#organization`. |
+| **Sitemapa** | Strona **nie była** w `page-sitemap.xml` — ten sam korzeń co T-192 (cache RankMath). `wp rankmath sitemap generate` → 19 → 20 stron, landing w środku. |
+| **Stopka** | Pozycja „Leasing samochodu z Chin" w fallbacku nawigacji, `footer.php` (menu-2 niepodpięte, więc renderuje się fallback). Backup `footer.php.bak-2026-07-31-leasing`, `php -l` czysty. |
+| **`/finansowanie/`** | Link „Szczegóły ścieżki leasingowej — jak to działa krok po kroku →" pod akapitem o leasingu operacyjnym. Backup treści w `~/backups/primaauto/finansowanie-196330-2026-07-31.html`. |
+| **`llms.txt` / `llms-full.txt`** | Pozycja w obu + dedykowana sekcja „Leasing samochodu sprowadzanego z Chin" w `llms-full` (7 faktów answer-first). Zmiana w generatorach `scripts/build-llms.php` i `scripts/build-llms-full.php`, więc przeżyje regenerację. |
+| **Indexing API** | 1 URL zgłoszony przez `~/bin/index-submit` (ad-hoc 1/100). |
+
+### Naprawiony defekt z publikacji
+
+Przy pierwszej publikacji strona została wgrana przez WP-CLI **bez `--user`** → WordPress
+potraktował zapis jako pozbawiony `unfiltered_html` i **wyciął tagi `<style>`
+i `<script type="application/ld+json">`**, zostawiając ich zawartość jako widoczny tekst.
+Na dole strony wisiało **4479 znaków gołego CSS i JSON-a**, a schema FAQPage nie działała
+w ogóle. Naprawione zapisem z `--user=1`. **Reguła na przyszłość: każdy `wp post update`
+z treścią zawierającą `<script>`/`<style>` musi mieć `--user=1`.**
+
+### Nieaktualne w pierwotnym zakresie
+
+- **`/informacje/` — pozycja na liście: ODPADA.** Strona ma 301 na home od 17.07
+  (antykanibalizacja), nie ma tam listy do uzupełnienia.
+
+### Otwarte
+
+| Element | Stan |
+|---|---|
+| **B — blok na 317 hubach serie** | Nie ruszone. Nagłówek: **`{full_title} leasing`** (patrz korekta w §3A). Priorytet wg GSC: Zeekr 9X (24 imp), Geely Monjaro (10), Zeekr 8X i Xiaomi YU7 (po 3). |
+| **C — formularz leadowy** | Nie ruszone. **Dług:** CTA na landingu prowadzi dziś do `/kontakt/`, czyli do `mailto:` — spec zakładał formularz osadzony na stronie (§3A pkt 9). Landing bez formularza = landing bez mierzalnej konwersji. |
+| **Pasek zaufania na ofertach** | Nie ruszone — dotyka `class-asiaauto-single.php` (ZAWSZE PYTAJ). |
+| **Rozjazd depozytu z §4 umowy** | Wydzielony do **T-223**, czeka na odpowiedź Ruslana (punkt 8 w `docs/biznes/2026-07-27-punkty-do-weryfikacji-ruslan.md`). |
+
+## 11. Decyzje zapadłe — ciąg dalszy
+
+| # | Decyzja | Kiedy |
+|---|---|---|
+| D7 | Szyk nagłówka na hubach: **`{model} leasing`**, nie `Leasing {model}` — GSC 90 dni: 54 imp vs 4 imp. Spójne z T-203 | 2026-07-31 |
+| D8 | Poprawki Ruslana wchodzą **1:1**, łącznie z „pracujemy z najlepszymi" (zamiast konkretu o leasingodawcy finansującym auta spoza UE). Rozjazd z umową idzie do T-223, nie blokuje publikacji | 2026-07-31 |
+| D9 | Leasingodawcy **nie nazywamy z nazwy** — Ruslan sam wybrał sformułowanie bez nazwy. Zamyka pytanie 9.0 | 2026-07-31 |
