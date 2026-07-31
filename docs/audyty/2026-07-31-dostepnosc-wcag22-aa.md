@@ -276,6 +276,49 @@ PageSpeed Insights, kategoria accessibility, `locale=pl`. Surowe JSON-y zachowan
 
 ---
 
+## 9a. Stan wykonania — blok mechaniczny (2026-07-31)
+
+Wykonane tego samego dnia, theme `1.1.6` → `1.1.8`. Wszystkie pliki z backupem `*.bak-2026-07-31-a11y`, każdy przez `php -l` / `node --check` przed wgraniem.
+
+| # | Zadanie | Stan | Plik |
+|---|---|---|---|
+| A1 | Skip link przenosi focus | **zrobione** — zweryfikowane: `activeElement` = `#pa-content` | `header.php` |
+| A2 | `aria-label` na logo w stopce | **zrobione** | `footer.php` |
+| A3 | Etykiety trzech `<select>` | **zrobione** — `<label class="aa-sr-only">` na home, `aria-label` na sortowaniu | `class-asiaauto-homepage.php`, `class-asiaauto-inventory.php` |
+| A5 | `h1` na stronie 404 | **zrobione** — `h2.aa-404__title` → `h1`, rozmiar bez zmian (klasa nadpisuje) | `class-asiaauto-shortcodes.php` |
+| A6 | `<th scope="row">` + `<caption>` w tabelach kontaktu | **zrobione** — plus `font-weight:400; text-align:left`, żeby domyślne style `th` nie zmieniły wyglądu | `class-asiaauto-contact.php` |
+| A7 | Etykiety pól filtrów listingu | **zrobione** — `aria-label` na „Cena od", „Cena do", „Szukaj marki lub modelu" | `class-asiaauto-inventory.php` |
+| AA5 (część) | Nagłówki stopki `h4` → `h2` | **zrobione** — patrz uwaga niżej | `footer.php` |
+| AA7 | `aria-expanded` zdjęte z `<li>`, dodane `aria-controls` | **zrobione** — zweryfikowane działanie toggle'a | `nav.js`, `header.css` |
+| AA8 | Polski `<title>` na 404 | **zrobione** | `functions.php` |
+
+**Uwaga do AA5:** pierwsze podejście zmieniło `h4` → `h3`. Naprawiło to skok `h2 → h4` na stronach z treścią, ale na 404 (gdzie jedynym nagłówkiem treści jest `h1`) zostawiło nowy skok `h1 → h3`. Poprawione na `h2` — „Nawigacja" i „Kontakt" to sekcje najwyższego poziomu strony, więc `h2` jest poprawne niezależnie od głębokości nagłówków w treści. Sekwencje po zmianie: home `h1 h2 h3…`, listing `h1 h2 h3…`, kontakt `h1 h2…`, 404 `h1 h2 h2` — bez skoków.
+
+### Wynik automatu po bloku mechanicznym
+
+| Typ strony | Przed (mobile / desktop) | Po (mobile / desktop) | Δ |
+|---|---|---|---|
+| Strona główna | 87 / 87 | **97 / 97** | +10 |
+| Listing pojazdów | 86 / 84 | **94 / 92** | +8 / +8 |
+| Karta auta | 89 / 89 | **92 / 92** | +3 |
+| Kontakt | 92 / 92 | **97 / 97** | +5 |
+| Kreator zamówienia | 93 / 93 | **97 / 97** | +4 |
+| 404 | 91 / 91 | **96 / 96** | +5 |
+
+Karta auta zyskała +3, mimo że nie była bezpośrednio edytowana — poprawki logo w stopce i hierarchii nagłówków działają globalnie.
+
+Surowe JSON-y „po" w `tmp/a11y-po/`, baseline „przed" w `~/backups/primaauto/2026-07-31/a11y-baseline/`.
+
+**Co automat nadal zgłasza:** wyłącznie `color-contrast` (nietknięty — koszyk 2), `target-size` (listing i oferta) oraz `heading-order` na ofercie i listingu desktop. Te dwa ostatnie to znane, nienaprawione pozycje: nagłówki kafli/kolumn USP (AA5 punkty b i c) oraz A4 (`h1` karty auta).
+
+### Nowe ustalenie w trakcie naprawy
+
+**Listing ma dwa landmarki `<main>`** — `<main class="aa-inv__main">` zagnieżdżony wewnątrz `<main class="pa-main">`. axe zgłasza to jako `landmark-no-duplicate-main`, `landmark-unique` i `landmark-main-is-top-level`. Nie było tego w pierwotnej tabeli naruszeń, bo w warstwie 2 uruchomiłem na listingu tylko sondy własne, bez pełnego axe. To realne naruszenie struktury (1.3.1) — czytnik dostaje dwa konkurencyjne „główne obszary treści".
+
+Naprawa to jedno słowo: `<main class="aa-inv__main">` → `<div class="aa-inv__main">` w `class-asiaauto-inventory.php` (klasa zostaje, więc CSS bez zmian). **Nie wykonane** — poza uzgodnionym zakresem bloku mechanicznego, do decyzji.
+
+---
+
 ## 10. Metodyka
 
 **Warstwa 1 — automat.** PageSpeed Insights v5 (Lighthouse z axe-core pod spodem), kategoria accessibility, mobile + desktop, 12 typów stron. Skrypt: `scratchpad/a11y_primaauto.py` (na bazie `~/projekty/auranet/tmp/a11y_przesiew.py`). Surowe JSON-y zachowane w celu odtworzenia selektorów i par kolorów.
