@@ -3278,3 +3278,23 @@ Pełna trasa zmian: `docs/superpowers/specs/2026-04-28-diagnostyka-admin-panel-d
 | 2026-04-17 | 0.30.8 | prod asiaauto.pl | Załączniki PDF (akcyza 0% widoczna), token w nazwie PDF, UPLOAD_DIR→contracts, nr umowy w tytule przelewu, info o podpisach w wizardzie. Bootstrap odtworzony po uszkodzeniu sed. |
 | 2026-04-16 | 0.30.7 | prod asiaauto.pl | Sesja 2: CIF fix, panel klienta, version bump. ZADANIE 5 core DONE. |
 | 2026-04-15 | 0.29.0-wip | prod asiaauto.pl | Bootstrap repo primaauto. PHP lint clean (PHP 8.3). Pending: v0.30.6 (3 patche, nie wgrane). |
+
+## 0.34.15 — 2026-07-31 (a11y: struktura nagłówków oferty + landmark listingu)
+
+Realizacja punktów z `docs/audyty/2026-07-31-dostepnosc-wcag22-aa.md`.
+
+- `class-asiaauto-single.php:564` — kolumny paska USP („W cenie", „Dlaczego my", „Informacje") `h3` → `h2`
+- `class-asiaauto-single.php:471` (`infoBox()`) — nagłówek „Informacje" w boksie sidebara `h3` → `h2`
+- `class-asiaauto-inventory.php:193` — `<main class="aa-inv__main">` → `<div>`; szablon renderuje się wewnątrz `<main class="pa-main">` z `header.php`, więc były DWA landmarki „główna treść" (axe: `landmark-no-duplicate-main`, `landmark-unique`, `landmark-main-is-top-level`)
+- `class-asiaauto-shortcodes.php:2329` — `h2.aa-404__title` → `h1` (strona 404 startowała hierarchię od `h2`)
+- `class-asiaauto-homepage.php` — `<label class="aa-sr-only">` dla `#aa-home-make` i `#aa-home-model`
+- `class-asiaauto-inventory.php` — `aria-label` na `.aa-sort__select`, obu `.aa-price-inputs__input` i `.aa-search__input` (miały wyłącznie `placeholder`)
+- `class-asiaauto-contact.php` — `<th scope="row">` + `<caption class="aa-sr-only">` w tabelach godzin i danych firmy; do `.aa-contact__hours-day` i `.aa-contact__data-label` dołożone `font-weight:400; text-align:left`, żeby domyślne style `th` nie zmieniły wyglądu
+
+**Dlaczego nagłówki oferty to dwie linie, nie jedna:** karta auta ma dwa układy DOM. Na mobile sticky-head z `<h1>` jest na górze (skok `h1 → h3` na kolumnach USP — to zgłaszało PSI), na desktopie sidebar jest w DOM po kolumnie treści, więc tytuł poziomu 1 wypada na 13. pozycji, a skok przenosi się na `h3.aa-info__title` (to zgłaszał axe). Obie zmiany siedzą w kodzie współdzielonym, więc działają na obu szerokościach.
+
+**Nie naprawione świadomie:** na desktopie nagłówek poziomu 1 nadal jest w kolejności czytania po całej treści (sidebar za kolumną główną w DOM). Wymaga przestawienia kolejności i utrzymania układu przez `order` w gridzie — osobna decyzja.
+
+Wyniki PSI: oferta 89 → 93, listing bez zmiany punktowej (reguły landmarków nie są punktowane przez Lighthouse), axe potwierdza usunięcie trzech reguł.
+
+Backupy: `class-asiaauto-single.php.bak-2026-07-31-a11y-headings`, `class-asiaauto-inventory.php.bak-2026-07-31-a11y-main`, `*.bak-2026-07-31-a11y`.

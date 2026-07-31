@@ -306,7 +306,7 @@ Wykonane tego samego dnia, theme `1.1.6` → `1.1.8`. Wszystkie pliki z backupem
 |---|---|---|---|
 | Strona główna | 87 / 87 | **97 / 97** | +10 |
 | Listing pojazdów | 86 / 84 | **94 / 92** | +8 / +8 |
-| Karta auta | 89 / 89 | **92 / 92** | +3 |
+| Karta auta | 89 / 89 | **93 / 93** | +4 |
 | Kontakt | 92 / 92 | **97 / 97** | +5 |
 | Kreator zamówienia | 93 / 93 | **97 / 97** | +4 |
 | 404 | 91 / 91 | **96 / 96** | +5 |
@@ -317,11 +317,34 @@ Surowe JSON-y „po" w `tmp/a11y-po/`, baseline „przed" w `~/backups/primaauto
 
 **Co automat nadal zgłasza:** wyłącznie `color-contrast` (nietknięty — koszyk 2), `target-size` (listing i oferta) oraz `heading-order` na ofercie i listingu desktop. Te dwa ostatnie to znane, nienaprawione pozycje: nagłówki kafli/kolumn USP (AA5 punkty b i c) oraz A4 (`h1` karty auta).
 
+### Blok drugi — struktura karty auta i landmark listingu (2026-07-31)
+
+| Zadanie | Plik : linia | Stan |
+|---|---|---|
+| AA5c — kolumny USP `h3` → `h2` | `class-asiaauto-single.php:564` | **zrobione** |
+| AA5c — „Informacje" w sidebarze `h3` → `h2` | `class-asiaauto-single.php:471` (`infoBox()`) | **zrobione** |
+| Zduplikowany landmark `main` na listingu | `class-asiaauto-inventory.php:193` | **zrobione** — `<main class="aa-inv__main">` → `<div>` |
+
+**Dlaczego dwie linie, nie jedna.** Karta auta ma dwa układy DOM i skok w hierarchii wypadał w każdym gdzie indziej:
+
+- **mobile** — sticky-head z prawdziwym `<h1>` jest na górze, więc sekwencja to `h1 → h3 „W cenie"`; skok na kolumnach USP (to zgłaszało PSI)
+- **desktop** — sidebar jest w DOM **po** kolumnie treści, więc pierwszym nagłówkiem strony są kolumny USP, tytuł poziomu 1 wypada dopiero na 13. pozycji, a skok przenosi się na `h3.aa-info__title` tuż za nim (to zgłaszał axe)
+
+Dwa narzędzia wskazywały dwa różne elementy, bo mierzyły dwa różne układy tej samej strony. Obie zmiany są w kodzie współdzielonym (pasek USP renderowany raz, `infoBox()` to jedna metoda wołana dwukrotnie), więc każda działa na obu szerokościach — nie ma rozgałęzienia na warianty.
+
+Poziom `h2` jest tu poprawny merytorycznie, nie jest obejściem: „W cenie", „Dlaczego my", „Informacje" to sekcje najwyższego poziomu strony oferty, rodzeństwo `h2 „Opis pojazdu"` (`class-asiaauto-single.php:309`).
+
+Sekwencja po zmianie (desktop): `h2 h2 h2 → h2 Opis → h3 h3 → h2 Inne egzemplarze → h3×4 → h2 Inne modele → poziom 1 Tytuł → h2 Informacje → h2 h2 stopka`. Bez skoków. Style bez zmian (`.aa-usp-col__title` 12px/600, `.aa-info__title` 16px/600 — oba z `!important` na klasie, żaden selektor nie celuje w tag).
+
+Wynik: oferta **92 → 93** (mobile i desktop), `heading-order` zniknęło. Listing bez zmiany punktowej (reguły landmarków są best-practice i Lighthouse ich nie punktuje), ale axe potwierdza usunięcie trzech reguł; smoke test: 24 kafle, paginacja działa, `?strona=2`, `aria-current` przechodzi, układ 824 px szerokości bez zmian.
+
+**Czego to NIE naprawia.** Na desktopie nagłówek poziomu 1 nadal wypada w kolejności czytania jako trzynasty, po całej treści — bo sidebar jest w DOM za kolumną główną. Narzędzia już nie zgłaszają, ale czytnik ekranu nawigujący po nagłówkach nadal zaczyna ofertę od „W cenie", a nazwę auta i cenę znajduje na końcu. Naprawa wymagałaby przestawienia sidebara przed kolumnę treści w DOM i utrzymania układu CSS-em (grid `order`), czyli realnej zmiany w renderze oferty. **Odłożone do decyzji** — nowa pozycja koszyka 2.
+
 ### Nowe ustalenie w trakcie naprawy
 
 **Listing ma dwa landmarki `<main>`** — `<main class="aa-inv__main">` zagnieżdżony wewnątrz `<main class="pa-main">`. axe zgłasza to jako `landmark-no-duplicate-main`, `landmark-unique` i `landmark-main-is-top-level`. Nie było tego w pierwotnej tabeli naruszeń, bo w warstwie 2 uruchomiłem na listingu tylko sondy własne, bez pełnego axe. To realne naruszenie struktury (1.3.1) — czytnik dostaje dwa konkurencyjne „główne obszary treści".
 
-Naprawa to jedno słowo: `<main class="aa-inv__main">` → `<div class="aa-inv__main">` w `class-asiaauto-inventory.php` (klasa zostaje, więc CSS bez zmian). **Nie wykonane** — poza uzgodnionym zakresem bloku mechanicznego, do decyzji.
+Naprawa to jedno słowo: `<main class="aa-inv__main">` → `<div class="aa-inv__main">` w `class-asiaauto-inventory.php:193` (klasa zostaje, więc CSS bez zmian). **WYKONANE** w bloku drugim — patrz wyżej.
 
 ---
 
