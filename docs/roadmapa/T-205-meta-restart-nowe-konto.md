@@ -1,8 +1,11 @@
 # T-205 — Meta: restart na nowym koncie (Facebook/Instagram)
 
-> Status: **ODBLOKOWANE — mamy dostęp od 2026-07-31** · Rozmiar: M
-> Godziny pozostałe: **12–16 h** (z pierwotnych 16–22 h; Ruslan wykonał konfigurację portfolio sam)
-> **Plan wykonawczy: [`T-205-plan-wykonawczy-2026-07-31.md`](T-205-plan-wykonawczy-2026-07-31.md)**
+> Status: **W TOKU — pomiar i katalog wdrożone 2026-08-01, zostały kampanie** · Rozmiar: M
+> Godziny: **12–16 h na całość** (z pierwotnych 16–22 h; Ruslan wykonał konfigurację portfolio wg naszej instrukcji)
+> **Plan wykonawczy (rewizja 01.08): [`T-205-plan-wykonawczy-2026-07-31.md`](T-205-plan-wykonawczy-2026-07-31.md)**
+>
+> Wdrożone 01.08: piksel `1634147041766916`, GTM wersja 10 (stary piksel odcięty), katalog `2936723456671912` z feedem dobowym.
+> Następny ruch: **audiencje** — zbierają dane dopiero od utworzenia, więc każdy dzień zwłoki jest nie do odrobienia.
 > Zastępuje pozycję „Uruchomienie kampanii Facebook/Instagram" (17–20 h) — tamta zakładała, że mamy dostęp do konta.
 
 ## Stan na 2026-07-31 — dostęp odzyskany

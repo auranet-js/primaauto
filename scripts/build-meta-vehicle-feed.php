@@ -30,23 +30,26 @@ $cols = array_merge($cols, ['exterior_color','body_style','fuel_type','transmiss
 function tname($pid,$tax){ $t=get_the_terms($pid,$tax); return ($t && !is_wp_error($t))?$t[0]->name:''; }
 function tslug($pid,$tax){ $t=get_the_terms($pid,$tax); return ($t && !is_wp_error($t))?$t[0]->slug:''; }
 function norm($s){ return strtolower(trim((string)$s)); }
+/* slug + name razem: część termów ma slug w chińskim (URL-encoded, bo importer bierze $api_value),
+   a polską nazwę tylko w name — patrząc na sam slug wpadały w OTHER. */
+function key2($slug,$name){ return norm(rawurldecode((string)$slug).' '.(string)$name); }
 
-function map_fuel($slug,$name){ $k=norm($slug?:$name); return match(true){
-  str_contains($k,'electric')||$k==='ev'||str_contains($k,'elektry')=>'ELECTRIC',
-  str_contains($k,'phev')||str_contains($k,'erev')||str_contains($k,'hybr')=>'HYBRID',
-  str_contains($k,'petrol')||str_contains($k,'gasol')||str_contains($k,'benzy')=>'GASOLINE',
-  str_contains($k,'diesel')=>'DIESEL', default=>'OTHER'}; }
-function map_trans($slug,$name){ $k=norm($slug?:$name); return match(true){
+function map_fuel($slug,$name){ $k=key2($slug,$name); return match(true){
+  str_contains($k,'phev')||str_contains($k,'erev')||str_contains($k,'hybr')||str_contains($k,'混')=>'HYBRID',
+  str_contains($k,'electric')||$k==='ev'||str_contains($k,'elektry')||str_contains($k,'纯电')||str_contains($k,'电动')=>'ELECTRIC',
+  str_contains($k,'petrol')||str_contains($k,'gasol')||str_contains($k,'benzy')||str_contains($k,'汽油')=>'GASOLINE',
+  str_contains($k,'diesel')||str_contains($k,'柴油')=>'DIESEL', default=>'OTHER'}; }
+function map_trans($slug,$name){ $k=key2($slug,$name); return match(true){
   str_contains($k,'manu')=>'MANUAL',
   str_contains($k,'auto')||str_contains($k,'cvt')||str_contains($k,'dct')||str_contains($k,'dht')||str_contains($k,'dsg')||str_contains($k,'jednobieg')||str_contains($k,'single')=>'AUTOMATIC',
   default=>'OTHER'}; }
-function map_drive($slug,$name){ $k=norm($slug?:$name); return match(true){
+function map_drive($slug,$name){ $k=key2($slug,$name); return match(true){
   str_contains($k,'awd')||str_contains($k,'all')=>'AWD',
   $k==='4wd'||str_contains($k,'4x4')||str_contains($k,'four')=>'4X4',
   str_contains($k,'fwd')||str_contains($k,'front')||str_contains($k,'prz')=>'FWD',
   str_contains($k,'rwd')||str_contains($k,'rear')||str_contains($k,'ty')=>'RWD',
   default=>'Other'}; }
-function map_body($slug,$name){ $k=norm($slug?:$name); return match(true){
+function map_body($slug,$name){ $k=key2($slug,$name); return match(true){
   str_contains($k,'suv')=>'SUV', str_contains($k,'cross')=>'CROSSOVER',
   str_contains($k,'sedan')||str_contains($k,'limuz')=>'SEDAN',
   str_contains($k,'hatch')||str_contains($k,'liftback')=>'HATCHBACK', str_contains($k,'kombi')||str_contains($k,'wagon')=>'WAGON',
@@ -87,7 +90,9 @@ foreach ($ids as $pid){
   foreach($gal as $aid){ $u=wp_get_attachment_image_url((int)$aid,'large')?:wp_get_attachment_image_url((int)$aid,'full'); if($u)$imgs[]=$u; if(count($imgs)>=IMG_SLOTS)break; }
   if(!$imgs){ $skipped++; continue; } // brak obrazu = Meta odrzuci wiersz
 
-  $row=[$vid,$title,$desc,$url,$make,$model,$year,$mileage>0?$mileage:'', $mileage>0?'KM':'',
+  // mileage jest u Meta POLEM WYMAGANYM — puste => wiersz odrzucony (fatal property_value_missing).
+  // Auta nowe z importu mają przebieg 0, więc jawnie wysyłamy 0 KM zamiast pustej wartości.
+  $row=[$vid,$title,$desc,$url,$make,$model,$year,max($mileage,0),'KM',
         $state, number_format($price,0,'','').' PLN','available'];
   for($i=0;$i<IMG_SLOTS;$i++) $row[]=$imgs[$i]??'';
   $row=array_merge($row,[$color, map_body($bo_s,$bo_n), map_fuel($fuel_s,$fuel_n),
