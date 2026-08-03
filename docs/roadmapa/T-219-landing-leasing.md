@@ -1,7 +1,10 @@
 # T-219 — Landing „Leasing samochodu z Chin" + pokrycie leasingu na hubach
 
 > Utworzony: 2026-07-31
-> Status: **spec gotowy do budowy**
+> Status: ✅ **ZAMKNIĘTY 2026-08-03** — części A (landing), B (blok na 317 hubach)
+> i D (linkowanie: 2174 oferty, stopka, `/finansowanie/`, llms, sitemapa, indexing) wdrożone.
+> Część C (formularz leadowy) **wydzielona do T-224**. Autolinker przeniesiony do T-214.
+> Otwarte pytanie o mechanikę depozytu: **T-223** (czeka na Ruslana).
 > Powiązane: T-217 (wzorzec umowy leasingowej — **LIVE od 2026-07-30**, v0.34.14),
 > T-113 (ścieżka finansowania w kreatorze), T-189 (kalkulator raty), T-221 (pakiet prawny),
 > T-214 (dział wiedzy — autolinker i llms-full)
@@ -278,7 +281,7 @@ z treścią zawierającą `<script>`/`<style>` musi mieć `--user=1`.**
 |---|---|
 | ~~**B — blok na 317 hubach serie**~~ | ✅ **WDROŻONE 31.07** (theme 1.2.0) — nowy plik `hub-leasing-block.php`, do `taxonomy-serie.php` weszły 3 linie. Bez liczb: bez cen, bez liczby ofert, bez procentu depozytu — decyzje D10-D14 niżej. |
 | **C — formularz leadowy** | Nie ruszone, **plan wykonawczy gotowy**: `docs/roadmapa/T-219-C-formularz-plan-wykonawczy.md` (5–6 h; recon pokazał, że publiczny submit już istnieje w `order/start`, więc nie budujemy od zera). **Dług:** CTA na landingu prowadzi dziś do `mailto:`. |
-| ~~**Pasek zaufania na ofertach**~~ | ✅ **WDROŻONE 31.07** (plugin 0.34.16) — claim „Możliwy leasing" na **2174 ofertach** prowadzi na landing. Jedna zmieniona linia w `trustLine()` + `text-decoration: underline` (WCAG 1.4.1). |
+| ~~**Pasek zaufania na ofertach**~~ | ✅ **WDROŻONE 03.08** (plugin 0.34.16) — claim „Możliwy leasing" na **2174 ofertach** prowadzi na landing. Jedna zmieniona linia w `trustLine()` + `text-decoration: underline` (WCAG 1.4.1). |
 | **Autolinker działu wiedzy** | Nie ruszone — hasło „leasing” jeszcze nie prowadzi na landing (osobny punkt z §3B). |
 | **Rozjazd depozytu z §4 umowy** | Wydzielony do **T-223**, czeka na odpowiedź Ruslana (punkt 8 w `docs/biznes/2026-07-27-punkty-do-weryfikacji-ruslan.md`). |
 

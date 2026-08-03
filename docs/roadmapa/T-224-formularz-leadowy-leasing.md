@@ -1,8 +1,9 @@
-# T-219 C — formularz leadowy: plan wykonawczy
+# T-224 — formularz leadowy „Zapytaj o leasing”: plan wykonawczy
 
 > Utworzony: 2026-07-31
 > Status: **plan gotowy, czeka na zielone światło**
-> Poprzedza: T-219 A (landing LIVE), T-219 B (blok na 317 hubach LIVE, theme 1.2.0)
+> Wydzielony z T-219 przy zamknięciu tasku 2026-08-03 (A + B + D wdrożone).
+> Poprzedza: T-219 (landing LIVE, blok na 317 hubach, claim na 2174 ofertach)
 > Pod ten komponent wejdą potem: T-189 (kalkulator raty), T-188 (alerty)
 
 ---

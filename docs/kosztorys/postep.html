@@ -66,7 +66,7 @@ footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line);
 <header class="top">
 <h1>Prima Auto — postęp prac i plan rozwoju</h1>
 <div class="sub">Platforma importu samochodów z Chin · primaauto.com.pl · opracowanie: Auranet (Jan Schenk)</div>
-<div class="stamp">Stan na 01.08.2026 · dokument roboczy, aktualizowany na bieżąco wraz z postępem prac</div>
+<div class="stamp">Stan na 03.08.2026 · dokument roboczy, aktualizowany na bieżąco wraz z postępem prac</div>
 </header>
 
 <div class="cols">
@@ -76,6 +76,16 @@ footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line);
 <table>
 <thead><tr><th>Data</th><th>Praca</th><th class="num">Godziny [h]</th></tr></thead>
 <tbody>
+<tr>
+<td class="data-col">03.08.2026</td>
+<td><strong>Strona o leasingu — od zera do widocznej w całym serwisie</strong> <span class='wersje'>wtyczka 0.34.16, motyw 1.2.0</span><div class="opis">Powstała osobna strona „Leasing samochodu z Chin”, która tłumaczy całą ścieżkę: kto dobiera firmę leasingową, co robimy my, co robi klient, jak wygląda kolejność od wyboru auta do odbioru, ile trwa przygotowanie samochodu i co wchodzi w cenę. Treść przeszła przez Pana korektę i weszła w Pana brzmieniu.
+
+Sama strona to jednak dopiero połowa roboty — dotąd nikt nie miał jak na nią trafić. Dlatego leasing pojawia się teraz w trzech miejscach, w których klient faktycznie się zatrzymuje. Po pierwsze: na 2174 ofertach zdanie „Możliwy leasing” pod ceną stało się linkiem — to dokładnie ten moment, gdy ktoś patrzy na kwotę i się waha. Po drugie: na 317 stronach modeli doszedł krótki blok „{model} leasing”, bo w Google ludzie szukają właśnie tak — „zeekr 9x leasing”, „geely monjaro leasing”. Po trzecie: link w stopce na każdej stronie i na stronie o finansowaniu.
+
+Świadomie nie wpisaliśmy na stronach modeli żadnych kwot ani procentów. Ceny się zmieniają wraz z rotacją ofert, a wysokość depozytu jest ustawieniem, które zmienia się w panelu — gdyby te liczby siedziały w treści 317 stron, każda zmiana oznaczałaby 317 stron mówiących nieprawdę. Wszystkie warunki są w jednym miejscu, na stronie o leasingu.
+
+Strona została też zgłoszona do Google i dopisana do plików, z których korzystają ChatGPT i podobne narzędzia — tak, żeby na pytanie „czy auto z Chin można wziąć w leasing” istniała nasza odpowiedź.</div></td>
+<td class="num">7</td></tr>
 <tr>
 <td class="data-col">30.07.2026</td>
 <td><strong>Umowa leasingowa generowana z panelu — drugi wzorzec obok umowy pośrednictwa</strong> <div class="opis">Umowa leasingowa jest już generowana przez system. Do tej pory trzeba ją było składać ręcznie w Wordzie, a numer nadawać poza kolejnością — od teraz wybiera się ją na karcie zamówienia jednym polem „Wzorzec umowy” i dokument powstaje tak samo jak umowa pośrednictwa: z danymi z zamówienia, w naszej szacie graficznej, z załącznikiem ze specyfikacją auta.
@@ -175,7 +185,7 @@ Efekt bez wsparcia reklamowego: w dwie doby filmy zebrały ponad 3800 wyświetle
 <td><strong>Reklamy dynamiczne Google (DSA) — celowanie w najtańsze oferty</strong> <div class="opis">Feed reklam przestawiony ze stron modeli na najtańszą aktualną ofertę każdego modelu, z automatyczną codzienną aktualizacją. Do tego nowa treść reklamy (wymiana jednej z dwóch kreacji).</div></td>
 <td class="num">3</td></tr>
 </tbody>
-<tfoot><tr><td colspan="2">Razem od spotkania 16.07.2026</td><td class="num">77</td></tr></tfoot>
+<tfoot><tr><td colspan="2">Razem od spotkania 16.07.2026</td><td class="num">84</td></tr></tfoot>
 </table>
 
 </section>
@@ -203,8 +213,8 @@ Czego reklamy nie ruszą bez Ciebie: weryfikacji firmy (dane muszą zgadzać si�
 Jedno mówimy wprost: obserwujący i grupy odbiorców do remarketingu startują od zera, a ich odbudowa to tygodnie zbierania danych, których nie da się skrócić naszą pracą. Warto jednak wiedzieć, że stara strona przy 16,7 tys. obserwujących zbierała około dwóch reakcji na post — jej zasięg był już martwy. Realną stratą były grupy odbiorców do reklam, nie sami obserwujący. Licznik już biegnie: od 1.08 zbieramy dane na własnym koncie.</div><div class="pytania"><strong>Do potwierdzenia z Tobą:</strong><ul><li>Kto opublikuje post z zaproszeniem na starej stronie (16,7 tys. obserwujących)? Dostęp managera miał tam Andrzej — do sprawdzenia, czy nadal działa. To jedyna droga przeniesienia części obserwujących na nową stronę.</li><li>Czy Prima-Auto ma konto na Instagramie, które podpinamy do nowej strony, czy zakładamy nowe? Bez niego odpadają miejsca reklamowe na Instagramie.</li></ul></div><div class="skala">Status: w toku — pomiar przepięty i katalog aut działa od 1.08 (4 h); przed nami listy odbiorców, kreacje z 8 filmów, kampanie i start po Twojej weryfikacji firmy w UE oraz podpięciu karty</div></td>
 <td class="num">15–17</td></tr>
 <tr>
-<td><strong>T-219 — Podstrona leasingowa (landing „Leasing samochodu z Chin”)</strong> <div class="opis"><span class="badge new">nowe</span> Osobna podstrona opisująca ścieżkę leasingową (jak to działa, współpraca z finansującym, kroki od zamówienia do wydania auta) + zalinkowanie jej w kilku miejscach serwisu pod SEO (pasek zaufania na ofertach, stopka, strony informacyjne). Fraza „leasing samochodu z chin” sprawdzona w bazie słów kluczowych: brak mierzalnego wolumenu — nisza dopiero powstaje, więc rankowanie będzie tanie, a strona pracuje głównie na konwersję i zaufanie. Kalkulator raty finansowania to osobne zadanie (T-189 — rata na kartach ofert).</div><div class="skala">Status: do zaplanowania; frazy zbadane 17.07</div></td>
-<td class="num">3–4</td></tr>
+<td><strong>T-224 — Formularz „Zapytaj o leasing” na stronie leasingowej</strong> <div class="opis"><span class="badge new">nowe</span> Dziś przycisk na stronie o leasingu prowadzi do zakładki Kontakt, czyli do zwykłego maila. Zapytanie trafia więc do skrzynki i nigdzie się nie zapisuje — nie widać go w panelu, nie da się policzyć, ile osób pyta o leasing i z których modeli przychodzą. Formularz to zmienia: zapytanie ląduje na liście w panelu, przychodzi powiadomienie na maila i zliczamy je jako zapytanie w statystykach. Pod ten sam formularz podepniemy później kalkulator raty (T-189).</div><div class="skala">Status: plan wykonawczy gotowy</div></td>
+<td class="num">5–6</td></tr>
 <tr>
 <td><strong>T-220 — Aneks VIN do umowy — generowanie, status i wysyłka do klienta</strong> <div class="opis"><span class="badge new">nowe</span> Umowa bywa podpisywana, zanim znany jest numer VIN — w umowie leasingowej jest to zapisane wprost („VIN zostanie dodany aneksem po weryfikacji auta”). Dziś aneks powstaje ręcznie poza systemem. Po zmianie: w karcie zamówienia, przy dokumentach, dochodzi przycisk „Generuj aneks VIN” — aktywny dopiero gdy numer VIN jest wpisany. Powstaje gotowy PDF w szacie Prima-Auto; samo wygenerowanie niczego nie wysyła. Osobno, obok statusu zamówienia, pojawia się pole „Aneks VIN” (brak / wygenerowany / wysłany) — przełączasz je ręcznie, gdy aneks jest gotowy, a klient dostaje wtedy powiadomienie i pobiera aneks w tym samym miejscu co umowę. Zamówienie nie traci przy tym swojego etapu (auto „w drodze” dalej jest „w drodze”). Aneks to ścieżka wyjątkowa: przy płatności depozytu online klient wiąże się przed umową, więc VIN zwykle znamy już przy jej generowaniu i umowa wychodzi od razu z numerem. Zakres aneksu na teraz: wyłącznie numer VIN (potwierdzone 27.07) — ale generator budujemy tak, żeby w przyszłości dało się dołożyć aneksy do innych pól (cena, termin, specyfikacja) bez przebudowy. Jeden szablon obsługuje obie umowy (pośrednictwa i leasingową) — różni je tylko odwołanie do zmienianego punktu. Dodatkowo: gdy umowa jest generowana bez VIN-u, w polu VIN drukuje się „Numer VIN zostanie uzupełniony w formie aneksu do niniejszej umowy” zamiast dzisiejszej kreski.</div><div class="skala">Status: wzorzec aneksu przeanalizowany (27.07), zakres i sposób działania uzgodnione — gotowe do budowy</div></td>
 <td class="num">5–7</td></tr>
@@ -284,7 +294,7 @@ Jedno mówimy wprost: obserwujący i grupy odbiorców do remarketingu startują 
 <td><strong>T-214 — Ujednolicenie i wzmocnienie stron modeli (hubów) pod frazy zakupowe</strong> <span class='rozmiar'>skala: średnia</span><div class="opis">Strony modeli to nasza najmocniejsza broń w Google — stoją na 1.-2. miejscu na frazy typu 'zeekr 9x cena'. Przegląd 14.07 wykazał trzy luki do domknięcia. (1) 34 z 302 stron modeli ma słabszy nagłówek — brakuje w nim słów 'cena w Polsce', bo powstały po ostatnim ujednoliceniu i nie dostały automatycznie tego dopisku; wśród nich ważne modele: Zeekr 9X, Zeekr 8X, Denza Z9 GT. (2) Strona modelu BAW wyświetla się w Google jako 'Beijing' zamiast 'BAW' — a to marka, której szuka 1300 osób miesięcznie; podobnie Zeekr 8X ma zbędny dopisek 'PHEV' rozmywający dopasowanie. (3) Strony modeli opisują wersje słownie, ale nie podają ceny osobno dla każdej wersji (np. 'Ultra od 426 tys.') — dane już mamy, wystarczy je pokazać. Pracujemy ostrożnie, pojedynczo, z pomiarem przed i po (strony z 1. miejsca mają najwięcej do stracenia), bo nadrzędna zasada brzmi: nie zepsuć tego, co już rankuje.</div><div class="skala">Status: znaleziska zapisane (docs/seo/znaleziska-huby-2026-07-14); wymaga pilota + progów wycofania z T-203-baseline</div></td>
 <td class="num">11–14</td></tr>
 </tbody>
-<tfoot><tr><td>Razem pełna lista (widełki)</td><td class="num">576–750</td></tr></tfoot>
+<tfoot><tr><td>Razem pełna lista (widełki)</td><td class="num">578–752</td></tr></tfoot>
 </table>
 </section>
 </div>

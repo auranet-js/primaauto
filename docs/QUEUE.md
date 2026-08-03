@@ -1,6 +1,6 @@
 # Kolejka zadań — Prima Auto
 
-> Aktualizacja: 2026-07-31 (T-217 WDROŻONY 30.07 — v0.34.14; T-219 część A+D wdrożona 31.07, zostają B i C; założony T-223 — rozjazd depozytu)
+> Aktualizacja: 2026-08-03 (T-217 WDROŻONY 30.07 — v0.34.14; **T-219 ZAMKNIĘTY 03.08** — landing + 317 hubów + 2174 oferty; wydzielone: T-224 formularz, T-223 rozjazd depozytu)
 
 ---
 
@@ -22,7 +22,8 @@ T-217 (wzorzec leasingowy) ──┬──→ T-220 (aneks VIN)
 |---|---|---|---|
 | **T-221** — pakiet prawny pod PayU | 🔵 gotowe do startu | **blokuje T-121** | 12–18 h |
 | **T-217** — drugi wzorzec umowy (leasing) | ✅ **DONE 2026-07-30** (v0.34.14 LIVE) | odblokował T-220 i T-219 | — |
-| **T-219** — landing „Leasing samochodu z Chin" + blok na hubach | 🟡 **A + B + D DONE 31.07** — strona LIVE, blok na 317 hubach (theme 1.2.0), claim na **2174 ofertach** podlinkowany (plugin 0.34.16), sitemapa, stopka, `/finansowanie/`, llms, indexing. Zostaje **C** (formularz, plan wykonawczy gotowy) | niezależny; źródło treści = wzorzec z T-217 | 5–6 h (pozostało) |
+| **T-219** — landing „Leasing samochodu z Chin" + blok na hubach | ✅ **ZAMKNIĘTY 03.08** — landing LIVE (treść po korekcie Ruslana), blok na 317 hubach (theme 1.2.0), claim na **2174 ofertach** podlinkowany (plugin 0.34.16), stopka, `/finansowanie/`, llms, sitemapa, indexing | — | ~7 h |
+| **T-224** — formularz „Zapytaj o leasing" | 🔵 plan wykonawczy gotowy | wydzielony z T-219 C; pod niego wejdzie T-189 | 5–6 h |
 | **T-223** — rozjazd depozytu: strona vs §4 umowy | ⏸️ czeka na Ruslana (punkt 8 w liście weryfikacyjnej) | wynik decyduje, czy ruszamy §4 wzorca (strefa krucha) | 1–4 h |
 | **T-220** — aneks VIN | 🔵 gotowe do budowy | zależy od T-217 (szablon per typ) | 8–12 h |
 | **T-121** — płatność PayU za depozyt | ⚠️ gated na T-221 | po regulaminie i zgodzie PayU | 32–42 h |

@@ -1,6 +1,6 @@
 # Historia wersji asiaauto-sync
 
-## 0.34.16 — 2026-07-31 (T-219 D: claim leasingowy na ofertach prowadzi na landing)
+## 0.34.16 — 2026-08-03 (T-219 D: claim leasingowy na ofertach prowadzi na landing)
 
 **Co.** Pasek zaufania pod ceną na każdej ofercie kończył się zdaniem „Możliwy leasing." —
 zwykłym tekstem, bez linku. Od tej wersji to link na `/leasing-samochodu-z-chin/`.
@@ -9,7 +9,7 @@ zwykłym tekstem, bez linku. Od tej wersji to link na `/leasing-samochodu-z-chin
 - `trustLine()`, linia 522 — **jedna zmieniona linia**: `<span class="aa-trustline__fin">`
   zamienione na `<a class="aa-trustline__fin" href="/leasing-samochodu-z-chin/">`. Klasa
   zostaje na `<a>`, więc kolor (`--primary`) i `font-weight: 600` bez zmian. Kropka
-  **poza** linkiem. Backup: `.bak-2026-07-31-leasing-link`.
+  **poza** linkiem. Backup: `.bak-2026-08-03-leasing-link`.
 
 ### `assets/css/asiaauto-single.css`
 - `a.aa-trustline__fin` — `text-decoration: underline` + `text-underline-offset: 2px`,
