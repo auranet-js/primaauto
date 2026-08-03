@@ -1,5 +1,33 @@
 # Historia wersji asiaauto-sync
 
+## 0.34.16 — 2026-07-31 (T-219 D: claim leasingowy na ofertach prowadzi na landing)
+
+**Co.** Pasek zaufania pod ceną na każdej ofercie kończył się zdaniem „Możliwy leasing." —
+zwykłym tekstem, bez linku. Od tej wersji to link na `/leasing-samochodu-z-chin/`.
+
+### `includes/class-asiaauto-single.php` (strefa krucha, ZAWSZE PYTAJ)
+- `trustLine()`, linia 522 — **jedna zmieniona linia**: `<span class="aa-trustline__fin">`
+  zamienione na `<a class="aa-trustline__fin" href="/leasing-samochodu-z-chin/">`. Klasa
+  zostaje na `<a>`, więc kolor (`--primary`) i `font-weight: 600` bez zmian. Kropka
+  **poza** linkiem. Backup: `.bak-2026-07-31-leasing-link`.
+
+### `assets/css/asiaauto-single.css`
+- `a.aa-trustline__fin` — `text-decoration: underline` + `text-underline-offset: 2px`,
+  na hover bez podkreślenia. **Powód: WCAG 1.4.1** — sam kolor nie może być jedynym
+  wyróżnikiem linku, a serwis przeszedł audyt WCAG 2.2 AA 31.07 i nie psujemy tego.
+  CSS busta się przez `filemtime`, więc bez ręcznego cache-bustu.
+
+**Zasięg: 2174 oferty publish** — 7× więcej niż blok leasingowy na 317 hubach (T-219 B).
+To miejsce, w którym klient patrzy na cenę rzędu 400 tys. i się zastanawia, więc dźwignia
+konwersyjna największa z całego T-219 D.
+
+**Weryfikacja.** Diff renderu przed/po na 3 losowych ofertach (AITO M9, Mazda EZ-60,
+Leapmotor B01): jedyna różnica to zamiana `<span>` na `<a>` plus nowy `?ver=` przy CSS.
+Rozbieżność 24 linii przy Leapmotorze to sekcja podobnych ofert, która rotuje niezależnie
+(inne auto, inny przebieg) — nie skutek zmiany. Landing odpowiada 200, reguła CSS obecna
+na produkcji.
+
+
 ## 0.34.15 — 2026-07-31 (che168: override'y ślepe na napęd + martwy klucz `by_engine`)
 
 **Objaw.** Oferta `che168:59161281` (`汉L 2025款 DM-p`, plug-in hybryda) wylądowała w hubie

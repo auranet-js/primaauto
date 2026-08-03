@@ -277,8 +277,8 @@ z treścią zawierającą `<script>`/`<style>` musi mieć `--user=1`.**
 | Element | Stan |
 |---|---|
 | ~~**B — blok na 317 hubach serie**~~ | ✅ **WDROŻONE 31.07** (theme 1.2.0) — nowy plik `hub-leasing-block.php`, do `taxonomy-serie.php` weszły 3 linie. Bez liczb: bez cen, bez liczby ofert, bez procentu depozytu — decyzje D10-D14 niżej. |
-| **C — formularz leadowy** | Nie ruszone. **Dług:** CTA na landingu prowadzi dziś do `/kontakt/`, czyli do `mailto:` — spec zakładał formularz osadzony na stronie (§3A pkt 9). Landing bez formularza = landing bez mierzalnej konwersji. |
-| **Pasek zaufania na ofertach** | Nie ruszone — dotyka `class-asiaauto-single.php` (ZAWSZE PYTAJ). |
+| **C — formularz leadowy** | Nie ruszone, **plan wykonawczy gotowy**: `docs/roadmapa/T-219-C-formularz-plan-wykonawczy.md` (5–6 h; recon pokazał, że publiczny submit już istnieje w `order/start`, więc nie budujemy od zera). **Dług:** CTA na landingu prowadzi dziś do `mailto:`. |
+| ~~**Pasek zaufania na ofertach**~~ | ✅ **WDROŻONE 31.07** (plugin 0.34.16) — claim „Możliwy leasing" na **2174 ofertach** prowadzi na landing. Jedna zmieniona linia w `trustLine()` + `text-decoration: underline` (WCAG 1.4.1). |
 | **Autolinker działu wiedzy** | Nie ruszone — hasło „leasing” jeszcze nie prowadzi na landing (osobny punkt z §3B). |
 | **Rozjazd depozytu z §4 umowy** | Wydzielony do **T-223**, czeka na odpowiedź Ruslana (punkt 8 w `docs/biznes/2026-07-27-punkty-do-weryfikacji-ruslan.md`). |
 
