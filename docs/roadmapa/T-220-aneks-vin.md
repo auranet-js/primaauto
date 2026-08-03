@@ -3,6 +3,16 @@
 > Status: **gotowe do budowy** (decyzje zapadły 2026-07-27) · Rozmiar: S/M
 > Godziny realnie: **5–7 h** (Janek ~1 h, AI ~4–6 h) · Rynkowo: 12–18 h
 > Powiązane: T-217 (drugi wzorzec umowy — aneks musi obsłużyć oba), T-218 (panel zamówień — lista, nie karta)
+>
+> ⚠️ **Pakiet wykonawczy: `docs/sesje/2026-08-03-T-220-PAKIET-WYKONAWCZY.md`** — zastępuje ten spec
+> tam, gdzie się rozjeżdżają. Trzy korekty z 2026-08-03 (po weryfikacji kodu i bazy):
+> **(a)** D5 „aneks w kroku 4 kreatora” **wycofane** — kreator pokazuje wtedy krok 5, panel 4 jest
+> ukryty; aneks idzie do klienta mailem z PDF-em w załączniku;
+> **(b)** guard to `isValidVin()` (17 znaków), nie „VIN niepusty” — w bazie są ucięte numery
+> i jeden już trafił do zamówienia (#387790: `L1NB`);
+> **(c)** D6 potwierdzone jako **w zakresie** — 99,2 % ofert dongchedi nie ma VIN-u, więc `—`
+> w umowie pośrednictwa jest regułą, nie wyjątkiem.
+> Wymóg nadrzędny dopisany przez Janka: **wygenerowanie aneksu nie wysyła żadnych maili.**
 
 ---
 
