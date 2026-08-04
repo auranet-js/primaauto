@@ -1,5 +1,23 @@
 # Historia wersji asiaauto-sync
 
+## 0.34.19 — 2026-08-04 (T-237: kontaminacja hubów + scalenie duplikatu LS9)
+
+Dwa auta Geely siedziały na seriach należących do innych marek: „Galaxy M9" na termie `M9`
+(AITO), „Geely Galaxy L7" na termie `L7` (Li Auto). Marka była poprawna, seria nie — auta
+Geely wyświetlały się na cudzych hubach i **zaniżały tam cenę „od"**: AITO M9 pokazywał
+224 000 zł zamiast 312 000, Li Auto L7 — 99 000 zamiast 211 000. Przepięte na `Galaxy M9`
+(6550) i `Galaxy L7` (7153), liczniki i tytuły przeliczone.
+
+Duplikat serii scalony: ten sam model stał na dwóch indeksowalnych hubach — `LS9` (2 szt.)
+i `IM LS9` (1 szt.), kanibalizując frazę „im ls9" (90/mc) i pokazując mniejszą podaż niż
+realna. Po scaleniu jeden hub z 3 sztukami; `im-ls9` → `ls9` przez `V62_SERIE_REDIRECTS`
+(opcja `_asiaauto_redirects` w bazie okazała się martwa — plugin jej nie czyta).
+
+Nie ruszane, bo to nie duplikaty: `Smart #5` (elektryk) i `Smart #5 EHD Super Hybrid`
+(hybryda z range extenderem) to różne auta. `LS8` — dziś jeden term `IM LS8`, ale mapowanie
+produkuje nazwę `LS8`, więc przy kolejnym imporcie powstanie drugi term; do poprawy w mapie,
+zanim się wydarzy.
+
 ## 0.34.18 — 2026-08-04 (T-226: identyfikacja pojazdu w danych podstawowych)
 
 Sekcja „Dane podstawowe" na ofercie otwierała się rokiem modelowym i od razu wymiarami —
