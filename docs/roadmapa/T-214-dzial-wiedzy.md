@@ -1,6 +1,14 @@
 # T-214 — Dział wiedzy: Leksykon + Magazyn newsowy + Blog (wspólny silnik, bez n8n)
 
-> Status: **F0–F3 WDROŻONE 2026-07-21, zaakceptowane przez Janka („podoba mi się")**. Live: 10 haseł Słownika (/wiki/, index+follow, w llms.txt, zgłoszone do indeksacji) + 2 newsy (/aktualnosci/) + cron newsowy 06:45 (mail akceptacyjny) + menu Słownik/Aktualności. Pozostało: F2 Tier 2 (~80 haseł hurtowo generatorem), auto-linker (filtr w renderach ofert/hubów — strefa ZAWSZE PYTAJ), sekcje dynamiczne „auta z technologią" pod hasłami, F4 blog/rankingi.
+> Status: **F0–F3 WDROŻONE 2026-07-21**. Pozostało: sekcje dynamiczne „auta z technologią" pod hasłami, **F4 blog/rankingi (w toku — patrz T-225)**.
+> ✅ **Auto-linker WDROŻONY 2026-07-22** (spec mylnie trzymał go jako otwarty): `class-asiaauto-autolink.php` (201 linii) wpięty w 4 punktach — `brand-hub` ×2 (wiki_body, FAQ), `single` (opis oferty), `shortcodes` (`tech_specs`, `equipment`). Weryfikacja na żywo: strona oferty ma **6 linków do `/wiki/`**. Backupy `.bak-2026-07-22-autolink` w obu plikach.
+>
+> **POMIAR STANU 2026-08-04 (zweryfikowany na produkcji):**
+> - **Słownik `/wiki/`: 74 hasła** (plan zakładał 40 w F2 — Tier 2 zrobiony ponad plan). GSC 28 dni: **40 klik., 2330 wyśw. z 68 URL-i**.
+> - **Aktualności: 38 wpisów.** GSC 28 dni: **413 klik., 3578 wyśw. z 36 URL-i** — czyli 36 wpisów daje więcej ruchu niż 1228 stron ofert (282 klik.). Najlepszy dowód, że format działa.
+> - ⚠️ **Magazyn milczy od 2026-07-22** (ostatni wpis „VW i Horizon Robotics", 13 dni przerwy przy założeniu 1–3 newsy/dobę). Cron 06:45 do sprawdzenia — osobne zadanie, nie blokuje F4.
+> - Kategorie `rankingi` / `porownania` / `poradniki` **istnieją, `/rankingi/` zwraca HTTP 200, 0 wpisów** — listing gotowy, treści brak. `category.php` obsługuje wszystkie cztery sekcje.
+> - Kontekst wzrostu całego serwisu: GSC 28 dni **9 558 klik.** (poprzednie 28 dni: 3 602 — **+165%**), średnia pozycja 6,5 → 5,6.
 >
 > **Lekcje z wdrożenia 21.07 (WAŻNE dla Tier 2):** (1) generacja = JEDEN przebieg claude -p (draft+samokontrola+korekta w jednym prompcie, Opus, 3 równolegle ~2,5 min/hasło) — NIE osobne procesy na recenzję/korektę (15 min/hasło przez narzut startu); (2) research w sieci PRZED pisaniem obowiązkowy (claude -p --allowedTools WebSearch,WebFetch) — bez niego hasła typu Blade Battery nie znają generacji; (3) FAQ z realnych PAA (DFS SERP ~$0.002/hasło), nie syntetyczne; (4) H2 zawsze z frazą w odmianie, nigdy generyczne „Jak to działa"; (5) frazy główne z DFS przed generacją (hybryda plug in 9900 > phev 2400); (6) okładki brandowe = og:image i kafle, NIE hero w treści (dublują tytuł); zdjęcia w treści = kadry z galerii ofert (technologie widoczne) + diagramy HTML/CSS .pa-diagram (niewidoczne); (7) nazwa sekcji „Słownik" (nie „Leksykon").
 > Rozmiar: XL, fazowany · Godziny realnie: **76–102 h silnik (F0–F4)** + nadzór ~3–5 h/tydz na starcie
@@ -53,7 +61,7 @@ Prima Auto = polskie źródło prawdy o chińskiej motoryzacji. Trzy sekcje na j
 - **F1 (2 sesje):** generator z backupu 14.07 → `scripts/kb/`; framework 7 etapów; prompty 3 typów; fact-check liczb; mail akceptacyjny + tokenowy endpoint „Opublikuj"; dry-run 2–3 próbki mailem do Janka.
 - **F2 (2–3 sesje):** 40 haseł Tier 1 batchami po 10 (mail do akceptu); auto-linker — diff `class-asiaauto-single.php` do akceptu Janka (ZAWSZE PYTAJ); indeks /wiki/.
 - **F3 (1 sesja + 2 tyg. obserwacji):** cron 06:45 + pierwsze maile akceptacyjne; Janek zakłada konta prasowe (BYD/Geely, gotowe dane do formularzy ode mnie); news sitemap live.
-- **F4 (1–2 sesje):** 5 rankingów przez gate kanibalizacyjny GSC; cron 2×/tydz.
+- **F4 (1–2 sesje):** 5 rankingów przez gate kanibalizacyjny GSC; cron 2×/tydz. **Doprecyzowanie 2026-08-04:** rankingi = wpisy w kategorii `/rankingi/` (własny listing jak `/aktualnosci/` i `/wiki/`), a **stroną filarową całej sekcji jest `/marki/`** — rozbudowa tej strony i podpięcie do niej kilku ostatnich rankingów wydzielone do **T-225**. Kolejność segmentów wg popytu × podaż (pomiar DFS+GSC+Ads 2026-08-04, `docs/analizy/2026-08-04-rankingi-porownania-recon.md`): **terenówki ~3450/mc → pickupy ~2480 → vany/7-osobowe ~2140 → kombi 480 → sportowe ~520**, SUV-y (~6500) jako największy tekst po pilocie.
 - **Od Janka:** „ok" na diffy stref kruchych (permalinki, single.php), kliki w maile akceptacyjne, konta prasowe. Każda faza = commit + smoke test; kill-switch plikowy od F1.
 
 ## Strefy kruche / reguły
