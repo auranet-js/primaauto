@@ -54,6 +54,12 @@ ZASADY:
 4. Ton rzeczowy, bez marketingowego nadęcia, bez wykrzykników. Piszemy do kogoś, kto rozważa wydanie
    150-300 tysięcy złotych i chce wiedzieć, z czym ma do czynienia.
 5. Nagłówki H2 mają odpowiadać na realne pytania kupującego, nie brzmieć jak spis treści.
+6. NIE OPISUJ NASZEGO PROCESU IMPORTU. Zakaz obejmuje: nazwy organów i miejsc, w których auto
+   uzyskuje dopuszczenie do ruchu (nie wiemy tego i nie publikujemy), kolejność etapów sprowadzania,
+   miasta i porty, nazwy partnerów, czasy trwania poszczególnych kroków. Piszemy o REZULTACIE dla
+   klienta („autem dopuszczonym do ruchu z kompletem dokumentów zajmujemy się my, koszt w cenie"),
+   nigdy o tym, jak to robimy — to informacja dla konkurencji, a jej szczegóły bywają nieprawdziwe.
+   Dotyczy również FAQ: na pytanie „jak wygląda homologacja" odpowiadaj rezultatem, nie procedurą.
 
 Zwróć czysty JSON o strukturze:
 {
