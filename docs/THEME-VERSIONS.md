@@ -14,3 +14,27 @@ Standalone motyw produkcyjny zastępujący Hello Elementor + Elementor Pro. Źr�
 | 2026-04-24 | 1.0.2 | **Admin bar offset + bezpieczny fallback „Nawigacja" + link `/marki/`.** (a) Sticky `.pa-header` chował się pod pasek admina WP — dodane `body.admin-bar .pa-header { top: 32px }` + media query `<=782px` → `top: 46px` (WP admin bar grubszy na mobile). (b) Footer kolumna „Nawigacja" była pusta — theme_mod `nav_menu_locations` wskazywał `menu-2 → term 3273` który nie istnieje w DB (jedyne menu to term 6033 „Header" pod `menu-1`). `has_nav_menu('menu-2')` zwracał true, `wp_nav_menu()` nic nie renderował, fallback nie odpalał. Fix: `wp_nav_menu` z `echo=>false` + warunek na niepusty output → fallback gdy menu wskazuje na nieistniejący term. (c) Fallback rozszerzony z 4 do 6 linków: Samochody / **Marki** (nowy, `/marki/`) / W drodze / W Rzeszowie / **O nas** (nowy, `/informacje/o-nas/` bo `/o-nas/` = 301) / Kontakt. |
 | 2026-04-24 | 1.0.1 | **Fix podwójnego headera.** `header.php` renderował dwa warianty `.pa-header__inner` (desktop + mobile) przełączane klasami utility `.desktop-only`/`.mobile-only` z `base.css`. Ale reguła `.pa-header__inner { display: flex }` w `header.css` (ładowany po `base.css` — zależność `['primaauto-base']`) miała tę samą specificity (0,1,0) i wygrywała kolejnością → `display: flex` nadpisywał `display: none` z `.mobile-only`, efekt: oba warianty renderowane jednocześnie na desktopie. Fix: `.pa-header__inner--desktop { display: flex }` + `.pa-header__inner--mobile { display: none }` z media query `@media (max-width: 768px)` odwracającą stan — selectory BEM same ustawiają visibility, utility klasy `.desktop-only`/`.mobile-only` usunięte z dwóch divów w `header.php` (zostaje tylko w `.pa-mobile-menu.mobile-only`, to osobna instancja). Bump w `style.css` + `PRIMAAUTO_THEME_VERSION` w `functions.php`. |
 | 2026-04-24 | 1.0.0 | **Pierwsza wersja produkcyjna.** Aktywacja `wp theme activate primaauto2026`, deaktywacja `elementor` + `elementor-pro` (zostają na dysku jako safety net ~7 dni). Z frontu zniknęły: `elementor-frontend.min.js` + Pro chunks, swiper, share-link, eicons font, Font Awesome, 4× inline `<style id="elementor-post-...">`, wszystkie wrappery `.elementor-element`, Hello Elementor parent CSS + block presets, admin bar „Edit with Elementor". Zostały: `pa-header` (sticky 70px), `pa-footer` (3-kolumnowy granat), `aa-single` (renderer pluginu mobile.de-style), Complianz RODO, Inter self-host + preload. Filter `elementor/theme/get_location_templates` = empty → Theme Builder Elementor Pro nie injectuje header/footer/single. Templates: `header.php`, `footer.php`, `front-page.php`, `page.php`, `page-marki.php`, `single-listings.php`, `taxonomy-make.php`, `taxonomy-serie.php`, `404.php`, `index.php`. Assets: `base.css`, `header.css`, `footer.css`, `nav.js`. Rollback: `wp theme activate asiaauto && wp plugin activate elementor elementor-pro`. |
+## 1.2.1 — 2026-08-04 (T-225b: siatka marek)
+
+`page-marki.php`: marki `global_jv` (VW, Audi, Toyota, Honda, Nissan, Mazda, Ford, Mercedes)
+zniknęły z siatki — strona nazywa się „Chińskie marki samochodów", a one nie są chińskie.
+Ich huby zostają nietknięte (chińskie modele tych marek rankują we własnych hubach).
+50 kafli zamiast 58.
+
+„Najpopularniejsze" liczone z realnego `count` zamiast listy slugów wpisanej na sztywno —
+poprzednio Volkswagen z 8 ofertami stał przed Hongqi ze 118. Teraz: BYD 272, Geely 148,
+AITO 137, Hongqi 119, Li Auto 118, XPeng 118, Leapmotor 116, Denza 107.
+
+Kafelek pokazuje grupę kapitałową (`_asiaauto_brand_group`) pod nazwą — „Denza / BYD",
+„AITO / Seres i Huawei", „Hongqi / FAW". Zamiast teasera z opisu: 76% opisów zaczyna się
+od „<Marka> to…" (śr. 128 znaków), 58 takich zdań to szum, a kafle urosłyby trzykrotnie
+przy 79,6% ruchu mobilnego. Marka będąca własnym koncernem nie powtarza nazwy.
+
+Dodane pod siatką: FAQ (5 pytań z realnych zapytań — „kto jest właścicielem volvo" 720/mc)
++ schema `ItemList` (50 pozycji) i `FAQPage`, oraz sekcja „Najnowsze rankingi" renderowana
+warunkowo (dziś niewidoczna, kategoria pusta).
+
+`hub.css`: `.aa-brand-card` z flex na grid `1fr auto` — wariant bez grupy (lista modeli
+na hubie marki) wygląda identycznie jak przed zmianą. Wersja motywu podbita, bo CSS jest
+cache-busted przez `PRIMAAUTO_THEME_VERSION`, nie przez `filemtime`.
+
