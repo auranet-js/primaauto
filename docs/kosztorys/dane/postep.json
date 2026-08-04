@@ -7,38 +7,10 @@
   "changelog": [
     {
       "data": "04.08.2026",
-      "tytul": "Strona „Chińskie marki samochodów” przebudowana od podstaw",
-      "opis": "Strona z listą marek była dotąd samą siatką nazw z licznikami — jedno zdanie tekstu i nic więcej. Przez trzy miesiące zebrała 631 wyświetleń w Google i tylko 2 wejścia, mimo że samo hasło „chińskie marki samochodów” ma 5400 wyszukań miesięcznie. Teraz tłumaczy rynek: kto do kogo należy (osiem koncernów i ich marki), czym są marki tworzone razem z Huawei, dlaczego Volvo i MG to dziś marki chińskie. Doszły zdjęcia sześciu aut z naszej oferty, odpowiedzi na najczęstsze pytania oraz oznaczenie koncernu przy każdej marce — widać od razu, że Denza należy do BYD, a Hongqi do FAW. Z listy zniknęły Volkswagen, Toyota, Mazda i pozostałe marki globalne, bo nie są chińskie; ich własne strony działają bez zmian. Kolejność „najpopularniejszych” liczy się teraz z liczby aut w ofercie — wcześniej Volkswagen z ośmioma sztukami stał przed Hongqi ze stu dziewiętnastoma.",
-      "wersje": "motyw 1.2.1",
-      "godz": 5
-    },
-    {
-      "data": "04.08.2026",
-      "tytul": "Karta auta pokazuje wreszcie markę, model, wersję i kolor",
-      "opis": "Sekcja „Dane podstawowe” na stronie każdego auta zaczynała się od rocznika i od razu przechodziła do wymiarów — brakowało odpowiedzi na najprostsze pytanie, czym ten samochód właściwie jest. Teraz otwiera ją marka, model, wersja wyposażenia, rok i kolor nadwozia. Dane pochodzą z naszej bazy, więc uzupełniają się same również dla aut dodawanych ręcznie. Przy okazji poprawiliśmy dobór pojęć podlinkowanych do słownika w tabeli danych technicznych: wcześniej system podlinkowywał „rok modelowy”, teraz w pierwszej kolejności wyjaśnia to, co dla chińskich aut naprawdę wymaga tłumaczenia — zasięg CLTC, typ ogniw czy producenta baterii.",
-      "wersje": "wtyczka 0.34.18",
-      "godz": 2
-    },
-    {
-      "data": "04.08.2026",
-      "tytul": "Słownik pojęć rozrósł się do 89 haseł",
-      "opis": "Doszło piętnaście nowych haseł opisujących rzeczy, które klient widzi w tabeli danych technicznych, a które nigdzie nie były wyjaśnione: rodzaje zawieszenia, hamulce, nadwozie samonośne i ramowe, brak skrzyni biegów w samochodzie elektrycznym, radar, mapy Amap oraz procesory kokpitu Snapdragon. Każde hasło ma własną stronę z pytaniami i odpowiedziami. Dla porównania skali: 74 wcześniejsze hasła przyniosły w ostatnim miesiącu 2330 wyświetleń w Google.",
-      "wersje": "",
-      "godz": 3
-    },
-    {
-      "data": "04.08.2026",
-      "tytul": "Pięć marek bez własnego opisu dostało pełne strony",
-      "opis": "Sprawdziliśmy wszystkie 58 marek w ofercie pod kątem kompletności treści. Okazało się, że sześć nie miało żadnego opisu, dziewięć nie miało pytań i odpowiedzi, jedenaście — zdania wprowadzającego. Najgorzej wypadły Maxus i Foton, czyli marki, których nazwy ludzie w Polsce wyszukują odpowiednio 9900 i 8100 razy miesięcznie. Obie mają teraz pełne strony, podobnie jak BAW, Shangjie i Dongfeng Fengxing. To o tyle istotne, że akurat te marki obsługują segmenty, o które ludzie pytają najczęściej, a my ich nie opisywaliśmy: Foton to pickupy, BAW terenówki, Shangjie kombi elektryczne.",
-      "wersje": "",
-      "godz": 3
-    },
-    {
-      "data": "04.08.2026",
-      "tytul": "Uporządkowanie tego, co obiecujemy klientowi w opisach aut",
-      "opis": "Opisy na stronach marek i modeli powstawały w różnym czasie i rozjechały się z tym, co piszemy na stronach informacyjnych. W 372 miejscach naprawiliśmy trzy rzeczy: transport morski podawany jako 4–6 tygodni (na stronie „Proces zamawiania” jest 6–8), obietnicę odbioru auta „z polskimi tablicami” (a strona o rejestracji mówi wprost, że wniosek składa klient) oraz opis procedury dopuszczenia auta do ruchu, który wskazywał niewłaściwy organ. Przyjęliśmy zasadę, że w opisach aut piszemy o tym, co klient dostaje, a nie jak przebiega nasz proces — po pierwsze dlatego, że szczegóły się zmieniają, po drugie dlatego, że to informacja dla konkurencji.",
-      "wersje": "",
-      "godz": 3
+      "tytul": "Porządkowanie treści w całym serwisie — marki, karty aut, słownik pojęć",
+      "opis": "Dzień pracy nad tym, co klient czyta na stronie, w pięciu obszarach.\n\nStrona „Chińskie marki samochodów” była dotąd samą siatką nazw z licznikami — jedno zdanie tekstu i nic więcej. Przez trzy miesiące zebrała 631 wyświetleń w Google i tylko 2 wejścia, mimo że samo hasło ma 5400 wyszukań miesięcznie. Teraz tłumaczy rynek: kto do kogo należy (osiem koncernów i ich marki), czym są marki tworzone razem z Huawei, dlaczego Volvo i MG to dziś marki chińskie. Doszły zdjęcia sześciu aut z naszej oferty, odpowiedzi na najczęstsze pytania i oznaczenie koncernu przy każdej marce — widać od razu, że Denza należy do BYD, a Hongqi do FAW. Z listy zniknęły Volkswagen, Toyota, Mazda i pozostałe marki globalne, bo nie są chińskie; ich własne strony działają bez zmian. Kolejność „najpopularniejszych” liczy się teraz z liczby aut w ofercie — wcześniej Volkswagen z ośmioma sztukami stał przed Hongqi ze stu dziewiętnastoma.\n\nSłownik pojęć urósł do 89 haseł. Piętnaście nowych opisuje rzeczy, które klient widzi w tabeli danych technicznych, a które nigdzie nie były wyjaśnione: rodzaje zawieszenia, hamulce, nadwozie samonośne i ramowe, brak skrzyni biegów w samochodzie elektrycznym, radar, mapy Amap i procesory kokpitu. Dla skali: 74 wcześniejsze hasła przyniosły w ostatnim miesiącu 2330 wyświetleń w Google.\n\nSprawdziliśmy wszystkie 58 marek w ofercie pod kątem kompletności treści. Sześć nie miało żadnego opisu, dziewięć pytań i odpowiedzi, jedenaście zdania wprowadzającego. Najgorzej wypadły Maxus i Foton — marki wyszukiwane w Polsce odpowiednio 9900 i 8100 razy miesięcznie. Obie mają teraz pełne strony, podobnie jak BAW, Shangjie i Dongfeng Fengxing. To akurat marki obsługujące segmenty, o które ludzie pytają najczęściej, a my ich nie opisywaliśmy: Foton to pickupy, BAW terenówki, Shangjie kombi elektryczne.\n\nSekcja „Dane podstawowe” na stronie auta zaczynała się od rocznika i od razu przechodziła do wymiarów — brakowało odpowiedzi na najprostsze pytanie, czym ten samochód właściwie jest. Teraz otwiera ją marka, model, wersja wyposażenia, rok i kolor nadwozia; dane uzupełniają się same również dla aut dodawanych ręcznie. Poprawiliśmy też dobór pojęć podlinkowanych do słownika: wcześniej system tłumaczył „rok modelowy”, teraz w pierwszej kolejności to, co przy chińskich autach naprawdę wymaga wyjaśnienia — zasięg CLTC, typ ogniw czy producenta baterii.\n\nNa koniec uporządkowaliśmy to, co obiecujemy klientowi w opisach aut. Powstawały w różnym czasie i rozjechały się ze stronami informacyjnymi. W 372 miejscach poprawiliśmy trzy rzeczy: transport morski podawany jako 4–6 tygodni (na stronie „Proces zamawiania” jest 6–8), obietnicę odbioru auta „z polskimi tablicami” (a strona o rejestracji mówi wprost, że wniosek składa klient) oraz opis procedury dopuszczenia do ruchu, który wskazywał niewłaściwy organ. Przyjęliśmy zasadę, że w opisach aut piszemy o tym, co klient dostaje, a nie jak przebiega nasz proces — szczegóły się zmieniają, a poza tym to informacja dla konkurencji.",
+      "wersje": "wtyczka 0.34.18, motyw 1.2.1",
+      "godz": 7
     },
     {
       "data": "03.08.2026",

@@ -29,6 +29,14 @@ def load(name):
     with open(os.path.join(DANE, name), encoding='utf-8') as f:
         return json.load(f)
 
+def esc_par(t):
+    """Escape + rozbicie na akapity po pustej linii — opisy w changelogu bywają wieloakapitowe."""
+    parts = [p.strip() for p in str(t).split("\n\n") if p.strip()]
+    if len(parts) <= 1:
+        return esc(t)
+    return "".join(f"<p>{esc(p)}</p>" for p in parts)
+
+
 def esc(s):
     return html.escape(str(s), quote=False)
 
@@ -68,7 +76,7 @@ def rows_changelog():
                     f"rel=\"noopener\">{esc(c['link']['tekst'])}</a></div>")
         out.append(f"""<tr>
 <td class="data-col">{esc(c['data'])}</td>
-<td><strong>{esc(c['tytul'])}</strong> {wersje}<div class="opis">{esc(c['opis'])}</div>{link}</td>
+<td><strong>{esc(c['tytul'])}</strong> {wersje}<div class="opis">{esc_par(c['opis'])}</div>{link}</td>
 <td class="num">{fmt_h(c.get('godz', 0))}</td></tr>""")
     return '\n'.join(out)
 
@@ -140,6 +148,8 @@ td.num {{ font-variant-numeric: tabular-nums; font-weight: 600; white-space: now
 td.data-col {{ white-space: nowrap; color: var(--ink-2); font-size: 13px; font-variant-numeric: tabular-nums; }}
 tfoot td {{ background: var(--accent-soft); font-weight: 700; }}
 .opis {{ color: var(--ink-2); font-weight: 400; margin-top: 4px; font-size: 14px; }}
+.opis p {{ margin: 0 0 9px; }}
+.opis p:last-child {{ margin-bottom: 0; }}
 .skala {{ color: var(--ink-3); font-size: 12.5px; margin-top: 4px; }}
 .linki {{ margin-top: 8px; font-size: 13.5px; }}
 .linki a {{ color: var(--accent); font-weight: 600; }}
