@@ -1,5 +1,20 @@
 # Historia wersji asiaauto-sync
 
+## 0.34.18 — 2026-08-04 (T-226: identyfikacja pojazdu w danych podstawowych)
+
+Sekcja „Dane podstawowe" na ofercie otwierała się rokiem modelowym i od razu wymiarami —
+nie było odpowiedzi na pytanie, czym to auto właściwie jest. Dodane na początek: Marka,
+Model, Wersja, Rok modelowy, Kolor nadwozia, Kolor wnętrza.
+
+Źródła: taksonomie (`make`, `serie`, `ca-year`, `exterior-color`, `interior-color`) + meta
+`_asiaauto_complectation`, czyli poza `extra_prep` — dane kompletne dla obu źródeł (dongchedi
+i che168) i niezależne od uszkodzonych escapów unicode. Wstawka przez `array_splice` obok
+istniejącego bloku roku modelowego, zero zmian w pętli budującej wiersze z extra_prep.
+
+Marki i modelu świadomie NIE linkujemy — mają już po ~4 linki na stronie (breadcrumb,
+„Wszystkie oferty", inne egzemplarze, CTA katalogu). Linkowanie nadwozia/paliwa/napędu
+do katalogu z filtrem to osobny task (T-227).
+
 ## 0.34.17 — 2026-08-04 (T-227b: priorytet niszy w autolinkerze)
 
 Autolinker rozstrzyga konkurencję o ograniczone sloty (3 w specyfikacji, 3 w wyposażeniu)
