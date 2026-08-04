@@ -77,15 +77,27 @@ def get_paa(keyword):
         return []
 
 
+def _cjk_variants(s):
+    """Warianty zapisu CJK w meta_value: surowy UTF-8 i escape \\uXXXX.
+
+    W bazie współistnieją OBA (pomiar 2026-08-04, `front_suspension_form` z „麦弗逊”:
+    234 rekordy surowe, 736 escapowanych). json_decode widzi je identycznie, LIKE nie —
+    szukanie tylko escapowanej formy gubiło ~24% rekordów i zaniżało kontekst haseł.
+    """
+    esc = json.dumps(s, ensure_ascii=True)[1:-1].replace("\\", "\\\\\\\\")
+    return [s] if esc == s else [s, esc]
+
+
 def db_examples(cfg, limit=6):
     """Przykładowe auta z daną technologią z bazy (LIKE po _asiaauto_extra_prep)."""
     conds = []
     for key, val in cfg.get("term_keys", {}).items():
-        if val:
-            esc = json.dumps(val, ensure_ascii=True)[1:-1].replace("\\", "\\\\\\\\")
-            conds.append(f"m.meta_value LIKE '%\"{key}\":\"%{esc}%'")
-        else:
-            conds.append(f"(m.meta_value LIKE '%\"{key}\":\"%' AND m.meta_value NOT LIKE '%\"{key}\":\"\"%')")
+        for k in _cjk_variants(key):
+            if val:
+                for v in _cjk_variants(val):
+                    conds.append(f"m.meta_value LIKE '%\"{k}\":\"%{v}%'")
+            else:
+                conds.append(f"(m.meta_value LIKE '%\"{k}\":\"%' AND m.meta_value NOT LIKE '%\"{k}\":\"\"%')")
     if not conds:
         return []
     sql = ("SELECT p.post_title FROM wp7j_posts p "

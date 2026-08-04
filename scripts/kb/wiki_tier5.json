@@ -1,0 +1,152 @@
+[
+  {
+    "title": "Zawieszenie McPherson — jak działa i co daje kierowcy",
+    "headword": "Zawieszenie McPherson",
+    "slug": "zawieszenie-mcpherson",
+    "category": "podwozie",
+    "aliases": "McPherson, kolumna McPhersona, zawieszenie McPhersona, McPhersona",
+    "term_keys": { "front_suspension_form": "麦弗逊" },
+    "main_kw": "kolumna mcphersona",
+    "context": "Najpopularniejsza konstrukcja zawieszenia przedniej osi: kolumna łącząca amortyzator ze sprężyną pełni jednocześnie rolę górnego elementu prowadzącego koło, dolny wahacz prowadzi je od spodu. Zalety: tanie, lekkie, kompaktowe (zostawia miejsce na silnik lub napęd elektryczny w przedniej osi). Wady wobec dwuwahaczowego: gorsza kontrola pochylenia koła przy dużych przechyłach, więcej drgań przenoszonych do nadwozia. W naszej bazie: 958 aut ma McPhersona z przodu (na 1985 z wypełnionym parametrem, 95% oferty). Typowo w autach kompaktowych i miejskich; auta wyższych segmentów przechodzą na dwuwahaczowe. Renderowane w specyfikacji jako „McPherson (niezależne)”."
+  },
+  {
+    "title": "Zawieszenie wielowahaczowe — dlaczego jest w tylnej osi",
+    "headword": "Zawieszenie wielowahaczowe",
+    "slug": "zawieszenie-wielowahaczowe",
+    "category": "podwozie",
+    "aliases": "Wielowahaczowe, zawieszenie wielowahaczowe, wielowahaczowe niezależne, multilink",
+    "term_keys": { "rear_suspension_form": "多连杆" },
+    "main_kw": "zawieszenie wielowahaczowe",
+    "context": "Konstrukcja z kilkoma niezależnymi wahaczami prowadzącymi koło — każdy odpowiada za inną oś ruchu, dzięki czemu geometria koła zmienia się w kontrolowany sposób podczas ściskania i przechyłów. Daje najlepszy kompromis komfortu i prowadzenia, kosztem masy, ceny i miejsca. W naszej bazie: 1449 aut z zawieszeniem wielowahaczowym w tylnej osi — najczęstsze rozwiązanie tyłu w chińskich autach elektrycznych. Dla porównania belka skrętna (rozwiązanie tańsze, zależne) występuje tylko w około 70 autach. Renderowane w specyfikacji jako „Wielowahaczowe (niezależne)”."
+  },
+  {
+    "title": "Zawieszenie dwuwahaczowe (podwójne wahacze)",
+    "headword": "Zawieszenie dwuwahaczowe",
+    "slug": "zawieszenie-dwuwahaczowe",
+    "category": "podwozie",
+    "aliases": "Podwójne wahacze, dwuwahaczowe, zawieszenie dwuwahaczowe, podwójny wahacz, double wishbone",
+    "term_keys": { "front_suspension_form": "双叉臂" },
+    "main_kw": "zawieszenie dwuwahaczowe",
+    "context": "Dwa wahacze (górny i dolny) prowadzą koło niezależnie od amortyzatora. Utrzymuje koło prostopadle do drogi także przy mocnym przechyle nadwozia, co przekłada się na większą przyczepność w zakręcie i precyzyjniejsze prowadzenie niż McPherson. Kosztem: cena, masa, zajmowane miejsce. W naszej bazie: 886 aut ma dwuwahaczowe zawieszenie przedniej osi — to drugi najczęstszy układ przodu po McPhersonie (958). Charakterystyczne dla segmentu premium i aut o wyższych osiągach. W specyfikacji: „Podwójne wahacze”."
+  },
+  {
+    "title": "Zawieszenie pięciowahaczowe",
+    "headword": "Zawieszenie pięciowahaczowe",
+    "slug": "zawieszenie-pieciowahaczowe",
+    "category": "podwozie",
+    "aliases": "Pięciowahaczowe, zawieszenie pięciowahaczowe, pięciowahaczowe niezależne, five-link",
+    "term_keys": { "rear_suspension_form": "五连杆" },
+    "main_kw": "zawieszenie pięciowahaczowe",
+    "context": "Odmiana zawieszenia wielowahaczowego z pięcioma elementami prowadzącymi koło — każdy przejmuje inną składową sił, co pozwala niezależnie stroić zbieżność, pochylenie i reakcje na hamowanie oraz przyspieszanie. Stosowane w tylnej osi aut, w których liczy się jednocześnie komfort i stabilność przy dużej masie (baterie). W naszej bazie: 345 aut. Odróżnienie od zwykłego wielowahaczowego (1449 aut) jest istotne przy porównywaniu wersji tego samego modelu. W specyfikacji: „Pięciowahaczowe (niezależne)”."
+  },
+  {
+    "title": "Zawieszenie zależne i półzależne — belka skrętna i most sztywny",
+    "headword": "Zawieszenie zależne",
+    "slug": "zawieszenie-zalezne",
+    "category": "podwozie",
+    "aliases": "Belka skrętna, Most sztywny, zawieszenie zależne, zawieszenie półniezależne, oś sztywna",
+    "term_keys": { "rear_suspension_form": "非独立" },
+    "main_kw": "zawieszenie zależne i niezależne",
+    "context": "W zawieszeniu zależnym koła jednej osi są połączone sztywnym elementem — ruch jednego wpływa na drugie. Dwa warianty w ofercie: belka skrętna (półniezależne, tanie i kompaktowe, typowe dla aut miejskich i kompaktowych, około 70 aut w bazie) oraz most sztywny (pełna oś, około 30 aut — wyłącznie terenówki, bo wytrzymuje przeciążenia w terenie i pozwala na duży skok zawieszenia). W naszej bazie zawieszenie zależne to około 100 aut z 1985 — czyli rozwiązanie mniejszościowe, ale w terenówkach zamierzone, a nie oszczędnościowe. W specyfikacji: „Belka skrętna (półniezależne)” lub „Most sztywny (zależne)”."
+  },
+  {
+    "title": "Zawieszenie o regulowanej twardości i wysokości",
+    "headword": "Zawieszenie regulowane",
+    "slug": "zawieszenie-regulowane",
+    "category": "podwozie",
+    "aliases": "zawieszenie regulowane, regulacja twardości zawieszenia, regulowana wysokość zawieszenia, regulacja zawieszenia",
+    "term_keys": { "variable_suspension": "软硬" },
+    "main_kw": "zawieszenie regulowane",
+    "context": "Możliwość zmiany charakterystyki zawieszenia z fotela kierowcy. Dwa poziomy w danych: sama regulacja twardości amortyzatorów (246 aut) oraz regulacja twardości i wysokości nadwozia jednocześnie (333 auta) — łącznie 579 aut w bazie. Regulacja wysokości występuje razem z zawieszeniem pneumatycznym i pozwala obniżyć auto na autostradzie (zasięg, stabilność) albo podnieść w terenie i przy wjeździe na krawężnik. Różni się od zawieszenia adaptacyjnego CDC tym, że tam zmiana jest ciągła i automatyczna, a tu wybiera się tryb."
+  },
+  {
+    "title": "Hamulce tarczowe wentylowane",
+    "headword": "Hamulce tarczowe wentylowane",
+    "slug": "hamulce-tarczowe-wentylowane",
+    "category": "podwozie",
+    "aliases": "Wentylowane tarczowe, tarcze wentylowane, hamulce wentylowane, tarcza wentylowana",
+    "term_keys": { "front_brake_type": "通风盘" },
+    "main_kw": "hamulce tarczowe wentylowane",
+    "context": "Tarcza zbudowana z dwóch powierzchni ciernych rozdzielonych kanałami wentylacyjnymi, które przetłaczają powietrze i odbierają ciepło. Zapobiega przegrzaniu i spadkowi skuteczności hamowania (fadingowi) przy powtarzanych hamowaniach z dużych prędkości — istotne szczególnie w ciężkich autach elektrycznych. W naszej bazie: 2001 aut z 2033 z wypełnionym parametrem ma wentylowane tarcze na przedniej osi, czyli to praktycznie standard. Warianty rzadkie: tarcze ceramiczne (18 aut) i karbonowo-ceramiczne (7) w autach o najwyższych osiągach. W specyfikacji: „Wentylowane tarczowe”."
+  },
+  {
+    "title": "Elektryczny hamulec postojowy (EPB) i Auto Hold",
+    "headword": "Elektryczny hamulec postojowy",
+    "slug": "elektryczny-hamulec-postojowy",
+    "category": "podwozie",
+    "aliases": "elektryczny hamulec postojowy, elektroniczny hamulec postojowy, hamulec postojowy, EPB",
+    "term_keys": { "park_brake_type": "电子驻车" },
+    "main_kw": "elektryczny hamulec postojowy",
+    "context": "Zamiast dźwigni ręcznej — przycisk i siłowniki elektryczne w zaciskach tylnej osi. Zwalnia się automatycznie przy ruszaniu, zwykle współpracuje z funkcją Auto Hold (utrzymanie auta na wzniesieniu bez trzymania pedału). W naszej bazie: 2029 aut z 2033 — czyli w praktyce każde auto z chińskiego rynku ma EPB, klasyczny hamulec ręczny to 2 sztuki. Praktyczna konsekwencja przy imporcie: brak dźwigni oznacza inną procedurę awaryjnego holowania i inne czynności serwisowe przy wymianie klocków tylnych (konieczny tryb serwisowy). W specyfikacji jako „Hamulec postojowy: Elektroniczny”."
+  },
+  {
+    "title": "Nadwozie samonośne i ramowe — co oznacza w praktyce",
+    "headword": "Nadwozie samonośne i ramowe",
+    "slug": "nadwozie-samonosne-i-ramowe",
+    "category": "nadwozie",
+    "aliases": "Samonośne, Ramowe, nadwozie samonośne, nadwozie ramowe, rama drabinowa, konstrukcja ramowa",
+    "term_keys": { "car_body_structure": "承载式" },
+    "main_kw": "nadwozie samonośne",
+    "context": "Samonośne: nadwozie samo przenosi obciążenia, brak osobnej ramy — lżejsze, sztywniejsze skrętnie, lepsze w kolizji czołowej, tańsze w produkcji. Dominuje w autach osobowych i SUV-ach: 1933 auta w naszej bazie. Ramowe: nadwozie osadzone na osobnej ramie drabinowej — cięższe i mniej sztywne skrętnie, ale wytrzymuje skręcanie w terenie, większe obciążenia i łatwiej je naprawić po uszkodzeniu. W naszej bazie 103 auta — to dokładnie terenówki i pickupy (Tank, Leopard 5 i 8, BJ40, Jetour G700). Praktyczny wniosek dla kupującego: konstrukcja ramowa to sygnał, że auto projektowano pod teren i holowanie, a nie pod komfort i zasięg. W specyfikacji: „Samonośne” albo „Ramowe”."
+  },
+  {
+    "title": "Skrzynia biegów w aucie elektrycznym — przekładnia jednobiegowa",
+    "headword": "Przekładnia jednobiegowa",
+    "slug": "przekladnia-jednobiegowa-ev",
+    "category": "naped",
+    "aliases": "Jednobiegowa, przekładnia jednobiegowa, stałe przełożenie, reduktor jednobiegowy",
+    "term_keys": { "gearbox_type": "固定齿比" },
+    "main_kw": "czy samochód elektryczny ma skrzynię biegów",
+    "context": "Silnik elektryczny ma pełny moment obrotowy od zera obrotów i użyteczny zakres do kilkunastu tysięcy obrotów na minutę, więc nie potrzebuje przekładni wielobiegowej — wystarczy jedna stała redukcja. Stąd brak biegów, brak sprzęgła i brak szarpnięć przy zmianie przełożenia. W naszej bazie: 1079 aut z przekładnią o stałym przełożeniu (najczęstszy typ „skrzyni” w ofercie). Wyjątki w świecie EV to konstrukcje dwubiegowe stosowane dla zwiększenia prędkości maksymalnej i sprawności na autostradzie. Dla porównania hybrydy mają E-CVT (282), DHT (200) lub DCT (246). W specyfikacji: „Jednobiegowa (EV)” lub „Jednobiegowa (stałe przełożenie)”."
+  },
+  {
+    "title": "Bezpośredni wtrysk paliwa w chińskich hybrydach",
+    "headword": "Bezpośredni wtrysk paliwa",
+    "slug": "bezposredni-wtrysk-paliwa",
+    "category": "naped",
+    "aliases": "Bezpośredni wtrysk, wtrysk bezpośredni, bezpośredni wtrysk paliwa, direct injection",
+    "term_keys": { "oil_supply": "直喷" },
+    "main_kw": "bezpośredni wtrysk paliwa",
+    "context": "Paliwo podawane pod wysokim ciśnieniem prosto do komory spalania, a nie do kolektora dolotowego. Daje precyzyjniejsze dawkowanie, wyższą sprawność i niższe zużycie — dlatego jest standardem w silnikach spalinowych pracujących jako generator w hybrydach szeregowych (EREV) i w hybrydach plug-in. W naszej bazie: 1101 aut ma wtrysk bezpośredni (738 oznaczonych jako wtrysk bezpośredni do cylindra, 363 jako bezpośredni), wobec 228 z wielopunktowym wtryskiem pośrednim. Znana wada konstrukcji: osadzanie się nagaru na zaworach dolotowych, bo paliwo ich nie omywa — w hybrydach mniej dotkliwa, bo silnik pracuje w wąskim, optymalnym zakresie obciążeń."
+  },
+  {
+    "title": "Turbodoładowanie w chińskich hybrydach i autach spalinowych",
+    "headword": "Turbodoładowanie",
+    "slug": "turbodoladowanie",
+    "category": "naped",
+    "aliases": "Turbo, Bi-turbo, turbodoładowanie, doładowanie turbo, turbosprężarka",
+    "term_keys": { "gas_form": "涡轮增压" },
+    "main_kw": "silnik turbo",
+    "context": "Turbosprężarka napędzana spalinami wtłacza do cylindrów więcej powietrza, co pozwala uzyskać moc większego silnika z mniejszej pojemności. W naszej bazie: 806 aut z doładowaniem turbo, 127 wolnossących, 6 z podwójnym turbo. W hybrydach plug-in i EREV silnik doładowany pracuje najczęściej jako generator w stałym zakresie obrotów, więc klasyczna zwłoka turbo (turbo lag) jest dla kierowcy niewyczuwalna — moment do kół daje silnik elektryczny. Odmiany spotykane w danych: turbosprężarka o zmiennej geometrii (VGT) i praca w cyklu Millera, obie nastawione na sprawność, nie na osiągi."
+  },
+  {
+    "title": "Radar milimetrowy (mmWave) w systemach asystujących",
+    "headword": "Radar milimetrowy",
+    "slug": "radar-milimetrowy",
+    "category": "adas",
+    "aliases": "radar milimetrowy, radar mmWave, radary milimetrowe, fale milimetrowe, mmWave",
+    "term_keys": { "millimeter_wave_radar": "" },
+    "main_kw": "radar milimetrowy",
+    "context": "Radar pracujący w paśmie fal milimetrowych (typowo 77 GHz) mierzy odległość i prędkość względną obiektów. W odróżnieniu od kamery i lidaru działa w deszczu, mgle, śniegu i w całkowitej ciemności, ale ma niską rozdzielczość kątową — nie rozpoznaje kształtów. Dlatego jest podstawą aktywnego tempomatu i hamowania awaryjnego, a nie samodzielnym systemem jazdy autonomicznej. W naszej bazie: 1061 aut ma radary milimetrowe, najczęściej 3 sztuki (412 aut) lub 5 (340). Więcej radarów oznacza pokrycie boków i tyłu, czyli martwe pole, ostrzeganie o ruchu poprzecznym przy wyjeździe i zmianę pasa. Dla porównania lidar ma 561 aut."
+  },
+  {
+    "title": "Amap, Petal i Baidu — nawigacja w chińskich autach",
+    "headword": "Nawigacja Amap",
+    "slug": "nawigacja-amap-petal-baidu",
+    "category": "komfort",
+    "aliases": "Amap, Gaode, Petal Maps, mapy Amap, nawigacja Amap",
+    "term_keys": { "map_brand_高德": "" },
+    "main_kw": "amap nawigacja",
+    "context": "Fabryczna nawigacja chińskich aut opiera się na trzech dostawcach map: Amap (Gaode, należy do Alibaby) — 857 aut w naszej bazie, Petal Maps (Huawei) — 146 i Baidu Maps — 80. Wszystkie są zoptymalizowane pod Chiny i po imporcie do Polski mapy Europy albo nie działają, albo są mocno niekompletne. Praktyczne rozwiązanie po sprowadzeniu auta: nawigacja z telefonu przez Apple CarPlay lub Android Auto, o ile auto je obsługuje, albo przez lustrzane odbicie ekranu. To jedna z realnych różnic między autem z importu a wersją europejską i warto ją znać przed zakupem."
+  },
+  {
+    "title": "Snapdragon 8295 i 8155 — procesory kokpitu",
+    "headword": "Snapdragon 8295",
+    "slug": "snapdragon-8295-8155",
+    "category": "komfort",
+    "aliases": "Snapdragon 8295, Snapdragon 8155, Qualcomm Snapdragon, Snapdragon",
+    "term_keys": { "car_intelligent_chip_高通骁龙8295": "", "car_intelligent_chip_高通骁龙8155": "" },
+    "main_kw": "snapdragon 8295",
+    "context": "Procesory Qualcomm dedykowane systemom pokładowym, faktyczny standard w chińskich autach. Snapdragon 8155 (proces 7 nm, wprowadzony około 2021) obsługuje jeden lub dwa ekrany i podstawową grafikę. Snapdragon 8295 (5 nm, od 2023) jest kilkakrotnie wydajniejszy, obsługuje wiele ekranów jednocześnie, wyświetlacz przezierny AR-HUD, przetwarzanie obrazu z kamer i lokalne modele głosowe. W naszej bazie: 287 aut z 8295 i 245 z 8155. Praktyczna wskazówka dla kupującego: układ kokpitu decyduje o płynności ekranu i o tym, jak długo producent będzie dostarczał aktualizacje — 8295 to auta z lat 2024 i nowsze, 8155 to wcześniejsze roczniki tego samego modelu."
+  }
+]

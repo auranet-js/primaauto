@@ -51,7 +51,13 @@ Zasada: **najpierw fundament linkowania (bo z niego korzysta wszystko dalej), po
 
 Dlaczego pierwsze: 1228 stron ofert to największy zbiór URL-i w serwisie i dziś prawie nie linkuje w głąb. Każdy dodany link działa dla całego zbioru naraz.
 
-⚠️ **Korekta zakresu po audycie słownika 2026-08-04** (`docs/analizy/2026-08-04-slownik-luki-audyt.md`): linkowania z **parametrów technicznych** (typ silnika, typ i producent baterii, struktura nadwozia, rodzaj paliwa, zawieszenie, skrzynia, audio, chipy) **nie trzeba budować** — `AsiaAuto_Autolink` działa od 22.07 i jest wpięty w `tech_specs` oraz `equipment`. Na ofercie daje dziś 6 linków do `/wiki/` — dokładnie tyle, ile wartości ma swoje hasło. **Każde nowe hasło = automatyczny link w setkach ofert.** Dlatego rozbudowa słownika (T-233) awansuje do Bloku 1 i jest wykonywana **przed** T-227, a T-227 obejmuje wyłącznie linki do hubów i katalogu.
+⚠️ **Korekta po audycie słownika 2026-08-04** (`docs/analizy/2026-08-04-slownik-luki-audyt.md`): mechanizm linkowania z parametrów technicznych **istnieje** (`AsiaAuto_Autolink`, wpięty w `tech_specs` i `equipment`), ale **jego limity są zaszyte na sztywno i już wysycone**: `tech_specs` 3 + `equipment` 3 = 6, i dokładnie 6 linków jest dziś na ofercie (`Rok modelowy`, `CLTC`, `LFP`, `Keyless`, `Filtr PM2.5`, `OTA`).
+
+Nowe hasła **nie zwiększą liczby linków w ofertach** — zmienią tylko, które hasła wygrywają (dłuższy alias ma pierwszeństwo), co i tak poprawia trafność: dziś w tabeli specyfikacji linkuje się „Rok modelowy" zamiast parametrów konstrukcyjnych.
+
+**Nowy punkt do decyzji — T-227b:** czy podnieść limity w `tech_specs`/`equipment`. Zmiana jednolinijkowa, ale dotyka renderu oferty (ZAWSZE PYTAJ) i grozi przelinkowaniem tabeli.
+
+T-233a zostaje w Bloku 0, ale **uzasadnieniem jest własny ruch haseł** (74 hasła = 2330 wyśw./28 dni), AEO i pokrycie merytoryczne — nie „odblokowanie linków w ofertach". T-227 obejmuje wyłącznie linki do hubów i katalogu, których autolinker nie robi w ogóle.
 
 ### Blok 2 — Pillar: strona `/marki/` (rozbite T-225)
 

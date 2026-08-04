@@ -3,13 +3,25 @@
 > Powód: od czasu wdrożenia słownika (74 hasła, 21.07) doszła ścieżka katalogu Autohome — **292 parametry na model zamiast ~100 z auto-api**. Pokrycie nigdy nie było przeliczone na nowych danych.
 > Metoda: przelot po **2090 ofertach** z `_asiaauto_extra_prep` (364 klucze), rozkład wartości dla pól słownikowych, zestawienie z listą opublikowanych haseł.
 
-## Wniosek nadrzędny — linkowania nie trzeba budować, trzeba dopisać hasła
+## Wniosek nadrzędny — mechanizm linkowania istnieje, ale ma wysycone limity
 
-`AsiaAuto_Autolink` **działa od 22.07** i jest wpięty m.in. w `tech_specs` oraz `equipment`. Na stronie oferty daje dziś **6 linków do `/wiki/`** — dokładnie tyle, ile wartości ze specyfikacji ma swoje hasło.
+`AsiaAuto_Autolink` **działa od 22.07** i jest wpięty w `tech_specs`, `equipment`, opis oferty, hub marki (wiki_body + FAQ), treść haseł i newsy.
 
-Czyli: **każde nowe hasło zamienia się automatycznie w link w setkach lub tysiącach ofert**, bez dotykania kodu renderującego. Rozbudowa słownika jest tańszą i szerzej działającą dźwignią niż budowanie osobnego mechanizmu linkowania parametrów.
+**Weryfikacja na żywej ofercie (XPeng Mona M03):** 6 linków — `Rok modelowy`, `CLTC`, `LFP`, `Keyless`, `Filtr PM2.5`, `OTA`.
 
-Osobnym zadaniem zostaje linkowanie **do hubów i katalogu** (marka → hub marki, model → hub modelu, nadwozie/kolor/paliwo → katalog z filtrem) — tego autolinker nie robi.
+⚠️ **Limity per punkt renderu są zaszyte na sztywno i już wysycone:** `tech_specs` **3**, `equipment` **3**, opis oferty 4, newsy 5, treść hasła 6. Plus reguła „jedno hasło = jeden link na stronę". Czyli 3 + 3 = 6 to **maksimum, jakie specyfikacja może pokazać dziś** — i tyle właśnie pokazuje.
+
+**Konsekwencja:** dopisanie nowych haseł **samo z siebie nie zwiększy liczby linków w ofertach**. Zmieni tylko, które hasła wygrywają (najdłuższy alias ma pierwszeństwo) — a to i tak jest poprawą trafności, bo dziś w specyfikacji technicznej linkuje się „Rok modelowy" zamiast realnych parametrów konstrukcyjnych.
+
+**Wartość rozbudowy słownika leży więc gdzie indziej i jest realna:**
+1. **Własne strony z ruchem** — 74 hasła dają 2 330 wyświetleń / 28 dni (~31 na hasło).
+2. **AEO** — ustrukturyzowane definicje to materiał, po który sięgają AI Overviews.
+3. **Pokrycie merytoryczne** — dziś zawieszenie (95% aut), hamulce (97%) i struktura nadwozia (97%) nie mają ani jednego hasła.
+4. **Linkowanie tam, gdzie limit nie jest wysycony** — newsy (5) i treść haseł (6).
+
+**Decyzja do podjęcia osobno:** czy podnieść limity w `tech_specs`/`equipment` (dziś 3+3). Zmiana jest jednolinijkowa, ale dotyka renderu oferty — strefa ZAWSZE PYTAJ, i niesie ryzyko przelinkowania tabeli specyfikacji.
+
+Osobnym zadaniem zostaje linkowanie **do hubów i katalogu** (marka → hub marki, model → hub modelu, nadwozie/kolor/paliwo → katalog z filtrem) — tego autolinker nie robi w ogóle.
 
 ## Luki wg liczby aut, których dotyczą
 
