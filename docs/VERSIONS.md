@@ -1,5 +1,22 @@
 # Historia wersji asiaauto-sync
 
+## 0.34.17 — 2026-08-04 (T-227b: priorytet niszy w autolinkerze)
+
+Autolinker rozstrzyga konkurencję o ograniczone sloty (3 w specyfikacji, 3 w wyposażeniu)
+globalnie, a nie kolejnością komórek tabeli. Nowy przebieg `pickWinners()`: skleja segmenty
+tekstowe spoza SKIP_TAGS, szuka pierwszego wystąpienia każdego aliasu i sortuje po
+(priorytet, pozycja). Dopiero zwycięzcy trafiają do podmiany — przebieg 2 iteruje po ~3
+aliasach zamiast 271, więc całość jest tańsza niż poprzednia wersja (1,94 ms na tabelę
+25,8 tys. znaków, <1% TTFB 0,26 s).
+
+Priorytet: 1 = specyfika chińska/EV (bateria, naped, adas + CLTC, NEV), 2 = kokpit/audio/
+normy, 3 = uniwersalna motoryzacja (podwozie, nadwozie, turbo, wtrysk, rok modelowy).
+Mapowanie po `_wiki_category` + lista wyjątków, więc nowe hasło dziedziczy priorytet kategorii.
+
+Powód: pomiar na 12 ofertach pokazał, że 33 z 72 slotów zajmowała uniwersalna motoryzacja
+(McPherson, hamulce, turbo), a tylko 13 specyfika chińska/EV. Po zmianie 33 / 15 / 21.
+Efekt na żywo: `CLTC · LFP · FinDreams` zamiast `Rok modelowy · CLTC · LFP`.
+
 ## 0.34.16 — 2026-08-03 (T-219 D: claim leasingowy na ofertach prowadzi na landing)
 
 **Co.** Pasek zaufania pod ceną na każdej ofercie kończył się zdaniem „Możliwy leasing." —
