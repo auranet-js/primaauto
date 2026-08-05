@@ -29,6 +29,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 import kb_lib as kb
 import ranking_generate as rg
 import ranking_market as rm
+import ranking_specs as rspec
 import ranking_stock as rs
 
 META_DANE = "_asiaauto_ranking_dane"
@@ -131,8 +132,22 @@ def przerenderuj_tabele(w, dry_run=False):
         print("  brak danych przy wpisie"); return None
     pozycje, trafione = rs.wzbogac(pozycje, "model")
     okres = rg.okres_slownie(w["dane"]["okres"])
+    # Rankingi parametryczne maja INNA tabele (inne kolumny i nagłowek). Bez tej galezi
+    # przebudowa wstawiala im tabele sprzedazowa - kolumna z sekundami dostawala naglowek
+    # „Sprzedaz / sierpien 2026" (blad zlapany przez Janka 2026-08-05).
+    definicje = json.loads(rg.DEFINICJE.read_text(encoding="utf-8"))["rankingi"]
+    d = definicje.get(w["dane"].get("definicja")) or {}
+    if d.get("zrodlo") == "spec":
+        # Dane parametryczne przeliczamy z katalogu na nowo: sa nasze, tanie w pobraniu
+        # i tylko wtedy komplet kolumn (bateria, ogniwa, moc) jest pewny.
+        d["_nazwa"] = w["dane"]["definicja"]
+        dane_tab = rspec.ranking_parametryczny(d["parametr"], d.get("top", 20))
+        pozycje, trafione = rs.wzbogac(dane_tab["ranking"], "model")
+        buduj = lambda: rg.tabela_specow(pozycje, dane_tab, d)
+    else:
+        buduj = lambda: rg.tabela_rankingu(pozycje, okres)
     nowa = re.sub(r"<!--RANKING:START-->.*?<!--RANKING:END-->",
-                  lambda _: "<!--RANKING:START-->" + rg.tabela_rankingu(pozycje, okres) + "<!--RANKING:END-->",
+                  lambda _: "<!--RANKING:START-->" + buduj() + "<!--RANKING:END-->",
                   w["tresc"], flags=re.S)
     nowa = re.sub(r"<!--OFERTA:START:_podsumowanie-->.*?<!--OFERTA:END-->",
                   lambda _: rg.podsumowanie_oferty(pozycje), nowa, flags=re.S)
@@ -142,7 +157,42 @@ def przerenderuj_tabele(w, dry_run=False):
     if dry_run:
         print("  (dry-run — nie zapisuję)"); return None
     zapisz_tresc(w["id"], nowa, "tabela")
+    if d.get("zrodlo") == "spec":
+        meta = dict(w["dane"])
+        meta.update({"parametr": d["parametr"], "jednostka": dane_tab["jednostka"],
+                     "etykieta": dane_tab["etykieta"],
+                     "pozycje": [{k: p.get(k) for k in
+                                  ("pozycja", "marka", "model", "podmiot", "nasza_marka",
+                                   "nasza_serie", "wartosc", "klasa", "klucz", "naped",
+                                   "bateria", "zasieg", "ogniwa", "typ_ogniw", "moc",
+                                   "predkosc", "przyspieszenie")} for p in pozycje]})
+        kb.wp("post", "meta", "set", str(w["id"]), META_DANE, json.dumps(meta, ensure_ascii=False))
     return {"pozycji": len(pozycje), "trafione": trafione}
+
+
+def odswiez_okladke(w, dry_run=False):
+    """Przebudowa okladki z danych zapisanych przy wpisie: zdjecie auta z czolowki rankingu.
+    Osobny tryb, bo okladki nie chcemy zmieniac przy kazdym przeliczeniu dostepnosci -
+    obrazek skaczacy co dobe to szum w social i w Google Discover."""
+    definicje = json.loads(rg.DEFINICJE.read_text(encoding="utf-8"))["rankingi"]
+    d = definicje.get(w["dane"].get("definicja"))
+    if not d:
+        print("  brak definicji w rankingi.json"); return None
+    d["_nazwa"] = w["dane"]["definicja"]
+    pozycje, _ = rs.wzbogac(w["dane"].get("pozycje", []), "model")
+    if dry_run:
+        z = rg.foto_z_czolowki(pozycje)
+        print(f"  kandydat: {z['auto']} ({z['szerokosc']} px)" if z else "  brak zdjecia o wystarczajacej rozdzielczosci")
+        return None
+    # Po skasowaniu zalacznika meta _thumbnail_id znika i `wp post meta get` konczy sie bledem,
+    # nie pustym stringiem - stad odczyt przez eval zamiast twardego wywolania.
+    stare = kb.wp("eval", f'echo (string) get_post_meta({w["id"]}, "_thumbnail_id", true);').strip()
+    rg.okladka(str(w["id"]), d, {"zrodlo_data": w["dane"]["okres"]}, pozycje)
+    nowe = kb.wp("eval", f'echo (string) get_post_meta({w["id"]}, "_thumbnail_id", true);').strip()
+    if stare and nowe and stare != nowe:
+        kb.wp("post", "delete", stare, "--force")
+        print(f"  stara okladka {stare} usunieta")
+    return nowe
 
 
 def odswiez_ranking(w, miesiac=None, dry_run=False):
@@ -211,6 +261,7 @@ def main():
     ap.add_argument("--oferta", action="store_true", help="przelicz bloki dostępności (domyślne)")
     ap.add_argument("--ranking", action="store_true", help="podmień dane rynkowe (świadomie)")
     ap.add_argument("--tabela", action="store_true", help="przebuduj sam znacznik tabeli z zapisanych danych")
+    ap.add_argument("--okladka", action="store_true", help="przebuduj okladke ze zdjecia auta z czolowki")
     ap.add_argument("--wpis", help="ID albo slug wpisu; domyślnie wszystkie rankingi")
     ap.add_argument("--miesiac", help="RRRRMM dla --ranking")
     ap.add_argument("--dry-run", action="store_true")
@@ -220,6 +271,12 @@ def main():
     wpisy = wpisy_rankingowe(a.wpis)
     if not wpisy:
         print("Brak wpisów rankingowych z danymi.")
+        return
+
+    if a.okladka:
+        for w in wpisy:
+            print(f"#{w['id']} {w['tytul'][:58]}")
+            odswiez_okladke(w, a.dry_run)
         return
 
     if a.tabela:

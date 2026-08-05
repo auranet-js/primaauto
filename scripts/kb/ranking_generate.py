@@ -24,6 +24,7 @@ import argparse
 import json
 import re
 import sys
+import unicodedata
 from datetime import date, datetime
 from pathlib import Path
 
@@ -109,9 +110,18 @@ def okres_slownie(miesiac: str, dopelniacz=False) -> str:
 LINKOWANE_POZYCJE = 3
 
 
+def pelna_nazwa(p: dict) -> str:
+    """Marka + model, ale bez dublowania: nasze nazwy serii bywają już z marką
+    („HiPhi Z", „Li Auto MEGA"), a doklejenie marki dawało „HiPhi HiPhi Z"."""
+    marka, model = (p.get("marka") or "").strip(), (p.get("model") or "").strip()
+    if marka and model.lower().startswith(marka.lower()):
+        return model
+    return f"{marka} {model}".strip()
+
+
 def nazwa_auta(p: dict) -> str:
     """Nazwa modelu w tabeli — dla czołówki jako link do naszego huba, dalej zwykły tekst."""
-    tekst = f"{p['marka']} {p['model']}"
+    tekst = pelna_nazwa(p)
     oferta = p.get("nasza_oferta") or {}
     if p.get("pozycja", 99) <= LINKOWANE_POZYCJE and oferta.get("url"):
         return f'<a href="{oferta["url"]}">{tekst}</a>'
@@ -131,7 +141,7 @@ def tabela_rankingu(pozycje: list, okres: str) -> str:
                 " aa-rank-down" if p["zmiana_proc"] < 0 else "")
         auto = nazwa_auta(p)
         dopiski = []
-        if p.get("nasza_serie") and p["nasza_serie"].lower() not in f"{p['marka']} {p['model']}".lower():
+        if p.get("nasza_serie") and p["nasza_serie"].lower() not in pelna_nazwa(p).lower():
             dopiski.append(f"u nas: {p['nasza_serie']}")
         drugalinia = (f'<span class="aa-rank-alias">{" · ".join(dopiski)}</span>' if dopiski else "")
         wiersze.append(
@@ -171,13 +181,18 @@ def tabela_specow(pozycje: list, dane: dict, d: dict) -> str:
 
     wiersze = []
     for p in pozycje:
-        wart = f'{p["wartosc"]}'.replace(".", ",")
+        if par == "cena":
+            # 万 to dziesiątki tysięcy juanów — zapis nieczytelny poza Chinami.
+            # Przeliczamy na miliony (czysta zamiana jednostki, nie szacunek).
+            wart = f'{p["wartosc"] / 100:.2f}'.replace(".", ",") + " mln"
+        else:
+            wart = f'{p["wartosc"]}'.replace(".", ",")
         dodatki = "".join(f'<td class="aa-rank-klasa">{f(p)}</td>' for _, f in kolumny)
         wiersze.append(
             f'<tr><td class="aa-rank-poz">{p["pozycja"]}</td>'
             f'<td class="aa-rank-auto">{nazwa_auta(p)}'
             f'<span class="aa-rank-klasa-mob">{p.get("naped", "")}</span></td>'
-            f'<td class="aa-rank-szt">{wart} {dane["jednostka"]}</td>{dodatki}'
+            f'<td class="aa-rank-szt">{wart} {"juanów" if par == "cena" else dane["jednostka"]}</td>{dodatki}'
             f'<td class="aa-rank-oferta">{p["blok_kompakt"]}</td></tr>'
         )
     naglowki = "".join(f'<th class="aa-rank-klasa">{n}</th>' for n, _ in kolumny)
@@ -388,7 +403,73 @@ def zbuduj_tresc(gen: dict, dane: dict, pozycje: list, d: dict) -> str:
     return "\n".join(czesci)
 
 
-def okladka(post_id: str, d: dict, dane: dict):
+MIN_SZEROKOSC_OKLADKI = 1024   # poniżej tego kadr 1200×675 wychodzi rozmyty
+
+
+def slugify(s: str) -> str:
+    """Nazwa pliku pod SEO: bez diakrytykow i znakow specjalnych."""
+    s = unicodedata.normalize("NFD", s.lower())
+    s = "".join(c for c in s if unicodedata.category(c) != "Mn")
+    return re.sub(r"[^a-z0-9]+", "-", s).strip("-")
+
+
+def foto_z_czolowki(pozycje: list, ile_prob: int = 5):
+    """Zdjęcie do okładki z oferty auta, które stoi najwyżej w rankingu (pomysł Janka,
+    2026-08-05). Bierzemy najszersze zdjęcie z galerii najtańszego egzemplarza — i tylko
+    wtedy, gdy ma sens rozdzielczościowy: część ofert ma w galerii 640 px, z czego okładka
+    wychodzi rozmyta. Gdy czołówka nie ma zdjęć, schodzimy niżej, maksymalnie `ile_prob`
+    pozycji. Plik KOPIUJEMY — oferta rotuje, okładka ma zostać."""
+    kandydaci = [p for p in pozycje if p.get("nasza_oferta")][:ile_prob]
+    if not kandydaci:
+        return None
+    php = '''
+$in = json_decode(file_get_contents("php://stdin"), true);
+$out = [];
+foreach ($in as $r) {
+    $t = get_term_by("slug", $r["slug"], "serie");
+    if (!$t) { continue; }
+    $q = new WP_Query(["post_type"=>"listings","post_status"=>"publish","posts_per_page"=>-1,
+        "fields"=>"ids","tax_query"=>[["taxonomy"=>"serie","field"=>"term_id","terms"=>$t->term_id]]]);
+    // Kolejnosc ma znaczenie: pierwsze zdjecie w galerii to prawie zawsze ujecie z zewnatrz,
+    // a najszersze bywa zdjeciem wnetrza (casus Avatr 11 - 2026-08-05, okladka z otwartymi
+    // drzwiami). Bierzemy wiec PIERWSZE zdjecie spelniajace prog rozdzielczosci, nie najwieksze.
+    $najlepsze = null; $szer = 0; $min = 1024;
+    $oferty = [];
+    foreach ($q->posts as $pid) { $oferty[$pid] = (int) get_post_meta($pid, "price", true) ?: PHP_INT_MAX; }
+    asort($oferty);
+    foreach (array_keys($oferty) as $pid) {
+        $g = get_post_meta($pid, "gallery", true);
+        $ids = is_array($g) ? $g : array_filter(explode(",", (string) $g));
+        array_unshift($ids, get_post_thumbnail_id($pid));
+        foreach (array_filter($ids) as $a) {
+            $m = wp_get_attachment_metadata($a);
+            if (($m["width"] ?? 0) >= $min) { $szer = $m["width"]; $najlepsze = get_attached_file($a); break 2; }
+        }
+    }
+    if ($najlepsze) { $out[] = ["klucz"=>$r["klucz"], "plik"=>$najlepsze, "szerokosc"=>$szer]; }
+}
+echo json_encode($out, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
+'''
+    wejscie = [{"klucz": p["klucz"], "slug": (p.get("nasza_oferta") or {}).get("slug", "")}
+               for p in kandydaci]
+    try:
+        wyniki = {w["klucz"]: w for w in json.loads(kb.wp("eval", php, stdin=json.dumps(wejscie, ensure_ascii=False)))}
+    except Exception as e:
+        print(f"  [!] zdjęcie z czołówki: {e}", flush=True)
+        return None
+
+    for p in kandydaci:
+        w = wyniki.get(p["klucz"])
+        if not w or w["szerokosc"] < MIN_SZEROKOSC_OKLADKI:
+            if w:
+                print(f"    pomijam {p['marka']} {p['model']} — zdjęcia {w['szerokosc']} px", flush=True)
+            continue
+        return {"plik": w["plik"], "auto": pelna_nazwa(p),
+                "pozycja": p["pozycja"], "szerokosc": w["szerokosc"]}
+    return None
+
+
+def okladka(post_id: str, d: dict, dane: dict, pozycje: list = None):
     """Okładka wpisu. Trzy rzeczy są obowiązkowe i nie podlegają negocjacji (reguła Janka,
     2026-08-05): **WebP**, **nazwa pliku z frazą** (nie `cover-123.webp`) i **opisy pod SEO** —
     tytuł, alt i podpis. Zdjęcie z sesji, gdy definicja je wskazuje (`foto`); plansza
@@ -397,6 +478,19 @@ def okladka(post_id: str, d: dict, dane: dict):
     nazwa = f"{d['slug']}-{okres.replace(' ', '-')}.webp"
     plik = kb.STATE_DIR / nazwa
     zrodlowe = d.get("foto")
+    auto = None
+
+    # Domyslnie okladka to auto z czolowki rankingu - najbardziej adekwatna ilustracja,
+    # jaka mamy. `foto_stale: true` w definicji przypina zdjecie na sztywno.
+    if pozycje and not d.get("foto_stale"):
+        z_rankingu = foto_z_czolowki(pozycje)
+        if z_rankingu:
+            zrodlowe = z_rankingu["plik"]
+            auto = z_rankingu["auto"]
+            nazwa = f"{d['slug']}-{slugify(auto)}.webp"
+            plik = kb.STATE_DIR / nazwa
+            print(f"    okladka z pozycji {z_rankingu['pozycja']}: {auto} "
+                  f"({z_rankingu['szerokosc']} px)", flush=True)
 
     if zrodlowe and Path(zrodlowe).exists():
         # Kadr 16:9 z fotografii — WebP, bo tak ma być każdy obraz w serwisie.
@@ -405,15 +499,18 @@ def okladka(post_id: str, d: dict, dane: dict):
                         "-crop", "2048x1152+0+0", "+repage", "-resize", "1200x675",
                         "-unsharp", "0x0.6+0.7+0.02", "-quality", "86", str(plik)],
                        check=True, capture_output=True)
-        podpis = d.get("foto_podpis", "fot. Prima-Auto")
-        alt = d.get("foto_alt") or f"{d['tytul']} — {okres}"
+        podpis = (f"{auto} — egzemplarz z naszej oferty" if auto
+                  else d.get("foto_podpis", "fot. Prima-Auto"))
+        alt = ((f"{auto} — {d['tytul'].lower()}") if auto
+               else (d.get("foto_alt") or f"{d['tytul']} — {okres}"))
     else:
         make_cover(d["tytul"], str(plik), "RANKING")
         podpis = "grafika: Prima-Auto"
         alt = f"{d['tytul']} — dane za {okres}"
 
+    tytul_zal = f"{d['tytul']}" + (f" — {auto}" if auto else f" — {okres}")
     kb.wp("media", "import", str(plik), f"--post_id={post_id}", "--featured_image",
-          f"--title={d['tytul']} — {okres}", f"--alt={alt}", f"--caption={podpis}",
+          f"--title={tytul_zal}", f"--alt={alt}", f"--caption={podpis}",
           f"--desc=Ilustracja do rankingu: {d['tytul'].lower()}, dane za {okres}. "
           f"Prima-Auto — import samochodów z Chin.", "--porcelain")
     plik.unlink(missing_ok=True)
@@ -436,17 +533,23 @@ def zapisz_draft(d: dict, gen: dict, tresc: str, dane: dict, pozycje: list) -> t
     meta = {"definicja": d["_nazwa"], "okres": dane["zrodlo_data"],
             "porownanie_z": dane["porownanie_z"], "zrodlo": dane["zrodlo"],
             "zrodlo_url": dane["zrodlo_url"], "pobrano": dane["pobrano"],
+            "parametr": dane.get("parametr"), "jednostka": dane.get("jednostka"),
+            "etykieta": dane.get("etykieta"),
+            # Pola parametryczne TEZ ida do meta - bez nich przebudowa tabeli gubi kolumny
+            # (blad z 2026-08-05: „Bateria" i „Ogniwa" wychodzily jako myslniki).
             "pozycje": [{k: p.get(k) for k in
                          ("pozycja", "marka", "model", "model_cn", "podmiot", "nasza_marka",
                           "nasza_serie", "wartosc", "poprzedni_miesiac", "zmiana_proc",
-                          "klasa", "klucz")} for p in pozycje]}
+                          "klasa", "klucz", "naped", "bateria", "zasieg", "ogniwa",
+                          "typ_ogniw", "moc", "predkosc", "przyspieszenie", "wersja")}
+                        for p in pozycje]}
     kb.wp("post", "meta", "set", post_id, "_asiaauto_ranking_dane",
           json.dumps(meta, ensure_ascii=False))
     kb.wp("post", "meta", "set", post_id, "_kb_faq_json", json.dumps(gen["faq"], ensure_ascii=False))
     kb.wp("post", "meta", "set", post_id, "rank_math_description", gen["meta_opis"])
 
     try:
-        okladka(post_id, d, dane)
+        okladka(post_id, d, dane, pozycje)
     except Exception as e:
         print(f"  okładka nieudana (nie blokuje): {e}", flush=True)
 

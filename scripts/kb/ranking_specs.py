@@ -186,7 +186,10 @@ def ranking_parametryczny(parametr: str, top: int = 20, min_wartosc: float = 0) 
             continue
         # Hub nazwany po hybrydzie (DM-i, PHEV, EM-i) nie wchodzi do rankingu elektryków,
         # nawet gdy trafiła do niego wersja EV — nazwa modelu w tabeli byłaby myląca.
-        if cfg["napedy"] == ["bev"] and re.search(r"\b(DM-i|DM|PHEV|EM-i|EM-P)\b", o["model"]):
+        # Hub nazwany po hybrydzie z wersja BEV w srodku (Denza D9 DM-i, wariant elektryczny)
+        # wypada z KAZDEGO rankingu parametrycznego: w tabeli wygladalby jak „D9 DM-i -
+        # elektryczny", czyli sprzecznie sam ze soba. To defekt mapowania, nie dana.
+        if kod == "bev" and re.search(r"\b(DM-i|DM|PHEV|EM-i|EM-P)\b", o["model"]):
             odrzucone.append(f"{o['marka']} {o['model']}: hub hybrydowy, wersja EV")
             continue
         wartosc = wartosc_parametru(parametr, o)
