@@ -222,8 +222,9 @@ def sekcja_zrodla_spec(dane: dict, wzbogacone: int, d: dict) -> str:
         f"realnie da się sprowadzić z Chin. To nie jest spis całego rynku chińskiego: modele "
         f"niedostępne w imporcie nie mają tu wpisu, nawet jeśli w Chinach się sprzedają.</p>"
         + cltc +
-        f"<p>Każda pozycja to najlepszy wynik wśród wersji danego modelu — stan katalogu "
-        f"na {dzis}. Kolumna „U nas\" pokazuje bieżącą dostępność i przelicza się automatycznie.</p>"
+        f"<p>Każda pozycja to najlepszy wynik wśród wersji danego modelu; stan katalogu "
+        f"z ostatniego przeliczenia ({dzis}). Kolumna „U nas\" pokazuje bieżącą dostępność "
+        f"i przelicza się automatycznie.</p>"
     )
 
 
@@ -254,9 +255,9 @@ def sekcja_zrodla(dane: dict, wzbogacone: int) -> str:
         f"obejmuje {okres_slownie(dane['zrodlo_data'])} i porównuje je z miesiącem poprzednim "
         f"({okres_slownie(dane['porownanie_z'])}). Z listy wybraliśmy wyłącznie marki chińskie — "
         f"w oryginalnym rankingu są też auta koncernów zagranicznych produkowane w Chinach.</p>"
-        f"<p>Kolumna „U nas\" pokazuje stan naszej oferty w dniu {dzis}: {wzbogacone} "
-        f"{'model' if wzbogacone == 1 else 'modeli'} z tego zestawienia mamy dostępne. "
-        f"Ta kolumna aktualizuje się automatycznie — ranking rynkowy zostaje, dostępność rotuje.</p>"
+        f"<p>Kolumna „U nas\" pokazuje <strong>bieżący</strong> stan naszej oferty — nie stan "
+        f"z dnia publikacji. Przelicza się automatycznie, bo to ona rotuje; ranking rynkowy "
+        f"zostaje taki, jaki był w mierzonym miesiącu.</p>"
     )
 
 
