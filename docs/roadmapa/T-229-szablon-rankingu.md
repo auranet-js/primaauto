@@ -58,6 +58,18 @@ To jest odwrotność pierwszej wersji specu: **trwały jest ranking, zmienna jes
   przy każdej pozycji; przelicza go osobna komenda. Narracja i sam ranking zostają nietknięte.
 - **D5 — Zasięg w WLTC, gdy go mamy; CLTC z jawną etykietą, gdy nie.** Nigdy zmieszane w jednej
   kolumnie. Dla czytelnika z Polski CLTC jest zawyżone o mniej więcej jedną czwartą.
+- **D7 — Jeden stały URL na temat, aktualizowany; nie nowy wpis co miesiąc.** Frazy są wieczne,
+  nie rocznikowe: „chińskie suv" 5400/mc wobec „chińskie samochody 2026" **30/mc**. Dwanaście wpisów
+  rocznie o tym samym temacie to kanibalizacja i rozproszony autorytet — każdy zaczynałby od zera.
+  Ranking niesie okres **w treści** („dane za lipiec 2026") i datę aktualizacji, ale nie w URL-u.
+  **Comiesięczne dane idą osobnym kanałem, który już działa:** news w `/aktualnosci/`
+  („Sprzedaż aut elektrycznych w Chinach, lipiec 2026") linkujący do rankingu. Ranking dostaje
+  świeżość i link, news dostaje temat, Google widzi jeden URL na temat plus doniesienia wokół niego.
+  Wyjątek: podsumowania roczne („Chińska motoryzacja w 2026") to inny intent — mogą żyć osobno.
+- **D8 — Dwa odświeżalne bloki, nie jeden.** Konsekwencja D7: skoro dane rynkowe też się zmieniają
+  (nowy miesiąc sprzedaży), blok `<!--RANKING:START/END-->` musi być podmienialny tak samo jak
+  `OFERTA` — inaczej aktualizacja oznacza ręczne przepisywanie tekstu. Różnią się częstotliwością:
+  `RANKING` rzadko i świadomie, `OFERTA` automatem, bo rotuje codziennie.
 - **D6 — Gate antykanibalizacyjny przed publikacją** (reguła D2 z T-162): sprawdzić w GSC,
   czy fraza główna nie ma już URL-a w serwisie na pozycji ≤20.
 
@@ -127,12 +139,14 @@ To jest odwrotność pierwszej wersji specu: **trwały jest ranking, zmienna jes
 
 ---
 
-## Task 4 — Odświeżanie dostępności (`ranking_refresh.py`)
+## Task 4 — Odświeżanie (`ranking_refresh.py`)
 
-**Deliverable:** komenda przeliczająca wyłącznie bloki `OFERTA` we wszystkich rankingach.
+**Deliverable:** komenda przeliczająca bloki we wpisach — osobno dostępność, osobno dane rynkowe.
 
-- [ ] **4.1** Dla każdego wpisu w `rankingi`: odczytaj pozycje, przelicz dostępność, podmień bloki.
+- [ ] **4.1a** `--oferta` (domyślne, pod cron): przelicza wyłącznie bloki `OFERTA`.
   **Ranking i narracja pozostają nietknięte** — zmienia się tylko to, co u nas rotuje.
+- [ ] **4.1b** `--ranking --zrodlo <url>`: podmienia blok `RANKING` na nowe dane okresowe
+  i aktualizuje zdanie o okresie w leadzie. Uruchamiane świadomie, nie z crona (D8).
 - [ ] **4.2** Guard: spadek liczby dopasowań o >50% względem poprzedniego przebiegu → nie podmieniaj,
   zgłoś mailem (wzorzec sanity-gate z generatorów llms).
 - [ ] **4.3** Cron dopiero po miesiącu obserwacji, nie od razu.
