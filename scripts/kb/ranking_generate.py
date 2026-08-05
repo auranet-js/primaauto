@@ -30,6 +30,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 import kb_lib as kb
 import ranking_market as rm
+import ranking_specs as rspec
 import ranking_stock as rs
 from make_cover import make_cover
 
@@ -137,6 +138,65 @@ def tabela_rankingu(pozycje: list, okres: str) -> str:
     )
 
 
+def tabela_specow(pozycje: list, dane: dict, d: dict) -> str:
+    """Tabela rankingu parametrycznego. Kolumny zależą od parametru: przy zasięgu liczy się
+    bateria, przy przyspieszeniu moc i prędkość. Zasięg zawsze z etykietą CLTC (D5) — chińska
+    norma jest łagodniejsza od WLTP mniej więcej o jedną czwartą."""
+    par = dane.get("parametr")
+    kolumny = {
+        "zasieg": [("Bateria", lambda p: f'{p["bateria"]} kWh' if p.get("bateria") else "—"),
+                   ("Ogniwa", lambda p: " ".join(x for x in (p.get("ogniwa"), p.get("typ_ogniw")) if x) or "—")],
+        "bateria": [("Zasięg CLTC", lambda p: f'{p["zasieg"]} km' if p.get("zasieg") else "—"),
+                    ("Ogniwa", lambda p: " ".join(x for x in (p.get("ogniwa"), p.get("typ_ogniw")) if x) or "—")],
+        "przyspieszenie": [("Moc", lambda p: f'{p["moc"]} KM' if p.get("moc") else "—"),
+                           ("V-max", lambda p: f'{p["predkosc"]} km/h' if p.get("predkosc") else "—")],
+        "cena": [("Napęd", lambda p: p.get("naped", "—")),
+                 ("Zasięg CLTC", lambda p: f'{p["zasieg"]} km' if p.get("zasieg") else "—")],
+    }[par]
+
+    wiersze = []
+    for p in pozycje:
+        wart = f'{p["wartosc"]}'.replace(".", ",")
+        dodatki = "".join(f'<td class="aa-rank-klasa">{f(p)}</td>' for _, f in kolumny)
+        wiersze.append(
+            f'<tr><td class="aa-rank-poz">{p["pozycja"]}</td>'
+            f'<td class="aa-rank-auto">{p["marka"]} {p["model"]}'
+            f'<span class="aa-rank-klasa-mob">{p.get("naped", "")}</span></td>'
+            f'<td class="aa-rank-szt">{wart} {dane["jednostka"]}</td>{dodatki}'
+            f'<td class="aa-rank-oferta">{p["blok_kompakt"]}</td></tr>'
+        )
+    naglowki = "".join(f'<th class="aa-rank-klasa">{n}</th>' for n, _ in kolumny)
+    return (
+        '<div class="aa-rank-tabela"><table class="aa-rank"><thead><tr>'
+        '<th class="aa-rank-poz">#</th><th>Model</th>'
+        f'<th class="aa-rank-szt">{dane["etykieta"]}</th>{naglowki}'
+        '<th class="aa-rank-oferta">U nas</th>'
+        "</tr></thead><tbody>" + "".join(wiersze) + "</tbody></table></div>"
+    )
+
+
+def sekcja_zrodla_spec(dane: dict, wzbogacone: int, d: dict) -> str:
+    """Uczciwe postawienie sprawy: ranking parametryczny opisuje modele, które da się sprowadzić,
+    a nie cały rynek chiński. Bez tego zdania byłaby to cicha zamiana zakresu."""
+    dzis = date.today().strftime("%d.%m.%Y")
+    cltc = ("<p><strong>CLTC to chińska norma pomiaru</strong> — łagodniejsza od europejskiego "
+            "WLTP mniej więcej o jedną czwartą. Auto z deklarowanym zasięgiem 700 km CLTC "
+            "w polskich warunkach realnie przejedzie bliżej 500 km, a zimą mniej. Podajemy "
+            "wartości katalogowe, bo tylko one są porównywalne między modelami.</p>"
+            if dane.get("parametr") in ("zasieg", "bateria") else "")
+    return (
+        "<h2>Skąd te dane</h2>"
+        f"<p>Parametry pochodzą z kart katalogowych Autohome — chińskiego katalogu, w którym "
+        f"producenci publikują dane homologacyjne. Zestawienie obejmuje "
+        f"<strong>{dane['modeli_z_danymi']} modeli</strong> z kompletną kartą, czyli te, które "
+        f"realnie da się sprowadzić z Chin. To nie jest spis całego rynku chińskiego: modele "
+        f"niedostępne w imporcie nie mają tu wpisu, nawet jeśli w Chinach się sprzedają.</p>"
+        + cltc +
+        f"<p>Każda pozycja to najlepszy wynik wśród wersji danego modelu — stan katalogu "
+        f"na {dzis}. Kolumna „U nas\" pokazuje bieżącą dostępność i przelicza się automatycznie.</p>"
+    )
+
+
 def podsumowanie_oferty(pozycje: list) -> str:
     """Jedyne miejsce w treści, które mówi o stanie naszej oferty zbiorczo — i dlatego siedzi
     w bloku odświeżanym automatem. Narracja tych liczb nie dotyka (rotują codziennie)."""
@@ -175,6 +235,37 @@ def sekcja_faq(faq: list) -> str:
     for f in faq:
         czesci.append(f"<h3>{f['q']}</h3><p>{f['a']}</p>")
     return "".join(czesci)
+
+
+def dane_dla_modelu_spec(dane: dict, pozycje: list, d: dict) -> str:
+    linie = []
+    for p in pozycje:
+        det = []
+        for etyk, klucz, jedn in (("bateria", "bateria", "kWh"), ("zasięg CLTC", "zasieg", "km"),
+                                  ("moc", "moc", "KM"), ("V-max", "predkosc", "km/h"),
+                                  ("0-100", "przyspieszenie", "s")):
+            if p.get(klucz):
+                det.append(f"{etyk} {p[klucz]} {jedn}")
+        if p.get("ogniwa"):
+            det.append(f"ogniwa {p['ogniwa']}")
+        if p.get("typ_ogniw"):
+            det.append(p["typ_ogniw"])
+        linie.append(f"  {p['pozycja']}. {p['marka']} {p['model']} — {p['wartosc']} "
+                     f"{dane['jednostka']} ({p.get('naped', '')}); {', '.join(det)}"
+                     + ("  | mamy w ofercie" if p.get("nasza_oferta") else ""))
+    return f"""TEMAT: {d['tytul']}
+KRYTERIUM RANKINGU: {d['kryterium']}
+ŹRÓDŁO: karty katalogowe Autohome, {dane['modeli_z_danymi']} modeli z kompletnymi danymi
+FRAZA, NA KTÓRĄ PISZEMY: {d['fraza_glowna']}
+KONTEKST REDAKCYJNY: {d.get('kontekst', '')}
+
+DANE (jedyne dopuszczalne liczby):
+{chr(10).join(linie)}
+
+UWAGA O NORMIE: zasięg podany jest w chińskiej normie CLTC, łagodniejszej od WLTP mniej więcej
+o jedną czwartą. Jeśli piszesz o zasięgu, ZAWSZE dopisz „CLTC" i nie przeliczaj na WLTP.
+(ile z tych modeli mamy w ofercie — NIE PISZ, to osobny blok, który się przelicza)
+"""
 
 
 def dane_dla_modelu(dane: dict, pozycje: list, d: dict) -> str:
@@ -223,7 +314,14 @@ def bramka_liczb(narracja: str, pozycje: list, dane: dict):
             dozwolone |= {p["zmiana_proc"], abs(p["zmiana_proc"])}
         if p.get("nasza_oferta"):
             dozwolone |= {p["nasza_oferta"]["sztuk"], p["nasza_oferta"]["cena_od"]}
-    dozwolone |= {int(dane["zrodlo_data"]), int(dane["porownanie_z"])}
+    # Rankingi parametryczne nie mają miesiąca porównawczego — pole bywa puste.
+    dozwolone |= {int(x) for x in (dane.get("zrodlo_data"), dane.get("porownanie_z"))
+                  if str(x or "").isdigit()}
+    # Wartości parametrów (zasięg, kWh, moc, V-max, cena w 万) też są danymi z tabeli.
+    for p in pozycje:
+        for klucz in ("bateria", "zasieg", "moc", "predkosc", "przyspieszenie"):
+            if p.get(klucz):
+                dozwolone.add(int(p[klucz]))
     # Ceny z NASZEJ oferty są celowo poza zbiorem dozwolonych: rotują codziennie, a narracja
     # się nie odświeża. Liczby sztuk zostają dozwolone, bo to wartości jednocyfrowe, które
     # kolidują z pozycjami w rankingu i procentami m/m — łapie je osobna bramka tekstowa.
@@ -236,16 +334,22 @@ def bramka_liczb(narracja: str, pozycje: list, dane: dict):
 
 
 def zbuduj_tresc(gen: dict, dane: dict, pozycje: list, d: dict) -> str:
+    spec = d.get("zrodlo") == "spec"
     okres = okres_slownie(dane["zrodlo_data"])
     mamy = sum(1 for p in pozycje if p.get("nasza_oferta"))
+    naglowek = (f"<h2>Ranking: {d.get('naglowek_tabeli', 'zestawienie')} — TOP {len(pozycje)}</h2>"
+                if spec else
+                (f"<h2>Ranking: {len(pozycje)} najlepiej sprzedających się chińskich SUV-ów</h2>"
+                 if d["_nazwa"] == "suv" else f"<h2>Ranking — {okres}</h2>"))
+    kryterium = (f"<p class=\"aa-rank-kryterium\">Kryterium: {d['kryterium']}.</p>" if spec else
+                 f"<p class=\"aa-rank-kryterium\">Kryterium: {d['kryterium']}. Dane za {okres}.</p>")
     czesci = [
         f"<p class=\"aa-lead\"><strong>{gen['lead']}</strong></p>",
         gen["wstep"],
-        f"<h2>Ranking: {len(pozycje)} najlepiej sprzedających się chińskich SUV-ów</h2>"
-        if d["_nazwa"] == "suv" else f"<h2>Ranking — {okres}</h2>",
-        f"<p class=\"aa-rank-kryterium\">Kryterium: {d['kryterium']}. Dane za {okres}.</p>",
+        naglowek,
+        kryterium,
         "<!--RANKING:START-->",
-        tabela_rankingu(pozycje, okres),
+        tabela_specow(pozycje, dane, d) if spec else tabela_rankingu(pozycje, okres),
         "<!--RANKING:END-->",
         podsumowanie_oferty(pozycje),
     ]
@@ -253,7 +357,9 @@ def zbuduj_tresc(gen: dict, dane: dict, pozycje: list, d: dict) -> str:
         czesci.append(f"<h2>{s['h2']}</h2>{s['html']}")
     # Sekcja źródeł niesie okres i datę stanu oferty, więc przy każdym odświeżeniu musi się
     # przeliczyć razem z danymi — stąd własne znaczniki.
-    czesci.append("<!--ZRODLA:START-->" + sekcja_zrodla(dane, mamy) + "<!--ZRODLA:END-->")
+    czesci.append("<!--ZRODLA:START-->" +
+                  (sekcja_zrodla_spec(dane, mamy, d) if spec else sekcja_zrodla(dane, mamy)) +
+                  "<!--ZRODLA:END-->")
     czesci.append(sekcja_faq(gen["faq"]))
     return "\n".join(czesci)
 
@@ -352,9 +458,15 @@ def main():
     d = wczytaj_definicje(a.ranking)
     print(f"=== {d['tytul']}", flush=True)
 
-    print("  dane rynkowe…", flush=True)
-    dane = rm.dongchedi_ranking(d["klasy"], a.miesiac, d.get("typ", 11), d.get("naped", ""),
-                                d.get("top"))
+    if d.get("zrodlo") == "spec":
+        print("  dane parametryczne (katalog Autohome)…", flush=True)
+        dane = rspec.ranking_parametryczny(d["parametr"], d.get("top", 20))
+        if dane["odrzucone_rozjazd"]:
+            print(f"    odrzucone przy rozjeździe źródeł: {len(dane['odrzucone_rozjazd'])}", flush=True)
+    else:
+        print("  dane rynkowe…", flush=True)
+        dane = rm.dongchedi_ranking(d["klasy"], a.miesiac, d.get("typ", 11), d.get("naped", ""),
+                                    d.get("top"))
     pozycje = dane["ranking"]
     if dane["dziury_w_czolowce"]:
         print("  BŁĄD: pozycje bez nazwy mieszczą się w publikowanej czołówce — ranking byłby "
@@ -369,7 +481,8 @@ def main():
     print(f"    {trafione} z {len(pozycje)} pozycji mamy w ofercie", flush=True)
 
     print("  narracja…", flush=True)
-    wejscie = dane_dla_modelu(dane, pozycje, d)
+    wejscie = (dane_dla_modelu_spec(dane, pozycje, d) if d.get("zrodlo") == "spec"
+               else dane_dla_modelu(dane, pozycje, d))
     gen = None
     for proba in (1, 2):
         tekst, _ = kb.call_model(GEN_PROMPT, wejscie, model=a.model)

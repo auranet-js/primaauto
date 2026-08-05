@@ -105,8 +105,9 @@
       "top": 25,
       "poziom_dopasowania": "model",
       "kontekst": "Segment, w którym Chińczycy grają cenami hybryd plug-in (Qin, Seal, Starshine). W Polsce sedan jest niszą wobec SUV-a, ale to właśnie tu chińskie marki mają najtańsze auta z dużym zasięgiem.",
-      "foto": "/home/host476470/media/primaauto/sesje/2026-07-23/SCH02413.jpg",
-      "foto_alt": "Chiński sedan z oferty Prima-Auto — ranking sprzedaży sedanów w Chinach"
+      "foto": "/home/host476470/media/primaauto/oferty/byd-han-l-dm-2025-kanton-360439-9.webp",
+      "foto_alt": "BYD Han L DM-i z oferty Prima-Auto — ranking sprzedaży chińskich sedanów w Chinach",
+      "foto_podpis": "BYD Han L DM-i — egzemplarz z naszej oferty"
     },
     "vany": {
       "tytul": "Chińskie vany i MPV — ranking sprzedaży w Chinach",
@@ -130,7 +131,79 @@
       "top": 20,
       "poziom_dopasowania": "model",
       "kontekst": "MPV to w Chinach segment premium — Denza D9, Voyah Dreamer i Maextro jeżdżą jako auta reprezentacyjne, a nie rodzinne kombivany. Dla polskiego kupującego to najtańsza droga do siedmiu miejsc w wysokim standardzie."
+    },
+    "zasieg": {
+      "tytul": "Chińskie samochody elektryczne o największym zasięgu — TOP 20",
+      "slug": "chinskie-elektryki-najwiekszy-zasieg",
+      "zrodlo": "spec",
+      "parametr": "zasieg",
+      "top": 20,
+      "fraza_glowna": "zasięg chińskich samochodów elektrycznych",
+      "fraza_wolumen": 200,
+      "frazy_poboczne": [
+        "chiński samochód elektryczny zasięg",
+        "chińskie auta elektryczne zasięg",
+        "chiński suv elektryczny"
+      ],
+      "kryterium": "deklarowany zasięg w normie CLTC, najlepsza wersja modelu, wyłącznie auta w pełni elektryczne marek chińskich",
+      "naglowek_tabeli": "chińskie elektryki o największym zasięgu",
+      "poziom_dopasowania": "model",
+      "kontekst": "Zasięg jest pierwszym pytaniem każdego, kto patrzy na chińskiego elektryka. Trzeba uczciwie powiedzieć, że CLTC to nie WLTP — inaczej klient poczuje się oszukany po pierwszej zimie."
+    },
+    "bateria": {
+      "tytul": "Chińskie auta z największą baterią — TOP 20",
+      "slug": "chinskie-auta-najwieksza-bateria",
+      "zrodlo": "spec",
+      "parametr": "bateria",
+      "top": 20,
+      "fraza_glowna": "chińskie auta bateria",
+      "fraza_wolumen": null,
+      "frazy_poboczne": [
+        "największa bateria samochód elektryczny",
+        "chiński samochód bateria kWh",
+        "producenci baterii chiny"
+      ],
+      "kryterium": "pojemność baterii w kWh, najlepsza wersja modelu, auta elektryczne, plug-in i z range extenderem marek chińskich",
+      "naglowek_tabeli": "chińskie auta z największą baterią",
+      "poziom_dopasowania": "model",
+      "kontekst": "Pojemność baterii mówi o koszcie auta i o tym, ile realnie przejedzie zimą. Przy okazji widać, kto dostarcza ogniwa — CATL, CALB, BYD FinDreams — co jest sygnałem jakości dla kupującego."
+    },
+    "najszybsze": {
+      "tytul": "Najszybsze chińskie samochody — ranking przyspieszenia, mocy i prędkości",
+      "slug": "najszybsze-chinskie-samochody",
+      "zrodlo": "spec",
+      "parametr": "przyspieszenie",
+      "top": 20,
+      "fraza_glowna": "najszybsze chińskie samochody",
+      "fraza_wolumen": 520,
+      "frazy_poboczne": [
+        "najszybszy chiński samochód",
+        "chińskie auta sportowe",
+        "chiński samochód 0-100"
+      ],
+      "kryterium": "czas przyspieszenia 0-100 km/h z karty katalogowej, najszybsza wersja modelu, marki chińskie",
+      "naglowek_tabeli": "najszybsze chińskie auta (0-100 km/h)",
+      "poziom_dopasowania": "model",
+      "kontekst": "Chińskie elektryki rozpędzają się szybciej niż europejskie auta sportowe za trzykrotnie większe pieniądze — to jeden z niewielu tematów, gdzie liczby robią robotę bez komentarza."
+    },
+    "najdrozsze": {
+      "tytul": "Najdroższe chińskie samochody — ile kosztują w Chinach",
+      "slug": "najdrozsze-chinskie-samochody",
+      "zrodlo": "spec",
+      "parametr": "cena",
+      "top": 20,
+      "fraza_glowna": "najdroższe chińskie samochody",
+      "fraza_wolumen": null,
+      "frazy_poboczne": [
+        "chińskie auta luksusowe",
+        "chiński samochód luksusowy",
+        "chińskie auta premium"
+      ],
+      "kryterium": "cena katalogowa w Chinach (w dziesiątkach tysięcy juanów), najdroższa wersja modelu, marki chińskie",
+      "naglowek_tabeli": "najdroższe chińskie auta w cenniku producenta",
+      "poziom_dopasowania": "model",
+      "kontekst": "Segment, o którym w Polsce nikt nie wie: Yangwang U9 za 1,68 mln juanów to auto z klasy Ferrari, a Maextro S800 konkuruje z Maybachem. Cena chińska nie jest ceną w Polsce i trzeba to napisać wprost."
     }
   },
-  "_foto_opis": "`foto` = ścieżka do zdjęcia źródłowego (sesje własne, np. z Dysku PrimaAuto/sesje/). Generator sam kadruje 16:9, konwertuje do WebP i nadaje nazwę pliku z frazy (slug + okres) oraz opisy pod SEO. Bez `foto` wchodzi plansza typograficzna — gorsza, więc traktujemy ją jako awaryjną. Oryginały sesji trzymamy w `~/media/primaauto/sesje/<data>/` (nie w `tmp/`, które jest czyszczone) — Dysk Google zostaje archiwum, serwer ma kopię roboczą."
+  "_foto_opis": "`foto` = ścieżka do zdjęcia źródłowego (sesje własne, np. z Dysku PrimaAuto/sesje/). Generator sam kadruje 16:9, konwertuje do WebP i nadaje nazwę pliku z frazy (slug + okres) oraz opisy pod SEO. Bez `foto` wchodzi plansza typograficzna — gorsza, więc traktujemy ją jako awaryjną. Oryginały sesji trzymamy w `~/media/primaauto/sesje/<data>/` (nie w `tmp/`, które jest czyszczone) — Dysk Google zostaje archiwum, serwer ma kopię roboczą. Zdjęcia z galerii ofert KOPIUJEMY do `~/media/primaauto/oferty/` — oferta rotuje i po jej usunięciu plik znika razem z załącznikami, a okładka wpisu ma zostać."
 }
