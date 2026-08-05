@@ -6,7 +6,7 @@
 > **POMIAR STANU 2026-08-04 (zweryfikowany na produkcji):**
 > - **Słownik `/wiki/`: 74 hasła** (plan zakładał 40 w F2 — Tier 2 zrobiony ponad plan). GSC 28 dni: **40 klik., 2330 wyśw. z 68 URL-i**.
 > - **Aktualności: 38 wpisów.** GSC 28 dni: **413 klik., 3578 wyśw. z 36 URL-i** — czyli 36 wpisów daje więcej ruchu niż 1228 stron ofert (282 klik.). Najlepszy dowód, że format działa.
-> - ⚠️ **Magazyn milczy od 2026-07-22** (ostatni wpis „VW i Horizon Robotics", 13 dni przerwy przy założeniu 1–3 newsy/dobę). Cron 06:45 do sprawdzenia — osobne zadanie, nie blokuje F4.
+> - ✅ **Magazyn działa** — weryfikacja 2026-08-04: ostatnie wpisy z 05.08 (04:52, 04:56), publikacja codzienna. Wcześniejsza notatka o „milczeniu od 22.07" była **błędem odczytu** (`tail` zamiast `head` na liście sortowanej malejąco). Źródła: CNEVPost 21 newsów, CarNewsChina 18, electrive 1.
 > - Kategorie `rankingi` / `porownania` / `poradniki` **istnieją, `/rankingi/` zwraca HTTP 200, 0 wpisów** — listing gotowy, treści brak. `category.php` obsługuje wszystkie cztery sekcje.
 > - Kontekst wzrostu całego serwisu: GSC 28 dni **9 558 klik.** (poprzednie 28 dni: 3 602 — **+165%**), średnia pozycja 6,5 → 5,6.
 >
