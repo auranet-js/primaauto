@@ -51,12 +51,17 @@ if ($wiki === '') { echo "Pusty wiki_body.\n"; return; }
 $SEP = '[\s\x{00A0}\x{202F}]';   // spacja zwykła, nbsp, wąska
 $L   = '\d{2,3}(?:' . $SEP . '\d{3})+';   // „209 000”
 
+// Mediana bywa oddzielona od ceny tagiem („… 290 000 PLN</strong> (mediana ok. 203 000)”),
+// więc NIE wciągamy jej w podmianę przedziału — zabranie tagu rozerwałoby HTML.
+// Usuwamy ją osobnym przebiegiem; rotuje z ofertą i nie niesie wartości dla czytelnika.
 $wzorce = [
-    // „od 209 000 do 279 000 PLN, z medianą ok. 235 000”
-    '/od' . $SEP . $L . $SEP . 'do' . $SEP . $L . $SEP . 'PLN(?:,' . $SEP . 'z' . $SEP . 'medianą'
-        . $SEP . 'ok\.' . $SEP . $L . ')?/u' => 'od ' . $cena_od . ' PLN',
+    // „od 209 000 do 279 000 PLN” → „od 197 000 PLN”
+    '/od' . $SEP . $L . $SEP . 'do' . $SEP . $L . $SEP . 'PLN/u' => 'od ' . $cena_od . ' PLN',
     // „209 000–279 000 PLN” (en dash lub dywiz)
     '/' . $L . '[–-]' . $L . $SEP . 'PLN/u' => 'od ' . $cena_od . ' PLN',
+    // mediana w dwóch kształtach — do usunięcia
+    '/,' . $SEP . 'z' . $SEP . 'medianą' . $SEP . 'ok\.' . $SEP . $L . '/u' => '',
+    '/' . $SEP . '\(mediana' . $SEP . 'ok\.' . $SEP . $L . '\)/u' => '',
 ];
 
 $nowy = $wiki;
@@ -66,7 +71,9 @@ foreach ($wzorce as $wzor => $zamiast) {
     // callback — string zastępujący zawiera cyfry, które po „$” byłyby czytane
     // jako numer grupy (wpadka z 2026-08-04, 77 uszkodzonych pól)
     $nowy = preg_replace_callback($wzor, function ($m) use ($zamiast, &$trafienia) {
-        $trafienia[] = $m[0];
+        // zapisujemy PARĘ (dopasowanie, zamiennik) — inaczej raport pokazywałby
+        // podmianę tam, gdzie w rzeczywistości następuje usunięcie
+        $trafienia[] = ['co' => $m[0], 'na' => $zamiast];
         return $zamiast;
     }, $nowy);
     if ($nowy === null) { echo "BŁĄD regexu — przerywam, nic nie zapisano.\n"; return; }
@@ -77,13 +84,15 @@ printf("Hub: %s (id %d) | cena wejścia z bazy: %s PLN\n\n", $term->name, $TERM_
 
 if (!$trafienia) { echo "Nie znalazłem przedziałów cenowych — nic do zrobienia.\n"; return; }
 
-printf("Znalezione przedziały (%d):\n", count($trafienia));
-foreach ($trafienia as $t) { printf("   - %s\n   + od %s PLN\n", $t, $cena_od); }
+printf("Znalezione dopasowania (%d):\n", count($trafienia));
+foreach ($trafienia as $t) {
+    printf("   - %s\n   + %s\n", trim($t['co']), $t['na'] === '' ? '(usunięte)' : $t['na']);
+}
 
 // Kontrola: żadnych osieroconych liczb ze starych przedziałów
 $stare = [];
 foreach ($trafienia as $t) {
-    if (preg_match_all('/' . $L . '/u', $t, $mm)) {
+    if (preg_match_all('/' . $L . '/u', $t['co'], $mm)) {
         foreach ($mm[0] as $liczba) {
             if (mb_strpos($nowy, $liczba) !== false && $liczba !== $cena_od) { $stare[] = $liczba; }
         }
