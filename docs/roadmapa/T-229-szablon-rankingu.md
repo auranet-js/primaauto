@@ -60,6 +60,12 @@ To jest odwrotność pierwszej wersji specu: **trwały jest ranking, zmienna jes
   kolumnie. Dla czytelnika z Polski CLTC jest zawyżone o mniej więcej jedną czwartą.
 - **D6 — Gate antykanibalizacyjny przed publikacją** (reguła D2 z T-162): sprawdzić w GSC,
   czy fraza główna nie ma już URL-a w serwisie na pozycji ≤20.
+- **D9 — Weryfikacja krzyżowa liczb, które trafiają do publikacji.** Pierwszy realny test parsera
+  (2026-08-04) wychwycił rozbieżność: cnevpost podaje **Deepal 29 213** za lipiec 2026, a zrzut
+  z WeChat tę samą liczbę przypisywał **Denzie**. Jedno ze źródeł się myli — i tego nie da się
+  rozstrzygnąć bez trzeciego. Zasada: pozycje z czołówki rankingu (1–5) oraz każda, przy której
+  wchodzi nasza oferta, wymagają potwierdzenia w drugim niezależnym źródle. Rozbieżność
+  → nie publikujemy pozycji albo podajemy obie wartości z atrybucją, nigdy nie wybieramy „na oko".
 - **D7 — Jeden stały URL na temat, aktualizowany; nie nowy wpis co miesiąc.** Frazy są wieczne,
   nie rocznikowe: „chińskie suv" 5400/mc wobec „chińskie samochody 2026" **30/mc**. Dwanaście wpisów
   rocznie o tym samym temacie to kanibalizacja i rozproszony autorytet — każdy zaczynałby od zera.
