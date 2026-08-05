@@ -156,12 +156,18 @@ def parsuj_artykul(url: str):
     for tab in tabele:
         h = [n.lower() for n in tab["naglowki"]]
         # tabela rankingowa: pozycja + podmiot + wartość
-        if not ({"rank", "automaker"} <= set(h) or {"rank", "brand"} <= set(h)):
+        # Nagłówki różnią się między serwisami: cnevpost „Rank|Automaker|Type|Value",
+        # carnewschina „Place|Brand|Sales volume (June 2026)". Rozpoznajemy oba.
+        kol_poz = next((n for n in tab["naglowki"] if n.lower() in ("rank", "place", "#", "no.")), None)
+        kol_pod = next((n for n in tab["naglowki"] if n.lower() in ("automaker", "brand", "model", "make")), None)
+        kol_war = next((n for n in tab["naglowki"]
+                        if any(k in n.lower() for k in ("value", "volume", "sales", "deliveries", "units"))), None)
+        if not (kol_pod and kol_war):
             continue
         for w in tab["wiersze"]:
-            podmiot = w.get("Automaker") or w.get("Brand") or ""
-            wartosc = liczba(w.get("Value") or w.get("Volume") or "")
-            poz = liczba(w.get("Rank") or "")
+            podmiot = w.get(kol_pod) or ""
+            wartosc = liczba(w.get(kol_war) or "")
+            poz = liczba(w.get(kol_poz) or "") if kol_poz else None
             if not podmiot or wartosc is None:
                 continue
             ranking.append({
