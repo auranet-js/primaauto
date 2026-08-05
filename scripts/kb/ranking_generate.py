@@ -103,6 +103,21 @@ def okres_slownie(miesiac: str, dopelniacz=False) -> str:
     return f"{tab[miesiac[4:6]]} {miesiac[:4]}"
 
 
+# Ile pierwszych pozycji dostaje link w nazwie modelu. Świadomie mało: oferta ma już ~40 linków
+# w <main>, a link z tabeli ma prowadzić tam, gdzie czytelnik faktycznie klika — czyli w czołówkę
+# (decyzja Janka, 2026-08-05). Pozycja bez naszego huba zostaje tekstem, nie linkujemy w pustkę.
+LINKOWANE_POZYCJE = 3
+
+
+def nazwa_auta(p: dict) -> str:
+    """Nazwa modelu w tabeli — dla czołówki jako link do naszego huba, dalej zwykły tekst."""
+    tekst = f"{p['marka']} {p['model']}"
+    oferta = p.get("nasza_oferta") or {}
+    if p.get("pozycja", 99) <= LINKOWANE_POZYCJE and oferta.get("url"):
+        return f'<a href="{oferta["url"]}">{tekst}</a>'
+    return tekst
+
+
 def tabela_rankingu(pozycje: list, okres: str) -> str:
     """Tabela = źródło prawdy wpisu. Układ pod telefon (79,6% ruchu): klasa nadwozia jedzie
     w komórce modelu jako druga linia, a kolumna „Klasa" znika pod 700 px — zamiast zmuszać
@@ -114,9 +129,9 @@ def tabela_rankingu(pozycje: list, okres: str) -> str:
         if p.get("zmiana_proc") is not None:
             klasa_zm = " aa-rank-up" if p["zmiana_proc"] > 0 else (
                 " aa-rank-down" if p["zmiana_proc"] < 0 else "")
-        auto = f"{p['marka']} {p['model']}"
+        auto = nazwa_auta(p)
         dopiski = []
-        if p.get("nasza_serie") and p["nasza_serie"].lower() not in auto.lower():
+        if p.get("nasza_serie") and p["nasza_serie"].lower() not in f"{p['marka']} {p['model']}".lower():
             dopiski.append(f"u nas: {p['nasza_serie']}")
         drugalinia = (f'<span class="aa-rank-alias">{" · ".join(dopiski)}</span>' if dopiski else "")
         wiersze.append(
@@ -160,7 +175,7 @@ def tabela_specow(pozycje: list, dane: dict, d: dict) -> str:
         dodatki = "".join(f'<td class="aa-rank-klasa">{f(p)}</td>' for _, f in kolumny)
         wiersze.append(
             f'<tr><td class="aa-rank-poz">{p["pozycja"]}</td>'
-            f'<td class="aa-rank-auto">{p["marka"]} {p["model"]}'
+            f'<td class="aa-rank-auto">{nazwa_auta(p)}'
             f'<span class="aa-rank-klasa-mob">{p.get("naped", "")}</span></td>'
             f'<td class="aa-rank-szt">{wart} {dane["jednostka"]}</td>{dodatki}'
             f'<td class="aa-rank-oferta">{p["blok_kompakt"]}</td></tr>'
@@ -330,6 +345,15 @@ def bramka_liczb(narracja: str, pozycje: list, dane: dict):
             dozwolone.discard(p["nasza_oferta"]["cena_od"])
     dozwolone |= set(range(2015, date.today().year + 2))    # roczniki
     obce = {n for n in liczby(narracja) if n not in dozwolone}
+    # Zaokrąglony próg w zdaniu („moc przekraczająca 1500 KM", „powyżej 800 km CLTC") nie jest
+    # zmyśloną liczbą, tylko sposobem mówienia — pod warunkiem, że stoi po słowie progowym
+    # i jest okrągły. Bez tego wyjątku bramka wywalała poprawny tekst (pomiar 2026-08-05).
+    czysta = re.sub(r"<[^>]+>", " ", narracja).lower()
+    progi = set()
+    for n in obce:
+        if n % 50 == 0 and re.search(rf"(ponad|powyżej|poniżej|przekracz\w*|blisko|około|prawie)\s+{n}\b", czysta):
+            progi.add(n)
+    obce -= progi
     return {n for n in obce if n >= 1000}, {n for n in obce if n < 1000}
 
 
@@ -453,6 +477,8 @@ def main():
     ap.add_argument("--dry-run", action="store_true", help="tylko podgląd (domyślne)")
     ap.add_argument("--no-mail", action="store_true")
     ap.add_argument("--force", action="store_true", help="publikuj mimo ostrzeżeń bramek")
+    ap.add_argument("--z-zapisu", action="store_true",
+                    help="użyj narracji zapisanej w tmp/ zamiast generować od nowa")
     a = ap.parse_args()
 
     d = wczytaj_definicje(a.ranking)
@@ -480,11 +506,18 @@ def main():
     pozycje, trafione = rs.wzbogac(pozycje, d.get("poziom_dopasowania", "model"))
     print(f"    {trafione} z {len(pozycje)} pozycji mamy w ofercie", flush=True)
 
-    print("  narracja…", flush=True)
+    zapis = kb.KB_DIR / "tmp" / f"ranking-{a.ranking}-{dane['zrodlo_data']}.json"
+    if a.z_zapisu and zapis.exists():
+        gen = json.loads(zapis.read_text(encoding="utf-8"))["generacja"]
+        print(f"  narracja z zapisu ({zapis.name})", flush=True)
+    else:
+        gen = None
+    print("  narracja…", flush=True) if gen is None else None
     wejscie = (dane_dla_modelu_spec(dane, pozycje, d) if d.get("zrodlo") == "spec"
                else dane_dla_modelu(dane, pozycje, d))
-    gen = None
     for proba in (1, 2):
+        if gen is not None:
+            break
         tekst, _ = kb.call_model(GEN_PROMPT, wejscie, model=a.model)
         # Surowa odpowiedź na dysk zawsze — przy dłuższych tekstach model bywa ucinany
         # i bez zapisu nie da się orzec, czy to problem promptu, czy limitu.
