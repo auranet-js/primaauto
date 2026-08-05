@@ -58,6 +58,8 @@ To jest odwrotność pierwszej wersji specu: **trwały jest ranking, zmienna jes
   przy każdej pozycji; przelicza go osobna komenda. Narracja i sam ranking zostają nietknięte.
 - **D5 — Zasięg w WLTC, gdy go mamy; CLTC z jawną etykietą, gdy nie.** Nigdy zmieszane w jednej
   kolumnie. Dla czytelnika z Polski CLTC jest zawyżone o mniej więcej jedną czwartą.
+- **D6 — Gate antykanibalizacyjny przed publikacją** (reguła D2 z T-162): sprawdzić w GSC,
+  czy fraza główna nie ma już URL-a w serwisie na pozycji ≤20.
 - **D7 — Jeden stały URL na temat, aktualizowany; nie nowy wpis co miesiąc.** Frazy są wieczne,
   nie rocznikowe: „chińskie suv" 5400/mc wobec „chińskie samochody 2026" **30/mc**. Dwanaście wpisów
   rocznie o tym samym temacie to kanibalizacja i rozproszony autorytet — każdy zaczynałby od zera.
@@ -70,8 +72,6 @@ To jest odwrotność pierwszej wersji specu: **trwały jest ranking, zmienna jes
   (nowy miesiąc sprzedaży), blok `<!--RANKING:START/END-->` musi być podmienialny tak samo jak
   `OFERTA` — inaczej aktualizacja oznacza ręczne przepisywanie tekstu. Różnią się częstotliwością:
   `RANKING` rzadko i świadomie, `OFERTA` automatem, bo rotuje codziennie.
-- **D6 — Gate antykanibalizacyjny przed publikacją** (reguła D2 z T-162): sprawdzić w GSC,
-  czy fraza główna nie ma już URL-a w serwisie na pozycji ≤20.
 
 ## Pliki
 
@@ -80,7 +80,7 @@ To jest odwrotność pierwszej wersji specu: **trwały jest ranking, zmienna jes
 | `scripts/kb/ranking_market.py` | **nowy** — pozyskanie i normalizacja danych rynkowych (feedy + katalog Autohome) |
 | `scripts/kb/ranking_stock.py` | **nowy** — dopasowanie pozycji rankingu do naszej oferty (sztuki, cena od, zdjęcie, URL) |
 | `scripts/kb/ranking_generate.py` | **nowy** — research + narracja + złożenie wpisu + draft |
-| `scripts/kb/ranking_refresh.py` | **nowy** — przelicza wyłącznie bloki dostępności we wpisach |
+| `scripts/kb/ranking_refresh.py` | **nowy** — przelicza bloki we wpisach: `OFERTA` z crona, `RANKING` na żądanie (D8) |
 | `scripts/kb/rankingi.json` | **nowy** — definicje rankingów (temat, kryterium, fraza, źródła) |
 | `class-asiaauto-autolink.php:61` | **modyfikacja** — objąć `rankingi`, `porownania`, `poradniki` |
 | `class-asiaauto-seo.php` | **modyfikacja** — `ItemList` dla wpisów w `rankingi` |
