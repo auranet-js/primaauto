@@ -48,11 +48,15 @@ foreach (get_terms(["taxonomy" => "{taxonomy}", "hide_empty" => true]) as $t) {{
         "tax_query" => [["taxonomy" => "{taxonomy}", "field" => "term_id", "terms" => $t->term_id]],
     ]);
     if (!$q->posts) {{ continue; }}
-    $ceny = []; $foto = ""; $min_id = 0; $min = PHP_INT_MAX;
+    $ceny = []; $foto = ""; $min_id = 0; $min = PHP_INT_MAX; $marki = [];
     foreach ($q->posts as $p) {{
         $c = (int) get_post_meta($p->ID, "price", true);
         if ($c > 0) {{ $ceny[] = $c; if ($c < $min) {{ $min = $c; $min_id = $p->ID; }} }}
+        foreach (wp_get_post_terms($p->ID, "make", ["fields" => "names"]) as $m) {{
+            $marki[$m] = ($marki[$m] ?? 0) + 1;
+        }}
     }}
+    arsort($marki);
     if ($min_id) {{
         $tid = get_post_thumbnail_id($min_id);
         if ($tid) {{ $foto = wp_get_attachment_image_url($tid, "medium_large"); }}
@@ -60,6 +64,7 @@ foreach (get_terms(["taxonomy" => "{taxonomy}", "hide_empty" => true]) as $t) {{
     $out[] = [
         "nazwa" => $t->name,
         "slug"  => $t->slug,
+        "marka" => (string) array_key_first($marki),
         "sztuk" => count($q->posts),
         "cena_od" => $ceny ? min($ceny) : 0,
         "url"   => get_term_link($t),
@@ -78,12 +83,44 @@ echo json_encode($out, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     return mapa
 
 
-def dopasuj(pozycja: str, mapa: dict):
-    """Ścisłe dopasowanie: nazwa → slug. Bez fuzzy — lepiej brak niż zły hub."""
+def ta_sama_marka(z_rankingu: str, nasza: str) -> bool:
+    """Marki z rankingu bywają submarkami („Geely Galaxy", „GAC Aion", „BAIC Off-Road"),
+    a taksonomia trzyma markę główną. Zgodność = jedna zawiera się w drugiej albo mają
+    wspólny pierwszy człon."""
+    a, b = (z_rankingu or "").lower().strip(), (nasza or "").lower().strip()
+    if not a or not b:
+        return True
+    return a == b or a.startswith(b) or b.startswith(a) or a.split()[0] == b.split()[0]
+
+
+def dopasuj(pozycja: str, mapa: dict, marka: str = ""):
+    """Ścisłe dopasowanie: nazwa → slug. Bez fuzzy — lepiej brak niż zły hub.
+
+    Sama nazwa modelu nie wystarcza: nazwy krótkie powtarzają się między markami. Casus
+    z 2026-08-05: „AITO M6" (SUV) trafiał w nasz hub „M6", który jest vanem GAC-a. Dlatego
+    dopasowanie po nazwie musi jeszcze zgadzać się co do marki."""
     for klucz in (pozycja.lower().strip(), slug(pozycja)):
-        if klucz in mapa:
-            return mapa[klucz]
+        d = mapa.get(klucz)
+        if d and ta_sama_marka(marka, d.get("marka", "")):
+            return d
     return None
+
+
+def klucz_pozycji(r: dict) -> str:
+    """Stabilny identyfikator pozycji w treści wpisu — po nim `ranking_refresh.py` odnajduje
+    blok do przeliczenia. Musi być niezależny od tego, czy akurat mamy model w ofercie,
+    bo blok pusty też ma się kiedyś wypełnić."""
+    return slug(f"{r.get('marka', '')} {r.get('model') or r.get('podmiot', '')}")
+
+
+def blok_oferty_kompakt(d, klucz: str) -> str:
+    """Wersja do komórki tabeli — sam tekst i link, bez zdjęcia. Ranking czyta się na telefonie
+    (79,6% ruchu), a miniatura w każdym wierszu rozwala układ."""
+    srodek = ""
+    if d:
+        cena = f"{d['cena_od']:,}".replace(",", " ")
+        srodek = f'<a href="{d["url"]}">{d["sztuk"]} szt., od {cena} zł</a>'
+    return f"<!--OFERTA:START:{klucz}-->{srodek}<!--OFERTA:END-->"
 
 
 def blok_oferty(d) -> str:
@@ -104,6 +141,22 @@ def blok_oferty(d) -> str:
     )
 
 
+def wzbogac(ranking: list, poziom: str = "model", mapa: dict = None):
+    """Dokłada do każdej pozycji `nasza_oferta`, `blok_html` i `blok_kompakt`.
+    Wspólne wejście dla generatora (Task 3) i odświeżacza (Task 4)."""
+    mapa = mapa if mapa is not None else stan_taksonomii("make" if poziom == "marka" else "serie")
+    trafione = 0
+    for r in ranking:
+        d = dopasuj(r["podmiot"], mapa, r.get("nasza_marka") or r.get("marka", ""))
+        r["nasza_oferta"] = d
+        r["klucz"] = klucz_pozycji(r)
+        r["blok_html"] = blok_oferty(d)
+        r["blok_kompakt"] = blok_oferty_kompakt(d, r["klucz"])
+        if d:
+            trafione += 1
+    return ranking, trafione
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--json", required=True, help="wynik ranking_market.py")
@@ -120,13 +173,10 @@ def main():
     print(f"Dopasowanie po taksonomii `{taxonomy}` ({len(ranking)} pozycji)…\n")
     mapa = stan_taksonomii(taxonomy)
 
-    trafione = 0
+    ranking, trafione = wzbogac(ranking, a.poziom, mapa)
     for r in ranking:
-        d = dopasuj(r["podmiot"], mapa)
-        r["nasza_oferta"] = d
-        r["blok_html"] = blok_oferty(d)
+        d = r["nasza_oferta"]
         if d:
-            trafione += 1
             cena = f"{d['cena_od']:,}".replace(",", " ")
             print(f"  ✓ {r['podmiot']:<18} {d['sztuk']:>3} szt., od {cena:>9} zł   {'foto' if d['foto'] else 'BEZ FOTO'}")
         else:

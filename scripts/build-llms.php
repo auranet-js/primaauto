@@ -169,6 +169,30 @@ if ($wiki_entries) {
     $o[] = "Indeks słownika: [https://primaauto.com.pl/wiki/](https://primaauto.com.pl/wiki/)";
     $o[] = "";
 }
+// Rankingi rynkowe (T-229) — jeden stały URL na temat, aktualizowany w miejscu (D7),
+// więc w llms.txt wymieniamy wszystkie, nie tylko ostatnie.
+$rankingi = get_posts(['post_type' => 'post', 'category_name' => 'rankingi', 'posts_per_page' => -1]);
+if ($rankingi) {
+    $o[] = "## Rankingi rynku chińskiego (sprzedaż, dane okresowe)";
+    $o[] = "";
+    foreach ($rankingi as $rp) {
+        $exc = trim(wp_strip_all_tags((string) $rp->post_excerpt));
+        $dane = json_decode((string) get_post_meta($rp->ID, '_asiaauto_ranking_dane', true), true);
+        // Okres słownie — „202606" nic nie mówi modelowi językowemu, który to czyta.
+        $mies = ['01' => 'styczeń', '02' => 'luty', '03' => 'marzec', '04' => 'kwiecień',
+                 '05' => 'maj', '06' => 'czerwiec', '07' => 'lipiec', '08' => 'sierpień',
+                 '09' => 'wrzesień', '10' => 'październik', '11' => 'listopad', '12' => 'grudzień'];
+        $okres = '';
+        if (!empty($dane['okres']) && preg_match('/^(\d{4})(\d{2})$/', (string) $dane['okres'], $mm)) {
+            $okres = " (dane za " . ($mies[$mm[2]] ?? $mm[2]) . " {$mm[1]})";
+        }
+        $o[] = "- [" . get_the_title($rp) . "](" . get_permalink($rp) . "){$okres}" . ($exc !== '' ? ": {$exc}" : '');
+    }
+    $o[] = "";
+    $o[] = "Sekcja rankingów: [https://primaauto.com.pl/rankingi/](https://primaauto.com.pl/rankingi/)";
+    $o[] = "";
+}
+
 $news = get_posts(['post_type' => 'post', 'category_name' => 'aktualnosci', 'posts_per_page' => 10]);
 if ($news) {
     $o[] = "## Aktualności z chińskiego rynku motoryzacyjnego (ostatnie)";

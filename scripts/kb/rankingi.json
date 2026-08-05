@@ -1,0 +1,88 @@
+{
+  "_opis": "Definicje rankingów rynkowych (T-229 Task 3.1). Jeden wpis = jeden stały URL aktualizowany w miejscu (D7). `klasy` to `outter_detail_type` API Dongchedi, `typ` to `rank_data_type` (11 = sprzedaż miesięczna). Typy 2-5 i 10 są nierozpoznane — nie wolno ich tu wpisywać, dopóki nie ustalimy metodologii.",
+  "rankingi": {
+    "suv": {
+      "tytul": "Najchętniej kupowane chińskie SUV-y — ranking sprzedaży w Chinach",
+      "slug": "chinskie-suvy-ranking-sprzedazy",
+      "fraza_glowna": "chińskie suv",
+      "fraza_wolumen": 5400,
+      "frazy_poboczne": [
+        "najlepsze chińskie suv",
+        "chiński suv",
+        "chińskie suv-y opinie"
+      ],
+      "kryterium": "liczba samochodów sprzedanych w Chinach w danym miesiącu, marki chińskie, wszystkie klasy SUV-ów",
+      "klasy": [
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "typ": 11,
+      "naped": "",
+      "top": 30,
+      "poziom_dopasowania": "model",
+      "kontekst": "To najszersza fraza w całym zestawieniu rankingów (6 280/mc razem z wariantami) i największa podaż po naszej stronie: 172 modele SUV-ów w ofercie. Long-tail przy tej frazie jest cenowy („chiński suv za 54 tys.\"), więc tekst musi filtrować intent treścią — pokazywać realne ceny sprowadzenia, nie unikać tematu.",
+      "podsekcje_klas": true,
+      "foto": "/home/host476470/media/primaauto/sesje/2026-07-23/SCH02447.jpg",
+      "foto_alt": "Chiński SUV na placu Prima-Auto — ranking najchętniej kupowanych SUV-ów w Chinach"
+    },
+    "elektryki": {
+      "tytul": "Chińskie samochody elektryczne — bestsellery rynku chińskiego",
+      "slug": "chinskie-samochody-elektryczne-bestsellery",
+      "fraza_glowna": "chińskie samochody elektryczne",
+      "fraza_wolumen": 1880,
+      "frazy_poboczne": [
+        "chińskie auta elektryczne",
+        "chiński samochód elektryczny"
+      ],
+      "kryterium": "sprzedaż w Chinach, wyłącznie auta w pełni elektryczne, marki chińskie",
+      "klasy": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "typ": 11,
+      "naped": "",
+      "top": 30,
+      "poziom_dopasowania": "model",
+      "kontekst": "Rdzeń zainteresowania chińskim rynkiem. Naturalnie linkuje się z hasłami słownika (LFP, 800V, CLTC) i z hubami modeli.",
+      "uwaga": "API nie ma filtra „tylko BEV\" — `new_energy_type` obsługuje 2 (PHEV) i 3 (EREV). Wersję BEV trzeba złożyć odejmowaniem albo po naszej taksonomii `fuel`. Do rozstrzygnięcia przed publikacją.",
+      "gotowy": false
+    },
+    "terenowe": {
+      "tytul": "Chińskie terenówki i auta 4×4 — co naprawdę jeździ w terenie",
+      "slug": "chinskie-terenowki-4x4",
+      "fraza_glowna": "chińskie terenówki",
+      "fraza_wolumen": 3450,
+      "frazy_poboczne": [
+        "chińskie auta terenowe",
+        "chiński 4x4",
+        "chińska terenówka"
+      ],
+      "kryterium": "sprzedaż w Chinach, auta z nadwoziem ramowym i napędem 4×4",
+      "klasy": [
+        11,
+        12,
+        13,
+        14
+      ],
+      "typ": 11,
+      "naped": "",
+      "top": 20,
+      "poziom_dopasowania": "model",
+      "kontekst": "Druga co do wielkości fraza, a nikt w Polsce tego segmentu nie obsługuje treścią. Mamy 23 modele z nadwoziem ramowym — całą serię Tank, Leopardy i BJ40.",
+      "uwaga": "API nie rozróżnia konstrukcji ramowej — filtr trzeba złożyć z listy modeli po naszej stronie (Tank, BJ40/BJ60, Leopard 5/8) albo z katalogu Autohome. Bez tego ranking wpuści zwykłe crossovery.",
+      "gotowy": false
+    }
+  },
+  "_foto_opis": "`foto` = ścieżka do zdjęcia źródłowego (sesje własne, np. z Dysku PrimaAuto/sesje/). Generator sam kadruje 16:9, konwertuje do WebP i nadaje nazwę pliku z frazy (slug + okres) oraz opisy pod SEO. Bez `foto` wchodzi plansza typograficzna — gorsza, więc traktujemy ją jako awaryjną. Oryginały sesji trzymamy w `~/media/primaauto/sesje/<data>/` (nie w `tmp/`, które jest czyszczone) — Dysk Google zostaje archiwum, serwer ma kopię roboczą."
+}
