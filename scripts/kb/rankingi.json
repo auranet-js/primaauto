@@ -82,6 +82,54 @@
       "kontekst": "Druga co do wielkości fraza, a nikt w Polsce tego segmentu nie obsługuje treścią. Mamy 23 modele z nadwoziem ramowym — całą serię Tank, Leopardy i BJ40.",
       "uwaga": "API nie rozróżnia konstrukcji ramowej — filtr trzeba złożyć z listy modeli po naszej stronie (Tank, BJ40/BJ60, Leopard 5/8) albo z katalogu Autohome. Bez tego ranking wpuści zwykłe crossovery.",
       "gotowy": false
+    },
+    "sedany": {
+      "tytul": "Chińskie sedany — ranking sprzedaży w Chinach",
+      "slug": "chinskie-sedany-ranking-sprzedazy",
+      "fraza_glowna": "chińskie sedany",
+      "fraza_wolumen": 1300,
+      "frazy_poboczne": [
+        "chiński sedan",
+        "chińskie limuzyny",
+        "sedan z chin"
+      ],
+      "kryterium": "liczba samochodów sprzedanych w Chinach w danym miesiącu, marki chińskie, nadwozie sedan (klasy od kompaktowej po limuzyny)",
+      "klasy": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "typ": 11,
+      "naped": "",
+      "top": 25,
+      "poziom_dopasowania": "model",
+      "kontekst": "Segment, w którym Chińczycy grają cenami hybryd plug-in (Qin, Seal, Starshine). W Polsce sedan jest niszą wobec SUV-a, ale to właśnie tu chińskie marki mają najtańsze auta z dużym zasięgiem.",
+      "foto": "/home/host476470/media/primaauto/sesje/2026-07-23/SCH02413.jpg",
+      "foto_alt": "Chiński sedan z oferty Prima-Auto — ranking sprzedaży sedanów w Chinach"
+    },
+    "vany": {
+      "tytul": "Chińskie vany i MPV — ranking sprzedaży w Chinach",
+      "slug": "chinskie-vany-mpv-ranking-sprzedazy",
+      "fraza_glowna": "chińskie vany",
+      "fraza_wolumen": 1000,
+      "frazy_poboczne": [
+        "chiński van",
+        "chińskie mpv",
+        "van 7 osobowy z chin"
+      ],
+      "kryterium": "liczba samochodów sprzedanych w Chinach w danym miesiącu, marki chińskie, nadwozie MPV/van (od małych po premium)",
+      "klasy": [
+        21,
+        22,
+        23,
+        24
+      ],
+      "typ": 11,
+      "naped": "",
+      "top": 20,
+      "poziom_dopasowania": "model",
+      "kontekst": "MPV to w Chinach segment premium — Denza D9, Voyah Dreamer i Maextro jeżdżą jako auta reprezentacyjne, a nie rodzinne kombivany. Dla polskiego kupującego to najtańsza droga do siedmiu miejsc w wysokim standardzie."
     }
   },
   "_foto_opis": "`foto` = ścieżka do zdjęcia źródłowego (sesje własne, np. z Dysku PrimaAuto/sesje/). Generator sam kadruje 16:9, konwertuje do WebP i nadaje nazwę pliku z frazy (slug + okres) oraz opisy pod SEO. Bez `foto` wchodzi plansza typograficzna — gorsza, więc traktujemy ją jako awaryjną. Oryginały sesji trzymamy w `~/media/primaauto/sesje/<data>/` (nie w `tmp/`, które jest czyszczone) — Dysk Google zostaje archiwum, serwer ma kopię roboczą."

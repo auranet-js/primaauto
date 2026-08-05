@@ -231,6 +231,7 @@ PREFIKSY_CJK = {
     "方程豹": "Fangchengbao", "阿维塔": "Avatr", "星途": "Exeed", "传祺": "GAC Trumpchi",
     "荣威": "Roewe", "名爵": "MG", "宝骏": "Baojun", "五菱": "Wuling", "领克": "Lynk & Co",
     "奔腾": "Bestune", "欧拉": "Ora", "风云": "Chery Fulwin", "睿蓝": "Ruilan",
+    "尚界": "Shangjie", "奕派": "Dongfeng eπ", "极狐": "Arcfox", "比亚迪": "BYD",
     "启辰": "Venucia", "华境": "Huajing", "享界": "Stelato", "尊界": "Maextro",
 }
 
