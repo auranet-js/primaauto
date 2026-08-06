@@ -1,5 +1,52 @@
 # Historia wersji asiaauto-sync
 
+## 0.34.20 — 2026-08-06 (promocja Terenwizja na stronie głównej)
+
+Pasek promocyjny pod hero strony głównej: szkolenie off-road z Terenwizją i film pamiątkowy
+na kanale za sprowadzenie terenowego SUV-a 4x4, którego nie ma jeszcze nikt w Polsce
+(propozycja Ruslana z 2026-08-05). Nowa metoda `renderPromo()` w `class-asiaauto-homepage.php`,
+wywołana między `renderHero()` a `renderLead()` — zmiana addytywna, bez dotykania istniejących
+sekcji. Klik prowadzi na `/samochody/?nadwozie=suv&naped=awd` (670 ofert).
+
+Pasek stoi **pod** akapitem answer-first, nie nad nim. Pierwsza wersja wstawiała go między H1
+a akapit — GSC (07.07–03.08) pokazuje, że home ma 634 kliknięcia (6,4% witryny) przy średniej
+pozycji 4,9, ale head-termy niebrandowe siedzą nisko: `auta z chin` poz. 8,3, `import aut z chin`
+7,7, `import samochodów z chin` 8,8. Wpychanie tekstu o szkoleniu off-road przed akapit pisany
+pod te frazy rozmywało otwarcie tematyczne, więc kolejność odwrócona.
+
+Doszła sekcja `renderTerenwizja()` (po „Co zawiera cena importu", przed FAQ) — dowód społeczny:
+test Leoparda 5 na kanale TERENWIZJA (394 tys. subskrybentów, 249 tys. wyświetleń), auto z tego
+materiału kupione w Prima-Auto, co właściciel mówi w samym filmie. Miniatura to statyczny WebP
+w `uploads/asiaauto/byd-leopard-5-prima-auto-test-terenwizja.webp` linkujący do YouTube —
+świadomie BEZ iframe (skrypty zewnętrzne, zgoda w Complianz, CWV). Sekcja ma jeden przycisk,
+prowadzący do ofert; osobne wezwanie „Obejrzyj test na YouTube" wycięto, żeby najcenniejsza
+strona wejścia nie oferowała wyjścia z serwisu jako równorzędnej akcji. Odnośniki do Terenwizji
+mają `rel="sponsored noopener"` — to układ partnerski (szkolenie i film za ekspozycję).
+
+Dane materiału trzymają stałe `TW_*` w klasie: przy nowym filmie (zapowiadany na 2026-08-10,
+chińskie SUV-y + reklama Prima-Auto) podmieniamy identyfikator, tytuł, miniaturę i liczby.
+
+**A11y — pułapka specyficzności (zaliczona i naprawiona 2026-08-06).** Reguła `.aa-home a
+{ color: inherit }` (klasa + typ) bije selektor jednoklasowy, więc `color:#fff` na przyciskach
+`<a>` nie wchodziło i tekst dziedziczył `--txt`: **kontrast 2,47:1** przy wymaganych 4,5:1.
+Przycisk wyszukiwarki obok trzymał 4,85:1 tylko dlatego, że jest `<button>`, nie `<a>`.
+Naprawa: selektory `.aa-home a.aa-home__promo-cta` / `.aa-home a.aa-home__tw-cta` — z tym, że
+podbicie bazy wymusiło **identyczne podbicie w media query desktop**, bo inaczej `width:100%`
+z wersji mobilnej rozpychało przycisk i ściskało tekst do jednego słowa w linii. Dodatkowo
+`tw-stats` przeszło z `--sec` (3,88:1 przy 11,5 px) na `#566577` (5,75:1). Zmierzone na żywej
+stronie: 4,85 / 4,85 / 5,75 — wszystko AA.
+
+Przy okazji pomiaru wyszły **zastane** braki kontrastu poza zakresem tej zmiany:
+`.aa-home__section-sub` i `.aa-home__stat-label` mają 3,71:1 (kolor `--sec` na jasnym tle).
+Nie ruszane — osobny temat dla całej strony głównej.
+
+Wyłącznik bez wchodzenia w kod: `wp option update aa_promo_terenwizja 0` (domyślnie włączone).
+
+Druga propozycja Ruslana — „z hasłem Terenwizja ładowarka i komplet filtrów gratis" — świadomie
+**bez zmian w kodzie**: oba są już standardowo w cenie (`renderIncludedInCif()`, kolumna „W cenie"
+w karcie oferty, shortcode `[asiaauto_included]`), więc hasło działa wyłącznie jako źródło leada
+przy rozmowie, nie jako osobna obietnica na stronie.
+
 ## 0.34.19 — 2026-08-04 (T-237: kontaminacja hubów + scalenie duplikatu LS9)
 
 Dwa auta Geely siedziały na seriach należących do innych marek: „Galaxy M9" na termie `M9`
