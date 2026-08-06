@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>T-121 — makiety płatności PayU (PrimaAuto)</title>
+<style>
+:root{
+  --wiz-primary:#1B2A4A; --wiz-accent:#D63031; --wiz-accent-h:#B52828;
+  --wiz-text:#2D3748; --wiz-secondary:#718096; --wiz-bg:#F5F6F8; --wiz-card:#FFFFFF;
+  --wiz-border:#E1E4E8; --wiz-success:#38A169; --wiz-amber:#E8AC07; --wiz-error:#E53E3E;
+  --wiz-radius:6px;
+  --font:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#E8EAEE;font-family:var(--font);color:var(--wiz-text);line-height:1.5}
+.page{max-width:1000px;margin:0 auto;padding:32px 16px 64px}
+h1{font-size:24px;color:var(--wiz-primary);margin:0 0 6px}
+.lead{color:var(--wiz-secondary);font-size:14px;margin:0 0 32px}
+.mock{background:var(--wiz-card);border:1px solid var(--wiz-border);border-radius:var(--wiz-radius);margin:0 0 12px;padding:24px}
+.mock--admin{background:#F0F0F1}
+.caption{font-size:13px;color:var(--wiz-secondary);margin:0 0 32px;padding-left:2px}
+.caption strong{color:var(--wiz-text)}
+.sec{margin:0 0 44px}
+.sec__label{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--wiz-secondary);font-weight:600;margin:0 0 10px}
+
+/* progress */
+.prog{display:flex;gap:4px;margin:0 0 24px}
+.prog__step{flex:1;text-align:center;font-size:11px;color:var(--wiz-secondary);border-top:3px solid var(--wiz-border);padding-top:8px}
+.prog__step--done{border-color:var(--wiz-success);color:var(--wiz-text)}
+.prog__step--active{border-color:var(--wiz-accent);color:var(--wiz-primary);font-weight:600}
+
+.title{font-size:20px;color:var(--wiz-primary);margin:0 0 6px;font-weight:600}
+.desc{font-size:14px;color:var(--wiz-secondary);margin:0 0 18px}
+
+.block{border:1px solid var(--wiz-border);border-radius:var(--wiz-radius);padding:16px;margin:0 0 14px}
+.block__head{display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px;color:var(--wiz-primary);margin:0 0 10px}
+.block__num{width:22px;height:22px;border-radius:50%;background:var(--wiz-primary);color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center;flex:0 0 22px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:var(--wiz-radius);padding:13px 22px;font-size:15px;font-weight:600;font-family:var(--font);cursor:default}
+
+/* natywny przycisk PayU — odwzorowanie wg zestawu z brandingu PayU (zielona pigułka,
+   biały tekst, "Płacę teraz z PayU →"). Docelowo oficjalny asset z panelu akceptanta. */
+.payu-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;
+  background:#A6CE00;border:0;border-radius:999px;
+  padding:16px 26px;font-family:var(--font);font-size:17px;font-weight:400;color:#fff;
+  cursor:default}
+.payu-btn__logo{font-weight:800;letter-spacing:-.01em}
+.payu-btn__amt{font-weight:700;padding-left:2px}
+.payu-btn__arr{font-size:18px;line-height:1;padding-left:4px}
+/* pole BLIK na naszej stronie */
+.blik{border:1px solid var(--wiz-border);border-radius:var(--wiz-radius);padding:16px;background:#FAFBFC}
+.blik__t{font-weight:600;font-size:15px;color:var(--wiz-primary);margin:0 0 3px;display:flex;align-items:center;gap:8px}
+.blik__badge{background:#000;color:#fff;font-size:10px;font-weight:700;padding:2px 6px;border-radius:3px;letter-spacing:.06em}
+.blik__d{font-size:13px;color:var(--wiz-secondary);margin:0 0 12px}
+.blik__row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.blik__in{flex:1;min-width:160px;border:1px solid #C9CDD3;border-radius:var(--wiz-radius);padding:13px 14px;
+  font-family:ui-monospace,Menlo,Consolas,monospace;font-size:21px;letter-spacing:.28em;color:#A0AAB8;background:#fff}
+.blik__go{background:var(--wiz-primary);color:#fff;border:0;border-radius:var(--wiz-radius);padding:14px 24px;font-size:15px;font-weight:600;font-family:var(--font);cursor:default}
+.other{margin:16px 0 0}
+.other__t{font-size:13px;color:var(--wiz-secondary);margin:0 0 10px}
+
+/* prawa kolumna kreatora */
+.wrap{display:grid;grid-template-columns:1fr 300px;gap:22px}
+.side{font-size:13px}
+.side__card{border:1px solid var(--wiz-border);border-radius:var(--wiz-radius);overflow:hidden;margin:0 0 12px}
+.side__img{height:104px;background:linear-gradient(135deg,#DDE2E8,#C7CED7);display:flex;align-items:center;justify-content:center;color:#93A0AF;font-size:12px}
+.side__b{padding:12px}
+.side__car{font-weight:600;color:var(--wiz-primary);margin:0 0 8px;font-size:14px;line-height:1.3}
+.side__row{display:flex;justify-content:space-between;gap:10px;padding:4px 0;color:var(--wiz-secondary)}
+.side__row b{color:var(--wiz-text)}
+.side__badge{display:flex;align-items:center;gap:8px;border:1px solid #BEE3CB;background:#EDF7F0;border-radius:var(--wiz-radius);padding:9px 12px;font-weight:600;color:#1e7e45;font-size:13px}
+.side__dot{width:8px;height:8px;border-radius:50%;background:var(--wiz-success);flex:0 0 8px}
+@media(max-width:820px){.wrap{grid-template-columns:1fr}}
+.methods{display:flex;align-items:center;gap:7px;justify-content:center;margin:10px 0 0;flex-wrap:wrap}
+.methods__i{border:1px solid var(--wiz-border);border-radius:3px;background:#fff;padding:3px 7px;font-size:10px;font-weight:700;color:#5A6472;letter-spacing:.02em}
+.methods__t{font-size:11px;color:var(--wiz-secondary)}
+.btn--ghost{background:#fff;color:var(--wiz-primary);border:1px solid var(--wiz-border);font-size:14px;padding:10px 18px}
+.btn--primary{background:var(--wiz-primary);color:#fff}
+
+.note{font-size:13px;color:var(--wiz-text);background:#FFF8E5;border-left:3px solid var(--wiz-amber);padding:10px 12px;border-radius:0 4px 4px 0;margin:12px 0 0}
+.note a{color:var(--wiz-primary)}
+.muted-links{font-size:12px;color:var(--wiz-secondary);margin:14px 0 0}
+.muted-links a{color:var(--wiz-secondary)}
+
+.rows{border:1px solid var(--wiz-border);border-radius:var(--wiz-radius);overflow:hidden}
+.row{display:flex;justify-content:space-between;gap:16px;padding:10px 14px;font-size:14px;border-bottom:1px solid var(--wiz-border)}
+.row:last-child{border-bottom:0}
+.row__l{color:var(--wiz-secondary)}
+.row__v{font-weight:600;text-align:right}
+
+.split{display:flex;gap:14px;align-items:center;margin:16px 0}
+.split__line{flex:1;height:1px;background:var(--wiz-border)}
+.split__txt{font-size:12px;color:var(--wiz-secondary);text-transform:uppercase;letter-spacing:.06em}
+
+.state{display:flex;gap:14px;align-items:flex-start;padding:20px;border-radius:var(--wiz-radius);margin:0 0 12px}
+.state--wait{background:#FFF8E5;border:1px solid #F0DFA8}
+.state--ok{background:#EDF7F0;border:1px solid #BEE3CB}
+.state--err{background:#FDECEC;border:1px solid #F5C2C2}
+.state__ico{width:36px;height:36px;border-radius:50%;flex:0 0 36px;display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff}
+.state--wait .state__ico{background:var(--wiz-amber)}
+.state--ok .state__ico{background:var(--wiz-success)}
+.state--err .state__ico{background:var(--wiz-error)}
+.state__t{font-weight:600;font-size:16px;color:var(--wiz-primary);margin:0 0 4px}
+.state__d{font-size:14px;color:var(--wiz-text);margin:0}
+
+/* admin */
+.adm{background:#fff;border:1px solid #c3c4c7;border-radius:4px}
+.adm__h{background:#fff;border-bottom:1px solid #c3c4c7;padding:10px 14px;font-size:14px;font-weight:600;color:#1d2327}
+.adm__b{padding:14px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-weight:600;color:#50575e;border-bottom:1px solid #dcdcde;padding:7px 8px;font-size:12px}
+td{border-bottom:1px solid #f0f0f1;padding:8px;color:#2c3338;vertical-align:top}
+tr:last-child td{border-bottom:0}
+.pill{display:inline-block;padding:2px 9px;border-radius:11px;font-size:11px;font-weight:600}
+.pill--ok{background:#EDF7F0;color:#1e7e45}
+.pill--wait{background:#FFF8E5;color:#8a6d0b}
+.pill--err{background:#FDECEC;color:#b52828}
+code{background:#f0f0f1;padding:1px 5px;border-radius:3px;font-size:12px;font-family:ui-monospace,Menlo,Consolas,monospace}
+.legend{font-size:13px;color:var(--wiz-secondary);border-left:3px solid var(--wiz-border);padding:2px 0 2px 12px;margin:10px 0 0}
+@media(max-width:640px){.page{padding:20px 10px 48px}.mock{padding:16px}.prog__step{font-size:10px}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<h1>T-121 — płatność PayU za depozyt: makiety</h1>
+<p class="lead">PrimaAuto · 2026-08-06 · makiety do pakietu wykonawczego. Kolory i typografia z realnego kreatora (<code>asiaauto-order-wizard.css</code>). Nie jest to gotowy kod — układ i treści do akceptu.</p>
+
+<!-- ══ 1 ══ -->
+<div class="sec">
+  <p class="sec__label">Ekran 1 — krok 3 kreatora, po zapisaniu danych do umowy</p>
+  <div class="mock">
+    <div class="prog">
+      <div class="prog__step prog__step--done">1 Dane kontaktowe</div>
+      <div class="prog__step prog__step--done">2 Weryfikacja</div>
+      <div class="prog__step prog__step--active">3 Dane do umowy</div>
+      <div class="prog__step">4 Umowa i depozyt</div>
+      <div class="prog__step">5 Realizacja</div>
+    </div>
+
+    <div class="wrap">
+    <div>
+    <p class="title">Dane do umowy</p>
+    <p class="desc">Dane zapisane. Przygotowujemy umowę — możesz już zarezerwować sobie miejsce w kolejce.</p>
+
+    <div class="block">
+      <div class="block__head"><span class="block__num">✓</span><span>Dane zapisane</span></div>
+      <p class="desc" style="margin:0">Jan Kowalski · ul. Przykładowa 1, 33-100 Tarnów · PESEL ***</p>
+    </div>
+
+    <div class="block">
+      <div class="block__head"><span class="block__num">2</span><span>Wpłać depozyt zwrotny</span></div>
+      <div class="rows" style="margin-bottom:14px">
+        <div class="row"><span class="row__l">Kwota depozytu</span><span class="row__v">6 150,00 zł</span></div>
+        <div class="row"><span class="row__l">Zgłoszenie</span><span class="row__v">#1247 / 2026</span></div>
+        <div class="row"><span class="row__l">Pojazd</span><span class="row__v">Voyah Passion 2024</span></div>
+      </div>
+
+      <div class="blik">
+        <p class="blik__t"><span class="blik__badge">BLIK</span> Zapłać kodem BLIK</p>
+        <p class="blik__d">Wpisz 6-cyfrowy kod z aplikacji swojego banku i potwierdź płatność w telefonie. Nie opuszczasz tej strony.</p>
+        <div class="blik__row">
+          <div class="blik__in">_ _ _ _ _ _</div>
+          <button class="blik__go">Zapłać 6 150,00 zł</button>
+        </div>
+      </div>
+
+      <div class="other">
+        <p class="other__t">Wolisz inaczej? Kartą, Google Pay, Apple Pay lub przelewem online:</p>
+        <button class="payu-btn">
+          <span>Płacę teraz z <span class="payu-btn__logo">PayU</span></span>
+          <span class="payu-btn__amt">6 150,00 zł</span>
+          <span class="payu-btn__arr">→</span>
+        </button>
+        <div class="methods">
+          <span class="methods__i">VISA</span>
+          <span class="methods__i">Mastercard</span>
+          <span class="methods__i">Google Pay</span>
+          <span class="methods__i">Apple Pay</span>
+          <span class="methods__i">przelew online</span>
+        </div>
+      </div>
+
+      <p class="note">Zgłoszenia z opłaconym depozytem zwrotnym realizujemy w pierwszej kolejności. <a href="#">Poczytaj więcej o depozycie</a></p>
+
+      <div class="split"><span class="split__line"></span><span class="split__txt">albo</span><span class="split__line"></span></div>
+
+      <button class="btn btn--ghost">Wolę zapłacić zwykłym przelewem — pokaż dane</button>
+
+      <p class="muted-links">Płatność obsługuje PayU S.A. Wpłacając depozyt akceptujesz <a href="#">regulamin usługi</a> i <a href="#">politykę prywatności</a>.</p>
+    </div>
+    </div>
+
+    <aside class="side">
+      <div class="side__badge"><span class="side__dot"></span> Potwierdzone · zgłoszenie #1247</div>
+      <div class="side__card" style="margin-top:12px">
+        <div class="side__img">zdjęcie pojazdu</div>
+        <div class="side__b">
+          <p class="side__car">Voyah Passion 2024, 4WD, 108 kWh</p>
+          <div class="side__row"><span>Cena</span><b>219 900 zł</b></div>
+          <div class="side__row"><span>Depozyt zwrotny</span><b>6 150 zł</b></div>
+          <div class="side__row"><span>Status depozytu</span><b>nieopłacony</b></div>
+        </div>
+      </div>
+    </aside>
+    </div>
+  <p class="caption"><strong>Przycisk w oznaczeniach PayU</strong> — tu odwzorowany CSS-em (logo, proporcje i zieleń przybliżone). Przy wdrożeniu bierzemy oficjalny asset z brandbooka PayU z panelu akceptanta; umowa akceptanta wymaga używania ich oznaczeń, więc to nie jest wybór estetyczny. Rządek metod pod spodem odpowiada temu, co realnie masz włączone na POS-ie — do sprawdzenia w panelu przed wdrożeniem.<br><br><strong>Decyzja D1:</strong> przycisk pojawia się już przy statusie <code>potwierdzone</code>, czyli <em>przed</em> umową. <strong>D2:</strong> komunikat o pierwszeństwie + link do <code>/depozyt/</code>. Przelew nie znika — schodzi o poziom niżej jako alternatywa. Linki prawne w stopce bloku to jednocześnie realizacja podlinkowania <code>/regulamin-uslugi/</code> z T-221.</p>
+</div>
+
+<!-- ══ 2 ══ -->
+<div class="sec">
+  <p class="sec__label">Ekran 2 — krok 4, dopóki depozyt nie jest opłacony</p>
+  <div class="mock">
+    <p class="title">Umowa i depozyt</p>
+
+    <div class="block">
+      <div class="block__head"><span class="block__num">1</span><span>Pobierz umowę</span></div>
+      <p class="desc" style="margin:0">Umowa zlecenia importu nr 1247/2026 · PDF, 240 kB</p>
+    </div>
+    <div class="block">
+      <div class="block__head"><span class="block__num">2</span><span>Prześlij podpisaną umowę</span></div>
+      <p class="desc" style="margin:0">Przeciągnij plik lub wybierz z dysku</p>
+    </div>
+
+    <div class="block" style="border-color:var(--wiz-accent)">
+      <div class="block__head"><span class="block__num">3</span><span>Wpłać depozyt zwrotny</span></div>
+      <div class="blik">
+        <p class="blik__t"><span class="blik__badge">BLIK</span> Zapłać kodem BLIK</p>
+        <p class="blik__d">Kwota 6 150,00 zł · zgłoszenie #1247 / 2026</p>
+        <div class="blik__row">
+          <div class="blik__in">_ _ _ _ _ _</div>
+          <button class="blik__go">Zapłać</button>
+        </div>
+      </div>
+      <div class="other">
+        <p class="other__t">Kartą, Google Pay, Apple Pay lub przelewem online:</p>
+        <button class="payu-btn">
+          <span>Płacę teraz z <span class="payu-btn__logo">PayU</span></span>
+          <span class="payu-btn__amt">6 150,00 zł</span>
+          <span class="payu-btn__arr">→</span>
+        </button>
+      </div>
+      <div class="split"><span class="split__line"></span><span class="split__txt">albo zwykłym przelewem</span><span class="split__line"></span></div>
+      <div class="rows">
+        <div class="row"><span class="row__l">Kwota depozytu</span><span class="row__v">6 150,00 zł</span></div>
+        <div class="row"><span class="row__l">Numer konta</span><span class="row__v">12 2490 0005 0000 4530 0000 0000</span></div>
+        <div class="row"><span class="row__l">Odbiorca</span><span class="row__v">Prima-Auto Ruslan Prima</span></div>
+        <div class="row"><span class="row__l">Tytuł przelewu</span><span class="row__v">Depozyt zam. 1247/2026</span></div>
+      </div>
+    </div>
+  </div>
+  <p class="caption">Ten sam blok płatności co w kroku 3 — to jedno miejsce w kodzie renderowane dwa razy. Znika dopiero, gdy <code>_order_deposit_paid = 1</code>; wtedy w tym miejscu jest zielony pasek „Depozyt opłacony 6.08.2026”.</p>
+</div>
+
+<!-- ══ 3 ══ -->
+<div class="sec">
+  <p class="sec__label">Ekran 3 — powrót z bramki PayU, trzy stany</p>
+  <div class="mock">
+    <div class="state state--wait">
+      <div class="state__ico">📱</div>
+      <div>
+        <p class="state__t">Potwierdź płatność w aplikacji banku</p>
+        <p class="state__d">Wysłaliśmy żądanie do Twojego banku. Otwórz aplikację i zatwierdź płatność 6 150,00 zł — masz na to <strong>1:47</strong>. Ta strona zaktualizuje się sama.</p>
+      </div>
+    </div>
+    <div class="state state--wait">
+      <div class="state__ico">⏳</div>
+      <div>
+        <p class="state__t">Przetwarzamy płatność</p>
+        <p class="state__d">Bank potwierdza transakcję — to zwykle kilka sekund. Ta strona odświeży się sama, nie zamykaj jej.</p>
+      </div>
+    </div>
+    <div class="state state--ok">
+      <div class="state__ico">✓</div>
+      <div>
+        <p class="state__t">Depozyt zaksięgowany — 6 150,00 zł</p>
+        <p class="state__d">Dziękujemy. Twoje zgłoszenie #1247 trafiło do realizacji w pierwszej kolejności. Potwierdzenie wysłaliśmy na jan.kowalski@example.com.</p>
+      </div>
+    </div>
+    <div class="state state--err">
+      <div class="state__ico">✕</div>
+      <div>
+        <p class="state__t">Płatność nie doszła do skutku</p>
+        <p class="state__d">Nic nie zostało pobrane z Twojego konta. Możesz spróbować ponownie albo zapłacić zwykłym przelewem.</p>
+        <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn btn--primary" style="font-size:14px;padding:10px 18px">Spróbuj ponownie</button>
+          <button class="btn btn--ghost">Pokaż dane do przelewu</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="caption">Pierwszy stan dotyczy BLIK-a wpisanego u nas (K7b), dwa kolejne — powrotu z bramki. <strong>Kluczowe:</strong> stan „zaksięgowany” pokazujemy wyłącznie na podstawie <code>_order_deposit_paid</code> ustawionego przez webhook — nigdy na podstawie tego, że klient wrócił z bramki. Dlatego domyślnym stanem powrotu jest „przetwarzamy”, które odpytuje <code>GET /order/{id}</code> co 3 s przez ~30 s, a potem przechodzi w „potwierdzimy mailem”.</p>
+</div>
+
+<!-- ══ 4 ══ -->
+<div class="sec">
+  <p class="sec__label">Ekran 4 — karta zamówienia w panelu (nowa sekcja)</p>
+  <div class="mock mock--admin">
+    <div class="adm">
+      <div class="adm__h">Płatności PayU</div>
+      <div class="adm__b">
+        <table>
+          <thead>
+            <tr><th>Data</th><th>Kwota</th><th>Status</th><th>ID PayU</th><th>Próba</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>06.08.2026 14:12</td><td>6 150,00 zł</td><td><span class="pill pill--ok">Opłacona</span></td><td><code>ZH4K2M9P</code></td><td>1247-2</td></tr>
+            <tr><td>06.08.2026 13:48</td><td>6 150,00 zł</td><td><span class="pill pill--err">Odrzucona</span></td><td><code>ZH4J8T1C</code></td><td>1247-1</td></tr>
+          </tbody>
+        </table>
+        <p class="legend">Depozyt oznaczony jako wpłacony <strong>automatycznie</strong> 06.08.2026 14:12 (notyfikacja PayU).</p>
+      </div>
+    </div>
+  </div>
+  <p class="caption">Sekcja tylko do odczytu — bez przycisków akcji. Ręczne „Oznacz depozyt jako wpłacony” zostaje tam, gdzie jest dziś, i obsługuje przelewy. Wiersz <span class="pill pill--wait">Otwarta</span> pojawia się między utworzeniem płatności a notyfikacją; jeśli wisi dłużej niż kilkanaście minut, Ruslan ma sygnał, żeby sprawdzić panel PayU — do tego ta tabela wystarczy, cronu nie robimy.</p>
+</div>
+
+<div class="sec">
+  <p class="sec__label">Czego tu nie ma — świadomie</p>
+  <p class="caption" style="margin:0">Ekranu wyboru metody płatności (BLIK / karta / raty) — wybór odbywa się po stronie PayU, my wysyłamy klienta na bramkę. Formularza danych karty — nigdy nie przechodzą przez nasz serwer. Ekranu zwrotu depozytu — zwroty robi Ruslan przelewem, tak jak dziś; refund przez API to osobna decyzja (T-121 §8).</p>
+</div>
+
+</div>
+</body>
+</html>

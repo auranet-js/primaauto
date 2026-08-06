@@ -152,13 +152,13 @@
   {
    "id": "T-121",
    "tytul": "Płatność online (BLIK/karta) za depozyt rezerwacyjny",
-   "opis": "Klient wpłaca depozyt zwrotny od razu w kreatorze — BLIK-iem lub kartą, zamiast przepisywać numer konta do bankowości. Ustalenie z 27.07: przycisk płatności pojawia się już po potwierdzeniu zamówienia, czyli PRZED umową — dzięki temu klient wiąże się wcześniej, a my możemy jechać sprawdzić konkretny egzemplarz i wystawić umowę od razu z numerem VIN. Pod przyciskiem informacja, że zgłoszenia z opłaconym depozytem realizujemy w pierwszej kolejności, oraz odnośnik do strony wyjaśniającej depozyt. Przelew zostaje jako alternatywa. Kwota pobierana jest ta zamrożona na zamówieniu, więc nie rozjedzie się z umową ani z mailem. Platforma nie ma sklepu internetowego, więc mechanizm płatności piszemy w całości, choć miejsce wpięcia w proces zamówienia jest już przygotowane. WARUNEK WEJŚCIA: zadanie „Regulamin usługi i strona o depozycie” (T-221) — bez opublikowanych dokumentów operator płatności nie dopuści przyjmowania zwrotnych depozytów.",
+   "opis": "Klient wpłaca depozyt zwrotny od razu w kreatorze — kodem BLIK wpisanym wprost na naszej stronie albo kartą, Google Pay, Apple Pay i przelewem online przez operatora płatności. Ustalenie z 27.07: przycisk płatności pojawia się już po potwierdzeniu zamówienia, czyli PRZED umową — dzięki temu klient wiąże się wcześniej, a my możemy jechać sprawdzić konkretny egzemplarz i wystawić umowę od razu z numerem VIN. Pod przyciskiem informacja, że zgłoszenia z opłaconym depozytem realizujemy w pierwszej kolejności, oraz odnośnik do strony wyjaśniającej depozyt. Zwykły przelew zostaje jako alternatywa. Kwota pobierana jest ta zamrożona na zamówieniu, więc nie rozjedzie się z umową ani z mailem. Ustalenie z 06.08: BLIK obsługujemy bez wychodzenia ze strony — klient wpisuje sześciocyfrowy kod u nas i potwierdza w aplikacji banku. Przy niemal ośmiu na dziesięć wizyt z telefonu to najkrótsza możliwa droga; przekierowanie na stronę operatora jest w tym miejscu najbardziej zawodne, bo dochodzi przeskakiwanie między przeglądarką a aplikacją banku. Platforma nie ma sklepu internetowego, więc mechanizm płatności piszemy w całości, choć miejsce wpięcia w proces zamówienia jest już przygotowane.",
    "rozmiar": "L",
-   "rynkowo_od": 60,
-   "rynkowo_do": 80,
-   "realnie_od": 24,
-   "realnie_do": 32,
-   "status": "plan gotowy i uzupełniony o decyzje z 27.07; czeka na T-221 (dokumenty) i zgodę operatora płatności"
+   "rynkowo_od": 70,
+   "rynkowo_do": 95,
+   "realnie_od": 27,
+   "realnie_do": 36,
+   "status": "odblokowane — dane produkcyjne operatora płatności są od 06.08, zgoda na przyjmowanie zwrotnych depozytów załatwiona; pakiet wykonawczy gotowy 06.08, budowa może ruszyć"
   },
   {
    "id": "T-113",
