@@ -1,6 +1,6 @@
 # Kolejka zadań — Prima Auto
 
-> Aktualizacja: 2026-08-06 (**T-229 DONE 05.08** — mechanizm rankingów; **T-230 — 7 rankingów LIVE**; **T-238 DONE 05.08** — ceny i tytuły hubów; **T-239 DONE 06.08** — promocja Terenwizja na stronie głównej; **T-240 zaparkowany** — indywidualizacja hubów z własnymi materiałami; **T-241** — procedura „nowe materiały z sesji → hub + reklamy", pierwszy przebieg Leopard 5 na 3 h. Wcześniej: T-217 WDROŻONY 30.07 — v0.34.14; T-219 ZAMKNIĘTY 03.08)
+> Aktualizacja: 2026-08-06 (**T-220 DONE 06.08** — aneks VIN, v0.34.22; **T-242 DONE 06.08** — edycja VIN w zamówieniu, v0.34.21; **T-229 DONE 05.08** — mechanizm rankingów; **T-230 — 7 rankingów LIVE**; **T-238 DONE 05.08** — ceny i tytuły hubów; **T-239 DONE 06.08** — promocja Terenwizja na stronie głównej; **T-240 zaparkowany** — indywidualizacja hubów z własnymi materiałami; **T-241** — procedura „nowe materiały z sesji → hub + reklamy", pierwszy przebieg Leopard 5 na 3 h. Wcześniej: T-217 WDROŻONY 30.07 — v0.34.14; T-219 ZAMKNIĘTY 03.08)
 
 ---
 
@@ -26,7 +26,7 @@ T-217 (wzorzec leasingowy) ──┬──→ T-220 (aneks VIN)
 | **T-224** — formularz „Zapytaj o leasing" | 🔵 plan wykonawczy gotowy | wydzielony z T-219 C; pod niego wejdzie T-189 | 5–6 h |
 | **T-223** — rozjazd depozytu: strona vs §4 umowy | ⏸️ czeka na Ruslana (punkt 8 w liście weryfikacyjnej) | wynik decyduje, czy ruszamy §4 wzorca (strefa krucha) | 1–4 h |
 | **T-242** — edycja VIN w zamówieniu (umowa leasingowa) | ✅ **DONE 2026-08-06** (v0.34.21 LIVE) | raportujemy razem z T-220 | ~1 h |
-| **T-220** — aneks VIN | 🔵 gotowe do budowy | zależy od T-217 (szablon per typ) | 8–12 h |
+| **T-220** — aneks VIN | ✅ **DONE 2026-08-06** (v0.34.22 LIVE) — generator + guard + znacznik + mail z załącznikiem; D6: umowa pośrednictwa bez VIN-u zapowiada aneks | raportujemy razem z T-242 | ~5 h |
 | **T-121** — płatność PayU za depozyt | ⚠️ gated na T-221 | po regulaminie i zgodzie PayU | 32–42 h |
 | **T-113** — ścieżka finansowania w kreatorze | ⏸️ gate częściowo zdjęty | po T-217 | 30–40 h |
 

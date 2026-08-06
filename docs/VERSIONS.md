@@ -1,5 +1,56 @@
 # Historia wersji asiaauto-sync
 
+## 0.34.22 — 2026-08-06 (T-220: aneks VIN do umowy)
+
+Druga strona sprawy zamkniętej w 0.34.21. Tamta wersja pozwoliła **usunąć** błędny numer przed
+podpisaniem; ta pozwala **dopisać** prawdziwy po weryfikacji auta — aneksem do już podpisanej
+umowy, bez ruszania samej umowy.
+
+Powód wagi tematu: **99,2 % ofert dongchedi nie ma VIN-u w ogłoszeniu** (1477 z 1489, pomiar
+03.08). Umowa podpisywana przed przyjazdem auta z reguły nie zna numeru, więc aneks to nie
+wyjątek, tylko normalny krok obiegu.
+
+**Generator** (`class-asiaauto-contract.php`): nowa metoda `generateAnnex($order_id, ['vin'],
+$contract_date)` obok `generate()` — jeden szablon dla obu wzorców (D1), różnicują się tytułem
+i odwołaniem do jednostki redakcyjnej z mapy `ANNEX_FIELDS` (pośrednictwo → `§1, ust.1, pkt.1
+Umowy podpunkt c`; leasing → `§2 Umowy lit. e oraz w Załączniku nr 1`). Jedna strona A4 w szacie
+umowy, dwa podpisy, stopka „Aneks do umowy nr …". Mapa pól jest osią rozszerzalności: dołożenie
+ceny czy terminu = jeden wpis, szablon i tak iteruje po liście pozycji.
+
+**Aneks nie ma własnej numeracji** (D8) — identyfikuje się umową: „aneks do umowy nr AA/2026/0031
+z dnia 30.07.2026". Data umowy dotąd nigdzie nie była zapisywana (`collectData()` stempluje
+`date('d.m.Y')` przy renderze), więc doszło `_order_contract_date` + `resolveContractDate()`:
+zapisana data → `post_date` pliku PDF → dziś, z możliwością ręcznej korekty przed generowaniem
+(potrzebne dla 6 umów wgranych ręcznie, gdzie data pliku ≠ data umowy).
+
+**Generowanie nie wysyła żadnych maili** — wymóg nadrzędny. Mail z PDF-em w załączniku
+(szablon `annex_vin_sent`, edytowalny w Ustawieniach) wychodzi wyłącznie przy świadomym
+przełączeniu znacznika `_order_annex_vin_state` na „wysłany", z potwierdzeniem w oknie
+dialogowym. Ponowny zapis tej samej wartości nie wysyła drugiego maila; regeneracja cofa
+znacznik na „wygenerowany", bo klient nie ma jeszcze tego dokumentu.
+
+**Guard (D3):** umowa główna istnieje, ma numer, a `_order_vin` przechodzi `isValidVin()`
+(17 znaków bez I/O/Q). Nie „VIN niepusty" — w bazie leżą numery ucięte przez che168 i jeden
+(`L1NB`) już trafił do zamówienia. Guard nie przechodzi → przycisk nieaktywny z podanym powodem.
+
+**Statusy zamówienia nietknięte** (`STATUSES`, `TRANSITIONS`, `LISTING_RESERVATION_MAP`,
+`changeStatus()`), kreator klienta i blok ręcznego wgrywania umowy również. Aneks żyje w osobnym
+polu obok statusu, więc auto „w drodze" nie znika z filtra.
+
+**D6 — umowa pośrednictwa bez VIN-u zapowiada aneks.** Zamiast myślnika w `§1 ust.1 pkt 1 lit. c`
+i w wierszu „VIN" Załącznika nr 1 drukuje się „zostanie uzupełniony w formie aneksu do niniejszej
+Umowy". Przy okazji ogryzek numeru z che168 (`LC0EJ5…`) na ogłoszeniu przestał wchodzić do umowy
+jako „VIN" — traktowany jest jak brak. Numer **wpisany ręcznie** w zamówieniu drukuje się
+dokładnie tak, jak go wpisano (guard tego pola pozostaje otwarty — T-217 §6).
+
+Testy: `tmp/T-220-testy-aneks.php` — **62/62** (generator, guard, maile z licznikiem na
+`pre_wp_mail`, D6, brak wpływu na statusy i rezerwacje, weryfikacja sprzątania). Regresje:
+`tmp/T-217-regresja-posrednictwo.php` — 5 umów, `pdftotext` + `diff` **bez różnic** przed i po;
+`tmp/T-217-testy-leasing.php` — 42/42; `tmp/T-217-e2e-status-i-zalacznik.php` — 22/22;
+`tmp/test-vin-guard-2026-08-06.php` — 15/15. W zestawie T-217 poprawione 5 przestarzałych
+asercji (T-20 zakładało nieistniejący już fallback VIN-u z oferty — zabity przez T-242;
+T-30/T-31/T-04 liczyły numery UL od zera, a są już dwie produkcyjne umowy leasingowe).
+
 ## 0.34.21 — 2026-08-06 (VIN w umowie leasingowej respektuje edycję w zamówieniu)
 
 Zgłoszenie Ruslana z rozmowy 06.08: wyczyścił VIN w zamówieniu, a numer dalej drukował się
