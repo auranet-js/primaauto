@@ -1,5 +1,38 @@
 # Historia wersji asiaauto-sync
 
+## 0.34.21 — 2026-08-06 (VIN w umowie leasingowej respektuje edycję w zamówieniu)
+
+Zgłoszenie Ruslana z rozmowy 06.08: wyczyścił VIN w zamówieniu, a numer dalej drukował się
+w umowie i wracał przy każdej regeneracji. Jedyne, co działało, to skasowanie VIN-u na samym
+ogłoszeniu — a to zła droga, bo psuje dane oferty pracującej w reklamach i tak czy tak zostaje
+nadpisane przy najbliższej aktualizacji z che168 (`class-asiaauto-importer.php:460-462`).
+Obejściem awaryjnym było kasowanie i zakładanie zamówienia od nowa, co wysyła klientowi maile
+o nieistniejącym zamówieniu.
+
+Przyczyna: `getVehicleData()` liczyło `vin_verified` (wariant leasingowy) z fallbackiem
+`_order_vin` → `vin_number` ogłoszenia → `'—'`. Puste pole zamówienia oznaczało więc „weź
+z oferty", a nie „brak numeru", i edycja w karcie zamówienia nie miała jak zadziałać.
+
+**Umowa leasingowa czyta teraz VIN wyłącznie z pola karty zamówienia.** Wpisany numer się
+drukuje, puste pole daje klauzulę wzorca „zostanie dodany aneksem do umowy po weryfikacji auta"
+(§2 lit. e + wiersz „VIN" w Załączniku nr 1). Guard formatu (17 znaków bez I/O/Q) bez zmian —
+zamaskowany numer z che168 nadal nie przechodzi.
+
+**Umowa pośrednictwa nietknięta** — klucz `vin` zachowuje stary fallback na ogłoszenie, więc
+150 istniejących zamówień renderuje się identycznie. Otwarte i świadomie odłożone: pośrednictwo
+dalej drukuje zamaskowane VIN-y z che168 (decyzja D4 z T-217).
+
+**Karta zamówienia** (`class-asiaauto-order-admin.php`): pole VIN przestało wypełniać się samo
+numerem z oferty — wcześniej dowolny zapis karty (choćby zmiana prowizji) po cichu utrwalał go
+w `_order_vin`, bez decyzji Ruslana i bez weryfikacji auta. W zamian pod polem stoi stały pasek
+**„VIN OFERTY: …"** z przyciskiem **Wstaw** i notą, że numer pochodzi od chińskiego sprzedającego
+i bywa zamaskowany albo nieprawdziwy. Ruslan widzi numer bez szukania, wkleja jednym kliknięciem
+albo zostawia puste.
+
+Test: `tmp/test-vin-guard-2026-08-06.php` (read-only, Reflection, bez PDF i bez zapisu do bazy) —
+15 asercji na prawdziwych zamówieniach UL/2026/0001, AA/2026/0030 i #407317. Uruchamiać przy
+każdej następnej zmianie w generatorze umów, razem z zestawem T-217.
+
 ## 0.34.20 — 2026-08-06 (promocja Terenwizja na stronie głównej)
 
 Pasek promocyjny pod hero strony głównej: szkolenie off-road z Terenwizją i film pamiątkowy
