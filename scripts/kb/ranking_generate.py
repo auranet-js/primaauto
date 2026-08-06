@@ -228,21 +228,42 @@ def sekcja_zrodla_spec(dane: dict, wzbogacone: int, d: dict) -> str:
     )
 
 
-def podsumowanie_oferty(pozycje: list) -> str:
+def podsumowanie_oferty(pozycje: list, parametr: str = None) -> str:
     """Jedyne miejsce w treści, które mówi o stanie naszej oferty zbiorczo — i dlatego siedzi
-    w bloku odświeżanym automatem. Narracja tych liczb nie dotyka (rotują codziennie)."""
+    w bloku odświeżanym automatem. Narracja tych liczb nie dotyka (rotują codziennie).
+
+    Przy rankingu cenowym zdanie musi trzymać się tematu: tabela podaje ceny KATALOGOWE
+    W CHINACH, więc doklejenie „ceny od 208 000 zł" bez etykiety zestawiało dwie waluty
+    i dwa rynki w jednym akapicie, w dodatku odwrotnym kierunkiem („od" w rankingu
+    najdroższych). Uwaga Janka, 2026-08-05."""
     mamy = [p for p in pozycje if p.get("nasza_oferta")]
     if not mamy:
         return "<!--OFERTA:START:_podsumowanie--><!--OFERTA:END-->"
     ceny = [p["nasza_oferta"]["cena_od"] for p in mamy]
     sztuk = sum(p["nasza_oferta"]["sztuk"] for p in mamy)
     od = f"{min(ceny):,}".replace(",", " ")
+    do = f"{max(ceny):,}".replace(",", " ")
+    ile = f'<strong>{len(mamy)} {"model" if len(mamy) == 1 else "modeli"}</strong>'
+    egz = f'{sztuk} {"egzemplarz" if sztuk == 1 else "egz."}'
+    if parametr == "cena":
+        zdanie = (f"Z tego zestawienia mamy dziś w ofercie {ile} ({egz}). Ceny końcowe "
+                  f"w Polsce — czyli już po sprowadzeniu, nie chińskie katalogowe — "
+                  f"mieszczą się między {od} a {do} zł.")
+    else:
+        zdanie = (f"Z tego zestawienia mamy dziś w ofercie {ile} ({egz}), ceny końcowe "
+                  f"w Polsce od {od} zł.")
     return ("<!--OFERTA:START:_podsumowanie-->"
-            f'<p class="aa-rank-podsumowanie">Z tego zestawienia mamy dziś w ofercie '
-            f'<strong>{len(mamy)} {"model" if len(mamy) == 1 else "modeli"}</strong> '
-            f'({sztuk} {"egzemplarz" if sztuk == 1 else "egz."}), ceny od {od} zł. '
+            f'<p class="aa-rank-podsumowanie">{zdanie} '
             f'Stan aktualizuje się automatycznie — <a href="/samochody/">zobacz pełną ofertę</a>.</p>'
             "<!--OFERTA:END-->")
+
+
+def normalizuj_wan(tekst: str) -> str:
+    """Model potrafi przepisać z danych chiński zapis ceny („180 万 CNY"), a tabela pokazuje
+    już „1,80 mln juanów" — dwa zapisy tej samej liczby w jednym tekście. Ujednolicamy."""
+    def zamien(m):
+        return f"{float(m.group(1)) / 100:.2f}".replace(".", ",") + " mln juanów"
+    return re.sub(r"(\d+(?:[.,]\d+)?)\s*万\s*(?:CNY|RMB|juanów)?", zamien, tekst)
 
 
 def sekcja_zrodla(dane: dict, wzbogacone: int) -> str:
@@ -391,7 +412,7 @@ def zbuduj_tresc(gen: dict, dane: dict, pozycje: list, d: dict) -> str:
         "<!--RANKING:START-->",
         tabela_specow(pozycje, dane, d) if spec else tabela_rankingu(pozycje, okres),
         "<!--RANKING:END-->",
-        podsumowanie_oferty(pozycje),
+        podsumowanie_oferty(pozycje, dane.get("parametr")),
     ]
     for s in gen["sekcje"]:
         czesci.append(f"<h2>{s['h2']}</h2>{s['html']}")
@@ -637,11 +658,12 @@ def main():
     if not gen or not all(k in gen for k in ("lead", "wstep", "sekcje", "faq", "excerpt", "meta_opis")):
         raise SystemExit("BŁĄD: niepełna odpowiedź modelu")
     for pole in ("lead", "wstep", "excerpt", "meta_opis"):
-        gen[pole] = kb.normalize_quotes(gen[pole])
+        gen[pole] = normalizuj_wan(kb.normalize_quotes(gen[pole]))
     for s in gen["sekcje"]:
-        s["h2"], s["html"] = kb.normalize_quotes(s["h2"]), kb.normalize_quotes(s["html"])
-    gen["faq"] = [{"q": kb.normalize_quotes(f["q"]), "a": kb.normalize_quotes(f["a"])}
-                  for f in gen["faq"]]
+        s["h2"] = normalizuj_wan(kb.normalize_quotes(s["h2"]))
+        s["html"] = normalizuj_wan(kb.normalize_quotes(s["html"]))
+    gen["faq"] = [{"q": normalizuj_wan(kb.normalize_quotes(f["q"])),
+                   "a": normalizuj_wan(kb.normalize_quotes(f["a"]))} for f in gen["faq"]]
 
     narracja = " ".join([gen["lead"], gen["wstep"], gen["excerpt"], gen["meta_opis"]] +
                         [s["h2"] + s["html"] for s in gen["sekcje"]] +
