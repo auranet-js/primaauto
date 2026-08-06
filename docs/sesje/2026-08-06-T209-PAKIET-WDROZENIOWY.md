@@ -24,7 +24,7 @@
 3. **Telefon pod podpisem**, nie w bloku danych: „Pozdrawiamy, / Zespół Prima-Auto / +48 721 730 507" — czerwień `#D63031`, klikalny `tel:`.
 4. Dane firmowe z `asiaauto_order_config` (nazwa, adres, NIP, REGON, telefon) — nic na sztywno. Adres = **plac** `ul. Przemysłowa 13A, 35-105 Rzeszów` (adres rejestrowy nie ma u nas kodu pocztowego).
 5. Logo: `https://primaauto.com.pl/primaauto-logo-mail.png` (64×64 w stopce), leży na produkcji od 31.07.
-6. **Przyciski granatowe** `#1B2A4A`. Czerwień zostaje akcentem (numery kroków, telefon). Rozważone i odrzucone: błękit, zieleń.
+6. **Przyciski w niebieskim LinkedIn** `#0A66C2`. Czerwień zostaje akcentem (numery kroków, telefon), granat `#1B2A4A` obsługuje stopkę, nagłówki i pasek postępu. Rozważone i odrzucone: granat na CTA (zlewał się ze stopką), błękit `#2563EB` (za jaskrawy, „appowy"), zieleń `#38A169` (pracuje już jako sygnał statusu — przycisk w tym kolorze rozmywałby jej znaczenie), czerwień marki (w skrzynce czyta się jako alert).
 7. Magic link zawsze jako **przycisk + goły URL pod spodem** — Outlook bywa bez stylów, a to jedyna droga klienta do zamówienia.
 
 **Treść**
