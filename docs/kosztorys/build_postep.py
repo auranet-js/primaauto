@@ -51,6 +51,11 @@ etap3  = load('etap3.json')
 ukryte = set(postep.get('todo_ukryte_id', []))
 roadmapa = [p for p in etap3['pozycje'] if p.get('id') not in ukryte]
 
+# 2026-08-06: todo_ukryte_id filtruje TEŻ todo_nowe. Wcześniej działało wyłącznie
+# na roadmapę, więc dopisanie ID zrealizowanego zadania z todo_nowe nic nie dawało
+# — zadanie zostawało na liście „do zrobienia" i nikt tego nie sygnalizował.
+postep['todo_nowe'] = [t for t in postep['todo_nowe'] if t.get('id') not in ukryte]
+
 # kolejność: todo_pierwsze (wyciągnięte na czoło) → nowe niewycenione → reszta roadmapy
 pierwsze_ids = postep.get('todo_pierwsze', [])
 wszystkie = {p['id']: p for p in roadmapa}
