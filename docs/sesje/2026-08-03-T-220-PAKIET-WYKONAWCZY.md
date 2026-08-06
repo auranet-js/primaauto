@@ -8,6 +8,11 @@
 
 ---
 
+> ⚠️ **Aktualizacja 2026-08-06:** stan wejściowy przesunął się na **0.34.21** (T-242 — edycja VIN
+> w zamówieniu). Nieaktualne są: **§3.2** (leasing nie ma już fallbacku na ogłoszenie), **§1**
+> (są dwie produkcyjne umowy leasingowe, nie zero) i wygląd pola VIN w karcie zamówienia.
+> Poprawki + świeży prompt startowy: `docs/sesje/2026-08-06-T-220-PROMPT-STARTOWY.md` — zacznij od niego.
+
 ## 0. Prompt startowy (do wklejenia w nowym wątku)
 
 ```
