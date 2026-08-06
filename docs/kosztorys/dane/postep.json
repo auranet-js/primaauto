@@ -186,6 +186,16 @@
   ],
   "todo_nowe": [
     {
+      "id": "T-241",
+      "tytul": "Zdjęcia i filmy z sesji — wykorzystanie na stronach modeli i w reklamach",
+      "opis": "Po każdej sesji zdjęciowej na placu powstaje komplet materiałów konkretnych egzemplarzy: zdjęcia w kilku kolorach i filmy w dwóch kadrach — poziomym i pionowym. Dziś te materiały trafiają wyłącznie na YouTube i do reklam, a strony modeli zostają na zdjęciach z chińskich placów. Po zmianie każda nowa sesja uruchamia jeden powtarzalny cykl: zdjęcia idą na stronę modelu razem z filmami i opisem realnego egzemplarza, świeże kreacje wchodzą do kampanii wideo i Demand Gen, a filmy są publikowane na kanale pojedynczo, dzień po dniu, bo tak utrzymują zasięg. Przy okazji sprawdzamy, które modele z sesji nie mają jeszcze własnej strony.\n\nPierwszy przebieg: BYD Leopard 5. Jego strona przyciąga dziś 3 709 wyświetleń w Google miesięcznie i 228 wejść. Przy zapytaniach o cenę jesteśmy w ścisłej czołówce — przy „denza bao 5 cena” na drugim–trzecim miejscu, przy „denza b5 cena” na pierwszym. Ale przy dwóch najważniejszych hasłach, samym „leopard 5” i „byd leopard 5”, jesteśmy dopiero na piątym i dziewiątym miejscu, a to razem 1 625 wyświetleń, z których dostajemy zaledwie 23 wejścia. Google przy takim zapytaniu szuka strony, która pokazuje realny samochód, a nie opis katalogowy — i dokładnie to mamy: 29 zdjęć obu egzemplarzy z placu, cztery filmy oraz test tego auta w Terenwizji, kanale z 394 tys. subskrybentów, gdzie właściciel mówi wprost, że kupił je u Ciebie.",
+      "status": "materiały z sesji 23.07 uporządkowane (Leopard 5, Exeed VX, Jetour T2) — pierwszy przebieg gotowy do startu",
+      "realnie_od": 3,
+      "realnie_do": 4,
+      "rynkowo_od": 7,
+      "rynkowo_do": 10
+    },
+    {
       "id": "T-224",
       "tytul": "Formularz „Zapytaj o leasing” na stronie leasingowej",
       "opis": "Dziś przycisk na stronie o leasingu prowadzi do zakładki Kontakt, czyli do zwykłego maila. Zapytanie trafia więc do skrzynki i nigdzie się nie zapisuje — nie widać go w panelu, nie da się policzyć, ile osób pyta o leasing i z których modeli przychodzą. Formularz to zmienia: zapytanie ląduje na liście w panelu, przychodzi powiadomienie na maila i zliczamy je jako zapytanie w statystykach. Pod ten sam formularz podepniemy później kalkulator raty (T-189).",
@@ -228,6 +238,12 @@
           "url": "https://primaauto.com.pl/depozyt/"
         }
       ]
+    },
+    {
+      "id": "T-240",
+      "tytul": "Indywidualne strony modeli tam, gdzie mamy własne materiały",
+      "opis": "Wszystkie 317 stron modeli powstaje dziś z jednego szablonu i jest odświeżanych automatycznie — ceny, liczba sztuk i parametry aktualizują się same, bo oferta rotuje codziennie. To jest zaleta, ale zamyka drogę do ręcznego dopracowania pojedynczej strony: przy najbliższym automatycznym przebiegu taka praca zostałaby nadpisana. Modele, przy których mamy własne zdjęcia, filmy i materiały wideo, zasługują na bogatsze potraktowanie niż reszta katalogu, więc do rozstrzygnięcia zostaje, jak pogodzić jedno z drugim: dane mają dalej rotować automatem, a warstwa opisowa i zdjęciowa pozostać nietknięta. Ile takich stron ma sens i ile to kosztuje, będziemy wiedzieć po pierwszym przebiegu na Leopardzie 5.",
+      "status": "kierunek do rozstrzygnięcia — wycena po pierwszym przebiegu na Leopardzie 5"
     }
   ],
   "todo_ukryte_id": [
