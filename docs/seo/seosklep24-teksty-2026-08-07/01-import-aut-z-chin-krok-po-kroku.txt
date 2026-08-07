@@ -1,0 +1,213 @@
+Tytuł: Import aut z Chin krok po kroku: model–rejestracja
+
+Opis:Etapy importu auta z Chin: wybór modelu, dokumenty, transport morski, odprawa celna, cło i akcyza, dopuszczenie jednostkowe i rejestracja w Polsce.
+
+Content:<section class="quick-facts">
+<h2>Najważniejsze w skrócie</h2>
+<ul>
+<li>Auto sprowadzone z Chin przechodzi przez cztery bramki: zakup, transport morski, odprawę celną i dopuszczenie do ruchu w Polsce.</li>
+<li>Chiński samochód nie ma europejskiego świadectwa zgodności COC, dlatego ścieżką rejestracyjną jest zwykle dopuszczenie jednostkowe pojazdu.</li>
+<li>Na koszt składają się cło 10%, VAT 23% i akcyza zależna od napędu — samochody w pełni elektryczne są z akcyzy zwolnione.</li>
+</ul>
+</section>
+
+<section class="answer-first-box">
+<p><strong>W skrócie:</strong> import auta z Chin do Polski to sekwencja czterech etapów, w której każdy kolejny opiera się na dokumentach z poprzedniego. Kolejność jest sztywna, a najwięcej czasu zabierają transport morski i przygotowanie do dopuszczenia jednostkowego.</p>
+<ul>
+<li><strong>Zakup i dokumenty:</strong> faktura eksportowa, chiński certyfikat eksportowy i pełna specyfikacja techniczna muszą powstać przed wysyłką, nie po przyjeździe auta.</li>
+<li><strong>Transport i odprawa:</strong> kontener lub statek ro-ro do portu w Europie, następnie zgłoszenie celne, w którym rozliczane są cło i VAT importowy.</li>
+<li><strong>Dopuszczenie i rejestracja:</strong> badanie techniczne, dopuszczenie jednostkowe wydawane przez Dyrektora Transportowego Dozoru Technicznego, na końcu wniosek w wydziale komunikacji.</li>
+</ul>
+</section>
+
+<section class="intro">
+<p>Sprowadzenie samochodu z Chin różni się od zakupu auta w Niemczech przede wszystkim tym, że pojazd przekracza granicę celną Unii Europejskiej i nie posiada dokumentu, który w obrocie wewnątrzunijnym rozstrzyga wszystko — świadectwa zgodności WE. Ta jedna różnica generuje cały dodatkowy łańcuch formalności: zgłoszenie celne, rozliczenie należności importowych i osobną ścieżkę dopuszczenia pojazdu do ruchu.</p>
+<p>Poniżej rozpisany jest cały proces w kolejności, w jakiej faktycznie się dzieje, wraz ze wskazaniem, gdzie najczęściej powstają opóźnienia. Podejście etapowe ma znaczenie praktyczne: błąd w opisie pojazdu na fakturze wystawionej w Chinach ujawnia się dopiero podczas odprawy w polskim porcie, kiedy poprawienie dokumentu wymaga kontaktu ze sprzedawcą po drugiej stronie świata i wstrzymuje kontener na czas wyjaśnień.</p>
+</section>
+
+<h2>Etap 1: wybór modelu i weryfikacja pojazdu w Chinach</h2>
+<p>Pierwszy etap decyduje o tym, jak trudne będą wszystkie następne. Chiński rynek wewnętrzny działa na innych zasadach niż europejski: część modeli powstaje wyłącznie na potrzeby krajowe, w wersjach, które nigdy nie miały przechodzić europejskiej homologacji. To nie przekreśla możliwości rejestracji, ale przekłada się na zakres pracy przy dopuszczeniu jednostkowym.</p>
+<p>Na tym etapie sprawdza się trzy rzeczy. Po pierwsze — status pojazdu: nowy, demonstracyjny czy używany, bo od tego zależy komplet dokumentów po stronie chińskiej. Po drugie — czytelność numeru VIN i jego zgodność z dokumentami sprzedawcy oraz tabliczką znamionową. Po trzecie — kompletność specyfikacji technicznej: masa własna, dopuszczalna masa całkowita, moc silnika lub silników, pojemność skokowa przy napędach spalinowych, pojemność baterii przy elektrykach, liczba miejsc, rozstaw osi. Te dane wrócą później w zgłoszeniu celnym, w badaniu technicznym i w dowodzie rejestracyjnym — i muszą być wszędzie identyczne.</p>
+<p>Osobna kwestia to wyposażenie różniące rynek chiński od europejskiego. Najczęściej dotyczy to oświetlenia, oznaczeń na tabliczkach, jednostek na zegarach oraz języka systemu multimedialnego. Część z tych elementów podlega korekcie przed badaniem technicznym, część jest neutralna formalnie, ale wpływa na komfort użytkowania.</p>
+
+<h2>Etap 2: dokumenty, które muszą powstać przed wysyłką</h2>
+<p>Komplet dokumentów przygotowuje się przed załadunkiem, nie po przyjeździe. Ta zasada wygląda na oczywistą, a jest najczęściej łamana i najdroższa w skutkach: kontener, który czeka w porcie na korektę faktury, generuje opłaty za przestój i składowanie liczone za każdą dobę.</p>
+<p>Podstawowy zestaw obejmuje fakturę handlową z pełnym opisem pojazdu i wartością transakcyjną, chiński certyfikat eksportowy pojazdu, dokument przewozowy właściwy dla trasy — konosament przy transporcie morskim — oraz specyfikację techniczną. Do tego dochodzą potwierdzenia płatności, listy pakunkowe i dokumenty potwierdzające prawo sprzedawcy do dysponowania pojazdem w eksporcie.</p>
+<p>Kontrola, którą warto wykonać zanim auto wypłynie, jest prosta i sprowadza się do porównania tych samych pól w kilku dokumentach: numer VIN, rok produkcji, wartość, oznaczenie modelu i wersji. Rozbieżność choćby w jednym z nich urząd celny traktuje nie jako literówkę, lecz jako sygnał, że opis towaru może nie odpowiadać rzeczywistości — a to uruchamia procedurę wyjaśniającą.</p>
+
+<h2>Etap 3: transport morski i harmonogram</h2>
+<p>Samochody z Chin docierają do Europy dwiema drogami. Transport kontenerowy jest droższy w przeliczeniu na pojedynczy egzemplarz, ale lepiej chroni pojazd i pozwala załadować auto razem z częściami. Transport ro-ro, czyli specjalistycznym statkiem samochodowym, jest tańszy przy większych partiach, natomiast wymaga, aby pojazd był jezdny.</p>
+<p>Realny czas przewozu z chińskich portów do Europy Północnej to zwykle kilka tygodni samej żeglugi, do czego dochodzą operacje portowe po obu stronach oraz transport lądowy z portu docelowego do Polski. Auta trafiają najczęściej przez Gdańsk, Gdynię, Bremerhaven, Rotterdam lub Hamburg. Na całkowity czas wpływają też czynniki niezależne od nadawcy: dostępność miejsca na statku, kolejki w portach przeładunkowych oraz sezonowe spiętrzenia.</p>
+<p>Dwie rzeczy pozostają w tym etapie pod kontrolą kupującego. Pierwsza to ubezpieczenie ładunku obejmujące typowe zdarzenia na danej trasie — szkody transportowe zdarzają się rzadko, ale bez polisy i protokołu są nie do odzyskania. Druga to dokumentacja fotograficzna pojazdu przed załadunkiem, która przy odbiorze pozwala odróżnić uszkodzenie powstałe w transporcie od wady wcześniejszej. Uporządkowany opis etapów, jakim jest <a href="https://primaauto.com.pl/">import aut z chin</a> prowadzony w modelu agencyjnym, bywa przydatny właśnie tutaj — pokazuje, w którym momencie dokumenty przechodzą z rąk do rąk i kto za nie odpowiada.</p>
+
+<h2>Etap 4: odprawa celna, cło, VAT i akcyza</h2>
+<p>Po przybyciu do portu unijnego pojazd musi zostać zgłoszony do procedury dopuszczenia do obrotu. Zgłoszenie celne składa agencja celna działająca na podstawie pełnomocnictwa importera. Na tym etapie rozliczane są dwie podstawowe należności: cło i podatek od towarów i usług.</p>
+<p>Stawka celna dla samochodów osobowych przywożonych spoza Unii wynosi 10% i liczona jest od wartości celnej, czyli od ceny zakupu powiększonej o koszty transportu i ubezpieczenia do granicy UE. VAT w stawce 23% naliczany jest od wartości celnej powiększonej o cło. Trzecim obciążeniem jest akcyza, rozliczana już w Polsce, przed pierwszą rejestracją.</p>
+<p>Akcyza jest jedynym elementem, który różnicuje pojazdy według napędu — i różnica ta bywa znacząca. Samochody osobowe w pełni elektryczne oraz napędzane wodorem są z akcyzy zwolnione. Hybrydy plug-in objęte są stawkami obniżonymi. Pojazdy spalinowe rozliczane są według pojemności skokowej silnika, z wyraźnie wyższą stawką powyżej dwóch litrów. Przy typowej dla chińskiej oferty przewadze napędów elektrycznych i hybryd plug-in ma to realne przełożenie na koszt końcowy.</p>
+<table>
+<thead>
+<tr><th>Etap</th><th>Co się dzieje</th><th>Gdzie powstają opóźnienia</th></tr>
+</thead>
+<tbody>
+<tr><td>Zakup i weryfikacja</td><td>Wybór egzemplarza, sprawdzenie VIN, kompletowanie specyfikacji</td><td>Niepełna specyfikacja techniczna, rozbieżny opis wersji</td></tr>
+<tr><td>Dokumenty eksportowe</td><td>Faktura, certyfikat eksportowy, konosament, potwierdzenia płatności</td><td>Błąd w opisie pojazdu lub wartości na fakturze</td></tr>
+<tr><td>Transport morski</td><td>Załadunek, żegluga, operacje portowe, przewóz lądowy do Polski</td><td>Brak miejsca na statku, kolejki portowe, szkody bez protokołu</td></tr>
+<tr><td>Odprawa celna</td><td>Zgłoszenie celne, rozliczenie cła i VAT importowego</td><td>Niespójność dokumentów, spór o wartość celną, koszty składowania</td></tr>
+<tr><td>Akcyza</td><td>Deklaracja i zapłata przed pierwszą rejestracją</td><td>Błędne przypisanie napędu lub pojemności silnika</td></tr>
+<tr><td>Dopuszczenie do ruchu</td><td>Badanie techniczne, dopuszczenie jednostkowe, tłumaczenia przysięgłe</td><td>Braki danych technicznych, konieczne korekty wyposażenia</td></tr>
+<tr><td>Rejestracja</td><td>Wniosek w wydziale komunikacji, opłaty, tablice</td><td>Wezwania do uzupełnienia dokumentów</td></tr>
+</tbody>
+</table>
+
+<h2>Etap 5: dopuszczenie jednostkowe i badanie techniczne</h2>
+<p>To moment, który najbardziej odróżnia import z Chin od zakupu auta w Unii. Samochód kupiony w Niemczech ma świadectwo zgodności WE, które przesądza o spełnieniu wymagań technicznych. Samochód z chińskiego rynku wewnętrznego takiego dokumentu nie ma, bo nigdy nie był przeznaczony na rynek unijny.</p>
+<p>Ścieżką przewidzianą dla takich pojazdów jest dopuszczenie jednostkowe pojazdu. Postępowanie prowadzi Dyrektor Transportowego Dozoru Technicznego na podstawie ustawy z 14 kwietnia 2023 r. o systemach homologacji pojazdów oraz ich wyposażenia. W jego toku ocenia się, czy konkretny egzemplarz spełnia wymagania techniczne w zakresie istotnym dla bezpieczeństwa i ochrony środowiska. Warto podkreślić, że ocenie podlega pojedynczy pojazd, a nie typ — stąd nazwa procedury.</p>
+<p>Równolegle wykonuje się badanie techniczne w stacji kontroli pojazdów oraz tłumaczenia przysięgłe dokumentów, które będą składane w urzędzie. Najczęstsze prace dostosowawcze dotyczą oświetlenia — chińskie reflektory bywają ustawione pod ruch prawostronny inaczej niż wymagają tego przepisy europejskie — oraz oznaczeń i tabliczek znamionowych.</p>
+
+<h2>Etap 6: rejestracja w wydziale komunikacji</h2>
+<p>Ostatni krok jest formalnością pod warunkiem, że poprzednie zostały domknięte. Do wniosku o rejestrację dołącza się dokumenty własności pojazdu, dokumenty celne potwierdzające dopuszczenie do obrotu, potwierdzenie zapłaty akcyzy, dokument dopuszczenia jednostkowego, zaświadczenie o badaniu technicznym oraz tłumaczenia przysięgłe. Urząd wydaje dowód rejestracyjny i tablice.</p>
+<p>Typowe przyczyny wezwań do uzupełnienia są powtarzalne i wszystkie sprowadzają się do spójności: inny zapis numeru VIN w dwóch dokumentach, brak potwierdzenia jednej z płatności, tłumaczenie wykonane przez osobę bez uprawnień tłumacza przysięgłego, rozbieżność masy własnej między specyfikacją a wynikiem badania. Żadna z tych rzeczy nie blokuje rejestracji trwale, ale każda przesuwa ją o kolejne dni.</p>
+
+<h2>Czego spodziewać się po wersji z chińskiego rynku</h2>
+<p>Poza formalnościami jest jeszcze warstwa, która nie wpływa na rejestrację, ale decyduje o codziennym użytkowaniu. Samochód budowany na rynek wewnętrzny ma inaczej ustawione kilka rzeczy niż jego europejski odpowiednik, o ile taki w ogóle istnieje.</p>
+<p>Najbardziej odczuwalny jest system multimedialny. Fabryczne oprogramowanie bywa w całości w języku chińskim, a nawigacja jest przypisana do map chińskich. W praktyce rozwiązuje się to na trzy sposoby: zmianą języka w ustawieniach systemu, jeśli producent taką opcję przewidział, wgraniem oprogramowania w wersji eksportowej albo wymianą jednostki multimedialnej. Nie każdy model daje wszystkie trzy możliwości, dlatego jest to pytanie do zadania przed zakupem, a nie po odbiorze auta.</p>
+<p>Druga różnica dotyczy usług połączonych. Aplikacje producenta, zdalne sterowanie klimatyzacją czy zarządzanie ładowaniem bywają powiązane z chińskimi serwerami i chińskim numerem telefonu przy rejestracji konta. Podstawowe funkcje pojazdu działają niezależnie od tego, natomiast część wygodowych rozwiązań może pozostać niedostępna.</p>
+<p>Trzecia to złącza ładowania w samochodach elektrycznych. Chiński standard GB/T różni się od europejskiego CCS2, co przy imporcie rozwiązuje się adapterem lub wymianą gniazda. Ten element warto ustalić na etapie wyboru egzemplarza, ponieważ wpływa na możliwość korzystania z publicznej infrastruktury szybkiego ładowania.</p>
+<p>Żadna z tych rzeczy nie jest przeszkodą w rejestracji ani wadą ukrytą — są to normalne konsekwencje tego, że pojazd projektowano dla innego rynku. Problemem stają się dopiero wtedy, gdy kupujący dowiaduje się o nich po odbiorze auta.</p>
+
+<h2>Samodzielnie czy przez agencję importową</h2>
+<p>Import można poprowadzić samodzielnie i jest to wykonalne, natomiast wymaga umiejętności, które przy jednorazowym zakupie trudno zbudować: weryfikacji chińskiego sprzedawcy, organizacji frachtu morskiego, współpracy z agencją celną i przeprowadzenia pojazdu przez dopuszczenie jednostkowe. Każdy z tych obszarów da się opanować, ale nauka odbywa się na własnym aucie i własnych opłatach za składowanie.</p>
+<p>Model agencyjny przenosi tę pracę na pośrednika, który prowadzi zakup, transport, odprawę i formalności, a klient pozostaje właścicielem pojazdu na każdym etapie. Kluczowe pytanie przy wyborze agencji nie dotyczy ceny usługi, tylko zakresu odpowiedzialności: kto odpowiada za kompletność dokumentów, w jakim trybie zgłaszane są szkody transportowe i jak rozliczane są opłaty zewnętrzne, których wysokość zależy od czasu — składowanie i przestoje.</p>
+
+<section class="qa">
+<h2>Najczęstsze pytania o import auta z Chin</h2>
+
+<h3>Ile trwa cały proces od zakupu do rejestracji?</h3>
+<p>Największą i najmniej elastyczną częścią harmonogramu jest transport morski liczony w tygodniach. Do tego dochodzą operacje portowe, odprawa celna oraz przygotowanie do dopuszczenia jednostkowego. Proces przebiega szybciej, gdy komplet dokumentów powstał przed wysyłką — wtedy odprawa i formalności rejestracyjne układają się sekwencyjnie, bez cofania się po brakujące papiery.</p>
+
+<h3>Czy każde chińskie auto da się zarejestrować w Polsce?</h3>
+<p>Rejestracja jest możliwa, jeśli pojazd przejdzie dopuszczenie jednostkowe, czyli wykaże spełnienie wymagań technicznych w zakresie bezpieczeństwa i ochrony środowiska. Trudniejsze bywają egzemplarze bardzo nietypowe lub takie, dla których producent nie udostępnia danych technicznych. Standardowe osobowe modele z chińskiego rynku wewnętrznego przechodzą tę ścieżkę rutynowo.</p>
+
+<h3>Od czego zależy wysokość akcyzy?</h3>
+<p>Od rodzaju napędu i pojemności skokowej silnika. Samochody w pełni elektryczne i wodorowe są z akcyzy zwolnione, hybrydy plug-in objęte stawkami obniżonymi, a pojazdy spalinowe rozliczane według pojemności, z wyraźnie wyższą stawką powyżej dwóch litrów. Przy chińskiej ofercie, w której dominują napędy elektryczne i hybrydowe, ta różnica ma realne znaczenie dla budżetu.</p>
+
+<h3>Czy chiński samochód ma świadectwo zgodności COC?</h3>
+<p>Pojazd przeznaczony na chiński rynek wewnętrzny nie ma europejskiego świadectwa zgodności, ponieważ nie przechodził homologacji unijnej. Dlatego ścieżką rejestracyjną jest dopuszczenie jednostkowe pojazdu, w którym ocenia się konkretny egzemplarz. Sytuacja wygląda inaczej przy modelach oficjalnie sprzedawanych w Unii — te mają pełną homologację europejską.</p>
+
+<h3>Jakie koszty najczęściej wypadają poza kalkulacją?</h3>
+<p>Najczęściej pomijane są opłaty portowe i za składowanie, koszty obsługi agencji celnej, tłumaczenia przysięgłe oraz prace dostosowawcze przed badaniem technicznym. Osobną kategorią są koszty czasu: każda korekta dokumentu wykonywana już po przybyciu pojazdu oznacza kolejne dni w porcie, za które nalicza się opłaty.</p>
+
+<h3>Co się dzieje, gdy auto zostanie uszkodzone w transporcie?</h3>
+<p>Podstawą roszczenia jest protokół szkody sporządzony przy odbiorze oraz dokumentacja fotograficzna sprzed załadunku, która pozwala wykazać, że uszkodzenie nie istniało wcześniej. Bez tych dwóch elementów przypisanie odpowiedzialności jest w praktyce niewykonalne, niezależnie od zakresu polisy.</p>
+</section>
+
+<section class="sources">
+<h2>Źródła</h2>
+<ul>
+<li><a href="https://www.gov.pl/web/gov/zarejestruj-pojazd-sprowadzony-z-zagranicy" rel="nofollow noopener noreferrer">gov.pl — rejestracja pojazdu sprowadzonego z zagranicy</a></li>
+<li><a href="https://www.tdt.gov.pl/" rel="nofollow noopener noreferrer">Transportowy Dozór Techniczny — organ właściwy w sprawach dopuszczenia jednostkowego</a></li>
+<li><a href="https://www.kas.gov.pl/documents/10181/2847085/C%C5%82o_i_podatek_akcyzowy.pdf" rel="nofollow noopener noreferrer">KAS — broszura informacyjna: cło i podatek akcyzowy</a></li>
+<li><a href="https://ec.europa.eu/taxation_customs/dds2/taric/taric_consultation.jsp" rel="nofollow noopener noreferrer">TARIC — unijna baza stawek celnych</a></li>
+</ul>
+</section>
+
+<p>Import auta z Chin jest procesem przewidywalnym, o ile prowadzi się go w kolejności i z dokumentami przygotowanymi z wyprzedzeniem. Trzy elementy decydują o przebiegu: spójność danych pojazdu we wszystkich dokumentach, świadome zaplanowanie kosztów łącznie z opłatami zależnymi od czasu oraz wczesne przygotowanie do dopuszczenia jednostkowego. Błędy popełnione na początku nie znikają — ujawniają się w porcie albo w urzędzie, kiedy ich naprawa kosztuje najwięcej.</p>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Ile trwa cały proces od zakupu do rejestracji?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Największą i najmniej elastyczną częścią harmonogramu jest transport morski liczony w tygodniach. Do tego dochodzą operacje portowe, odprawa celna oraz przygotowanie do dopuszczenia jednostkowego. Proces przebiega szybciej, gdy komplet dokumentów powstał przed wysyłką."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Czy każde chińskie auto da się zarejestrować w Polsce?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Rejestracja jest możliwa, jeśli pojazd przejdzie dopuszczenie jednostkowe, czyli wykaże spełnienie wymagań technicznych w zakresie bezpieczeństwa i ochrony środowiska. Standardowe osobowe modele z chińskiego rynku wewnętrznego przechodzą tę ścieżkę rutynowo."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Od czego zależy wysokość akcyzy?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Od rodzaju napędu i pojemności skokowej silnika. Samochody w pełni elektryczne i wodorowe są z akcyzy zwolnione, hybrydy plug-in objęte stawkami obniżonymi, a pojazdy spalinowe rozliczane według pojemności, z wyraźnie wyższą stawką powyżej dwóch litrów."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Czy chiński samochód ma świadectwo zgodności COC?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Pojazd przeznaczony na chiński rynek wewnętrzny nie ma europejskiego świadectwa zgodności, ponieważ nie przechodził homologacji unijnej. Dlatego ścieżką rejestracyjną jest dopuszczenie jednostkowe pojazdu."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Jakie koszty najczęściej wypadają poza kalkulacją?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Najczęściej pomijane są opłaty portowe i za składowanie, koszty obsługi agencji celnej, tłumaczenia przysięgłe oraz prace dostosowawcze przed badaniem technicznym."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Co się dzieje, gdy auto zostanie uszkodzone w transporcie?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Podstawą roszczenia jest protokół szkody sporządzony przy odbiorze oraz dokumentacja fotograficzna sprzed załadunku. Bez tych dwóch elementów przypisanie odpowiedzialności jest w praktyce niewykonalne."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "HowTo",
+      "name": "Import auta z Chin do rejestracji w Polsce",
+      "step": [
+        {
+          "@type": "HowToStep",
+          "name": "Wybór modelu i weryfikacja pojazdu",
+          "text": "Sprawdzenie statusu pojazdu, czytelności numeru VIN oraz kompletności specyfikacji technicznej, która będzie powtarzana we wszystkich dokumentach."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Skompletowanie dokumentów eksportowych",
+          "text": "Faktura handlowa, chiński certyfikat eksportowy, dokument przewozowy i potwierdzenia płatności przygotowane przed załadunkiem."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Transport morski i ubezpieczenie",
+          "text": "Wybór transportu kontenerowego lub ro-ro, ubezpieczenie ładunku oraz dokumentacja fotograficzna pojazdu przed załadunkiem."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Odprawa celna i należności importowe",
+          "text": "Zgłoszenie celne przez agencję celną, rozliczenie cła w stawce 10% i VAT w stawce 23%, następnie akcyza przed pierwszą rejestracją."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Dopuszczenie jednostkowe i badanie techniczne",
+          "text": "Postępowanie przed Dyrektorem Transportowego Dozoru Technicznego, badanie techniczne w stacji kontroli pojazdów i tłumaczenia przysięgłe dokumentów."
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Rejestracja w wydziale komunikacji",
+          "text": "Złożenie wniosku wraz z dokumentami własności, celnymi, potwierdzeniem akcyzy, dopuszczeniem jednostkowym i wynikiem badania technicznego."
+        }
+      ]
+    }
+  ]
+}
+</script>
+
++Artykuł Sponsorowany+

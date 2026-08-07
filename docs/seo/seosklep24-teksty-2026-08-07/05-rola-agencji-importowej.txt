@@ -1,0 +1,182 @@
+Tytuł: Rola agencji importowej przy aucie z Chin
+
+Opis:Co robi pośrednik przy sprowadzaniu auta z Chin: weryfikacja sprzedawcy, zakup, fracht morski, współpraca z agencją celną, dopuszczenie jednostkowe i odbiór.
+
+Content:<section class="quick-facts">
+<h2>W skrócie</h2>
+<ul>
+<li>Agencja importowa działa w modelu pośrednictwa — kupującym i właścicielem pojazdu pozostaje klient, nie pośrednik.</li>
+<li>Zakres obejmuje zwykle weryfikację sprzedawcy, zakup, fracht, koordynację odprawy i formalności rejestracyjnych.</li>
+<li>Zgłoszenie celne składa agencja celna na podstawie pełnomocnictwa — to odrębny podmiot i odrębna odpowiedzialność.</li>
+<li>O jakości pośrednika decyduje standard dowodowy: raporty, zdjęcia, protokoły — nie deklaracje.</li>
+</ul>
+</section>
+
+<section class="intro">
+<p>Sprowadzenie auta z drugiego końca świata wymaga skoordynowania kilku rzeczy naraz: zakupu u sprzedawcy, którego nie da się odwiedzić, transportu morskiego, odprawy celnej i indywidualnej ścieżki dopuszczenia pojazdu do ruchu w Polsce. Każdy z tych obszarów obsługuje ktoś inny, a błąd popełniony w pierwszym ujawnia się zwykle w trzecim.</p>
+<p>Rolą agencji importowej jest spięcie tego w jeden proces z jednym punktem odpowiedzialności wobec klienta. Poniżej opisane jest, co taka agencja faktycznie robi, czego nie robi mimo powszechnego przekonania, oraz po czym poznać, że pracuje rzetelnie.</p>
+</section>
+
+<h2>Model pośrednictwa: kto jest właścicielem auta</h2>
+<p>To pierwsze rozróżnienie i najważniejsze, bo determinuje wszystko dalej. Agencja importowa nie jest komisem ani salonem — nie kupuje samochodów na własny magazyn, żeby odsprzedać je z marżą. Działa na zlecenie konkretnego klienta, który wskazuje pojazd, jest jego nabywcą i pozostaje właścicielem od momentu zakupu.</p>
+<p>Konsekwencje są praktyczne. Faktura zakupu wystawiana jest na klienta, a nie na pośrednika. Klient jest importerem w rozumieniu procedur celnych. Wynagrodzenie agencji jest opłatą za usługę koordynacji, oddzieloną od ceny pojazdu i od opłat zewnętrznych — a nie marżą ukrytą w cenie auta. Ten model jest przejrzystszy kosztowo, ale wymaga od kupującego zrozumienia, że część opłat nie jest przychodem pośrednika, tylko kosztem przenoszonym w takiej wysokości, w jakiej został poniesiony.</p>
+<p>Firmy działające w tym modelu — jak <a href="https://primaauto.com.pl/">Prima-Auto</a> — prowadzą klienta przez cały proces: od wskazania konkretnego egzemplarza w chińskiej ofercie, przez zakup, transport i odprawę, po dopuszczenie do ruchu i rejestrację w Polsce.</p>
+
+<h2>Weryfikacja sprzedawcy i pojazdu</h2>
+<p>Chiński rynek samochodowy jest ogromny i zróżnicowany. Sprzedawcą bywa dealer marki, komis, platforma handlowa albo podmiot zajmujący się eksportem. Pierwszym zadaniem pośrednika jest ustalenie, z kim faktycznie zawierana jest transakcja i czy ten podmiot ma prawo dysponować pojazdem w eksporcie.</p>
+<p>Drugim jest weryfikacja samego egzemplarza, i tutaj rozstrzyga standard dowodowy. Rzetelna weryfikacja zostawia ślad, który można sprawdzić po czasie: zdjęcia numeru VIN i tabliczki znamionowej, dokumentacja fotograficzna nadwozia i wnętrza, potwierdzenie przebiegu, opis rozbieżności względem ogłoszenia. Deklaracja „sprawdzone" bez tych materiałów nie ma wartości dowodowej — a przy sporze to właśnie one rozstrzygają, czy uszkodzenie powstało w transporcie, czy istniało wcześniej.</p>
+<p>Przy autach elektrycznych i hybrydowych do zakresu weryfikacji dochodzą kwestie, których w samochodzie spalinowym nie ma: stan baterii, standard złącza ładowania, wersja oprogramowania oraz to, czy system multimedialny obsługuje inny język niż chiński. Te informacje trzeba zebrać przed zakupem, bo później zmiana bywa kosztowna.</p>
+
+<h2>Czego agencja importowa nie robi</h2>
+<p>Ta część bywa pomijana, a jest źródłem większości nieporozumień. Zakres pośrednika ma granice wyznaczone przepisami i podziałem ról między podmiotami.</p>
+<p><strong>Zgłoszenia celnego nie składa agencja importowa.</strong> Robi to agencja celna, działająca na podstawie odrębnego pełnomocnictwa i ponosząca własną odpowiedzialność za prawidłowość zgłoszenia. Pośrednik koordynuje przekazanie dokumentów i pilnuje ich spójności, ale nie zastępuje agencji celnej.</p>
+<p><strong>Dopuszczenia jednostkowego nie wydaje pośrednik.</strong> Postępowanie prowadzi Dyrektor Transportowego Dozoru Technicznego. Agencja przygotowuje dokumentację i prowadzi sprawę, natomiast rozstrzygnięcie należy do organu.</p>
+<p><strong>Pośrednik nie jest gwarantem stanu technicznego</strong> w rozumieniu gwarancji producenta. Odpowiada za rzetelność wykonanej weryfikacji i zgodność pojazdu z tym, co zostało klientowi przedstawione — to jest odpowiedzialność realna, ale innego rodzaju niż gwarancja fabryczna.</p>
+<p>Uczciwa agencja mówi o tych granicach wprost przy zawieraniu umowy. Deklaracja, że pośrednik „załatwia wszystko i za wszystko odpowiada", jest sygnałem ostrzegawczym, bo w tym procesie po prostu nie da się przejąć cudzej odpowiedzialności ustawowej.</p>
+
+<h2>Transport, ubezpieczenie i odbiór</h2>
+<p>Na etapie logistyki pośrednik dobiera formę przewozu — kontener albo statek ro-ro — organizuje ubezpieczenie ładunku i prowadzi obieg dokumentów przewozowych. Kluczowe jest tu ubezpieczenie: nie sama polisa, lecz jej zakres na konkretnej trasie i lista wyłączeń.</p>
+<p>Wybór między kontenerem a ro-ro nie jest wyłącznie kwestią ceny. Kontener chroni pojazd przed warunkami atmosferycznymi i pozwala przewieźć razem z autem dodatkowe elementy, na przykład komplet opon czy części zamienne. Transport ro-ro jest tańszy przy większych partiach, ale wymaga, by pojazd był jezdny, a auto stoi na pokładzie bez osłony. Przy samochodach o wyższej wartości różnica w koszcie frachtu bywa mniejsza niż potencjalna szkoda lakiernicza.</p>
+<p>Przy odbiorze pojazdu w Polsce standardem powinien być protokół z dokumentacją fotograficzną, porównywany ze zdjęciami sprzed załadunku. Bez tego zestawienia przypisanie ewentualnej szkody jest w praktyce niewykonalne, a zgłoszenie do ubezpieczyciela ma niewielkie szanse powodzenia. Termin zgłoszenia szkody bywa krótki, dlatego oględziny przy odbiorze nie są formalnością, tylko czynnością o skutkach finansowych.</p>
+
+<h2>Przebieg współpracy krok po kroku</h2>
+<p>Dobrze poprowadzony proces ma jasno wyznaczone punkty, w których klient podejmuje decyzję, a nie jedynie otrzymuje informację. Poniżej typowa sekwencja.</p>
+<p><strong>Ustalenie potrzeb i budżetu.</strong> Rozmowa o tym, jaki samochód ma zostać sprowadzony i w jakim budżecie całkowitym — nie cenie zakupu, lecz kwocie obejmującej wszystkie opłaty do momentu rejestracji. Na tym etapie pośrednik powinien powiedzieć wprost, jakie pozycje kosztowe dojdą i które z nich są zmienne.</p>
+<p><strong>Wyszukanie ofert.</strong> Przedstawienie konkretnych egzemplarzy z chińskiego rynku wraz ze specyfikacją, zdjęciami i wstępną kalkulacją kosztu końcowego. Klient wybiera, pośrednik nie decyduje za niego.</p>
+<p><strong>Weryfikacja wybranego pojazdu.</strong> Sprawdzenie sprzedawcy i egzemplarza, zakończone raportem z materiałem fotograficznym. To moment, w którym transakcja może zostać wstrzymana bez konsekwencji, jeśli stan faktyczny odbiega od ogłoszenia.</p>
+<p><strong>Zakup i płatność.</strong> Zawarcie transakcji, przy której nabywcą jest klient. Harmonogram płatności powinien być opisany w umowie z pośrednikiem, wraz ze wskazaniem, co dzieje się w razie wycofania się sprzedawcy.</p>
+<p><strong>Transport i odprawa.</strong> Organizacja frachtu, ubezpieczenia, przekazanie dokumentów do agencji celnej, rozliczenie należności importowych. Klient powinien otrzymywać informację przy każdym kamieniu milowym, a nie dopiero przy dostawie.</p>
+<p><strong>Dopuszczenie i rejestracja.</strong> Przygotowanie dokumentacji do dopuszczenia jednostkowego, badanie techniczne, tłumaczenia przysięgłe, wniosek rejestracyjny. Etap kończy się przekazaniem auta z kompletem dokumentów.</p>
+
+<h2>Umowa: co powinno się w niej znaleźć</h2>
+<p>Umowa z pośrednikiem jest dokumentem, który rozstrzyga w razie sporu, a jednocześnie najczęściej czytanym pobieżnie. Cztery elementy są w niej najważniejsze.</p>
+<p><strong>Zakres usługi.</strong> Wyliczenie czynności, które pośrednik wykonuje, i wskazanie tych, które pozostają poza jego zakresem. Sformułowania ogólne typu „kompleksowa obsługa importu" nie mają wartości interpretacyjnej.</p>
+<p><strong>Standard weryfikacji.</strong> Opisanie, co dokładnie obejmuje sprawdzenie pojazdu i w jakiej formie klient otrzymuje jego wynik. Bez tego trudno później wykazać, że weryfikacja została wykonana nierzetelnie.</p>
+<p><strong>Harmonogram i płatności.</strong> Kolejność wpłat powiązana z etapami, a nie jedna płatność z góry. Warto też zapisać, co dzieje się z wpłaconymi środkami, jeśli transakcja nie dojdzie do skutku z przyczyn leżących po stronie sprzedawcy.</p>
+<p><strong>Odpowiedzialność i reklamacje.</strong> Tryb zgłaszania zastrzeżeń, terminy oraz zakres odpowiedzialności pośrednika. Uczciwie sformułowana umowa wskazuje także ograniczenia tej odpowiedzialności — bo pewnych rzeczy, jak rozstrzygnięcia organu czy szkody objęte polisą przewoźnika, pośrednik po prostu nie kontroluje.</p>
+
+<h2>Jak czytać wycenę agencji</h2>
+<p>Przejrzysta oferta rozdziela trzy kategorie, które w mniej uczciwych wycenach bywają zlewane w jedną kwotę: cenę pojazdu, wynagrodzenie pośrednika oraz opłaty zewnętrzne. Ta trzecia grupa jest najbardziej zmienna, bo część opłat zależy od czasu — składowanie w porcie i przestoje nalicza się dobowo, a ich wysokość rośnie przy każdym dniu wyjaśnień.</p>
+<table>
+<thead>
+<tr><th>Pozycja</th><th>Kto rozlicza</th><th>Kiedy rośnie</th></tr>
+</thead>
+<tbody>
+<tr><td>Cena pojazdu</td><td>Sprzedawca w Chinach</td><td>Zmiana specyfikacji po zamówieniu</td></tr>
+<tr><td>Wynagrodzenie agencji</td><td>Pośrednik</td><td>Rozszerzenie zakresu poza umowę</td></tr>
+<tr><td>Fracht i ubezpieczenie</td><td>Przewoźnik, ubezpieczyciel</td><td>Zmiana trasy, dopłaty paliwowe</td></tr>
+<tr><td>Opłaty portowe i składowanie</td><td>Terminal</td><td>Każdy dzień przestoju ponad czas wolny</td></tr>
+<tr><td>Odprawa celna</td><td>Agencja celna</td><td>Korekty zgłoszenia, dodatkowe kontrole</td></tr>
+<tr><td>Cło, VAT, akcyza</td><td>Organy podatkowe</td><td>Zależne od wartości i napędu, nie od pośrednika</td></tr>
+<tr><td>Dopuszczenie i rejestracja</td><td>TDT, stacja kontroli, urząd</td><td>Prace dostosowawcze przed badaniem</td></tr>
+</tbody>
+</table>
+<p>Warto zapytać wprost o dwie rzeczy: co dzieje się z kosztami, jeśli pojawi się opóźnienie po stronie sprzedawcy, oraz w jaki sposób dokumentowane są opłaty zewnętrzne. Odpowiedź na te pytania mówi o pośredniku więcej niż cały cennik.</p>
+
+<h2>Po czym poznać rzetelną agencję</h2>
+<p>Kryteria sprowadzają się do sprawdzalności. Rzetelny pośrednik potrafi przed rozpoczęciem współpracy pokazać, jak wygląda raport z weryfikacji pojazdu, w jakich momentach klient dostaje informację o postępie i co dokładnie znajdzie się w komplecie dokumentów na końcu procesu.</p>
+<p>Warto zwrócić uwagę na cztery rzeczy: czy umowa opisuje etapy i moment przejścia własności; czy pośrednik wskazuje granice swojej odpowiedzialności zamiast obiecywać, że „załatwia wszystko"; czy istnieje opisana procedura zgłaszania szkód transportowych; oraz czy wycena rozdziela usługę od opłat zewnętrznych. Sygnałami ostrzegawczymi są natomiast: niechęć do udostępnienia materiału z weryfikacji, żądanie pełnej przedpłaty bez dokumentów oraz brak jasności co do tego, na kogo wystawiana jest faktura zakupu pojazdu.</p>
+
+<h2>Najczęstsze błędy przy wyborze pośrednika</h2>
+<p>Doświadczenia rynku pokazują kilka powtarzalnych pomyłek, które kosztują więcej niż różnica w wynagrodzeniu między pośrednikami.</p>
+<p><strong>Wybór wyłącznie po cenie usługi.</strong> Najniższa prowizja bywa równoważona brakiem weryfikacji pojazdu albo przerzuceniem części pracy na klienta. Warto porównywać nie kwoty, lecz zakresy — dwie oferty różniące się o kilka procent mogą obejmować zupełnie co innego.</p>
+<p><strong>Brak pytania o wersję rynkową.</strong> Egzemplarz z chińskiego rynku wewnętrznego różni się od europejskiego językiem systemu, mapami i złączem ładowania. Rzetelny pośrednik mówi o tym sam; jeśli temat nie pada, trzeba go poruszyć.</p>
+<p><strong>Akceptacja pełnej przedpłaty bez dokumentów.</strong> Harmonogram płatności powiązany z etapami jest standardem. Żądanie całej kwoty z góry, przed weryfikacją pojazdu i bez dokumentów potwierdzających transakcję, jest sygnałem ostrzegawczym.</p>
+<p><strong>Pomijanie kwestii serwisu.</strong> Import kończy się rejestracją, ale użytkowanie trwa lata. Przy markach nieobecnych w Polsce oficjalnie warto ustalić już na etapie zakupu, gdzie auto będzie serwisowane i skąd sprowadzane będą części.</p>
+<p><strong>Traktowanie kosztu zakupu jako kosztu końcowego.</strong> Cena w chińskim ogłoszeniu to punkt wyjścia, do którego dochodzą transport, ubezpieczenie, opłaty portowe, cło, VAT, akcyza, tłumaczenia, badanie techniczne i dopuszczenie jednostkowe. Rzetelna wycena pokazuje całość na starcie.</p>
+
+<section class="qa">
+<h2>Pytania i odpowiedzi</h2>
+
+<h3>Czy pośrednik kupuje auto na siebie i odsprzedaje mi je?</h3>
+<p>W modelu agencyjnym nie. Nabywcą i właścicielem pojazdu jest klient, a faktura zakupu wystawiana jest na niego. Pośrednik świadczy usługę koordynacji, za którą pobiera wynagrodzenie oddzielone od ceny auta. Model, w którym firma kupuje pojazdy na własny magazyn i odsprzedaje je z marżą, to działalność komisowa — inna konstrukcja i inny podział odpowiedzialności.</p>
+
+<h3>Kto składa zgłoszenie celne?</h3>
+<p>Agencja celna, na podstawie pełnomocnictwa udzielonego przez importera. Agencja importowa koordynuje przekazanie dokumentów i pilnuje ich spójności, ale nie zastępuje agencji celnej ani nie przejmuje jej odpowiedzialności za prawidłowość zgłoszenia.</p>
+
+<h3>Za co pośrednik faktycznie odpowiada?</h3>
+<p>Za rzetelność weryfikacji pojazdu i sprzedawcy, zgodność auta z tym, co przedstawiono klientowi, terminowe prowadzenie procesu oraz kompletność dokumentacji w zakresie opisanym w umowie. Nie odpowiada natomiast za rozstrzygnięcia organów ani nie pełni funkcji gwaranta w rozumieniu gwarancji producenta.</p>
+
+<h3>Czy da się sprowadzić auto z Chin samodzielnie?</h3>
+<p>Tak, jest to wykonalne. Wymaga jednak zweryfikowania sprzedawcy na odległość, zorganizowania frachtu morskiego, współpracy z agencją celną i przeprowadzenia pojazdu przez dopuszczenie jednostkowe. Każdy z tych elementów da się opanować, natomiast przy jednorazowym zakupie nauka odbywa się kosztem własnego auta i opłat za składowanie.</p>
+
+<h3>Co, jeśli auto przyjedzie w innym stanie, niż wynikało z opisu?</h3>
+<p>Rozstrzyga materiał dowodowy: raport z weryfikacji i zdjęcia sprzed załadunku zestawione z protokołem odbioru. Jeśli rozbieżność istniała już w Chinach, odpowiedzialność leży po stronie weryfikacji. Jeśli powstała w transporcie, sprawa idzie do ubezpieczyciela. Bez dokumentacji z obu momentów rozstrzygnięcie jest praktycznie niemożliwe.</p>
+
+<h3>Jak długo trwa cały proces?</h3>
+<p>Najdłuższą pozycją jest fracht morski liczony w tygodniach, do czego dochodzą operacje portowe, odprawa i przygotowanie do dopuszczenia jednostkowego. Harmonogram jest przewidywalny pod warunkiem, że dokumenty powstały przed wysyłką — przesunięcia biorą się niemal zawsze z konieczności poprawiania czegoś po przybyciu pojazdu.</p>
+</section>
+
+<section class="sources">
+<h2>Źródła</h2>
+<ul>
+<li><a href="https://www.tdt.gov.pl/" rel="nofollow noopener noreferrer">Transportowy Dozór Techniczny — dopuszczenie jednostkowe pojazdu</a></li>
+<li><a href="https://www.gov.pl/web/gov/zarejestruj-pojazd-sprowadzony-z-zagranicy" rel="nofollow noopener noreferrer">gov.pl — rejestracja pojazdu sprowadzonego z zagranicy</a></li>
+<li><a href="https://www.kas.gov.pl/documents/10181/2847085/C%C5%82o_i_podatek_akcyzowy.pdf" rel="nofollow noopener noreferrer">KAS — cło i podatek akcyzowy</a></li>
+</ul>
+</section>
+
+<p>Agencja importowa wnosi wartość tam, gdzie proces ma najwięcej styków: przy weryfikacji sprzedawcy, którego nie da się odwiedzić, przy dokumentach, które muszą być spójne przez kilka miesięcy i kilka podmiotów, oraz przy formalnościach, w których pomyłka kosztuje dni postoju. Rzetelnego pośrednika poznaje się nie po obietnicy, że zajmie się wszystkim, lecz po tym, że potrafi pokazać granice swojej odpowiedzialności i udokumentować każdy etap.</p>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Czy pośrednik kupuje auto na siebie i odsprzedaje mi je?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "W modelu agencyjnym nie. Nabywcą i właścicielem pojazdu jest klient, a faktura zakupu wystawiana jest na niego. Pośrednik świadczy usługę koordynacji, za którą pobiera wynagrodzenie oddzielone od ceny auta."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Kto składa zgłoszenie celne?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Agencja celna, na podstawie pełnomocnictwa udzielonego przez importera. Agencja importowa koordynuje przekazanie dokumentów, ale nie zastępuje agencji celnej ani nie przejmuje jej odpowiedzialności za prawidłowość zgłoszenia."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Za co pośrednik faktycznie odpowiada?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Za rzetelność weryfikacji pojazdu i sprzedawcy, zgodność auta z tym, co przedstawiono klientowi, terminowe prowadzenie procesu oraz kompletność dokumentacji w zakresie opisanym w umowie."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Czy da się sprowadzić auto z Chin samodzielnie?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Tak, jest to wykonalne. Wymaga zweryfikowania sprzedawcy na odległość, zorganizowania frachtu morskiego, współpracy z agencją celną i przeprowadzenia pojazdu przez dopuszczenie jednostkowe."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Co, jeśli auto przyjedzie w innym stanie, niż wynikało z opisu?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Rozstrzyga materiał dowodowy: raport z weryfikacji i zdjęcia sprzed załadunku zestawione z protokołem odbioru. Bez dokumentacji z obu momentów rozstrzygnięcie jest praktycznie niemożliwe."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Jak długo trwa cały proces?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Najdłuższą pozycją jest fracht morski liczony w tygodniach, do czego dochodzą operacje portowe, odprawa i przygotowanie do dopuszczenia jednostkowego. Harmonogram jest przewidywalny, jeśli dokumenty powstały przed wysyłką."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+
++Reklama+

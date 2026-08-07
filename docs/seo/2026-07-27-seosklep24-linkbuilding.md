@@ -124,9 +124,60 @@ poboczne, śródtytuły), zachowanie przypisania anchor → URL 1:1, zdjęcia ta
 artykułu (nie tylko jako grafika wyróżniająca). Treść:
 `https://auratest.pl/fe4f58fec53ctmp/primaauto-seosklep24-odpowiedz-wariant-a-2026-07-28.html`
 
-Stan: czekamy na teksty do weryfikacji. Zadeklarowany zwrot: 1–2 dni robocze. Przy weryfikacji
-sprawdzamy warstwę faktograficzną (przypisanie modeli do marek, struktura właścicielska
-koncernów, dostępność modeli w Polsce) **oraz czy każdy anchor trafił pod właściwy URL**.
+**2026-07-29 12:40 — dostawca potwierdził przyjęcie zlecenia.** „Jak tylko przygotujemy treści —
+prześlemy je w plikach do akceptacji lub ewentualnych poprawek."
+
+**2026-08-05 10:52 — teksty przysłane, mail wpadł do spamu.** Wiadomość z dziesięcioma
+załącznikami `.txt` trafiła do folderu spam skrzynki `js@auranet.com.pl` (SpamAssassin 6.1 pkt
+przy progu 5.0; `RSPAMD_HIGH` +6.0, `LOCAL_RTZM_B` +1.0 — SPF, DKIM i DMARC przeszły poprawnie).
+Przyczyną było dziesięć załączników zawierających HTML. Odnaleziona 2026-08-06 w
+`~/imap/auranet.com.pl/js/Maildir/.INBOX.spam/`, Message-ID
+`bcbe10ad-c799-4243-963e-7333c1564540@seosklep24.pl`.
+
+**2026-08-06 — weryfikacja.** Pełny raport: `docs/seo/2026-08-06-seosklep24-weryfikacja-tekstow.md`.
+Skrót: anchory 10/10 zgodne z tabelą i wszystkie **dofollow** (brak `rel` — potwierdzone), ale
+warstwa faktograficzna zdyskwalifikowała materiał: 5 zmyślonych cytatów przepisów (m.in. art. 70
+PoRD i rozporządzenie 715/2007 jako podstawa homologacji), 9 niesprawdzalnych danych rynkowych,
+43 z 49 linków źródłowych martwych, link do nieistniejącej podstrony `/marki/chinskie-premium/`
+(404), zepsuty JSON-LD w tekście 1, zero zdjęć z placu. Trzy teksty (marki w PL, koncerny-matki,
+modele SUV/pick-up) nie zawierały ani jednej nazwy marki lub modelu.
+
+## Zmiana decyzji: treści piszemy sami (2026-08-07)
+
+Decyzja z 27.07 („treści pisze dostawca") **wycofana**. Powód: zderzenie z materiałem. Argument
+„jakość tekstu na PBN nie przekłada się na wartość linku" pozostaje słuszny, ale dotyczył pisania
+od zera — tutaj szkielet był gotowy, więc poprawiamy, nie piszemy. Rozstrzygający był tekst 5:
+zmyślony „przepis" przypisujący agencji importowej odpowiedzialność za zgłoszenia celne, stojący
+obok linku do nas. Oddanie tego do poprawki ich agentom AI oznaczałoby kolejną rundę weryfikacji.
+
+Napisane u nas, w odwzorowanym formacie dostawcy (pola `Tytuł`/`Opis`/`Content`, sekcje
+`quick-facts`/`answer-first-box`/`intro`/`qa`/`sources`, JSON-LD FAQPage + HowTo, stopka
+`+Reklama+`). Zmierzone parametry: 1900–2109 słów (ich zakres 1976–2336), 10–13 H2, 6 H3,
+1 tabela, JSON-LD parsowalny we wszystkich dziesięciu, 9 źródeł zewnętrznych — każde sprawdzone
+HTTP-em. Przypisanie anchor → URL zachowane 1:1.
+
+Konkrety oparte na taksonomii serwisu (292 termy `make`, 2717 termów `serie`) — mapa koncernów
+z submarkami, modele SUV i pick-up z oferty. Fakty świeże zweryfikowane wyszukiwarką: Mercedes
+wyszedł z Denzy całkowicie IX 2024 (BYD 100%), Zeekr przejął 51% Lynk &amp; Co II 2025.
+
+Pliki: `docs/seo/seosklep24-teksty-2026-08-07/`.
+
+**2026-08-07 11:04 — wysłane do dostawcy** przez Janka (`RE:` na wątek zam. 44516), z archiwum
+ZIP i prośbą o publikację bez modyfikacji treści. W mailu zgłoszone: nieistniejące podstawy
+prawne, martwe linki źródłowe, link 404 w naszej domenie, brak nazw marek w trzech tekstach oraz
+informacja, że ich wysyłka wpada w filtry antyspamowe (prośba o archiwum lub link zamiast
+dziesięciu załączników).
+
+Świadomie **nie** wypunktowano wszystkich dziewięciu zmyślonych danych rynkowych ani nie użyto
+słowa „halucynacje" — celem jest publikacja, nie spór. Nie żądano zwrotu ani rabatu: usługą jest
+publikacja linków i tę otrzymujemy.
+
+**Otwarte:** pula źródeł w naszych tekstach liczy 9 adresów i powtarzają się między artykułami
+(PZPM i IEA po 6×). Do rozważenia poszerzenie do kilkunastu, dobranych tematycznie — ten sam
+rodzaj wspólnego odcisku, który zarzuciliśmy dostawcy przy identycznych szkieletach.
+
+Stan: czekamy na publikację. Przy odbiorze sprawdzamy, czy opublikowano nasze wersje bez zmian
+**oraz czy każdy anchor trafił pod właściwy URL**.
 
 ## Pomiar
 

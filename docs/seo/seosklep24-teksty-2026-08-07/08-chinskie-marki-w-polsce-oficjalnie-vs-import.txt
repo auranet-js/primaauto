@@ -1,0 +1,174 @@
+Tytuł: Chińskie marki aut w Polsce: oficjalnie czy z importu
+
+Opis:Które chińskie marki mają w Polsce salony i serwis, a które trzeba sprowadzić indywidualnie. Lista marek, różnice w gwarancji i wsparciu posprzedażowym.
+
+Content:<section class="quick-facts">
+<h2>Najważniejsze w skrócie</h2>
+<ul>
+<li>Kilkanaście chińskich marek ma w Polsce dystrybutora i sieć dealerską — największe z nich to MG, BYD oraz para Omoda i Jaecoo.</li>
+<li>Zdecydowana większość chińskich marek nie jest w Polsce obecna oficjalnie i dostępna jest wyłącznie z importu.</li>
+<li>Różnica dotyczy nie samego auta, lecz gwarancji, serwisu i dostępu do części — samochód jest ten sam.</li>
+<li>Lista marek oficjalnych zmienia się co kilka miesięcy, dlatego status warto sprawdzać na bieżąco.</li>
+</ul>
+</section>
+
+<section class="intro">
+<p>Podział chińskich marek na obecne w Polsce oficjalnie i te sprowadzane indywidualnie ma znaczenie praktyczne, ale nie takie, jakie zwykle mu się przypisuje. Nie chodzi o jakość samochodu — auto tej samej marki i modelu jest identyczne niezależnie od kanału. Chodzi o to, kto odpowiada za gwarancję, gdzie wykonywane będą naprawy i jak długo czeka się na część.</p>
+<p>Poniżej znajduje się aktualny podział na trzy kategorie wraz z nazwami marek, a po nim opis tego, co realnie zmienia się w zależności od tego, w której kategorii znajduje się interesujący nas samochód.</p>
+</section>
+
+<h2>Marki z siecią dealerską w Polsce</h2>
+<p>Ta grupa rozrosła się w ostatnich latach z jednej marki do kilkunastu, a łączna liczba punktów sprzedaży przekroczyła sto osiemdziesiąt.</p>
+<p><strong>MG</strong> jest najstarszym stażem i największą pod względem sprzedaży chińską marką na polskim rynku. Należy do koncernu SAIC, ma brytyjski rodowód i najszerszą sieć serwisową spośród chińskich producentów.</p>
+<p><strong>BYD</strong> wszedł do Polski z własną strukturą dystrybucji i oferuje pełną gamę: elektryki oraz hybrydy plug-in w segmentach od miejskiego po duże SUV-y.</p>
+<p><strong>Omoda i Jaecoo</strong> to para marek koncernu Chery stworzona specjalnie na rynki eksportowe. W Polsce rozwinęły sieć bardzo szybko i należą do najlepiej sprzedających się chińskich marek.</p>
+<p><strong>Leapmotor</strong> korzysta z sieci dealerskiej Stellantisa, co dało marce dostęp do infrastruktury, jakiej samodzielnie nie zbudowałaby przez lata.</p>
+<p><strong>Dongfeng</strong> rozpoczął sprzedaż pod własną marką, oferując modele elektryczne w segmencie miejskim i kompaktowym.</p>
+<p>Do tej grupy należą też <strong>BAIC</strong>, <strong>Forthing</strong> oraz <strong>Chery</strong> sprzedające część modeli pod własną nazwą. W segmencie użytkowym obecny jest <strong>Maxus</strong>, również z grupy SAIC.</p>
+
+<h2>Marki obecne w Europie, w Polsce dopiero wchodzące</h2>
+<p>To kategoria najbardziej płynna i to w niej najłatwiej o nieaktualną informację. Marki z tej grupy mają dystrybucję w części krajów europejskich — najczęściej w Skandynawii, Niemczech lub Holandii — a w Polsce są na etapie wchodzenia albo obecne przez pojedynczych importerów.</p>
+<p>Należą tu między innymi <strong>Zeekr</strong>, <strong>NIO</strong>, <strong>XPeng</strong>, <strong>Hongqi</strong>, <strong>Lynk &amp; Co</strong> oraz <strong>Denza</strong>, która weszła na rynki europejskie jako marka premium grupy BYD. Status każdej z nich potrafi zmienić się w ciągu kilku miesięcy, dlatego przy konkretnym zakupie jedynym wiarygodnym źródłem jest sprawdzenie u dystrybutora, czy dany model jest objęty gwarancją realizowaną w Polsce.</p>
+
+<h2>Marki dostępne wyłącznie z importu</h2>
+<p>Największa grupa — i to w niej znajduje się większość tego, co na chińskim rynku wewnętrznym uchodzi za najciekawsze.</p>
+<p>Należą tu marki technologiczne, których w Europie nie ma w ogóle: <strong>AITO</strong> i <strong>Luxeed</strong> tworzone we współpracy z Huawei, <strong>Li Auto</strong> specjalizujące się w konstrukcjach z przedłużaczem zasięgu, <strong>Xiaomi</strong>, które weszło do motoryzacji w 2024 roku, <strong>Avatr</strong> prowadzony przez Changan wspólnie z CATL i Huawei oraz <strong>IM Motors</strong> z grupy SAIC.</p>
+<p>Dalej marki segmentu terenowego i SUV-owego: <strong>Tank</strong> z grupy Great Wall, <strong>Jetour</strong> i <strong>Exeed</strong> z grupy Chery, <strong>Voyah</strong> — premium koncernu Dongfeng, <strong>Deepal</strong> z Changan oraz <strong>iCAR</strong>. Do tego marki luksusowe BYD: <strong>Yangwang</strong> i <strong>Fangchengbao</strong>.</p>
+<p>Ta lista pokazuje skalę zjawiska: chiński rynek wewnętrzny jest wielokrotnie szerszy niż to, co producenci kierują na eksport. Przeglądając zestawienie, w którym zebrane są <a href="https://primaauto.com.pl/marki/">lista chińskich marek aut</a> wraz z modelami, łatwo zauważyć, że marki dostępne w polskich salonach to niewielki wycinek całości.</p>
+<table>
+<thead>
+<tr><th>Kategoria</th><th>Marki</th><th>Gwarancja i serwis</th></tr>
+</thead>
+<tbody>
+<tr><td>Sieć dealerska w Polsce</td><td>MG, BYD, Omoda, Jaecoo, Leapmotor, Dongfeng, BAIC, Forthing, Chery, Maxus</td><td>Gwarancja dystrybutora, serwis autoryzowany, części z magazynu krajowego</td></tr>
+<tr><td>Wchodzące na rynek polski</td><td>Zeekr, NIO, XPeng, Hongqi, Lynk &amp; Co, Denza</td><td>Zależne od etapu — do sprawdzenia u dystrybutora dla konkretnego modelu</td></tr>
+<tr><td>Wyłącznie import</td><td>AITO, Li Auto, Xiaomi, Avatr, Voyah, Tank, Jetour, Exeed, Deepal, iCAR, Luxeed, IM Motors, Yangwang, Fangchengbao</td><td>Gwarancja i serwis organizowane indywidualnie</td></tr>
+</tbody>
+</table>
+
+<h2>Co realnie zmienia kanał zakupu</h2>
+<p><strong>Gwarancja.</strong> Przy marce z dystrybutorem gwarancja jest realizowana w sieci autoryzowanej, na standardowych warunkach. Przy imporcie gwarancji producenta zwykle nie da się wyegzekwować poza rynkiem macierzystym — jej miejsce zajmuje gwarancja pośrednika lub warsztatu, o zakresie wynikającym z umowy. To nie jest gorsze rozwiązanie z definicji, ale trzeba wiedzieć, co dokładnie obejmuje.</p>
+<p><strong>Serwis.</strong> Marka oficjalna ma stacje z dostępem do diagnostyki producenta i procedur naprawczych. Przy imporcie serwis trzeba zorganizować: znaleźć warsztat z uprawnieniami do pracy przy układach wysokiego napięcia i doświadczeniem w danej konstrukcji. W przypadku popularnych modeli chińskich takie warsztaty w Polsce już istnieją.</p>
+<p><strong>Części.</strong> Przy marce oficjalnej część zamawia się z magazynu krajowego lub europejskiego. Przy imporcie sprowadza się ją z Chin, co wydłuża czas naprawy — szczególnie przy elementach nadwozia i optyce. To jest realna różnica i najczęstsza przyczyna rozczarowania osób, które nie wzięły jej pod uwagę.</p>
+<p><strong>Oprogramowanie i usługi.</strong> Modele przygotowane na rynek europejski mają lokalizację językową, mapy europejskie i działające usługi połączone. Egzemplarz z rynku chińskiego może mieć system w języku chińskim, mapy przypisane do Chin oraz aplikację producenta wymagającą konta zakładanego na chiński numer telefonu. Podstawowe funkcje pojazdu działają niezależnie, ale zakres udogodnień bywa węższy — i jest to różnica, o której trzeba wiedzieć przed zakupem, nie po odbiorze.</p>
+<p><strong>Rejestracja.</strong> Auto marki oficjalnej kupione w polskim salonie ma pełną homologację europejską. Egzemplarz sprowadzony z chińskiego rynku wewnętrznego przechodzi dopuszczenie jednostkowe pojazdu, prowadzone przez Dyrektora Transportowego Dozoru Technicznego. Obie ścieżki kończą się rejestracją, ale druga jest dłuższa.</p>
+
+<h2>Jak samodzielnie sprawdzić status marki</h2>
+<p>Ponieważ lista zmienia się co kilka miesięcy, warto znać sposób weryfikacji zamiast polegać na zestawieniach, które szybko się dezaktualizują. Trzy kroki wystarczą.</p>
+<p><strong>Krok pierwszy: strona producenta w wersji polskiej.</strong> Marka obecna oficjalnie prowadzi polskojęzyczną stronę z cennikiem, konfiguratorem i wyszukiwarką dealerów. Sama strona w języku angielskim, kierowana na rynek europejski ogólnie, oznacza zwykle, że Polska nie jest jeszcze objęta dystrybucją.</p>
+<p><strong>Krok drugi: lista punktów serwisowych.</strong> Nie sama lista salonów, lecz serwisów. Zdarza się, że marka rozpoczyna sprzedaż wcześniej, niż buduje zaplecze serwisowe, a to właśnie serwis decyduje o realnej wykonalności gwarancji.</p>
+<p><strong>Krok trzeci: pytanie o gwaranta wprost.</strong> Przy konkretnej ofercie warto zapytać, kto jest podmiotem odpowiedzialnym za gwarancję i w jakiej sieci będą realizowane naprawy. Odpowiedź konkretna — z nazwą podmiotu — oznacza oficjalny kanał. Odpowiedź ogólna zwykle oznacza sprzedaż spoza sieci, co samo w sobie nie jest wadą, ale zmienia zakres tego, na co można liczyć.</p>
+
+<h2>Porównanie kosztów: salon kontra import</h2>
+<p>Zestawienie obu ścieżek wymaga liczenia całości, nie ceny wywoławczej. Przy zakupie w salonie cena obejmuje samochód z homologacją europejską, gwarancją i dostępem do serwisu — nie dochodzą żadne dodatkowe opłaty poza rejestracyjnymi.</p>
+<p>Przy imporcie do ceny pojazdu w Chinach dochodzą: transport morski, ubezpieczenie ładunku, opłaty portowe, obsługa agencji celnej, cło w stawce 10%, VAT importowy 23%, akcyza zależna od napędu, tłumaczenia przysięgłe, badanie techniczne, dopuszczenie jednostkowe oraz ewentualne prace dostosowawcze i wynagrodzenie pośrednika. To długa lista i właśnie dlatego porównywanie ceny chińskiej z polską ceną salonową prowadzi do fałszywych wniosków.</p>
+<p>Import wychodzi korzystniej w dwóch przypadkach: gdy model nie jest w Polsce oferowany w ogóle albo gdy chodzi o wersję wyposażeniową lub napędową niedostępną w europejskiej konfiguracji. Przy modelu dostępnym w salonie w porównywalnej specyfikacji różnica zwykle nie uzasadnia dodatkowego czasu i formalności.</p>
+<p>Warto też uwzględnić rzecz trudną do wyceny: przy aucie z oficjalnej sieci odsprzedaż jest prostsza, bo kolejny nabywca nie musi organizować sobie serwisu. Przy egzemplarzu z importu ten sam problem, który rozwiązywaliśmy przy zakupie, przechodzi na następnego właściciela — i on to w cenie uwzględni.</p>
+
+<h2>Kiedy import mimo wszystko ma sens</h2>
+<p>Odpowiedź jest prosta: wtedy, gdy poszukiwanego modelu w polskiej ofercie nie ma. Dotyczy to trzech sytuacji.</p>
+<p>Pierwsza to marki nieobecne w Europie w ogóle — jeśli ktoś chce AITO, Li Auto czy Avatr, import jest jedyną drogą. Druga to modele, których producent nie kieruje na europejski rynek, mimo że sama marka jest tu obecna. Trzecia to wersje wyposażeniowe lub napędowe niedostępne w europejskiej konfiguracji, w tym konstrukcje z przedłużaczem zasięgu, które w Chinach są powszechne, a w Europie występują śladowo.</p>
+<p>Jeśli natomiast interesujący model stoi w polskim salonie, a różnica ceny nie jest znacząca — argumenty za importem słabną, bo do ceny trzeba doliczyć czas i konieczność samodzielnego zorganizowania zaplecza serwisowego.</p>
+
+<h2>W którą stronę zmierza ta lista</h2>
+<p>Podział opisany wyżej jest zdjęciem stanu, a nie stanem trwałym. Kierunek zmian da się jednak przewidzieć na podstawie tego, co producenci już robią.</p>
+<p>Pierwszy czynnik to cła wyrównawcze wprowadzone przez Unię Europejską na samochody elektryczne importowane z Chin. Ich skutkiem jest przenoszenie produkcji na teren Unii — BYD buduje fabrykę na Węgrzech, inni producenci rozważają podobne kroki. Auto wyprodukowane w Unii nie podlega tym cłom, co zmienia rachunek ekonomiczny i sprzyja rozszerzaniu oficjalnej dystrybucji.</p>
+<p>Drugi to kolejność wchodzenia na rynki. Producenci zaczynają od krajów o wysokim udziale samochodów elektrycznych, potem obejmują rynki większe. Polska, jako jeden z większych rynków w regionie, pojawia się w tych planach coraz wcześniej — stąd tempo, w jakim rośnie liczba punktów dealerskich.</p>
+<p>Trzeci to partnerstwa z europejskimi koncernami, których przykładem jest Leapmotor korzystający z sieci Stellantisa. Ten model pozwala wejść na rynek bez budowania własnej infrastruktury i prawdopodobnie będzie powielany.</p>
+<p>Praktyczny wniosek dla kupującego: marka, która dziś dostępna jest wyłącznie z importu, za rok może mieć salon w Polsce — i odwrotnie, obecność w Europie nie gwarantuje wejścia do Polski. Dlatego przy konkretnym zakupie zawsze rozstrzyga stan bieżący, nie zestawienie sprzed kilku miesięcy.</p>
+
+<section class="qa">
+<h2>Pytania i odpowiedzi</h2>
+
+<h3>Ile chińskich marek jest w Polsce oficjalnie?</h3>
+<p>Kilkanaście, a liczba rośnie z każdym rokiem. Najbardziej rozpoznawalne to MG, BYD oraz Omoda i Jaecoo, a łączna liczba punktów sprzedaży chińskich marek w Polsce przekroczyła sto osiemdziesiąt. To wciąż niewielki wycinek chińskiego rynku, na którym działa kilkadziesiąt marek.</p>
+
+<h3>Czy auto z importu można normalnie zarejestrować?</h3>
+<p>Tak. Pojazd z chińskiego rynku wewnętrznego przechodzi dopuszczenie jednostkowe pojazdu, po którym rejestruje się go standardowo w wydziale komunikacji. Procedura jest dłuższa niż przy aucie z homologacją europejską, ale rutynowa.</p>
+
+<h3>Czy przy imporcie mam jakąkolwiek gwarancję?</h3>
+<p>Gwarancji producenta zwykle nie da się wyegzekwować poza rynkiem macierzystym. W praktyce funkcjonuje gwarancja pośrednika lub warsztatu, o zakresie opisanym w umowie. Warto ją przeczytać przed zakupem i sprawdzić, co obejmuje w zakresie baterii i układu wysokiego napięcia.</p>
+
+<h3>Czy części do chińskich aut są trudno dostępne?</h3>
+<p>Przy markach z siecią dealerską — nie, zamawia się je jak do każdego innego samochodu. Przy imporcie części eksploatacyjne są zwykle dostępne bez problemu, natomiast elementy nadwozia i optyka wymagają sprowadzenia z Chin, co wydłuża naprawę. To najczęstsza realna niedogodność importu.</p>
+
+<h3>Skąd wiadomo, czy oferta pochodzi z oficjalnej sieci?</h3>
+<p>Rozstrzyga wskazanie podmiotu odpowiedzialnego za gwarancję i miejsca wykonywania napraw. Oferta z oficjalnej sieci wskazuje dystrybutora i konkretne warunki gwarancyjne. Ogólne sformułowania bez wskazania gwaranta zwykle oznaczają sprzedaż spoza sieci.</p>
+
+<h3>Dlaczego niektóre marki są w Europie, a nie ma ich w Polsce?</h3>
+<p>Producenci wchodzą na rynki etapami, zaczynając zwykle od krajów o wysokim udziale sprzedaży aut elektrycznych — Norwegii, Holandii czy Niemiec. Polska pojawia się w kolejnych falach ekspansji. Dlatego marka może mieć salony w Oslo i nie mieć ich w Warszawie, mimo że model jest ten sam.</p>
+</section>
+
+<section class="sources">
+<h2>Źródła</h2>
+<ul>
+<li><a href="https://www.pzpm.org.pl/Publikacje/Raporty" rel="nofollow noopener noreferrer">PZPM — raporty rynku motoryzacyjnego w Polsce</a></li>
+<li><a href="https://www.tdt.gov.pl/" rel="nofollow noopener noreferrer">Transportowy Dozór Techniczny — dopuszczenie jednostkowe pojazdu</a></li>
+<li><a href="https://www.gov.pl/web/gov/zarejestruj-pojazd-sprowadzony-z-zagranicy" rel="nofollow noopener noreferrer">gov.pl — rejestracja pojazdu sprowadzonego z zagranicy</a></li>
+</ul>
+</section>
+
+<p>Podział na marki oficjalne i importowane nie mówi nic o jakości samochodu — mówi o tym, kto stoi za gwarancją i jak szybko przyjedzie część. W polskich salonach dostępny jest dziś wycinek chińskiej oferty obejmujący kilkanaście marek, podczas gdy sam rynek chiński liczy ich kilkadziesiąt. Import ma sens tam, gdzie poszukiwanego modelu w tym wycinku nie ma — pod warunkiem, że zaplecze serwisowe zostanie zaplanowane przed zakupem, a nie przy pierwszej usterce.</p>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Ile chińskich marek jest w Polsce oficjalnie?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Kilkanaście, a liczba rośnie z każdym rokiem. Najbardziej rozpoznawalne to MG, BYD oraz Omoda i Jaecoo, a łączna liczba punktów sprzedaży chińskich marek w Polsce przekroczyła sto osiemdziesiąt."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Czy auto z importu można normalnie zarejestrować?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Tak. Pojazd z chińskiego rynku wewnętrznego przechodzi dopuszczenie jednostkowe pojazdu, po którym rejestruje się go standardowo w wydziale komunikacji. Procedura jest dłuższa niż przy aucie z homologacją europejską, ale rutynowa."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Czy przy imporcie mam jakąkolwiek gwarancję?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Gwarancji producenta zwykle nie da się wyegzekwować poza rynkiem macierzystym. W praktyce funkcjonuje gwarancja pośrednika lub warsztatu, o zakresie opisanym w umowie."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Czy części do chińskich aut są trudno dostępne?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Przy markach z siecią dealerską nie. Przy imporcie części eksploatacyjne są zwykle dostępne, natomiast elementy nadwozia i optyka wymagają sprowadzenia z Chin, co wydłuża naprawę."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Skąd wiadomo, czy oferta pochodzi z oficjalnej sieci?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Rozstrzyga wskazanie podmiotu odpowiedzialnego za gwarancję i miejsca wykonywania napraw. Oferta z oficjalnej sieci wskazuje dystrybutora i konkretne warunki gwarancyjne."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Dlaczego niektóre marki są w Europie, a nie ma ich w Polsce?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Producenci wchodzą na rynki etapami, zaczynając zwykle od krajów o wysokim udziale sprzedaży aut elektrycznych. Polska pojawia się w kolejnych falach ekspansji."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+
++Reklama+
