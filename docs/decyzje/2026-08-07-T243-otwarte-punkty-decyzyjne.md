@@ -9,6 +9,11 @@
 >
 > Wszystkie cztery są **niezależne od odpowiedzi Ruslana** na instrukcję dostępów — można je
 > rozstrzygnąć w dowolnym momencie, także zanim odpisze.
+>
+> **Aktualizacja 07.08:** D-1 i D-3 dostały swoją pozycję godzinową w kolejce jako
+> **faza T-243h — czujnik kanału FB + baseline kosztu, 2–3 h realnie / 5–8 h rynkowo**.
+> Suma T-243 po dodaniu: **89–119 h realnie / 225–300 h rynkowo**. Decyzja dotyczy teraz
+> tego, **czy i kiedy fazę h wykonać**, a nie czy ją wycenić.
 
 ---
 

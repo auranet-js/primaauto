@@ -79,6 +79,10 @@ footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line);
 <thead><tr><th>Data</th><th>Praca</th><th class="num">Godziny [h]</th></tr></thead>
 <tbody>
 <tr>
+<td class="data-col">07.08.2026</td>
+<td><strong>Plan automatycznej dystrybucji materiałów na kanały społecznościowe</strong> <div class="opis">Rozpoznanie i plan wykonawczy dla obiegu, w którym zdjęcia i filmy z sesji na placu trafiają na wszystkie kanały bez ręcznego klikania: wskazujesz auto w panelu, a system przygotowuje gotowe posty z ceną w tytule, opisem, hashtagami i linkiem do konkretnej oferty, i wstawia je do kalendarza jako zaplanowane — do zatwierdzenia, zmiany albo skasowania przed publikacją. Przy okazji policzyliśmy, ile poszczególne kanały realnie dowożą: przez ostatnie 90 dni Facebook przysłał 1 310 wejść i 30 kontaktów, czyli dokładnie tyle, co płatna kampania remarketingowa — tyle że za darmo. Sprawdziliśmy też publiczny rejestr reklam Meta i wiemy już na pewno, że osoba, która przejęła konto w czerwcu, nigdy nie użyła Waszej strony do reklam — chodziło jej o konto rozliczeniowe, nie o Waszych obserwujących. Powstał komplet dokumentów: opis rozwiązania z podziałem na osiem etapów i wyceną, instrukcja uporządkowania dostępów do kont wysłana do Prima-Auto oraz rejestr decyzji do podjęcia.</div></td>
+<td class="num">4</td></tr>
+<tr>
 <td class="data-col">06.08.2026</td>
 <td><strong>Numer VIN w umowie i aneks do umowy</strong> <div class="opis">Dwie zmiany składające się na jeden obieg dla aut, przy których numer VIN poznajemy dopiero po weryfikacji. Po pierwsze: umowa bierze teraz VIN wyłącznie z pola w zamówieniu. Wcześniej system podstawiał numer z ogłoszenia, przez co wyczyszczone pole nie miało skutku — numer wracał do dokumentu przy każdej regeneracji, a zapis karty zamówienia (choćby po zmianie prowizji) po cichu utrwalał niezweryfikowany numer sprzedającego. Numer z oferty jest teraz pokazany obok pola, opisany jako niezweryfikowany, z przyciskiem „Wstaw”. Po drugie: aneks uzupełniający VIN powstaje w panelu, a nie ręcznie poza systemem — przycisk „Generuj aneks VIN” w sekcji dokumentów, aktywny dopiero gdy w zamówieniu jest pełny, siedemnastoznakowy numer. Dokument ma szatę umowy, mieści się na jednej stronie i odwołuje się do numeru oraz daty umowy; obsługuje oba wzorce (pośrednictwo i leasing). Samo wygenerowanie nie wysyła nic — mail z aneksem w załączniku wychodzi dopiero po świadomym przestawieniu znacznika na „wysłany”. Przy okazji umowa pośrednictwa bez VIN-u zapowiada teraz aneks zamiast drukować kreskę, a ucięte numery z chińskich ogłoszeń przestały wchodzić do dokumentów. Umowy z wpisanym VIN-em wyglądają dokładnie jak dotąd — potwierdzone porównaniem wygenerowanych plików co do znaku.</div></td>
 <td class="num">9</td></tr>
@@ -183,7 +187,7 @@ footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line);
 <td><strong>Reklamy dynamiczne Google (DSA) — celowanie w najtańsze oferty</strong> <div class="opis">Feed reklam przestawiony ze stron modeli na najtańszą aktualną ofertę każdego modelu, z automatyczną codzienną aktualizacją. Do tego nowa treść reklamy (wymiana jednej z dwóch kreacji).</div></td>
 <td class="num">3</td></tr>
 </tbody>
-<tfoot><tr><td colspan="2">Razem od spotkania 16.07.2026</td><td class="num">106</td></tr></tfoot>
+<tfoot><tr><td colspan="2">Razem od spotkania 16.07.2026</td><td class="num">110</td></tr></tfoot>
 </table>
 
 </section>
@@ -233,8 +237,8 @@ Drugi powód, dla którego to się liczy: materiał trzeba najpierw opublikować
 
 Do tego jedna wspólna strona z podglądem: co poszło na który kanał, co czeka w kolejce, co się nie udało i jak to zadziałało. Dziś tego widoku nie ma nigdzie.
 
-Podział na siedem etapów. Pierwszy — uporządkowanie dostępów do kont — jest po Waszej stronie i blokuje resztę; instrukcja jest gotowa. Wersja, która realnie zdejmuje ręczną robotę na Facebooku i Instagramie, to 57–75 godzin; YouTube, TikTok, podgląd wyników i rotacja dochodzą po kolei.</div><div class="skala">Status: spec i instrukcja dostępów gotowe — czeka na uporządkowanie uprawnień do kont</div></td>
-<td class="num">87–116</td></tr>
+Podział na osiem etapów. Pierwszy — uporządkowanie dostępów do kont — jest po Waszej stronie i blokuje resztę; instrukcja jest gotowa. Osobny, mały etap to czujnik pilnujący, czy ruch z Facebooka nie zamarł — bo dziś nikt nas o tym nie powiadomi. Wersja, która realnie zdejmuje ręczną robotę na Facebooku i Instagramie, to 57–75 godzin; YouTube, TikTok, podgląd wyników i rotacja dochodzą po kolei.</div><div class="skala">Status: spec i instrukcja dostępów gotowe — czeka na uporządkowanie uprawnień do kont</div></td>
+<td class="num">89–119</td></tr>
 <tr>
 <td><strong>T-121 — Płatność online (BLIK/karta) za depozyt rezerwacyjny</strong> <span class='rozmiar'>skala: duża</span><div class="opis">Klient wpłaca depozyt zwrotny od razu w kreatorze — kodem BLIK wpisanym wprost na naszej stronie albo kartą, Google Pay, Apple Pay i przelewem online przez operatora płatności. Ustalenie z 27.07: przycisk płatności pojawia się już po potwierdzeniu zamówienia, czyli PRZED umową — dzięki temu klient wiąże się wcześniej, a my możemy jechać sprawdzić konkretny egzemplarz i wystawić umowę od razu z numerem VIN. Pod przyciskiem informacja, że zgłoszenia z opłaconym depozytem realizujemy w pierwszej kolejności, oraz odnośnik do strony wyjaśniającej depozyt. Zwykły przelew zostaje jako alternatywa. Kwota pobierana jest ta zamrożona na zamówieniu, więc nie rozjedzie się z umową ani z mailem. Ustalenie z 06.08: BLIK obsługujemy bez wychodzenia ze strony — klient wpisuje sześciocyfrowy kod u nas i potwierdza w aplikacji banku. Przy niemal ośmiu na dziesięć wizyt z telefonu to najkrótsza możliwa droga; przekierowanie na stronę operatora jest w tym miejscu najbardziej zawodne, bo dochodzi przeskakiwanie między przeglądarką a aplikacją banku. Platforma nie ma sklepu internetowego, więc mechanizm płatności piszemy w całości, choć miejsce wpięcia w proces zamówienia jest już przygotowane.</div><div class="skala">Status: odblokowane — dane produkcyjne operatora płatności są od 06.08, zgoda na przyjmowanie zwrotnych depozytów załatwiona; pakiet wykonawczy gotowy 06.08, budowa może ruszyć</div></td>
 <td class="num">27–36</td></tr>
@@ -308,7 +312,7 @@ Podział na siedem etapów. Pierwszy — uporządkowanie dostępów do kont — 
 <td><strong>T-214 — Ujednolicenie i wzmocnienie stron modeli (hubów) pod frazy zakupowe</strong> <span class='rozmiar'>skala: średnia</span><div class="opis">Strony modeli to nasza najmocniejsza broń w Google — stoją na 1.-2. miejscu na frazy typu 'zeekr 9x cena'. Przegląd 14.07 wykazał trzy luki do domknięcia. (1) 34 z 302 stron modeli ma słabszy nagłówek — brakuje w nim słów 'cena w Polsce', bo powstały po ostatnim ujednoliceniu i nie dostały automatycznie tego dopisku; wśród nich ważne modele: Zeekr 9X, Zeekr 8X, Denza Z9 GT. (2) Strona modelu BAW wyświetla się w Google jako 'Beijing' zamiast 'BAW' — a to marka, której szuka 1300 osób miesięcznie; podobnie Zeekr 8X ma zbędny dopisek 'PHEV' rozmywający dopasowanie. (3) Strony modeli opisują wersje słownie, ale nie podają ceny osobno dla każdej wersji (np. 'Ultra od 426 tys.') — dane już mamy, wystarczy je pokazać. Pracujemy ostrożnie, pojedynczo, z pomiarem przed i po (strony z 1. miejsca mają najwięcej do stracenia), bo nadrzędna zasada brzmi: nie zepsuć tego, co już rankuje.</div><div class="skala">Status: znaleziska zapisane (docs/seo/znaleziska-huby-2026-07-14); wymaga pilota + progów wycofania z T-203-baseline</div></td>
 <td class="num">11–14</td></tr>
 </tbody>
-<tfoot><tr><td>Razem pełna lista (widełki)</td><td class="num">664–866</td></tr></tfoot>
+<tfoot><tr><td>Razem pełna lista (widełki)</td><td class="num">666–869</td></tr></tfoot>
 </table>
 </section>
 </div>
