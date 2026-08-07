@@ -250,6 +250,16 @@
    "tytul": "Indywidualne strony modeli tam, gdzie mamy własne materiały",
    "opis": "Wszystkie 317 stron modeli powstaje dziś z jednego szablonu i jest odświeżanych automatycznie — ceny, liczba sztuk i parametry aktualizują się same, bo oferta rotuje codziennie. To jest zaleta, ale zamyka drogę do ręcznego dopracowania pojedynczej strony: przy najbliższym automatycznym przebiegu taka praca zostałaby nadpisana. Modele, przy których mamy własne zdjęcia, filmy i materiały wideo, zasługują na bogatsze potraktowanie niż reszta katalogu, więc do rozstrzygnięcia zostaje, jak pogodzić jedno z drugim: dane mają dalej rotować automatem, a warstwa opisowa i zdjęciowa pozostać nietknięta. Ile takich stron ma sens i ile to kosztuje, będziemy wiedzieć po pierwszym przebiegu na Leopardzie 5.",
    "status": "kierunek do rozstrzygnięcia — wycena po pierwszym przebiegu na Leopardzie 5"
+  },
+  {
+   "id": "T-243",
+   "tytul": "Automatyczna dystrybucja zdjęć i filmów na wszystkie kanały społecznościowe",
+   "opis": "Po każdej sesji na placu powstaje komplet materiałów: zdjęcia każdego auta i filmy w dwóch kadrach, poziomym i pionowym. Dziś opublikowanie ich to robota ręczna — ktoś musi wymyślić tytuł, opis i hashtagi, dobrać właściwy kadr do platformy i wrzucić plik osobno na Facebooka, Instagrama, YouTube'a i TikToka. Przy sesji z dziesięcioma autami to kilka godzin klikania, a część materiałów nigdy nie wychodzi. Na Facebooku posty powstają ręcznie do dziś.\n\nPo zmianie wskazujesz auto w panelu i dostajesz gotowy komplet postów na wszystkie kanały — z ceną w tytule, opisem, hashtagami i linkiem prowadzącym wprost do tej oferty. Materiały z nowej sesji zgłaszają się same, z folderu na Dysku. Posty trafiają do kalendarza jako zaplanowane, więc widzisz je z wyprzedzeniem i możesz je zmienić, przesunąć albo skasować, zanim się ukażą — nic nie publikuje się bez Twojej wiedzy. System pilnuje też rytmu: nie wypuści dwóch postów o tym samym aucie pod rząd, a w tygodniach bez nowych dostaw sam zaproponuje powtórkę wcześniejszych ofert w nowym ujęciu, żeby kanały nie milczały.\n\nDrugi powód, dla którego to się liczy: materiał trzeba najpierw opublikować, żeby móc go promować. Film wgrany na YouTube można wypromować kampanią wideo, post na Facebooku można podbić, rolkę na TikToku wypuścić w reklamę. Post, którego nie ma, nie jest kandydatem do promocji. Dziś każda taka publikacja kosztuje osobną sesję pracy, więc materiał z sesji trafia do reklam w ułamku.\n\nDo tego jedna wspólna strona z podglądem: co poszło na który kanał, co czeka w kolejce, co się nie udało i jak to zadziałało. Dziś tego widoku nie ma nigdzie.\n\nPodział na siedem etapów. Pierwszy — uporządkowanie dostępów do kont — jest po Waszej stronie i blokuje resztę; instrukcja jest gotowa. Wersja, która realnie zdejmuje ręczną robotę na Facebooku i Instagramie, to 57–75 godzin; YouTube, TikTok, podgląd wyników i rotacja dochodzą po kolei.",
+   "status": "spec i instrukcja dostępów gotowe — czeka na uporządkowanie uprawnień do kont",
+   "realnie_od": 87,
+   "realnie_do": 116,
+   "rynkowo_od": 220,
+   "rynkowo_do": 292
   }
  ],
  "todo_ukryte_id": [
