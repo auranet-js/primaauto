@@ -73,6 +73,10 @@ Pełny zapis: memory `reference_stara_strona_fb_zywy_kanal.md`. Skrót:
 
 ## 5. Otwarte decyzje Janka — nierozstrzygnięte na koniec sesji
 
+> **Rejestr z opcjami i rekomendacjami: `docs/decyzje/2026-08-07-T243-otwarte-punkty-decyzyjne.md`**
+> (D-1…D-4, każdy z pustym polem „Decyzja" do uzupełnienia). Poniżej skrót.
+> Wszystkie cztery są **niezależne od odpowiedzi Ruslana** — można je rozstrzygnąć wcześniej.
+
 1. **Czujnik ruchu z Facebooka** — cron tygodniowy na Organic Social w GA4, alarm gdy się
    załamie. 1–2 h wzorcem `run-job.sh`. Uzasadnienie: nikt tej Strony nie pilnuje, jedyne
    co możemy, to zauważyć w porę, gdyby przestała działać. **Dorzucić do T-243 jako osobną
