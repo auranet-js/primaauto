@@ -47,7 +47,8 @@ oauth, tokens, cfg = load(); at = refresh(oauth, tokens)
 CID='9506068500'
 H={"Authorization":f"Bearer {at}","developer-token":cfg['developer_token'],
    "login-customer-id":cfg['mcc_customer_id'],"Content-Type":"application/json"}
-r=urllib.request.Request(f'https://googleads.googleapis.com/v21/customers/{CID}/googleAds:search',
+VER=cfg.get('api_version','v25')  # wersja z ads-config.json — NIE hardkoduj (v21 sunset 08.2026)
+r=urllib.request.Request(f'https://googleads.googleapis.com/{VER}/customers/{CID}/googleAds:search',
   data=json.dumps({'query':"""SELECT dynamic_search_ads_search_term_view.search_term,
    dynamic_search_ads_search_term_view.landing_page, metrics.impressions, metrics.clicks
    FROM dynamic_search_ads_search_term_view WHERE campaign.id = 23896725555
