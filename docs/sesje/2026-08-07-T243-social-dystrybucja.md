@@ -111,7 +111,14 @@ Zasada wspólna dla 1, 3 i 4: **nie podawaj inferencji jako faktu i nie sprzedaw
 jako tropu.** Heurystyka Janka, którą sformułował dwa razy tego dnia: *gdyby dostęp wrócił,
 człowiek już by o tym wiedział.*
 
-## 7. Prompt do nowego wątku (skopiuj)
+## 7. Prompty wykonawcze podtasków
+
+**`docs/sesje/2026-08-07-T243-PROMPT-WYKONAWCZY.md`** — gotowe prompty per podtask plus drzewo
+gałęzi zależne od tego, co odpisze Ruslan (A: Meta odblokowana · B: YouTube · C: TikTok ·
+D: stare portfolio wróciło · E: cisza). Kluczowa obserwacja: **pięć z ośmiu faz nie czeka
+na nikogo — bez ani jednej odpowiedzi da się zbudować 62–83 h roboty.**
+
+## 8. Prompt do nowego wątku (skopiuj)
 
 ```
 Kontynuujemy T-243 — dystrybucja treści na kanały społecznościowe dla primaauto. Przeczytaj:
@@ -119,8 +126,11 @@ Kontynuujemy T-243 — dystrybucja treści na kanały społecznościowe dla prim
 - docs/roadmapa/T-243-social-dystrybucja-tresci.md (spec: architektura, fazy, godziny)
 - memory: reference_stara_strona_fb_zywy_kanal.md (wątek starej Strony FB — ZAMKNIĘTY)
 
-Instrukcja dostępów poszła do Ruslana 07.08. Zanim cokolwiek zaproponujesz, zapytaj mnie,
-co odpisał — od tego zależy, czy ruszamy fazę e (dystrybucja), czy tylko b/c/d.
+- docs/sesje/2026-08-07-T243-PROMPT-WYKONAWCZY.md (gotowe prompty podtasków + drzewo gałęzi)
+
+Instrukcja dostępów poszła do Ruslana 07.08. Zapytaj mnie, co odpisał, i dobierz gałąź
+z pakietu wykonawczego. Jeśli nie odpisał — NIE czekamy: pięć z ośmiu faz jest niezależnych,
+ruszamy ścieżką domyślną (h → d → c → b).
 
 Na koniec poprzedniej sesji zostały cztery moje decyzje nierozstrzygnięte (sekcja 5):
 czujnik ruchu z FB, kolejność faz, koszt kontaktu RMKT vs Facebook, API Biblioteki Reklam.
