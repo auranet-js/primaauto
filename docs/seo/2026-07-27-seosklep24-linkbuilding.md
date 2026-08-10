@@ -179,6 +179,50 @@ rodzaj wspólnego odcisku, który zarzuciliśmy dostawcy przy identycznych szkie
 Stan: czekamy na publikację. Przy odbiorze sprawdzamy, czy opublikowano nasze wersje bez zmian
 **oraz czy każdy anchor trafił pod właściwy URL**.
 
+## Odbiór publikacji — 2026-08-10
+
+Dostawca zrealizował zamówienie **2026-08-08 14:15**. Raport z listą adresów udostępniony w panelu
+`panel.seosklep24.pl` (zlecenie 23304, login `js@auranet.com.pl`, dane w mailu z 07.08 14:40).
+Panel deklarował rozłożenie na 5 dni z zakończeniem 12.08, ale komplet 10 publikacji był gotowy
+już 08.08.
+
+**Opublikowano nasze wersje, nie tekst dostawcy** — porównanie zdanie po zdaniu (12 próbek
+losowanych deterministycznie z każdego pliku) daje 11–12 trafień na 12 w każdym artykule.
+Tytuły zgodne z naszymi. Reklamacja z 07.08 poskutkowała w całości.
+
+| # | URL publikacji | Anchor | Cel | HTTP | `rel` |
+|---|---|---|---|---:|---|
+| 1 | autogalant.pl/import-aut-z-chin-krok-po-kroku-model-rejestracja/ | import aut z chin | `/` | 200 | brak |
+| 2 | dskrakow.pl/import-z-chin-vs-zakup-w-europie-proces-i-formalnosci | import samochodów z chin | `/` | 200 | brak |
+| 3 | mszczesniak.pl/auta-z-chin-w-polsce-wyposazenie-i-technologie | auta z chin | `/` | 200 | brak |
+| 4 | colina.pl/samochody-z-chin-ev-phev-erev-czy-spalinowy | samochody z chin | `/` | 200 | brak |
+| 5 | magnaflow.pl/rola-agencji-importowej-przy-aucie-z-chin | Prima-Auto | `/` | 200 | brak |
+| 6 | autogaz-lodz.pl/chinskie-marki-samochodow-liczace-sie-globalnie | chińskie marki samochodów | `/marki/` | 200 | brak |
+| 7 | auto-nostalgia.pl/chinskie-marki-premium-denza-hongqi-zeekr-lynk-co | marki chińskich samochodów | `/marki/` | 200 | brak |
+| 8 | auto-elektryczne.pl/chinskie-marki-aut-w-polsce-oficjalnie-czy-z-importu.html | lista chińskich marek aut | `/marki/` | 200 | brak |
+| 9 | farinapruszkow.pl/chinskie-marki-aut-byd-geely-chery-i-saic | chińskie marki aut | `/marki/` | 200 | brak |
+| 10 | landworld.pl/chinskie-suv-y-i-pick-upy-przeglad-marek-i-modeli | marki samochodów z Chin | `/marki/` | 200 | brak |
+
+Wszystkie domeny na `https://www.` poza landworld.pl (bez `www`).
+
+**Rozkład 5/5 dotrzymany co do anchora i adresu docelowego.** Wszystkie linki **dofollow** —
+żaden nie ma atrybutu `rel`, sprawdzone parserem na źródle HTML, nie na oko.
+
+Poprawione względem wersji dostawcy: JSON-LD parsuje się bez błędu (backticki zniknęły), FAQPage
+obecny w każdym artykule, HowTo w tekście o imporcie krok po kroku, **zdjęcia wgrane** — 8–9 na
+artykuł (u nich było zero mimo wysłania). Objętość live 2142–3357 słów wraz z nawigacją serwisu.
+
+**Defekt hosta: farinapruszkow.pl.** Sam artykuł działa poprawnie, natomiast strona główna
+serwisu renderuje surowy kod shortcodów motywu (`[tdc_zone type="tdc_content"][vc_row]...`)
+zamiast treści. Około 19:40 tego samego dnia **cała domena** zwracała błąd krytyczny WordPressa
+(HTTP 500, także dla Googlebota) i podniosła się w ciągu kilkunastu minut. Certyfikat SSL nie
+obejmuje wariantu `www` (curl zwraca błąd weryfikacji peera). Zgłoszone dostawcy mailem — bez
+żądania wymiany, bo link żyje i jest dofollow; chodzi o sygnał, że serwis jest zaniedbany.
+
+Metoda weryfikacji: `docs/seo/seosklep24-teksty-2026-08-07/` porównane z pobranym HTML-em
+publikacji (normalizacja białych znaków, próbki zdań 60–180 znaków), linki wyciągnięte regexem
+z atrybutami `href`/`rel`, JSON-LD przepuszczony przez parser.
+
 ## Pomiar
 
 Po publikacji: zebrać listę URL-i artykułów, sprawdzić `rel` na linkach (dofollow/nofollow),
