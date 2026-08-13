@@ -21,16 +21,19 @@
  *   wp eval-file scripts/che168-domknij-luke.php --pages=10 --status=draft
  */
 
-$opt = ['apply' => false, 'pages' => 6, 'limit' => 0, 'status' => null];
+$opt = ['apply' => false, 'pages' => 6, 'limit' => 0, 'status' => null, 'marks' => null];
 foreach ((array) ($args ?? []) as $a) {
     if ($a === '--apply') $opt['apply'] = true;
     elseif (preg_match('/^--pages=(\d+)$/', (string) $a, $m)) $opt['pages'] = (int) $m[1];
     elseif (preg_match('/^--limit=(\d+)$/', (string) $a, $m)) $opt['limit'] = (int) $m[1];
     elseif (preg_match('/^--status=(publish|draft)$/', (string) $a, $m)) $opt['status'] = $m[1];
+    elseif (preg_match('/^--marks=(.+)$/', (string) $a, $m)) $opt['marks'] = array_map('trim', explode(',', trim($m[1], "\"' ")));
 }
 
 $cfg   = get_option('asiaauto_import_config', [])['che168'] ?? [];
-$marks = (array) ($cfg['marks'] ?? []);
+// --marks zawęża i USTALA KOLEJNOŚĆ przelotu (przy --limit decyduje, co wejdzie najpierw).
+// Filtry Ruslana zostają nietknięte — marka spoza konfiguracji i tak nie przejdzie isAllowedByConfig().
+$marks = $opt['marks'] ?: (array) ($cfg['marks'] ?? []);
 if (!$marks) { echo "Brak marek w filtrach che168 — nic do roboty.\n"; return; }
 
 // Status importu bierzemy z tego samego źródła prawdy co sync, by kanały się nie rozjechały.
