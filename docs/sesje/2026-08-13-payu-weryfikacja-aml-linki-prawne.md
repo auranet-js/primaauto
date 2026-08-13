@@ -82,18 +82,36 @@ Zweryfikowane curl-em: `/informacje/regulamin/`, `/regulamin-uslugi/`, `/polityk
 
 ---
 
+## 3a. Maksymalny czas realizacji — dopisany (20 dni roboczych)
+
+Ruslan podał 20 dni roboczych (ustalone przez Janka 13.08). Dodane jako ust. 3 w §2
+„Depozyt i płatności" strony `/regulamin-uslugi/` (post 390645):
+
+> **Maksymalny czas realizacji zamówienia: 20 dni roboczych** od dnia zaksięgowania Depozytu.
+> W tym terminie Usługodawca wykonuje czynności objęte zamówieniem, tj. zmierzające do
+> rezerwacji i zakupu wskazanego samochodu. Termin importu, transportu oraz wydania samochodu
+> wynika z odrębnej umowy zawieranej z Klientem.
+
+**Dlaczego ostatnie zdanie jest konieczne:** kreator pokazuje klientowi „szac. czas dostawy
+120 dni", więc bez rozgraniczenia regulamin obiecywałby dostawę auta w 4 tygodnie. Zamówienie
+opłacane online to **depozyt** i uruchomienie czynności rezerwacyjno-zakupowych — zgodnie z §4
+wzorca umowy („warunkiem rozpoczęcia przez Zleceniobiorcę czynności zmierzających do rezerwacji,
+zakupu lub importu Samochodu jest wpłata depozytu"). Termin importu pozostaje w umowie.
+
+Kopia poprzedniej treści strony: scratchpad sesji, `regulamin-uslugi-390645.bak-2026-08-13.html`.
+
+---
+
 ## 4. Co zostało
 
-**Brakuje jednego wymogu PayU: maksymalnego czasu realizacji zamówienia w dniach roboczych.**
-Dziś §1 `/regulamin-uslugi/` odsyła terminy do indywidualnej umowy. Proponowane brzmienie
-(czeka na liczbę od Ruslana — kreator pokazuje „szac. 120 dni", ale to szacunek kalendarzowy
-transportu, a PayU chce maksimum, którego Ruslan jest gotów bronić):
+**Lista wymagań PayU po naszej stronie jest domknięta.** Regulamin ma politykę zwrotów (§3)
+i reklamacji (§5, 14 dni), adres kontaktowy, maksymalny czas realizacji (20 dni roboczych),
+pełne dane firmy (§1); polityka prywatności wskazuje administratora danych; wszystkie trzy
+dokumenty są dostępne ze stopki na każdej podstronie.
 
-> Usługa realizowana jest w terminie do **X dni roboczych** od dnia zaksięgowania Depozytu.
-> Szczegółowy termin określa umowa zawierana z Klientem.
-
-**Po stronie Ruslana:** skan dokumentu w Panelu Menedżerskim + odpowiedź do Karoliny Rogalskiej
-z bezpośrednimi linkami do trzech dokumentów. Info dla niego wysłane Jankowi mailem 13.08.
+**Zostaje wyłącznie po stronie Ruslana:** skan karty pobytu albo dokumentu PESEL w Panelu
+Menedżerskim + odpowiedź do Karoliny Rogalskiej z bezpośrednimi linkami do trzech dokumentów.
+Info dla niego wysłane Jankowi mailem 13.08.
 
 **Płatności pozostają wyłączone** (`asiaauto_payu_enabled = 0`, tryb `prod`) do zakończenia
 weryfikacji. Klient widzi przelew tradycyjny. Włączenie = jedna opcja.
