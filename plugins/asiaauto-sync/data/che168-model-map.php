@@ -26,14 +26,22 @@ return array (
     'title_eu' => 'BYD Song L DM-i',
     'slug' => 'song-l-dm-i',
   ),
-  // UWAGA: che168 trzyma DM-i i (ewentualne) EV pod jednym '海豹06' — override jest
-  // engine-agnostyczny i celuje w wariant DM-i (dominujący w danych 2026-07).
+  // che168 trzyma DM-i i EV pod jednym '海豹06'. Domyślny wariant = DM-i (dominujący),
+  // EV rozstrzygane przez `by_engine` (T-222, 2026-07-30 — wcześniej 2 oferty EV wpadły do huba DM-i).
   'BYD|海豹06' =>
   array (
     'mark_eu' => 'BYD',
     'serie_eu' => 'Seal 6 DM-i',
     'title_eu' => 'BYD Seal 6 DM-i',
     'slug' => 'seal-6-dm-i',
+    'by_engine' => array (
+      'electric' => array (
+        'mark_eu' => 'BYD',
+        'serie_eu' => 'Seal 6 EV',
+        'title_eu' => 'BYD Seal 6',
+        'slug' => 'seal-6-ev',
+      ),
+    ),
   ),
   'BYD|海豹06 DM-i旅行版' =>
   array (
@@ -79,14 +87,23 @@ return array (
     'title_eu' => 'BYD Leopard 5 (Denza B5)',
     'slug' => 'leopard-5',
   ),
-  // UWAGA: override ślepy na napęd (klucz=mark|model). Mapuje na PHEV; wariant EV (Dreamer EV)
-  //        wymagałby rozróżnienia po engine_type — do dorobienia, gdy pojawi się EV Dreamer.
+  // che168 trzyma PHEV i EV pod jednym 'Dreamer'. Domyślny = PHEV (dominujący, 41 ofert),
+  // EV rozstrzygane przez `by_engine` (2026-07-31 — pierwszy EV Dreamer, oferta 398795
+  // 岚图梦想家 2025款 EV 四驱尊贵鲲鹏版, wpadł do huba PHEV).
   'VOYAH|Dreamer' =>
   array (
     'mark_eu' => 'Voyah',
     'serie_eu' => 'Dream PHEV',
     'title_eu' => 'Voyah Dream PHEV',
     'slug' => 'dream-phev',
+    'by_engine' => array (
+      'electric' => array (
+        'mark_eu' => 'Voyah',
+        'serie_eu' => 'Dream EV',
+        'title_eu' => 'Voyah Dream EV',
+        'slug' => 'dream-ev',
+      ),
+    ),
   ),
   // 2026-07-27: BŁĄD DANYCH auto-api — dla 岚图追光 (Voyah Passion) pole `model` zwraca
   //             dosłownie "Zeekr" (obca marka). Zweryfikowane katalogiem: specid 59292 =
@@ -138,26 +155,58 @@ return array (
     'title_eu' => 'Changan CS75 Plus',
     'slug' => 'cs75-plus',
   ),
+  // che168 trzyma DM-i i EV pod jednym 'Han'. Domyślny = DM-i (dominujący, 52 oferty),
+  // EV rozstrzygane przez `by_engine` (T-222, 2026-07-30).
   'BYD|Han' =>
   array (
     'mark_eu' => 'BYD',
     'serie_eu' => 'Han DM-i',
     'title_eu' => 'BYD Han',
     'slug' => 'han-dm-i',
+    'by_engine' => array (
+      'electric' => array (
+        'mark_eu' => 'BYD',
+        'serie_eu' => 'Han EV',
+        'title_eu' => 'BYD Han EV',
+        'slug' => 'han-ev',
+      ),
+    ),
   ),
-  'BYD|Qin L' => 
+  // che168 trzyma EV i DM-i pod jednym 'Qin L'. Domyślny = EV, DM-i rozstrzygane przez
+  // `by_engine` (2026-08-10 — wcześniej 2 oferty DM-i wpadły do huba EV; che168 podaje dla nich
+  // displacement 1.5 i ice_power_kw 74, więc engine_type 'plug-in hybrid' jest wiarygodny).
+  'BYD|Qin L' =>
   array (
     'mark_eu' => 'BYD',
     'serie_eu' => 'Qin L EV',
     'title_eu' => 'BYD Qin L EV',
     'slug' => 'qin-l-ev',
+    'by_engine' => array (
+      // Klucz PO normalizacji enum-mapy ('plug-in hybrid' → 'phev') — patrz engineKey().
+      'phev' => array (
+        'mark_eu' => 'BYD',
+        'serie_eu' => 'Qin L DM-i',
+        'title_eu' => 'BYD Qin L',
+        'slug' => 'qin-l-dm-i',
+      ),
+    ),
   ),
-  'BYD|Qin PLUS' => 
+  // che168 trzyma DM-i i EV pod jednym 'Qin PLUS'. Domyślny = DM-i, EV przez `by_engine`
+  // (2026-08-10 — wcześniej 1 oferta EV wpadła do huba DM-i).
+  'BYD|Qin PLUS' =>
   array (
     'mark_eu' => 'BYD',
     'serie_eu' => 'Qin Plus DM-i',
     'title_eu' => 'BYD Qin Plus DM-i',
     'slug' => 'qin-plus-dm-i',
+    'by_engine' => array (
+      'electric' => array (
+        'mark_eu' => 'BYD',
+        'serie_eu' => 'Qin PLUS EV',
+        'title_eu' => 'BYD Qin PLUS',
+        'slug' => 'qin-plus-ev',
+      ),
+    ),
   ),
   'Changan|CS55PLUS' => 
   array (
@@ -173,12 +222,22 @@ return array (
     'title_eu' => 'Changan UNI-V',
     'slug' => 'uni-v',
   ),
-  'Denza|Denza D9' => 
+  // che168 trzyma DM-i i EV pod jednym 'Denza D9'. Domyślny = DM-i, EV przez `by_engine`
+  // (2026-08-10 — wcześniej 1 oferta EV wpadła do huba DM-i).
+  'Denza|Denza D9' =>
   array (
     'mark_eu' => 'Denza',
     'serie_eu' => 'D9 DM-i',
     'title_eu' => 'Denza D9 DM-i',
     'slug' => 'd9-dm-i',
+    'by_engine' => array (
+      'electric' => array (
+        'mark_eu' => 'Denza',
+        'serie_eu' => 'D9 EV',
+        'title_eu' => 'Denza D9 EV',
+        'slug' => 'd9-ev',
+      ),
+    ),
   ),
   'Denza|Denza Z9' => 
   array (
@@ -187,12 +246,23 @@ return array (
     'title_eu' => 'Denza Z9 DM-i',
     'slug' => 'z9-dm-i',
   ),
-  'Denza|Denza Z9GT' => 
+  // che168 trzyma DM-i i EV pod jednym 'Denza Z9GT' (rocznik 2026 ma 5 wersji: 2 PHEV + 3 EV).
+  // Domyślny = DM-i, EV przez `by_engine` (2026-08-10, zgłoszenie Ruslana — wcześniej 2 oferty EV
+  // wpadły do huba DM-i; che168 podaje dla nich displacement 0.0 i puste ice_power_kw).
+  'Denza|Denza Z9GT' =>
   array (
     'mark_eu' => 'Denza',
     'serie_eu' => 'Z9 GT DM-i',
     'title_eu' => 'Denza Z9 GT DM-i',
     'slug' => 'z9-gt-dm-i',
+    'by_engine' => array (
+      'electric' => array (
+        'mark_eu' => 'Denza',
+        'serie_eu' => 'Z9 GT EV',
+        'title_eu' => 'Denza Z9 GT EV',
+        'slug' => 'z9-gt-ev',
+      ),
+    ),
   ),
   // USUNIĘTY 2026-07-27: override 'Denza|腾势N8L' → serie_eu 'N8L' short-circuitował krok 0
   // resolveChe168() i nie dopuszczał do kroku 3 (warianty napędu). Efekt: che168 budował
@@ -336,12 +406,23 @@ return array (
     'title_eu' => 'Volkswagen CC',
     'slug' => 'cc',
   ),
-  'Volkswagen|Jetta' => 
+  'Volkswagen|Jetta' =>
   array (
     'mark_eu' => 'Volkswagen',
     'serie_eu' => 'Jetta',
     'title_eu' => 'Volkswagen Lavida Jetta',
     'slug' => 'jetta',
+  ),
+  // che168 podaje goły 'Passat' — bez override algorytm tworzyl sierote 'Passat' (parent=0,
+  // URL /model/passat/ zamiast /samochody/volkswagen/passat/). Wersja chinska = Passat CN,
+  // hub zasiedlony (brand-mapping 'Volkswagen|Passat CN'). PHEV ma wlasny hub Passat New Energy,
+  // wiec rozbicie po napedzie nie jest tu potrzebne. (2026-08-10)
+  'Volkswagen|Passat' =>
+  array (
+    'mark_eu' => 'Volkswagen',
+    'serie_eu' => 'Passat CN',
+    'title_eu' => 'Volkswagen Passat CN',
+    'slug' => 'passat-cn',
   ),
   'Volvo|S60' => 
   array (
@@ -705,13 +786,34 @@ return array (
   // NIE w nazwę termu-sieroty — inaczej oferty che168 wylądowałyby w innym hubie niż
   // te same modele z dongchedi. Wersje rozstrzygnięte po param_93 (车型名称), nie „na oko".
 
-  // 海狮06 2025款 DM-i → brand-mapping 'BYD|Haishi 06 DM'
+  // che168 nazywa BYD 夏 (Xia) jako '比亚迪M9' — nazwa dealerska, nie modelowa (param_93 mowi
+  // „夏 2025款"). Bez override algorytm robil sierote 'm9-2' z nazwa CJK „比亚迪M9", obok
+  // zasiedlonego huba 'Xia Summer' (5 ofert, content + rework v1). Uwaga: hub 'M9' (#5304)
+  // nalezy do AITO — zbieznosc nazw pozorna. (2026-08-10)
+  'BYD|比亚迪M9' =>
+  array (
+    'mark_eu' => 'BYD',
+    'serie_eu' => 'Xia Summer',
+    'title_eu' => 'BYD Xia',
+    'slug' => 'xia-summer',
+  ),
+  // 海狮06 2025款 DM-i → brand-mapping 'BYD|Haishi 06 DM'. che168 trzyma DM-i i EV pod jednym
+  // '海狮06'; domyślny = DM-i, EV przez `by_engine` (2026-08-10 — wcześniej 2 oferty EV wpadły
+  // do huba DM-i). Hub docelowy: brand-mapping 'BYD|Sea Lion 06EV'.
   'BYD|海狮06' =>
   array (
     'mark_eu' => 'BYD',
     'serie_eu' => 'Sealion 6 DM',
     'title_eu' => 'BYD Sealion 6',
     'slug' => 'sealion-6-dm',
+    'by_engine' => array (
+      'electric' => array (
+        'mark_eu' => 'BYD',
+        'serie_eu' => 'Sealion 6 EV',
+        'title_eu' => 'BYD Sealion 6',
+        'slug' => 'sealion-6-ev',
+      ),
+    ),
   ),
   // → brand-mapping 'BYD|Haishi 05 EV'
   'BYD|海狮05 EV' =>
@@ -721,13 +823,24 @@ return array (
     'title_eu' => 'BYD Sealion 5',
     'slug' => 'sealion-5-ev',
   ),
-  // 汉L 2025款 EV — sprawdzone na wszystkich 3 sztukach z sondy, każda EV (nie DM).
+  // che168 trzyma EV i DM pod jednym '汉L' (łacińskie 'Han L' idzie algorytmem sufiksów i
+  // rozpoznaje napęd samo — CJK-owy klucz trafiał tu i short-circuitował). Domyślny = EV
+  // (28 ofert, sonda widziała 3/3 EV), DM rozstrzygane przez `by_engine` (2026-07-31 —
+  // oferta 399083 汉L 2025款 DM-p wpadła do huba EV).
   'BYD|汉L' =>
   array (
     'mark_eu' => 'BYD',
     'serie_eu' => 'Han L EV',
     'title_eu' => 'BYD Han L EV',
     'slug' => 'han-l-ev',
+    'by_engine' => array (
+      'phev' => array (
+        'mark_eu' => 'BYD',
+        'serie_eu' => 'Han L DM',
+        'title_eu' => 'BYD Han L',
+        'slug' => 'han-l-dm',
+      ),
+    ),
   ),
   // 唐新能源 2025款 DM-i 115KM → Tang DM-i (32 listingi). UWAGA: to NIE Sealion 8 —
   // Sealion 8 to Tang L, osobny model z własnymi termami.
@@ -764,12 +877,25 @@ return array (
   ),
   // 宋PLUS新能源 2025款 EV 520km → brand-mapping 'BYD|Song PLUS EV' (5 listingów).
   // che168 skraca 宋PLUS新能源 do 'PLUS New Energy' (ten sam wzorzec co 'L EV'/'L DM-i').
+  // che168 trzyma EV i DM-i pod jednym '宋PLUS新能源' (skracanym do 'PLUS New Energy').
+  // Domyślny = EV, DM-i rozstrzygane przez `by_engine` → hub eksportowy „Seal U DM-I (Song Plus)"
+  // (T-222, 2026-07-30 — wcześniej 3 oferty DM-i wpadły do huba EV).
   'BYD|PLUS New Energy' =>
   array (
     'mark_eu' => 'BYD',
     'serie_eu' => 'Song PLUS EV',
     'title_eu' => 'BYD Song PLUS EV',
     'slug' => 'song-plus-ev',
+    'by_engine' => array (
+      // Klucz PO normalizacji enum-mapy ('plug-in hybrid' → 'phev'); surowa nazwa z che168
+      // nigdy tu nie dociera. (2026-07-31 — wpis z 30.07 był martwy przez ten rozjazd.)
+      'phev' => array (
+        'mark_eu' => 'BYD',
+        'serie_eu' => 'Seal U DM-I (Song Plus)',
+        'title_eu' => 'BYD Seal U DM-i',
+        'slug' => 'seal-u-dm-i',
+      ),
+    ),
   ),
   // Zasiedlony term 'Li Auto MEGA' (8 listingów) — świadomie łamie konwencję serie-bez-marki
   // (L6/L7/i6), bo hub już ma content; nowy 'MEGA' rozbiłby podaż na dwa huby.
@@ -955,5 +1081,121 @@ return array (
     'serie_eu' => '10 EM-P',
     'title_eu' => 'Lynk & Co 10 EM-P',
     'slug' => '10-em-p',
+  ),
+
+  // --- GAC Hyptec (2026-07-28). Wyjątek od reguły „klucz z CJK": che168 zwraca tę markę
+  // już zlatynizowaną, i to STARĄ nazwą — mark='Hyper', model='HT' (potwierdzone getOffer
+  // dla inner_id 58784725). Klucze MUSZĄ zostać w formie 'Hyper|*', bo tak przychodzą z API;
+  // nazwy EU po stronie wartości to Hyptec (uzasadnienie wolumenami: brand-mapping sekcja v6.8).
+  // Bez aliasu oferta wypadała jako sierota — ręczny import z panelu nie ma guarda mapowania
+  // (sync ma: isMappedForImport), więc surowe mark/model utworzyły osobną markę „Hyper".
+  // Sygnatury mark_eu|serie_eu dodane równolegle w brand-mapping-v6.1.php — bez nich alias martwy.
+  'Hyper|HT' =>
+  array (
+    'mark_eu' => 'GAC',
+    'serie_eu' => 'Hyptec HT',
+    'title_eu' => 'GAC Hyptec HT',
+    'slug' => 'hyptec-ht',
+  ),
+  'Hyper|HL' =>
+  array (
+    'mark_eu' => 'GAC',
+    'serie_eu' => 'Hyptec HL',
+    'title_eu' => 'GAC Hyptec HL',
+    'slug' => 'hyptec-hl',
+  ),
+  'Hyper|GT' =>
+  array (
+    'mark_eu' => 'GAC',
+    'serie_eu' => 'Hyptec GT',
+    'title_eu' => 'GAC Hyptec GT',
+    'slug' => 'hyptec-gt',
+  ),
+  'Hyper|SSR' =>
+  array (
+    'mark_eu' => 'GAC',
+    'serie_eu' => 'Hyptec SSR',
+    'title_eu' => 'GAC Hyptec SSR',
+    'slug' => 'hyptec-ssr',
+  ),
+  'Hyper|A800' =>
+  array (
+    'mark_eu' => 'GAC',
+    'serie_eu' => 'Hyptec A800',
+    'title_eu' => 'GAC Hyptec A800',
+    'slug' => 'hyptec-a800',
+  ),
+
+  // === v6.8 / 2026-07-29 — zaciąg ręczny 28.07: klucze w formie che168 ===
+  'Mercedes-Benz|EQE SUV' =>
+  array (
+    'mark_eu' => 'Mercedes-Benz',
+    'serie_eu' => 'EQE SUV',
+    'title_eu' => 'Mercedes-Benz EQE SUV',
+    'slug' => 'eqe-suv',
+  ),
+  'Foton|Foton Mars' =>
+  array (
+    'mark_eu' => 'Foton',
+    'serie_eu' => 'Tunland V9',
+    'title_eu' => 'Foton Tunland V9',
+    'slug' => 'tunland-v9',
+  ),
+  'Foton|V New Energy' =>
+  array (
+    'mark_eu' => 'Foton',
+    'serie_eu' => 'Toano Da V',
+    'title_eu' => 'Foton Toano Da V',
+    'slug' => 'toano-da-v',
+  ),
+  '大通|V70' =>
+  array (
+    'mark_eu' => 'Maxus',
+    'serie_eu' => 'V70',
+    'title_eu' => 'Maxus V70',
+    'slug' => 'v70',
+  ),
+  '大通|Interstellar' =>
+  array (
+    'mark_eu' => 'Maxus',
+    'serie_eu' => 'Interstellar',
+    'title_eu' => 'Maxus Interstellar',
+    'slug' => 'interstellar',
+  ),
+  '大通|G90' =>
+  array (
+    'mark_eu' => 'Maxus',
+    'serie_eu' => 'G90',
+    'title_eu' => 'Maxus G90',
+    'slug' => 'g90',
+  ),
+  'Mengshi|Mengshi 917' =>
+  array (
+    'mark_eu' => 'Dongfeng',
+    'serie_eu' => 'M-Hero 917',
+    'title_eu' => 'Dongfeng M-Hero 917',
+    'slug' => 'm-hero-917',
+  ),
+  '华东汽车|华东牌商务车' =>
+  array (
+    'mark_eu' => 'Toyota',
+    'serie_eu' => 'Sienna',
+    'title_eu' => 'Toyota Sienna',
+    'slug' => 'sienna',
+  ),
+
+  // --- 2026-08-15: Exeed VX (Lanyue) ---
+  // Che168 wysyła model w CJK ('星途揽月C-DM'), a '星途' nie ma w $cnPrefix resolveChe168(),
+  // więc lookup umierał na kroku "model nadal z CJK" → sierota. Brand-mapping trzyma tę parę
+  // wyłącznie w formie dongchedi ('Exeed|Exeed Lanyue C-DM'), w którą che168 nigdy nie trafi.
+  // Sync odrzucał ofertę guardem, ale ręczny import guarda nie ma → oferta 417885 (14.08)
+  // założyła duplikat huba 'Lanyue C-DM'. sigToKey() przepisuje entry z powrotem na klucz
+  // brand-mappingu, więc importer trafia w istniejący hub /samochody/exeed/vx/.
+  'Exeed|星途揽月C-DM' =>
+  array (
+    'mark_eu' => 'Exeed',
+    'serie_eu' => 'VX (Lanyue)',
+    'title_eu' => 'Exeed VX',
+    'slug' => 'vx',
   ),
 );
