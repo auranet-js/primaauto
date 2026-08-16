@@ -55,33 +55,57 @@ poniżej okazały się niewystarczające.
 
 ## Plan
 
-### Krok 1 — dolać to, co da się dolać od ręki (~38 ofert)
+### Krok 1 — dolać to, co da się dolać od ręki — WYKONANE 16.08
 
 ```
 cd ~/domains/primaauto.com.pl/public_html
-wp eval-file ~/projekty/primaauto/scripts/merge-spec-from-twin.php        # 16 ofert
-php ~/projekty/primaauto/scripts/dolej-spec-z-banku.php 100 0 apply       # 22 oferty
+wp eval-file ~/projekty/primaauto/scripts/merge-spec-from-twin.php apply   # 22 oferty, +303 pola śr.
+php ~/projekty/primaauto/scripts/dolej-spec-z-banku.php 100 0 apply        # 8 ofert,  +321 pól śr.
 ```
 
-Oba mają dry-run (`DRY=1` / brak `apply`) — przed każdym biegiem warto zobaczyć listę.
+Razem **30 ofert** uzupełnionych. Bank dał mniej niż w dry-runie (8 zamiast 22), bo bliźniak
+załatał część celów wcześniej — kolejność „najpierw bliźniak, potem bank" jest właściwa.
 
-### Krok 2 — odświeżyć bank
+⚠️ **Oba skrypty wymagają jawnego `apply`** — bez tego robią dry-run i kończą się komunikatem
+o sukcesie, który łatwo wziąć za zapis. `merge-spec-from-twin.php` czyta flagę z `$args`,
+nie z `DRY=1`, mimo tego co mówi jego własny nagłówek. Po biegu weryfikuj w bazie
+(`_asiaauto_spec_inherited_at`), a nie po komunikacie.
 
-Bank powstał **29.07 i od tego czasu nie był przebudowany**. Wszystko, co weszło bogate po tej
-dacie, nie jest dawcą. Przebudowa `zbuduj-bank-specyfikacji.php` podniesie trafialność kroku 1
-bez żadnego kontaktu z API.
+### Krok 2 — ~~odświeżyć bank~~ NIE ROBIĆ TEGO
 
-### Krok 3 — domknąć pętlę cronem
+⚠️ **Sprawdzone na produkcji 16.08 — przebudowa bank NISZCZY, nie wzbogaca.**
 
-Dziś w cronie jest wyłącznie dolewanie z banku (04:45, 100/dobę). Brakuje dwóch ogniw:
-przebudowy banku i dolewania z bliźniaka. Docelowo nocna sekwencja:
+`zbuduj-bank-specyfikacji.php` buduje bank **od zera** z ofert żywych (`publish`, ≥ 200 pól)
+i nadpisuje pliki marek. Nie scala z tym, co już w banku jest. Efekt biegu 16.08:
 
 ```
-przebuduj bank  →  dolej z bliźniaka  →  dolej z banku
+przed:  933 warianty
+po:     574 warianty   (ubyło 367, przybyło 8)
 ```
 
-Do decyzji: czy dokładamy to jako osobne wpisy w crontab (przez `~/bin/cron-install`), czy jeden
-skrypt-orkiestrator. Bez tego kroku chudy zapas trzeba łatać ręcznie po każdym większym zaciągu.
+Wypadły warianty z ofert w międzyczasie wygaszonych — czyli **dokładnie to, po co bank
+powstał**: „odcina los danych od losu ogłoszenia" (komentarz w nagłówku samego skryptu).
+Bank przywrócony z `~/backups/primaauto/2026-08-16/spec-bank-przed-przebudowa.tar.gz`,
+wynik nieudanej przebudowy leży obok w `uploads/asiaauto/spec-bank.po-przebudowie-2026-08-16/`.
+
+Wniosek: **bank przebudowujemy wyłącznie skryptem, który scala** (dziś takiego nie ma).
+Przed każdym uruchomieniem `zbuduj-bank-specyfikacji.php` — tar katalogu i porównanie liczby
+wariantów po biegu.
+
+### Krok 3 — domknąć pętlę cronem (ODŁOŻONE, decyzja Janka 16.08: „cron potem")
+
+Dziś w cronie jest wyłącznie dolewanie z banku (04:45, 100/dobę). Brakuje dolewania z bliźniaka —
+a to ono dowozi najwięcej (22 vs 8 ofert w biegu 16.08). Docelowa nocna sekwencja:
+
+```
+dolej z bliźniaka  →  dolej z banku
+```
+
+Przebudowy banku w tej sekwencji **nie ma** i być nie może, dopóki skrypt nie scala (patrz krok 2).
+
+Do decyzji przy uruchamianiu: osobny wpis w crontab (przez `~/bin/cron-install`) czy jeden
+skrypt-orkiestrator. Bez tego chudy zapas trzeba łatać ręcznie po każdym większym zaciągu —
+a przy wznowionym imporcie z dongchedi przyrasta ~30–40 ofert na 2 h.
 
 ### Krok 4 — reszta, czyli ~155 ofert bez dawcy
 
@@ -99,6 +123,16 @@ kroku 3. Zanim to nastąpi, karty mają szkielet techniczny, bez listy wyposaże
 Jeśli któryś model jest ważny sprzedażowo teraz, dwa wyjścia: opis ręczny Ruslana (wtedy narzędzia
 go nie ruszą — pomijają wpisy ręczne) albo punktowe scalenie z bliźniaka che168
 (`merge-spec-from-dongchedi-twin.php` działa w drugą stronę, ale wzorzec ten sam).
+
+## Stan po biegu 16.08
+
+| źródło | chude (< 100 pól) | zdrowe | razem `publish` |
+|---|---|---|---|
+| dongchedi | 74 | 829 | 903 |
+| che168 | 145 | 1161 | 1306 |
+
+Chude dongchedi to w większości sztuki, które weszły **po** uzupełnieniu — import trwa, więc
+dopóki nie ma kroku 3, każdy zaciąg odtwarza ogon na nowo.
 
 ## Do rozstrzygnięcia
 
