@@ -92,20 +92,36 @@ Wniosek: **bank przebudowujemy wyłącznie skryptem, który scala** (dziś takie
 Przed każdym uruchomieniem `zbuduj-bank-specyfikacji.php` — tar katalogu i porównanie liczby
 wariantów po biegu.
 
-### Krok 3 — domknąć pętlę cronem (ODŁOŻONE, decyzja Janka 16.08: „cron potem")
+### Krok 3 — domknąć pętlę cronem — WYKONANE 16.08
 
-Dziś w cronie jest wyłącznie dolewanie z banku (04:45, 100/dobę). Brakuje dolewania z bliźniaka —
-a to ono dowozi najwięcej (22 vs 8 ofert w biegu 16.08). Docelowa nocna sekwencja:
+Nocna sekwencja jest kompletna:
 
 ```
-dolej z bliźniaka  →  dolej z banku
+04:25  gaszenie martwych ofert
+04:35  dolewanie z bliźniaka   ← NOWY WPIS
+04:45  dolewanie z banku
 ```
+
+Wpis dodany przez `~/bin/cron-install` (backup: `~/backups/crontab/crontab-2026-08-16-170834.bak`):
+
+```
+35 4 * * * /bin/bash -lc 'cd /home/host476470/domains/primaauto.com.pl/public_html && \
+  wp eval-file /home/host476470/projekty/primaauto/scripts/merge-spec-from-twin.php apply' \
+  >> /home/host476470/.claude/merge-spec-twin.log 2>&1
+```
+
+Wybrany osobny wpis, nie skrypt-orkiestrator: dwa kroki są niezależne (bliźniak = WP-CLI, bank =
+czysty PHP), a rozdzielone wpisy dają osobne logi i osobne wyłączanie. Kolejność bliźniak → bank
+jest istotna — bliźniak dowozi więcej i zdejmuje bankowi część celów (w biegu 16.08: 22 vs 8).
 
 Przebudowy banku w tej sekwencji **nie ma** i być nie może, dopóki skrypt nie scala (patrz krok 2).
 
-Do decyzji przy uruchamianiu: osobny wpis w crontab (przez `~/bin/cron-install`) czy jeden
-skrypt-orkiestrator. Bez tego chudy zapas trzeba łatać ręcznie po każdym większym zaciągu —
-a przy wznowionym imporcie z dongchedi przyrasta ~30–40 ofert na 2 h.
+Pomiar biegu: 1,4 s wall-clock, 216 MB RSS, bez limitu porcji — skrypt czyta wszystkie oferty
+`publish` do pamięci. Przy obecnej skali (~2 300 ofert) mieści się w LVE z zapasem; gdyby magazyn
+urósł kilkukrotnie, trzeba będzie dołożyć porcjowanie.
+
+Weryfikacja po pierwszej nocy: `tail ~/.claude/merge-spec-twin.log` — linia „Ofert zapisanych: N".
+Log dopisywany, nie rotowany.
 
 ### Krok 4 — reszta, czyli ~155 ofert bez dawcy
 
@@ -117,26 +133,28 @@ Zostają warianty premierowe, których nie ma ani w bazie, ani w banku — najcz
 5 × Xiaomi SU7 RWD ULR 2025      3 × XPeng Mona M03 (515 / 620) 2025
 ```
 
-Te załatają się **same**, gdy tylko wejdzie bogatszy egzemplarz tej samej wersji — pod warunkiem
-kroku 3. Zanim to nastąpi, karty mają szkielet techniczny, bez listy wyposażenia.
+Te załatają się **same**, gdy tylko wejdzie bogatszy egzemplarz tej samej wersji — od 17.08 robi to
+nocny cron z kroku 3. Zanim dawca wejdzie, karty mają szkielet techniczny, bez listy wyposażenia.
 
 Jeśli któryś model jest ważny sprzedażowo teraz, dwa wyjścia: opis ręczny Ruslana (wtedy narzędzia
 go nie ruszą — pomijają wpisy ręczne) albo punktowe scalenie z bliźniaka che168
 (`merge-spec-from-dongchedi-twin.php` działa w drugą stronę, ale wzorzec ten sam).
 
-## Stan po biegu 16.08
+## Stan po biegu 16.08 (17:10, po włączeniu crona)
 
 | źródło | chude (< 100 pól) | zdrowe | razem `publish` |
 |---|---|---|---|
-| dongchedi | 74 | 829 | 903 |
+| dongchedi | 74 | 826 | 900 |
 | che168 | 145 | 1161 | 1306 |
+| wpisy ręczne | 9 | 93 | 102 |
 
-Chude dongchedi to w większości sztuki, które weszły **po** uzupełnieniu — import trwa, więc
-dopóki nie ma kroku 3, każdy zaciąg odtwarza ogon na nowo.
+Chude dongchedi to w większości sztuki, które weszły **po** uzupełnieniu. Dry-run bliźniaka po
+biegu: 155 celów, 0 do zapisu — cała reszta czeka na dawcę, którego jeszcze nie ma w bazie ani
+w banku (krok 4). Od 17.08 cron będzie je zbierał sam, w miarę jak dawcy wchodzą z importu.
 
 ## Do rozstrzygnięcia
 
-1. Krok 3 — cron czy dalej ręcznie po zaciągu.
+1. ~~Krok 3 — cron czy dalej ręcznie po zaciągu.~~ **Rozstrzygnięte 16.08: cron, wpis 04:35.**
 2. Czy chudy zapas (< 100 pól) ma w ogóle wisieć na `publish`, czy trzymać w `draft` do czasu
    uzupełnienia. Dziś wisi — 34 nowe oferty z dzisiaj są widoczne ze szkieletem.
 3. Czy reklamować regresję u dostawcy — od 20.07 płacimy za dane, które są 8× uboższe niż przed.
