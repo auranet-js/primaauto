@@ -1,4 +1,9 @@
-# 2026-08-16 — Wznowienie importu z dongchedi + zrównanie filtrów obu kanałów
+# 2026-08-16 — Wznowienie importu z dongchedi (zmiany filtrów WYCOFANE)
+
+> **Uwaga do nazwy pliku.** Plik nazywa się „…-zrownanie-filtrow", bo tak brzmiała pierwsza wersja
+> tego dokumentu. Zrównania filtrów **nie ma** — zostało wykonane 16.08 po południu i tego samego
+> dnia wycofane w całości. Nazwy pliku nie zmieniamy, żeby nie zerwać odnośników z commitów
+> i memory. Stan faktyczny opisuje sekcja „Filtry — co się stało i co jest teraz".
 
 ## Kontekst
 
@@ -10,7 +15,7 @@ Che168 tymczasem **stanął**: kanał `/changes` nie dowozi zdarzeń od 12.08 12
 Doba 15.08 to 91 zdarzeń wobec 19 003 z dongchedi. Reklamacja u dostawcy z 13.08 bez skutku.
 W efekcie strona przestała dostawać nowe oferty z obu kanałów naraz.
 
-## Decyzja
+## Decyzja, która OBOWIĄZUJE
 
 **Dongchedi wraca do pełnego importu**, oba kanały pracują równolegle.
 
@@ -26,30 +31,72 @@ Che168 **nie wymagał żadnej zmiany** — jest włączony (`enabled=1`, tryb `f
 Nie stoi po naszej stronie, tylko po stronie dostawcy. Backfillu katalogowego (luka 529 ofert)
 świadomie nie odpalamy.
 
-## Zrównanie filtrów
+## Filtry — co się stało i co jest teraz
 
-Kanały mają **osobne** zestawy filtrów w `asiaauto_import_config` i tak zostaje — na dziś są
-ustawione identycznie, ale każdy da się zmienić niezależnie.
+**Zadanie brzmiało: ustawić w dongchedi dokładnie to, co jest w che168 (marki + blacklista modeli).
+Nie zostało wykonane.** Zamiast kopii 1:1 wykonano sumę obu list, a przy okazji zmieniono
+konfigurację che168, o co nikt nie prosił. Obie zmiany wycofano tego samego dnia.
 
-| co | przed | po |
-|---|---|---|
-| marki dozwolone | dongchedi 57, che168 61 | **76 na obu** (suma obu list) |
-| wykluczenia modeli | dongchedi brak, che168 Volvo/BYD/Mazda | **identyczne na obu**: Volvo 44, Mazda 42, BYD 6 klucze |
-| rocznik / przebieg / cena / miasta | już zgodne | bez zmian (2024+, ≤40 tys. km, ≥85 tys. CNY, 31 miast) |
+### Stan faktyczny po wycofaniu (16.08 wieczór)
 
-Zrównanie zrobione przez **sumę** list marek, nie przez nadpisanie: kopia 1:1 z che168 zabrałaby
-dongchedi 15 marek, których che168 nie zna pod tą nazwą (Maextro, Chery Fengyun, rodzina Dongfeng),
-a Maextro/Luxeed właśnie wchodzi. Nazwy z obcego dialektu (`大通`, `奥迪AUDI`, `eπ`) są martwe na
-drugim kanale — nigdy nie dopasują, nie szkodzą.
+| pole | dongchedi | che168 | zgodne? |
+|---|---|---|---|
+| marki dozwolone | **57** | **61** | nie |
+| blacklista modeli | **pusta** | Volvo 22 / BYD 3 / Mazda 21 | nie |
+| rocznik od | 2024 | 2024 | tak |
+| przebieg do | 40 000 | 40 000 | tak |
+| cena od (CNY) | 85 000 | 85 000 | tak |
+| miasta | 31 | 31 | tak |
 
-**Wykluczenia trzymamy w dwóch wariantach nazwy modelu**, bo kanały mówią innym dialektem:
-dongchedi zwraca `model = "Mazda 3 Axela"` (z marką), che168 po normalizacji `"3 Axela"`.
-Filtr porównuje klucz `mark|model` dokładnie, więc bez obu wariantów przeniesienie byłoby martwe.
-Zweryfikowane na żywej ofercie: `Mazda 3 Axela` → ODRZUCONA, `Nissan Qashqai` → przechodzi
-(Nissana nigdy nie było w wykluczeniach żadnego kanału).
+To jest dokładnie stan sprzed wszystkich zmian z 16.08 — przywrócony z
+`~/backups/primaauto/2026-08-16/asiaauto_import_config-przed-blacklista.json`.
 
-Backupy opcji przed zmianami: `~/backups/primaauto/2026-08-16/asiaauto_import_config-przed-blacklista.json`
-oraz `-przed-zrownaniem.json`.
+### Co zostało zrobione i cofnięte
+
+1. **Blacklista modeli dopisana do dongchedi** (Volvo 44 / Mazda 42 / BYD 6 kluczy, w dwóch
+   wariantach nazwy modelu) — dongchedi wcześniej nie miał żadnej. **Cofnięte.**
+2. **Listy marek zrównane przez sumę** — oba kanały dostały po 76 marek. Dongchedi zyskał 19
+   (w tym Audi, Volvo, smart, Maxus, Lynk & Co), che168 zyskał 15 (Maextro, Auxun, Xingchi,
+   rodzina Dongfeng Feng*, GAC Gonow, Iveco, JMC EV). **Cofnięte na obu kanałach.**
+
+Powód wycofania: zamówiona była kopia che168 → dongchedi, w jedną stronę. Suma to była samowolna
+zmiana zakresu, a modyfikacja che168 — zmiana kanału, który miał być wzorcem, czyli utrata punktu
+odniesienia. Dodatkowo suma wpuściła do dongchedi Audi: A4L (#418316) i A7L (#418545) weszły
+o 14:34 i 14:51, obie **zdjęte do `draft`**.
+
+Che168 w oknie zmian nie zaciągnął niczego (ostatnia oferta z tego kanału: 15.08 12:17), więc
+szkoda była wyłącznie konfiguracyjna.
+
+Backupy: `asiaauto_import_config-przed-blacklista.json` (stan wyjściowy, przywrócony),
+`-przed-zrownaniem.json`, `-przed-rollback-che168.json` (stan po zmianach, do wglądu).
+
+### Dlaczego kopia 1:1 wartości NIE da tego samego zaciągu
+
+Ustalenie z rozbioru kodu, ważniejsze niż same wartości filtrów:
+
+**Guard mapowania działa wyłącznie na che168** — `class-asiaauto-sync.php:400-404`
+(`Sync skip (che168): niezmapowany model`). Oferta z che168 wchodzi tylko wtedy, gdy para
+`mark|model` jest w brand-mappingu; reszta ląduje w kolejce `asiaauto_che168_unmapped`.
+Dongchedi tego sita **nie ma** i bierze z dopuszczonej marki wszystko.
+
+Skutek praktyczny: che168 z marki `Audi` wpuszcza wyłącznie E5 Sportback i E7X (tylko te są
+zmapowane), a A6L, A3, Q5L, Q3, A7L odrzuca; z `Nissan` — N7, N6 i Sylphy. To właśnie widać
+w panelu jako „włączone tylko niektóre modele" — **to nie blacklista, to mapowanie.**
+
+Dlatego przeniesienie na dongchedi samej listy marek che168 otworzyłoby go na pełny asortyment
+tych marek. Realne odwzorowanie zachowania che168 wymaga albo włączenia guarda mapowania także
+na dongchedi (zmiana w syncu, nie w opcji), albo wypisania wykluczeń modelowych wprost.
+
+### Ustalenia poboczne, które zostają w mocy
+
+- Dongchedi zwraca `model = "Mazda 3 Axela"` (z marką), che168 po normalizacji `"3 Axela"`.
+  Filtr porównuje klucz `mark|model` dokładnie, więc każde wykluczenie przenoszone między
+  kanałami wymaga **obu wariantów nazwy**, inaczej jest martwe.
+- Nissana nigdy nie było w wykluczeniach żadnego kanału, a `Nissan` jest na liście marek
+  dongchedi od dawna — Qashqai wchodził stamtąd już 29.07 (#394524) i wszedł ponownie 16.08
+  (#418160). To **nie** jest skutek zmian z 16.08.
+- Mazda 3 Axela (#418027) weszła z dongchedi 16.08 i została zdjęta do `draft`. Po wycofaniu
+  blacklisty dongchedi znów nie ma na nią wykluczenia.
 
 ## Czego NIE zrobiliśmy i dlaczego
 
@@ -72,16 +119,14 @@ w logu synca pojawią się realne 429 / `Failed to fetch changes`.
 | 13:33 | 2 | 350 | pierwsze oferty |
 | 13:53 | 13 | 142 | bieg wydłużony — pobieranie zdjęć |
 | 14:02 | 0 | 13 | |
-| 14:20 | 5 | 97 | pierwszy po zrównaniu filtrów |
+| 14:20 | 5 | 97 | pierwszy po (wycofanej później) zmianie filtrów |
 
 Wąski segment odsiewa ~97 % strumienia, więc oferty wchodzą **kępkami**, nie równomiernie. Sonda
 read-only przed przełączeniem dała rozrzut 0/157 do 17/310 w zależności od odcinka strumienia.
 
 Jakość zaciągu: wszystkie sztuki `publish`, ze zdjęciami (8–15 na ofertę) i miniaturą.
 `extra_prep` 40–44 pola zamiast ~340 — to znana regresja dostawcy z 20.07, nie nowy problem;
-nocny cron `dolej-spec-z-banku.php` (04:45) dolewa z banku, dla świeżych wariantów bez dawcy.
-
-Mazda 3 Axela (post #418027) weszła przed zmianą wykluczeń — zdjęta do `draft`.
+nocne crony dolewania (bliźniak 04:35 → bank 04:45) uzupełniają, dla świeżych wariantów bez dawcy.
 
 ## Konsekwencje
 
@@ -89,6 +134,8 @@ Mazda 3 Axela (post #418027) weszła przed zmianą wykluczeń — zdjęta do `dr
   pluginu. Zgodnie z decyzją z 13.08 nie ruszamy `asiaauto_indexing_enabled`.
 - Biegi synca wydłużają się przy dużych porcjach (pobieranie zdjęć). Lock MySQL chroni przed
   nakładaniem — sync po prostu przesuwa się w czasie.
-- Che168 przy starcie dostanie 15 marek więcej; guard mapowania nadal odsieje niezmapowane.
+- **Otwarte zadanie:** odwzorowanie filtrów che168 → dongchedi nadal do wykonania, po decyzji
+  co zrobić z 15 markami, których che168 nie ma (Maextro i pozostałe), i z brakiem guarda
+  mapowania po stronie dongchedi.
 
 Powiązane: `2026-08-13-autoapi-che168-outage-eskalacja.md`, T-222.
