@@ -1,5 +1,40 @@
 # Historia wersji asiaauto-sync
 
+## 0.34.23 — 2026-08-18 (guard mapowania rozszerzony na dongchedi)
+
+**To nie jest nowa funkcja, tylko otwarcie bramy przed istniejącym mechanizmem.**
+`isMappedForImport()` powstał w T-186 (22.07) i od początku był w środku źródło-agnostyczny —
+bierze `mark`/`model`, pyta `AsiaAuto_Mapping::getEuForCn()`, przy pudle loguje parę do kolejki
+domapowań. Wołany był jednak wyłącznie za warunkiem `$source === 'che168'`, więc drugi kanał
+szedł obok niego bez kontroli.
+
+**Objaw.** Po wznowieniu importu dongchedi w trybie `full` (16.08) do bazy weszły oferty
+z chińskimi nazwami w tytule i w nazwie termu `serie` — `Voyah|岚图泰山 PHEV`, `Maextro|智界V9`,
+`NIO|蔚来ES9` — z kalekimi slugami hubów (`phev`, `v9`, `es9`), oraz modele spalinowe spoza
+segmentu (`Nissan|Pathfinder`, `Audi A4L`, `Mazda 3 Axela`). Che168 tego nie przepuszczał ani razu.
+
+**Pomiar przed zmianą** (read-only, 2400 zdarzeń strumienia dongchedi): 911 `added`, filtr konfigu
+przepuszcza 17, z tego guard odrzuca 3 (dokładnie te pary co wyżej) i przepuszcza 14 zmapowanych.
+Strata legalnego zaciągu: zero.
+
+**Zmiana** (`class-asiaauto-sync.php`): `normalizeForSource()` woła guard także dla dongchedi, ale
+**tylko gdy zdarzenie niesie `mark` i `model`**. Ten warunek jest konieczny, nie kosmetyczny:
+`changed` w dongchedi niesie wyłącznie `{new_price}` (480/480 zdarzeń w pomiarze), więc
+bezwarunkowy guard zablokowałby każdą aktualizację ceny w magazynie. `isMappedForImport()` dostał
+opcjonalny parametr `$source` (domyślnie `che168`, więc istniejące wywołanie bez zmian) — po to,
+by log mówił, z którego kanału poszedł skip.
+
+**Regresja che168: zero** — ścieżka che168 zachowana co do znaku (adapter → guard), potwierdzona
+testem na dwóch scenariuszach. Smoke test guarda dongchedi: 5/5 (zmapowana przechodzi, trzy
+niezmapowane odrzucone, `changed` z samym `new_price` przechodzi).
+
+**Nie objęte tą wersją:** pre-filtr przed `getOffer()` (`class-asiaauto-sync.php:333`) nadal jest
+che168-only, choć `/changes` dongchedi ma komplet pól filtra — dziś dongchedi woła `getOffer()`
+dla wszystkich 911 `added`, żeby przyjąć 17. Osobna decyzja, wyłącznie wydajność.
+
+Pliki: `includes/class-asiaauto-sync.php` (backup: `.bak-2026-08-18-guard-dongchedi`).
+
+
 ## 0.34.22 — 2026-08-06 (T-220: aneks VIN do umowy)
 
 Druga strona sprawy zamkniętej w 0.34.21. Tamta wersja pozwoliła **usunąć** błędny numer przed
