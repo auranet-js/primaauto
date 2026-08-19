@@ -6,7 +6,9 @@ import urllib.request
 import urllib.parse
 
 SECRETS = "/home/host476470/secrets/google"
-API_VERSION = "v21"
+# Wersja API czytana z ~/secrets/google/ads-config.json (pole api_version) — hardkod v21
+# zwracal 404 po wygaszeniu wersji (2026-08-19). Fallback tylko gdy pola brak.
+API_VERSION = json.load(open(f"{SECRETS}/ads-config.json")).get("api_version", "v25")
 
 
 def load():
