@@ -18,7 +18,7 @@
 | **[DSA] Import modele z Chin** | 23896725555 | Search DSA | page-feed, długi ogon modeli | rework 12.07 (`dsa-rework-2026-07-12.md`); T-200 rekomendował PAUZĘ 09.07 przy CPA 204 zł; 16.07 feed przestawiony z hubów na najtańszą ofertę per model (`docs/decyzje/2026-07-16-dsa-feed-na-oferty.md`), kampania została włączona. Feed odświeża cron co 3 dni (`scripts/dsa-offer-feed-refresh.py`, lepki — podmiana tylko gdy sztuka zeszła z publish) |
 | **[RMKT] Dynamic Remarketing — Model-huby** | 23897599362 | Display | powrót niedoszłych, feed model-hubów | recon + optymalizacja 12.07 (`rmkt-optymalizacja-2026-07-12.md`), konwersje ×2 po zmianach; feed odświeżany tygodniowo (`scripts/refresh-rmkt-feed.sh`) |
 | **[DG] Demand Gen — auta z Chin (YouTube)** | 24069066886 | Demand Gen | zasięg wizualny na YouTube | z T-200 „visual-first" (09.07) — teza: auta kupuje się oczami, 3 000 ogłoszeń ze zdjęciami jako paliwo |
-| **[VID] Placementy — widzowie konkurencji** | 24060052062 | Video | placementy pod kanałami konkurencji | z T-200; konwersje to subskrypcje i follow-on views YouTube, **nie leady** |
+| **[VID] Placementy — widzowie konkurencji** | 24060052062 | Video | placementy pod kanałami konkurencji | z T-200; **jedyna kampania, która nadal liczy YouTube jako konwersje** — patrz sekcja 3a |
 | **[SKAG-1] Na placu** | 23803851563 | Search | auta fizycznie na placu | PAUSED. Rework 11.07 (2 RSA/grupę, zdjęcia grupowe); recheck 16.07 potwierdził, że **zdjęcia grupowe działają w Search** (`docs/sesje/2026-07-16-rechecki-t195-skag1.md`); T-200 rekomendował pauzę przy 0 konw. / 612 zł |
 | **[SKAG-2] W drodze** | 23803851566 | Search | auta w drodze do Polski | rework 11.07 wzorcem SKAG-1 (`skag2-rework-plan-2026-07-11.md`, 60 ops); 18 grup modelowych |
 | **[SKAG-3] Popularne sprowadzenie** | 23803851569 | Search | modele „pod sprowadzenie" | PAUSED, zero wydatku |
@@ -71,12 +71,64 @@ Miesięczne tempo: **~4 330 zł/30 dni** (~4 030 zł/mc wg ostatnich 7 dni). Sum
 
 1. **Moment zapisu.** Ads przypisuje konwersję do dnia **kliknięcia** (okno do 30 dni wstecz), GA4 do dnia **zdarzenia**. Przy ruchomym oknie 30-dniowym brzegi się nie pokrywają.
 2. **Model atrybucji.** Ads: data-driven, cross-device, z modelowaniem przy braku zgody. GA4 w tym raporcie: session-scope — zdarzenie liczy się kampanii **tej sesji**, więc lead, który wrócił z organica, ląduje w organiku (widać to w skrajnym przypadku DSA: 3 konwersje w Ads, 0 zdarzeń w GA4).
-3. **Co jest liczone.** W Ads aktywne są tylko dwie akcje wiodące — `click_phone` (43) i `click_whatsapp` (40,2). `generate_lead` ma w Ads **0**, mimo że GA4 rejestruje 8 zdarzeń w 30 dni (z płatnych tylko 1, z Brandu). `purchase` w Ads 0, w GA4 3 — to testy PayU z 10.08, nie sprzedaż.
+3. **Co jest liczone.** W Ads do kolumny „Konwersje" wchodzą `click_phone` (43) i `click_whatsapp` (40,2). `generate_lead` ma w oknie 30 dni **0**, ale **mechanizm działa** — w 90 dniach zliczył 9 konwersji; po prostu w tym miesiącu formularz nie dowiózł leada z płatnych (GA4 widzi 8 zdarzeń, z tego 7 z direct/organic). `purchase` 0 w Ads, 3 w GA4 — to testy PayU z 10.08, nie sprzedaż.
 
 **Praktyka:**
 - **Do decyzji budżetowych używaj Ads** — ranking kampianii jest w obu źródłach ten sam (Brand > Topic ≈ RMKT > DG >> DSA/SKAG), a Ads ma pełne koszty.
 - **Do raportu dla Ruslana nie podawaj liczby leadów z Ads** jako faktycznej — realny kontakt telefoniczny/WhatsApp jest bliżej liczby GA4. Bezpieczna formuła: „X kontaktów zmierzonych w analityce, Y konwersji raportowanych przez Google Ads (z modelowaniem)".
 - Organic wciąż dowozi najwięcej: 8 813 sesji i 98 zdarzeń kontaktowych w 30 dni — **więcej niż wszystkie kampanie płatne razem** (60).
+
+## 3a. Co liczymy jako konwersję — stan celów (sprawdzone 2026-08-19)
+
+**Ustalenie Janka: konwersją jest telefon, WhatsApp i wypełnienie formularza zamówienia. Nic innego.**
+(Dojdzie osobny formularz kontaktowy na `/kontakt/` — wtedy dopisujemy go do tej listy.)
+Subskrypcje YouTube i „follow-on views" **nie są konwersją** — wskoczyły same przy uruchomieniu kampanii
+wideo i Janek je wyłączył.
+
+**Stan po sprawdzeniu: naprawa trzyma na 6 z 7 wydających kampanii, ale nie na [VID].**
+
+Akcje konwersji na poziomie konta:
+
+| akcja | status | w kolumnie „Konwersje" | 90 dni |
+|---|---|---|---|
+| `click_phone` | ENABLED, primary | **tak** | 99,3 |
+| `click_whatsapp` | ENABLED, primary | **tak** | 102,8 |
+| `generate_lead` | ENABLED, primary | **tak** | 9,0 |
+| `purchase` | ENABLED | nie | 0 |
+| `YouTube channel subscriptions` | ENABLED | **nie** | 7,0 |
+| `YouTube follow-on views` | ENABLED | **nie** | 35,0 |
+| `close_convert_lead`, `qualify_lead` | HIDDEN | nie | 0 |
+| 4 × „Local actions / Działania lokalne" | ENABLED, primary | nie | 0 |
+
+Co realnie wpadło do kolumny „Konwersje" w 30 dniach:
+
+| kampania | kontaktowe (telefon/WhatsApp) | YouTube |
+|---|---|---|
+| [Brand] | 30,0 | — |
+| [Topic] | 17,0 | — |
+| [RMKT] | 17,2 | — |
+| [DG] | 16,0 | — |
+| [DSA] | 3,0 | — |
+| **[VID]** | **0** | **7,0** |
+| **RAZEM** | **83,2** | **7,0** |
+
+### Dziura: [VID] nadal liczy YouTube jako konwersje
+
+Wyłączenie akcji na poziomie konta **nie wystarcza** — decyduje zestaw celów przypisany do kampanii.
+`ENGAGEMENT/YOUTUBE_HOSTED` i `YOUTUBE_FOLLOW_ON_VIEWS/YOUTUBE_HOSTED` wiszą jako `biddable=True`
+na **9 z 10 kampanii** (razem z `PURCHASE/WEBSITE` i `UNKNOWN/GOOGLE_HOSTED`). Cel kampanii nadpisuje
+ustawienie akcji — dlatego całe 7 „konwersji" [VID] to 5 follow-on views + 2 subskrypcje, za 353 zł/30 dni,
+przy zerze kontaktów.
+
+**[DG] to jedyna kampania ustawiona zgodnie z ustaleniem** — ma wyłącznie `SUBMIT_LEAD_FORM/WEBSITE`
++ `CONTACT/WEBSITE`. I dobrze, bo jako jedyna chodzi na **MAXIMIZE_CONVERSIONS** — czyli algorytm faktycznie
+optymalizuje pod telefon/WhatsApp/formularz.
+
+**Mina na przyszłość:** pozostałe kampanie (Brand, Topic, DSA, RMKT, SKAG × 4) mają YouTube w celach,
+ale chodzą na MANUAL_CPC, więc nic nie licytują automatycznie — szkoda jest dziś tylko raportowa.
+**Przełączenie którejkolwiek z nich na Maximize Conversions bez wcześniejszego zawężenia celów
+uruchomi optymalizację pod subskrypcje YouTube.** Przed każdą zmianą strategii licytacji: sprawdź
+`campaign_conversion_goal` tej kampanii.
 
 ## 4. Jak odświeżyć te liczby
 
@@ -100,4 +152,4 @@ Skrypt jest read-only. Zmiany na koncie robi się osobnymi skryptami mutującymi
 2. **DSA** — utrzymać po zmianie feedu czy zapauzować zgodnie z rekomendacją T-200? Zwolniłoby ~15 zł/dz.
 3. **VID** — 353 zł/30 dni za 20 kliknięć; konwersje to subskrypcje YouTube. Zostawiamy jako budowanie kanału czy przenosimy budżet?
 4. **Gdzie przenieść uwolnione budżety** — Brand (CPA 12 zł, ale limit 10 zł/dz dławi skalę) i DG (CPA 12 zł w ostatnim tygodniu) są dziś najtańsze.
-5. **`generate_lead` w Ads ma 0** przy 8 zdarzeniach w GA4 — sprawdzić import akcji z GA4, jeśli formularz ma być mierzony jako konwersja.
+5. **Zawęzić cele konwersji [VID]** (i profilaktycznie pozostałych kampanii) do `CONTACT/WEBSITE` + `SUBMIT_LEAD_FORM/WEBSITE`, wzorem [DG] — dziś [VID] raportuje 7 konwersji, które są subskrypcjami YouTube.
