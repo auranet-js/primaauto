@@ -1,0 +1,19 @@
+{
+ "url": "https://primaauto.com.pl/",
+ "ms": 1517,
+ "wersja_axe": "4.10.2",
+ "naruszen": 1,
+ "elementow_z_bledem": 70,
+ "testow_zdanych": 31,
+ "do_recznego_sprawdzenia": 1,
+ "naruszenia": [
+  {
+   "id": "color-contrast",
+   "waga": "serious",
+   "sztuk": 70,
+   "opis": "Elements must meet minimum color contrast ratio thresholds",
+   "wcag": "wcag2aa,wcag143",
+   "przyklad": "<span class=\"aa-home__stat-label\">ofert</span>"
+  }
+ ]
+}

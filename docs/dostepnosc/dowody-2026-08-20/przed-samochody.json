@@ -1,0 +1,27 @@
+{
+ "url": "https://primaauto.com.pl/samochody/",
+ "ms": 1696,
+ "wersja_axe": "4.10.2",
+ "naruszen": 2,
+ "elementow_z_bledem": 81,
+ "testow_zdanych": 30,
+ "do_recznego_sprawdzenia": 1,
+ "naruszenia": [
+  {
+   "id": "color-contrast",
+   "waga": "serious",
+   "sztuk": 80,
+   "opis": "Elements must meet minimum color contrast ratio thresholds",
+   "wcag": "wcag2aa,wcag143",
+   "przyklad": "<span class=\"aa-price-inputs__unit\">zł</span>"
+  },
+  {
+   "id": "target-size",
+   "waga": "serious",
+   "sztuk": 1,
+   "opis": "All touch targets must be 24px large, or leave sufficient space",
+   "wcag": "wcag22aa,wcag258",
+   "przyklad": "<button class=\"aa-search__clear\" type=\"button\" style=\"display:none\" aria-label=\"Wyczyść\">"
+  }
+ ]
+}

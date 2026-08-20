@@ -1,0 +1,19 @@
+{
+ "url": "https://primaauto.com.pl/klient/",
+ "ms": 1316,
+ "wersja_axe": "4.10.2",
+ "naruszen": 1,
+ "elementow_z_bledem": 8,
+ "testow_zdanych": 29,
+ "do_recznego_sprawdzenia": 1,
+ "naruszenia": [
+  {
+   "id": "color-contrast",
+   "waga": "serious",
+   "sztuk": 8,
+   "opis": "Elements must meet minimum color contrast ratio thresholds",
+   "wcag": "wcag2aa,wcag143",
+   "przyklad": "<div class=\"aa-klient__tagline\">Panel klienta</div>"
+  }
+ ]
+}
