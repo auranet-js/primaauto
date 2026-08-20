@@ -58,13 +58,18 @@ idzie po stałej i bez tego zmiany w `base.css`/`footer.css` nie dotarłyby do p
 
 | Strona | Przed | Po |
 |---|---|---|
-| `/` | 70 elementów | **0** |
+| `/` | 70 elementów | **7** |
 | `/samochody/` | 81 | **0** |
 | `/klient/` | 8 | **0** |
-| `/oferta/{listing}/` | 61 | **0** |
-| `/samochody/smart/5/` | 24 | **0** |
-| `/kontakt/` | 22 | **0** |
-| **Razem** | **266** | **0** |
+| `/oferta/{listing}/` | 61 | **1** |
+| `/samochody/smart/5/` | 24 | **6** |
+| `/kontakt/` | 22 | **1** |
+| **Razem** | **266** | **15** |
+
+**Wszystkie 15 pozostałych zgłoszeń to jeden i ten sam przypadek:** czerwień marki `#D63031`
+jako tekst na jasnoszarym tle `#F5F6F8` — **4,48 wobec progu 4,50**. Pozostawione świadomie,
+decyzja Janka z przeglądu 20.08 (§4a). Przejściowo osiągnięto tu 0, ale kosztem odcienia marki
+w całym serwisie — koszt nieproporcjonalny do różnicy 0,02 punktu.
 
 ### Przejście klawiaturą (wskaźnik fokusu, 160 przystanków)
 
@@ -103,13 +108,16 @@ idzie po stałej i bez tego zmiany w `base.css`/`footer.css` nie dotarłyby do p
   4,02 → 5,43 na białym, 3,71 → 5,03 na `#F5F6F8`
 - **Stopka odwrotnie** — tam tekst leży na granacie, więc `.pa-footer { --c-secondary: #A8B6C8 }`
   (3,54 → 6,90). Globalna zmiana sama w sobie pogorszyłaby stopkę do 3,0
-- **Czerwień `#D63031` → `#C92A2B`** w 9 plikach frontowych: jako tekst na `#F5F6F8` 4,48 → 5,04,
-  na białym 4,85 → 5,46, jako tło z białym tekstem 4,85 → 5,46. Wszystkie kontrasty rosną,
-  żaden nie spada. ⚠️ **To korekta odcienia marki** — różnica ok. 3 % jasności, wizualnie
-  nierozpoznawalna, ale warto o niej wiedzieć
+- ~~**Czerwień `#D63031` → `#C92A2B`**~~ — **WYCOFANE 20.08 po przeglądzie wizualnym.**
+  Zmiana obejmowała `--c-accent`, czyli całą czerwień serwisu (ceny, przyciski, linki), żeby
+  domknąć kryterium przy różnicy **0,02 punktu**. Koszt nieproporcjonalny do zysku — przywrócono
+  pierwotny odcień. Zostaje 15 zgłoszeń axe, wszystkie tego jednego typu
 - **Szary `#6b7280` → `#5C6B7F`** w `hub.css` (5×): 4,47 → 5,03
-- **Badge „Nowe"** — biały na bursztynie dawał **2,03**; tło marki zostaje, tekst na granat: **7,00**.
-  Warianty `--pl` i `--transit` dostały jawne `color: #fff`, bo stoją na ciemnym tle
+- **Badge „Nowe"** — biały na bursztynie dawał **2,03**; tło bursztynowe zostaje, tekst na
+  ciemny brąz `#4A3800`: **5,57**. Pierwsza wersja użyła granatu (7,00), ale odrzucona przy
+  przeglądzie jako obcy kolor — brąz to w istocie bardzo ciemny żółty, więc zostaje w rodzinie
+  tła i badge zachowuje charakter. Warianty `--pl` i `--transit` dostały jawne `color: #fff`,
+  bo stoją na ciemnym tle
 - **Przycisk WhatsApp** — biały na zieleni dawał **1,98**; zieleń marki zostaje,
   tekst na granat: **7,17** (na hoverze 4,59)
 - **Zieleń jako tekst** `#25D366 → #0E7A3C` w `contact.php`: 1,83 → 5,02
@@ -129,6 +137,22 @@ idzie po stałej i bez tego zmiany w `base.css`/`footer.css` nie dotarłyby do p
 - Nowy `themes/primaauto2026/assets/js/a11y-consent-focus.js` (2,6 KB) — pętla działa
   **tylko gdy baner jest widoczny**, z trzema bezpiecznikami cofającymi skrypt do bezczynności
 - Podpięty w `functions.php`, wersja motywu 1.2.2 → 1.2.3
+
+### 4a. Przegląd wizualny z Jankiem (20.08, po pierwszym przebiegu)
+
+Wdrożone zmiany kolorystyczne zostały przedstawione w formie par „przed / po" w realnym
+kontekście (`primaauto-zmiany-kolorow-2026-08-20.html`). Dwie korekty:
+
+| Pozycja | Decyzja | Powód |
+|---|---|---|
+| Czerwień marki | **cofnięta do `#D63031`** | zmiana całego odcienia marki dla 0,02 punktu kontrastu to zły stosunek kosztu do zysku |
+| Badge „Nowe" | **granat → ciemny brąz `#4A3800`** | granat czytał się jako kolor obcy wobec bursztynowego tła; brąz daje 5,57 i zostaje w rodzinie koloru |
+
+Pozostałe siedem zmian zaakceptowanych bez korekt.
+
+**Wniosek na przyszłość:** przy kryteriach kontrastu, gdzie brakuje ułamka punktu, domyślnie
+zgłaszać jako pozycję do decyzji, a nie zamykać zmianą koloru marki. Liczba jest argumentem,
+nie rozstrzygnięciem — o wyglądzie decyduje właściciel serwisu.
 
 ### Karty niezamknięte
 - **N-2** (przeskok poziomu nagłówka) — **nie potwierdzony**: 0 przeskoków na `/`, `/samochody/`
@@ -164,7 +188,10 @@ Zmienione pliki (kopie .bak-2026-08-20-a11y obok każdego):
     assets/css/base.css, footer.css, hub.css
     assets/js/a11y-consent-focus.js (nowy), functions.php
 
-Karty zgłoszone do ponownego orzeczenia: N-1, N-3, N-5, N-6
+Karty zgłoszone do ponownego orzeczenia: N-1 (częściowo — patrz niżej), N-3, N-5, N-6
+N-1 zamknięta poza jednym przypadkiem: czerwień marki #D63031 jako tekst na tle #F5F6F8
+  daje 4,48 przy progu 4,50. Właściciel serwisu świadomie zachowuje odcień marki.
+  Prosimy o odnotowanie jako pozycji niezamkniętej z uzasadnieniem, nie jako przeoczenia.
 Karty niezamknięte: N-2 (nie potwierdzony — 0 przeskoków na 3 sprawdzonych stronach;
   proszę wskazać, które 2 z 16 stron próbki go miały)
 Karty zakwestionowane: N-4 i N-7 — patrz §1 raportu. Drzewo dostępności (CDP) pokazuje
@@ -172,7 +199,8 @@ Karty zakwestionowane: N-4 i N-7 — patrz §1 raportu. Drzewo dostępności (CD
   aria-label, przycisk logowania ma value="Zaloguj się". Pliki nietknięte po dacie audytu.
 
 Wyniki testów po stronie wykonawcy:
-  - axe (6 stron): 266 → 0 elementów z błędem
+  - axe (6 stron): 266 → 15 elementów z błędem (wszystkie: czerwień marki jako tekst
+    na jasnoszarym tle, 4,48 wobec progu 4,50 — pozostawione świadomie, patrz §4a)
   - przejście klawiaturą /samochody/: 160 przystanków, 17 → 0 bez wskaźnika
   - fokus zasłonięty banerem: 5/9/2 → 0/0/0
   - 2.1.2 po zmianie: zachowane (34 elementy na 40 Tabów po akceptacji banera)
