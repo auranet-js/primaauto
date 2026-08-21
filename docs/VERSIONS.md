@@ -1,5 +1,76 @@
 # Historia wersji asiaauto-sync
 
+## 0.34.24 — 2026-08-21 (tłumaczenie opisów: wyłączony thinking Gemini)
+
+**Objaw.** Część opisów ofert wyświetlała się po chińsku, znacznie większa część była
+urwana w połowie zdania („Shunxiang: 200 starannie wyselekcjonowanych" i koniec).
+Zgłoszone jako podejrzenie niezapłaconego Google Cloud — API działało poprawnie, HTTP 200.
+
+**Przyczyna.** `translateViaGemini()` wołał `gemini-2.5-flash` z `maxOutputTokens: 2048`
+i bez `thinkingConfig`. Gemini 2.5 wlicza tokeny „myślenia" do tego samego limitu.
+Odtworzone wywołanie na opisie oferty #430197 (Geely Galaxy E8):
+
+```
+finishReason: MAX_TOKENS
+thoughtsTokenCount: 1743   <- z limitu 2048
+candidatesTokenCount: 301  <- tyle zostalo na tlumaczenie
+```
+
+Gdy myślenie zjadło cały budżet, odpowiedź wracała pusta → plugin szedł na fallback DeepL →
+klucz DeepL był zakomentowany w `wp-config.php` → zapisywany był surowy chiński.
+Gdy zostawiło resztkę — zapisywane było tłumaczenie ucięte w pół słowa.
+
+**To nie była regresja.** Objaw jest w danych od pierwszego pełnego miesiąca importu,
+w stabilnej proporcji — nie było momentu, w którym coś przestało działać:
+
+| miesiąc | ofert | opis po chińsku | opis twardo ucięty |
+|---|---|---|---|
+| 2026-04 | 153 | 8 (5%) | 20 (13%) |
+| 2026-05 | 273 | 12 (4%) | 80 (29%) |
+| 2026-06 | 386 | 24 (6%) | 75 (19%) |
+| 2026-07 | 437 | 21 (5%) | 92 (21%) |
+| 2026-08 | 1730 | 141 (8%) | 195 (11%) |
+
+Przechodziło niezauważone, bo karta na `/samochody/` nie renderuje opisu — widać go
+dopiero po wejściu w pojedynczą ofertę, a przy rotacji 48 h większość takich sztuk
+wylatuje, zanim ktokolwiek na nią trafi.
+
+**Pomiar alternatyw** (9 losowych opisów, ten sam zestaw, pełne teksty w raporcie
+`primaauto-porownanie-tlumaczen-2026-08-21.md`) — sprawdzone, czy zamiast LLM nie wystarczy
+zwykły tłumacz maszynowy:
+
+| silnik | koszt/mies (5400 opisów) | czas/opis | jakość |
+|---|---|---|---|
+| Gemini 2.5 Flash bez thinkingu | $3,27 | 1,8 s | kontekst motoryzacyjny OK |
+| Gemini 2.5 Flash z thinkingiem | $27,26 | 8,9 s | jw., ale gubi tagi `<br/>` |
+| Google Cloud Translation | $9,72 | 1,4 s | błędy faktograficzne |
+| DeepL Free | $0 (limit 500k zn. = 51% wolumenu) | — | jw. |
+
+Google Translate odpadł nie na cenie (choć jest 3× droższy — rozlicza znaki, nie tokeny),
+tylko na jakości: `岚图梦想家` → „Lantu Dreamer" zamiast „Voyah Dreamer" (u nas marka to Voyah),
+`黑外米内` → „czarne nadwozie i wnętrze" zamiast „czarny lakier, beżowe wnętrze",
+`买下24款` → „Kupiono 24 modele" zamiast rocznika 2024, a przy `„查博士"` urwał zdanie
+i zgubił cały akapit o ratach. DeepL popełnia ten sam błąd na kolorach.
+
+**Zmiana** (`class-asiaauto-translator.php`):
+- `generationConfig`: `maxOutputTokens` 2048 → 4096, dodane `thinkingConfig.thinkingBudget = 0`
+- nowy guard: `finishReason !== 'STOP'` odrzuca odpowiedź do fallbacku zamiast zapisywać ucięty tekst
+- `wp-config.php`: odkomentowany `ASIAAUTO_DEEPL_API_KEY` (fallback, zużyte 11 z 500 000 znaków limitu)
+
+**Smoke test** — trzy oferty, które wcześniej poszły po chińsku lub ucięte:
+
+| oferta | CN | wynik | czas |
+|---|---|---|---|
+| #430197 | 413 zn. | OK, 1142 zn. | 2,2 s |
+| #430213 | 97 zn. | OK, 338 zn. | 1,3 s |
+| #430249 | 404 zn. | OK, 1434 zn. | 2,7 s |
+
+Kompletność zweryfikowana przez porównanie końcówek z oryginałem, tagi `<br/>` zachowane.
+
+**Nie zrobione** (osobny krok): retranslacja zaległych ofert (`diag/retranslate-descriptions.php`)
+oraz detektor liczący dziennie świeże oferty z opisem CJK lub uciętym.
+
+
 ## 0.34.23 — 2026-08-18 (guard mapowania rozszerzony na dongchedi)
 
 **To nie jest nowa funkcja, tylko otwarcie bramy przed istniejącym mechanizmem.**
