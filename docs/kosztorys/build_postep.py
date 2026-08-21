@@ -5,7 +5,7 @@ Generator strony "Postęp prac i plan rozwoju" Prima Auto.
 
 Rejestr zmian od spotkania 16.07.2026 (changelog, najświeższe u góry)
 + aktualna lista zadań do zrobienia (roadmapa z etap3.json + nowe niewycenione).
-Godziny NIE są tu pokazywane — rozliczenie godzin żyje w kosztorysie (build.py).
+Godziny sprzed spotkania nie są tu rozpisywane — ich zestawienie żyje w kosztorysie (build.py).
 
 Dane: dane/postep.json (changelog, nowe taski, ukrycia) + dane/etap3.json (roadmapa).
 
@@ -87,6 +87,13 @@ def rows_changelog():
 
 ch_sum = sum(c.get('godz', 0) for c in postep['changelog'])
 
+# 2026-08-21: suma godzin zrealizowanych DO spotkania (etapy 1-2 z kosztorysu, realne).
+# Liczona z danych, nie hardkodowana — kosztorys bywa korygowany wstecz.
+etap1 = load('etap1.json')
+etap2 = load('etap2.json')
+przed_sum = (sum(b.get('godz_realne', 0) for b in etap1['bloki'])
+             + sum(t.get('godz_realne', 0) for t in etap2['taski']))
+
 def row_task(p, nowy=False):
     badge = '<span class="badge new">nowe</span> ' if nowy else ''
     rozmiar = ''
@@ -165,6 +172,7 @@ tfoot td {{ background: var(--accent-soft); font-weight: 700; }}
 .rozmiar {{ color: var(--ink-3); font-size: 12px; font-weight: 400; white-space: nowrap; }}
 .badge {{ display: inline-block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.4px; border-radius: 4px; padding: 2px 7px; }}
 .badge.new {{ background: var(--green-soft); color: var(--green); }}
+.note.przed-spotkaniem {{ font-size: 15px; color: var(--ink); }}
 footer {{ margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--ink-3); font-size: 12.5px; }}
 @media (max-width: 1100px) {{
     .cols {{ grid-template-columns: 1fr; gap: 8px; }}
@@ -200,6 +208,8 @@ footer {{ margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line)
 </tbody>
 <tfoot><tr><td colspan="2">Razem od spotkania {esc(postep['zamkniecie']['data'])}</td><td class="num">{fmt_h(ch_sum)}</td></tr></tfoot>
 </table>
+
+<div class="note przed-spotkaniem">Godziny zrealizowane do spotkania {esc(postep['zamkniecie']['data'])} (etapy 1–2 kosztorysu): <strong>{fmt_h(przed_sum)} h</strong></div>
 
 </section>
 

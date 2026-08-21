@@ -14,9 +14,39 @@
   },
   {
    "data": "20.08.2026",
-   "tytul": "Płatność online za depozyt — bramka PayU uruchomiona",
-   "opis": "Na stronie zamówienia działa już płatność online za depozyt zwrotny: kod BLIK wpisywany bez opuszczania naszej strony, a obok przycisk płatności kartą i przelewem online przez PayU. Wcześniej pozostawał wyłącznie zwykły przelew bankowy.\n\nPrzed włączeniem sprawdziliśmy, że dane produkcyjne PayU działają — połączenie z bramką odpowiada poprawnie. Samego przelewu nie testowaliśmy: to prawdziwe pieniądze, więc decyzja o próbnej płatności należy do Was. Zamówienie testowe na 1 zł czeka gotowe.\n\nPrzy okazji przygotowaliśmy odpowiedź na pytania działu weryfikacji PayU o model biznesowy i przedmiot płatności — z opisem, że rozliczamy wyłącznie zwrotny depozyt za usługę organizacji importu, oraz z odnośnikami do regulaminu usługi, strony o depozycie i polityki prywatności. Do tego zrzut ekranu płatności, bo pojawia się on dopiero po założeniu zgłoszenia i weryfikator nie zobaczy go, przeglądając stronę anonimowo.",
-   "godz": 1
+   "tytul": "Płatność online za depozyt — uruchomiona",
+   "opis": "Na stronie zamówienia działa płatność online za depozyt zwrotny: kod BLIK wpisywany bez opuszczania naszej strony, a obok przycisk płatności kartą i przelewem online. Wcześniej pozostawał wyłącznie zwykły przelew bankowy — klient musiał wyjść ze zgłoszenia, otworzyć bankowość i przepisać dane.\n\nDroga do uruchomienia zajęła kilka tygodni i nie całą po naszej stronie. Mechanizm był gotowy i sprawdzony na koncie testowym już 10 sierpnia — pełna ścieżka od zgłoszenia do potwierdzenia wpłaty przeszła bez błędu. Na koncie produkcyjnym płatności jednak nie ruszały i dopiero mail z działu weryfikacji wyjaśnił dlaczego: konto było w trakcie weryfikacji, nie chodziło o nasz kod. Operator postawił dwa warunki — dokumenty tożsamości po Twojej stronie oraz komplet informacji na stronie: polityka zwrotów i reklamacji, adres do kontaktu, czas rozpatrzenia reklamacji, maksymalny czas realizacji zamówienia w dniach roboczych, pełne dane firmy i wskazanie administratora danych osobowych.\n\nUzupełniliśmy to wszystko: regulamin usługi dostał maksymalny czas realizacji (20 dni roboczych od skompletowania dokumentów), a regulamin, polityka prywatności i strona o depozycie trafiły do stopki i menu, żeby weryfikator — i klient — trafiał na nie z każdej strony bez szukania. Przygotowaliśmy też odpowiedź na pytania o model biznesowy i przedmiot płatności, z wyjaśnieniem, że pobierany jest wyłącznie zwrotny depozyt za usługę organizacji importu, oraz zrzut ekranu płatności — widać ją dopiero po założeniu zgłoszenia, więc weryfikator przeglądający stronę anonimowo by jej nie zobaczył.\n\nOd 20 sierpnia bramka jest włączona na produkcji. Samej wpłaty nie testowaliśmy — to prawdziwe pieniądze, więc decyzja o próbnej płatności należy do Was; zamówienie testowe na 1 zł czeka gotowe. Godziny obejmują obie części: mechanizm płatności i pakiet dokumentów wymaganych przez operatora. Zostawiamy zapas na poprawki, które wyjdą, gdy przez bramkę przejdą pierwsi klienci.",
+   "godz": 27
+  },
+  {
+   "data": "20.08.2026",
+   "tytul": "Dostępność strony — poprawki po audycie",
+   "godz": 3,
+   "opis": "Serwis przeszedł audyt dostępności (16 adresów, 55 kryteriów normy WCAG 2.2) i wdrożyliśmy poprawki. Najważniejsza dotyczy osób, które poruszają się po stronie klawiaturą zamiast myszy: na liście aut siedemnaście kolejnych elementów nie pokazywało, gdzie użytkownik się aktualnie znajduje — dziś każdy z nich ma widoczną obwódkę. Baner zgód przestał zasłaniać element, na którym stoi kursor klawiatury. Poprawiony został kontrast tekstów pomocniczych i rozmiar drobnych elementów dotykowych: automatyczny pomiar na sześciu stronach pokazuje 266 usterek przed zmianą i 15 po niej, a te 15 to jeden powtarzający się przypadek — czerwień marki jako drobny tekst na szarym tle, o włos poniżej progu. Zostawiliśmy ją świadomie: zmiana tego odcienia dotknęłaby cen, przycisków i linków w całym serwisie.\n\nDwie uwagi audytu okazały się nieprawdziwe — wskazywały pole wyszukiwarki i przycisk logowania jako pozbawione opisu, a oba opisy są w kodzie i widzi je czytnik ekranu. Sprawdziliśmy to narzędziem przeglądarki, z którego korzystają czytniki. Zgodności nie orzekamy sami — stronę ogląda ponownie audytor."
+  },
+  {
+   "data": "20.08.2026",
+   "tytul": "Przycisk filtrów na telefonie — widoczny i podpisany",
+   "godz": 1,
+   "opis": "Na liście aut na telefonie przycisk otwierający filtry był najsłabszym elementem paska — szary napis „Filtry”, słabszy wizualnie niż sortowanie obok, mimo że przy blisko 80% ruchu z telefonów to główne wejście do zawężania listy. Dziś jest w kolorze marki, z białym napisem „Marka / model”, więc od razu widać, co się pod nim kryje. Żeby dłuższy napis się zmieścił, skróciliśmy etykiety sortowania do „Najnowsze / Najtańsze / Najdroższe” — przy okazji przestał się ucinać licznik znalezionych ofert, który na wąskich telefonach znikał już wcześniej."
+  },
+  {
+   "data": "19.08.2026",
+   "tytul": "Pomiar efektów wcześniejszych prac i porządek w kampaniach",
+   "godz": 4,
+   "opis": "Domknęliśmy cztery zaległe sprawdzenia: czy zmiany z lipca dowiozły to, co miały. Punkt odniesienia dla wszystkich liczb: w porównywanym okresie czterech tygodni cała strona urosła z 3 738 do 12 913 wejść z Google, czyli ponad trzykrotnie. Bez tego tła każdy wzrost pojedynczej strony wygląda jak sukces poprawki, a często jest tylko falą całego serwisu.\n\nPolskie znaki w pytaniach i odpowiedziach na stronach modeli: przed poprawką jedna trzecia wpisów była uszkodzona, dziś zero na blisko tysiąc sprawdzonych rekordów. Strony modeli po przepisaniu tytułów i opisów: klikalność w wynikach wyszukiwania wzrosła wyraźnie powyżej średniej serwisu na trzech z siedmiu badanych (Shark 6, Li Auto, Xiaomi YU7).\n\nPo stronie reklam powstała jedna mapa wszystkich kampanii — co jest włączone, na co kieruje, ile kosztuje — zamiast rozproszonej wiedzy w panelu. Przy jej robieniu wyszło, że dziewięć kampanii miało wśród celów subskrypcję kanału YouTube. Google optymalizował je więc pod subskrypcje, a nie pod telefon, WhatsApp i formularz. Cel został zdjęty ze wszystkich dziewięciu."
+  },
+  {
+   "data": "18.08.2026",
+   "tytul": "Drugie źródło ogłoszeń — pełne dopięcie i praca równoległa obu kanałów",
+   "godz": 71.5,
+   "opis": "Podsumowanie długiego wątku, który ciągnie się od czerwca: budowy drugiego, niezależnego źródła ogłoszeń obok dotychczasowego. Powód jest prosty — jeden dostawca to jeden punkt awarii, co boleśnie potwierdziło się w tym roku dwa razy.\n\nCo przez ten czas powstało: ręczny import pojedynczego ogłoszenia z podanego adresu, automatyczne pobieranie co kwadrans z filtrami, które ustaliliśmy (rocznik, przebieg, próg ceny, lista miast), słownik marek i modeli tłumaczący chińskie nazwy na nasze — trafność automatycznego dopasowania auta do właściwej strony modelu podniosła się z 61% do ponad 98%, wyposażenie dociągane z katalogu producenta tam, gdzie giełda podaje samą listę podstawową, wykluczanie pojedynczych modeli w panelu oraz przeglądarka ofert z podglądem ceny w złotówkach i importem jednym kliknięciem.\n\nSierpień zszedł na utrzymaniu ciągłości. Dostawca drugiego kanału od 12 sierpnia przestał przysyłać nowe ogłoszenia — reklamacja leży u niego bez odpowiedzi, a strona przez ten czas nie dostawała nowych aut z żadnej strony. Wróciliśmy więc do pełnego pobierania z pierwszego kanału i od tej pory oba pracują równolegle. Uruchomiliśmy też nocne uzupełnianie danych technicznych: gdy nowe ogłoszenie przychodzi z okrojoną specyfikacją, system szuka bliźniaczej sztuki tej samej wersji i rocznika i dolewa brakujące pozycje, nigdy nie nadpisując tego, co już jest. Przy pierwszym uruchomieniu uzupełniło się 30 aut, średnio o ponad 300 pozycji wyposażenia każde. Doszło zabezpieczenie przed przypisaniem auta do niewłaściwej strony modelu przy odświeżaniu oferty oraz porządek w nazwach — 128 nieużywanych wpisów usuniętych z katalogu.\n\nGodziny obejmują cały wątek od czerwca poza tym, co pokazaliśmy już we wpisie z 20 lipca. Praca nie jest domknięta — zostaje dostrojenie filtrów po Twoich testach i wyjaśnienie sprawy z dostawcą."
+  },
+  {
+   "data": "10.08.2026",
+   "tytul": "Maile do klientów w nowej szacie i naprawa linku do zamówienia",
+   "godz": 14,
+   "opis": "Szesnaście wiadomości wysyłanych klientom — od potwierdzenia zgłoszenia po informacje o kolejnych etapach — dostało jednolitą szatę: nagłówek z aktualnym statusem, pasek pokazujący, na którym etapie jest zamówienie, stopka z danymi firmy i podpis z telefonem. Do każdej dołączana jest wersja tekstowa, żeby wiadomość wyświetliła się poprawnie także w starszych programach pocztowych i nie wpadała w spam. Maile przychodzące do Was zostają bez zmian, w prostej formie.\n\nPrzy okazji naprawiliśmy dwie usterki w linku, którym klient wchodzi ze swojego maila prosto do zamówienia. Link działał tylko raz — po pierwszym otwarciu przestawał, więc powrót do wiadomości kończył się komunikatem o błędzie; wystarczyło też, że skaner poczty firmowej otworzył go przed człowiekiem. Drugi błąd był gorszy: klient z dwoma zamówieniami tracił dostęp do pierwszego, bo nowy link kasował poprzedni. Dziś każde zamówienie ma własny link, ważny 48 godzin i działający wielokrotnie. Linki wysłane wcześniej nadal działają — nic nie umarło w skrzynkach klientów."
   },
   {
    "data": "07.08.2026",
@@ -243,7 +273,7 @@
   {
    "id": "T-221",
    "tytul": "Regulamin usługi i strona o depozycie — domknięcie przed uruchomieniem płatności online",
-   "opis": "Przy okazji prac nad płatnościami online sprawdziliśmy dokumenty na stronie. Od prawnika są dwa regulaminy i oba dotyczą wyłącznie korzystania ze strony internetowej — ten opublikowany mówi wprost, że usługi są nieodpłatne. Nie istnieje żaden dokument regulujący samą usługę: depozyt, zasady i terminy zwrotu, reklamację usługi, odstąpienie konsumenta. Przygotowaliśmy więc treść regulaminu usługi (w konwencji dokumentów prawnika, żeby domykał jego pakiet, a nie przepisywał jego pracy) oraz stronę wyjaśniającą klientowi, czym jest depozyt, kiedy wraca i komu dokładnie płaci. Strona o depozycie trafi w okolice przycisku płatności w kreatorze — dokładnie w momencie, w którym klient decyduje o wpłacie i ma najwięcej wątpliwości. Obie strony są już napisane i opublikowane pod własnymi adresami (na razie bez linków i bez indeksowania) — ta praca jest rozliczona w sekcji „Zrealizowane”. Sprawa z operatorem płatności jest załatwiona — dostęp produkcyjny mamy od 06.08. Zostały trzy rzeczy porządkowe: dopisanie operatora płatności do polityki prywatności (wymóg ochrony danych od chwili, gdy zaczynamy pobierać płatności), udostępnienie obu stron w serwisie i podlinkowanie ich z kreatora oraz usunięcie sprzeczności ze starym regulaminem, który wciąż mówi o nieodpłatnych usługach. Korekta strony „Finansowanie” czeka na Twoją odpowiedź w sprawie modelu płatności.",
+   "opis": "Przy okazji prac nad płatnościami online sprawdziliśmy dokumenty na stronie. Od prawnika są dwa regulaminy i oba dotyczą wyłącznie korzystania ze strony internetowej — ten opublikowany mówi wprost, że usługi są nieodpłatne. Nie istnieje żaden dokument regulujący samą usługę: depozyt, zasady i terminy zwrotu, reklamację usługi, odstąpienie konsumenta. Przygotowaliśmy więc treść regulaminu usługi (w konwencji dokumentów prawnika, żeby domykał jego pakiet, a nie przepisywał jego pracy) oraz stronę wyjaśniającą klientowi, czym jest depozyt, kiedy wraca i komu dokładnie płaci. Strona o depozycie trafi w okolice przycisku płatności w kreatorze — dokładnie w momencie, w którym klient decyduje o wpłacie i ma najwięcej wątpliwości. Obie strony są już napisane i opublikowane pod własnymi adresami (na razie bez linków i bez indeksowania) — ta praca jest ujęta w sekcji „Zrealizowane”. Sprawa z operatorem płatności jest załatwiona — dostęp produkcyjny mamy od 06.08. Zostały trzy rzeczy porządkowe: dopisanie operatora płatności do polityki prywatności (wymóg ochrony danych od chwili, gdy zaczynamy pobierać płatności), udostępnienie obu stron w serwisie i podlinkowanie ich z kreatora oraz usunięcie sprzeczności ze starym regulaminem, który wciąż mówi o nieodpłatnych usługach. Korekta strony „Finansowanie” czeka na Twoją odpowiedź w sprawie modelu płatności.",
    "status": "dokumenty napisane i opublikowane 27.07; dostęp produkcyjny do operatora płatności uzyskany 06.08 — nie blokuje już płatności online, zostały trzy zadania porządkowe",
    "realnie_od": 2,
    "realnie_do": 3,
@@ -282,14 +312,14 @@
   }
  ],
  "todo_ukryte_id": [
+  "T-121",
   "T-187",
+  "T-209",
   "T-220"
  ],
  "todo_pierwsze": [
   "T-186",
   "T-205"
  ],
- "todo_po_nowych": [
-  "T-121"
- ]
+ "todo_po_nowych": []
 }
