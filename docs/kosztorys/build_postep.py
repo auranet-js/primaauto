@@ -75,13 +75,16 @@ def rows_changelog():
     out = []
     for c in postep['changelog']:
         wersje = f"<span class='wersje'>{esc(c['wersje'])}</span>" if c.get('wersje') else ''
+        # 2026-08-21: numer taska przy wpisie — Ruslan zestawia „Zrealizowane" z „W kolejce"
+        # po numerach; do tej pory pokazywała je wyłącznie kolejka.
+        task = f"<span class='task'>{esc(' · '.join(c['task']))}</span> " if c.get('task') else ''
         link = ''
         if c.get('link'):
             link = (f"<div class=\"opis\"><a href=\"{esc(c['link']['url'])}\" target=\"_blank\" "
                     f"rel=\"noopener\">{esc(c['link']['tekst'])}</a></div>")
         out.append(f"""<tr>
 <td class="data-col">{esc(c['data'])}</td>
-<td><strong>{esc(c['tytul'])}</strong> {wersje}<div class="opis">{esc_par(c['opis'])}</div>{link}</td>
+<td>{task}<strong>{esc(c['tytul'])}</strong> {wersje}<div class="opis">{esc_par(c['opis'])}</div>{link}</td>
 <td class="num">{fmt_h(c.get('godz', 0))}</td></tr>""")
     return '\n'.join(out)
 
@@ -173,6 +176,7 @@ tfoot td {{ background: var(--accent-soft); font-weight: 700; }}
 .badge {{ display: inline-block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.4px; border-radius: 4px; padding: 2px 7px; }}
 .badge.new {{ background: var(--green-soft); color: var(--green); }}
 .note.przed-spotkaniem {{ font-size: 15px; color: var(--ink); }}
+.task {{ display: inline-block; font-size: 11.5px; font-weight: 700; letter-spacing: 0.3px; color: var(--accent); background: var(--accent-soft); border-radius: 4px; padding: 2px 7px; vertical-align: 2px; }}
 footer {{ margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--ink-3); font-size: 12.5px; }}
 @media (max-width: 1100px) {{
     .cols {{ grid-template-columns: 1fr; gap: 8px; }}
