@@ -68,7 +68,7 @@ footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line);
 <header class="top">
 <h1>Prima Auto — postęp prac i plan rozwoju</h1>
 <div class="sub">Platforma importu samochodów z Chin · primaauto.com.pl · opracowanie: Auranet (Jan Schenk)</div>
-<div class="stamp">Stan na 16.08.2026 · dokument roboczy, aktualizowany na bieżąco wraz z postępem prac</div>
+<div class="stamp">Stan na 21.08.2026 · dokument roboczy, aktualizowany na bieżąco wraz z postępem prac</div>
 </header>
 
 <div class="cols">
@@ -78,6 +78,14 @@ footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line);
 <table>
 <thead><tr><th>Data</th><th>Praca</th><th class="num">Godziny [h]</th></tr></thead>
 <tbody>
+<tr>
+<td class="data-col">21.08.2026</td>
+<td><strong>Opisy ogłoszeń po polsku — naprawa tłumaczenia</strong> <span class='wersje'>wtyczka 0.34.24</span><div class="opis"><p>Część opisów przy ogłoszeniach wyświetlała się po chińsku, a znacznie większa część urywała się w połowie zdania — na przykład „Trzynaście lat skupienia na samochodach w dobrym stanie! Shunxiang: 200 starannie wyselekcjonowanych” i koniec. Klient wchodzący w takie ogłoszenie widział tekst, który nagle się urywa, albo znaki, których nie przeczyta.</p><p>Przyczyna leżała w automacie tłumaczącym opisy z chińskiego. Program, który wykonuje tłumaczenie, dostawał zbyt ciasny limit na odpowiedź i większość tego limitu zużywał na wewnętrzne rozważania, zanim zdążył napisać tłumaczenie — zostawało mu miejsce na kilka pierwszych zdań. Gdy nie zostawało nic, do ogłoszenia trafiał oryginalny chiński tekst. Wyłączyliśmy te rozważania (przy tłumaczeniu opisu handlowego nie są do niczego potrzebne) i poszerzyliśmy limit. Dołożyliśmy też zabezpieczenie: jeśli tłumaczenie wróci ucięte, system je odrzuca zamiast wstawiać do ogłoszenia.</p><p>Przy okazji sprawdziliśmy, czy nie taniej byłoby użyć zwykłego tłumacza maszynowego zamiast programu rozumiejącego kontekst. Porównanie na dziewięciu prawdziwych opisach pokazało, że nie: zwykły tłumacz zamienia markę Voyah na „Lantu” (chińska nazwa, której klient nie skojarzy z naszą ofertą), z zapisu „czarny lakier, beżowe wnętrze” robi „czarne nadwozie i wnętrze”, a rocznik 2024 potrafi przeczytać jako „24 sztuki”. W jednym opisie zgubił cały akapit o zakupie na raty. Zostajemy przy dotychczasowym rozwiązaniu — po poprawce działa też pięć razy szybciej i taniej niż przed nią.</p><p>Poprawka obejmuje wszystkie ogłoszenia, które wchodzą od teraz. Dodatkowo przetłumaczyliśmy ponownie 162 najświeższe ogłoszenia. Starszych świadomie nie ruszamy — przy naszej rotacji ofert i tak schodzą z serwisu w ciągu kilku dni.</p></div></td>
+<td class="num">1</td></tr>
+<tr>
+<td class="data-col">20.08.2026</td>
+<td><strong>Płatność online za depozyt — bramka PayU uruchomiona</strong> <div class="opis"><p>Na stronie zamówienia działa już płatność online za depozyt zwrotny: kod BLIK wpisywany bez opuszczania naszej strony, a obok przycisk płatności kartą i przelewem online przez PayU. Wcześniej pozostawał wyłącznie zwykły przelew bankowy.</p><p>Przed włączeniem sprawdziliśmy, że dane produkcyjne PayU działają — połączenie z bramką odpowiada poprawnie. Samego przelewu nie testowaliśmy: to prawdziwe pieniądze, więc decyzja o próbnej płatności należy do Was. Zamówienie testowe na 1 zł czeka gotowe.</p><p>Przy okazji przygotowaliśmy odpowiedź na pytania działu weryfikacji PayU o model biznesowy i przedmiot płatności — z opisem, że rozliczamy wyłącznie zwrotny depozyt za usługę organizacji importu, oraz z odnośnikami do regulaminu usługi, strony o depozycie i polityki prywatności. Do tego zrzut ekranu płatności, bo pojawia się on dopiero po założeniu zgłoszenia i weryfikator nie zobaczy go, przeglądając stronę anonimowo.</p></div></td>
+<td class="num">1</td></tr>
 <tr>
 <td class="data-col">07.08.2026</td>
 <td><strong>Plan automatycznej dystrybucji materiałów na kanały społecznościowe</strong> <div class="opis">Rozpoznanie i plan wykonawczy dla obiegu, w którym zdjęcia i filmy z sesji na placu trafiają na wszystkie kanały bez ręcznego klikania: wskazujesz auto w panelu, a system przygotowuje gotowe posty z ceną w tytule, opisem, hashtagami i linkiem do konkretnej oferty, i wstawia je do kalendarza jako zaplanowane — do zatwierdzenia, zmiany albo skasowania przed publikacją. Przy okazji policzyliśmy, ile poszczególne kanały realnie dowożą: przez ostatnie 90 dni Facebook przysłał 1 310 wejść i 30 kontaktów, czyli dokładnie tyle, co płatna kampania remarketingowa — tyle że za darmo. Sprawdziliśmy też publiczny rejestr reklam Meta i wiemy już na pewno, że osoba, która przejęła konto w czerwcu, nigdy nie użyła Waszej strony do reklam — chodziło jej o konto rozliczeniowe, nie o Waszych obserwujących. Powstał komplet dokumentów: opis rozwiązania z podziałem na osiem etapów i wyceną, instrukcja uporządkowania dostępów do kont wysłana do Prima-Auto oraz rejestr decyzji do podjęcia.</div></td>
@@ -187,7 +195,7 @@ footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line);
 <td><strong>Reklamy dynamiczne Google (DSA) — celowanie w najtańsze oferty</strong> <div class="opis">Feed reklam przestawiony ze stron modeli na najtańszą aktualną ofertę każdego modelu, z automatyczną codzienną aktualizacją. Do tego nowa treść reklamy (wymiana jednej z dwóch kreacji).</div></td>
 <td class="num">3</td></tr>
 </tbody>
-<tfoot><tr><td colspan="2">Razem od spotkania 16.07.2026</td><td class="num">110</td></tr></tfoot>
+<tfoot><tr><td colspan="2">Razem od spotkania 16.07.2026</td><td class="num">112</td></tr></tfoot>
 </table>
 
 </section>

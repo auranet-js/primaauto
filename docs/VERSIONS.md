@@ -67,8 +67,21 @@ i zgubił cały akapit o ratach. DeepL popełnia ten sam błąd na kolorach.
 
 Kompletność zweryfikowana przez porównanie końcówek z oryginałem, tagi `<br/>` zachowane.
 
-**Nie zrobione** (osobny krok): retranslacja zaległych ofert (`diag/retranslate-descriptions.php`)
-oraz detektor liczący dziennie świeże oferty z opisem CJK lub uciętym.
+**Retranslacja zaległości.** Napisany `diag/retranslate-broken-descriptions.php`
+(kopia w repo: `scripts/`) — stary `diag/retranslate-descriptions.php` nie nadaje się,
+pochodzi z v0.11 i wpisuje w `post_content` tablicę zwracaną przez `translateDescription()`
+zamiast pola `translated`. Kryteria uszkodzenia: ≥3 znaki CJK, PL/CN < 1.8, albo końcówka
+na przecinku/średniku którego nie ma w oryginale (to trzecie kryterium wymagało poprawki
+po partii próbnej — chińskie opisy nagminnie kończą się na `；`, więc wierne tłumaczenie
+dziedziczy ten znak i było odrzucane jako ucięte).
+
+Bieg 2026-08-21: **162 najnowsze oferty naprawione** (~$0,18), **816 zostawionych świadomie**
+— decyzja Janka: przy rotacji ofert (48 h draft → 7 dni trash) starsze i tak schodzą z serwisu,
+a koszt dokończenia (~$0,90) nie równoważy braku efektu. Skrypt zostaje, gdyby wrócić:
+`APPLY=1 LIMIT=100 wp eval-file …` bierze od najnowszych.
+
+**Świadomie nie robimy:** detektora liczącego dziennie świeże oferty z opisem CJK lub uciętym
+(propozycja odrzucona 2026-08-21).
 
 
 ## 0.34.23 — 2026-08-18 (guard mapowania rozszerzony na dongchedi)
