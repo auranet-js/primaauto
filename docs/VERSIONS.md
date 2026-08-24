@@ -36,9 +36,30 @@ dotyczyła wyłącznie guarda mapowania na dongchedi; dla che168 kod jest logicz
 5. Oferta 440759 (Geely Galaxy M9, import ręczny) przepięta z serii **AITO M9** (5304, parent
    AITO) na **Galaxy M9** (6550, parent Geely) — siedziała w cudzym hubie.
 
-**Otwarte (do decyzji).** Puste termy-śmieci 7234 `Galaxy` (make) i 7235 `银河M9` (serie) — zwracają
-HTTP 200, ale RankMath pomija je w sitemapie (count=0). 3 oferty z ręcznie zmienionym tytułem lub
-brakiem wpisu w mapie tłumaczeń: 421846, 432040, 442620.
+**Domknięcie tego samego dnia (druga tura).**
+
+6. Skasowane puste termy-śmieci 7234 `Galaxy` (make) i 7235 `银河M9` (serie). Dziecko przed
+   rodzicem, żeby WP nie przepiął go na `parent=0`. Po kasacji `/samochody/galaxy/` i
+   `/samochody/galaxy/m9-2/` robią **301 na hub Geely** — wcześniejsze „HTTP 200" było
+   wynikiem podążenia za przekierowaniem, nie żywym pustym hubem.
+7. `data/translations-complectations.php` — dopisane `进阶` → `Advanced` oraz
+   `易三方闪充性能` → `Tri-Motor Flash Charge Performance`. Frazę Denzy trzeba było zapisać
+   **bez końcowego `型`**: wcześniejszy wpis `'型' => ''` zjada je w trakcie iteracji
+   `str_replace`, więc wariant z `型` nigdy by nie trafił. Wersje tłumaczyły się dotąd do
+   pustego łańcucha i oferta zostawała z pełną nazwą w tytule (432040, 442620 — naprawione).
+8. `#421846` — duplikat `900 2025` siedział w ŚRODKU tytułu, bo Ruslan dopisał na końcu
+   „NOWY różne kolory + hak". Wycięty wyłącznie powielony fragment, dopisek zachowany.
+9. `#410869` (BYD, draft) przepięty z serii **AITO M9** (5304) na **Xia Summer** (3742) +
+   tytuł `BYD M9` → `BYD Xia Summer`. Znany przypadek: che168 nazywa BYD 夏 dealersko
+   `比亚迪M9`, override dopisany 10.08 — ta oferta weszła 10.08 o 11:01, tuż przed nim.
+   Hub AITO M9 nie zawiera już obcych marek.
+
+`#390837` i `#439214` zostawione świadomie — mają poprawne tytuły (drugi edytowany ręcznie).
+
+**Zauważone obok, NIE ruszane.** Mapa tłumaczeń nie zna samego `性能` (są tylko `高性能`
+i `巅峰性能`), więc „Performance" gubi się po cichu w **11 ofertach**: `领克08 EM-P 2026款
+210四驱性能Ultra H7` → `Lynk & Co 08 EM-P 2026 210 4WD Ultra H7`. Fix to jedna linia, ale
+zmienia zachowanie przyszłych importów — do decyzji.
 
 **Wniosek na przyszłość.** Adapter ufał cudzemu API bez asercji — założenie o kształcie odpowiedzi
 było zapisane jako `empty()`, bez logu i alarmu, gdy przestanie być prawdziwe. Wada rozeszła się na
