@@ -383,6 +383,16 @@
    "status": "kierunek do rozstrzygnięcia — wycena po pierwszym przebiegu na Leopardzie 5"
   },
   {
+   "id": "T-248",
+   "tytul": "Śledzenie statku — numer przesyłki w zamówieniu i status przewoźnika przy aucie w drodze",
+   "opis": "Kiedy zamówienie wchodzi w etap „w drodze”, klient wie tylko tyle, że auto płynie. O termin dopytuje mailem albo telefonem, a żeby odpowiedzieć, ktoś po Waszej stronie musi zajrzeć do dokumentów przewoźnika i przepisać to, co tam widać.\n\nPo zmianie w karcie zamówienia dochodzi pole na numer przesyłki od przewoźnika (numer kontenera lub listu przewozowego Maersk). Po jego wpisaniu system sam pyta przewoźnika o stan przesyłki i przy statusie „w drodze” pokazuje aktualne dane: gdzie jest ładunek, jaki port jest następny i jaka jest przewidywana data przypłynięcia. Widzi to Ruslan w panelu i klient przy swoim zamówieniu — bez telefonu do Was. Dane odświeżają się same, więc przesunięcie terminu przez armatora dociera do klienta bez Waszego udziału.\n\nDo sprawdzenia przed wyceną: na jakich zasadach Maersk udostępnia dane śledzenia dla naszych przesyłek — od tego zależy zakres i koszt. Wariant zapasowy, gdyby dostęp do danych okazał się niedostępny lub płatny ponad sens: pole na numer przesyłki plus link prowadzący klienta wprost do śledzenia u przewoźnika, bez przepisywania statusu na naszą stronę. Do ustalenia też, czy poza Maerskiem korzystacie z innych armatorów — obsługa kolejnego przewoźnika to osobna praca.",
+   "status": "zgłoszone 24.08.2026 — wycenione wstępnie, zakres do potwierdzenia po sprawdzeniu dostępu do danych Maersk",
+   "realnie_od": 3,
+   "realnie_do": 3,
+   "rynkowo_od": 7,
+   "rynkowo_do": 9
+  },
+  {
    "id": "T-243",
    "tytul": "Automatyczna dystrybucja zdjęć i filmów na wszystkie kanały społecznościowe",
    "opis": "Po każdej sesji na placu powstaje komplet materiałów: zdjęcia każdego auta i filmy w dwóch kadrach, poziomym i pionowym. Dziś opublikowanie ich to robota ręczna — ktoś musi wymyślić tytuł, opis i hashtagi, dobrać właściwy kadr do platformy i wrzucić plik osobno na Facebooka, Instagrama, YouTube'a i TikToka. Przy sesji z dziesięcioma autami to kilka godzin klikania, a część materiałów nigdy nie wychodzi. Na Facebooku posty powstają ręcznie do dziś.\n\nPo zmianie wskazujesz auto w panelu i dostajesz gotowy komplet postów na wszystkie kanały — z ceną w tytule, opisem, hashtagami i linkiem prowadzącym wprost do tej oferty. Materiały z nowej sesji zgłaszają się same, z folderu na Dysku. Posty trafiają do kalendarza jako zaplanowane, więc widzisz je z wyprzedzeniem i możesz je zmienić, przesunąć albo skasować, zanim się ukażą — nic nie publikuje się bez Twojej wiedzy. System pilnuje też rytmu: nie wypuści dwóch postów o tym samym aucie pod rząd, a w tygodniach bez nowych dostaw sam zaproponuje powtórkę wcześniejszych ofert w nowym ujęciu, żeby kanały nie milczały.\n\nDrugi powód, dla którego to się liczy: materiał trzeba najpierw opublikować, żeby móc go promować. Film wgrany na YouTube można wypromować kampanią wideo, post na Facebooku można podbić, rolkę na TikToku wypuścić w reklamę. Post, którego nie ma, nie jest kandydatem do promocji. Dziś każda taka publikacja kosztuje osobną sesję pracy, więc materiał z sesji trafia do reklam w ułamku.\n\nDo tego jedna wspólna strona z podglądem: co poszło na który kanał, co czeka w kolejce, co się nie udało i jak to zadziałało. Dziś tego widoku nie ma nigdzie.\n\nPodział na osiem etapów. Pierwszy — uporządkowanie dostępów do kont — jest po Waszej stronie i blokuje resztę; instrukcja jest gotowa. Osobny, mały etap to czujnik pilnujący, czy ruch z Facebooka nie zamarł — bo dziś nikt nas o tym nie powiadomi. Wersja, która realnie zdejmuje ręczną robotę na Facebooku i Instagramie, to 57–75 godzin; YouTube, TikTok, podgląd wyników i rotacja dochodzą po kolei.",
@@ -397,10 +407,10 @@
   "T-121",
   "T-187",
   "T-209",
-  "T-220"
+  "T-220",
+  "T-186"
  ],
  "todo_pierwsze": [
-  "T-186",
   "T-205"
  ],
  "todo_po_nowych": []

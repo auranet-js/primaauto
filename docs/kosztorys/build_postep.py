@@ -104,7 +104,8 @@ def row_task(p, nowy=False):
         rozmiar = f"<span class='rozmiar'>skala: {ROZMIARY.get(p['rozmiar'], p['rozmiar'])}</span>"
     idtxt = f"{esc(p['id'])} — " if p.get('id') else ''
     if p.get('realnie_od') is not None:
-        godz = f"{fmt_h(p['realnie_od'])}–{fmt_h(p['realnie_do'])}"
+        godz = (fmt_h(p['realnie_od']) if p['realnie_od'] == p['realnie_do']
+                else f"{fmt_h(p['realnie_od'])}–{fmt_h(p['realnie_do'])}")
     else:
         godz = '—'
     linki = ''
