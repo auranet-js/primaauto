@@ -1,5 +1,37 @@
 # Historia wersji asiaauto-sync
 
+## 0.34.26 — 2026-08-24 (tryb „tylko aktualizacja" per źródło — przełącznik w panelu)
+
+**Po co.** Gdy oba feedy (dongchedi, che168) działają, nie potrzebujemy przyrostu z obu naraz —
+kosztuje transfer, wywołania API i pulę Indexing. Ale wyłączenie źródła przyciskiem w panelu
+gasiło **wszystko**, łącznie z aktualizacją cen i wycofywaniem sztuk zdjętych u źródła. Skutek
+byłby taki, jak przy dongchedi w lipcu: zapas zostaje na stronie jako oferty aut już sprzedanych.
+
+**Co się zmieniło.** Nic w mechanice synca — tryb `verify` istnieje od 0.34.x (T-222, 30.07)
+i robi dokładnie to, co trzeba (`added` → skip, `changed` na znanej ofercie → aktualizacja,
+`removed` → `markRemoved()`). Brakowało wyłącznie sposobu, żeby go ustawić inaczej niż
+`wp option update` z konsoli. Panel dostał więc trzeci stan.
+
+**Zmiany.**
+
+1. `class-asiaauto-admin.php` — handler `sync_source_toggle` przyjmuje `sync_source_mode`
+   ∈ `{full, verify, off}` zamiast boolowego `source_enabled`; mapuje trzy stany UI na dwie
+   istniejące opcje: `full` → `enabled=1 mode=full`, `verify` → `enabled=1 mode=verify`,
+   `off` → `enabled=0` (`mode` zostaje nietknięty, żeby powrót wracał do poprzedniego trybu).
+   Wartości spoza listy odrzucane przed zapisem.
+2. `class-asiaauto-admin.php` — kafelek „Źródła" w zakładce Konfiguracja: `<select>` z trzema
+   opcjami + „zapisz", pod spodem opis skutku („bez nowych ofert; ceny i wycofywanie działają").
+
+**Czego nie ruszono.** `class-asiaauto-sync.php` — bez zmian. Kursor `asiaauto_last_change_id_{source}`
+biegnie także w trybie `verify`, więc powrót na `full` **nie ciąga zaległości** — wchodzą wyłącznie
+zdarzenia od chwili przełączenia (sprawdzone przy powrocie dongchedi 16.08). Ręczny import
+(menu che168 / „Dodaj z Dongchedi") tych flag nie dotyczy — pozostaje dostępny w każdym trybie.
+
+**Weryfikacja.** `php -l` na obu plikach. Smoke test przez `handleSave()` na źródle che168:
+`verify` → `enabled=1 mode=verify`, `isVerifyOnly=true`; `off` → `enabled=0`, `isEnabledForSource=false`;
+`full` → `enabled=1 mode=full`; wartość spoza listy nie zmienia opcji. Render kafelka sprawdzony
+przez `renderStatus()` — trzy opcje w select, zaznaczony stan bieżący.
+
 ## 0.34.25 — 2026-08-24 (che168: pole `complectation` z API dublowało tytuły)
 
 **Objaw.** Od 19.08 tytuły nowych ofert che168 niosły nazwę pojazdu dwa razy:
