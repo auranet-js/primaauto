@@ -185,3 +185,45 @@ wp cron event run asiaauto_daily_cleanup
 # PHP lint po edycji
 ~/projekty/primaauto/scripts/lint.sh
 ```
+
+## Po zmianie mapy tłumaczeń (`data/translations-complectations.php`)
+
+Dopisanie wpisu do mapy działa **wyłącznie na oferty importowane od tego momentu** — te już
+w bazie zostają ze starym tekstem, więc mapa i baza rozjeżdżają się po cichu. Domyka to:
+
+```bash
+cd ~/domains/primaauto.com.pl/public_html
+
+# dry-run: wszystkie oferty che168
+wp eval-file ~/projekty/primaauto/scripts/przelicz-tytuly-po-mapie.php
+
+# dry-run zawężony do wersji zawierających dany znak CJK
+wp eval-file ~/projekty/primaauto/scripts/przelicz-tytuly-po-mapie.php 性能
+
+# zapis
+wp eval-file ~/projekty/primaauto/scripts/przelicz-tytuly-po-mapie.php 性能 zapisz
+```
+
+Przelicza `complectation` z `param_93` i wymienia **wyłącznie ogon tytułu** — prefiks
+(marka, seria, rocznik) i `post_name` zostają, więc adresy stron się nie zmieniają.
+Pomija oferty, których tytuł nie kończy się zapisaną wersją (ręczne edycje Ruslana) i wypisuje
+je na końcu do przejrzenia.
+
+**Kolejność wpisów w mapie ma znaczenie.** Jest iterowana `str_replace` po kolei, więc wpis
+ogólny przechwytuje każde złożenie stojące po nim. Wersje szczegółowe dopisuj POWYŻEJ ogólnych,
+inaczej umrą po cichu — `极致性能版` dopisane po `性能` daje samo `Performance`. Ta sama pułapka
+dotyczy istniejących wpisów kasujących (`'版' => ''`, `'型' => ''`): frazy kończące się tym
+znakiem trzeba zapisywać bez niego. Historia: `docs/VERSIONS.md`, wpis 0.34.25.
+
+## Naprawa tytułów zdublowanych przez pole `complectation` z API
+
+Jednorazówka z 24.08.2026 (auto-api zaczęło wypełniać pole pełną nazwą pojazdu), zostawiona
+na wypadek nawrotu po stronie źródła:
+
+```bash
+wp eval-file ~/projekty/primaauto/scripts/napraw-tytuly-che168-2026-08-24.php          # dry-run
+wp eval-file ~/projekty/primaauto/scripts/napraw-tytuly-che168-2026-08-24.php zapisz   # zapis
+```
+
+Wykrywa duplikat mechanicznie: rocznik z `param_93` stoi **przed** `款`, więc jego obecność
+w `complectation` dowodzi, że pole niesie całą nazwę, a nie samą wersję.
