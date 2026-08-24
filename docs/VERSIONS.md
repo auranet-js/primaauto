@@ -56,10 +56,28 @@ dotyczyła wyłącznie guarda mapowania na dongchedi; dla che168 kod jest logicz
 
 `#390837` i `#439214` zostawione świadomie — mają poprawne tytuły (drugi edytowany ręcznie).
 
-**Zauważone obok, NIE ruszane.** Mapa tłumaczeń nie zna samego `性能` (są tylko `高性能`
-i `巅峰性能`), więc „Performance" gubi się po cichu w **11 ofertach**: `领克08 EM-P 2026款
-210四驱性能Ultra H7` → `Lynk & Co 08 EM-P 2026 210 4WD Ultra H7`. Fix to jedna linia, ale
-zmienia zachowanie przyszłych importów — do decyzji.
+**Trzecia tura — `性能` (Performance) gubione po cichu.** Mapa znała tylko `高性能`
+i `巅峰性能`, więc samo `性能` wypadało: `领克08 EM-P 2026款 210四驱性能Ultra H7` dawało
+`Lynk & Co 08 EM-P 2026 210 4WD Ultra H7`. Nic tego nie sygnalizowało — guard usuwający
+resztkowe CJK wycina znak i tytuł wygląda poprawnie.
+
+Przed decyzją zmierzona symulacja obu wersji mapy na 2353 ofertach z `param_93`:
+**11 wyników innych, 2342 bez zmian**, każda zmiana wyłącznie dodaje zgubione słowo.
+Zero regresji, bo `高性能` (poz. 36), `巅峰性能` (230) i `易三方闪充性能` (245) stoją
+w iteracji przed nowym wpisem (247).
+
+10. `data/translations-complectations.php` — dopisane `性能` → `Performance` wraz
+    z komentarzem o kolejności: to wpis **ogólny**, przechwytuje każde złożenie stojące
+    po nim, więc przyszłe wersje szczegółowe (`极致性能` itp.) trzeba wstawiać POWYŻEJ.
+    Zmierzone: `极致性能版` dopisane po `性能` daje samo `Performance` (przedrostek zjedzony),
+    dopisane przed — `Ultimate Performance`. Ta sama pułapka co przy `型` w drugiej turze.
+11. `scripts/przelicz-tytuly-po-mapie.php` — **nowe narzędzie**. Przelicza `complectation`
+    z `param_93` i synchronizuje ogon tytułu po każdej zmianie mapy tłumaczeń; bez niego
+    nowe wpisy działają wyłącznie na ofertach importowanych od tego momentu, a te już
+    w bazie zostają ze starym tekstem. Przyjmuje filtr znaku CJK i tryb `zapisz`.
+    Przebieg z filtrem `性能`: 26 zbadanych, **9 tytułów poprawionych**, 15 bez zmian,
+    2 pominięte (tytuły edytowane ręcznie, już zawierały „Performance").
+    Kontrola po zapisie: 18 ofert z „High Performance" nietkniętych.
 
 **Wniosek na przyszłość.** Adapter ufał cudzemu API bez asercji — założenie o kształcie odpowiedzi
 było zapisane jako `empty()`, bez logu i alarmu, gdy przestanie być prawdziwe. Wada rozeszła się na
