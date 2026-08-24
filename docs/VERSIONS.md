@@ -1,5 +1,49 @@
 # Historia wersji asiaauto-sync
 
+## 0.34.25 — 2026-08-24 (che168: pole `complectation` z API dublowało tytuły)
+
+**Objaw.** Od 19.08 tytuły nowych ofert che168 niosły nazwę pojazdu dwa razy:
+`Xiaomi SU7 Ultra 2025 Xiaomi SU7 Ultra 2025 Ultra`, `Geely Galaxy L7 2024 Geely Galaxy L7 2023
+1.5T 115km MAX`. Zasięg: **1256 ofert (1195 publish + 61 draft), 34 marki**. Slugi nietknięte —
+`post_name` nie zawiera `complectation`, więc adresy i indeks zostały bez zmian.
+
+**Przyczyna — po stronie auto-api, nie u nas.** Adapter che168 opierał się na założeniu z lipca,
+że źródło nie podaje pola `complectation` (podaje je dongchedi), więc sam wycinał wersję z
+`param_93` — część po `款`. 18/19.08 auto-api zaczęło pole wypełniać **pełną nazwą pojazdu**,
+niekonsekwentnie CN/EN. Guard `if (empty($data['complectation']) && …)` przestał wchodzić i cała
+nazwa szła do tytułu obok marki, serii i rocznika.
+
+Dowód rozstrzygający: oferta 421414 (inner_id 59273159) zaimportowana 18.08 poprawnie ma
+`_asiaauto_complectation_original = 曜黑版 70kWh 五座` — sam trim, zapisywany wyłącznie wtedy, gdy
+pole z API było puste. Dziś to samo API dla tego samego rekordu zwraca
+`极氪9X 2026款 曜黑版 70kWh 五座`. Pliki decydujące o tytule (`class-asiaauto-che168-adapter.php`,
+`class-asiaauto-importer.php`) mają mtime 2026-07-27 — nietknięte. Zmiana z 18.08 (v0.34.23)
+dotyczyła wyłącznie guarda mapowania na dongchedi; dla che168 kod jest logicznie identyczny.
+
+**Zmiany.**
+
+1. `class-asiaauto-che168-adapter.php` — `param_93` ma teraz **pierwszeństwo** nad polem z API;
+   pole zostaje wyłącznie jako fallback (brak `param_93` / brak `款` / pusty trim).
+2. Ten sam plik — cięcie po znaczniku **rocznika** (`2025款`) zamiast po ostatnim `款`:
+   `豪越L 2025款 2.0T DCT尊享款` ma dwa `款`, więc `end(explode())` dawał pusty trim i wersja
+   przepadała (2 oferty Geely Haoyue L).
+3. `data/che168-model-map.php` + `data/brand-mapping-v6.1.php` — dopisana para `Galaxy|银河M9`
+   → `Geely / Galaxy M9` (slug `m9`). Bez niej ręczny import 22.08 założył term make `Galaxy`
+   (7234) i serie `银河M9` (7235). auto-api podaje `mark='Galaxy'` dla całej submarki.
+4. `scripts/napraw-tytuly-che168-2026-08-24.php` — batch naprawczy. Odtwarza wersję z `param_93`
+   i wymienia **wyłącznie ogon** tytułu; prefiks (marka, seria, rocznik) i `post_name` nietknięte.
+   Wynik: 1256 naprawionych, 0 z CJK po naprawie. Backup: `~/backups/primaauto/2026-08-24/`.
+5. Oferta 440759 (Geely Galaxy M9, import ręczny) przepięta z serii **AITO M9** (5304, parent
+   AITO) na **Galaxy M9** (6550, parent Geely) — siedziała w cudzym hubie.
+
+**Otwarte (do decyzji).** Puste termy-śmieci 7234 `Galaxy` (make) i 7235 `银河M9` (serie) — zwracają
+HTTP 200, ale RankMath pomija je w sitemapie (count=0). 3 oferty z ręcznie zmienionym tytułem lub
+brakiem wpisu w mapie tłumaczeń: 421846, 432040, 442620.
+
+**Wniosek na przyszłość.** Adapter ufał cudzemu API bez asercji — założenie o kształcie odpowiedzi
+było zapisane jako `empty()`, bez logu i alarmu, gdy przestanie być prawdziwe. Wada rozeszła się na
+cały zaciąg przez 5 dni, wykryta okiem, nie przez system.
+
 ## 0.34.24 — 2026-08-21 (tłumaczenie opisów: wyłączony thinking Gemini)
 
 **Objaw.** Część opisów ofert wyświetlała się po chińsku, znacznie większa część była
