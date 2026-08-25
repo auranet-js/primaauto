@@ -1,0 +1,1622 @@
+{
+ "data": "2026-08-25T13:54:10.537Z",
+ "strony": [
+  {
+   "url": "https://primaauto.com.pl/",
+   "pelna_bateria": true,
+   "status": 200,
+   "dom": {
+    "sesja": {
+     "zalogowany": false,
+     "baner_zgod": [
+      {
+       "el": "DIV.cmplz-header",
+       "rola": null,
+       "aria_modal": null
+      },
+      {
+       "el": "DIV.cmplz-title",
+       "rola": null,
+       "aria_modal": null
+      },
+      {
+       "el": "DIV.cmplz-close",
+       "rola": "button",
+       "aria_modal": null
+      }
+     ]
+    },
+    "jezyk": {
+     "lang": "pl-PL",
+     "obcojezyczne": []
+    },
+    "struktura": {
+     "h1": 1,
+     "przeskoki_naglowkow": 0,
+     "main": 1,
+     "nav_bez_nazwy": 0,
+     "nav_razem": 4,
+     "skip": null
+    },
+    "formularze": {
+     "pol": 2,
+     "bez_nazwy": [],
+     "bez_autocomplete": []
+    },
+    "nazwy": {
+     "interaktywnych": 115,
+     "bez_nazwy": []
+    },
+    "cele_male": [],
+    "ruch": {
+     "animacje_szybkie": 0,
+     "karuzele": 0,
+     "tytuly_natywne": 9
+    },
+    "live": [
+     "dialog cmplz-cookiebanner banner-1 "
+    ],
+    "media": {
+     "video": 0,
+     "audio": 0,
+     "iframe": []
+    },
+    "inne": {
+     "accesskey": 0,
+     "autofocus": 0,
+     "obrazy": 49,
+     "obrazy_bez_alt": 0,
+     "obrazy_alt_puste": 0
+    },
+    "reguly_focus": [],
+    "kontrast_pomocniczy": {
+     "biel_vs_ccc": 1.61
+    }
+   },
+   "axe": {
+    "wersja": "4.13.0",
+    "naruszen": 1,
+    "elementow": 7,
+    "do_sprawdzenia": 1,
+    "naruszenia": [
+     {
+      "id": "color-contrast",
+      "waga": "serious",
+      "sztuk": 7,
+      "wcag": "wcag2aa,wcag143",
+      "przyklad": "<div class=\"aa-home__car-price\">202 000 PLN</div>",
+      "wyjasnienie": "Element has insufficient color contrast of 4.48 (foreground color: #d63031, background color: #f5f6f8, font size: 12.0pt"
+     }
+    ]
+   },
+   "klawiatura": {
+    "przystankow": 45,
+    "bez_wskaznika_fokusu": 0,
+    "przyklady_bez_wskaznika": [],
+    "zaslanianych": 0,
+    "pulapka_podejrzenie": false,
+    "kolejnych_powtorzen": 0,
+    "bez_nazwy": 0,
+    "wskazniki": [
+     "2px rgb(255, 255, 255)"
+    ]
+   },
+   "odstepy": {
+    "przyciete": 0,
+    "poziomy": false
+   },
+   "tekst200": {
+    "przyciete": 0,
+    "poziomy": false
+   },
+   "reflow": {
+    "rzutnia": 320,
+    "przewijanie_poziome": false,
+    "mq_mobile": true,
+    "wystajacych": 0,
+    "poza_tabelami": 0,
+    "przyklady": []
+   },
+   "orientacja": {
+    "tresc_widoczna": true,
+    "blokada": 0
+   }
+  },
+  {
+   "url": "https://primaauto.com.pl/samochody/",
+   "pelna_bateria": true,
+   "status": 200,
+   "dom": {
+    "sesja": {
+     "zalogowany": false,
+     "baner_zgod": [
+      {
+       "el": "DIV.cmplz-header",
+       "rola": null,
+       "aria_modal": null
+      },
+      {
+       "el": "DIV.cmplz-title",
+       "rola": null,
+       "aria_modal": null
+      },
+      {
+       "el": "DIV.cmplz-close",
+       "rola": "button",
+       "aria_modal": null
+      }
+     ]
+    },
+    "jezyk": {
+     "lang": "pl-PL",
+     "obcojezyczne": []
+    },
+    "struktura": {
+     "h1": 1,
+     "przeskoki_naglowkow": 0,
+     "main": 1,
+     "nav_bez_nazwy": 0,
+     "nav_razem": 5,
+     "skip": null
+    },
+    "formularze": {
+     "pol": 4,
+     "bez_nazwy": [],
+     "bez_autocomplete": []
+    },
+    "nazwy": {
+     "interaktywnych": 170,
+     "bez_nazwy": [
+      "BUTTON.aa-color ",
+      "BUTTON.aa-color ",
+      "BUTTON.aa-color ",
+      "BUTTON.aa-color ",
+      "BUTTON.aa-color ",
+      "BUTTON.aa-color ",
+      "BUTTON.aa-color ",
+      "BUTTON.aa-color ",
+      "BUTTON.aa-color ",
+      "BUTTON.aa-color "
+     ]
+    },
+    "cele_male": [],
+    "ruch": {
+     "animacje_szybkie": 0,
+     "karuzele": 0,
+     "tytuly_natywne": 22
+    },
+    "live": [
+     "dialog cmplz-cookiebanner banner-1 "
+    ],
+    "media": {
+     "video": 0,
+     "audio": 0,
+     "iframe": []
+    },
+    "inne": {
+     "accesskey": 0,
+     "autofocus": 0,
+     "obrazy": 27,
+     "obrazy_bez_alt": 0,
+     "obrazy_alt_puste": 0
+    },
+    "reguly_focus": [
+     {
+      "sel": ".aa-inv select.aa-sort__select:focus",
+      "css": "outline: none !important; border-color: var(--aa-primary) !important;"
+     },
+     {
+      "sel": ".aa-inv .aa-filter__search input[type=\"text\"], .aa-inv .aa-filter__search input[",
+      "css": "display: block !important; width: 100% !important; padding: 6px 10px !important;"
+     },
+     {
+      "sel": ".aa-inv .aa-color, .aa-inv .aa-color:hover, .aa-inv .aa-color:focus, .elementor-",
+      "css": "position: relative !important; width: 34px !important; height: 34px !important; "
+     },
+     {
+      "sel": ".aa-inv input[type=\"text\"].aa-price-inputs__input, .aa-inv input[type=\"text\"].aa",
+      "css": "display: block !important; width: 100% !important; padding: 9px 30px 9px 10px !i"
+     },
+     {
+      "sel": ".aa-inv input[type=\"text\"].aa-search__input, .aa-inv input[type=\"text\"].aa-searc",
+      "css": "display: block !important; width: 100% !important; padding: 9px 32px !important;"
+     }
+    ],
+    "kontrast_pomocniczy": {
+     "biel_vs_ccc": 1.61
+    }
+   },
+   "axe": {
+    "wersja": "4.13.0",
+    "naruszen": 0,
+    "elementow": 0,
+    "do_sprawdzenia": 1,
+    "naruszenia": []
+   },
+   "klawiatura": {
+    "przystankow": 45,
+    "bez_wskaznika_fokusu": 0,
+    "przyklady_bez_wskaznika": [],
+    "zaslanianych": 0,
+    "pulapka_podejrzenie": false,
+    "kolejnych_powtorzen": 0,
+    "bez_nazwy": 0,
+    "wskazniki": [
+     "2px rgb(255, 255, 255)"
+    ]
+   },
+   "odstepy": {
+    "przyciete": 1,
+    "poziomy": false
+   },
+   "tekst200": {
+    "przyciete": 1,
+    "poziomy": false
+   },
+   "reflow": {
+    "rzutnia": 320,
+    "przewijanie_poziome": false,
+    "mq_mobile": true,
+    "wystajacych": 0,
+    "poza_tabelami": 0,
+    "przyklady": []
+   },
+   "orientacja": {
+    "tresc_widoczna": true,
+    "blokada": 0
+   }
+  },
+  {
+   "url": "https://primaauto.com.pl/marki/",
+   "pelna_bateria": true,
+   "status": 200,
+   "dom": {
+    "sesja": {
+     "zalogowany": false,
+     "baner_zgod": [
+      {
+       "el": "DIV.cmplz-header",
+       "rola": null,
+       "aria_modal": null
+      },
+      {
+       "el": "DIV.cmplz-title",
+       "rola": null,
+       "aria_modal": null
+      },
+      {
+       "el": "DIV.cmplz-close",
+       "rola": "button",
+       "aria_modal": null
+      }
+     ]
+    },
+    "jezyk": {
+     "lang": "pl-PL",
+     "obcojezyczne": []
+    },
+    "struktura": {
+     "h1": 1,
+     "przeskoki_naglowkow": 0,
+     "main": 1,
+     "nav_bez_nazwy": 0,
+     "nav_razem": 4,
+     "skip": null
+    },
+    "formularze": {
+     "pol": 0,
+     "bez_nazwy": [],
+     "bez_autocomplete": []
+    },
+    "nazwy": {
+     "interaktywnych": 109,
+     "bez_nazwy": []
+    },
+    "cele_male": [],
+    "ruch": {
+     "animacje_szybkie": 0,
+     "karuzele": 0,
+     "tytuly_natywne": 9
+    },
+    "live": [
+     "dialog cmplz-cookiebanner banner-1 "
+    ],
+    "media": {
+     "video": 0,
+     "audio": 0,
+     "iframe": []
+    },
+    "inne": {
+     "accesskey": 0,
+     "autofocus": 0,
+     "obrazy": 9,
+     "obrazy_bez_alt": 0,
+     "obrazy_alt_puste": 0
+    },
+    "reguly_focus": [],
+    "kontrast_pomocniczy": {
+     "biel_vs_ccc": 1.61
+    }
+   },
+   "axe": {
+    "wersja": "4.13.0",
+    "naruszen": 0,
+    "elementow": 0,
+    "do_sprawdzenia": 1,
+    "naruszenia": []
+   },
+   "klawiatura": {
+    "przystankow": 45,
+    "bez_wskaznika_fokusu": 0,
+    "przyklady_bez_wskaznika": [],
+    "zaslanianych": 0,
+    "pulapka_podejrzenie": false,
+    "kolejnych_powtorzen": 0,
+    "bez_nazwy": 0,
+    "wskazniki": [
+     "2px rgb(255, 255, 255)"
+    ]
+   },
+   "odstepy": {
+    "przyciete": 0,
+    "poziomy": false
+   },
+   "tekst200": {
+    "przyciete": 0,
+    "poziomy": false
+   },
+   "reflow": {
+    "rzutnia": 320,
+    "przewijanie_poziome": true,
+    "mq_mobile": true,
+    "wystajacych": 3,
+    "poza_tabelami": 3,
+    "przyklady": [
+     "DIV.cmplz-divider cmplz-divid →332",
+     "DIV.cmplz-divider cmplz-foote →332",
+     "SPAN.aa-brand-card__count →332"
+    ]
+   },
+   "orientacja": {
+    "tresc_widoczna": true,
+    "blokada": 0
+   }
+  },
+  {
+   "url": "https://primaauto.com.pl/samochody/toyota/sienna/",
+   "pelna_bateria": false,
+   "status": 200,
+   "dom": {
+    "sesja": {
+     "zalogowany": false,
+     "baner_zgod": [
+      {
+       "el": "DIV.cmplz-header",
+       "rola": null,
+       "aria_modal": null
+      },
+      {
+       "el": "DIV.cmplz-title",
+       "rola": null,
+       "aria_modal": null
+      },
+      {
+       "el": "DIV.cmplz-close",
+       "rola": "button",
+       "aria_modal": null
+      }
+     ]
+    },
+    "jezyk": {
+     "lang": "pl-PL",
+     "obcojezyczne": []
+    },
+    "struktura": {
+     "h1": 1,
+     "przeskoki_naglowkow": 0,
+     "main": 1,
+     "nav_bez_nazwy": 0,
+     "nav_razem": 5,
+     "skip": null
+    },
+    "formularze": {
+     "pol": 0,
+     "bez_nazwy": [],
+     "bez_autocomplete": []
+    },
+    "nazwy": {
+     "interaktywnych": 68,
+     "bez_nazwy": []
+    },
+    "cele_male": [],
+    "ruch": {
+     "animacje_szybkie": 0,
+     "karuzele": 0,
+     "tytuly_natywne": 9
+    },
+    "live": [
+     "dialog cmplz-cookiebanner banner-1 "
+    ],
+    "media": {
+     "video": 0,
+     "audio": 0,
+     "iframe": []
+    },
+    "inne": {
+     "accesskey": 0,
+     "autofocus": 0,
+     "obrazy": 6,
+     "obrazy_bez_alt": 0,
+     "obrazy_alt_puste": 0
+    },
+    "reguly_focus": [],
+    "kontrast_pomocniczy": {
+     "biel_vs_ccc": 1.61
+    }
+   },
+   "axe": {
+    "wersja": "4.13.0",
+    "naruszen": 1,
+    "elementow": 5,
+    "do_sprawdzenia": 1,
+    "naruszenia": [
+     {
+      "id": "color-contrast",
+      "waga": "serious",
+      "sztuk": 5,
+      "wcag": "wcag2aa,wcag143",
+      "przyklad": "<a href=\"https://primaauto.com.pl/wiki/e-cvt/\" class=\"aa-autolink\" title=\"Słownik: E-CVT\">E-CVT</a>",
+      "wyjasnienie": "Element has insufficient color contrast of 4.48 (foreground color: #d63031, background color: #f5f6f8, font size: 12.8pt"
+     }
+    ]
+   }
+  },
+  {
+   "url": "https://primaauto.com.pl/oferta/hongqi-hs5-2024-413330/",
+   "pelna_bateria": false,
+   "status": 200,
+   "dom": {
+    "sesja": {
+     "zalogowany": false,
+     "baner_zgod": [
+      {
+       "el": "DIV.cmplz-header",
+       "rola": null,
+       "aria_modal": null
+      },
+      {
+       "el": "DIV.cmplz-title",
+       "rola": null,
+       "aria_modal": null
+      },
+      {
+       "el": "DIV.cmplz-close",
+       "rola": "button",
+       "aria_modal": null
+      }
+     ]
+    },
+    "jezyk": {
+     "lang": "pl-PL",
+     "obcojezyczne": []
+    },
+    "struktura": {
+     "h1": 1,
+     "przeskoki_naglowkow": 0,
+     "main": 1,
+     "nav_bez_nazwy": 0,
+     "nav_razem": 5,
+     "skip": null
+    },
+    "formularze": {
+     "pol": 0,
+     "bez_nazwy": [],
+     "bez_autocomplete": []
+    },
+    "nazwy": {
+     "interaktywnych": 107,
+     "bez_nazwy": []
+    },
+    "cele_male": [],
+    "ruch": {
+     "animacje_szybkie": 0,
+     "karuzele": 0,
+     "tytuly_natywne": 15
+    },
+    "live": [
+     "dialog cmplz-cookiebanner banner-1 "
+    ],
+    "media": {
+     "video": 0,
+     "audio": 0,
+     "iframe": []
+    },
+    "inne": {
+     "accesskey": 0,
+     "autofocus": 0,
+     "obrazy": 24,
+     "obrazy_bez_alt": 0,
+     "obrazy_alt_puste": 1
+    },
+    "reguly_focus": [],
+    "kontrast_pomocniczy": {
+     "biel_vs_ccc": 1.61
+    }
+   },
+   "axe": {
+    "wersja": "4.13.0",
+    "naruszen": 1,
+    "elementow": 1,
+    "do_sprawdzenia": 1,
+    "naruszenia": [
+     {
+      "id": "color-contrast",
+      "waga": "serious",
+      "sztuk": 1,
+      "wcag": "wcag2aa,wcag143",
+      "przyklad": "<a href=\"https://primaauto.com.pl/samochody/?marka=hongqi&amp;model=hs5\" class=\"aa-home__section-link\">Wszystkie (25) →<",
+      "wyjasnienie": "Element has insufficient color contrast of 4.48 (foreground color: #d63031, background color: #f5f6f8, font size: 9.8pt "
+     }
+    ]
+   }
+  },
+  {
+   "url": "https://primaauto.com.pl/wiki/",
+   "pelna_bateria": false,
+   "status": 200,
+   "dom": {
+    "sesja": {
+     "zalogowany": false,
+     "baner_zgod": [
+      {
+       "el": "DIV.cmplz-header",
+       "rola": null,
+       "aria_modal": null
+      },
+      {
+       "el": "DIV.cmplz-title",
+       "rola": null,
+       "aria_modal": null
+      },
+      {
+       "el": "DIV.cmplz-close",
+       "rola": "button",
+       "aria_modal": null
+      }
+     ]
+    },
+    "jezyk": {
+     "lang": "pl-PL",
+     "obcojezyczne": []
+    },
+    "struktura": {
+     "h1": 1,
+     "przeskoki_naglowkow": 0,
+     "main": 1,
+     "nav_bez_nazwy": 0,
+     "nav_razem": 5,
+     "skip": null
+    },
+    "formularze": {
+     "pol": 0,
+     "bez_nazwy": [],
+     "bez_autocomplete": []
+    },
+    "nazwy": {
+     "interaktywnych": 147,
+     "bez_nazwy": []
+    },
+    "cele_male": [],
+    "ruch": {
+     "animacje_szybkie": 0,
+     "karuzele": 0,
+     "tytuly_natywne": 7
+    },
+    "live": [
+     "dialog cmplz-cookiebanner banner-1 "
+    ],
+    "media": {
+     "video": 0,
+     "audio": 0,
+     "iframe": []
+    },
+    "inne": {
+     "accesskey": 0,
+     "autofocus": 0,
+     "obrazy": 8,
+     "obrazy_bez_alt": 0,
+     "obrazy_alt_puste": 0
+    },
+    "reguly_focus": [],
+    "kontrast_pomocniczy": {
+     "biel_vs_ccc": 1.61
+    }
+   },
+   "axe": {
+    "wersja": "4.13.0",
+    "naruszen": 0,
+    "elementow": 0,
+    "do_sprawdzenia": 1,
+    "naruszenia": []
+   }
+  },
+  {
+   "url": "https://primaauto.com.pl/wiki/hamulce-tarczowe-wentylowane/",
+   "pelna_bateria": false,
+   "status": 200,
+   "dom": {
+    "sesja": {
+     "zalogowany": false,
+     "baner_zgod": [
+      {
+       "el": "DIV.cmplz-header",
+       "rola": null,
+       "aria_modal": null
+      },
+      {
+       "el": "DIV.cmplz-title",
+       "rola": null,
+       "aria_modal": null
+      },
+      {
+       "el": "DIV.cmplz-close",
+       "rola": "button",
+       "aria_modal": null
+      }
+     ]
+    },
+    "jezyk": {
+     "lang": "pl-PL",
+     "obcojezyczne": []
+    },
+    "struktura": {
+     "h1": 1,
+     "przeskoki_naglowkow": 0,
+     "main": 1,
+     "nav_bez_nazwy": 0,
+     "nav_razem": 5,
+     "skip": null
+    },
+    "formularze": {
+     "pol": 0,
+     "bez_nazwy": [],
+     "bez_autocomplete": []
+    },
+    "nazwy": {
+     "interaktywnych": 80,
+     "bez_nazwy": []
+    },
+    "cele_male": [],
+    "ruch": {
+     "animacje_szybkie": 0,
+     "karuzele": 0,
+     "tytuly_natywne": 10
+    },
+    "live": [
+     "dialog cmplz-cookiebanner banner-1 "
+    ],
+    "media": {
+     "video": 0,
+     "audio": 0,
+     "iframe": []
+    },
+    "inne": {
+     "accesskey": 0,
+     "autofocus": 0,
+     "obrazy": 11,
+     "obrazy_bez_alt": 0,
+     "obrazy_alt_puste": 0
+    },
+    "reguly_focus": [],
+    "kontrast_pomocniczy": {
+     "biel_vs_ccc": 1.61
+    }
+   },
+   "axe": {
+    "wersja": "4.13.0",
+    "naruszen": 1,
+    "elementow": 1,
+    "do_sprawdzenia": 1,
+    "naruszenia": [
+     {
+      "id": "color-contrast",
+      "waga": "serious",
+      "sztuk": 1,
+      "wcag": "wcag2aa,wcag143",
+      "przyklad": "<a href=\"https://primaauto.com.pl/samochody/\" class=\"aa-home__section-link\">Wszystkie auta →</a>",
+      "wyjasnienie": "Element has insufficient color contrast of 4.48 (foreground color: #d63031, background color: #f5f6f8, font size: 9.8pt "
+     }
+    ]
+   }
+  },
+  {
+   "url": "https://primaauto.com.pl/kontakt/",
+   "pelna_bateria": false,
+   "status": 200,
+   "dom": {
+    "sesja": {
+     "zalogowany": false,
+     "baner_zgod": [
+      {
+       "el": "DIV.cmplz-header",
+       "rola": null,
+       "aria_modal": null
+      },
+      {
+       "el": "DIV.cmplz-title",
+       "rola": null,
+       "aria_modal": null
+      },
+      {
+       "el": "DIV.cmplz-close",
+       "rola": "button",
+       "aria_modal": null
+      }
+     ]
+    },
+    "jezyk": {
+     "lang": "pl-PL",
+     "obcojezyczne": []
+    },
+    "struktura": {
+     "h1": 1,
+     "przeskoki_naglowkow": 0,
+     "main": 1,
+     "nav_bez_nazwy": 0,
+     "nav_razem": 4,
+     "skip": null
+    },
+    "formularze": {
+     "pol": 0,
+     "bez_nazwy": [],
+     "bez_autocomplete": []
+    },
+    "nazwy": {
+     "interaktywnych": 58,
+     "bez_nazwy": []
+    },
+    "cele_male": [],
+    "ruch": {
+     "animacje_szybkie": 0,
+     "karuzele": 0,
+     "tytuly_natywne": 10
+    },
+    "live": [
+     "dialog cmplz-cookiebanner banner-1 "
+    ],
+    "media": {
+     "video": 0,
+     "audio": 0,
+     "iframe": [
+      "inline"
+     ]
+    },
+    "inne": {
+     "accesskey": 0,
+     "autofocus": 0,
+     "obrazy": 3,
+     "obrazy_bez_alt": 0,
+     "obrazy_alt_puste": 0
+    },
+    "reguly_focus": [],
+    "kontrast_pomocniczy": {
+     "biel_vs_ccc": 1.61
+    }
+   },
+   "axe": {
+    "wersja": "4.13.0",
+    "naruszen": 1,
+    "elementow": 1,
+    "do_sprawdzenia": 1,
+    "naruszenia": [
+     {
+      "id": "color-contrast",
+      "waga": "serious",
+      "sztuk": 1,
+      "wcag": "wcag2aa,wcag143",
+      "przyklad": "<td class=\"aa-contact__hours-time aa-contact__hours-time--closed\">Zamknięte</td>",
+      "wyjasnienie": "Element has insufficient color contrast of 4.48 (foreground color: #d63031, background color: #f5f6f8, font size: 10.5pt"
+     }
+    ]
+   }
+  },
+  {
+   "url": "https://primaauto.com.pl/klient/",
+   "pelna_bateria": false,
+   "status": 200,
+   "dom": {
+    "sesja": {
+     "zalogowany": false,
+     "baner_zgod": [
+      {
+       "el": "DIV.cmplz-header",
+       "rola": null,
+       "aria_modal": null
+      },
+      {
+       "el": "DIV.cmplz-title",
+       "rola": null,
+       "aria_modal": null
+      },
+      {
+       "el": "DIV.cmplz-close",
+       "rola": "button",
+       "aria_modal": null
+      }
+     ]
+    },
+    "jezyk": {
+     "lang": "pl-PL",
+     "obcojezyczne": []
+    },
+    "struktura": {
+     "h1": 1,
+     "przeskoki_naglowkow": 0,
+     "main": 1,
+     "nav_bez_nazwy": 0,
+     "nav_razem": 4,
+     "skip": null
+    },
+    "formularze": {
+     "pol": 4,
+     "bez_nazwy": [
+      {
+       "typ": "INPUT/submit",
+       "name": "wp-submit"
+      }
+     ],
+     "bez_autocomplete": []
+    },
+    "nazwy": {
+     "interaktywnych": 50,
+     "bez_nazwy": []
+    },
+    "cele_male": [],
+    "ruch": {
+     "animacje_szybkie": 0,
+     "karuzele": 0,
+     "tytuly_natywne": 9
+    },
+    "live": [
+     "dialog cmplz-cookiebanner banner-1 "
+    ],
+    "media": {
+     "video": 0,
+     "audio": 0,
+     "iframe": []
+    },
+    "inne": {
+     "accesskey": 0,
+     "autofocus": 0,
+     "obrazy": 3,
+     "obrazy_bez_alt": 0,
+     "obrazy_alt_puste": 0
+    },
+    "reguly_focus": [
+     {
+      "sel": "#aa-klient-login-form input[type=\"text\"]:focus, #aa-klient-login-form input[type",
+      "css": "border-color: var(--aa-pri); box-shadow: rgba(27, 42, 74, 0.1) 0px 0px 0px 3px; "
+     }
+    ],
+    "kontrast_pomocniczy": {
+     "biel_vs_ccc": 1.61
+    }
+   },
+   "axe": {
+    "wersja": "4.13.0",
+    "naruszen": 0,
+    "elementow": 0,
+    "do_sprawdzenia": 1,
+    "naruszenia": []
+   }
+  },
+  {
+   "url": "https://primaauto.com.pl/polityka-prywatnosci/",
+   "pelna_bateria": false,
+   "status": 200,
+   "dom": {
+    "sesja": {
+     "zalogowany": false,
+     "baner_zgod": [
+      {
+       "el": "DIV.cmplz-header",
+       "rola": null,
+       "aria_modal": null
+      },
+      {
+       "el": "DIV.cmplz-title",
+       "rola": null,
+       "aria_modal": null
+      },
+      {
+       "el": "DIV.cmplz-close",
+       "rola": "button",
+       "aria_modal": null
+      }
+     ]
+    },
+    "jezyk": {
+     "lang": "pl-PL",
+     "obcojezyczne": []
+    },
+    "struktura": {
+     "h1": 1,
+     "przeskoki_naglowkow": 0,
+     "main": 1,
+     "nav_bez_nazwy": 0,
+     "nav_razem": 4,
+     "skip": null
+    },
+    "formularze": {
+     "pol": 0,
+     "bez_nazwy": [],
+     "bez_autocomplete": []
+    },
+    "nazwy": {
+     "interaktywnych": 49,
+     "bez_nazwy": []
+    },
+    "cele_male": [],
+    "ruch": {
+     "animacje_szybkie": 0,
+     "karuzele": 0,
+     "tytuly_natywne": 9
+    },
+    "live": [
+     "dialog cmplz-cookiebanner banner-1 "
+    ],
+    "media": {
+     "video": 0,
+     "audio": 0,
+     "iframe": []
+    },
+    "inne": {
+     "accesskey": 0,
+     "autofocus": 0,
+     "obrazy": 3,
+     "obrazy_bez_alt": 0,
+     "obrazy_alt_puste": 0
+    },
+    "reguly_focus": [],
+    "kontrast_pomocniczy": {
+     "biel_vs_ccc": 1.61
+    }
+   },
+   "axe": {
+    "wersja": "4.13.0",
+    "naruszen": 0,
+    "elementow": 0,
+    "do_sprawdzenia": 1,
+    "naruszenia": []
+   }
+  },
+  {
+   "url": "https://primaauto.com.pl/informacje/proces-zamawiania/",
+   "pelna_bateria": false,
+   "status": 200,
+   "dom": {
+    "sesja": {
+     "zalogowany": false,
+     "baner_zgod": [
+      {
+       "el": "DIV.cmplz-header",
+       "rola": null,
+       "aria_modal": null
+      },
+      {
+       "el": "DIV.cmplz-title",
+       "rola": null,
+       "aria_modal": null
+      },
+      {
+       "el": "DIV.cmplz-close",
+       "rola": "button",
+       "aria_modal": null
+      }
+     ]
+    },
+    "jezyk": {
+     "lang": "pl-PL",
+     "obcojezyczne": []
+    },
+    "struktura": {
+     "h1": 1,
+     "przeskoki_naglowkow": 0,
+     "main": 1,
+     "nav_bez_nazwy": 0,
+     "nav_razem": 4,
+     "skip": null
+    },
+    "formularze": {
+     "pol": 0,
+     "bez_nazwy": [],
+     "bez_autocomplete": []
+    },
+    "nazwy": {
+     "interaktywnych": 51,
+     "bez_nazwy": []
+    },
+    "cele_male": [],
+    "ruch": {
+     "animacje_szybkie": 0,
+     "karuzele": 0,
+     "tytuly_natywne": 9
+    },
+    "live": [
+     "dialog cmplz-cookiebanner banner-1 "
+    ],
+    "media": {
+     "video": 0,
+     "audio": 0,
+     "iframe": []
+    },
+    "inne": {
+     "accesskey": 0,
+     "autofocus": 0,
+     "obrazy": 3,
+     "obrazy_bez_alt": 0,
+     "obrazy_alt_puste": 0
+    },
+    "reguly_focus": [],
+    "kontrast_pomocniczy": {
+     "biel_vs_ccc": 1.61
+    }
+   },
+   "axe": {
+    "wersja": "4.13.0",
+    "naruszen": 0,
+    "elementow": 0,
+    "do_sprawdzenia": 1,
+    "naruszenia": []
+   }
+  },
+  {
+   "url": "https://primaauto.com.pl/w-drodze/",
+   "pelna_bateria": false,
+   "status": 200,
+   "dom": {
+    "sesja": {
+     "zalogowany": false,
+     "baner_zgod": [
+      {
+       "el": "DIV.cmplz-header",
+       "rola": null,
+       "aria_modal": null
+      },
+      {
+       "el": "DIV.cmplz-title",
+       "rola": null,
+       "aria_modal": null
+      },
+      {
+       "el": "DIV.cmplz-close",
+       "rola": "button",
+       "aria_modal": null
+      }
+     ]
+    },
+    "jezyk": {
+     "lang": "pl-PL",
+     "obcojezyczne": []
+    },
+    "struktura": {
+     "h1": 1,
+     "przeskoki_naglowkow": 0,
+     "main": 1,
+     "nav_bez_nazwy": 0,
+     "nav_razem": 4,
+     "skip": null
+    },
+    "formularze": {
+     "pol": 1,
+     "bez_nazwy": [],
+     "bez_autocomplete": []
+    },
+    "nazwy": {
+     "interaktywnych": 131,
+     "bez_nazwy": []
+    },
+    "cele_male": [],
+    "ruch": {
+     "animacje_szybkie": 0,
+     "karuzele": 0,
+     "tytuly_natywne": 9
+    },
+    "live": [
+     "dialog cmplz-cookiebanner banner-1 "
+    ],
+    "media": {
+     "video": 0,
+     "audio": 0,
+     "iframe": []
+    },
+    "inne": {
+     "accesskey": 0,
+     "autofocus": 0,
+     "obrazy": 26,
+     "obrazy_bez_alt": 0,
+     "obrazy_alt_puste": 0
+    },
+    "reguly_focus": [
+     {
+      "sel": ".aa-inv select.aa-sort__select:focus",
+      "css": "outline: none !important; border-color: var(--aa-primary) !important;"
+     },
+     {
+      "sel": ".aa-inv .aa-filter__search input[type=\"text\"], .aa-inv .aa-filter__search input[",
+      "css": "display: block !important; width: 100% !important; padding: 6px 10px !important;"
+     },
+     {
+      "sel": ".aa-inv .aa-color, .aa-inv .aa-color:hover, .aa-inv .aa-color:focus, .elementor-",
+      "css": "position: relative !important; width: 34px !important; height: 34px !important; "
+     },
+     {
+      "sel": ".aa-inv input[type=\"text\"].aa-price-inputs__input, .aa-inv input[type=\"text\"].aa",
+      "css": "display: block !important; width: 100% !important; padding: 9px 30px 9px 10px !i"
+     },
+     {
+      "sel": ".aa-inv input[type=\"text\"].aa-search__input, .aa-inv input[type=\"text\"].aa-searc",
+      "css": "display: block !important; width: 100% !important; padding: 9px 32px !important;"
+     }
+    ],
+    "kontrast_pomocniczy": {
+     "biel_vs_ccc": 1.61
+    }
+   },
+   "axe": {
+    "wersja": "4.13.0",
+    "naruszen": 0,
+    "elementow": 0,
+    "do_sprawdzenia": 1,
+    "naruszenia": []
+   }
+  },
+  {
+   "url": "https://primaauto.com.pl/oferta/denza-z9-gt-ev-2026-406707/",
+   "pelna_bateria": false,
+   "status": 200,
+   "dom": {
+    "sesja": {
+     "zalogowany": false,
+     "baner_zgod": [
+      {
+       "el": "DIV.cmplz-header",
+       "rola": null,
+       "aria_modal": null
+      },
+      {
+       "el": "DIV.cmplz-title",
+       "rola": null,
+       "aria_modal": null
+      },
+      {
+       "el": "DIV.cmplz-close",
+       "rola": "button",
+       "aria_modal": null
+      }
+     ]
+    },
+    "jezyk": {
+     "lang": "pl-PL",
+     "obcojezyczne": []
+    },
+    "struktura": {
+     "h1": 1,
+     "przeskoki_naglowkow": 0,
+     "main": 1,
+     "nav_bez_nazwy": 0,
+     "nav_razem": 5,
+     "skip": null
+    },
+    "formularze": {
+     "pol": 0,
+     "bez_nazwy": [],
+     "bez_autocomplete": []
+    },
+    "nazwy": {
+     "interaktywnych": 82,
+     "bez_nazwy": []
+    },
+    "cele_male": [],
+    "ruch": {
+     "animacje_szybkie": 0,
+     "karuzele": 0,
+     "tytuly_natywne": 10
+    },
+    "live": [
+     "dialog cmplz-cookiebanner banner-1 "
+    ],
+    "media": {
+     "video": 0,
+     "audio": 0,
+     "iframe": []
+    },
+    "inne": {
+     "accesskey": 0,
+     "autofocus": 0,
+     "obrazy": 13,
+     "obrazy_bez_alt": 0,
+     "obrazy_alt_puste": 0
+    },
+    "reguly_focus": [],
+    "kontrast_pomocniczy": {
+     "biel_vs_ccc": 1.61
+    }
+   },
+   "axe": {
+    "wersja": "4.13.0",
+    "naruszen": 1,
+    "elementow": 5,
+    "do_sprawdzenia": 1,
+    "naruszenia": [
+     {
+      "id": "color-contrast",
+      "waga": "serious",
+      "sztuk": 5,
+      "wcag": "wcag2aa,wcag143",
+      "przyklad": "<a href=\"/samochody/?marka=denza&amp;model=z9-gt-ev\" class=\"aa-home__section-link\">Wszystkie (7) →</a>",
+      "wyjasnienie": "Element has insufficient color contrast of 4.48 (foreground color: #d63031, background color: #f5f6f8, font size: 9.8pt "
+     }
+    ]
+   }
+  },
+  {
+   "url": "https://primaauto.com.pl/oferta/icar-super-v23-2026-355778/",
+   "pelna_bateria": false,
+   "status": 200,
+   "dom": {
+    "sesja": {
+     "zalogowany": false,
+     "baner_zgod": [
+      {
+       "el": "DIV.cmplz-header",
+       "rola": null,
+       "aria_modal": null
+      },
+      {
+       "el": "DIV.cmplz-title",
+       "rola": null,
+       "aria_modal": null
+      },
+      {
+       "el": "DIV.cmplz-close",
+       "rola": "button",
+       "aria_modal": null
+      }
+     ]
+    },
+    "jezyk": {
+     "lang": "pl-PL",
+     "obcojezyczne": []
+    },
+    "struktura": {
+     "h1": 1,
+     "przeskoki_naglowkow": 0,
+     "main": 1,
+     "nav_bez_nazwy": 0,
+     "nav_razem": 5,
+     "skip": null
+    },
+    "formularze": {
+     "pol": 0,
+     "bez_nazwy": [],
+     "bez_autocomplete": []
+    },
+    "nazwy": {
+     "interaktywnych": 100,
+     "bez_nazwy": []
+    },
+    "cele_male": [],
+    "ruch": {
+     "animacje_szybkie": 0,
+     "karuzele": 0,
+     "tytuly_natywne": 16
+    },
+    "live": [
+     "dialog cmplz-cookiebanner banner-1 "
+    ],
+    "media": {
+     "video": 0,
+     "audio": 0,
+     "iframe": []
+    },
+    "inne": {
+     "accesskey": 0,
+     "autofocus": 0,
+     "obrazy": 16,
+     "obrazy_bez_alt": 0,
+     "obrazy_alt_puste": 1
+    },
+    "reguly_focus": [],
+    "kontrast_pomocniczy": {
+     "biel_vs_ccc": 1.61
+    }
+   },
+   "axe": {
+    "wersja": "4.13.0",
+    "naruszen": 1,
+    "elementow": 1,
+    "do_sprawdzenia": 1,
+    "naruszenia": [
+     {
+      "id": "color-contrast",
+      "waga": "serious",
+      "sztuk": 1,
+      "wcag": "wcag2aa,wcag143",
+      "przyklad": "<a href=\"https://primaauto.com.pl/samochody/?marka=icar&amp;model=super-v23\" class=\"aa-home__section-link\">Wszystkie (27",
+      "wyjasnienie": "Element has insufficient color contrast of 4.48 (foreground color: #d63031, background color: #f5f6f8, font size: 9.8pt "
+     }
+    ]
+   }
+  },
+  {
+   "url": "https://primaauto.com.pl/samochody/chery/arrizo-8/",
+   "pelna_bateria": false,
+   "status": 200,
+   "dom": {
+    "sesja": {
+     "zalogowany": false,
+     "baner_zgod": [
+      {
+       "el": "DIV.cmplz-header",
+       "rola": null,
+       "aria_modal": null
+      },
+      {
+       "el": "DIV.cmplz-title",
+       "rola": null,
+       "aria_modal": null
+      },
+      {
+       "el": "DIV.cmplz-close",
+       "rola": "button",
+       "aria_modal": null
+      }
+     ]
+    },
+    "jezyk": {
+     "lang": "pl-PL",
+     "obcojezyczne": []
+    },
+    "struktura": {
+     "h1": 1,
+     "przeskoki_naglowkow": 0,
+     "main": 1,
+     "nav_bez_nazwy": 0,
+     "nav_razem": 5,
+     "skip": null
+    },
+    "formularze": {
+     "pol": 0,
+     "bez_nazwy": [],
+     "bez_autocomplete": []
+    },
+    "nazwy": {
+     "interaktywnych": 82,
+     "bez_nazwy": []
+    },
+    "cele_male": [],
+    "ruch": {
+     "animacje_szybkie": 0,
+     "karuzele": 0,
+     "tytuly_natywne": 10
+    },
+    "live": [
+     "dialog cmplz-cookiebanner banner-1 "
+    ],
+    "media": {
+     "video": 0,
+     "audio": 0,
+     "iframe": []
+    },
+    "inne": {
+     "accesskey": 0,
+     "autofocus": 0,
+     "obrazy": 13,
+     "obrazy_bez_alt": 0,
+     "obrazy_alt_puste": 0
+    },
+    "reguly_focus": [],
+    "kontrast_pomocniczy": {
+     "biel_vs_ccc": 1.61
+    }
+   },
+   "axe": {
+    "wersja": "4.13.0",
+    "naruszen": 1,
+    "elementow": 5,
+    "do_sprawdzenia": 1,
+    "naruszenia": [
+     {
+      "id": "color-contrast",
+      "waga": "serious",
+      "sztuk": 5,
+      "wcag": "wcag2aa,wcag143",
+      "przyklad": "<a href=\"https://primaauto.com.pl/wiki/turbodoladowanie/\" class=\"aa-autolink\" title=\"Słownik: Turbo\">turbo</a>",
+      "wyjasnienie": "Element has insufficient color contrast of 4.48 (foreground color: #d63031, background color: #f5f6f8, font size: 12.8pt"
+     }
+    ]
+   }
+  },
+  {
+   "url": "https://primaauto.com.pl/nie-ma-takiej-strony-audyt-2026/",
+   "pelna_bateria": false,
+   "status": 404,
+   "dom": {
+    "sesja": {
+     "zalogowany": false,
+     "baner_zgod": [
+      {
+       "el": "DIV.cmplz-header",
+       "rola": null,
+       "aria_modal": null
+      },
+      {
+       "el": "DIV.cmplz-title",
+       "rola": null,
+       "aria_modal": null
+      },
+      {
+       "el": "DIV.cmplz-close",
+       "rola": "button",
+       "aria_modal": null
+      }
+     ]
+    },
+    "jezyk": {
+     "lang": "pl-PL",
+     "obcojezyczne": []
+    },
+    "struktura": {
+     "h1": 1,
+     "przeskoki_naglowkow": 0,
+     "main": 1,
+     "nav_bez_nazwy": 0,
+     "nav_razem": 4,
+     "skip": null
+    },
+    "formularze": {
+     "pol": 0,
+     "bez_nazwy": [],
+     "bez_autocomplete": []
+    },
+    "nazwy": {
+     "interaktywnych": 107,
+     "bez_nazwy": []
+    },
+    "cele_male": [],
+    "ruch": {
+     "animacje_szybkie": 0,
+     "karuzele": 0,
+     "tytuly_natywne": 6
+    },
+    "live": [
+     "dialog cmplz-cookiebanner banner-1 "
+    ],
+    "media": {
+     "video": 0,
+     "audio": 0,
+     "iframe": []
+    },
+    "inne": {
+     "accesskey": 0,
+     "autofocus": 0,
+     "obrazy": 3,
+     "obrazy_bez_alt": 0,
+     "obrazy_alt_puste": 0
+    },
+    "reguly_focus": [],
+    "kontrast_pomocniczy": {
+     "biel_vs_ccc": 1.61
+    }
+   },
+   "axe": {
+    "wersja": "4.13.0",
+    "naruszen": 0,
+    "elementow": 0,
+    "do_sprawdzenia": 1,
+    "naruszenia": []
+   }
+  },
+  {
+   "url": "https://primaauto.com.pl/oferta/xiaomi-su7-2025-408328/",
+   "pelna_bateria": false,
+   "status": 200,
+   "dom": {
+    "sesja": {
+     "zalogowany": false,
+     "baner_zgod": [
+      {
+       "el": "DIV.cmplz-header",
+       "rola": null,
+       "aria_modal": null
+      },
+      {
+       "el": "DIV.cmplz-title",
+       "rola": null,
+       "aria_modal": null
+      },
+      {
+       "el": "DIV.cmplz-close",
+       "rola": "button",
+       "aria_modal": null
+      }
+     ]
+    },
+    "jezyk": {
+     "lang": "pl-PL",
+     "obcojezyczne": []
+    },
+    "struktura": {
+     "h1": 1,
+     "przeskoki_naglowkow": 0,
+     "main": 1,
+     "nav_bez_nazwy": 0,
+     "nav_razem": 5,
+     "skip": null
+    },
+    "formularze": {
+     "pol": 0,
+     "bez_nazwy": [],
+     "bez_autocomplete": []
+    },
+    "nazwy": {
+     "interaktywnych": 97,
+     "bez_nazwy": []
+    },
+    "cele_male": [],
+    "ruch": {
+     "animacje_szybkie": 0,
+     "karuzele": 0,
+     "tytuly_natywne": 15
+    },
+    "live": [
+     "dialog cmplz-cookiebanner banner-1 "
+    ],
+    "media": {
+     "video": 0,
+     "audio": 0,
+     "iframe": []
+    },
+    "inne": {
+     "accesskey": 0,
+     "autofocus": 0,
+     "obrazy": 18,
+     "obrazy_bez_alt": 0,
+     "obrazy_alt_puste": 1
+    },
+    "reguly_focus": [],
+    "kontrast_pomocniczy": {
+     "biel_vs_ccc": 1.61
+    }
+   },
+   "axe": {
+    "wersja": "4.13.0",
+    "naruszen": 1,
+    "elementow": 1,
+    "do_sprawdzenia": 1,
+    "naruszenia": [
+     {
+      "id": "color-contrast",
+      "waga": "serious",
+      "sztuk": 1,
+      "wcag": "wcag2aa,wcag143",
+      "przyklad": "<a href=\"https://primaauto.com.pl/samochody/?marka=xiaomi&amp;model=su7\" class=\"aa-home__section-link\">Wszystkie (152) →",
+      "wyjasnienie": "Element has insufficient color contrast of 4.48 (foreground color: #d63031, background color: #f5f6f8, font size: 9.8pt "
+     }
+    ]
+   }
+  }
+ ],
+ "ruch_bez_interakcji": {
+  "po_0s": {
+   "slajd": null,
+   "klasy": null
+  },
+  "po_14s": {
+   "slajd": null,
+   "klasy": null
+  },
+  "zmiana": false
+ }
+}

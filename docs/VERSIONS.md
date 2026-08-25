@@ -1,5 +1,50 @@
 # Historia wersji asiaauto-sync
 
+
+## 0.34.27 — 2026-08-25 (a11y: domknięcie zlecenia naprawczego v3 przed reaudytem WCAG)
+
+Realizacja `~/projekty/auranet/docs/uslugi/wdrozenia/2026-08-21-primaauto-wdrozenie-v3.md`.
+Pełne podsumowanie z dowodami: `docs/dostepnosc/2026-08-25-PODSUMOWANIE-DO-REAUDYTU.md`.
+
+axe `color-contrast` na 17 adresach próbki audytowej: **97 → 27** elementów, przy czym
+wszystkie 27 to wyłącznie para `#d63031` / `#f5f6f8` objęta odstępstwem właściciela.
+
+**Kontrast (1.4.3)**
+- `themes/primaauto2026/assets/css/hub.css:231` — etykieta „Nowe”: `#fff` → `#1B2A4A` na `#E8AC07` (2,03 → 7,00:1), 18 elementów
+- `themes/primaauto2026/assets/css/hub.css:148` — licznik przy marce: `#dc2626` → `#C82333` na `#fef2f2` (4,41 → 5,13:1), 36 elementów
+- `themes/primaauto2026/assets/css/hub.css` — nowa `.aa-marki__figcap-model` (`#6E6E6E`, 4,72:1); w treści strony 263572 sześć razy `style="color:#999"` → klasa. `#767676` NIE wystarcza (4,20:1)
+- `themes/primaauto2026/assets/css/kb.css:250` — okruszek słownika: `#64748B` → `#5A6779` (4,40 → 5,32:1)
+- `plugins/asiaauto-sync/assets/css/asiaauto-inventory.css:407` — przycisk „Zarezerwowane”: usunięte `opacity: .7`, tło `#5C6B7F` → `#68727F` (2,96 → 4,88:1), 10 elementów
+- `class-asiaauto-homepage.php:980` — etykieta „Nowe” na stronie głównej: `#4A3800` → `#1B2A4A`; poza zakresem audytu, ujednolicenie z hubami
+
+**Pułapka warta zapamiętania — `opacity` tworzy kolor, którego nie ma w kodzie.** Zgłoszony przez
+audytora `#8d97a5` nie występował nigdzie w `wp-content`; powstawał dopiero z `opacity: .7`
+nakładającego tło `#5C6B7F` na białą stronę (dokładnie `rgb(141,151,165)`). Biały napis pozostawał
+biały, więc przygaszeniu ulegało wyłącznie tło. Grep po kolorze jest tu bezwartościowy jako dowód —
+liczy się odczyt z renderowanej strony. To samo dotyczy `mix-blend-mode`, `rgba()` i gradientów.
+
+**Nagłówki (1.3.1 + 2.4.6)**
+- `class-asiaauto-inventory.php:1007` — tytuł karty auta `h3` → `h2` na podstronach rezerwacji, po istniejącej fladze `is_subpage` z `executeQuery():638`. Na `/samochody/` zostaje `h3` (stoi pod `h2` „Filtry”). Styl siedzi na `.aa-card__title`, nie na selektorze `h3` — wygląd bez zmian
+- `asiaauto-inventory.css:71` — `.aa-inv__sidebar-head { display: none }` usuwało `h2` „Filtry” z drzewa dostępności na desktopie; zastąpione blokiem `@media (min-width: 769px)` z techniką sr-only (`clip-path`, wymiary 1 × 1 px). Karta audytu wskazywała blok mobilny — faktyczna przyczyna była w regule bazowej
+
+**Etykiety pól (3.3.2)**
+- `class-asiaauto-inventory.php:793` — `aria-label="Szukaj w filtrze: {taksonomia}"` na polach wyszukiwania w rozwijanych filtrach; wcześniej nazwa dostępna pochodziła wyłącznie z `placeholder` (technika porażki F82). Dotyczy filtrów „Marka” i „Rodzaj nadwozia” (pole pojawia się dopiero powyżej 8 wartości)
+
+**Wskaźnik fokusu (1.4.11)**
+- `themes/primaauto2026/assets/css/base.css:214` — wskaźnik dwubarwny: `outline: 2px solid #fff` + `box-shadow: 0 0 0 4px #1B2A4A`. Stały `--c-accent` dawał 1,81:1 na nagłówku `#9B0000` i 2,93:1 na skip-linku. Po zmianie 8,77:1 i 14,22:1
+- To samo w `asiaauto-inventory.css:692` i `asiaauto-order-wizard.css:1079` — nadpisywały wskaźnik przez `!important`; oba tła jasne, więc kryterium przechodziły, powód zmiany wyłącznie spójnościowy
+
+**Wersjonowanie**
+- `themes/primaauto2026/functions.php:4` — `PRIMAAUTO_THEME_VERSION` `1.2.3` → `1.2.4` (arkusze motywu mają stałą wersję; arkusze wtyczki bustują się przez `filemtime` i nie wymagały nic)
+
+**Znalezione, świadomie NIE naprawione:** reflow 320 px na `/marki/` — `scrollWidth` 332,
+kafel „Leapmotor” z licznikiem `193` wypycha pigułkę, bo `.aa-brand-card__name` nie ma `min-width: 0`.
+Test A/B z arkuszami sprzed wdrożenia daje identyczny wynik, więc to nie regresja. Poprawka
+(`min-width: 0; overflow-wrap: anywhere`) sprawdzona w przeglądarce, czeka na decyzję właściciela.
+
+Backupy: `.bak-2026-08-25-a11y-v3` obok każdego pliku oraz w `~/backups/primaauto/2026-08-25/`
+(w tym zrzut strony 263572 sprzed zmiany treści).
+
 ## 0.34.26 — 2026-08-24 (tryb „tylko aktualizacja" per źródło — przełącznik w panelu)
 
 **Po co.** Gdy oba feedy (dongchedi, che168) działają, nie potrzebujemy przyrostu z obu naraz —

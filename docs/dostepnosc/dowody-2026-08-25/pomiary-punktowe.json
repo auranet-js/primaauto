@@ -1,0 +1,125 @@
+{
+  "naglowki": {
+    "/samochody/": {
+      "sekwencja": [
+        1,
+        2,
+        3
+      ],
+      "liczba": 26,
+      "pierwsze": [
+        {
+          "poziom": 1,
+          "nazwa": "Samochody z Chin"
+        },
+        {
+          "poziom": 2,
+          "nazwa": "Filtry"
+        },
+        {
+          "poziom": 3,
+          "nazwa": "BYD Xia Summer 2025 DM-i 1.5T 180km Premium Ve"
+        },
+        {
+          "poziom": 3,
+          "nazwa": "BYD Leopard 5 (Denza B5) 2025 Cloud Suspension"
+        }
+      ],
+      "przeskoki": []
+    },
+    "/w-drodze/": {
+      "sekwencja": [
+        1,
+        2
+      ],
+      "liczba": 24,
+      "pierwsze": [
+        {
+          "poziom": 1,
+          "nazwa": "W drodze"
+        },
+        {
+          "poziom": 2,
+          "nazwa": "Denza Z9 DM-i 2025 1100 4WD Ultra Version"
+        },
+        {
+          "poziom": 2,
+          "nazwa": "BYD Leopard 7 (Tai 7) FCB, PHEV 2025 190KM 4WD"
+        },
+        {
+          "poziom": 2,
+          "nazwa": "Zeekr 8X Yao Ying 1400PS 2026 70kWh"
+        }
+      ],
+      "przeskoki": []
+    }
+  },
+  "polaFiltra": {
+    "znalezionych": 2,
+    "pola": [
+      {
+        "rola": "none",
+        "zrodlo": "brak",
+        "wszystkieZrodla": [],
+        "ignorowany": true
+      },
+      {
+        "rola": "none",
+        "zrodlo": "brak",
+        "wszystkieZrodla": [],
+        "ignorowany": true
+      }
+    ]
+  },
+  "fokus": [
+    {
+      "gdzie": "logo/menu w naglowku",
+      "tlo": "rgb(155,0,0)",
+      "obwodka": "rgb(255, 255, 255)",
+      "szerokosc": "2px",
+      "kontrastObwodki": 8.77,
+      "poswiata": "rgb(27, 42, 74)",
+      "kontrastPoswiaty": 1.62,
+      "lepszaZDwoch": 8.77
+    },
+    {
+      "gdzie": "skip-link",
+      "tlo": "rgb(27,42,74)",
+      "obwodka": "rgb(255, 255, 255)",
+      "szerokosc": "2px",
+      "kontrastObwodki": 14.22,
+      "poswiata": "rgb(27, 42, 74)",
+      "kontrastPoswiaty": 1,
+      "lepszaZDwoch": 14.22
+    },
+    {
+      "gdzie": "link w tresci",
+      "tlo": "rgb(255,255,255)",
+      "obwodka": "rgb(255, 255, 255)",
+      "szerokosc": "2px",
+      "kontrastObwodki": 1,
+      "poswiata": "rgb(27, 42, 74)",
+      "kontrastPoswiaty": 14.22,
+      "lepszaZDwoch": 14.22
+    }
+  ],
+  "reflow": {
+    "/samochody/": {
+      "scrollWidth": 320,
+      "clientWidth": 320,
+      "wystajace": []
+    },
+    "/marki/": {
+      "scrollWidth": 332,
+      "clientWidth": 320,
+      "wystajace": [
+        "span.aa-brand-card__count"
+      ]
+    },
+    "/w-drodze/": {
+      "scrollWidth": 320,
+      "clientWidth": 320,
+      "wystajace": []
+    }
+  }
+}
