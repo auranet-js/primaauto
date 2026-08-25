@@ -1,0 +1,340 @@
+<meta charset="utf-8">
+<title>Prima-Auto — czolowka</title>
+<style>
+  html,body{margin:0;padding:0;background:#000;overflow:hidden}
+  canvas{display:block}
+</style>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+// ---------------------------------------------------------------------------
+// Czolowka Prima-Auto — render deterministyczny sterowany funkcja render(t).
+// Zero animacji CSS: kazda klatka to jawne wywolanie z osi czasu (sekundy),
+// dzieki czemu zrzuty nie zaleza od obciazenia maszyny.
+// ---------------------------------------------------------------------------
+const CZERWIEN = '#9B0000', CZERWIEN_BOK = '#6B0000', CZERWIEN_JASNA = '#C41414';
+const c = document.getElementById('c'), g = c.getContext('2d');
+
+const P = new URLSearchParams(location.search);
+const WARIANT = (P.get('wariant') || 'A').toUpperCase();
+const CIEMNE   = (P.get('tlo') || 'light') === 'dark';
+const POZIOM   = (P.get('kadr') || '9x16') === '16x9';
+const TLO = CIEMNE ? '#000000' : '#FFFFFF';
+
+// kadr: pion 1080x1920 albo poziom 1920x1080 — w poziomie krazek musi zmiescic
+// sie w nizszym kadrze razem z napisami, wiec jest mniejszy
+const W = POZIOM ? 1920 : 1080, H = POZIOM ? 1080 : 1920;
+c.width = W; c.height = H;
+
+const CX = W / 2, CY = H * (POZIOM ? .37 : .40), R = POZIOM ? 250 : 330;
+
+const TAGLINE = 'IMPORT SAMOCHODÓW Z CHIN';
+const STOPKA  = 'primaauto.com.pl';
+const KROJ    = "'Nimbus Sans', Helvetica, Arial, sans-serif";
+
+const logo = new Image();
+let gotowe = false;
+
+// --- rewers medalu: gladka czerwien + bialy pierscien + grawer koncentryczny --
+const rewers = document.createElement('canvas');
+rewers.width = rewers.height = 1300;
+(function () {
+  const r = rewers.getContext('2d'), S = 650;
+  r.beginPath(); r.arc(S, S, 640, 0, 7); r.fillStyle = CZERWIEN; r.fill();
+  // bialy pierscien w tej samej proporcji co awers
+  r.beginPath(); r.arc(S, S, 566, 0, 7);
+  r.strokeStyle = '#fff'; r.lineWidth = 26; r.stroke();
+  // grawer — trzy cienkie kola, ledwo widoczne, jak bicie na rewersie medalu
+  r.strokeStyle = 'rgba(255,255,255,.10)'; r.lineWidth = 8;
+  [430, 330, 230].forEach(function (rr) { r.beginPath(); r.arc(S, S, rr, 0, 7); r.stroke(); });
+  // wypuklosc: swiatlo od gory-lewej
+  const gr = r.createRadialGradient(S - 230, S - 260, 40, S, S, 660);
+  gr.addColorStop(0, 'rgba(255,255,255,.20)');
+  gr.addColorStop(.55, 'rgba(255,255,255,0)');
+  gr.addColorStop(1, 'rgba(0,0,0,.28)');
+  r.globalCompositeOperation = 'source-atop';
+  r.fillStyle = gr; r.fillRect(0, 0, 1300, 1300);
+})();
+
+// --------------------------------- pomocnicze ------------------------------
+const clamp = (v, a, b) => v < a ? a : (v > b ? b : v);
+const easeOutQuint = t => 1 - Math.pow(1 - t, 5);
+const easeOutCubic = t => 1 - Math.pow(1 - t, 3);
+const easeInOut    = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+// odcinek czasu [a,b] -> [0,1]
+const faza = (t, a, b) => clamp((t - a) / (b - a), 0, 1);
+
+function tlo() {
+  g.fillStyle = TLO; g.fillRect(0, 0, W, H);
+  // winieta: na bialym subtelny chlod od dolu, na czarnym rozswietlenie sceny
+  const gr = g.createRadialGradient(CX, CY, R * .5, CX, CY, H * .78);
+  if (CIEMNE) {
+    gr.addColorStop(0, 'rgba(155,0,0,.16)');
+    gr.addColorStop(.55, 'rgba(90,0,0,.05)');
+    gr.addColorStop(1, 'rgba(0,0,0,0)');
+  } else {
+    gr.addColorStop(0, 'rgba(155,0,0,.012)');
+    gr.addColorStop(.42, 'rgba(155,0,0,0)');
+    gr.addColorStop(1, 'rgba(255,255,255,0)');
+  }
+  g.fillStyle = gr; g.fillRect(0, 0, W, H);
+}
+
+// cien (jasne tlo) albo poswiata (ciemne tlo) pod krazkiem
+function podstawa(sx, moc) {
+  g.save();
+  if (CIEMNE) {
+    const gr = g.createRadialGradient(CX, CY, R * .55, CX, CY, R * 1.85);
+    gr.addColorStop(0, 'rgba(196,20,20,' + (.34 * moc) + ')');
+    gr.addColorStop(.5, 'rgba(155,0,0,' + (.14 * moc) + ')');
+    gr.addColorStop(1, 'rgba(155,0,0,0)');
+    g.fillStyle = gr; g.fillRect(0, 0, W, H);
+  } else {
+    g.filter = 'blur(34px)';
+    g.globalAlpha = .22 * moc * (.45 + .55 * sx);
+    g.fillStyle = '#3b0a0a';
+    g.beginPath();
+    g.ellipse(CX, CY + R * 1.02, R * .92 * (.35 + .65 * sx), R * .18, 0, 0, 7);
+    g.fill();
+  }
+  g.restore();
+}
+
+// jedna sciana krazka (awers = logo, rewers = grawer), scisnieta wzdluz X
+function sciana(obraz, sx, dx, alfa) {
+  g.save();
+  g.globalAlpha = alfa;
+  g.translate(CX + dx, CY);
+  g.scale(Math.max(sx, .0001), 1);
+  g.drawImage(obraz, -R, -R, 2 * R, 2 * R);
+  g.restore();
+}
+
+// bok medalu — to on daje wrazenie bitego krazka, a nie naklejki
+function bok(a, sx, glebia) {
+  const dx = glebia * Math.sin(a);
+  g.save();
+  g.beginPath();
+  g.ellipse(CX - dx * .5, CY, Math.max(R * sx, 1) + Math.abs(dx) * .5, R, 0, 0, 7);
+  g.fillStyle = CZERWIEN_BOK;
+  g.fill();
+  // rant: cienka jasna krawedz od strony swiatla
+  g.lineWidth = 3;
+  g.strokeStyle = 'rgba(255,255,255,.16)';
+  g.stroke();
+  g.restore();
+  return dx;
+}
+
+// refleks przesuwajacy sie po powierzchni — pozycja wynika z kata obrotu
+function polysk(sx, poz, moc) {
+  if (sx < .02 || moc <= 0) return;
+  g.save();
+  g.beginPath();
+  g.ellipse(CX, CY, R * sx, R, 0, 0, 7);
+  g.clip();
+  g.globalCompositeOperation = 'screen';
+  g.globalAlpha = moc;
+  const x = CX + (poz * 2 - 1) * R * 1.15, sz = R * .55;
+  const gr = g.createLinearGradient(x - sz, CY - R, x + sz, CY + R);
+  gr.addColorStop(0, 'rgba(255,255,255,0)');
+  gr.addColorStop(.42, 'rgba(255,255,255,.10)');
+  gr.addColorStop(.5, 'rgba(255,255,255,.42)');
+  gr.addColorStop(.58, 'rgba(255,255,255,.10)');
+  gr.addColorStop(1, 'rgba(255,255,255,0)');
+  g.fillStyle = gr;
+  g.fillRect(CX - R, CY - R, 2 * R, 2 * R);
+  g.restore();
+}
+
+// modelunek kulistosci: swiatlo od gory-lewej, cien u dolu-prawej
+function modelunek(sx, moc) {
+  if (sx < .02) return;
+  g.save();
+  g.beginPath(); g.ellipse(CX, CY, R * sx, R, 0, 0, 7); g.clip();
+  g.globalAlpha = moc;
+  const gr = g.createRadialGradient(CX - R * .38 * sx, CY - R * .42, R * .1, CX, CY, R * 1.25);
+  gr.addColorStop(0, 'rgba(255,255,255,.16)');
+  gr.addColorStop(.5, 'rgba(255,255,255,0)');
+  gr.addColorStop(1, 'rgba(0,0,0,.34)');
+  g.fillStyle = gr; g.fillRect(CX - R, CY - R, 2 * R, 2 * R);
+  g.restore();
+}
+
+// napis wjezdza od dolu i wywolywany jest juz po zatrzymaniu krazka
+function napis(tekst, y, rozmiar, waga, odstep, kolor, post, masa) {
+  if (post <= 0) return;
+  const e = easeOutCubic(post);
+  g.save();
+  g.globalAlpha = e;
+  // dopasowanie do kadru: napis nigdy nie dotyka krawedzi (max 82% szerokosci)
+  if ('letterSpacing' in g) g.letterSpacing = odstep + 'px';
+  g.font = waga + ' ' + rozmiar + 'px ' + KROJ;
+  const limit = W * (POZIOM ? .52 : .82);
+  const szer = g.measureText(tekst).width;
+  if (szer > limit) {
+    rozmiar = Math.floor(rozmiar * limit / szer);
+    g.font = waga + ' ' + rozmiar + 'px ' + KROJ;
+  }
+  g.textAlign = 'center';
+  g.textBaseline = 'alphabetic';
+  g.fillStyle = kolor;
+  const yy = y + (POZIOM ? 18 : 26) * (1 - e);
+  // obrys w tej samej barwie pogrubia krok kroju o ~pol stopnia wagi
+  if (masa) {
+    g.strokeStyle = kolor;
+    g.lineJoin = 'round';
+    g.lineWidth = rozmiar * masa;
+    g.strokeText(tekst, CX, yy);
+  }
+  g.fillText(tekst, CX, yy);
+  g.restore();
+}
+
+function napisy(t) {
+  const kolorTag = CIEMNE ? '#FFFFFF' : CZERWIEN;
+  const kolorSt  = CIEMNE ? 'rgba(255,255,255,.78)' : 'rgba(0,0,0,.62)';
+  napis(TAGLINE, CY + R + (POZIOM ? 112 : 168), POZIOM ? 54 : 64, '700',
+        POZIOM ? 4 : 5, kolorTag, faza(t, 2.35, 2.95), .055);
+  napis(STOPKA,  H * (POZIOM ? .895 : .905), POZIOM ? 36 : 46, '700',
+        POZIOM ? 2 : 3, kolorSt, faza(t, 2.85, 3.45), .03);
+}
+
+// =========================== WARIANT A — MEDAL =============================
+// Krazek rozpedza sie, hamuje na awersie i dochodzi tlumionym drganiem.
+const A_SPIN = 3.9, A_KONIEC = 7.0, A_OBROTY = 2;
+
+function wariantA(t) {
+  tlo();
+  const wejscie = easeOutCubic(faza(t, 0, .45));
+
+  let a;
+  if (t < A_SPIN) {
+    a = 2 * Math.PI * A_OBROTY * easeOutQuint(faza(t, 0, A_SPIN));
+  } else {
+    // tlumione dojscie do frontu — medal "osiada" zamiast ciac ruch
+    const tau = t - A_SPIN;
+    a = 2 * Math.PI * A_OBROTY + .15 * Math.exp(-3.0 * tau) * Math.sin(7.0 * tau);
+  }
+
+  const cosa = Math.cos(a);
+  const sx = Math.abs(cosa);
+  const skala = .90 + .10 * wejscie;               // lekki najazd na starcie
+  const glebia = 30 * skala;
+
+  g.save();
+  g.translate(CX, CY); g.scale(skala, skala); g.translate(-CX, -CY);
+  g.globalAlpha = wejscie;
+
+  podstawa(sx, wejscie);
+  const dx = bok(a, sx, glebia);
+  sciana(cosa >= 0 ? logo : rewers, sx, dx * .5, 1);
+  modelunek(sx, .9 - .55 * faza(t, 4.6, 6.2));
+  // refleks wedruje wraz z obrotem, po zatrzymaniu przejezdza raz na koniec
+  const poz = (Math.sin(a) + 1) / 2;
+  polysk(sx, poz, t < A_SPIN ? .95 : .5);
+  if (t > 5.05 && t < 6.15) {
+    const p = faza(t, 5.05, 6.15);
+    polysk(1, p, .7 * (1 - Math.abs(p * 2 - 1)));
+  }
+  g.restore();
+
+  napisy(t);
+}
+
+// ====================== WARIANT B — PIERSCIEN / ORBITA =====================
+// Logo stoi w centrum, wokol krazy pierscien; przednia polowa rysowana PO
+// logo, tylna PRZED — stad realne wrazenie orbitowania, nie nakladki.
+const B_KONIEC = 5.0;
+
+function orbita(faz, tilt, promien, grubosc, kolor, przod, alfa) {
+  // rysuje polowe elipsy: przod = true -> luk przed logo (dolna czesc)
+  g.save();
+  g.globalAlpha = alfa;
+  g.lineWidth = grubosc;
+  g.strokeStyle = kolor;
+  g.lineCap = 'round';
+  g.beginPath();
+  const ry = promien * Math.sin(tilt);
+  const start = przod ? 0 : Math.PI;
+  g.ellipse(CX, CY, promien, Math.max(ry, 2), 0, start, start + Math.PI);
+  g.stroke();
+  g.restore();
+}
+
+function iskra(kat, tilt, promien, jasnosc, rozmiar) {
+  const x = CX + promien * Math.cos(kat);
+  const y = CY + promien * Math.sin(tilt) * Math.sin(kat);
+  const przod = Math.sin(kat) > 0;
+  const s = rozmiar * (przod ? 1 : .6);
+  g.save();
+  g.globalCompositeOperation = CIEMNE ? 'lighter' : 'source-over';
+  const gr = g.createRadialGradient(x, y, 0, x, y, s);
+  gr.addColorStop(0, 'rgba(255,255,255,' + (.95 * jasnosc) + ')');
+  gr.addColorStop(.35, 'rgba(255,120,120,' + (.55 * jasnosc) + ')');
+  gr.addColorStop(1, 'rgba(196,20,20,0)');
+  g.fillStyle = gr;
+  g.beginPath(); g.arc(x, y, s, 0, 7); g.fill();
+  g.restore();
+}
+
+function wariantB(t) {
+  tlo();
+
+  const wej   = easeOutCubic(faza(t, .05, .95));     // wejscie logo
+  const bieg  = easeInOut(faza(t, 0, 3.05));         // postep obrotu orbity
+  const osiad = easeOutCubic(faza(t, 2.25, 3.35));   // orbity ukladaja sie plasko
+
+  const obrotow = 2.15;
+  const kat = 2 * Math.PI * obrotow * bieg;
+  // tilt: z mocno pochylonej elipsy do niemal plaskiego pierscienia wokol logo
+  const tilt = (14 + 76 * osiad) * Math.PI / 180;
+  const r1 = R * (1.20 - .13 * osiad);
+  const r2 = R * (1.40 - .27 * osiad);
+
+  const alfaO = easeOutCubic(faza(t, .15, .8)) * (1 - .25 * osiad);
+
+  // --- tylne polowki orbit (im plaszczej lezy pierscien, tym mniejsza roznica
+  //     przod/tyl — inaczej na styku polkoli widac szew)
+  const tylG = .38 + .57 * osiad, tylC = .18 + .27 * osiad;
+  orbita(kat, tilt, r1, 7 + 2 * osiad, CZERWIEN, false, alfaO * tylG);
+  orbita(-kat * .72, tilt * .92, r2, 4 + osiad, CIEMNE ? '#ffffff' : '#9B0000', false, alfaO * tylC);
+  if (Math.sin(kat) <= 0) iskra(kat, tilt, r1, alfaO, 46);
+
+  // --- logo: wjezdza z lekkim przechyleniem, ktore sie prostuje
+  const tiltLogo = (1 - wej) * .55 + .55 * Math.exp(-3.2 * t) * Math.sin(7 * t) * (t > .9 ? 1 : 0);
+  const sx = Math.abs(Math.cos(tiltLogo));
+  const skala = (.86 + .14 * wej) * (1 + .008 * Math.sin((t - 3.2) * 1.5) * (t > 3.2 ? 1 : 0));
+
+  g.save();
+  g.translate(CX, CY); g.scale(skala, skala); g.translate(-CX, -CY);
+  g.globalAlpha = wej;
+  podstawa(sx, wej);
+  const dx = bok(tiltLogo, sx, 26);
+  sciana(logo, sx, dx * .5, 1);
+  modelunek(sx, .85 - .5 * faza(t, 3.5, 4.7));
+  polysk(sx, (Math.sin(tiltLogo) + 1) / 2, .45 * (1 - faza(t, 3.5, 4.7)));
+  // refleks przejezdza raz, gdy orbity juz osiadly
+  if (t > 3.3 && t < 4.35) {
+    const p = faza(t, 3.3, 4.35);
+    polysk(sx, p, .8 * (1 - Math.abs(p * 2 - 1)));
+  }
+  g.restore();
+
+  // --- przednie polowki orbit (przed logo)
+  orbita(kat, tilt, r1, 9, CZERWIEN, true, alfaO * .95);
+  orbita(-kat * .72, tilt * .92, r2, 5, CIEMNE ? '#ffffff' : '#9B0000', true, alfaO * .45);
+  if (Math.sin(kat) > 0) iskra(kat, tilt, r1, alfaO, 54);
+}
+
+// --------------------------------------------------------------------------
+function render(t) {
+  g.setTransform(1, 0, 0, 1, 0, 0);
+  g.clearRect(0, 0, W, H);
+  if (WARIANT === 'B') wariantB(t); else wariantA(t);
+}
+window.render = render;
+window.gotowe = () => gotowe;
+
+logo.onload = () => { gotowe = true; render(0); };
+logo.src = window.LOGO_DATA;
+</script>
