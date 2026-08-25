@@ -6,9 +6,10 @@
 > Dokument dla klienta: `docs/roadmapa/T-243b-czego-brakuje-2026-08-25.md`.
 > Spec parasola: `docs/roadmapa/T-243-social-dystrybucja-tresci.md`.
 
-Fala druga jest **cztery razy większa od pierwszej**: 7 aut zamiast 4, z kompletem zdjęć,
-i pierwszy raz z własną czołówką. Lipcowa paczka pokazała, co działa i co się marnuje —
-ten plik ma sprawić, żeby drugi raz nie zmarnować.
+Fala druga jest **prawie dwa razy większa od pierwszej**: 7 aut zamiast 4, każde w dwóch
+kadrach i z kompletem zdjęć, materiał zabrandowany animowanym logo i sloganem na końcu.
+Lipcowa paczka pokazała, co działa i co się marnuje — ten plik ma sprawić, żeby drugi raz
+nie zmarnować.
 
 ---
 
@@ -96,16 +97,18 @@ prowadząca na ofertę „w drodze do Polski" kosztuje zaufanie.
 📌 **Leopard 5 ma materiał z obu sesji** (23.07 i 24.08) — sprawdzić, czy nowy nie duplikuje
 opublikowanego 24.07 (`JREnGhOomqI` Short, `ptYgxcc99ok` i `7UTtfN7WaII` poziome).
 
-### Czołówka
+### Branding — temat zamknięty, nie otwierać go ponownie
 
-`scripts/czolowka/` — animowane logo Prima-Auto, warianty 9:16 i 16:9, wariant A („Medal"),
-3,9 s. Render: `python3 scripts/czolowka/render.py --kadr 9x16|16x9 --tlo light|dark`.
-Gotowe pliki na Dysku: `PrimaAuto/video/logo`.
+**Materiał ma już animowane logo i slogan na końcu** — jako outro, nie intro. Widz od pierwszej
+sekundy widzi auto, branding domyka. Nie ma więc problemu „13% Shorta oddane logo, zanim
+pojawi się samochód" i **nie proponuj wycinania ani skracania czołówki pod Shorty**.
 
-⚠️ **Do rozstrzygnięcia z Jankiem:** czy doklejamy ją do Shortsów. 3,9 s na materiale 30-sekundowym
-to **13% czasu** oddane brandingowi, zanim widz zobaczy auto — a retencja w pierwszych sekundach
-decyduje o zasięgu Shorta. Na poziomych ryzyko jest znacznie mniejsze. Sugestia: czołówka
-na poziomych i w reklamach, Shorty bez niej albo z wersją skróconą do ~1 s.
+W reklamach dodatkowo **nazwa kanału, tytuł i atrybucja źródła serwowane są z automatu przez
+platformę** — brandingu nie trzeba tam dokładać ręcznie.
+
+Silnik jest w `scripts/czolowka/` (warianty 9:16 i 16:9, wariant A „Medal", 3,9 s;
+`python3 scripts/czolowka/render.py --kadr 9x16|16x9 --tlo light|dark`), gotowe pliki na Dysku
+w `PrimaAuto/video/logo` — do przerenderowania, gdyby zmieniał się kadr, tło albo treść sloganu.
 
 ---
 
@@ -159,9 +162,9 @@ z falą lipcową — wtedy będzie wiadomo, czy skala 7 aut daje więcej niż 4,
 
 ## 5. Co zrobić jutro, w kolejności
 
-1. **Rozstrzygnąć z Jankiem trzy rzeczy** (pojedynczo, quizem — `feedback_quiz_sequential`):
-   czołówka na Shortsach tak/nie · Lynk & Co 900 (czekamy na status czy piszemy „w drodze")
-   · czy Leopard 5 z nowej sesji to inny materiał niż lipcowy.
+1. **Rozstrzygnąć z Jankiem dwie rzeczy** (pojedynczo, quizem — `feedback_quiz_sequential`):
+   Lynk & Co 900 (czekamy na poprawiony status czy piszemy „w drodze") · czy Leopard 5
+   z nowej sesji to inny materiał niż lipcowy.
 2. **Przygotować metadane dla wszystkich 14 pozycji** — wzorzec z 24–25.07: cena PLN w tytule,
    deep-link do oferty w pierwszej linii opisu, playlista „Auta na placu w Rzeszowie",
    nie-dla-dzieci, publiczny, 10–12 tagów. Shorts **bez pełnego bloku kontaktowego**
@@ -206,7 +209,6 @@ gotowe do odpalenia przez Janka (`! python3 …`).
 
 ## 7. Otwarte, do rozstrzygnięcia
 
-- **Czołówka na Shortsach** — patrz sekcja 2.
 - **Lynk & Co 900** — status na placu.
 - **[VID]** — skrypt `tmp/social/ads_przestaw.py` gotowy: pauza [VID] + [DG] z 20 na 35 zł/dz.
   Nie wykonany (blokada zapisów).
