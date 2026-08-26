@@ -89,6 +89,11 @@ Każdy folder: `*-pion.mp4` (9:16) + `*-poziom.mp4` (16:9) + zdjęcia `SCH027xx`
 | **Deepal G318** | 196 000 zł | `/oferta/deepal-g318-2026-272010/` (272010) | `/samochody/deepal/g318/` |
 | **Lynk & Co 900** | — | ⚠️ **żadna sztuka nie ma statusu „na placu"** — 4 szt. `in_transit` (292582, 387288, 360158, 387540) | `/samochody/lynk-co/900/` (sprawdzić) |
 
+⚠️ **Denza Z9 GT — sprawdzić kolizję z postem Andrzeja.** 26.08 na Stronie wyszedł post
+„Denza Z9 DM-i Ultra Version 1100 4WD 2025". Nasze oferty na placu to **Z9 GT** (303534, 314155)
+i z sesji mamy film Z9 GT. Jeśli to ten sam egzemplarz, film przesuwamy — nie wypuszczamy
+obu w tym samym tygodniu do tej samej publiczności. Pytanie poszło do Andrzeja 26.08.
+
 ⚠️ **Lynk & Co 900 — rozstrzygnąć PRZED publikacją.** Auto było na sesji, więc stoi na placu,
 ale w bazie wszystkie cztery sztuki są „w drodze". Albo Ruslan/Andrzej poprawia status
 (punkt A5 w dokumencie dla klienta), albo piszemy o nim jako o aucie w drodze. Reklama „od ręki"
@@ -117,8 +122,8 @@ w `PrimaAuto/video/logo` — do przerenderowania, gdyby zmieniał się kadr, tł
 | Kanał | Stan | Publikacja |
 |---|---|---|
 | **YouTube** | 19 filmów, 61 344 wyświetlenia, 15 subskrypcji. Ostatnia publikacja **24.07** | ✅ **Sprawdzony wzorzec: Janek wgrywa pliki, model przeklikuje metadane i publikację przez Studio (Chrome).** API niedostępne — kanał na prywatnym koncie Google, brak Brand Accounta |
-| **Facebook (nowa Strona)** | 145 fanów, Andrzej publikuje co 1–3 dni | Reklamy: **zablokowane** do czasu R1–R4 (regulamin grup odbiorców, karta, weryfikacja firmy, tryb aplikacji) |
-| **Instagram** | 3 sesje/90 dni, konto nieustalone | Czeka na odpowiedź A3 |
+| **Facebook (nowa Strona)** | 145 fanów, Andrzej publikuje **niemal codziennie** (25.08 Zeekr 8X i BYD DaHan, 26.08 Denza Z9) | Reklamy: **zablokowane** do czasu R1–R4 (regulamin grup odbiorców, karta, weryfikacja firmy, tryb aplikacji) |
+| **Instagram** | 3 sesje/90 dni. ✅ Konto **jest Prima-Auto**, Andrzej ma dostęp przez Meta i publikuje (odpowiedź z 26.08). ⚠️ Ale w portfolio **nie ma żadnego konta IG** — sprawdzone 26.08, trzy krańce puste, SU bez przypisania | Czeka na dodanie konta do portfolio i przypisanie do `Auranet API` (A3). **Hasła nie bierzemy** — nie załatwia publikacji z API i nie chcemy go mieć |
 | **TikTok** | 334 obs., 127 filmów, **stoi od 14.07**, brak linku w bio | Czeka na A1 |
 
 **Co da się zrobić bez nikogo:** YouTube (wzorzec ręczny) i kreacje do [DG] z materiałów, które

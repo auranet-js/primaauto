@@ -143,17 +143,36 @@ na kolejne dni, Wy macie swój rytm postów ofertowych — i szkoda, żeby tego 
 wychodziły dwa różne auta w dwóch miejscach albo dwa razy to samo. Wystarczy krótka wymiana
 raz w tygodniu.
 
+Pierwszy przykład jest już na stole: **26.08 wyszedł post o Denzie Z9**, a my mamy z sesji film
+Denzy Z9 GT. Jeśli to ten sam egzemplarz, przesuwamy film — nie ma sensu, żeby oba wyszły
+w tym samym tygodniu do tych samych ludzi.
+
 **Andrzej jest dla nas punktem kontaktowym w temacie reklam** — z nim ustalamy merytorycznie,
 co promujemy i kiedy.
 
-### A3. Czy `instagram.com/prima_auto.pl` jest Wasze i macie hasło?
+### A3. Instagram — dodać konto do portfolio *(5 minut)*
 
-Pytamy drugi raz (pierwszy 7 sierpnia), bo bez odpowiedzi Instagram stoi. Jeśli konto jest Wasze — podepniemy je
-do Strony i będzie skąd puszczać rolki pionowe z sesji. Jeśli nie jest albo hasło przepadło
-— zakładamy nowe i zmieniamy link w stopce strony internetowej.
+✅ **Odpowiedź mamy** (Andrzej, 26.08): konto jest Wasze, hasło macie, Andrzej już tam publikuje
+i ma dostęp przez Meta.
 
-Dla porządku: w ostatnich 90 dniach ten profil przysłał na stronę **3 wejścia**. Nie
-odzyskujemy działającego kanału, tylko budujemy nowy — i tak to traktujmy.
+⚠️ **Hasła nam nie przekazujcie.** Nie jest potrzebne i nie chcemy, żeby krążyło — po tym,
+co się stało w czerwcu, to zasada bez wyjątków. Dostęp Andrzeja zostaje bez zmian, publikuje
+dalej tak jak dotąd.
+
+Potrzebne jest co innego, i tego samo hasło by nie załatwiło: **konto musi być zasobem
+portfolio przypisanym do konta technicznego.** Sprawdziliśmy 26.08 — w portfolio Prima-Auto
+nie ma dziś żadnego konta na Instagramie, więc nasze narzędzia go nie widzą.
+
+**Co zrobić:**
+1. `business.facebook.com` → portfolio **Prima-Auto** → Ustawienia → Konta →
+   **Konta na Instagramie** → **Dodaj**.
+2. Ustawienia → Użytkownicy → **Użytkownicy systemowi** → `Auranet API` → **Dodaj zasoby**
+   → zaznaczyć to konto → pełna kontrola.
+
+Jeśli któryś z tych kroków wymaga uprawnień, których Andrzej nie ma — to punkt dla Ruslana.
+
+Dla porządku: w ostatnich 90 dniach profil przysłał na stronę **3 wejścia**. Nie odzyskujemy
+działającego kanału, tylko go budujemy — i tak to wyceniajmy.
 
 ### A4. Promowanie Waszych własnych postów
 
@@ -291,7 +310,7 @@ Możecie tę rolę odebrać w każdej chwili, jednym kliknięciem, w tym samym m
 | **R4** | Przełączyć aplikację „Prima-Auto API" na *Aktywna* | Ruslan | 10 min | **reklamy z filmami z sesji** |
 | **A1** | Wpisać `primaauto.com.pl` w profilu TikToka | Andrzej | 2 min | ruch z TikToka, dziś zerowy |
 | **A2** | Ustalić roboczo kalendarz: które auto kiedy | Andrzej | — | brak kolizji z reklamami |
-| **A3** | Odpowiedzieć: czy `prima_auto.pl` jest Wasze | Andrzej | 1 min | Instagram w ogóle |
+| **A3** | Dodać konto Instagram do portfolio i przypisać do `Auranet API` | Andrzej | 5 min | rolki z sesji na Instagramie |
 | **A4** | Nic — publikować dalej jak dotąd | Andrzej | — | materiał do podbicia |
 | **A5** | Poprawić status Lynk & Co 900 („na placu" zamiast „w drodze") | Andrzej | 2 min | spójność reklamy z ofertą |
 | **YT** | Przenieść kanał na konto marki *(zalecenie)* | właściciel konta Google | 15 min | kanał przestaje wisieć na osobie |
