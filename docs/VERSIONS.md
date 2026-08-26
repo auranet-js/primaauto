@@ -1,6 +1,201 @@
 # Historia wersji asiaauto-sync
 
 
+## 0.34.30 + motyw 1.3.3 — 2026-08-26 (a11y: siedem naruszeń widocznych wyłącznie przy 320 px)
+
+**Skąd.** Próbka audytowa jest mierzona przy 1366 px. Po domknięciu wszystkiego, co widać
+na desktopie (79 adresów, zero naruszeń axe), ten sam zestaw został przemierzony **przy
+320 px** — i wyszło 27 pozycji, których przemiar desktopowy nie widzi. Powód jest mechaniczny:
+ten sam tekst przy mniejszym foncie przechodzi z progu kontrastu 3:1 na 4,5:1, a tabele
+o sztywnej szerokości minimalnej rozpychają stronę dopiero na wąskiej rzutni.
+
+| Usterka | Kryterium | Zasięg | Naprawa |
+|---|---|---|---|
+| tabela w treści szersza od rodzica (`scrollWidth` 321 przy 320) | 1.4.10 | `/leasing-samochodu-z-chin/` | `hub.css` — `.aa-hub__body table { display: block; overflow-x: auto }` |
+| tabele w hasłach słownika, `scrollWidth` **329–464** | 1.4.10 | **10 haseł** | `kb.css` — to samo dla `.pa-article__content table` w `@media (max-width: 640px)` |
+| obszar przewijany niedostępny z klawiatury | 2.1.1 | `.aa-spec__scroll` na ofertach i hubach modeli + tabele powyżej | nowy `themes/primaauto2026/assets/js/a11y-scroll-regions.js` |
+| przycisk WhatsApp: biel na `#25D366` — **1,98:1** przy 13 px | 1.4.3 | **17 stron ofert**, pasek CTA przyklejony do dołu ekranu | `asiaauto-single.css` — tło `#17803D`, **5,01:1** |
+| zaślepka Complianz nad mapą: biel na `#808080` — 3,94:1 | 1.4.3 | `/kontakt/` | `base.css` — nadpisanie tła na `#6E6E6E`, **5,10:1** |
+| link w akapicie treści odróżniony wyłącznie kolorem, 1,18:1 wobec otoczenia | 1.4.1 | 1 news, ale reguła bazowa dotyczy każdego przyszłego | `kb.css` — podkreślenie `.pa-article__content p a, li a` z pominięciem autolinków |
+
+**Dwie zależności warte zapamiętania.**
+
+Naprawa 1.4.10 przez `overflow-x: auto` **tworzy nowy obowiązek z 2.1.1**: obszar, który się
+przewija, musi dać się przewinąć z klawiatury, więc potrzebuje `tabindex`. Stąd skrypt, a nie
+sama reguła CSS. Skrypt nadaje `tabindex="0"` + `role="region"` **tylko** wtedy, gdy kontener
+faktycznie przewija i **nie ma w środku własnego elementu focusowalnego** — karuzela ofert
+z linkami zostaje nietknięta, bo klawiatura dociera tam przez linki. Atrybuty są zdejmowane,
+gdy kontener przestaje przewijać (obrót ekranu), żeby nie zostawiać martwych landmarków:
+zmierzone przy 1366 px — zero oznaczonych obszarów.
+
+Przycisk WhatsApp to **najgorszy kontrast w całym serwisie** (1,98:1) i siedział na elemencie
+konwersyjnym, w pasku widocznym na telefonie, czyli na 79,6% ruchu. Wariant „ciemny napis na
+markowej zieleni" (6,15:1) odpadł, bo `.aa-mobile-cta a.aa-mcta--wa` ma `color: #fff !important`
+i wymagałby przepisania reguły; ciemniejsza zieleń trzyma też spójność paska — trzy przyciski,
+trzy białe etykiety na ciemnym tle.
+
+**Pomiar po wdrożeniu — 79 adresów, obie rzutnie:**
+
+| Przemiar | Wynik |
+|---|---|
+| axe (WCAG A/AA/2.2 AA), 1366 px | **0 naruszeń** |
+| axe (WCAG A/AA/2.2 AA), 320 px | **0 naruszeń** |
+| reflow przy 320 px (`scrollWidth` > 320) | **0 stron** |
+| nieudane ładowania | 0 |
+
+Skrypt przemiaru zachowany jako `scripts/a11y-przemiar-320.mjs` — z ostrzeżeniem, że każdy adres
+musi iść w osobnym `try/catch` przy `protocolTimeout` 420 s, bo jeden ciężki `axe.run` wywala
+cały przebieg (zaliczone 26.08 na 7. adresie).
+
+**Wersjonowanie:** `ASIAAUTO_VERSION` `0.34.29` → `0.34.30`; `PRIMAAUTO_THEME_VERSION`
+`1.2.8` → `1.3.3` (1.2.9 linki w treści, 1.3.0 tabele hubów, 1.3.1 skrypt obszarów przewijanych,
+1.3.2 Complianz, 1.3.3 tabele słownika).
+
+Dowody: `docs/dostepnosc/dowody-2026-08-26/` — logi obu przemiarów przed i po, lista 79 adresów.
+Backupy: `.bak-2026-08-26-cta-wa`, `.bak-2026-08-26-scroll-regions` oraz wcześniejsze z tego dnia.
+
+
+## 0.34.29 + motyw 1.2.8 — 2026-08-26 (a11y: cztery usterki spoza próbki audytowej)
+
+**Skąd się wzięły.** Po domknięciu obu pozycji zlecenia v4 przemiar na **73 adresach**
+z sitemap (15 ofert, 22 huby, 15 haseł słownika, wszystkie strony statyczne, 404) wykazał
+naruszenia, których próbka 17 adresów nie łapie — bo **nie ma w niej ani jednego huba marki**,
+a ze słownika jest jedno hasło, akurat bez podpisu ze zdjęciem. Zasięg ustalony skanem
+wszystkich **165** stron statycznych, hubów, haseł i newsów.
+
+| Usterka | Kryterium | Zasięg | Naprawa |
+|---|---|---|---|
+| `.aa-hub__facts-note` („Stan oferty: RRRR") `#9ca3af` na `#f5f6f8` — **2,35:1** | 1.4.3 | **43 huby marek** | `hub.css:21` → `#5C6B7F` (`--c-secondary`), **5,03:1** |
+| link w `figcaption` odróżniony wyłącznie kolorem, 2,61:1 wobec otoczenia przy progu 3,0 | 1.4.1 | **53 hasła słownika** | `kb.css` — podkreślenie `figcaption a:not(.aa-autolink)`; autolinki mają własną kropkowaną linię |
+| link wewnątrz `<summary>` → axe `nested-interactive` | 4.1.2 | 4 hasła słownika | `class-asiaauto-autolink.php:36` — `summary` dopisane do `SKIP_TAGS` |
+| przeskok nagłówka `h1` → `h3` | 1.3.1 | `/leasing-samochodu-z-chin/` | treść strony 398850: dwa `h3` → `h2` |
+
+**Dlaczego autolinker, a nie treść czterech haseł.** Autolinkowanie działa na filtrze przy
+renderowaniu, nie jest zapisane w bazie (`wp post list --s="aa-autolink"` → 0). Jedno słowo
+w `SKIP_TAGS` naprawia wszystkie cztery strony i **nie pozwala usterce wrócić** przy nowych
+hasłach FAQ. Lista już chroniła `a`, `button` i nagłówki — `summary` jest przyciskiem, więc
+należał do niej od początku.
+
+**Regresja złapana przy okazji.** Podniesienie nagłówków na stronie leasingu wypisało je
+ze stylu — `hub.css:91` celował wyłącznie w `.aa-hub__usp-block h3`. Selektor rozszerzony
+o `h2`, wygląd bez zmian. Wniosek na przyszłość: **zmiana poziomu nagłówka w treści potrafi
+odpiąć styl**, bo część reguł motywu wisi na nazwie taga, nie na klasie.
+
+**Wersjonowanie:** `ASIAAUTO_VERSION` `0.34.28` → `0.34.29`, `PRIMAAUTO_THEME_VERSION`
+`1.2.6` → `1.2.8` (1.2.7 to stan przed poprawką selektora `h2`).
+
+Podgląd zmian ze zrzutami przed/po i pełnymi listami adresów:
+`https://auratest.pl/fe4f58fec53ctmp/primaauto-4-poprawki-2026-08-26/`
+
+Backupy: `.bak-2026-08-26-poza-probka` przy `hub.css`, `kb.css` i `class-asiaauto-autolink.php`;
+treść strony 398850 sprzed edycji w archiwum sesji.
+
+
+## 0.34.28 + motyw 1.2.6 — 2026-08-26 (a11y: domknięcie 1.4.3 — jedna czerwień marki #C92A2B)
+
+Pozycja 2 z `~/projekty/auranet/docs/uslugi/wdrozenia/2026-08-25-primaauto-wdrozenie-v4.md`.
+Akcept właściciela 26.08.2026. Po zmianie **serwis spełnia wszystkie 43 stosowalne kryteria
+WCAG 2.2 AA** — ostatnie 27 elementów z błędem kontrastu zeszło do zera.
+
+**Recepta z karty odbioru była błędna i nie została użyta.** Karta kazała zmienić jedną zmienną
+(`base.css:29`, `--c-accent`). Zmierzone: podmiana `--c-accent` na jaskrawą zieleń w przeglądarce
+zmienia wartość zmiennej, ale **zero elementów** przyjmuje nowy kolor — `--c-accent` konsumuje
+wyłącznie `kb.css` (słownik, rankingi), w większości w stanach `:hover`. Czerwień marki płynęła
+z czterech innych zmiennych i z wartości wpisanych na sztywno.
+
+**Zmienione — 23 linie w 9 plikach**, wszystkie `#D63031` → `#C92A2B`:
+
+| Plik | Linie | Co obsługuje |
+|---|---|---|
+| `themes/primaauto2026/assets/css/hub.css` | 77, 112, 179, 394 | linki i autolinki w treści hubów (`.aa-hub__body a` — wpisane na sztywno, nie schodziło żadną zmienną), strzałki list USP, `--accent` paska „Oferty …", ramka `.aa-spec__summary` |
+| `themes/primaauto2026/assets/css/base.css` | 29 | `--c-accent` — słownik i rankingi |
+| `class-asiaauto-homepage.php` | 862, 867 | `--accent` i `--accent-text` strony głównej: ceny aut, linki sekcji, `.aa-home__make-name`, tła przycisków |
+| `class-asiaauto-shortcodes.php` | 619, 1717, 1985, 2181, 2296, 2423, 2474, 2476, 2483, 2689 | `--aa-accent` + ceny, CTA i kafle marek na stronie 404 |
+| `class-asiaauto-contact.php` | 354 | `--accent` — m.in. `.aa-contact__hours-time--closed` |
+| `class-asiaauto-login.php` | 67 | `--aa-accent` panelu klienta |
+| `assets/css/asiaauto-inventory.css` | 10 | `--aa-accent` listingu |
+| `assets/css/asiaauto-order-wizard.css` | 4 (komentarz), 16, 648 | `--wiz-accent` kreatora zamówienia |
+| `assets/css/asiaauto-single.css` | 4 | `--accent` karty oferty |
+
+**Świadomie NIE ruszone:** `class-asiaauto-admin.php` (panel wtyczki, poza zakresem audytu)
+i `class-asiaauto-order-mail.php` (szablony maili transakcyjnych — `#D63031` na białym daje
+4,85:1 i kryterium spełnia; zmiana wymaga osobnego testu renderowania w klientach pocztowych).
+Nagłówek strony `#9B0000` i logo bez zmian. Komentarz w `class-asiaauto-homepage.php:863`
+opisywał wariant wycofany w sierpniu („jako TŁO przycisków zostaje nietknięta #D63031") —
+zaktualizowany do stanu faktycznego: jedna czerwień, także jako tło (biel na niej 5,46:1
+zamiast 4,85:1).
+
+**Pomiar po wdrożeniu** — ta sama próbka 17 adresów i to samo narzędzie, którego użył reaudyt:
+
+| Pomiar | Wynik |
+|---|---|
+| axe `color-contrast` na 17 adresach | **0** (przed: 27) |
+| axe, wszystkie reguły WCAG A/AA/2.2 AA na 17 adresach | **0 naruszeń** |
+| elementy nadal renderowane w `#D63031` | **0** |
+| przeskoki nagłówków | brak |
+| reflow 320 px: `/marki/`, `/samochody/`, `/w-drodze/`, `/` | 320/320 na każdym |
+
+Kontrast `#C92A2B`: 5,04:1 na `#F5F6F8`, 5,46:1 na białym, 4,99:1 na `#FEF2F2`, biel na kolorze
+jako tle 5,46:1. Wszystkie powyżej progu 4,50.
+
+**Wersjonowanie:** `ASIAAUTO_VERSION` `0.34.27` → `0.34.28` (nagłówek wtyczki też),
+`PRIMAAUTO_THEME_VERSION` `1.2.5` → `1.2.6`. Arkusze wtyczki bustują się przez `filemtime`.
+
+Podgląd zestawienia przed/po (6 widoków × 2 szerokości):
+`https://auratest.pl/fe4f58fec53ctmp/primaauto-kolor-2026-08-26/`
+
+Backupy: `.bak-2026-08-26-kolor` obok każdego z 9 plików + `asiaauto-sync.php`.
+
+
+## motyw 1.2.5 — 2026-08-26 (a11y: reflow 320 px na /marki/ — pozycja 1 z zamknięcia audytu)
+
+Zmiana **wyłącznie w motywie**, wtyczka bez zmian. Realizacja pozycji 1
+z `~/projekty/auranet/docs/uslugi/wdrozenia/2026-08-25-primaauto-wdrozenie-v4.md`
+(kryterium 1.4.10, karta N-8).
+
+**Objaw przed zmianą:** `/marki/` przy rzutni 320 px dawało `scrollWidth` 332 — pigułka licznika
+przy kaflu o najdłuższej nazwie („Leapmotor”, 193) wypychała się poza ekran. Kolumna `1fr`
+w siatce kafla nie miała `min-width: 0`, więc nie schodziła poniżej naturalnej szerokości nazwy.
+
+**Zmiany w `themes/primaauto2026/assets/css/hub.css`:**
+- `:154` (nowa reguła) — `.aa-brand-card__name { min-width: 0; overflow-wrap: anywhere; }` — poprawka z karty audytu, strukturalna: kolumna może zejść poniżej szerokości nazwy
+- `:260` — siatka mobilna `minmax(140px, 1fr)` → `minmax(165px, 1fr)`
+- `:261` — `.aa-brand-card` na mobile: `padding: 14px 16px` → `14px 14px`, dodane `column-gap: 8px`
+
+**Dlaczego dwie ostatnie linie, skoro karta audytu prosiła o jedną.** Sama reguła z karty zamyka
+kryterium (320/320, zero elementów wystających), ale przy dwukolumnowej siatce mobilnej nazwy
+zaczynały się łamać **w środku wyrazu**: zmierzone `XPen/g`, `Changa/n`, `Xiao/mi`, `Leap/motor`,
+`Hong/qi`, `Dongfe/ng` przy 320 px oraz `Leapmoto/r` przy 390 px (najczęstsza szerokość telefonu).
+Poszerzenie minimalnej kolumny do 165 px daje na wąskich ekranach jedną kolumnę zamiast dwóch,
+a odzyskane 8 px z odstępów mieści najdłuższe nazwy w jednej linii. Po zmianie: **zero złamań
+w środku wyrazu na dziewięciu szerokościach** (320, 360, 390, 414, 480, 640, 768, 1024, 1366).
+
+**Wersjonowanie:** `themes/primaauto2026/functions.php:4` — `PRIMAAUTO_THEME_VERSION`
+`1.2.4` → `1.2.5` (arkusze motywu mają stałą wersję, bez bumpa przeglądarka podałaby stary CSS).
+
+**Pomiary po wdrożeniu** (puppeteer, rzutnia 320 × 720):
+
+| Adres | `scrollWidth` | elementy wystające |
+|---|---|---|
+| `/marki/` | 320 | 0 |
+| `/samochody/` | 320 | 0 |
+| `/w-drodze/` | 320 | 0 |
+| `/` | 320 | 0 na poziomie strony |
+
+axe (`wcag2a/2aa/21a/21aa/22aa`) na `/marki/` przy 1366 i 320 px: **zero naruszeń**, łącznie
+z `color-contrast`.
+
+**Uwaga do przyszłych pomiarów reflow:** na stronie głównej detektor „elementów wystających”
+pokazuje kafle `.aa-home__car`. To karuzela w kontenerze `.aa-home__latest` z `overflow-x: auto`
+(`scrollWidth` 1320 przy `clientWidth` 288) — zamierzone przewijanie wewnątrz komponentu, nie
+naruszenie 1.4.10. Strona sama w sobie ma 320/320. Sprawdzaj `overflow-x` przodków, zanim
+zgłosisz taki wynik jako usterkę.
+
+**Pozycja 2 (czerwień marki) — domknięta tego samego dnia, patrz wpis `0.34.28` wyżej.**
+
+Backup: `hub.css.bak-2026-08-26-a11y-v4`.
+
+
 ## 0.34.27 — 2026-08-25 (a11y: domknięcie zlecenia naprawczego v3 przed reaudytem WCAG)
 
 Realizacja `~/projekty/auranet/docs/uslugi/wdrozenia/2026-08-21-primaauto-wdrozenie-v3.md`.

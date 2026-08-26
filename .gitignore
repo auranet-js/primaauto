@@ -6,6 +6,8 @@
 # === Robocze / wrażliwe ===
 scratch/
 *.log
+# Wyjatek: logi pomiarow dostepnosci sa dowodem do raportu WCAG, maja zostac w repo.
+!docs/dostepnosc/**/*.log
 *.tmp
 .env
 .env.local
