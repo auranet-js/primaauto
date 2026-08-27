@@ -1,7 +1,7 @@
 # T-243 — Dystrybucja treści na kanały społecznościowe (parasol)
 
 > Status: **spec gotowy do wykonania** (2026-08-07) · Rozmiar: XL — rozbity na 8 pozycji
-> Godziny realnie: **89–119 h** · Rynkowo: **225–300 h** · Zużyte dotąd: **4 h** (rozpoznanie i spec, 07.08)
+> Godziny realnie: **99–133 h** (po dopisaniu fazy i, 27.08) · Rynkowo: **250–335 h** · Zużyte dotąd: **4 h** (rozpoznanie i spec, 07.08)
 > Pierwsza fala (a+b+c+d + Facebook/Instagram z e): **57–75 h**
 > Wchłania: **T-241** (procedura „nowe materiały z sesji") jako pierwszy przebieg fazy c
 > Styka się z: T-201a (assety wideo), T-205 (Meta), T-207 (dashboard marketingowy), T-240 (huby indywidualne)
@@ -202,13 +202,15 @@ maskowanie tablic i znaków wodnych.
 | **T-243f** — Rejestr i wyniki | Statyczny HTML + deploy. Warstwa wyników z Graph Insights, YouTube Analytics i GA4. | **11–15 h** | 28–38 h |
 | **T-243g** — Rotacja i rytm | `rotacja.py`, maskowanie tablic dla zdjęć importowych, crony przez `run-job.sh`, kill-switch, skille `/sesja` i `/kolejka`. | **9–13 h** | 23–33 h |
 | **T-243h** — Czujnik kanału FB + baseline kosztu | Cron tygodniowy na Organic Social w GA4 z alarmem przez `send-to-jan`, gdy ruch się załamie (wzorzec `run-job.sh`). Plus jednorazowy pomiar faktycznego wydatku kampanii RMKT w Google Ads, żeby porównanie „kontakt z Facebooka vs kontakt z remarketingu" miało liczbę, nie przymiotnik. | **2–3 h** | 5–8 h |
-| | **Razem** | **89–119 h** | **225–300 h** |
+| **T-243i** — Promotor (most publikacja→reklama) | `promotor.py`: pozycja `opublikowany` → kreacja. Meta z `object_story_id`, TikTok Spark Ads, zasób wideo do `[DG]` przez Ads API, pozycja w dynamicznych reklamach z katalogu. Idempotencja, `--dry-run`. **Dopisana 27.08** — spec opisywał dystrybucję i rejestr, ale nie moment, w którym opublikowany materiał staje się reklamą. | **10–14 h** | 25–35 h |
+| | **Razem** | **99–133 h** | **250–335 h** |
 
 **Pierwsza fala: a + b + c + d + Facebook i Instagram z e = 57–75 h.**
 Od tego momentu Ruslan wskazuje auto, a posty na Facebooku i Instagramie planują się same
 z materiałów z sesji. YouTube, TikTok, rejestr i rotacja dochodzą po kolei.
 
-**Kolejność wykonania:** a → b → c → d → e(FB, IG) → f → e(YouTube, TikTok) → g.
+**Kolejność wykonania:** a → b → c → d → e(FB, IG) → **i** → f → e(YouTube, TikTok) → g.
+Faza i idzie zaraz po pierwszej dystrybucji — bez niej pętla się nie domyka.
 Faza a jest blokująca dla części e. Fazy b, c, d można prowadzić równolegle do oczekiwania
 na audyt aplikacji TikToka. **Fazę h można zrobić kiedykolwiek** — nie zależy od niczego
 i nic od niej nie zależy, ale im wcześniej, tym dłuższy szereg pomiarowy.

@@ -1,322 +1,188 @@
-# Prima-Auto — czego brakuje, żeby ruszyć z reklamami
+# Prima-Auto — co zostało do zrobienia
 
-**Lista rzeczy niezrobionych · dla zespołu Prima-Auto**
-Wersja 2 · 25 sierpnia 2026 · przygotował: Auranet
-
----
-
-## Kto co robi
-
-**Andrzej** — prowadzi Stronę na Facebooku i jest naszym punktem kontaktowym w temacie
-reklam; do tego rzeczy, które da się zrobić od ręki (punkty A1–A5).
-**Ruslan** — cztery rzeczy, których z zewnątrz nie zrobi nikt inny (punkty R1–R4).
-
-Jeśli którykolwiek krok okaże się niejasny, przejdziemy go razem przez połączenie zdalne
-i wykonamy za Was. To nie jest uprzejmość — wolimy stracić pół godziny na rozmowie, niż
-czekać trzy tygodnie na klik, którego nikt nie umiał znaleźć.
+**Wersja 3 · 26 sierpnia 2026 · Auranet**
+*Aktualizacja listy z 25 sierpnia. Wszystko sprawdzone dzisiaj bezpośrednio na koncie.*
 
 ---
 
-## Uczciwie: o część z tego prosiliśmy już wcześniej
+## Trzy z czterech rzeczy Ruslana są już zrobione
 
-Nie po to, żeby wypominać — po to, żeby było jasne, że lista nie rośnie, tylko się nie kurczy.
+Sprawdziliśmy każdą osobno, nie na słowo:
 
-- **29 lipca 2026** — instrukcja odbudowy konta Facebooka po przejęciu. Wykonana w większości,
-  i to jest powód, dla którego reklamy w ogóle mają na czym stanąć. Zostały z niej: weryfikacja
-  firmy, karta i Instagram.
-- **7 sierpnia 2026** — instrukcja uporządkowania dostępów do kanałów społecznościowych.
-  Bez odpowiedzi. Padły tam trzy pytania, które powtarzamy niżej, bo bez nich stoimy.
+| | Wczoraj | Dziś | Jak to sprawdziliśmy |
+|---|---|---|---|
+| **R1** Regulamin grup odbiorców | ⛔ niezaakceptowany | ✅ **zaakceptowany** | konto reklamowe zwraca `web_custom_audience_tos: 1` |
+| **R3** Weryfikacja firmy | ⛔ niezweryfikowana | ✅ **zweryfikowana** | portfolio zwraca `verification_status: verified` |
+| **R4** Aplikacja w trybie roboczym | ⛔ deweloperski | ✅ **produkcyjny** | utworzyliśmy testową reklamę z nowym materiałem — przeszła bez błędu, który blokował ją wczoraj; skasowaliśmy ją od razu |
+| **A3** Instagram w portfolio | ⛔ nie było | ✅ **konto dodane**, `Auranet API` z pełnym dostępem | widzimy przypisanie |
 
-Dzisiejsza lista jest **krótsza** od sierpniowej, bo zmieniliśmy podejście — patrz niżej.
+Doszła też odpowiedź w sprawie haseł reklamowych: **BYD Shark 6 to pierwszy egzemplarz
+w Polsce** — piszemy to śmiało. **Deepal G318 nie jest pierwszy**, więc o nim tak nie napiszemy.
 
----
-
-## Zmieniamy podejście — prosimy o mniej niż w sierpniu
-
-W sierpniu prosiliśmy o prawo do **publikowania** na Waszych kanałach. **Wycofujemy tę prośbę.**
-Nowy podział pracy jest prostszy i zostawia Wam pełną kontrolę:
-
-> **My przygotowujemy reklamy i zostawiamy je wyłączone. Wy je włączacie.**
-
-Kampania, grupa odbiorców, film, tekst, link do konkretnej oferty — wszystko przygotowane
-i czekające w Menedżerze Reklam ze statusem „wstrzymana". Wchodzicie, patrzycie, przełączacie
-suwak na zielono. Albo nie przełączacie. Nic nie ruszy bez Waszej decyzji.
-
-Sprawdziliśmy to dzisiaj **praktycznie, nie teoretycznie** — wgraliśmy testowy film na konto
-reklamowe i utworzyliśmy testową kampanię, żeby nie okazało się za tydzień, że czegoś brakuje.
-Wgrywanie materiałów i zakładanie kampanii **działa**. Przy okazji wyszły cztery rzeczy, które
-nie działają — i to jest ta lista.
+Poniżej wyłącznie to, co zostało.
 
 ---
 
-# Ruslan — cztery rzeczy, których nie zrobi nikt inny
+# 1. Instagram — ostatni klik, i wyjaśnienie, dlaczego znowu o coś prosimy
 
-### R1. Regulamin grup odbiorców — niezaakceptowany ⛔ *(2 minuty)*
+**Andrzej lub Ruslan · 5 minut**
 
-**Najważniejszy punkt na całej liście.**
+Konto `@prima_auto.pl` jest w portfolio, `Auranet API` ma do niego pełny dostęp — to była
+większa część roboty i jest za nami. Ale nasze narzędzia wciąż go nie widzą i chcemy uczciwie
+powiedzieć dlaczego, żeby to nie wyglądało na kolejne żądanie z powietrza.
 
-Bez tego nie da się utworzyć **ani jednej** listy remarketingowej — grupy ludzi, którzy byli
-na stronie. Próbowaliśmy dzisiaj założyć pięć takich list. Facebook odrzucił wszystkie pięć
-tym samym komunikatem: *„Regulamin nie został zaakceptowany"*.
+**Klucz dostępu, którym się łączymy, powstał 31 lipca — zanim konto Instagrama trafiło
+do portfolio.** Uprawnienia zapisują się w takim kluczu w chwili jego tworzenia i późniejsze
+dodanie zasobu ich nie dokłada. Klucz ma dziś osiem uprawnień i żadnego instagramowego,
+więc pytanie o konto zwraca „nie istnieje lub brak uprawnień" — mimo że przypisanie jest
+poprawne. Trzeba go wystawić raz jeszcze, już z kompletem.
 
-**Co zrobić:** otworzyć poniższy adres, będąc zalogowanym na koncie z dostępem do konta
-reklamowego Prima-Auto, i zaakceptować regulamin.
+**Co zrobić:** Ustawienia portfolio → Użytkownicy → **Użytkownicy systemowi** → `Auranet API`
+→ **Wygeneruj nowy token** → aplikacja **Prima-Auto API** → zaznaczyć dotychczasowe
+uprawnienia **plus trzy instagramowe**:
 
-> `https://www.facebook.com/customaudiences/app/tos/?act=1038563008906171`
+```
+instagram_basic
+instagram_content_publish
+instagram_manage_insights
+```
 
-### R2. Konto reklamowe nie ma karty ⛔ *(10 minut)*
+Ważność: **Nigdy nie wygasa**. Token pokazuje się **tylko raz** — przekazać go nam od razu
+po wygenerowaniu (nie mailem otwartym tekstem, ustalimy kanał).
 
-Konto jest aktywne, ma poprawną walutę (PLN) i strefę czasową (Warszawa), ale **nie ma
-podpiętej żadnej metody płatności**. Suma wydatków od założenia wynosi zero.
+**Co to odblokowuje:** sześć pionowych filmów z sesji trafia na Instagram jako rolki bez
+żadnej dodatkowej pracy — ten sam plik, drugi kanał.
 
-Nawet kampania przełączona na zielono **nie wyświetli się ani razu** — Facebook jej nie
-uruchomi.
-
-**Co zrobić:** Menedżer Reklam → Ustawienia płatności → dodać kartę firmową i **ustawić limit
-wydatków na koncie**. Limit jest ważny — to zabezpieczenie, którego zabrakło w czerwcu.
-
-### R3. Firma niezweryfikowana ⛔ *(20 minut + oczekiwanie na Facebooka)*
-
-Portfolio Prima-Auto, założone 11 czerwca, ma status **„niezweryfikowane"**.
-
-Sprawdziliśmy dzisiaj, co to konkretnie oznacza, i wyszło ostrzej, niż zakładaliśmy: to nie są
-„limity", tylko **twarda blokada**. Próba utworzenia grupy odbiorców w kampanii kończy się
-komunikatem *„Nie można opublikować tego zestawu reklam"* z odesłaniem do weryfikacji.
-Dopóki firma nie jest zweryfikowana, **nie da się zbudować kampanii do końca** — nawet
-wyłączonej.
-
-**Co zrobić:** Ustawienia portfolio → Centrum bezpieczeństwa → Weryfikacja firmy.
-
-⚠️ **Dane muszą zgadzać się co do znaku z wpisem w CEIDG.** Poprzednia próba została odrzucona
-przez literówkę w nazwisku i dwa różne adresy w dokumentach.
-
-### R4. Nasza aplikacja jest w trybie testowym ⛔ *(10 minut)*
-
-To wyszło dzisiaj i wcześniej o tym nie wiedzieliśmy — dlatego nie było tego w sierpniowej liście.
-
-Aplikacja **„Prima-Auto API"**, którą zakładałeś 31 lipca, żeby dać nam dostęp do reklam,
-działa w **trybie deweloperskim**. W tym trybie Facebook pozwala nam czytać dane i zakładać
-kampanie, ale **odmawia utworzenia reklamy z nowym materiałem** — filmem z sesji, zdjęciem,
-tekstem. Komunikat brzmi dosłownie: *„Post reklamowy został utworzony przez aplikację w trybie
-deweloperskim"*.
-
-Skutek jest taki, że bez tej zmiany możemy przygotować kampanię, ale **nie możemy włożyć
-do niej filmu**.
-
-**Co zrobić:**
-1. Wejść na `developers.facebook.com` → **Moje aplikacje** → **Prima-Auto API**.
-2. U góry strony jest przełącznik trybu — obecnie stoi na **„W trakcie opracowywania"**.
-   Przestawić go na **„Aktywna"** (ang. *Live*).
-3. Facebook może przy tym poprosić o dwie rzeczy: **adres URL polityki prywatności**
-   (podajcie `https://primaauto.com.pl/polityka-prywatnosci/`) i **ikonę aplikacji**
-   (wystarczy logo Prima-Auto, 1024×1024 px). Jeśli poprosi o coś więcej — zrzut ekranu
-   do nas, podpowiemy.
+> **Żeby to było ostatni raz.** Próbowaliśmy wygenerować ten klucz sami — Facebook odmawia,
+> bo wymaga sekretu aplikacji „Prima-Auto API", a ten jest wyłącznie po Waszej stronie
+> (aplikację zakładał Ruslan). Jeśli Ruslan przekaże nam ten sekret raz, bezpiecznym kanałem,
+> **każdą kolejną zmianę uprawnień zrobimy sami i nie będziemy Was już o to prosić.**
+> Znajduje się w `developers.facebook.com` → Prima-Auto API → Ustawienia → Podstawowe
+> → „Klucz tajny aplikacji". Decyzja Wasza — bez tego po prostu wracamy do Was przy każdej zmianie.
 
 ---
 
-# Andrzej — pięć rzeczy do zrobienia albo do odpowiedzenia
+# 2. Karta na koncie reklamowym — bez tego nie wyświetli się żadna reklama
 
-### A1. TikTok — wpisać adres strony w profilu *(2 minuty, za darmo, największy zysk do wysiłku)*
+**Ruslan · 10 minut**
 
-Konto `@primaauto.pl` ma **334 obserwujących, 127 filmów i 1 781 polubień**. Liczba filmów jest
-**identyczna jak 14 lipca** — od sześciu tygodni nie wyszło nic.
+Konto „Prima-Auto" jest aktywne, ma poprawną walutę (PLN) i strefę czasową (Warszawa).
+Sprawdzone dzisiaj: **suma wydatków 0 zł, saldo 0 zł, limit wydatków nieustawiony,
+brak podpiętej metody płatności.**
 
-Ale ważniejsze jest co innego: **w opisie profilu nie ma linku do strony internetowej.**
-Są dwa numery telefonu, nie ma adresu `primaauto.com.pl`. Efekt widać w statystykach:
-TikTok **nie przysłał na stronę ani jednego wejścia**. Ani jednego, przy 127 filmach.
+Nawet kampania przełączona na zielono **nie wyświetli się ani razu** — Facebook jej nie uruchomi.
+Wszystko inne jest już gotowe i czeka wyłącznie na to.
 
-**Co zrobić:** aplikacja TikTok → swój profil → **Edytuj profil** → pole **„Witryna"**
+**Co zrobić:** Menedżer Reklam → Ustawienia płatności → dodać kartę firmową
+i **ustawić limit wydatków na koncie**.
+
+⚠️ Limit nie jest formalnością — to zabezpieczenie, którego zabrakło w czerwcu. Ustawcie go
+od razu przy karcie, na kwotę, przy której spokojnie śpicie.
+
+---
+
+# 3. YouTube — przenieść kanał na konto marki
+
+**Właściciel konta Google · 15 minut**
+
+Publikujemy właśnie **dwanaście filmów z sesji** — po jednym dziennie przez najbliższy tydzień.
+Dziś każdy z nich trzeba wyklikać ręcznie w Waszym Studio, bo kanał wisi na **prywatnym koncie
+Google osoby, która go założyła 3 grudnia**, a prywatnego konta nie da się podłączyć do żadnych
+narzędzi. Po przeniesieniu robimy to automatycznie — razem z opisami, linkami do ofert
+i statystykami, których dziś w ogóle nie widzimy.
+
+Druga rzecz jest poważniejsza. Kanał ma **63 556 wyświetleń** i **nie należy do firmy**.
+Jeżeli ta osoba odejdzie, straci telefon albo zapomni hasła, **kanał idzie razem z nią**
+i nie ma procedury, która by go odzyskała. Facebook już raz pokazał Wam, jak to wygląda.
+
+Konto marki (*Brand Account*) to wydzielona tożsamość Google, która **nie należy do żadnej
+osoby**. Ludzie dostają do niej role — nadawane i odbierane w każdej chwili — a kanał zostaje
+na miejscu.
+
+**Przeniesienie nie zmienia niczego, co widać:** filmy, subskrybenci, komentarze, playlisty,
+statystyki i adres `youtube.com/@primaauto_com_pl` zostają bez zmian. Dla widza nie dzieje się nic.
+Zmienia się wyłącznie to, do czyjego konta kanał jest przypięty.
+
+## To są dwa kroki, nie jeden
+
+**Krok 1 — przeniesienie.** `youtube.com` na koncie, na którym jest kanał → Ustawienia
+→ Ustawienia zaawansowane → **„Przenieś kanał na konto marki"**. Jeśli lista kont marki jest
+pusta, wybrać utworzenie nowego i wpisać nazwę `Prima-Auto`. Google poprosi o ponowne podanie
+hasła — to normalne.
+
+**Krok 2 — dopisanie nas.** ⚠️ **Bez tego kroku pierwszy nic nie daje.** Samo przeniesienie
+sprawia, że kanał należy do firmy, ale my nadal nie mamy do niego dostępu i dalej klikamy
+ręcznie. Trzeba jeszcze:
+
+`myaccount.google.com/brandaccounts` → **Prima-Auto** → **Zarządzaj uprawnieniami**
+→ ikona zapraszania → dodać **js@auranet.com.pl** z rolą **Menedżer**.
+
+Rolę możecie odebrać w każdej chwili, jednym kliknięciem, w tym samym miejscu.
+
+⚠️ Przeniesienie robi **wyłącznie właściciel konta Google, na którym jest kanał** — nikt inny
+nie ma tam tej opcji. **Nie próbujcie kilka razy pod rząd:** po nieudanej próbie Google potrafi
+zablokować kolejną na kilka dni. Zrzut ekranu z komunikatem do nas, podpowiemy.
+
+---
+
+# 4. TikTok — dwie rzeczy, jedna natychmiast, druga przy okazji
+
+**Andrzej · 2 minuty + 10 minut**
+
+### 4a. Adres strony w profilu *(2 minuty, największy zysk do wysiłku na całej liście)*
+
+Konto `@primaauto.pl` ma **334 obserwujących, 127 filmów i 1 781 polubień**. Liczba filmów
+jest identyczna jak 14 lipca — od sześciu tygodni nie wyszło nic.
+
+Ważniejsze: **w opisie profilu nie ma linku do strony.** Są dwa numery telefonu, nie ma adresu
+`primaauto.com.pl`. Efekt: TikTok **nie przysłał na stronę ani jednego wejścia** przy 127 filmach.
+Cała praca włożona w te filmy nie ma dokąd prowadzić.
+
+**Co zrobić:** aplikacja TikTok → profil → **Edytuj profil** → pole **„Witryna"**
 → wpisać `primaauto.com.pl` → Zapisz.
 
-Jeśli pola „Witryna" nie widać, to znaczy, że konto nie jest przełączone na firmowe:
-Ustawienia → Zarządzaj kontem → **Przełącz na konto biznesowe** → kategoria *Motoryzacja*.
-Wtedy pole się pojawi.
+Jeśli pola „Witryna" nie widać — konto nie jest firmowe, i wtedy od razu punkt 4b.
 
-### A2. Kalendarz publikacji — ustalamy go razem
+### 4b. Konto firmowe i Centrum biznesowe *(10 minut, skoro i tak przełączacie)*
 
-Strona pracuje: posty ofertowe wychodzą co jeden–trzy dni, ostatni **dzisiaj rano** (Zeekr 8X),
-a liczba obserwujących urosła z 26 na początku sierpnia do **145**. Andrzej to prowadzi
-i **prowadzi dalej** — nie przejmujemy tego i nie zmieniamy.
+Andrzej wspominał, że w temacie TikToka na coś czekacie — dajcie znać na co, bo być może
+da się to załatwić przy okazji jednym ruchem.
 
-Ustalmy tylko jedną rzecz roboczo: **które auto kiedy idzie.** My planujemy materiał z sesji
-na kolejne dni, Wy macie swój rytm postów ofertowych — i szkoda, żeby tego samego dnia
-wychodziły dwa różne auta w dwóch miejscach albo dwa razy to samo. Wystarczy krótka wymiana
-raz w tygodniu.
+Niezależnie od tego: **jeśli przełączacie konto na firmowe, warto zrobić od razu cały krok,
+a nie połowę.** Samo przełączenie odblokowuje pole „Witryna" i statystyki. Centrum biznesowe
+dokłada do tego możliwość, żebyśmy pomagali bez proszenia Was o hasło czy telefon przy każdej
+zmianie — tak samo, jak działa to na Facebooku.
 
-Pierwszy przykład jest już na stole: **26.08 wyszedł post o Denzie Z9**, a my mamy z sesji film
-Denzy Z9 GT. Jeśli to ten sam egzemplarz, przesuwamy film — nie ma sensu, żeby oba wyszły
-w tym samym tygodniu do tych samych ludzi.
+1. Aplikacja TikTok → profil → Ustawienia → Zarządzaj kontem → **Przełącz na konto biznesowe**
+   → kategoria *Motoryzacja*.
+2. `business.tiktok.com` → utworzyć **Centrum biznesowe TikTok** dla Prima-Auto
+   → dodać konto `@primaauto.pl` jako zasób
+   → dodać **Auranet** jako członka z uprawnieniami do zarządzania treścią.
 
-**Andrzej jest dla nas punktem kontaktowym w temacie reklam** — z nim ustalamy merytorycznie,
-co promujemy i kiedy.
+**Gotowe, gdy:** konto figuruje w Centrum biznesowym i mamy do niego dostęp.
 
-### A3. Instagram — dodać konto do portfolio *(5 minut)*
-
-✅ **Odpowiedź mamy** (Andrzej, 26.08): konto jest Wasze, hasło macie, Andrzej już tam publikuje
-i ma dostęp przez Meta.
-
-⚠️ **Hasła nam nie przekazujcie.** Nie jest potrzebne i nie chcemy, żeby krążyło — po tym,
-co się stało w czerwcu, to zasada bez wyjątków. Dostęp Andrzeja zostaje bez zmian, publikuje
-dalej tak jak dotąd.
-
-Potrzebne jest co innego, i tego samo hasło by nie załatwiło: **konto musi być zasobem
-portfolio przypisanym do konta technicznego.** Sprawdziliśmy 26.08 — w portfolio Prima-Auto
-nie ma dziś żadnego konta na Instagramie, więc nasze narzędzia go nie widzą.
-
-**Co zrobić:**
-1. `business.facebook.com` → portfolio **Prima-Auto** → Ustawienia → Konta →
-   **Konta na Instagramie** → **Dodaj**.
-2. Ustawienia → Użytkownicy → **Użytkownicy systemowi** → `Auranet API` → **Dodaj zasoby**
-   → zaznaczyć to konto → pełna kontrola.
-
-Jeśli któryś z tych kroków wymaga uprawnień, których Andrzej nie ma — to punkt dla Ruslana.
-
-Dla porządku: w ostatnich 90 dniach profil przysłał na stronę **3 wejścia**. Nie odzyskujemy
-działającego kanału, tylko go budujemy — i tak to wyceniajmy.
-
-### A4. Promowanie Waszych własnych postów
-
-Publikujecie posty z konkretnymi autami z naszego katalogu. Sprawdziliśmy dzisiaj, że
-**możemy taki post wziąć i zrobić z niego reklamę** — bez przepisywania go, bez tworzenia
-niczego nowego, na tym samym zdjęciu i tekście, który już napisaliście.
-
-To znaczy, że część budżetu reklamowego może iść na podbicie Waszych najlepszych postów
-zamiast wyłącznie na nasze materiały. Nie musicie nic robić — wystarczy, że publikujecie
-tak jak dotąd, a my wybierzemy te, które warto podbić, i przygotujemy je jako wyłączone.
-
-To wymaga jednak R1–R3. Bez karty i weryfikacji nie podbijemy niczego.
-
-### A5. Lynk & Co 900 — status na stronie się nie zgadza
-
-Drobiazg, ale wyjdzie w praniu. Z wczorajszej sesji mamy materiał z Lynk & Co 900, czyli auto
-było na placu. Tymczasem na stronie **wszystkie cztery sztuki tego modelu mają status
-„w drodze"**, a żadna „na placu".
-
-Jeśli zrobimy z tego post albo reklamę z hasłem „dostępny od ręki", a klient kliknie i zobaczy
-„w drodze do Polski", to wygląda źle i kosztuje zaufanie. Wystarczy poprawić status przy
-właściwej sztuce w panelu — albo dać nam znać, że auto jednak nie stoi na placu, to napiszemy
-o nim inaczej.
-
-Przy okazji: dla pozostałych sześciu aut z sesji wszystko się zgadza i mamy komplet powiązań
-z konkretnymi ofertami.
-
----
-
-# YouTube — kanał firmy wisi na czyimś prywatnym koncie
-
-**To nie jest bloker.** Publikujemy ręcznie i to nam wystarcza — kanał zebrał
-**61 344 wyświetlenia** przy 19 filmach, a sam materiał z Exeedem VX ma **36 714 wyświetleń**.
-Działa i będziemy to powtarzać.
-
-Zwracamy uwagę na coś innego, i to nie dla naszej wygody, tylko dla Waszego bezpieczeństwa.
-
-## Na czym polega problem
-
-Kanał należy do **prywatnego konta Google osoby, która go założyła 3 grudnia**. Nie do firmy.
-Konto Google to skrzynka pocztowa jednego człowieka.
-
-Jeżeli ta osoba odejdzie z firmy, straci telefon, zapomni hasła albo po prostu nie odbierze
-— **kanał z sześćdziesięcioma tysiącami wyświetleń idzie razem z nią** i nie ma procedury,
-która by go odzyskała. Facebook już raz pokazał Wam, jak to wygląda.
-
-## Co to jest „konto marki"
-
-Konto marki (ang. *Brand Account*) to **wydzielona tożsamość Google, która nie należy do
-żadnej osoby**. Kanał należy do konta marki, a ludzie dostają do niego role — właściciela
-albo menedżera. Kogoś można dodać, kogoś usunąć, a kanał zostaje na miejscu.
-
-**Nie musicie go najpierw tworzyć.** Google utworzy je automatycznie w trakcie przenoszenia
-i zapyta tylko o nazwę. Wpiszcie: `Prima-Auto`.
-
-## Czego przeniesienie NIE zmienia — bo to jest główna obawa
-
-Rozumiemy, że „przenieś kanał" brzmi jak coś, przy czym można wszystko stracić. Więc wprost,
-punkt po punkcie:
-
-- **Filmy zostają** — wszystkie, razem z wyświetleniami, opisami i miniaturami.
-- **Subskrybenci zostają.**
-- **Komentarze i playlisty zostają.**
-- **Adres kanału się nie zmienia** — `youtube.com/@primaauto_com_pl` działa dalej.
-- **Statystyki się nie zerują.**
-- **Nic nie znika z internetu ani na chwilę** — dla widza nie zmienia się nic.
-
-Zmienia się **wyłącznie to, do czyjego konta kanał jest przypięty.**
-
-## Czego trzeba pilnować
-
-- **Robi to właściciel konta Google, na którym jest kanał** — nikt inny nie ma tam tej opcji.
-- Konto nie może być kontem YouTube dla dzieci ani mieć aktywnych kar za naruszenia.
-- **Nie próbujcie kilka razy pod rząd.** Jeśli za pierwszym razem się nie uda, Google potrafi
-  zablokować kolejną próbę na kilka dni. Zróbcie zrzut ekranu z komunikatem i przyślijcie
-  do nas — podpowiemy, co dalej.
-
-## Krok po kroku
-
-1. Zalogować się na `youtube.com` **na koncie, na którym jest kanał Prima-Auto**
-   (sprawdźcie w prawym górnym rogu, czy to właściwe konto).
-2. Kliknąć swoje zdjęcie w prawym górnym rogu → **Ustawienia**.
-3. W menu po lewej → **Ustawienia zaawansowane**.
-4. Kliknąć **„Przenieś kanał na konto marki"**.
-5. Google poprosi o ponowne podanie hasła — to normalne.
-6. Pojawi się lista kont marki. Jeśli jest pusta, wybrać opcję **utworzenia nowego**
-   i wpisać nazwę `Prima-Auto`.
-7. Zatwierdzić. Przeniesienie trwa od kilku sekund do kilku minut.
-
-## Potem — jedna rzecz więcej, żeby to miało sens
-
-Po przeniesieniu trzeba jeszcze dopuścić nas do zarządzania, inaczej nic się dla nas nie zmienia:
-
-1. Wejść na `myaccount.google.com/brandaccounts`.
-2. Wybrać **Prima-Auto** → **Zarządzaj uprawnieniami**.
-3. Kliknąć ikonę zapraszania i dodać adres: **js@auranet.com.pl**, rola **Menedżer**.
-
-Możecie tę rolę odebrać w każdej chwili, jednym kliknięciem, w tym samym miejscu.
-
-**Czas całości: około 15 minut.** Zysk jest Wasz, nie nasz — my publikujemy tak czy inaczej.
-
----
-
-## Co robimy my, gdy R1–R4 będą zrobione
-
-1. **Zakładamy listy odbiorców** — osoby, które oglądały oferty, huby marek, kliknęły telefon
-   lub WhatsApp. Uwaga na to, do czego ich użyjemy: **głównie po to, żeby te osoby z reklam
-   wykluczyć.** Kto już Was zna, ten nie musi oglądać tej samej reklamy piąty raz — budżet ma
-   iść na ludzi, którzy o Was jeszcze nie słyszeli. Do przypomnienia się wrócimy później
-   i osobno.
-2. **Przygotowujemy kampanie na filmach z sesji** — rolki pionowe na Facebooka i Instagrama,
-   materiał poziomy do reklamy wideo. Wszystko **wyłączone**, gotowe do Waszego kliknięcia.
-3. **Przygotowujemy do podbicia Wasze własne posty** (punkt A4) — te, które same z siebie
-   poszły najlepiej.
-4. **Sprawdzamy, czy da się podłączyć katalog Waszych aut do reklam dynamicznych.**
-   Piszemy „sprawdzamy", a nie „podłączamy, bo przy poprzednim podejściu do katalogu wyszły
-   komplikacje po stronie Facebooka i nie będziemy obiecywać czegoś, czego nie jesteśmy pewni.
-   Katalog sam w sobie działa — 3 468 aut, odświeżany codziennie.
-5. ✅ **ZROBIONE DZIŚ — brakujące zdarzenie „obejrzenie oferty".** Znaleźliśmy dzisiaj, że
-   informacja o obejrzeniu konkretnego auta w ogóle nie docierała do Facebooka: przez trzydzieści
-   dni **zero takich zdarzeń przy 54 616 wejściach na stronę**. Przyczyna była po naszej stronie
-   i już ją naprawiliśmy — poprawka jest wdrożona na produkcji. To ważne, bo bez tego sygnału
-   reklamy nie wiedzą, które auto kto oglądał, i nie da się pokazać człowiekowi tego samochodu,
-   którym się interesował. Nic od Was nie wymagało i nic nie kosztowało.
+> **Mówimy wprost, czego to jeszcze nie załatwia:** w pełni automatyczna publikacja na TikToku
+> wymaga dodatkowo zatwierdzenia naszej aplikacji przez samego TikToka — to trwa kilka tygodni
+> i wynik nie zależy od nikogo z nas. Do tego czasu przygotowujemy gotowe materiały jako
+> **szkice** na koncie, a ostatnie kliknięcie „opublikuj" zostaje po Waszej stronie. To i tak
+> zdejmuje z Was cały proces i zostawia jedno kliknięcie.
 
 ---
 
 ## Zestawienie
 
-| | Co zrobić | Kto | Czas | Co odblokowuje |
-|---|---|---|---|---|
-| **R1** | Zaakceptować regulamin grup odbiorców (link wyżej) | Ruslan | 2 min | **wszystkie listy odbiorców** |
-| **R2** | Podpiąć kartę + ustawić limit wydatków | Ruslan | 10 min | jakiekolwiek wyświetlenie reklamy |
-| **R3** | Weryfikacja firmy — dane 1:1 z CEIDG | Ruslan | 20 min | zdjęcie limitów Facebooka |
-| **R4** | Przełączyć aplikację „Prima-Auto API" na *Aktywna* | Ruslan | 10 min | **reklamy z filmami z sesji** |
-| **A1** | Wpisać `primaauto.com.pl` w profilu TikToka | Andrzej | 2 min | ruch z TikToka, dziś zerowy |
-| **A2** | Ustalić roboczo kalendarz: które auto kiedy | Andrzej | — | brak kolizji z reklamami |
-| **A3** | Dodać konto Instagram do portfolio i przypisać do `Auranet API` | Andrzej | 5 min | rolki z sesji na Instagramie |
-| **A4** | Nic — publikować dalej jak dotąd | Andrzej | — | materiał do podbicia |
-| **A5** | Poprawić status Lynk & Co 900 („na placu" zamiast „w drodze") | Andrzej | 2 min | spójność reklamy z ofertą |
-| **YT** | Przenieść kanał na konto marki *(zalecenie)* | właściciel konta Google | 15 min | kanał przestaje wisieć na osobie |
+| | Co zrobić | Kto | Czas |
+|---|---|---|---|
+| **1** | Wygenerować token `Auranet API` z trzema uprawnieniami Instagrama | Andrzej / Ruslan | 5 min |
+| **2** | **Podpiąć kartę + ustawić limit wydatków** | Ruslan | 10 min |
+| **3** | **Przenieść kanał YouTube na konto marki — i dopisać nas jako menedżera** | właściciel konta Google | 15 min |
+| **4a** | Wpisać `primaauto.com.pl` w profilu TikToka | Andrzej | 2 min |
+| **4b** | Konto firmowe + Centrum biznesowe TikTok, dodać Auranet | Andrzej | 10 min |
 
-**R1–R4 to razem około 45 minut pracy jednej osoby.** Do tego czasu reklamy na Facebooku
-i Instagramie stoją, niezależnie od tego, ile materiału przygotujemy po swojej stronie.
+**Ruslan: 10 minut. Andrzej: 17 minut.**
+
+Publikacja dwunastu filmów z sesji rusza od razu i nie czeka na nic z tej listy — punkt 3 sprawia tylko, że przestajemy robić to ręcznie. Kampanie na Facebooku i Instagramie
+są gotowe do przygotowania i czekają wyłącznie na kartę.
 
 ---
 
