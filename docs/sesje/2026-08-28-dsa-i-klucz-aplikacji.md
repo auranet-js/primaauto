@@ -72,3 +72,48 @@ Prośby do klienta idą **całą ścieżką sprawdzoną do końca**, nie po jedn
 Dzisiejsza sekwencja (weryfikacja → domyślny reklamodawca → portfolio → klucz → panel
 uprawnień) to pięć osobnych próśb, z których każda była zapowiadana jako ostatnia,
 a wszystkie razem nie zdjęły blokera.
+
+## Korekta wieczorna — porównanie z Victorini podważa diagnozę
+
+Janek przeszedł tego samego dnia ten sam kreator weryfikacji na koncie **Victorini**.
+Sprawdzenie tamtego konta (read-only, `~/secrets/meta/tokens/victorini.txt`):
+
+- `act_2090715591128335` — aktywne zestawy `SHOP-PARAPETY-ALU` (Tarnów +80 km) i
+  `SHOP-PODBITKA` (Małopolska), `dsa_beneficiary` = `dsa_payor` = „Victorini sp. z o.o.",
+  **1 400 zł / 191 988 wyświetleń w 30 dniach** — reklamy realnie serwują do UE
+- `act_*/dsa_recommendations` → **zwraca podmiot**; na PrimaAuto ten sam endpoint zwraca `[]`
+- portfolio „Victorini" `645964997316686` → `verification_status: not_verified`,
+  a reklamy i tak chodzą (konto należy do innego portfolio, `owner 1103943545901678`,
+  poza zasięgiem naszego tokenu). **Weryfikacja firmy ≠ weryfikacja reklamodawcy** —
+  potwierdzone na żywym przykładzie.
+
+**Ale wszystkie działające zestawy Victorini powstały w styczniu i kwietniu 2026, żaden
+dzisiaj.** Więc „reklamy chodzą" dowodzi, że konto z historią unijnych reklam nadal dowozi
+— nie że nowy zestaw utworzony tam dziś by przeszedł walidację. Mój dowód „Victorini
+zweryfikowane" jest słabszy, niż go przedstawiłem.
+
+**Sonda nie działa na Victorini.** Cztery konfiguracje na dwóch kampaniach-kontenerach:
+`1885760` bez wskazania pola (L1-RUCH-NEW ma budżet na poziomie kampanii) i `2490408`
+blame `optimization_goal` (SHOP-PAR-KAM-TAR to OUTCOME_SALES, nie przyjmuje LINK_CLICKS).
+Każdy wariant pada **także na US**, więc kontrastu geograficznego tam nie ma i sonda nie
+odpowiada na nic. Token ma `ads_management` i `user_tasks: MANAGE` — to nie brak uprawnień.
+
+### Odwołanie tezy
+
+Komunikat Mety „dowiedz się, jak poprosić o weryfikację" traktowałem jako wskazanie
+przyczyny. To jest stały tekst przypisany do tego kodu błędu, nie diagnoza. Na tym oparłem
+osiem próśb do klienta w jeden wieczór.
+
+**Twarde, bez interpretacji:** PL i DE odrzucone, GB/US/CH przechodzą tym samym payloadem;
+`dsa_beneficiary` odrzucane niezależnie od wartości; Meta nie oddaje dla tego konta żadnego
+dopuszczalnego beneficjenta, dla Victorini oddaje. **Dlaczego — nie wiadomo.**
+
+**Hipoteza Janka, mocniejsza od mojej:** różnicą między kontami nie musi być weryfikacja,
+tylko dziewiczość konta. Victorini ma historię unijnych reklam, PrimaAuto **nie ma żadnej**
+— zero wydatku, zero kiedykolwiek utworzonych zestawów. Jeśli tak, ręczne przebicie
+pierwszego zestawu przez interfejs nie jest testem tezy, tylko rozwiązaniem.
+
+**Poniedziałek:** Janek na zdalnym pulpicie tworzy zestaw i reklamę ręcznie, kierowanie na
+Polskę, status wstrzymany, budżet minimalny, aż do „Opublikuj" (szkic nie przechodzi
+walidacji). Przejdzie → potrzebny identyfikator zestawu, odczytamy z API, co wysłała
+przeglądarka. Zatrzyma → zrzut ekranu, bo interfejs nazywa brakującą rzecz wprost.

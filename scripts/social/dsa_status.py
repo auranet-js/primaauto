@@ -53,8 +53,9 @@ def main():
         print('BLOKER ZDJĘTY — zestawy reklam do Polski przechodzą walidację.')
         print('Następny ruch: zestaw + reklama, potem decyzja o włączeniu z budżetem.')
     elif us:
-        print('BLOKER TRWA — konto jest sprawne (US przechodzi), stoi wyłącznie weryfikacja podmiotu.')
-        print('Zdejmuje ją Ruslan w Menedżerze Reklam: dokumenty firmy, beneficjent i płatnik.')
+        print('BLOKER TRWA — konto jest sprawne (US przechodzi), odbija wyłącznie kierowanie do UE.')
+        print('PRZYCZYNA NIEUSTALONA. Komunikat Mety o weryfikacji to stały tekst tego kodu')
+        print('błędu, nie diagnoza — patrz docs/sesje/2026-08-28-dsa-i-klucz-aplikacji.md.')
     else:
         print('Pada także kontrola na US — to nie jest DSA. Sprawdź token, konto i budżet.')
 
