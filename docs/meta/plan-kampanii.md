@@ -344,7 +344,7 @@ Nie to było przyczyną blokady, ale i tak było do naprawienia.
 | # | Rzecz | Dowód z API | Kto zdejmuje |
 |---|---|---|---|
 | 1 | **Weryfikacja reklamodawcy (DSA)** — żadna reklama do UE nie powstanie | `3858196` na PL i DE; ten sam zestaw z geo US i UA przechodzi `{"success": true}` | Ruslan, Menedżer Reklam, dokumenty firmy |
-| 2 | **Weryfikacja domeny `primaauto.com.pl`** — brak przypisania konwersji (AEM), gorszy priorytet zdarzeń | **kod wpięty 28.08 wieczorem** — `<meta name="facebook-domain-verification" content="945aj5ebvux0ph1vonne9nfuz8pb6t">` w `wp_head` (theme `primaauto2026/functions.php`), widoczny na `/`, `/samochody/`, `/kontakt/`; statusu nie odczytamy — edge `owned_domains` nadal `(#100) nonexisting field` w v25 | zostaje **jeden klik Ruslana**: Ustawienia firmy → Bezpieczeństwo marki → Domeny → `primaauto.com.pl` → **Zweryfikuj** |
+| ~~2~~ | ~~**Weryfikacja domeny `primaauto.com.pl`**~~ — **ZDJĘTY 28.08 wieczorem** | kod `945aj5ebvux0ph1vonne9nfuz8pb6t` w `wp_head` (theme `primaauto2026/functions.php`), widoczny na `/`, `/samochody/`, `/kontakt/`; Ruslan kliknął Zweryfikuj, **status „Zweryfikowana" potwierdzony zrzutem ekranu z Ustawień firmy** (API nie oddaje `owned_domains`, patrz gotchy) | — |
 | 3 | **Scope `read_insights` + `pages_read_user_content`** — nie widzimy wyników organicznych postów | `debug_token`: 11 scope'ów, żadnego z tych dwóch; `{post}/insights` odbija | Ruslan (regeneracja tokenu SU) **albo** sekret appki `1533997951805022` przekazany nam raz na zawsze |
 | 4 | **Regulamin listy klientów** — tylko grupy z wgranego pliku | `200/1870090` przy `subtype=CUSTOM` | Ruslan, jeden klik; **nie blokuje remarketingu** |
 | 5 | **Regulamin pozyskiwania kontaktów** na Stronie — brak formularzy w reklamie | `leadgen_tos_accepted: false` (page tokenem) | Ruslan lub Andrzej, jeden klik |
@@ -425,7 +425,7 @@ Zebrane modułem po module (`[VID]`, `[POST]`, `[RMKT]`, grupy odbiorców, CAPI,
 | | Co | Kto | Czas | Co odblokowuje |
 |---|---|---|---|---|
 | 1 | **Weryfikacja beneficjenta i płatnika reklam (DSA)** | Ruslan | 15 min + oczekiwanie | wszystkie trzy kampanie |
-| 2 | ~~**Domena `primaauto.com.pl` w portfolio**~~ — **ZROBIONE 28.08**: Ruslan dodał domenę i przekazał kod, my wpięliśmy w `wp_head`, Ruslan kliknął Zweryfikuj (status tylko z UI — API nie oddaje `owned_domains`) | Ruslan + my | — | przypisanie konwersji, priorytet zdarzeń |
+| 2 | ~~**Domena `primaauto.com.pl` w portfolio**~~ — **ZAMKNIĘTE 28.08**: Ruslan dodał domenę i przekazał kod, my wpięliśmy w `wp_head`, Ruslan zweryfikował — **status „Zweryfikowana" na zrzucie od klienta** | Ruslan + my | — | przypisanie konwersji, priorytet zdarzeń |
 | 3 | **Uprawnienia do statystyk Strony** — regeneracja tokenu **albo** sekret appki | Ruslan | 3 min | rotacja `[POST]` na danych, nie na oko |
 | 4 | Regulamin grup odbiorców z listy klientów | Ruslan | 1 min | grupy podobnych odbiorców z bazy CRM |
 | 5 | Regulamin pozyskiwania kontaktów na Stronie | Ruslan / Andrzej | 1 min | formularze w reklamie |
