@@ -431,7 +431,14 @@ Zebrane modułem po module (`[VID]`, `[POST]`, `[RMKT]`, grupy odbiorców, CAPI,
 | 5 | Regulamin pozyskiwania kontaktów na Stronie | Ruslan / Andrzej | 1 min | formularze w reklamie |
 | 6 | **YouTube: kanał na konto marki + `js@auranet.com.pl` jako menedżer** (T-243c poz. 3, „Ruslan w toku") — bez tego zapis przez API niemożliwy, każda publikacja to ręczne Studio. ~~Powiązanie z Google Ads~~ **istnieje i działa** — to była nasza pomyłka, nie prośba | **Ruslan**, nie Andrzej | — | wgrywanie filmów programowo |
 | 7 | Instagram: adres strony w profilu, literówka „z Chin ta Korei" | Andrzej | 3 min | ruch z IG, dziś zerowy |
-| 8 | **TikTok: konto firmowe + Business Center + Auranet jako członek** (T-243a krok 5, T-243c poz. 4b) — **to jest prośba o dostęp przez API, nie o link w bio**; konto prywatne nie ma jak wystawić dostępu. Link w bio (poz. 4a) to drobiazg przy okazji. Zegar audytu aplikacji TikToka liczy się w tygodniach → zaczynać równolegle z DSA | Ruslan lub Andrzej | 10 min | dystrybucja na TikToka + Spark Ads |
+| ~~8~~ | ~~**TikTok: konto firmowe + Business Center + Auranet jako członek**~~ — **PROŚBA WYCOFANA 28.08 wieczorem: TikTok ODRZUCIŁ wnioski Andrzeja i Ruslana o konto firmowe / weryfikację firmy** (informacja od Janka). Blokada leży po stronie TikToka, nie klienta — ponowienie prośby wysyła klienta pod ten sam mur. Ścieżka „konto biznesowe → Business Center → Auranet jako członek" jest zamknięta, a razem z nią dostęp do kanału przez API i Spark Ads. **Do ustalenia inna droga: dostęp przeglądarkowy do konta albo dostęp aplikacyjny.** Link w bio (poz. 4a) zostaje: nie wymaga konta firmowego | — | — | pozycja wstrzymana, nie otwarta |
+
+**Pozycja 8 nie jest już zadaniem dla klienta — jest do rozstrzygnięcia po naszej stronie.**
+TikTok odrzucił obie próby rejestracji firmy (Andrzej i Ruslan), więc dystrybucja na ten kanał
+i Spark Ads stoją do czasu, aż wybierzemy zastępczą drogę dostępu. Dwie do rozważenia: sesja
+przeglądarkowa na koncie klienta (publikacja sterowana z Chrome, bez API) albo dostęp aplikacyjny
+w TikTok for Developers na naszej aplikacji. Do tego czasu **nie wpisuj TikToka do próśb
+wysyłanych klientowi.**
 
 Pozycja 3 ma dwa warianty i **rekomendujemy sekret appki** — jednorazowo, po czym każdą
 przyszłą zmianę uprawnień robimy sami. To wycina z obiegu całą klasę przyszłych próśb.

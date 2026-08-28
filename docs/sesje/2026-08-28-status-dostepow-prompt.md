@@ -14,7 +14,7 @@ i tylko na tej podstawie zaktualizować pismo. Nic nie tworzymy, nic nie publiku
 | # | Pozycja | Pomiar | Stan 28.08 wieczorem |
 |---|---|---|---|
 | 1 | Weryfikacja reklamodawcy (DSA) | `python3 scripts/social/dsa_status.py` | PL `3858196`, US przechodzi → **blokuje** |
-| 2 | TikTok: konto firmowe + Business Center | pytanie do klienta; z naszej strony widać tylko bio: `curl -A "<UA przeglądarki>" https://www.tiktok.com/@primaauto.pl` → szukaj `bioLink` | brak `bioLink`, konto prywatne → **brak** |
+| 2 | TikTok: konto firmowe + Business Center | pytanie do klienta; z naszej strony widać tylko bio: `curl -A "<UA przeglądarki>" https://www.tiktok.com/@primaauto.pl` → szukaj `bioLink` | brak `bioLink`, konto prywatne → **ŚCIEŻKA ZABLOKOWANA PO STRONIE TIKTOKA**, patrz niżej |
 | 3 | Dwa scope'y (`read_insights`, `pages_read_user_content`) | `bash ~/secrets/meta/token-debug.sh --project primaauto-2026` | 11 scope'ów, **brak obu** |
 | 4 | YouTube: kanał na konto marki + `js@` jako menedżer | próba OAuth chooser / `~/secrets/google/youtube-auth.py` | „Ruslan w toku" (27.08) |
 | 5 | Regulamin lead ads | page token → `GET /1146829831857839?fields=leadgen_tos_accepted` | `false` → **otwarte** |
@@ -40,8 +40,13 @@ Konto Ads `9506068500` przez `tmp/gads_client.py` (`load()` → `refresh(oauth, 
 - **`pages_manage_posts` nie jest pozycją do wysłania klientowi.** Brakuje go w tokenie i tak ma
   zostać: publikuje Andrzej, my promujemy. Dokumenty `docs/produkcja/` opisują to jako stan
   tokenu — nie przepisuj do pisma.
-- **TikTok**: prośba to konto firmowe + Business Center + Auranet jako członek (dostęp przez API),
-  **nie** link w bio. Link to drobiazg przy okazji.
+- **TikTok — prośba z pisma v6 jest NIEWYKONALNA i nie ponawiaj jej.** TikTok **odrzucił**
+  wnioski Andrzeja i Ruslana o konto firmowe / weryfikację firmy (informacja od Janka,
+  28.08 wieczorem). Ścieżka „konto biznesowe → Business Center → Auranet jako członek" jest
+  zamknięta nie po stronie klienta, tylko po stronie TikToka — kolejne pismo z tą samą prośbą
+  wysyła klienta pod ten sam mur. Dopóki nie ustalimy z Jankiem innej drogi (dostęp
+  przeglądarkowy do konta albo dostęp aplikacyjny), pozycja jest **wstrzymana, nie otwarta**.
+  Link w bio pozostaje osobnym drobiazgiem — nie wymaga konta firmowego i nadal jest do zrobienia.
 - **YouTube jest u Ruslana, nie u Andrzeja.** Andrzej ma FB, IG i TikToka.
 
 ## Po pomiarze
