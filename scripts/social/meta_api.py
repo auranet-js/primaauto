@@ -77,12 +77,26 @@ def get(sciezka, tok=None):
         return None, _blad(e)
 
 
+# Endpointy, które PRZYJMUJĄ `execution_options`, ale go IGNORUJĄ i tworzą obiekt naprawdę.
+# Zmierzone 28.08: sonda `waliduj=True` na `customaudiences` założyła trzy grupy odbiorców
+# na koncie klienta. Rozpoznanie: endpoint respektujący walidację oddaje `{"success": true}`,
+# ignorujący — `{"id": ...}`. Dopisuj tu każdy kolejny, na którym się o to potkniesz.
+GLUCHE_NA_WALIDACJE = ('customaudiences',)
+
+
 def post(sciezka, dane, tok=None, waliduj=True):
     """POST. Domyślnie `validate_only` — Meta sprawdza wszystko i nic nie tworzy.
 
     Dopiero `waliduj=False` zapisuje obiekt na koncie klienta. Ta domyślność jest celowa:
     pomyłka w skrypcie ma kosztować komunikat, nie kampanię w bibliotece reklamowej.
+
+    Na endpointach z `GLUCHE_NA_WALIDACJE` domyślność jest fikcją, więc zamiast cichego
+    zapisu dostajesz wyjątek — świadomy zapis przechodzi przez `waliduj=False`.
     """
+    if waliduj and sciezka.rstrip('/').endswith(GLUCHE_NA_WALIDACJE):
+        raise RuntimeError(
+            f'{sciezka}: ten endpoint ignoruje validate_only i UTWORZY obiekt. '
+            'Jeśli tego chcesz, wywołaj z waliduj=False.')
     tok = tok or token()
     dane = dict(dane, access_token=tok)
     if waliduj:

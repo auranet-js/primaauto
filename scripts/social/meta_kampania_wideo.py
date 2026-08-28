@@ -7,6 +7,13 @@ na Stronie ani na profilu.
 
     python3 scripts/social/meta_kampania_wideo.py --dry-run
     ZGODA_PUBLIKACJA=<data> python3 scripts/social/meta_kampania_wideo.py --buduj
+    python3 scripts/social/meta_kampania_wideo.py --domknij   # po zdjęciu blokady DSA
+
+`--buduj` tworzy wszystko od zera i przy każdym biegu robi NOWĄ kampanię. Kampania
+i kreacja już istnieją (state/meta-kampanie.json) — brakuje wyłącznie zestawu reklam
+i reklamy, bo zestaw z targetem PL odbija się o `100/3858196` (weryfikacja DSA).
+Dlatego do domknięcia służy `--domknij`: dokłada te dwa obiekty do istniejącej kampanii,
+z wykluczeniami z grup odbiorców. Wszystko nadal PAUSED — start z budżetem to osobna zgoda.
 """
 import argparse, json, os, sys, urllib.error, urllib.parse, urllib.request
 
@@ -61,13 +68,86 @@ def miniatura(video_id, tok):
         return None
 
 
+# Wykluczenia — bez nich prospecting dopłaca za dotarcie do ludzi, którzy już byli na stronie.
+# Nazwy muszą się zgadzać z PLAN w grupy_odbiorcow.py.
+WYKLUCZENIA = ['Wszyscy odwiedzający — 180 dni', 'Kontakt tel./WhatsApp — 180 dni']
+
+
+def grupy(tok):
+    u = f'{GRAPH}{ACT}/customaudiences?fields=id,name&limit=100&access_token={urllib.parse.quote(tok)}'
+    d = json.load(urllib.request.urlopen(u))
+    return {g['name']: g['id'] for g in d.get('data', [])}
+
+
+def domknij():
+    """Dokłada zestaw reklam i reklamę do kampanii, która już istnieje."""
+    k, tok = KAMPANIA, token()
+    stan = json.load(open(STAN)) if os.path.exists(STAN) else {}
+    for czego in ('kampania', 'kreacja'):
+        if czego not in stan:
+            sys.exit(f'brak „{czego}" w {STAN} — najpierw --buduj')
+    if 'reklama' in stan:
+        print('reklama już istnieje:', stan['reklama']); return
+
+    mam = grupy(tok)
+    brak = [n for n in WYKLUCZENIA if n not in mam]
+    if brak:
+        sys.exit('brak grup do wykluczenia: ' + ', '.join(brak) +
+                 ' — uruchom grupy_odbiorcow.py --zaloz')
+    wyklucz = [{'id': mam[n], 'name': n} for n in WYKLUCZENIA]
+
+    print('KAMPANIA  ', stan['kampania'])
+    print('KREACJA   ', stan['kreacja'])
+    print('WYKLUCZAM ', ', '.join(WYKLUCZENIA))
+
+    print('\n--- ZESTAW REKLAM ---')
+    r, e = wywolaj(f'{ACT}/adsets', {
+        'name': 'Leopard 5 — PL 25-55', 'campaign_id': stan['kampania'], 'status': 'PAUSED',
+        'daily_budget': str(k['budzet_dz_gr']),
+        'billing_event': 'IMPRESSIONS', 'optimization_goal': 'OFFSITE_CONVERSIONS',
+        'bid_strategy': 'LOWEST_COST_WITHOUT_CAP', 'destination_type': 'WEBSITE',
+        'promoted_object': json.dumps({'pixel_id': PIKSEL, 'custom_event_type': 'CONTENT_VIEW'}),
+        'dsa_beneficiary': DSA_PODMIOT, 'dsa_payor': DSA_PODMIOT,
+        'targeting': json.dumps({
+            'geo_locations': {'countries': [k['kraj']]},
+            'age_min': k['wiek_od'], 'age_max': k['wiek_do'],
+            'publisher_platforms': ['facebook', 'instagram'],
+            'excluded_custom_audiences': wyklucz,
+        })}, tok)
+    if e:
+        print('   BŁĄD:', e)
+        if '3858196' in e:
+            print('   → to nadal weryfikacja DSA po stronie Ruslana, nie błąd konfiguracji.')
+            print('     Sprawdź stan: python3 scripts/social/dsa_status.py')
+        return
+    stan['zestaw'] = r['id']
+    print('   OK', r['id'])
+
+    print('--- REKLAMA ---')
+    r, e = wywolaj(f'{ACT}/ads', {
+        'name': 'Leopard 5 — wideo 9:16', 'adset_id': stan['zestaw'],
+        'creative': json.dumps({'creative_id': stan['kreacja']}), 'status': 'PAUSED'}, tok)
+    if e:
+        print('   BŁĄD:', e)
+    else:
+        stan['reklama'] = r['id']
+        print('   OK', r['id'])
+    json.dump(stan, open(STAN, 'w'), ensure_ascii=False, indent=2)
+    print('\nSTAN:', json.dumps(stan, ensure_ascii=False))
+    print('Wszystko PAUSED. Włączenie z budżetem = osobna zgoda Janka.')
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--dry-run', action='store_true')
     ap.add_argument('--buduj', action='store_true')
+    ap.add_argument('--domknij', action='store_true',
+                    help='dołóż zestaw reklam i reklamę do istniejącej kampanii')
     a = ap.parse_args()
-    if not (a.dry_run or a.buduj):
-        ap.error('podaj --dry-run albo --buduj')
+    if not (a.dry_run or a.buduj or a.domknij):
+        ap.error('podaj --dry-run, --buduj albo --domknij')
+    if a.domknij:
+        return domknij()
 
     k = KAMPANIA
     tok = token()

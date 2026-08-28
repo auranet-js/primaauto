@@ -118,3 +118,48 @@ Jankowi w czacie w całości, wysłane wyłącznie na `js@auranet.com.pl` przez 
 **Nigdy bezpośrednio do Ruslana ani Andrzeja.**
 
 Pismo ma jawnie mówić, że to lista zamykająca — i musi taka być, bo czwartej Janek nie chce.
+
+---
+
+# Wykonanie — 28.08 wieczorem
+
+## Tabela A–G: co wyszło z pomiarów
+
+| # | Wynik | Dowód |
+|---|---|---|
+| A | **JEST PROŚBĄ** — domena niezweryfikowana | brak `<meta name="facebook-domain-verification">` na `primaauto.com.pl`, brak TXT w DNS. Edge `owned_domains` niedostępny dla naszej appki w v19/v21/v23/v25 — ścieżki API nie ma, mierz przez stronę i DNS |
+| B | **wchłonięte przez A** — AEM stoi za weryfikacją domeny; `aem_*` niedostępne dla appki. Osobno: `da_checks` piksela zgłasza `pixel_has_low_event_source_match_rate` i `pixel_missing_param_in_events` — **to nasza robota, nie prośba** |
+| C | **NIE jest prośbą** — CAPI działa na tokenie SU: `capi_send.sh --project primaauto-2026 PageView TEST12345` → `{"events_received": 1}`. Regulamin pikseli (`1784018`) dotyczył wyłącznie zakładania piksela na poziomie portfolio |
+| D | **JEST PROŚBĄ** — `assigned_users` konta: my `DRAFT·ANALYZE·ADVERTISE`, Ruslan `+MANAGE`. Bez `MANAGE` każda zmiana `spend_cap` to prośba |
+| E | **JEST PROŚBĄ (Andrzej)** — GAQL `account_link` i `data_link` na `9506068500`: zero wierszy |
+| F | **NIE jest prośbą** — kreacja z `instagram_user_id` → `{"success": true}`; `{IG}/insights` czyta (`reach` 368/26); profil w `owned_instagram_accounts` |
+| G | **NIE jest prośbą** — `verification_status: not_verified`, ale nic z planu tego nie warunkuje. W piśmie wymienione w sekcji „o co świadomie nie prosimy" |
+
+## Co obaliło tezę pisma v4
+
+Grupy odbiorców **nie są zablokowane**. `200/1870090` dotyczy wyłącznie list z wgranego pliku.
+Grupy z piksela i z zaangażowania utworzyły się bez żadnego regulaminu. Wcześniejsze
+`2654/1870053` i `2654/1713151` to były błędy ładunku (`subtype` przy regule, zła nazwa
+zdarzenia dla IG), wzięte za jeden objaw jednej przyczyny.
+
+## Wpadka, którą trzeba znać
+
+`/act_*/customaudiences` **ignoruje `execution_options=validate_only`** — sonda utworzyła trzy
+prawdziwe grupy: `sonda-www` (120248811956940243), `sonda-fb` (120248811957410243),
+`sonda-ig` (120248811957520243). Guard `GLUCHE_NA_WALIDACJE` dopisany do `scripts/social/meta_api.py`.
+Do decyzji Janka: przemianować na docelowe nazwy i dołożyć pozostałe trzy, czy skasować.
+
+## Produkty
+
+- `docs/meta/prosby-koncowe-2026-08-28.html` — pismo v5, lista zamykająca
+- `docs/meta/plan-kampanii.md` — sekcje 5, 6, 8 przepisane; nagłówek z korektą wieczorną
+- `scripts/social/meta_api.py` — guard na endpointy głuche na walidację
+
+## Zauważone obok, nie ruszane
+
+Kliknięcie w WhatsApp to najmocniejszy kanał kontaktu (43,3 konwersji/30 dni), a Strona
+**nie ma podpiętego numeru WhatsApp Business** (`whatsapp_number` puste page tokenem,
+edge `owned_whatsapp_business_accounts` odbija `(#200)` — brak scope'u
+`whatsapp_business_management`). Reklamy „kliknij, żeby napisać na WhatsAppie" wymagałyby
+numeru na Stronie i rozszerzenia tokenu. **Nie ma tego w planie kampanii, więc nie ma tego
+w piśmie** — jeśli ma wejść, to jako decyzja Janka, nie mimochodem.

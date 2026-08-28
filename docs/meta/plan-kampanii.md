@@ -2,6 +2,12 @@
 
 > **Ustalone 2026-08-28** w sesji z Jankiem. Cały stan poniżej sprawdzony wywołaniami API
 > tego samego dnia — nic nie jest przepisane z wcześniejszych notatek.
+>
+> **Korekta wieczorna 28.08.** Przegląd modułowy pod pismo zamykające obalił dwie tezy
+> z porannej wersji: grupy odbiorców z piksela i zaangażowania **nie są zablokowane**
+> (sekcja 5), a regulamin pikseli **nie dotyka Conversions API** (sekcja 6). Doszły trzy
+> nowe prośby: weryfikacja domeny, limit wydatków wraz z rolą `MANAGE`, uprawnienia
+> do statystyk Strony.
 > Google Ads ma osobny dokument: `docs/ads/mapa-kampanii.md`.
 
 ---
@@ -64,9 +70,9 @@ własny wolumen. `Lead` jako cel optymalizacyjny odpada na tym etapie — zostaj
        BEZ ROTACJI — kreacje generuje katalog, odświeża się sam co dobę
 ```
 
-`spend_cap` konta wynosi **1 000 zł**. Przy 40–50 zł dziennie limit wyczerpie się w 20–25 dni.
-Przed startem trzeba go podnieść albo świadomie na nim stanąć — to decyzja Ruslana, my nie
-mamy roli `MANAGE`.
+`spend_cap` konta wynosi **1 000 zł**, a konto zasilane jest ręcznie. Kontrola wydatków
+leży po stronie Ruslana i Janka — **nie jest to nasza pozycja do pilnowania ani temat
+do pism**, patrz sekcja 6.
 
 ---
 
@@ -268,7 +274,7 @@ w Polsce, trzeba dołożyć to do generatora feedu (`scripts/build-meta-vehicle-
 
 ---
 
-## 5. Grupy odbiorców — ZABLOKOWANE, przyczyna ustalona
+## 5. Grupy odbiorców — SPRAWA ZAWĘŻONA 28.08 wieczorem
 
 Zaprojektowane i gotowe do założenia, wszystkie osiem:
 
@@ -283,31 +289,49 @@ Zaprojektowane i gotowe do założenia, wszystkie osiem:
 | Zaangażowani ze Strony FB | engagement | 365 dni | remarketing z organiku Andrzeja |
 | Zaangażowani z profilu IG | engagement | 365 dni | remarketing z organiku Andrzeja |
 
-**Żadnej nie da się dziś utworzyć.** Każda próba kończy się błędem, a przyczynę wyciągnęła
-dopiero próba założenia zwykłej listy:
+**Korekta wieczorna 28.08 — wcześniejszy zapis w tej sekcji był błędny.**
+Sześć z ośmiu grup (wszystkie z piksela i obie z zaangażowania) **przechodzi bez żadnego
+regulaminu**. Blokada dotyczy wyłącznie grup z **wgranej listy klientów** (`subtype=CUSTOM`
++ `customer_file_source`), których w planie ośmiu nie ma ani jednej.
+
+Pomiar, ten sam endpoint, cztery warianty:
 
 ```
-POST /act_1038563008906171/customaudiences  subtype=CUSTOM
-→ 200/1870090 „Nie zaakceptowano Regulaminu korzystania z grup niestandardowych odbiorców"
+CUSTOM + customer_file_source (lista klientów)  → 200/1870090  regulamin
+rule na pikselu, ViewContent, 180 dni           → utworzona    120248811956940243
+rule na Stronie, page_engaged, 365 dni          → utworzona    120248811957410243
+rule na profilu IG, 365 dni                     → utworzona    120248811957520243
 ```
 
-Grupy z piksela zwracały mylący `2654/1870053` („Failed to create custom audience"),
-a grupy z zaangażowania jeszcze bardziej mylący `2654/1713151` („nieprawidłowa nazwa
-zdarzenia") — obie to ta sama, jedna przyczyna.
+**Skąd wzięła się pomyłka.** Wcześniejsze próby szły z parametrem `subtype` przy regule
+(`2654/1870053` „podtyp nie jest obsługiwany") i z nieistniejącą nazwą zdarzenia dla IG
+(`2654/1713151`). To były **błędy ładunku**, nie ślad wspólnej blokady — a zostały wzięte
+za jeden objaw jednej przyczyny, bo obok stał prawdziwy błąd regulaminowy z listy klientów.
+Reguła na przyszłość: trzy różne kody błędu to trzy różne przyczyny, dopóki nie udowodnisz,
+że jest inaczej.
 
-**Pułapka:** konto ma `tos_accepted: {"web_custom_audience_tos": 1}`, co wygląda na komplet,
-ale to **inny regulamin**. Brakuje ogólnego regulaminu grup niestandardowych odbiorców,
-akceptowanego raz w Menedżerze Reklam. Nie czytaj obecności `web_custom_audience_tos`
-jako dowodu, że sprawa jest załatwiona.
+> **GOTCHA, kosztowna:** `/act_*/customaudiences` **ignoruje `execution_options=validate_only`**.
+> Sonda z `waliduj=True` **utworzyła trzy prawdziwe grupy** na koncie klienta
+> (`sonda-www`, `sonda-fb`, `sonda-ig`). Rozpoznanie po odpowiedzi: endpoint wspierający
+> walidację zwraca `{"success": true}`, endpoint ją ignorujący zwraca `{"id": ...}` —
+> **id w odpowiedzi na sondę znaczy, że obiekt powstał**. Zanim puścisz `post()` na nowy
+> endpoint, sprawdź kształt odpowiedzi, nie ufaj domyślności warstwy.
 
-Akceptacji **nie robimy z API** — to zgoda prawna wiążąca firmę klienta i podpisuje ją Ruslan.
+Regulamin listy klientów zostaje na liście próśb — kosztuje jedno kliknięcie i przyda się,
+gdy sięgniemy po bazę klientów z CRM jako źródło grup podobnych odbiorców. **Nie jest już
+blokerem remarketingu ani wykluczeń.**
 
-### Dlaczego to pilne mimo blokady reklam
+### Dlaczego to pilne — i dlaczego to już nasza robota, nie prośba
 
 Grupy z ruchu na stronie zaczynają zbierać od chwili utworzenia. Każdy dzień zwłoki
 to bezpowrotnie utracona pula do remarketingu **i do wykluczeń**, bez których kampanie
 wideo będą dopłacać za dotarcie do ludzi, którzy już byli na stronie. Piksel zbiera
 od 1 sierpnia — ten miesiąc ruchu nigdzie się nie odkłada.
+
+Po korekcie z 28.08 wieczorem **nic nas przed tym nie powstrzymuje**: sześć grup z planu
+możemy założyć od ręki, bez żadnego kliknięcia po stronie klienta. Trzy obiekty sondy
+(`sonda-www`, `sonda-fb`, `sonda-ig`) już zbierają — do decyzji Janka, czy przemianować
+je na docelowe nazwy i dołożyć pozostałe trzy, czy skasować i założyć komplet od zera.
 
 Przy okazji nadany został naszemu System Userowi komplet zadań na pikselu
 (`ADVERTISE`, `UPLOAD`, `ANALYZE`, `EDIT`) — wcześniej `assigned_users` piksela było puste.
@@ -315,30 +339,45 @@ Nie to było przyczyną blokady, ale i tak było do naprawienia.
 
 ---
 
-## 6. Blokery — stan na 28.08, w kolejności ważności
+## 6. Blokery i prośby — stan na 28.08 wieczorem, w kolejności ważności
 
-| # | Bloker | Dowód z API | Kto zdejmuje |
+| # | Rzecz | Dowód z API | Kto zdejmuje |
 |---|---|---|---|
 | 1 | **Weryfikacja reklamodawcy (DSA)** — żadna reklama do UE nie powstanie | `3858196` na PL i DE; ten sam zestaw z geo US i UA przechodzi `{"success": true}` | Ruslan, Menedżer Reklam, dokumenty firmy |
-| 2 | **Regulamin grup niestandardowych odbiorców** — brak wszystkich audiencji | `200/1870090` | Ruslan, jeden klik w Menedżerze Reklam |
-| 3 | **Regulamin pozyskiwania kontaktów** na Stronie — brak formularzy w reklamie | `leadgen_tos_accepted: false`, błąd `1815089` | Ruslan lub Andrzej, jeden klik |
-| 4 | `spend_cap` 1 000 zł — wystarczy na 20–25 dni | `spend_cap: 100000` (grosze) | Ruslan |
-
-Blokery 1 i 2 są niezależne. Zdjęcie samego DSA da reklamy bez wykluczeń i bez remarketingu —
-czyli kampanie wideo będą płacić za dotarcie do własnych, już pozyskanych odbiorców.
-Warto zdjąć oba, zanim cokolwiek ruszy.
+| 2 | **Weryfikacja domeny `primaauto.com.pl`** — brak przypisania konwersji (AEM), gorszy priorytet zdarzeń | brak `<meta name="facebook-domain-verification">` na stronie i brak wpisu TXT w DNS; edge `owned_domains` niedostępny dla naszej appki w v19–v25 | Ruslan dodaje domenę w portfolio i przekazuje kod, **wpięcie kodu robimy my** |
+| 3 | **Scope `read_insights` + `pages_read_user_content`** — nie widzimy wyników organicznych postów | `debug_token`: 11 scope'ów, żadnego z tych dwóch; `{post}/insights` odbija | Ruslan (regeneracja tokenu SU) **albo** sekret appki `1533997951805022` przekazany nam raz na zawsze |
+| 4 | **Regulamin listy klientów** — tylko grupy z wgranego pliku | `200/1870090` przy `subtype=CUSTOM` | Ruslan, jeden klik; **nie blokuje remarketingu** |
+| 5 | **Regulamin pozyskiwania kontaktów** na Stronie — brak formularzy w reklamie | `leadgen_tos_accepted: false` (page tokenem) | Ruslan lub Andrzej, jeden klik |
+| 6 | **Kanał YouTube niepowiązany z Google Ads** — 63 tys. wyświetleń nie buduje audiencji | GAQL `account_link` i `data_link` na koncie `9506068500`: **zero wierszy** | właściciel kanału (Andrzej) akceptuje, prośbę wysyłamy my |
 
 **Bloker 1 obejmuje wszystkie trzy kampanie, `[POST]` włącznie.** Promowanie gotowego posta
 nie jest osobną ścieżką omijającą weryfikację — to zwykły zestaw reklam z targetem PL.
 Sprawdzenie stanu: `python3 scripts/social/dsa_status.py` (sonda `validate_only`, nic nie tworzy).
 
+**Co przestało być blokerem po pomiarach 28.08 wieczorem:**
+
+- **grupy odbiorców z piksela i zaangażowania** — działają, patrz sekcja 5;
+- **regulamin pikseli w portfolio** (`1784018`) — dotyczył wyłącznie zakładania piksela
+  na poziomie portfolio. Conversions API działa na tokenie System Usera:
+  `bash ~/secrets/meta/capi_send.sh --project primaauto-2026 PageView TEST12345`
+  → `{"events_received": 1}`. Nie jest prośbą do klienta;
+- **rola reklamowa na Instagramie** — kreacja z `instagram_user_id` waliduje się
+  na `{"success": true}`, insighty IG czytamy (`reach` 368/26). Nie jest prośbą;
+- **niebieski znacznik Strony** (`verification_status: not_verified`) — sprawdzone,
+  nie warunkuje niczego z planu. **Nie prosimy o to.**
+
+**Poza naszym zakresem (decyzja Janka 28.08):** `spend_cap`, metoda płatności i rola `MANAGE`.
+Ruslan zasila konto ręcznie, budżetu pilnują z Jankiem na bieżąco. **Nie podnoś tego
+w pismach do klienta i nie traktuj `spend_cap: 100000` jako blokera** — to nastawa
+operacyjna klienta, nie brakujące uprawnienie.
+
 ### Jak zweryfikować, że bloker DSA zniknął
 
 Sonda bez tworzenia obiektów, `execution_options: ["validate_only"]`:
 
-```python
-# scratchpad/dsa_probe.py — wariant PL z dsa_beneficiary i dsa_payor
-# dziś: 3858196 · po weryfikacji oczekiwane: {"success": true}
+```
+python3 scripts/social/dsa_status.py
+# dziś: 3858196 · po weryfikacji oczekiwane: PRZECHODZI na wariantach PL
 ```
 
 ---
@@ -378,17 +417,24 @@ i `e0672a35900e392f4c2b53c9986962ee` (zdjęcia testowe).
 
 ---
 
-## 8. Zadania dla klienta — trzy kliknięcia i jeden proces
+## 8. Zadania dla klienta — lista zamykająca
 
-| | Co | Kto | Czas |
-|---|---|---|---|
-| 1 | **Weryfikacja beneficjenta i płatnika reklam (DSA)** — Menedżer Reklam, dokumenty firmy | Ruslan | 15 min + oczekiwanie |
-| 2 | **Akceptacja Regulaminu grup niestandardowych odbiorców** — Menedżer Reklam → Grupy odbiorców | Ruslan | 1 min |
-| 3 | Akceptacja Regulaminu pozyskiwania kontaktów na Stronie (tylko jeśli chcemy formularzy w reklamie) | Ruslan / Andrzej | 1 min |
-| 4 | Podniesienie `spend_cap` powyżej 1 000 zł przed startem | Ruslan | 2 min |
+Zebrane modułem po module (`[VID]`, `[POST]`, `[RMKT]`, grupy odbiorców, CAPI, katalog, pomiar),
+żeby nie wracać po raz czwarty. Pismo: `docs/meta/prosby-koncowe-2026-08-28.html`.
 
-Po punkcie 2 zakładamy komplet grup odbiorców tego samego dnia.
-Po punkcie 1 zostają dwa wywołania — zestaw reklam i reklama — reszta jest gotowa.
+| | Co | Kto | Czas | Co odblokowuje |
+|---|---|---|---|---|
+| 1 | **Weryfikacja beneficjenta i płatnika reklam (DSA)** | Ruslan | 15 min + oczekiwanie | wszystkie trzy kampanie |
+| 2 | **Domena `primaauto.com.pl` w portfolio** — dodać i przekazać kod | Ruslan | 5 min | przypisanie konwersji, priorytet zdarzeń |
+| 3 | **Uprawnienia do statystyk Strony** — regeneracja tokenu **albo** sekret appki | Ruslan | 3 min | rotacja `[POST]` na danych, nie na oko |
+| 4 | Regulamin grup odbiorców z listy klientów | Ruslan | 1 min | grupy podobnych odbiorców z bazy CRM |
+| 5 | Regulamin pozyskiwania kontaktów na Stronie | Ruslan / Andrzej | 1 min | formularze w reklamie |
+| 6 | Powiązanie kanału YouTube z Google Ads | Andrzej | 2 min | widzowie filmów jako odbiorcy |
+| 7 | Instagram: adres strony w profilu, literówka „z Chin ta Korei" | Andrzej | 3 min | ruch z IG, dziś zerowy |
+| 8 | TikTok: adres strony w profilu | Andrzej | 2 min | ruch z TikToka, dziś zerowy |
+
+Pozycja 3 ma dwa warianty i **rekomendujemy sekret appki** — jednorazowo, po czym każdą
+przyszłą zmianę uprawnień robimy sami. To wycina z obiegu całą klasę przyszłych próśb.
 
 ---
 
