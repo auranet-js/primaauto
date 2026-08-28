@@ -2,6 +2,9 @@
 /**
  * Meta vehicle catalog feed (Automotive Inventory Ads) — Prima Auto.
  * READ-ONLY: czyta listings z prod DB, generuje CSV. Nie dotyka pluginu.
+ *
+ * `custom_label_0` niesie lokalizację sztuki (na placu / w drodze / sprowadzimy).
+ * Auta wchodzą i wychodzą, więc stan czytamy z bazy przy KAŻDYM biegu — nigdy z listy ID.
  * Użycie: php build-meta-vehicle-feed.php [limit] [outfile]
  *   limit  -1 = wszystkie (domyślnie), liczba = pierwsze N (test)
  */
@@ -25,7 +28,8 @@ $cols = ['vehicle_id','title','description','url','make','model','year',
  'mileage.value','mileage.unit','state_of_vehicle','price','availability'];
 for ($i=0;$i<IMG_SLOTS;$i++) $cols[]="image[$i].url";
 $cols = array_merge($cols, ['exterior_color','body_style','fuel_type','transmission','drivetrain',
- 'address.addr1','address.city','address.region','address.postal_code','address.country','dealer_name']);
+ 'address.addr1','address.city','address.region','address.postal_code','address.country','dealer_name',
+ 'custom_label_0']);
 
 function tname($pid,$tax){ $t=get_the_terms($pid,$tax); return ($t && !is_wp_error($t))?$t[0]->name:''; }
 function tslug($pid,$tax){ $t=get_the_terms($pid,$tax); return ($t && !is_wp_error($t))?$t[0]->slug:''; }
@@ -59,9 +63,28 @@ function map_body($slug,$name){ $k=key2($slug,$name); return match(true){
   str_contains($k,'pickup')||str_contains($k,'pick-up')||str_contains($k,'truck')=>'TRUCK',
   default=>'OTHER'}; }
 
+/* Gdzie sztuka fizycznie jest. Adres w feedzie to punkt odbioru (Rzeszów) i jest ten sam
+   dla wszystkich — nie odróżnia auta stojącego na placu od takiego, które dopiero sprowadzimy.
+   Rozróżnia je `custom_label_0`, po którym da się zbudować zestaw produktów i osobny przekaz.
+
+   Auta wchodzą i wychodzą, więc stan czytamy z bazy przy każdym biegu. Autorytatywny jest
+   `_asiaauto_reservation_status`; `stm_car_location` NIE — nie odświeża się po przyjeździe
+   auta do PL (memory reference-on-lot-authoritative). */
+$rez = [];
+foreach ($wpdb->get_results("SELECT post_id, meta_value FROM {$wpdb->postmeta}
+         WHERE meta_key='_asiaauto_reservation_status'") as $r) {
+  $rez[(int)$r->post_id] = $r->meta_value;
+}
+function gdzie_jest($pid){
+  global $rez;
+  return match($rez[$pid] ?? ''){ 'on_lot'=>'na-placu', 'in_transit'=>'w-drodze',
+                                  default=>'sprowadzimy' };
+}
+
 $fh = fopen($out,'w');
 fputcsv($fh,$cols);
 $written=0; $skipped=0; $seen_terms=['body'=>[],'fuel'=>[],'trans'=>[],'drive'=>[]];
+$etykiety=['na-placu'=>0,'w-drodze'=>0,'sprowadzimy'=>0];
 foreach ($ids as $pid){
   $price=(float)get_post_meta($pid,'price',true);
   if ($price<=0){ $skipped++; continue; }
@@ -95,10 +118,12 @@ foreach ($ids as $pid){
   $row=[$vid,$title,$desc,$url,$make,$model,$year,max($mileage,0),'KM',
         $state, number_format($price,0,'','').' PLN','available'];
   for($i=0;$i<IMG_SLOTS;$i++) $row[]=$imgs[$i]??'';
+  $etykieta = gdzie_jest($pid);
   $row=array_merge($row,[$color, map_body($bo_s,$bo_n), map_fuel($fuel_s,$fuel_n),
         map_trans($tr_s,$tr_n), map_drive($dr_s,$dr_n),
-        DEALER_STREET,DEALER_CITY,DEALER_REGION,DEALER_POSTAL,DEALER_COUNTRY,DEALER_NAME]);
-  fputcsv($fh,$row); $written++;
+        DEALER_STREET,DEALER_CITY,DEALER_REGION,DEALER_POSTAL,DEALER_COUNTRY,DEALER_NAME,
+        $etykieta]);
+  fputcsv($fh,$row); $written++; $etykiety[$etykieta]++;
   // diag: zbierz unikalne wartości terminów
   if($bo_n)$seen_terms['body'][$bo_n]=map_body($bo_s,$bo_n);
   if($fuel_n)$seen_terms['fuel'][$fuel_n]=map_fuel($fuel_s,$fuel_n);
@@ -107,5 +132,7 @@ foreach ($ids as $pid){
 }
 fclose($fh);
 fwrite(STDERR,"OK zapisano: $out\nwierszy: $written | pominięto (brak ceny/obrazu): $skipped\n");
+fwrite(STDERR,"\nGDZIE SZTUKA JEST (custom_label_0):\n");
+foreach($etykiety as $e=>$n) fwrite(STDERR,sprintf("  %-14s %5d\n",$e,$n));
 fwrite(STDERR,"\nMAPOWANIA (term -> Meta), sprawdź czy nie ma OTHER tam gdzie nie trzeba:\n");
 foreach($seen_terms as $tax=>$m){ fwrite(STDERR,"  [$tax] ".json_encode($m,JSON_UNESCAPED_UNICODE)."\n"); }
