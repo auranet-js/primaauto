@@ -348,7 +348,7 @@ Nie to było przyczyną blokady, ale i tak było do naprawienia.
 | 3 | **Scope `read_insights` + `pages_read_user_content`** — nie widzimy wyników organicznych postów | `debug_token`: 11 scope'ów, żadnego z tych dwóch; `{post}/insights` odbija | Ruslan (regeneracja tokenu SU) **albo** sekret appki `1533997951805022` przekazany nam raz na zawsze |
 | 4 | **Regulamin listy klientów** — tylko grupy z wgranego pliku | `200/1870090` przy `subtype=CUSTOM` | Ruslan, jeden klik; **nie blokuje remarketingu** |
 | 5 | **Regulamin pozyskiwania kontaktów** na Stronie — brak formularzy w reklamie | `leadgen_tos_accepted: false` (page tokenem) | Ruslan lub Andrzej, jeden klik |
-| 6 | **Kanał YouTube niepowiązany z Google Ads** — 63 tys. wyświetleń nie buduje audiencji | GAQL `account_link` i `data_link` na koncie `9506068500`: **zero wierszy** | właściciel kanału (Andrzej) akceptuje, prośbę wysyłamy my |
+| ~~6~~ | ~~**Kanał YouTube niepowiązany z Google Ads**~~ — **POZYCJA BŁĘDNA, wycofana 28.08 wieczorem** | kanał `UCsfcUP3uwrDxPI_mDIle8Pw` **JEST powiązany**: konwersje `YOUTUBE_HOSTED` („YouTube channel subscriptions", „YouTube follow-on views") są `ENABLED` na koncie — na niepowiązanym koncie nie mogłyby istnieć. Wcześniejsze „zero wierszy" pochodziło z `account_link`/`data_link`, które opisują **partnerów zewnętrznych i linki do filmów w programach twórców**, nie powiązanie kanału. Kanał prowadzimy my (delegacja Studio u Janka), nie Andrzej | — |
 
 **Bloker 1 obejmuje wszystkie trzy kampanie, `[POST]` włącznie.** Promowanie gotowego posta
 nie jest osobną ścieżką omijającą weryfikację — to zwykły zestaw reklam z targetem PL.
@@ -426,12 +426,12 @@ Zebrane modułem po module (`[VID]`, `[POST]`, `[RMKT]`, grupy odbiorców, CAPI,
 |---|---|---|---|---|
 | 1 | **Weryfikacja beneficjenta i płatnika reklam (DSA)** | Ruslan | 15 min + oczekiwanie | wszystkie trzy kampanie |
 | 2 | ~~**Domena `primaauto.com.pl` w portfolio**~~ — **ZAMKNIĘTE 28.08**: Ruslan dodał domenę i przekazał kod, my wpięliśmy w `wp_head`, Ruslan zweryfikował — **status „Zweryfikowana" na zrzucie od klienta** | Ruslan + my | — | przypisanie konwersji, priorytet zdarzeń |
-| 3 | **Uprawnienia do statystyk Strony** — regeneracja tokenu **albo** sekret appki | Ruslan | 3 min | rotacja `[POST]` na danych, nie na oko |
+| 3 | **Dwa uprawnienia do klucza**: `read_insights`, `pages_read_user_content` — regeneracja tokenu **albo** sekret appki. **`pages_manage_posts` świadomie NIE jest prośbą** — ustalenie 27.08: Andrzej publikuje sam i dobrze, nasza wartość to promowanie jego postów, nie pisanie obok | Ruslan | 3 min | rotacja `[POST]` na danych, nie na oko |
 | 4 | Regulamin grup odbiorców z listy klientów | Ruslan | 1 min | grupy podobnych odbiorców z bazy CRM |
 | 5 | Regulamin pozyskiwania kontaktów na Stronie | Ruslan / Andrzej | 1 min | formularze w reklamie |
-| 6 | Powiązanie kanału YouTube z Google Ads | Andrzej | 2 min | widzowie filmów jako odbiorcy |
+| 6 | **YouTube: kanał na konto marki + `js@auranet.com.pl` jako menedżer** (T-243c poz. 3, „Ruslan w toku") — bez tego zapis przez API niemożliwy, każda publikacja to ręczne Studio. ~~Powiązanie z Google Ads~~ **istnieje i działa** — to była nasza pomyłka, nie prośba | **Ruslan**, nie Andrzej | — | wgrywanie filmów programowo |
 | 7 | Instagram: adres strony w profilu, literówka „z Chin ta Korei" | Andrzej | 3 min | ruch z IG, dziś zerowy |
-| 8 | TikTok: adres strony w profilu | Andrzej | 2 min | ruch z TikToka, dziś zerowy |
+| 8 | **TikTok: konto firmowe + Business Center + Auranet jako członek** (T-243a krok 5, T-243c poz. 4b) — **to jest prośba o dostęp przez API, nie o link w bio**; konto prywatne nie ma jak wystawić dostępu. Link w bio (poz. 4a) to drobiazg przy okazji. Zegar audytu aplikacji TikToka liczy się w tygodniach → zaczynać równolegle z DSA | Ruslan lub Andrzej | 10 min | dystrybucja na TikToka + Spark Ads |
 
 Pozycja 3 ma dwa warianty i **rekomendujemy sekret appki** — jednorazowo, po czym każdą
 przyszłą zmianę uprawnień robimy sami. To wycina z obiegu całą klasę przyszłych próśb.
