@@ -115,11 +115,13 @@ def main():
             'age_min': k['wiek_od'], 'age_max': k['wiek_do'],
             'publisher_platforms': ['facebook', 'instagram'],
         })}, tok)
+    adset = None
     if e:
         print('   BŁĄD:', e)
-        print('\nSTAN:', json.dumps(zrobione)); return
-    adset = r['id']; zrobione['zestaw'] = adset
-    print('   OK', adset)
+        print('   → idę dalej: kreacja nie zależy od zestawu, zbuduję co się da')
+    else:
+        adset = r['id']; zrobione['zestaw'] = adset
+        print('   OK', adset)
 
     print("--- 3. KREACJA (dark post — nie trafia na Stronę) ---")
     spec = {'page_id': PAGE, 'instagram_user_id': IG, 'video_data': {
@@ -135,6 +137,12 @@ def main():
     print('   OK', kre)
 
     print("--- 4. REKLAMA ---")
+    if not adset:
+        print('   POMINIĘTA — brak zestawu reklam (weryfikacja DSA)')
+        os.makedirs(os.path.dirname(STAN), exist_ok=True)
+        json.dump(zrobione, open(STAN, 'w'), ensure_ascii=False, indent=2)
+        print('\nZBUDOWANE CZĘŚCIOWO:', json.dumps(zrobione, ensure_ascii=False))
+        return
     r, e = wywolaj(f'{ACT}/ads', {
         'name': 'Leopard 5 — wideo 9:16', 'adset_id': adset,
         'creative': json.dumps({'creative_id': kre}), 'status': 'PAUSED'}, tok)

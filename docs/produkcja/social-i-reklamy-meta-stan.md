@@ -88,6 +88,12 @@ reklamowym pozostaje wyłącznie u Ruslana.
 **`act_1038563008906171`** · aktywne · PLN · Europe/Warsaw · `spend_cap` 1 000 zł ·
 wydatki 0 zł · **0 kampanii**
 
+**Karta jest podłączona** — Ruslan potwierdził 27.08, limit wydatków ustawiony na 1 000 zł.
+API jej nie pokazuje (`funding_source` i `funding_source_details` wracają puste we wszystkich
+wersjach od v18 do v23), bo użytkownik systemowy nie ma roli finansowej na koncie — `MANAGE`
+ma wyłącznie Ruslan. **Puste `funding_source` NIE jest dowodem braku karty** i nie należy
+tego tak czytać; jedynym śladem widocznym z API było pojawienie się `spend_cap`.
+
 ### Sprawdzone i DZIAŁA
 
 | Operacja | Dowód |
@@ -130,9 +136,11 @@ Weryfikacji **nie da się zrobić przez API** — to proces w Menedżerze Reklam
 Wtedy komunikat nie został zapisany i przez dwa dni uchodziło to za problem z uprawnieniami
 albo z kartą. Nie jest ani jednym, ani drugim.
 
-⚠️ **Weryfikacja firmy w portfolio to CO INNEGO.** Portfolio `Prima Auto` ma
-`verification_status: verified` od czerwca i to nie wystarcza. Strona `Prima-Auto`
-ma osobno `verification_status: not_verified`.
+⚠️ **To NIE jest weryfikacja firmy — ta jest zrobiona.** Portfolio `Prima Auto` ma
+`verification_status: verified` (punkt R3 z listy dla klienta, potwierdzony 26.08).
+Weryfikacja beneficjenta i płatnika wg DSA to **trzeci, osobny proces** — obok weryfikacji
+firmy i obok podłączenia karty, które również jest zrobione. Dla porządku: Strona `Prima-Auto`
+ma jeszcze własne `verification_status: not_verified`, ale to czwarta, niepowiązana rzecz.
 
 ### Pozostałe braki — realne, ale wtórne wobec powyższego
 
@@ -140,15 +148,29 @@ ma osobno `verification_status: not_verified`.
 |---|---|---|
 | **Katalog bez zestawów produktów** | `/catalog/product_sets` → `[]` | dynamiczne reklamy niemożliwe; do utworzenia po naszej stronie (mamy `MANAGE`) |
 | **Brak audiencji** | `/act_*/customaudiences` → `[]` | brak remarketingu i lookalike; do zbudowania z piksela |
-| **Brak źródła finansowania** | `funding_source` puste | żadna kampania nie ruszy nawet po weryfikacji |
 | **Strona niewidoczna jako zasób reklamowy** | `/act_*/promote_pages` → `[]` | do sprawdzenia po weryfikacji — może być skutkiem, nie przyczyną |
 
 ### Co przeszło w tej próbie
 
 Utworzenie kampanii — **trzykrotnie potwierdzone**. Wgranie wideo Leopard 5
 (`1389329476599667`, HEVC 10-bit HDR, 42 s — Meta przyjęła bez konwersji, prywatność `SELF`).
-Pobranie miniatury wygenerowanej przez Meta. Wszystkie kampanie testowe skasowane,
-konto zostało puste.
+Pobranie miniatury wygenerowanej przez Meta. **Kreacja wideo** (dark post — sprawdzone,
+że nie pojawia się na Stronie ani na profilu).
+
+### Co stoi na koncie teraz — kampania docelowa, niedokończona
+
+```
+1. KAMPANIA       120248809387930243  [VID] Auta z Chin — nowi odbiorcy   PAUSED
+2. ZESTAW REKLAM  —                   NIE POWSTAŁ  ← weryfikacja DSA
+3. KREACJA        4545681435750921    Leopard 5 — wideo 9:16
+4. REKLAMA        —                   NIE POWSTAŁA (nie ma czego spiąć z kreacją)
+
+   wideo w bibliotece: 1389329476599667 (Leopard 5 czarny, pion 9:16, 42 s)
+```
+
+**Dwa poziomy z czterech. Reklama nie istnieje i nie ruszy.** Po weryfikacji DSA zostają
+dwa wywołania — zestaw i reklama — reszta jest gotowa.
+Skrypt: `scripts/social/meta_kampania_wideo.py` (`--dry-run` / `--buduj`).
 
 ### Niesprawdzone
 
@@ -262,16 +284,25 @@ Metryki Page Insights `page_impressions` i `page_fans` **wycofane w v26** — zw
 
 ---
 
-## 9. Do posprzątania na koncie
+## 9. Co stoi na koncie
 
+**Zostawić — to kampania docelowa, do dokończenia po weryfikacji DSA:**
 ```
-4040666229569687   wideo „[TEST] BYD Shark 6 pion"     27.08, biblioteka reklamowa
+120248809387930243   kampania [VID] Auta z Chin — nowi odbiorcy   PAUSED
+4545681435750921     kreacja  Leopard 5 — wideo 9:16
+1389329476599667     wideo    Leopard 5 czarny, pion 9:16, 42 s
+```
+
+**Do posprzątania — pozostałości po testach:**
+```
+4040666229569687   wideo „[TEST] BYD Shark 6 pion"      27.08, biblioteka reklamowa
 2853400968357319   wideo „TEST Auranet — do skasowania" 25.08, biblioteka reklamowa
-1531739618705464   „TEST boost 2026-08-25-…"           25.08
-2410ca18ffde1dc…   zdjęcie testowe                      27.08, biblioteka reklamowa
+1531739618705464   „TEST boost 2026-08-25-…"            25.08
+2410ca18ffde1dc…   zdjęcie testowe (Shark 6)            27.08, biblioteka reklamowa
 ```
 
-Kampania testowa `120248752872730243` jest już `DELETED`.
+Kampanie testowe `120248752872730243`, `120248809207980243`, `120248809220940243`
+i `120248809243700243` są `DELETED`.
 
 Na Instagramie: sześć Reelsów z 27.08 (`DcjCnoIk8Gw`, `DcjCus-ghgw`, `DcjC5y1EhCK`,
 `DcjC_Vgjzmo`, `DcjDDm_kqyo`, `DcjDPwIDZMz`) — do usunięcia przez Andrzeja albo przez nas,
@@ -287,10 +318,9 @@ gdy dojdzie `instagram_manage_contents`.
 | 2 | Usunięcie sześciu Reelsów z 27.08 | Andrzej | 3 min |
 | 3 | Link `primaauto.com.pl` w polu „Witryna" profilu IG + literówka „z Chin **ta** Korei" | Andrzej | 2 min |
 | 4 | **Weryfikacja beneficjenta i płatnika reklam (DSA)** — bez tego żadna reklama na Meta nie powstanie; Menedżer Reklam, wymaga dokumentów firmy | Ruslan | 15 min + oczekiwanie |
-| 5 | Potwierdzenie karty na koncie reklamowym (API jej nie widzi) | Ruslan | wzrokiem |
-| 6 | Akceptacja powiązania kanału YouTube z Google Ads | właściciel kanału | 2 min |
-| 7 | Link do strony w bio TikToka | Andrzej | 2 min |
-| 8 | Przeniesienie kanału YT na konto marki + `js@auranet.com.pl` jako menedżer | właściciel | 15 min |
+| 5 | Akceptacja powiązania kanału YouTube z Google Ads | właściciel kanału | 2 min |
+| 6 | Link do strony w bio TikToka | Andrzej | 2 min |
+| 7 | Przeniesienie kanału YT na konto marki + `js@auranet.com.pl` jako menedżer | właściciel | 15 min |
 
 ---
 
