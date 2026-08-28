@@ -22,8 +22,12 @@ Konto zdrowe poza tym: `account_status 1`, `disable_reason 0`, PLN, portfolio `P
 co `200/1870090`, ale **nie tworzy grupy** — w przeciwieństwie do `POST /act_*/customaudiences`,
 który ignoruje `validate_only`. Używaj tej drogi.
 
-**Memory `reference-token-system-user-scopes-dynamiczne` NIE potwierdziła się tutaj.**
-Scope'y nie dołożyły się same na istniejącym tokenie SU. Niezależny pomiar na poście
+**Memory `reference-token-system-user-scopes-dynamiczne` obowiązuje, ale jej warunek
+u nas nie zaszedł.** Scope'y dziedziczą się na stare tokeny dopiero **gdy administrator
+portfolio wygeneruje nowy token** — od 27.08 nikt tego nie robił, więc na dysku i w API
+wciąż stoi ten sam komplet 11. Wniosek: R7 **nie jest do naprawienia po naszej stronie**,
+wymaga prośby do Ruslana o regenerację z `read_insights` i `pages_read_user_content`.
+Niezależny pomiar na poście
 Strony z 27.08 (page tokenem): `post_impressions` / `post_impressions_unique` /
 `post_engaged_users` → `#100 not a valid insights metric`; `post_clicks` → `{"data": []}`;
 odczyt `reactions`/`comments` → `#10 requires 'pages_read_user_content'`.
@@ -80,5 +84,6 @@ Czyli brak wyników organicznych jest realny, nie kosmetyczny.
 3. **Włączenie z budżetem = osobna zgoda Janka na konkretną datę.**
    Patrz `docs/meta/plan-kampanii.md` sekcja 9 i memory
    `feedback-publikacja-zewnetrzna-wymaga-osobnej-zgody`.
-4. R7 po zmianie sprawdzaj `debug_token` **i** pomiarem na realnym poście — sam
-   `debug_token` nie wystarczy, a dziedziczenie scope'ów tu nie zadziałało.
+4. R7 po regeneracji tokenu przez Ruslana sprawdzaj `debug_token` **i** pomiarem na realnym
+   poście. Pliku tokenu **nie musisz wymieniać** — stary odziedziczy scope'y (memory
+   `reference-token-system-user-scopes-dynamiczne`); zweryfikuj to jednak pomiarem, nie teorią.
