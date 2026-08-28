@@ -79,9 +79,11 @@ def get(sciezka, tok=None):
 
 # Endpointy, które PRZYJMUJĄ `execution_options`, ale go IGNORUJĄ i tworzą obiekt naprawdę.
 # Zmierzone 28.08: sonda `waliduj=True` na `customaudiences` założyła trzy grupy odbiorców
-# na koncie klienta. Rozpoznanie: endpoint respektujący walidację oddaje `{"success": true}`,
-# ignorujący — `{"id": ...}`. Dopisuj tu każdy kolejny, na którym się o to potkniesz.
-GLUCHE_NA_WALIDACJE = ('customaudiences',)
+# na koncie klienta, a na `product_sets` — dwa zestawy produktów. Rozpoznanie: endpoint
+# respektujący walidację oddaje `{"success": true}`, ignorujący — `{"id": ...}`.
+# Wzorzec: zapisy w KATALOGU i w grupach odbiorców walidacji nie respektują, w kampaniach
+# (`adsets`, `adcreatives`) tak. Dopisuj tu każdy kolejny, na którym się potkniesz.
+GLUCHE_NA_WALIDACJE = ('customaudiences', 'product_sets')
 
 
 def post(sciezka, dane, tok=None, waliduj=True):
