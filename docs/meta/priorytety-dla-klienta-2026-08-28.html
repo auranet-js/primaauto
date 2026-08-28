@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="pl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Prima-Auto — priorytety, żeby ruszyć z reklamami</title>
+<style>
+:root{--tekst:#1b1f24;--szary:#5b6470;--linia:#e3e7ec;--tlo:#fff;--akcent:#0A66C2;--zolty:#fff8e1;--zoltyram:#e6c65c;--czerw:#fdf2f2;--czerwram:#d9534f}
+*{box-sizing:border-box}
+body{margin:0;background:#f4f6f8;color:var(--tekst);font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+.wrap{max-width:820px;margin:0 auto;padding:40px 22px 80px;background:var(--tlo)}
+h1{font-size:28px;line-height:1.25;margin:0 0 6px;letter-spacing:-.02em}
+h2{font-size:21px;margin:44px 0 12px;padding-top:22px;border-top:1px solid var(--linia);letter-spacing:-.01em}
+h3{font-size:17px;margin:26px 0 8px}
+p{margin:0 0 14px}
+hr{border:0;border-top:1px solid var(--linia);margin:34px 0}
+table{border-collapse:collapse;width:100%;margin:18px 0;font-size:15px;display:block;overflow-x:auto}
+th,td{border:1px solid var(--linia);padding:9px 11px;text-align:left;vertical-align:top}
+th{background:#f7f9fb;font-weight:600}
+code{background:#f2f4f7;padding:2px 5px;border-radius:3px;font-size:.9em;font-family:ui-monospace,Menlo,Consolas,monospace;word-break:break-all}
+blockquote{margin:18px 0;padding:14px 18px;background:var(--zolty);border-left:4px solid var(--zoltyram);border-radius:0 4px 4px 0}
+blockquote.uwaga{background:var(--czerw);border-left-color:var(--czerwram)}
+blockquote p:last-child{margin-bottom:0}
+ul,ol{margin:0 0 14px;padding-left:22px}
+li{margin-bottom:6px}
+strong{font-weight:600}
+a{color:var(--akcent)}
+.prio{background:#f7f9fb;border:1px solid var(--linia);border-radius:5px;padding:4px 12px 16px;margin:26px 0}
+.prio h3{margin-top:18px}
+.kto{color:var(--szary);font-size:14px;margin:-4px 0 12px}
+@media(max-width:640px){.wrap{padding:26px 16px 60px}h1{font-size:23px}h2{font-size:19px}}
+</style></head><body><div class="wrap">
+
+<h1>Prima-Auto — priorytety, żeby ruszyć z reklamami</h1>
+<p><strong>Wersja 4 · 28 sierpnia 2026 · Auranet</strong><br />
+<em>Aktualizacja listy z 26 sierpnia. Całe konto reklamowe przeszliśmy dziś od zera —
+każdy punkt sprawdzony osobno, na żywym koncie, niezależnie od tego, co pisaliśmy wcześniej.</em></p>
+
+<hr />
+
+<h2>Co się zmieniło od 26 sierpnia</h2>
+
+<p><strong>Karta jest.</strong> To był w poprzedniej wersji jedyny bloker po stronie Ruslana
+i jest zdjęty. Konto pokazuje ważną metodę płatności.
+Dziękujemy.</p>
+
+<blockquote class="uwaga">
+<p><strong>Musimy sprostować własny zapis.</strong> W wersji z 26 sierpnia napisaliśmy,
+że regulamin grup odbiorców jest już zaakceptowany. <strong>To była nasza pomyłka</strong> —
+oparliśmy się na sygnale <code>web_custom_audience_tos</code>, który wygląda na potwierdzenie,
+ale dotyczy <strong>innego</strong> regulaminu. Wyszło to dopiero dzisiaj, kiedy próbowaliśmy
+faktycznie założyć listy odbiorców i konto odmówiło. Piszemy o tym wprost, bo wolimy jedno
+niewygodne zdanie od drugiego tygodnia czekania na coś, czego nikt nie kliknął.</p>
+</blockquote>
+
+<p><strong>Doszła rzecz, o której wcześniej nie wiedzieliśmy, i jest teraz najważniejsza
+na liście</strong> — unijny wymóg weryfikacji reklamodawcy. Bez niego Facebook nie uruchomi
+żadnej reklamy kierowanej do Polski. Szczegóły w priorytecie 1.</p>
+
+<table>
+<thead><tr><th></th><th>26 sierpnia</th><th>Dziś</th><th>Skąd wiemy</th></tr></thead>
+<tbody>
+<tr><td><strong>R2</strong> Karta i limit wydatków</td><td>⛔ brak</td>
+<td>✅ <strong>zrobione</strong></td>
+<td>konto zwraca ważną metodę płatności</td></tr>
+<tr><td><strong>A3</strong> Token z dostępem do Instagrama</td><td>⛔ do wygenerowania</td>
+<td>✅ <strong>zrobione</strong></td>
+<td>klucz ma komplet uprawnień instagramowych, publikacja działa</td></tr>
+<tr><td><strong>R1</strong> Regulamin grup odbiorców</td><td>✅ (nasza pomyłka)</td>
+<td>⛔ <strong>nadal do zaakceptowania</strong></td>
+<td>próba założenia listy: „Nie zaakceptowano Regulaminu korzystania z grup niestandardowych odbiorców”</td></tr>
+<tr><td><strong>R5</strong> Weryfikacja reklamodawcy (DSA)</td><td>— nie wiedzieliśmy</td>
+<td>⛔ <strong>nowy, najważniejszy</strong></td>
+<td>zestaw reklam kierowany na Polskę odrzucony; ten sam poza Unią przechodzi</td></tr>
+</tbody>
+</table>
+
+<hr />
+
+<h1>PRIORYTET 1 — weryfikacja reklamodawcy</h1>
+
+<div class="prio">
+<h3>R5. Bez tego nie powstanie żadna reklama kierowana do Polski</h3>
+<p class="kto"><strong>Ruslan · 15 minut plus czas rozpatrzenia po stronie Facebooka</strong></p>
+
+<p>Unijne przepisy o usługach cyfrowych wymagają, żeby przy każdej reklamie było wiadomo,
+<strong>kto na niej korzysta i kto za nią płaci</strong>. Facebook musi tę tożsamość
+zweryfikować dokumentami, zanim wpuści reklamę do obiegu.</p>
+
+<p>Sprawdziliśmy to dzisiaj twardo, nie z domysłu. Zbudowaliśmy prawdziwy zestaw reklam
+i puszczaliśmy go przez sprawdzanie Facebooka w ośmiu wariantach:</p>
+
+<ul>
+<li>kierowanie na <strong>Polskę</strong> — odrzucone, „poproś o weryfikację”,</li>
+<li>kierowanie na <strong>Niemcy</strong> — odrzucone tak samo,</li>
+<li>kierowanie na <strong>Stany Zjednoczone</strong> — <strong>przeszło bez zastrzeżeń</strong>,</li>
+<li>kierowanie na <strong>Ukrainę</strong> — <strong>przeszło bez zastrzeżeń</strong>.</li>
+</ul>
+
+<p>Ten sam zestaw, ten sam budżet, ten sam piksel — różnica wyłącznie w kraju odbiorcy.
+To jest dowód, że <strong>konto, karta i cała konfiguracja są sprawne</strong>, a jedyne,
+co blokuje reklamy, to brak weryfikacji wymaganej w Unii.</p>
+
+<p><strong>Co zrobić:</strong> Menedżer Reklam → Ustawienia konta → sekcja weryfikacji
+reklamodawcy (Facebook nazywa to weryfikacją beneficjenta i płatnika) → przejść proces
+z dokumentami firmy. Facebook prowadzi krok po kroku.</p>
+
+<p><strong>Czego nie da się obejść:</strong> tego procesu nie wykonamy za Was — wymaga
+dokumentów firmy i tożsamości podmiotu. To jedyna pozycja na całej liście, której nie
+możemy zrobić zdalnie zamiast Was.</p>
+
+<p>Uprzedzamy: rozpatrzenie potrafi potrwać od kilku godzin do kilku dni. Dlatego prosimy
+o rozpoczęcie <strong>jako pierwsze</strong> — reszta listy zajmuje minuty i można ją zrobić
+w trakcie czekania.</p>
+</div>
+
+<hr />
+
+<h1>PRIORYTET 2 — regulamin grup odbiorców</h1>
+
+<div class="prio">
+<h3>R1. Jeden klik, a bez niego reklamy będą przepalać budżet</h3>
+<p class="kto"><strong>Ruslan · 1 minuta</strong></p>
+
+<p>Konto nie ma zaakceptowanego regulaminu grup niestandardowych odbiorców. Dziś każda próba
+utworzenia listy kończy się odmową.</p>
+
+<p><strong>Co zrobić:</strong> Menedżer Reklam → <strong>Grupy odbiorców</strong> → przy
+pierwszym wejściu wyświetli się regulamin → zaakceptować. To wszystko.</p>
+
+<p><strong>Dlaczego to nie jest drobiazg.</strong> Listy odbiorców służą nam przede wszystkim
+do <strong>wykluczania</strong>. Bez nich reklama wideo będzie pokazywać się w kółko ludziom,
+którzy już byli na stronie i już Was znają — czyli będziecie płacić za dotarcie do własnych
+klientów zamiast do nowych. To nie jest kwestia wygody, tylko tego, gdzie idą pieniądze.</p>
+
+<blockquote>
+<p><strong>To jest pilne mimo tego, że reklamy i tak jeszcze nie ruszą.</strong> Listy zbierają
+ludzi <strong>dopiero od chwili, gdy powstaną</strong> — wstecz nic się nie odtworzy. Piksel
+zbiera dane od 1 sierpnia i cały ten miesiąc ruchu już przepadł. Każdy kolejny dzień
+bez tego kliknięcia to kolejny stracony dzień, niezależnie od weryfikacji z priorytetu 1.</p>
+</blockquote>
+
+<p>Zaraz po akceptacji zakładamy komplet ośmiu list tego samego dnia — mamy je już
+zaprojektowane i gotowe.</p>
+</div>
+
+<hr />
+
+<h1>PRIORYTET 3 — drobiazgi Andrzeja</h1>
+
+<div class="prio">
+<h3>A6. Instagram — link do strony i literówka w opisie <em>(3 minuty)</em></h3>
+<p>W opisie profilu <code>@prima_auto.pl</code> <strong>nie ma adresu strony</strong>, a w tekście
+jest literówka: „Bezpośredni import samochodów <strong>z Chin ta Korei</strong>”. Sprawdzone dzisiaj.</p>
+<p><strong>Co zrobić:</strong> Instagram → Edytuj profil → pole <strong>Witryna</strong>:
+<code>primaauto.com.pl</code> → poprawić „ta” na „i” → Zapisz.</p>
+
+<h3>A1. TikTok — adres strony w profilu <em>(2 minuty)</em></h3>
+<p>Bez zmian od poprzedniej wersji: w opisie profilu <code>@primaauto.pl</code> nie ma linku
+do strony, przy 127 filmach TikTok nie przysłał ani jednego wejścia na witrynę.</p>
+<p><strong>Co zrobić:</strong> TikTok → Edytuj profil → pole <strong>Witryna</strong>
+→ <code>primaauto.com.pl</code>. Jeśli pola nie widać: Ustawienia → Zarządzaj kontem
+→ Przełącz na konto biznesowe → kategoria <em>Motoryzacja</em>.</p>
+
+<h3>A2. Kalendarz publikacji — do ustalenia w rozmowie</h3>
+<p>Andrzej publikuje na Stronie i na Instagramie regularnie i <strong>prowadzi to dalej</strong> —
+nie przejmujemy tego. Ustalmy tylko, <strong>które auto kiedy idzie</strong>, żeby nasz materiał
+nie wychodził w tym samym tygodniu co Wasz post o tym samym modelu. Wystarczy krótka wymiana
+raz w tygodniu.</p>
+</div>
+
+<hr />
+
+<h1>Co zrobiliśmy po naszej stronie 28 sierpnia</h1>
+
+<p>Nie czekaliśmy z robotą na odblokowanie konta. Zrobione dzisiaj:</p>
+
+<ul>
+<li><strong>Katalog aut podłączony do danych o oglądaniu ofert.</strong> W poprzedniej wersji
+pisaliśmy ostrożnie „sprawdzamy, czy się da” — <strong>da się i jest zrobione</strong>.
+Katalog wie teraz, kto które auto oglądał na stronie, co jest warunkiem reklam pokazujących
+klientowi dokładnie to auto, którym się interesował.</li>
+<li><strong>Pięć zestawów aut do reklam:</strong> wszystkie pojazdy (3 113), do 200 tys. zł (1 857),
+SUV-y (1 746), elektryczne (1 341), hybrydy (1 271).</li>
+<li><strong>Sprawdziliśmy, że katalog odświeża się bez zarzutu</strong> — dziesięć ostatnich dób
+z rzędu, codziennie o 6:30, zero błędów i zero ostrzeżeń.</li>
+<li><strong>Ułożyliśmy plan kampanii z harmonogramem rotacji</strong> — dziewięć tygodni materiału
+wideo, model na tydzień, plus podbijanie Waszych własnych postów z wymianą co trzy–cztery dni.</li>
+<li><strong>Przenieśliśmy cele reklamowe z Google Ads</strong>, żeby oba systemy mierzyły to samo:
+kliknięcie w telefon, kliknięcie w WhatsApp, formularz zamówienia.</li>
+</ul>
+
+<p>Osiem list odbiorców jest zaprojektowanych i czeka wyłącznie na kliknięcie z priorytetu 2.
+Zestaw reklam i sama reklama to dwa wywołania, które wykonamy w dniu, w którym przejdzie
+weryfikacja z priorytetu 1.</p>
+
+<hr />
+
+<h1>Do rozważenia, nie do zrobienia dziś</h1>
+
+<h3>Formularze kontaktowe wewnątrz reklamy</h3>
+<p>Facebook pozwala zbierać kontakt bez wychodzenia z reklamy. U Was to dziś nie zadziała —
+Strona nie ma zaakceptowanego regulaminu pozyskiwania kontaktów (jeden klik, jak w priorytecie 2).</p>
+<p>Nie umieszczamy tego wyżej celowo. Dane mówią, że <strong>formularz jest u Was kanałem
+najsłabszym</strong>: przez ostatnie 30 dni wypełniono go dwanaście razy w całym ruchu strony,
+podczas gdy w telefon kliknięto sto razy, a w WhatsApp sto osiem. Zaczynamy od tego,
+co działa. Regulamin można kliknąć przy okazji.</p>
+
+<h3>YouTube — kanał nadal wisi na prywatnym koncie</h3>
+<p>Bez zmian wobec poprzedniej wersji i <strong>nadal nie jest to bloker</strong> — publikujemy ręcznie
+i to działa. Instrukcja przeniesienia na konto marki jest w wersji z 26 sierpnia, nie powtarzamy jej tutaj.</p>
+<p>Dokładamy jedną rzecz, którą sprawdziliśmy dzisiaj: <strong>kanał nie jest powiązany
+z kontem Google Ads</strong> — zero powiązań. Skutek jest konkretny: dziesiątki tysięcy wyświetleń
+filmów <strong>nie zbudowały ani jednej listy widzów</strong>, do której można by wrócić z reklamą.
+Powiązanie nie wymaga konta marki ani przenoszenia kanału: prośbę wysyłamy my z Google Ads,
+właściciel kanału akceptuje w YouTube Studio → Ustawienia → Kanał → Powiązane konta. Dwie minuty.</p>
+
+<hr />
+
+<h1>Zestawienie — stan na 28 sierpnia</h1>
+
+<table>
+<thead><tr><th></th><th>Co zrobić</th><th>Kto</th><th>Czas</th><th>Co odblokowuje</th></tr></thead>
+<tbody>
+<tr><td><strong>R5</strong></td><td><strong>Weryfikacja reklamodawcy (beneficjent i płatnik)</strong></td>
+<td>Ruslan</td><td>15 min + oczekiwanie</td>
+<td><strong>bez tego nie powstanie żadna reklama do Polski</strong></td></tr>
+<tr><td><strong>R1</strong></td><td><strong>Zaakceptować regulamin grup odbiorców</strong></td>
+<td>Ruslan</td><td>1 min</td>
+<td>listy odbiorców — bez nich budżet idzie na ludzi, którzy już Was znają</td></tr>
+<tr><td><strong>A6</strong></td><td>Instagram: wpisać adres strony, poprawić „ta Korei”</td>
+<td>Andrzej</td><td>3 min</td><td>ruch z Instagrama, dziś zerowy</td></tr>
+<tr><td><strong>A1</strong></td><td>TikTok: wpisać adres strony w profilu</td>
+<td>Andrzej</td><td>2 min</td><td>ruch z TikToka, dziś zerowy</td></tr>
+<tr><td><strong>A2</strong></td><td>Ustalić kalendarz: które auto kiedy</td>
+<td>Andrzej</td><td>rozmowa</td><td>brak kolizji publikacji</td></tr>
+<tr><td>—</td><td>Zaakceptować powiązanie kanału YouTube z Google Ads</td>
+<td>właściciel kanału</td><td>2 min</td><td>widzowie filmów jako odbiorcy reklam</td></tr>
+<tr><td><s>R2</s></td><td><s>Karta i limit wydatków</s></td><td>—</td><td>—</td><td>✅ <strong>zrobione</strong></td></tr>
+<tr><td><s>A3</s></td><td><s>Token z dostępem do Instagrama</s></td><td>—</td><td>—</td><td>✅ <strong>zrobione</strong></td></tr>
+<tr><td><s>R3</s></td><td><s>Weryfikacja firmy</s></td><td>—</td><td>—</td><td>✅ <strong>zrobione</strong></td></tr>
+</tbody>
+</table>
+
+<p><strong>Po stronie Ruslana: jeden proces z dokumentami i jedno kliknięcie.
+Po stronie Andrzeja: pięć minut w sumie i jedna rozmowa.</strong></p>
+
+<p>Jeśli którykolwiek krok okaże się niejasny — przejdziemy go razem przez połączenie zdalne
+i wykonamy za Was wszystko poza weryfikacją z priorytetu 1, której z definicji nie możemy
+zrobić w Waszym imieniu.</p>
+
+<hr />
+<p><strong>Kontakt:</strong> Jan Schenk, Auranet — js@auranet.com.pl</p>
+
+</div></body></html>

@@ -316,8 +316,9 @@ Audiencje z piksela: oglądający oferty 30 dni, oglądający huby 90 dni, porzu
 
 - Budżet: **15 zł/dz** · Zależność: audiencje muszą uzbierać minimum ludzi (zwykle 2–3 tygodnie)
 
-### M4 · Promowanie postów Andrzeja — WYKONALNE OD RĘKI, najkrótsza droga do efektu
+### M4 · Promowanie postów Andrzeja — najkrótsza droga do efektu, ale nie „od ręki"
 **Priorytet 0. Sprawdzone 27.08 na screenie od Janka i potwierdzone w Graph API.**
+**Skorygowane 28.08 — patrz przypis na końcu sekcji.**
 
 Wcześniejsza diagnoza w tym dokumencie była błędna. Andrzej **publikuje na naszej nowej
 Stronie** `1146829831857839`, nie tylko na starej. Zmierzone page tokenem:
@@ -342,7 +343,22 @@ sam. Brakuje wyłącznie ostatniego kroku — zamiany posta w reklamę.
 - Kampania: konwersje, `object_story_id` istniejącego posta jako kreacja
 - Wybór: auta z realnym zapasem i marżą, nie wszystko jak leci — decyzja Ruslana albo reguła z bazy
 - Budżet startowy: **15 zł/dz** na dwa–trzy posty tygodniowo
-- Zależność: **wyłącznie karta.** Zero pracy po stronie klienta
+- Zależność: **weryfikacja DSA** (patrz niżej), potem karta. Zero pracy po stronie Andrzeja
+
+> **KOREKTA 28.08 — „zależność: wyłącznie karta" było błędne.** Zdanie powstało dzień przed
+> wykryciem blokera DSA i przez dobę sugerowało, że promowanie postów da się odpalić od ręki.
+> Promowanie postu to zwykły zestaw reklam z targetem PL, więc leci na dokładnie ten sam mur
+> co kampania wideo. Zmierzone sondą `validate_only` 28.08:
+>
+> ```
+> PL · LINK_CLICKS + dsa_beneficiary/payor  → 100/3858196 „Nie można opublikować zestawu reklam"
+> US · LINK_CLICKS (kontrola)               → {"success": true}
+> ```
+>
+> Co **nie** jest blokerem i zostało potwierdzone tego samego dnia: kreacja z gotowego posta
+> (`object_story_id` → `{"success": true}`), uprawnienia na Stronie (`MANAGE` + `ADVERTISE`)
+> i gotowość samych postów (8/8 ostatnich ma `is_eligible_for_promotion: true`).
+> Pełny stan blokerów: `docs/meta/plan-kampanii.md` sekcja 6.
 
 > **Stara Strona `prima1auto` zostaje nietknięta.** Andrzej ma tam Managera, publikuje na obu
 > i przy okazji ofert kieruje ludzi na nową. Nie prosimy o rolę reklamodawcy, nie składamy
