@@ -102,18 +102,53 @@ wydatki 0 zł · **0 kampanii**
 **Wideo w bibliotece NIE jest publikacją** — prywatność `SELF`, nie pojawia się ani w feedzie
 Strony, ani na profilu. Sprawdzone trzema sposobami.
 
-### Sprawdzone i NIE DZIAŁA
+### JEDYNY realny bloker reklam: weryfikacja beneficjenta i płatnika (DSA)
+
+**Ustalone 27.08 na kampanii docelowej, nie na teście.** Zbudowana została prawdziwa kampania
+`[VID] Auta z Chin — nowi odbiorcy` (BYD Leopard 5, wideo 9:16, 25 zł/dz, PL 25–55,
+cel: zdarzenie `Contact`). Doszła do drugiego kroku i tam stanęła.
+
+Sekwencja błędów — każdy rozwiązany, aż do ostatniego:
+
+```
+1. campaigns  → 100/4834011  „określ is_adset_budget_sharing_enabled"   → dodane, PRZESZŁO
+2. adsets     → 100/3858081  „Nie wskazano reklamodawcy"                 → dodane dsa_beneficiary
+                                                                            + dsa_payor, ZMIENIŁO BŁĄD
+3. adsets     → 100/3858196  „Nie można opublikować tego zestawu reklam.
+                              Dowiedz się, jak poprosić o weryfikację"    → ŚCIANA
+```
+
+**Trzeci błąd to brak weryfikacji beneficjenta i płatnika**, wymaganej przez unijny DSA
+we wszystkich reklamach kierowanych do UE. Meta musi zweryfikować tożsamość podmiotu,
+który korzysta z reklamy i który za nią płaci. Sprawdzone dwiema nazwami — własną
+i dokładną nazwą zweryfikowanego portfolio — ten sam błąd, więc **problemem nie jest
+brzmienie nazwy, tylko nieprzeprowadzona weryfikacja**.
+
+Weryfikacji **nie da się zrobić przez API** — to proces w Menedżerze Reklam, z dokumentami firmy.
+
+**To samo zablokowało testy 25.08** — trzy warianty zestawu reklam, wszystkie odrzucone.
+Wtedy komunikat nie został zapisany i przez dwa dni uchodziło to za problem z uprawnieniami
+albo z kartą. Nie jest ani jednym, ani drugim.
+
+⚠️ **Weryfikacja firmy w portfolio to CO INNEGO.** Portfolio `Prima Auto` ma
+`verification_status: verified` od czerwca i to nie wystarcza. Strona `Prima-Auto`
+ma osobno `verification_status: not_verified`.
+
+### Pozostałe braki — realne, ale wtórne wobec powyższego
 
 | Problem | Objaw | Skutek |
 |---|---|---|
-| **Zestawy reklam** | 25.08 trzy warianty odrzucone, wynik `null` | bez tego nie ma żadnej reklamy |
-| **Strona niewidoczna jako zasób reklamowy** | `/act_*/promote_pages` → `[]` | prawdopodobna przyczyna powyższego |
-| **Katalog bez zestawów produktów** | `/catalog/product_sets` → `[]` | dynamiczne reklamy niemożliwe |
-| **Brak audiencji** | `/act_*/customaudiences` → `[]` | brak remarketingu i lookalike |
-| **Brak źródła finansowania** | `funding_source` puste we wszystkich wersjach API | żadna kampania nie ruszy |
+| **Katalog bez zestawów produktów** | `/catalog/product_sets` → `[]` | dynamiczne reklamy niemożliwe; do utworzenia po naszej stronie (mamy `MANAGE`) |
+| **Brak audiencji** | `/act_*/customaudiences` → `[]` | brak remarketingu i lookalike; do zbudowania z piksela |
+| **Brak źródła finansowania** | `funding_source` puste | żadna kampania nie ruszy nawet po weryfikacji |
+| **Strona niewidoczna jako zasób reklamowy** | `/act_*/promote_pages` → `[]` | do sprawdzenia po weryfikacji — może być skutkiem, nie przyczyną |
 
-⚠️ Komunikaty błędów zestawów reklam z 25.08 **przepadły** — skrypt wypisał je na ekran,
-a zapisał tylko `null`. Do ustalenia ponownym biegiem `tmp/social/adset_test.py`.
+### Co przeszło w tej próbie
+
+Utworzenie kampanii — **trzykrotnie potwierdzone**. Wgranie wideo Leopard 5
+(`1389329476599667`, HEVC 10-bit HDR, 42 s — Meta przyjęła bez konwersji, prywatność `SELF`).
+Pobranie miniatury wygenerowanej przez Meta. Wszystkie kampanie testowe skasowane,
+konto zostało puste.
 
 ### Niesprawdzone
 
@@ -251,10 +286,11 @@ gdy dojdzie `instagram_manage_contents`.
 | 1 | Token z pełnym kompletem uprawnień (lista w §2) | Ruslan / Andrzej | 5 min |
 | 2 | Usunięcie sześciu Reelsów z 27.08 | Andrzej | 3 min |
 | 3 | Link `primaauto.com.pl` w polu „Witryna" profilu IG + literówka „z Chin **ta** Korei" | Andrzej | 2 min |
-| 4 | Potwierdzenie karty na koncie reklamowym (API jej nie widzi) | Ruslan | wzrokiem |
-| 5 | Akceptacja powiązania kanału YouTube z Google Ads | właściciel kanału | 2 min |
-| 6 | Link do strony w bio TikToka | Andrzej | 2 min |
-| 7 | Przeniesienie kanału YT na konto marki + `js@auranet.com.pl` jako menedżer | właściciel | 15 min |
+| 4 | **Weryfikacja beneficjenta i płatnika reklam (DSA)** — bez tego żadna reklama na Meta nie powstanie; Menedżer Reklam, wymaga dokumentów firmy | Ruslan | 15 min + oczekiwanie |
+| 5 | Potwierdzenie karty na koncie reklamowym (API jej nie widzi) | Ruslan | wzrokiem |
+| 6 | Akceptacja powiązania kanału YouTube z Google Ads | właściciel kanału | 2 min |
+| 7 | Link do strony w bio TikToka | Andrzej | 2 min |
+| 8 | Przeniesienie kanału YT na konto marki + `js@auranet.com.pl` jako menedżer | właściciel | 15 min |
 
 ---
 

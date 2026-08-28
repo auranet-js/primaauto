@@ -48,12 +48,20 @@ def pobierz(file_id, cel, tok):
 
 
 def filmy_sesji(tok, kadr=None):
-    """Zwraca [{model, nazwa, id, kadr, w, h, rozmiar}] ze wszystkich folderów modeli."""
+    """Zwraca [{model, wariant, nazwa, id, kadr, w, h, rozmiar}] ze wszystkich folderów modeli.
+
+    Schodzi do podfolderów — część sesji ma układ <Model>/<Kolor>/ (np. Leopard-5/Czarny).
+    Kadr rozpoznajemy z metadanych wideo, nie z nazwy pliku: nazwy są niekonsekwentne.
+    """
     wynik = []
-    for f in lista(FOLDER_SESJE, tok):
-        if 'folder' not in f['mimeType']:
-            continue
-        for p in lista(f['id'], tok):
+
+    def zejdz(folder_id, model, wariant, glebokosc=0):
+        if glebokosc > 3:
+            return
+        for p in lista(folder_id, tok):
+            if 'folder' in p['mimeType']:
+                zejdz(p['id'], model, p['name'], glebokosc + 1)
+                continue
             if not p['mimeType'].startswith('video'):
                 continue
             m = p.get('videoMediaMetadata') or {}
@@ -61,6 +69,10 @@ def filmy_sesji(tok, kadr=None):
             k = '9:16' if (w and h and h > w) else ('16:9' if w else '?')
             if kadr and k != kadr:
                 continue
-            wynik.append({'model': f['name'], 'nazwa': p['name'], 'id': p['id'],
+            wynik.append({'model': model, 'wariant': wariant, 'nazwa': p['name'], 'id': p['id'],
                           'kadr': k, 'w': w, 'h': h, 'rozmiar': int(p.get('size', 0))})
+
+    for f in lista(FOLDER_SESJE, tok):
+        if 'folder' in f['mimeType']:
+            zejdz(f['id'], f['name'], None)
     return wynik
