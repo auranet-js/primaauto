@@ -425,7 +425,7 @@ Zebrane modułem po module (`[VID]`, `[POST]`, `[RMKT]`, grupy odbiorców, CAPI,
 | | Co | Kto | Czas | Co odblokowuje |
 |---|---|---|---|---|
 | 1 | **Weryfikacja beneficjenta i płatnika reklam (DSA)** | Ruslan | 15 min + oczekiwanie | wszystkie trzy kampanie |
-| 2 | **Domena `primaauto.com.pl` w portfolio** — dodać i przekazać kod | Ruslan | 5 min | przypisanie konwersji, priorytet zdarzeń |
+| 2 | ~~**Domena `primaauto.com.pl` w portfolio**~~ — **ZROBIONE 28.08**: Ruslan dodał domenę i przekazał kod, my wpięliśmy w `wp_head`, Ruslan kliknął Zweryfikuj (status tylko z UI — API nie oddaje `owned_domains`) | Ruslan + my | — | przypisanie konwersji, priorytet zdarzeń |
 | 3 | **Uprawnienia do statystyk Strony** — regeneracja tokenu **albo** sekret appki | Ruslan | 3 min | rotacja `[POST]` na danych, nie na oko |
 | 4 | Regulamin grup odbiorców z listy klientów | Ruslan | 1 min | grupy podobnych odbiorców z bazy CRM |
 | 5 | Regulamin pozyskiwania kontaktów na Stronie | Ruslan / Andrzej | 1 min | formularze w reklamie |
