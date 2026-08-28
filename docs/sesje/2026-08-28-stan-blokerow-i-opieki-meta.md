@@ -58,17 +58,51 @@ Czyli brak wyników organicznych jest realny, nie kosmetyczny.
 ## Czego nie mamy
 
 - **Wyników organicznych** (R7) — rotacja `[POST]` idzie na regule z bazy, nie na zasięgu.
-- **Sygnału „na placu" w feedzie.** Zmierzone na CSV: **wszystkie 3 113 wierszy** mają
-  `address.city = Rzeszów` i `availability = available` (`state_of_vehicle`: 3 069 USED / 44 NEW).
-  W bazie tymczasem **18 × `on_lot`, 27 × `in_transit`, 1 × `reserved`**. Osiemnaście aut
-  stojących w Polsce jest w katalogu Mety nieodróżnialnych od trzech tysięcy ofert z Chin —
-  a to najmocniejszy argument sprzedażowy, jaki mamy.
-  Nasza robota w `scripts/build-meta-vehicle-feed.php`, **nie prośba do Ruslana**.
+- ~~Sygnału „na placu" w feedzie~~ — **ZROBIONE 28.08 po południu, patrz niżej.**
 - **Czystej biblioteki reklam.** Potwierdzone do skasowania: wideo `4040666229569687`
   („[TEST] BYD Shark 6…"), `2853400968357319` („TEST Auranet — do skasowania"),
   obrazy `2410ca18ffde1dc6` (`test-zdjecie.jpg`), `1828a665ec14cbf1` (`m.jpg`).
   **Nierozstrzygnięte:** dwa obrazy `untitled` z 26 i 28.08 (`e0672a35900e392f`,
   `335a56499c433314`) — nie wiadomo, czy śmieć testowy, czy materiał kreacji Leoparda.
+
+---
+
+## Zrobione 28.08 po południu — rozróżnienie aut w katalogu
+
+Do `build-meta-vehicle-feed.php` doszła kolumna **`custom_label_0`** z trzema wartościami:
+`na-placu` / `w-drodze` / `sprowadzimy`. Źródło: `_asiaauto_reservation_status`, czytany
+z bazy przy KAŻDYM biegu crona (06:20, dziesięć minut przed pobraniem przez Metę) — auta
+wchodzą i wychodzą, więc żadnej listy ID. `stm_car_location` świadomie pominięte: nie
+odświeża się po przyjeździe auta do PL.
+
+Na tej etykiecie stoją dwa **zestawy produktów** w katalogu:
+
+| Zestaw | ID | Pozycji |
+|---|---|---|
+| Na placu w Polsce | `1410119631315688` | 18 |
+| W drodze do Polski | `1289794959844424` | 26 → 27 |
+
+Filtr obu: `availability = available` **i** `custom_label_0 = <etykieta>` — ten sam kształt
+co zestawy istniejące wcześniej. Upload feedu zamknięty czysto: 3 150 pozycji,
+`error_count 0`, `warning_count 0`. Rozkład w katalogu: 18 / 27 / 3 105, zgodny z bazą.
+Commity: `5de9f77` (feed), `30a75b7` (zestawy + guard).
+
+**Dwie pułapki zmierzone przy okazji:**
+- **`/{katalog}/product_sets` też ignoruje `validate_only`** — walidacja utworzyła oba
+  zestawy naprawdę (`{"id": …}` zamiast `{"success": true}`). Dopisany do
+  `GLUCHE_NA_WALIDACJE` w `meta_api.py`. Wzorzec: katalog i audiencje walidacji nie
+  respektują, struktura kampanii tak.
+- **Filtr `custom_label_0` laguje po uploadzie** — liczy mniej, niż katalog ma (3 137, potem
+  3 141 z 3 150), podczas gdy dane są już poprawne. Do pomiaru przechodź `/vehicles`
+  z paginacją i licz lokalnie; `product_count` zestawu sprawdź ponownie po kwadransie.
+
+**Czego to NIE daje:** zestaw sam niczego nie wyświetla — to cel do wpięcia w kampanię,
+a kampanie stoją na R5. Gdy DSA padnie, „Na placu w Polsce" jest gotowe jako osobny przekaz.
+
+**Świadomie NIE zrobione:** oznaczanie aut sprzedanych. W katalogu **11 sztuk ma nabywcę
+(`reservation_type = customer`), a widnieje jako `AVAILABLE`**. Janek uciął temat („nie
+prosiłem o zarezerwowane") — etykieta niesie wyłącznie lokalizację. Decyzja do podjęcia,
+gdy wróci temat.
 
 ---
 
