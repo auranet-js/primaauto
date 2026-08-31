@@ -90,6 +90,10 @@ def collect():
     for dims, m in ga4_rows(d)[2]:
         sess[dims[0]] = int(float(m[0]))
 
+    karty = [] if "--bez-straznika" in sys.argv else ads_query(
+        """SELECT asset.id, asset.name, asset.final_urls FROM asset
+           WHERE asset.type = 'DEMAND_GEN_CAROUSEL_CARD'""", api, hdr)
+
     reklamy = [] if "--bez-straznika" in sys.argv else ads_query(
         """SELECT campaign.name, campaign.status, ad_group.name, ad_group.status,
             ad_group_ad.ad.id, ad_group_ad.status, ad_group_ad.ad.final_urls,
@@ -98,7 +102,7 @@ def collect():
             AND campaign.status != 'REMOVED'""", api, hdr)
 
     return {"api": api, "campaigns": camps, "metrics": met, "ga4_events": ga4,
-            "ga4_sessions": sess, "reklamy": reklamy}
+            "ga4_sessions": sess, "reklamy": reklamy, "karty": karty}
 
 
 def kod(url):
@@ -140,6 +144,11 @@ def straznik(data):
         for u in r["adGroupAd"]["ad"].get("finalUrls", []):
             urle.setdefault(u, []).append(
                 f'{r["campaign"]["name"][:22]}/{r["adGroupAd"]["ad"]["id"]}')
+    # karty karuzeli mają WŁASNE final_urls, których nie ma na poziomie reklamy —
+    # bez tego strażnik miał ślepą plamkę (znalezione 31.08 przy pierwszym statusie)
+    for k in data.get("karty", []):
+        for u in k["asset"].get("finalUrls", []):
+            urle.setdefault(u, []).append(f'karta/{k["asset"]["id"]}')
     if not urle:
         return
     with ThreadPoolExecutor(max_workers=8) as pool:

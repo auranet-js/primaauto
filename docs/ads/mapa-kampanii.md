@@ -287,8 +287,11 @@ Oba potrafią wyłączyć reklamę tak, że kampania nadal wygląda na `ENABLED`
    1–15.07, po siedmiu tygodniach **22% żyje, 78% przekierowuje na hub modelu, 0,3% oddaje 410**
    (pomiar 31.08 na próbce z GSC). Przekierowanie jest nieszkodliwe — 404/410 to martwa reklama.
 
-Strażnik rozdziela `301` (informacja) od reszty (problem). Pierwszy bieg 31.08: 86 landingów,
-74 × 200, 11 przekierowań, **1 × 410** (`galaxy-yizhen-l380-2025-251809` w zapauzowanej `[SKAG-2]`).
+Strażnik rozdziela `301` (informacja) od reszty (problem). Bieg 31.08: **87 landingów**,
+74 × 200, 12 przekierowań, **1 × 410** (`galaxy-yizhen-l380-2025-251809` w zapauzowanej `[SKAG-2]`).
+
+**Sprawdza dwa źródła URL-i**, bo karty karuzeli mają własne `final_urls`, których nie ma na poziomie
+reklamy — pierwsza wersja strażnika ich nie widziała i była to ślepa plamka (domknięte 31.08).
 
 **Znalezisko z pierwszego biegu — huby też się zmieniają.** Dwa przekierowania to hub → hub:
 `/samochody/geely/galaxy-l7/` → `/samochody/geely/l7/` i `/samochody/li-auto/li-i6/` →
