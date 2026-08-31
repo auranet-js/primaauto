@@ -241,7 +241,8 @@ Skrypt jest read-only. Zmiany na koncie robi się osobnymi skryptami mutującymi
 | 2026-08-31 | usunięte 2 reklamy Xiaomi YU7 z `[SKAG-1]` (816416026504 „Xiaomi YU7 — 320 000 zł", 816416026507 „Xiaomi YU7 od ręki") — mail ws. marki Xiaomi | `scripts/gads-usun-reklamy-xiaomi-2026-08-31.py --apply`, zweryfikowane odczytem: oba `REMOVED` |
 | 2026-08-31 | pauza `[SKAG-2]`, pauza reklam `[VID]`, budżety Brand 10→25, DG 20→45 | `scripts/gads-realokacja-2026-08-31.py --apply`, zweryfikowane odczytem |
 | 2026-08-31 | odbudowa drugiej reklamy `[DSA]` — nowa 822835403980 (w recenzji), usunięta martwa 816552895918 | `scripts/gads-dsa-odbuduj-reklame-2026-08-31.py --apply`, zweryfikowane odczytem |
-| 2026-08-31 | **DO WYKONANIA** — 7 filmów z 27–30.08 → assety + 4 reklamy wideo w `[DG]` (Shark 6, Deepal G318, Leopard 7, Denza Z9 GT) | `scripts/gads-dg-nowe-filmy-2026-08-31.py --apply` — zwalidowane, `--apply` jeszcze nie puszczone |
+| 2026-08-31 | `[DG]` bid_modifier 0 na desktop/tablet/TV (0 konwersji ze 143 kliknięć) | `scripts/gads-dg-wylacz-desktop-2026-08-31.py --apply`, zweryfikowane odczytem |
+| 2026-08-31 | **DO WYKONANIA** — 4 Shorty z 27–30.08 → assety + 4 reklamy wideo w `[DG]` (Shark 6, Deepal G318, Leopard 7, Denza Z9 GT) | `scripts/gads-dg-nowe-filmy-2026-08-31.py --apply` — zwalidowane, `--apply` jeszcze nie puszczone |
 
 ## 7. Etykiety polityki — nie przepisuj reklam pod `APPROVED_LIMITED` (ustalone 2026-08-31)
 
@@ -291,3 +292,64 @@ i `[Topic]` (811967380201). API nie ma ścieżki odwoławczej dla reklam search.
 `responsive_search_ad`** — mają `expanded_dynamic_search_ad.description` / `description2`. Skrypt
 porównujący tylko RSA wypisze na nich „teksty identyczne" na dwóch pustych zbiorach (pomyłka
 zaliczona 31.08).
+
+## 8. [DG] Demand Gen — analiza 2026-08-31
+
+**Reklamy (60 dni):**
+
+| reklama | wyświetlenia | kliknięcia | koszt | konwersje | CTR | CPA |
+|---|---|---|---|---|---|---|
+| karuzela „auta na placu Rzeszów" | 19 114 | 920 | 132 zł | 8,0 | **4,81%** | **17 zł** |
+| wideo Exeed VX (Omoda 11) | 29 618 | 901 | 298 zł | 11,0 | 3,04% | 27 zł |
+| wideo Leopard 5 czarny | 39 053 | 1 171 | 322 zł | 9,0 | 3,00% | 36 zł |
+
+**Karuzela jest najlepsza i najbardziej zagłodzona** — najniższy CPA i najwyższy CTR przy 18%
+wydatku. Do rozważenia druga karuzela; blokada: obrazy `onlot <model> <oferta>` istnieją tylko dla
+starych aut (JetourT2, Leopard5, Leopard7b 317106, MazdaEZ6, Sealion8, XiaomiYU7) — dla Shark 6,
+G318 i Z9 GT trzeba by je dorobić.
+
+**Format wideo — pion vs poziom (asset-level, 60 dni):**
+
+| film | format | kliknięcia | konwersje | CVR |
+|---|---|---|---|---|
+| Exeed VX „189 tys." | Short | 530 | 11 | 2,08% |
+| Leopard 5 „233 tys." | Short | 235 | 4 | 1,70% |
+| Leopard 5 „233 000 zł" | poziomy | 936 | 5 | 0,53% |
+| Exeed VX „189 000 zł" | poziomy | 371 | 0 | 0% |
+
+Zbiorczo **pion 1,96% vs poziom 0,38%** (765 vs 1 307 kliknięć) — różnica 5×, istotna (z≈3,55,
+p≈0,0004). **Ale poziome konwertują** (Leopard 5 dowiózł 5), a pomiar jest zanieczyszczony: to Google
+decyduje, komu poda który asset, więc mierzymy format **razem z miejscem wyświetlenia**, nie jakość
+filmu. Decyzja 31.08: nowe reklamy czysto pionem, dwie istniejące mieszane **bez zmian** — zamiast
+resetować uczenie się działających reklam, robimy porównanie wewnątrz jednej kampanii i wracamy
+do tematu przy większej próbce. Filmy poziome zostają na kanale jako organika (tam działają — patrz 2a).
+
+**Urządzenia (1–30.08) — ZROBIONE 31.08:**
+
+| urządzenie | wyświetlenia | kliknięcia | koszt | konwersje |
+|---|---|---|---|---|
+| MOBILE | 63 928 | 2 310 | 557 zł | **26** |
+| DESKTOP | 3 185 | 74 | 15 zł | 0 |
+| TABLET | 2 786 | 68 | 16 zł | 0 |
+| CONNECTED_TV | 542 | 1 | 3 zł | 0 |
+
+`bid_modifier = 0` na desktop, tablet i TV (`scripts/gads-dg-wylacz-desktop-2026-08-31.py --apply`,
+zweryfikowane odczytem). Kandydat zgłoszony już 25.07 i wtedy niewykonany.
+
+**Wiek — obserwacja, NIE podstawa do zawężania:** 65+ dowozi **18 z 26 konwersji** przy 309 z 590 zł
+(CPA 17 zł wobec 35 zł w reszcie). Nie działamy na tym, bo demografia u wylogowanych jest modelowana
+przez Google, a 25.07 mierzyliśmy 72% ruchu jako `AGE_RANGE_UNDETERMINED` — dziś 0,8%. Coś się
+zmieniło po ich stronie i dane są jeszcze niepewne. Demografia jest ustawiona jako `bidOnly`
+(obserwacja), więc niczego nie blokuje.
+
+**Geo — fałszywy alarm, sprawdzone:** kampania nie ma kryteriów `LOCATION`/`LANGUAGE` w API, ale
+`geographic_view` i `user_location_view` pokazują **100% wyświetleń, kosztu i konwersji w Polsce**
+(kraj 2616). Nie ma wycieku za granicę.
+
+**Placementy:** 5 064 miejsc. 182 zł idzie w `youtube.com` (feed/Shorts, 30 562 wyśw., 800 kliknięć),
+115 zł rozsypuje się po ~5 000 pojedynczych filmów — polityka, treści religijne, obcojęzyczne, viral.
+Wykluczenia z 25.07 (47 kanałów bajkowych) trzymają, ale problem przesunął się gdzie indziej.
+Pojedynczo grosze, więc wykluczanie ręczne nie ma sensu — ewentualnie wykluczenia tematyczne w panelu.
+
+**Do zrobienia, gdy wejdzie film Denza N9:** dorzucić tym samym skryptem, oferta istnieje
+(`/oferta/denza-n9-dm-i-2025-455763/`).

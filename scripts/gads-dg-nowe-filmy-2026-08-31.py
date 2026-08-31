@@ -6,8 +6,17 @@
     python3 scripts/gads-dg-nowe-filmy-2026-08-31.py --apply
 
 Wzorzec skopiowany z działającej reklamy „DG wideo — Leopard 5 czarny" (818199638800):
-5 nagłówków, 1 długi, 4 opisy, logo + CTA jako assety, para wideo poziome + Short.
+5 nagłówków, 1 długi, 4 opisy, logo + CTA jako assety.
 Landingi wzięte z deep-linków w opisach filmów na YouTube i sprawdzone (200, cena zgodna).
+
+TYLKO SHORTY (decyzja 31.08). Pomiar 60 dni na poziomie assetów: pionowe 765 kliknięć
+i 15 konwersji (1,96%), poziome 1 307 kliknięć i 5 konwersji (0,38%) — różnica 5×, istotna
+(p≈0,0004), ale ZANIECZYSZCZONA: to Google wybiera, komu poda który asset, więc mierzymy
+format razem z miejscem wyświetlenia, nie samą jakość filmu. Dlatego nowe reklamy idą czysto
+pionem, a dwie istniejące (mieszane) zostają nietknięte — dostajemy porównanie w jednej
+kampanii zamiast resetu uczenia się działających reklam.
+Filmy poziome zostają na kanale jako organika — tam działają (fala Shortów z 8.08 podniosła
+popyt brandowy 2×, patrz docs/ads/mapa-kampanii.md sekcja 2a).
 
 Uwaga: [DG] to Demand Gen — inaczej niż kampania VIDEO, przyjmuje mutacje przez API.
 """
@@ -23,20 +32,17 @@ CTA = f"customers/{CID}/assets/398997821677"
 
 # (klucz, tytuł assetu, youtube_video_id)
 WIDEO = [
-    ("shark6_poz",  "Prima-Auto — BYD Shark 6 250 000 zł (poziome)", "zB_bIQPCm8c"),
-    ("shark6_sh",   "Prima-Auto — BYD Shark 6 250 tys. (Short)",     "crWB8tGy9zs"),
-    ("g318_poz",    "Prima-Auto — Deepal G318 196 000 zł (poziome)", "M40E56narKg"),
-    ("g318_sh",     "Prima-Auto — Deepal G318 196 tys. (Short)",     "Ku-Sbs9J5As"),
-    ("leo7_poz",    "Prima-Auto — BYD Leopard 7 234 000 zł (poziome)", "B9_Tm_ObRFg"),
-    ("leo7_sh",     "Prima-Auto — BYD Leopard 7 234 tys. (Short)",   "60GjiT8HDIg"),
-    ("z9gt_sh",     "Prima-Auto — Denza Z9 GT 291 tys. (Short)",     "kwHaiADCVps"),
+    ("shark6_sh",   "Prima-Auto — BYD Shark 6 250 tys. (Short)",   "crWB8tGy9zs"),
+    ("g318_sh",     "Prima-Auto — Deepal G318 196 tys. (Short)",   "Ku-Sbs9J5As"),
+    ("leo7_sh",     "Prima-Auto — BYD Leopard 7 234 tys. (Short)", "60GjiT8HDIg"),
+    ("z9gt_sh",     "Prima-Auto — Denza Z9 GT 291 tys. (Short)",   "kwHaiADCVps"),
 ]
 
 REKLAMY = [
     {
         "name": "DG wideo — BYD Shark 6",
         "url": "https://primaauto.com.pl/oferta/byd-shark-6-premium-awd-2026-phev-new/",
-        "videos": ["shark6_poz", "shark6_sh"],
+        "videos": ["shark6_sh"],
         "headlines": ["BYD Shark 6 za 250 000 zł", "Pierwszy pickup PHEV w Polsce",
                       "Dostępny od ręki w Rzeszowie", "Pickup 4x4 z hybrydą plug-in",
                       "Zobacz na żywo w Rzeszowie"],
@@ -49,7 +55,7 @@ REKLAMY = [
     {
         "name": "DG wideo — Deepal G318",
         "url": "https://primaauto.com.pl/oferta/deepal-g318-2026-272010/",
-        "videos": ["g318_poz", "g318_sh"],
+        "videos": ["g318_sh"],
         "headlines": ["Deepal G318 za 196 000 zł", "Terenówka PHEV z napędem 4x4",
                       "Dostępny od ręki w Rzeszowie", "Auto na placu w Rzeszowie",
                       "Zobacz na żywo w Rzeszowie"],
@@ -62,7 +68,7 @@ REKLAMY = [
     {
         "name": "DG wideo — BYD Leopard 7",
         "url": "https://primaauto.com.pl/oferta/byd-leopard-7-tai-7-fcb-phev-2026-317106/",
-        "videos": ["leo7_poz", "leo7_sh"],
+        "videos": ["leo7_sh"],
         "headlines": ["BYD Leopard 7 za 234 000 zł", "Hybrydowy SUV z napędem 4x4",
                       "Dostępny od ręki w Rzeszowie", "Auto na placu w Rzeszowie",
                       "Zobacz na żywo w Rzeszowie"],
@@ -152,7 +158,7 @@ def main():
             for k, n, v in brak:
                 mapa[k] = f"customers/{CID}/assets/PLACEHOLDER"
     else:
-        print(f"[{tryb}] assety wideo: wszystkie 7 już istnieje")
+        print(f"[{tryb}] assety wideo: wszystkie {len(WIDEO)} już istnieją")
 
     # 2) reklamy
     if not apply:
