@@ -53,8 +53,35 @@ Skrypt: `scripts/gads-realokacja-2026-08-31.py` (validate_only domyślnie, `--ap
 |---|---|---|---|
 | [SKAG-2] W drodze | ENABLED | **PAUSED** | 748 zł/30 dni przy **zerze konwersji przez 8 tygodni z rzędu**, mimo reworku z 11.07 |
 | [VID] Placementy | ENABLED | **reklamy PAUSED** | 444 zł/30 dni, **0 kontaktów**, CTR 0,11%, CPC 12,32 zł |
-| [Brand] budżet | 10 zł | **25 zł** | traci **57% wyświetleń przez budżet** przy CPC 0,41 zł i CPA 17 zł — najtańsza skala na koncie |
+| [Brand] budżet | 10 zł | **25 zł** | uzasadnienie było **błędne**, patrz „Nauczka" niżej |
 | [DG] budżet | 20 zł | **45 zł** | CPA spada (tydzień 17–23.08: 14 konwersji za 137 zł = **10 zł**), jedyny nośnik wideo |
+
+### Nauczka 31.08 — `search_budget_lost_impression_share` NIE dowodzi, że kampania jest zdławiona
+
+Podniesienie `[Brand]` z 10 na 25 zł uzasadniłem metryką **„57,3% wyświetleń traconych przez
+budżet"**. Janek to zakwestionował i miał rację. Sprawdzenie rozkładu dziennego:
+
+| kampania | dni z wydatkiem ≥95% budżetu (sierpień) | średnio/dz | budżet |
+|---|---|---|---|
+| `[DG]` | **26 / 30** | 19,71 zł | 20 zł |
+| `[Brand]` | **17 / 30** | 9,91 zł | 10 zł |
+
+`[Brand]` w połowie dni **nie wyczerpywał nawet 10 zł** — ostatni tydzień sierpnia to 11, 5, 6, 8, 3,
+20 i 2 zł. Ograniczeniem nie był budżet, tylko liczba wyszukiwań na markę. Metryka utraconego udziału
+jest **średnią po 30 dniach** i napędzają ją nieliczne dni szczytu (Google pozwala wydać do 2× budżetu
+dziennego — stąd te 20 zł przy limicie 10). Z takiej średniej nie wynika stały zapas na 2,5×.
+
+**Zasada: zanim podniesiesz budżet, policz dni z wydatkiem ≥95% limitu.** Aggregat
+`search_budget_lost_impression_share` jest przesłanką, nie dowodem. `[DG]` ten test przechodzi
+(26/30 dni pod sufitem), `[Brand]` nie przeszedł.
+
+Praktycznie te 25 zł prawdopodobnie się nie wyda — kampania osiądzie na 12–18 zł/dz i złapie szczyty.
+Nic z tym nie robimy, budżet w razie czego uwolnimy na coś innego (decyzja Janka 31.08).
+
+**Drugie przeoczenie w tej samej decyzji:** na „prima auto" jesteśmy w organiku na pozycji **1,1**,
+więc część kliknięć po 0,41 zł dostalibyśmy za darmo — realne CPA marki jest wyższe niż raportowane
+17 zł. Tego pytania w ogóle nie postawiłem, rekomendując podwyżkę. Da się je rozstrzygnąć testem
+wstrzymania (tydzień bez `[Brand]`, porównanie sumy ruchu i kontaktów markowych) — osobny temat.
 
 **[VID] nie da się zapauzować przez API** — kampania VIDEO zwraca `MUTATE_NOT_ALLOWED` na
 `campaigns:mutate` (potwierdzone ponownie 31.08, zgodnie z pomiarem z 25.07). Obejście: zapauzowane
@@ -268,6 +295,17 @@ Rozważane przy budowie drugiej karuzeli. Zostajemy przy ofertach:
   w czystce 14.07).
 
 ## 5. Otwarte decyzje (nie wykonane — czekają na Janka)
+
+0. **TERMIN 2026-09-07 — próg dla `[DG]` po skoku budżetu 20 → 45 zł.** Sprawdź 7-dniowe CPA
+   (`python3 scripts/ads-recheck.py`) i zastosuj:
+   - **CPA > 40 zł** → zejdź na **32 zł/dz** (skok 2,25× był za duży na strategii automatycznej),
+   - **CPA ≤ 30 zł** → zostaje 45 zł,
+   - **30–40 zł** → trzymaj i sprawdź ponownie 14.09.
+
+   Kontekst: podnieśliśmy budżet 2,25× **tego samego dnia**, co wycięcie trzech urządzeń, cztery nowe
+   reklamy, edycję Exeeda (reset uczenia) i drugą karuzelę. Przyjęta praktyka to 20–30% na raz —
+   ten krok był świadomie za duży i dlatego atrybucja będzie nieczytelna. Świadoma decyzja Janka:
+   testujemy mimo to, zamiast cofać (cofnięcie = piąta zmiana i kolejny reset).
 
 1. **[VID] — właściwa pauza w panelu.** Reklamy zapauzowane przez API 31.08, ale sama kampania
    formalnie `ENABLED` (API nie przyjmuje mutacji kampanii VIDEO). Do zamknięcia ręcznie.
