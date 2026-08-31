@@ -13,7 +13,7 @@
 
 | kampania | ID | typ | rola | historia / ustalenia |
 |---|---|---|---|---|
-| **[Brand] Prima-Auto** | 23779860635 | Search | obrona marki, najtańsze leady | od 22.04, oryginalna trójka kampanii |
+| **[Brand] Prima-Auto** | 23779860635 | Search | obrona marki, najtańsze leady | od 22.04, oryginalna trójka kampanii. **31.08: `TARGET_IMPRESSION_SHARE`** (górna pozycja 90%, sufit CPC 1,50 zł) zamiast MANUAL_CPC — udział skakał od 10% do 100%. Dwie reklamy od 31.08 (wcześniej jedna = pojedynczy punkt awarii) |
 | **[Topic] Import z Chin** | 23779860638 | Search | intencje generyczne („import aut z Chin") | od 22.04, oryginalna trójka |
 | **[DSA] Import modele z Chin** | 23896725555 | Search DSA | page-feed, długi ogon modeli | rework 12.07 (`dsa-rework-2026-07-12.md`); T-200 rekomendował PAUZĘ 09.07 przy CPA 204 zł; 16.07 feed przestawiony z hubów na najtańszą ofertę per model (`docs/decyzje/2026-07-16-dsa-feed-na-oferty.md`), kampania została włączona. Feed odświeża cron co 3 dni (`scripts/dsa-offer-feed-refresh.py`, lepki — podmiana tylko gdy sztuka zeszła z publish) |
 | **[RMKT] Dynamic Remarketing — Model-huby** | 23897599362 | Display | powrót niedoszłych, feed model-hubów | recon + optymalizacja 12.07 (`rmkt-optymalizacja-2026-07-12.md`), konwersje ×2 po zmianach; feed odświeżany tygodniowo (`scripts/refresh-rmkt-feed.sh`) |
@@ -55,6 +55,46 @@ Skrypt: `scripts/gads-realokacja-2026-08-31.py` (validate_only domyślnie, `--ap
 | [VID] Placementy | ENABLED | **reklamy PAUSED** | 444 zł/30 dni, **0 kontaktów**, CTR 0,11%, CPC 12,32 zł |
 | [Brand] budżet | 10 zł | **25 zł** | uzasadnienie było **błędne**, patrz „Nauczka" niżej |
 | [DG] budżet | 20 zł | **45 zł** | CPA spada (tydzień 17–23.08: 14 konwersji za 137 zł = **10 zł**), jedyny nośnik wideo |
+
+### `[Brand]` — optymalizacja 31.08 (to, czego zabrakło przy podnoszeniu budżetu)
+
+Janek zakwestionował podwyżkę budżetu i miał rację co do sedna: **budżet nie był właściwą dźwignią.**
+Pomiar dzienny, którego nie zrobiłem przed rekomendacją:
+
+| dzień | koszt | udział | utracone przez budżet |
+|---|---|---|---|
+| 05.08 | 11,08 zł | 87% | 0% |
+| **08.08** (fala brandowa) | 11,60 zł | **14%** | **85%** |
+| 12.08 | 9,82 zł | 10% | **90%** |
+| **16.08** | **6,78 zł** | **100%** | 0% |
+| 20.08 | 4,87 zł | 88% | 0% |
+
+Udział skacze od 10% do 100%, bo kampania stała na **`MANUAL_CPC` z wyłączonym eCPC** — nic nie
+pilnowało udziału, a mały budżet Google rozprowadzał przez dławienie. W dni ciszy budżetu **nie da
+się wydać** (16.08: 6,78 zł przy 100% udziału — nie ma czego kupować), w dni fali sufit wiąże.
+Czyli podniesienie do 25 zł kupuje wyłącznie dni fali, i tak trzeba było to przedstawić.
+
+**Wykonane 31.08** (`scripts/gads-brand-optymalizacja-2026-08-31.py --apply`, zweryfikowane odczytem):
+
+| co | z | na |
+|---|---|---|
+| strategia | `MANUAL_CPC` (eCPC off) | **`TARGET_IMPRESSION_SHARE`** — górna pozycja, cel 90%, sufit CPC 1,50 zł |
+| reklamy | **1** | **2** (nowa `822849281734`, w recenzji) |
+| wykluczenia | warka, łask, miechów | + **bełchatów** (31 zł, 4 kliknięcia, 0 konwersji) |
+| budżet | 25 zł | bez zmian — zapas na dni fali, nie obietnica wydatku |
+
+**Kampania miała JEDNĄ reklamę** i to `APPROVED_LIMITED`. Gdyby dostała `DISAPPROVED`, brand umiera —
+dokładnie tak zginęła główna reklama `[DSA]` 22.08. Druga reklama to przede wszystkim usunięcie
+pojedynczego punktu awarii; jej tekst świadomie nie zawiera „cło / rejestracja / dokumenty / VIN /
+umowa", więc jest też testem tezy z sekcji 7 (skrypt ma twardą kontrolę tych słów przed wysyłką).
+
+**Cele konwersji sprawdzone po zmianie strategii** — zgodnie z regułą z sekcji 3a. Nie wróciły cele
+YouTube: zostały `CONTACT/WEBSITE`, `SUBMIT_LEAD_FORM/WEBSITE`, `PURCHASE/WEBSITE`,
+`UNKNOWN/GOOGLE_HOSTED`. Skrypt sprawdza to sam po `--apply`.
+
+**Do obejrzenia razem z progiem `[DG]` 7.09:** czy udział `[Brand]` przestał skakać (cel 90% górnej
+pozycji) i ile realnie kosztuje jego utrzymanie przy suficie 1,50 zł. Stawki na słowach (6,82 i 6,92 zł
+na „prima-auto") są od teraz nieistotne — decyduje strategia.
 
 ### Nauczka 31.08 — `search_budget_lost_impression_share` NIE dowodzi, że kampania jest zdławiona
 
@@ -338,6 +378,7 @@ Rozważane przy budowie drugiej karuzeli. Zostajemy przy ofertach:
 | 2026-08-31 | pauza `[SKAG-2]`, pauza reklam `[VID]`, budżety Brand 10→25, DG 20→45 | `scripts/gads-realokacja-2026-08-31.py --apply`, zweryfikowane odczytem |
 | 2026-08-31 | odbudowa drugiej reklamy `[DSA]` — nowa 822835403980 (w recenzji), usunięta martwa 816552895918 | `scripts/gads-dsa-odbuduj-reklame-2026-08-31.py --apply`, zweryfikowane odczytem |
 | 2026-08-31 | `[DG]` bid_modifier 0 na desktop/tablet/TV (0 konwersji ze 143 kliknięć) | `scripts/gads-dg-wylacz-desktop-2026-08-31.py --apply`, zweryfikowane odczytem |
+| 2026-08-31 | `[Brand]` → TARGET_IMPRESSION_SHARE (górna 90%, sufit 1,50 zł) + druga reklama 822849281734 + wykluczenie „bełchatów" | `scripts/gads-brand-optymalizacja-2026-08-31.py --apply`, zweryfikowane odczytem; cele konwersji sprawdzone — YouTube nie wrócił |
 | 2026-08-31 | strażnik landingów + `DISAPPROVED` wbudowany w `ads-recheck.py` (sekcja 4) | pierwszy bieg: 86 landingów, 1 × 410, 1 reklama DISAPPROVED |
 | 2026-08-31 | `[DG]` +4 reklamy wideo (Shorty: Shark 6, Deepal G318, Leopard 7, Denza Z9 GT) | `scripts/gads-dg-nowe-filmy-2026-08-31.py --apply`, zweryfikowane odczytem |
 | 2026-08-31 | `[DG]` „wideo — Exeed VX" → sam Short (poziomy miał 371 kliknięć i 0 konwersji) | `scripts/gads-dg-exeed-tylko-short-2026-08-31.py --apply`, zweryfikowane: 1 wideo |
