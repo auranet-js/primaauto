@@ -301,7 +301,9 @@ Rozważane przy budowie drugiej karuzeli. Zostajemy przy ofertach:
 | 2026-08-31 | odbudowa drugiej reklamy `[DSA]` — nowa 822835403980 (w recenzji), usunięta martwa 816552895918 | `scripts/gads-dsa-odbuduj-reklame-2026-08-31.py --apply`, zweryfikowane odczytem |
 | 2026-08-31 | `[DG]` bid_modifier 0 na desktop/tablet/TV (0 konwersji ze 143 kliknięć) | `scripts/gads-dg-wylacz-desktop-2026-08-31.py --apply`, zweryfikowane odczytem |
 | 2026-08-31 | strażnik landingów + `DISAPPROVED` wbudowany w `ads-recheck.py` (sekcja 4) | pierwszy bieg: 86 landingów, 1 × 410, 1 reklama DISAPPROVED |
-| 2026-08-31 | **DO WYKONANIA** — 4 Shorty z 27–30.08 → assety + 4 reklamy wideo w `[DG]` (Shark 6, Deepal G318, Leopard 7, Denza Z9 GT) | `scripts/gads-dg-nowe-filmy-2026-08-31.py --apply` — zwalidowane, `--apply` jeszcze nie puszczone |
+| 2026-08-31 | `[DG]` +4 reklamy wideo (Shorty: Shark 6, Deepal G318, Leopard 7, Denza Z9 GT) | `scripts/gads-dg-nowe-filmy-2026-08-31.py --apply`, zweryfikowane odczytem |
+| 2026-08-31 | `[DG]` „wideo — Exeed VX" → sam Short (poziomy miał 371 kliknięć i 0 konwersji) | `scripts/gads-dg-exeed-tylko-short-2026-08-31.py --apply`, zweryfikowane: 1 wideo |
+| 2026-08-31 | `[DG]` +2. karuzela „nowa dostawa Rzeszów (sesja 25.08)" — 8 obrazów, 4 karty, reklama 822804557271 | `scripts/gads-dg-karuzela2-2026-08-31.py --apply`, zweryfikowane odczytem |
 
 ## 7. Etykiety polityki — nie przepisuj reklam pod `APPROVED_LIMITED` (ustalone 2026-08-31)
 
@@ -363,9 +365,15 @@ zaliczona 31.08).
 | wideo Leopard 5 czarny | 39 053 | 1 171 | 322 zł | 9,0 | 3,00% | 36 zł |
 
 **Karuzela jest najlepsza i najbardziej zagłodzona** — najniższy CPA i najwyższy CTR przy 18%
-wydatku. Do rozważenia druga karuzela; blokada: obrazy `onlot <model> <oferta>` istnieją tylko dla
-starych aut (JetourT2, Leopard5, Leopard7b 317106, MazdaEZ6, Sealion8, XiaomiYU7) — dla Shark 6,
-G318 i Z9 GT trzeba by je dorobić.
+wydatku. **Druga karuzela wdrożona 31.08** („nowa dostawa Rzeszów", Shark 6 / Deepal G318 /
+Leopard 7 / Denza Z9 GT). Zdjęcia z sesji **25.08 na Dysku** (`Prima Auto/sesje/<auto>/`) — tam,
+gdzie leżą też źródłowe MP4 filmów z YouTube'a. Kadry: 1.91:1 z profili bocznych (całe auto),
+1:1 z ujęć 3/4 (wypełnia kwadrat); wystawione w
+`~/domains/auratest.pl/public_html/fe4f58fec53ctmp/primaauto-onlot-sesja-2026-08-31/`.
+**Nie używaj zdjęć ofertowych ze strony, gdy istnieje sesja** — sesja jest wyraźnie lepsza.
+
+**Skład [DG] po 31.08: 8 reklam** — 2 karuzele, 4 wideo czysto pionowe, Exeed (sam Short),
+Leopard 5 (poziomy + Short, świadomie nietknięty).
 
 **Format wideo — pion vs poziom (asset-level, 60 dni):**
 
@@ -411,4 +419,13 @@ Wykluczenia z 25.07 (47 kanałów bajkowych) trzymają, ale problem przesunął 
 Pojedynczo grosze, więc wykluczanie ręczne nie ma sensu — ewentualnie wykluczenia tematyczne w panelu.
 
 **Do zrobienia, gdy wejdzie film Denza N9:** dorzucić tym samym skryptem, oferta istnieje
-(`/oferta/denza-n9-dm-i-2025-455763/`).
+(`/oferta/denza-n9-dm-i-2025-455763/`). Sesja N9 jest już na Dysku (`Prima Auto/sesje/Denza-N9/`),
+tak samo Lynk & Co 900.
+
+**Gotcha karuzeli (kosztowała bieg 31.08):** pola karty to `marketingImageAsset` i
+`squareMarketingImageAsset` — **nie** `marketingImage`/`squareMarketingImage` (400 „Cannot find
+field"), i nie da się ich odczytać przez GAQL o tej pierwszej nazwie. Schemat sprawdzisz
+zapytaniem do `googleAdsFields:search` **bez klauzuli FROM**:
+`SELECT name, data_type WHERE name LIKE 'asset.demand_gen_carousel_card_asset%'`.
+Skrypt karuzeli jest odtąd idempotentny na obrazach (dociąga po nazwie), bo pierwszy bieg
+utworzył 8 assetów i wywalił się dopiero na kartach.

@@ -14,6 +14,13 @@ filmy na YouTube. Kadry: profil boczny w 1.91:1 (całe auto), ujęcie 3/4 w 1:1 
 Pliki: ~/domains/auratest.pl/public_html/fe4f58fec53ctmp/primaauto-onlot-sesja-2026-08-31/
 
 Trzy etapy, każdy przerywa przy błędzie: obrazy → karty → reklama.
+Skrypt jest idempotentny na etapie obrazów: assety o tej samej nazwie są dociągane, nie tworzone
+ponownie (pierwszy bieg 31.08 utworzył obrazy i wywalił się na kartach — patrz gotcha niżej).
+
+GOTCHA: pola karty nazywają się `marketingImageAsset` i `squareMarketingImageAsset`, NIE
+`marketingImage`/`squareMarketingImage` (te drugie dają 400 „Cannot find field"). Schemat sprawdzisz
+zapytaniem do `googleAdsFields:search` — bez klauzuli FROM:
+    SELECT name, data_type WHERE name LIKE 'asset.demand_gen_carousel_card_asset%'
 """
 import base64, json, sys, urllib.request, urllib.error
 from pathlib import Path
@@ -74,34 +81,50 @@ def main():
            "developer-token": cfg["developer_token"],
            "login-customer-id": CID, "Content-Type": "application/json"}
 
-    # 1) obrazy
+    # 1) obrazy — dociągamy istniejące po nazwie, tworzymy tylko brakujące
+    istniejace = {}
+    req = urllib.request.Request(
+        f"https://googleads.googleapis.com/{api}/customers/{CID}/googleAds:search",
+        data=json.dumps({"query": "SELECT asset.resource_name, asset.name FROM asset "
+                                  "WHERE asset.type = 'IMAGE'"}).encode(), headers=hdr)
+    for r in json.load(urllib.request.urlopen(req)).get("results", []):
+        istniejace[r["asset"].get("name", "")] = r["asset"]["resourceName"]
+
     ops, klucze = [], []
+    obrazy = {}
     for a in AUTA:
         for suf, ratio in (("landscape", "1.91:1"), ("square", "1:1")):
+            nazwa = f'onlot {a["plik"]} sesja0825 [{ratio}]'[:120]
+            if nazwa in istniejace:
+                obrazy[(a["plik"], suf)] = istniejace[nazwa]
+                continue
             f = KADRY / f'{a["plik"]}-{suf}.jpg'
-            ops.append({"create": {"name": f'onlot {a["plik"]} sesja0825 [{ratio}]'[:120],
-                                   "type": "IMAGE",
+            ops.append({"create": {"name": nazwa, "type": "IMAGE",
                                    "imageAsset": {"data": base64.b64encode(f.read_bytes()).decode()}}})
             klucze.append((a["plik"], suf))
-    ok, out = call(hdr, api, "assets", {"operations": ops, "validateOnly": not apply})
-    print(f"[{tryb}] obrazy ({len(ops)}): {'OK' if ok else 'BŁĄD'}")
-    if not ok:
-        print(out); return 1
+    if ops:
+        ok, out = call(hdr, api, "assets", {"operations": ops, "validateOnly": not apply})
+        print(f"[{tryb}] obrazy: {len(obrazy)} już było, {len(ops)} nowych — {'OK' if ok else 'BŁĄD'}")
+        if not ok:
+            print(out); return 1
+        if apply:
+            obrazy.update({k: r["resourceName"] for k, r in zip(klucze, out["results"])})
+    else:
+        print(f"[{tryb}] obrazy: wszystkie 8 już istnieje, nic nie tworzę")
     if not apply:
         print(f"[{tryb}] karty i reklama — walidacja możliwa dopiero po utworzeniu obrazów")
         for a in AUTA:
             print(f'       karta: {a["naglowek"]:36} → {a["url"]}')
         print(f'       reklama: „{NAZWA_REKLAMY}" / „{NAGLOWEK}" / CTA „{CTA}" → {URL_GLOWNY}')
         return 0
-    obrazy = {k: r["resourceName"] for k, r in zip(klucze, out["results"])}
 
     # 2) karty
     ops = [{"create": {
         "name": f'karta {a["plik"]} sesja0825'[:120],
         "finalUrls": [a["url"]],
         "demandGenCarouselCardAsset": {
-            "marketingImage": obrazy[(a["plik"], "landscape")],
-            "squareMarketingImage": obrazy[(a["plik"], "square")],
+            "marketingImageAsset": obrazy[(a["plik"], "landscape")],
+            "squareMarketingImageAsset": obrazy[(a["plik"], "square")],
             "headline": a["naglowek"]},
     }} for a in AUTA]
     ok, out = call(hdr, api, "assets", {"operations": ops})
