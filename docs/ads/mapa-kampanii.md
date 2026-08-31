@@ -217,8 +217,8 @@ Skrypt jest read-only. Zmiany na koncie robi się osobnymi skryptami mutującymi
    mają `APPROVED_LIMITED` z tematem **`GOVERNMENT_DOCUMENTS_AND_OFFICIAL_SERVICES`** — Google czyta
    nasze „homologacja / rejestracja / cło" jako usługi urzędowe. Do rozstrzygnięcia: przepisać teksty
    czy odwołać się od decyzji. Dotyczy też części reklam w `[SKAG-2]` (zapauzowana).
-3. **[DSA] ma jedną reklamę `DISAPPROVED`** (ad 816552895918, ten sam temat) — druga (817108048038)
-   serwuje, więc kampania działa, ale na połowie mocy.
+3. ~~[DSA] ma jedną reklamę `DISAPPROVED`~~ — **zrobione 31.08**: martwa usunięta, dodana nowa
+   (822835403980, w recenzji). Sprawdzić za kilka dni, czy przeszła — to zarazem test tezy z sekcji 7.
 4. **Pozostałe ślady marki Xiaomi** (po usunięciu dwóch reklam 31.08, patrz sekcja 6):
    - aktywna RSA `[Topic]` (ad 811967380201) ma nagłówek **„Leopard, Geely, iCAR, Xiaomi"**,
    - `[DSA]` łapie przez page-feed zapytanie **„xiaomi su7 ultra"** (12,67 zł/30 dni),
@@ -240,4 +240,54 @@ Skrypt jest read-only. Zmiany na koncie robi się osobnymi skryptami mutującymi
 | 2026-08-19 | zawężenie celów konwersji na 9 kampaniach (18 operacji) | `scripts/ads-zawez-cele.py --apply`, backup `~/backups/primaauto/2026-08-19/` |
 | 2026-08-31 | usunięte 2 reklamy Xiaomi YU7 z `[SKAG-1]` (816416026504 „Xiaomi YU7 — 320 000 zł", 816416026507 „Xiaomi YU7 od ręki") — mail ws. marki Xiaomi | `scripts/gads-usun-reklamy-xiaomi-2026-08-31.py --apply`, zweryfikowane odczytem: oba `REMOVED` |
 | 2026-08-31 | pauza `[SKAG-2]`, pauza reklam `[VID]`, budżety Brand 10→25, DG 20→45 | `scripts/gads-realokacja-2026-08-31.py --apply`, zweryfikowane odczytem |
+| 2026-08-31 | odbudowa drugiej reklamy `[DSA]` — nowa 822835403980 (w recenzji), usunięta martwa 816552895918 | `scripts/gads-dsa-odbuduj-reklame-2026-08-31.py --apply`, zweryfikowane odczytem |
 | 2026-08-31 | **DO WYKONANIA** — 7 filmów z 27–30.08 → assety + 4 reklamy wideo w `[DG]` (Shark 6, Deepal G318, Leopard 7, Denza Z9 GT) | `scripts/gads-dg-nowe-filmy-2026-08-31.py --apply` — zwalidowane, `--apply` jeszcze nie puszczone |
+
+## 7. Etykiety polityki — nie przepisuj reklam pod `APPROVED_LIMITED` (ustalone 2026-08-31)
+
+**Problem, który to zamyka:** Janek od miesięcy poprawiał reklamy zgłaszane przez Google, po czym
+podpadał inny fragment; zamieniał go z powrotem na poprzedni i ten przechodził. Pętla.
+
+**Ustalenie: etykieta `GOVERNMENT_DOCUMENTS_AND_OFFICIAL_SERVICES` przypina się do egzemplarza
+reklamy, nie do frazy.** Dowody:
+
+1. **Lustrzane pary w `[SKAG-2]`** — w grupie „Jetour G700" ograniczona jest reklama z nagłówkiem
+   „już w drodze", a czysta ta z „349 000 zł" + „W drodze do Polski". W grupie „Leopard 3"
+   **dokładnie odwrotnie**. Te same frazy, przeciwne werdykty, ta sama kampania i moment.
+2. **Historia `[Topic]`** — wersja `806715493106` miała „Umowa, Transport, Cło" i „homologacja PL"
+   w opisie i była `APPROVED`. Następna wersja (`811967380201`) dostała `APPROVED_LIMITED`
+   **z tymi samymi frazami** nietkniętymi.
+3. **Edycja z 15.08 20:08** (z historii konta): zmienione „Import bezpośredni" → „Import bezpośredni
+   z Chin" i „Bezpieczny Import z Chin" → „Bezpośredni Import z Chin". Żadna nie dotyczy dokumentów;
+   „Umowa, Transport, Cło" i „Legalna Rejestracja w PL" zostały. O 20:10 reklama zapauzowana.
+
+**Ale `APPROVED_LIMITED` i `DISAPPROVED` to dwie różne sprawy — zmierzone dziennie:**
+
+| reklama | 11–21.08 | 22–30.08 |
+|---|---|---|
+| `[DSA]` 816552895918 `DISAPPROVED` | 126–276 wyśw./dz. | **0 codziennie** |
+| `[DSA]` 817108048038 `APPROVED` | 20–95 | 99–392 (przejęła ruch) |
+| `[Topic]` 811967380201 `APPROVED_LIMITED` | 18–74 | 26–56 — serwuje |
+| `[Brand]` 806602181652 `APPROVED_LIMITED` | 5–65 | 8–52 — serwuje |
+
+- **`DISAPPROVED` zabija reklamę.** DSA straciła 22.08 swoją główną reklamę (16 247 wyśw./60 dni
+  i CTR 7,6% wobec 6,3% drugiej).
+- **`APPROVED_LIMITED` na tym koncie nie zatrzymuje wyświetleń.** Reklamy z tą etykietą są w swoich
+  grupach tymi, które zbierają **najwięcej** wyświetleń (`[Topic]` 2 202 wobec zera na wersjach
+  „czystych", `[Brand]` 1 684, Jetour 306 wobec 79, Zeekr 8X 187 wobec 39).
+- Zastrzeżenie: kontrfaktu nie zmierzymy, więc nie twierdzimy, że ograniczenie nie kosztuje nic.
+  Ale `[Topic]` ma 98% udziału w wyświetleniach i 0% traconych przez budżet — nie ma tam dużo
+  miejsca na stratę.
+
+**Zasada:** reagujemy **tylko** na `DISAPPROVED`. Na `APPROVED_LIMITED` nie ruszamy tekstów — każda
+edycja RSA resetuje uczenie się reklamy, a etykieta i tak nie idzie za tym, co zmieniamy.
+Jedno odstępstwo: słowo **„homologacja"** stało po stronie odrzuconej w parze DSA — w nowych
+tekstach je omijamy, bo to nic nie kosztuje.
+
+**Nie zrobione — akcja w panelu:** odwołanie od `APPROVED_LIMITED` na `[Brand]` (806602181652)
+i `[Topic]` (811967380201). API nie ma ścieżki odwoławczej dla reklam search.
+
+**Gotcha narzędziowa:** porównując reklamy w grupie pamiętaj, że **reklamy DSA nie mają pól
+`responsive_search_ad`** — mają `expanded_dynamic_search_ad.description` / `description2`. Skrypt
+porównujący tylko RSA wypisze na nich „teksty identyczne" na dwóch pustych zbiorach (pomyłka
+zaliczona 31.08).
