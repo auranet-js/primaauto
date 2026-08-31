@@ -5,9 +5,17 @@
 Powstało 2026-08-19, żeby nie przekopywać całego konta przy każdym rechecku: mapa ról kampanii
 siedzi w docs/ads/mapa-kampanii.md, a ten skrypt dowozi do niej świeże liczby.
 
-    python3 scripts/ads-recheck.py            # tabele na stdout
+    python3 scripts/ads-recheck.py            # tabele + strażnik na stdout
     python3 scripts/ads-recheck.py --md       # w składni Markdown, do wklejenia w mapę
     python3 scripts/ads-recheck.py --json plik.json   # surowy dump
+    python3 scripts/ads-recheck.py --bez-straznika    # pomija sprawdzanie landingów (offline)
+
+STRAŻNIK (od 2026-08-31) — dwie rzeczy, które potrafią zabić kampanię po cichu:
+  1. reklama z `DISAPPROVED` przestaje się wyświetlać, a kampania dalej wygląda na ENABLED
+     (tak [DSA] straciła 22.08 swoją główną reklamę i nikt tego nie zauważył przez 9 dni),
+  2. landing reklamy przestaje istnieć — oferty rotują szybko: z 320 ofert, które miały ruch
+     1–15.07, po siedmiu tygodniach żyje 22%, 78% przekierowuje na hub modelu, a 0,3% oddaje 410.
+     Przekierowanie jest nieszkodliwe, 404/410 nie.
 
 Read-only — żadnych mutacji na koncie.
 
@@ -17,7 +25,8 @@ Gotchy:
 - `login-customer-id` = 9506068500 (konto direct, nie pod MCC),
 - konwersje Ads i zdarzenia GA4 NIE SĄ tą samą liczbą — patrz sekcja rozjazdu w mapie.
 """
-import json, sys, urllib.request
+import json, sys, urllib.request, urllib.error
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
@@ -81,7 +90,71 @@ def collect():
     for dims, m in ga4_rows(d)[2]:
         sess[dims[0]] = int(float(m[0]))
 
-    return {"api": api, "campaigns": camps, "metrics": met, "ga4_events": ga4, "ga4_sessions": sess}
+    reklamy = [] if "--bez-straznika" in sys.argv else ads_query(
+        """SELECT campaign.name, campaign.status, ad_group.name, ad_group.status,
+            ad_group_ad.ad.id, ad_group_ad.status, ad_group_ad.ad.final_urls,
+            ad_group_ad.policy_summary.approval_status
+           FROM ad_group_ad WHERE ad_group_ad.status != 'REMOVED'
+            AND campaign.status != 'REMOVED'""", api, hdr)
+
+    return {"api": api, "campaigns": camps, "metrics": met, "ga4_events": ga4,
+            "ga4_sessions": sess, "reklamy": reklamy}
+
+
+def kod(url):
+    """Kod HTTP landingu. Przekierowanie zwracamy jako '301 → cel', nie jako błąd."""
+    try:
+        r = urllib.request.urlopen(urllib.request.Request(
+            url, headers={"User-Agent": "Mozilla/5.0 (ads-recheck landing guard)"}), timeout=25)
+        cel = r.geturl()
+        return (301, cel) if cel.rstrip("/") != url.rstrip("/") else (200, None)
+    except urllib.error.HTTPError as e:
+        return (e.code, None)
+    except Exception as e:                       # DNS, timeout, TLS — też warto zobaczyć
+        return (0, type(e).__name__)
+
+
+def straznik(data):
+    """Dwa ciche zabójcy: reklamy DISAPPROVED i landingi, które przestały istnieć."""
+    reklamy = data.get("reklamy")
+    if reklamy is None:
+        return
+    print("\n" + "=" * 78 + "\nSTRAŻNIK — sprawdź to, zanim ruszysz cokolwiek\n" + "=" * 78)
+
+    odrzucone = [r for r in reklamy
+                 if r["adGroupAd"].get("policySummary", {}).get("approvalStatus") == "DISAPPROVED"]
+    if odrzucone:
+        print(f"\n[!] reklamy DISAPPROVED — NIE wyświetlają się ({len(odrzucone)}):")
+        for r in odrzucone:
+            print(f'    {r["campaign"]["name"][:30]:30} / {r["adGroup"]["name"][:26]:26} '
+                  f'ad={r["adGroupAd"]["ad"]["id"]} ({r["adGroupAd"]["status"]})')
+    else:
+        print("\n[ok] żadna reklama nie jest DISAPPROVED")
+    ograniczone = sum(1 for r in reklamy
+                      if r["adGroupAd"].get("policySummary", {}).get("approvalStatus") == "APPROVED_LIMITED")
+    if ograniczone:
+        print(f"[--] APPROVED_LIMITED: {ograniczone} — NIE przepisuj tekstów, patrz mapa sekcja 7")
+
+    urle = {}
+    for r in reklamy:
+        for u in r["adGroupAd"]["ad"].get("finalUrls", []):
+            urle.setdefault(u, []).append(
+                f'{r["campaign"]["name"][:22]}/{r["adGroupAd"]["ad"]["id"]}')
+    if not urle:
+        return
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        wyniki = dict(zip(urle, pool.map(kod, urle)))
+    zle = {u: w for u, w in wyniki.items() if w[0] not in (200, 301)}
+    przek = {u: w for u, w in wyniki.items() if w[0] == 301}
+    print(f"\nlandingi reklam: {len(urle)} sprawdzonych, "
+          f"{len(urle) - len(zle) - len(przek)} × 200, {len(przek)} × przekierowanie, {len(zle)} × problem")
+    for u, w in przek.items():
+        print(f'    [--] {w[1]}\n         ← {u}  ({", ".join(urle[u])})')
+    for u, w in zle.items():
+        print(f'    [!!] {w[0] or w[1]}  {u}  ({", ".join(urle[u])})')
+    if zle:
+        print("\n    Landing, który nie odpowiada 200/301, to martwa reklama — podmień URL")
+        print("    albo wyłącz reklamę. Oferty rotują: 78% znika w 7 tygodni (pomiar 31.08).")
 
 
 def report(data, md=False):
@@ -128,3 +201,4 @@ if __name__ == "__main__":
         json.dump(data, open(out, "w"), ensure_ascii=False, indent=1)
         print(f"zapisano {out}")
     report(data, md="--md" in sys.argv)
+    straznik(data)

@@ -193,21 +193,79 @@ recheck pokaże [VID] z 6 konwersjami, które nie są kontaktami — realny wyni
 sprawdź `campaign_conversion_goal` tej kampanii. Nowe kampanie dostają domyślny zestaw celów konta,
 w którym YouTube wraca.
 
-## 4. Jak odświeżyć te liczby
+## 4. Otwarcie wątku Ads — co robisz ZAWSZE, zanim cokolwiek ruszysz
+
+**Jedna komenda, zero wyjątków:**
 
 ```bash
-python3 scripts/ads-recheck.py          # tabela na stdout + linia rozjazdu Ads/GA4
-python3 scripts/ads-recheck.py --md     # ta sama tabela w Markdown, do wklejenia w sekcję 2
-python3 scripts/ads-recheck.py --json tmp/ads-dump.json   # surowe dane
+python3 scripts/ads-recheck.py
 ```
 
-Skrypt jest read-only. Zmiany na koncie robi się osobnymi skryptami mutującymi (wzorzec: `scripts/gads_dsa_rewrite_desc_2026_07_16.py`).
+Dowozi trzy rzeczy naraz: świeże liczby kampanii, rozjazd Ads↔GA4 i **strażnika**. Potem
+przeczytaj tę mapę do końca — role kampanii i ustalenia z sekcji 7 są warte więcej niż liczby.
 
-**Gotchy API (kosztowały czas 19.08):**
-- Wersję API bierz z `~/secrets/google/ads-config.json` (pole `api_version`, dziś `v25`). **Hardkod `v21` zwraca 404** — tak było w `scripts/gads_client.py` do 19.08 i w kilku skryptach jednorazowych w `tmp/`.
-- **`campaign.start_date` nie istnieje w v25** — całe zapytanie leci na 400 INVALID_ARGUMENT. Daty startu kampanii trzymaj tutaj, w mapie.
+Warianty: `--md` (tabela do wklejenia w sekcję 2), `--json plik` (surowy dump),
+`--bez-straznika` (pomija sprawdzanie landingów, gdy nie ma sieci). Skrypt jest **read-only** —
+zmiany na koncie robią osobne skrypty mutujące (wzorzec: `scripts/gads-realokacja-2026-08-31.py`,
+zawsze z `--apply` i walidacją bez niego).
+
+### Strażnik — dwaj cisi zabójcy (dodany 2026-08-31)
+
+Oba potrafią wyłączyć reklamę tak, że kampania nadal wygląda na `ENABLED`:
+
+1. **Reklama `DISAPPROVED`** — przestaje się wyświetlać. Tak `[DSA]` straciła 22.08 swoją główną
+   reklamę (126–276 wyświetleń dziennie → 0) i nikt tego nie zauważył przez dziewięć dni.
+   Strażnik wypisuje też liczbę `APPROVED_LIMITED` — ale **na te nie reagujemy**, patrz sekcja 7.
+2. **Landing, który przestał istnieć.** Oferty rotują szybko: z 320 ofert, które miały ruch w GSC
+   1–15.07, po siedmiu tygodniach **22% żyje, 78% przekierowuje na hub modelu, 0,3% oddaje 410**
+   (pomiar 31.08 na próbce z GSC). Przekierowanie jest nieszkodliwe — 404/410 to martwa reklama.
+
+Strażnik rozdziela `301` (informacja) od reszty (problem). Pierwszy bieg 31.08: 86 landingów,
+74 × 200, 11 przekierowań, **1 × 410** (`galaxy-yizhen-l380-2025-251809` w zapauzowanej `[SKAG-2]`).
+
+**Znalezisko z pierwszego biegu — huby też się zmieniają.** Dwa przekierowania to hub → hub:
+`/samochody/geely/galaxy-l7/` → `/samochody/geely/l7/` i `/samochody/li-auto/li-i6/` →
+`/samochody/li-auto/i6/`. Czyli teza „celujmy w huby, bo są wieczne" jest fałszywa — zmiana nazwy
+w taksonomii przestawia slug huba tak samo, jak rotacja zabiera ofertę. Różnica jest taka, że
+**hub zawsze odda 200, więc awarii nie widać**; oferta odda 410 i strażnik ją złapie.
+
+### Dlaczego reklamy celują w OFERTY, nie w huby `#oferty` (decyzja 31.08)
+
+Rozważane przy budowie drugiej karuzeli. Zostajemy przy ofertach:
+
+- **Siatka przekierowań łapie 250 z 251 martwych ofert** (99,6%) i prowadzi na hub modelu — czyli
+  to, co dałby hub, dostajemy i tak, tylko bez utraty precyzji na starcie.
+- **Karta obiecuje cenę i „od ręki".** Hub modelu pokazuje wszystkie egzemplarze, również w drodze
+  i do sprowadzenia, w innych cenach — landing przestaje potwierdzać obietnicę kreacji.
+- **Wiążącym ograniczeniem jest kreacja, nie URL.** Na karcie jest zdjęcie konkretnego auta z placu;
+  gdy się sprzeda, karta jest nieaktualna niezależnie od tego, dokąd linkuje. Hub tego nie naprawia,
+  tylko ukrywa (zawsze 200).
+- **Dowód z konta:** obecna karuzela ma karty z 24.07 i po pięciu tygodniach trzy z czterech ofert
+  nadal oddają 200, czwarta przekierowuje na hub. Nic się nie wysypało, a to najlepsza reklama w `[DG]`.
+
+### Gotchy API (każda kosztowała czas)
+
+- Wersję API bierz z `~/secrets/google/ads-config.json` (pole `api_version`, dziś `v25`).
+  **Hardkod `v21` zwraca 404** — tak było w `scripts/gads_client.py` do 19.08.
+- **`campaign.start_date` nie istnieje w v25** — całe zapytanie leci na 400 INVALID_ARGUMENT.
+  Daty startu kampanii trzymaj tutaj, w mapie.
+- **`change_event` sięga tylko 30 dni**, a `DURING LAST_30_DAYS` i tak wywala się na
+  `START_DATE_TOO_OLD` (dzień −30 jest już za stary) — używaj jawnego `BETWEEN` od dziś−29.
+  Starszą historię reklam odtwarzaj z samych reklam: wylistuj wszystkie w grupie **łącznie
+  z `REMOVED`**, posortuj po ID (rosnące = chronologia) i diffuj teksty.
+- **Reklamy DSA nie mają pól `responsive_search_ad`** — mają `expanded_dynamic_search_ad.description`
+  / `description2`. Skrypt porównujący tylko RSA wypisze na nich „teksty identyczne" na dwóch
+  pustych zbiorach (pomyłka zaliczona 31.08).
+- **`metrics.video_views` nie istnieje** w zapytaniu o `ad_group` (UNRECOGNIZED_FIELD).
+- **Nagłówki HTTP w urllib są kodowane latin-1** — polski znak w `User-Agent` wywala
+  `UnicodeEncodeError` na każdym żądaniu (zaliczone przy pierwszym biegu strażnika).
+- **Kampania VIDEO jest zamknięta dla API** — `campaigns:mutate` zwraca `MUTATE_NOT_ALLOWED`.
+  Działa `adGroupAds:mutate` na jej reklamach (tak zapauzowaliśmy `[VID]` 31.08) i `campaignBudgets:mutate`.
+- **Demand Gen** przyjmuje mutacje reklam i budżetu, ale **nie demografii** (`adGroupCriteria`
+  age range → MUTATE_NOT_ALLOWED) — zawężenie wieku tylko w panelu.
 - `login-customer-id` = `9506068500`, nie MCC. Konto jest direct-access.
-- Klient GA4 (`scripts/ga4_query.py`) odtworzony 19.08 — poprzednia kopia w `tmp/` przepadła w czystce 14.07. **Nie przenoś go z powrotem do `tmp/`.**
+- Klient GA4 to `scripts/ga4_query.py` — **nie przenoś go do `tmp/`** (poprzednia kopia przepadła
+  w czystce 14.07).
 
 ## 5. Otwarte decyzje (nie wykonane — czekają na Janka)
 
@@ -242,6 +300,7 @@ Skrypt jest read-only. Zmiany na koncie robi się osobnymi skryptami mutującymi
 | 2026-08-31 | pauza `[SKAG-2]`, pauza reklam `[VID]`, budżety Brand 10→25, DG 20→45 | `scripts/gads-realokacja-2026-08-31.py --apply`, zweryfikowane odczytem |
 | 2026-08-31 | odbudowa drugiej reklamy `[DSA]` — nowa 822835403980 (w recenzji), usunięta martwa 816552895918 | `scripts/gads-dsa-odbuduj-reklame-2026-08-31.py --apply`, zweryfikowane odczytem |
 | 2026-08-31 | `[DG]` bid_modifier 0 na desktop/tablet/TV (0 konwersji ze 143 kliknięć) | `scripts/gads-dg-wylacz-desktop-2026-08-31.py --apply`, zweryfikowane odczytem |
+| 2026-08-31 | strażnik landingów + `DISAPPROVED` wbudowany w `ads-recheck.py` (sekcja 4) | pierwszy bieg: 86 landingów, 1 × 410, 1 reklama DISAPPROVED |
 | 2026-08-31 | **DO WYKONANIA** — 4 Shorty z 27–30.08 → assety + 4 reklamy wideo w `[DG]` (Shark 6, Deepal G318, Leopard 7, Denza Z9 GT) | `scripts/gads-dg-nowe-filmy-2026-08-31.py --apply` — zwalidowane, `--apply` jeszcze nie puszczone |
 
 ## 7. Etykiety polityki — nie przepisuj reklam pod `APPROVED_LIMITED` (ustalone 2026-08-31)
