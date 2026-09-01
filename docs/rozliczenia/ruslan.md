@@ -1,6 +1,6 @@
 # Rejestr rozliczeń z Ruslanem
 
-> Ostatnia aktualizacja: 2026-08-21
+> Ostatnia aktualizacja: 2026-09-01
 > Zakres: zamówienia (`asiaauto_order`) rozliczone między Auranet a Prima-Auto.
 > **Ten plik jest source of truth dla „co już rozliczone".** Baza nie ma znacznika
 > rozliczenia — jedyne co w niej jest to `_order_deposit_paid` / `_order_deposit_paid_at`.
@@ -28,8 +28,8 @@ ORDER BY 3;"
 Z wyniku odsiej ręcznie (query tego nie odróżnia):
 
 - **Konto user ID 13 `andriy1988hudzo@gmail.com` („Andrii Hudzo") = Andrzej, nasz człowiek.**
-  Figuruje w bazie jako zwykły klient (`_order_type=customer`). Jego zamówienia
-  do rozliczenia **nie wchodzą** — chyba że ustalimy inaczej per pozycja.
+  Figuruje w bazie jako zwykły klient (`_order_type=customer`). Jego zamówienia są
+  **testowe** — nigdy nie wchodzą do rozliczenia.
 - **Wpisy testowe** — np. 410894 (Seal U, Jan Schenk, depozyt 1 zł, 10.08.2026).
 - **Anulowane** — status `anulowane` mimo zaksięgowanego depozytu.
 
@@ -38,24 +38,52 @@ z configu**, nie potwierdzenie rozliczonej prowizji. Nie traktuj jej jako kwoty 
 
 ---
 
+## 2026-09-01 — partie 5 + 6 wysłane Ruslanowi do akceptacji
+
+Lista 9 pozycji (partia 5 z 21.08 + partia 6 poniżej) poszła do Ruslana 01.09.2026 —
+czeka na akcept. Po potwierdzeniu oznaczyć obie partie jako rozliczone.
+
+## 2026-09-01 — partia 6 (do rozliczenia)
+
+| Data | Pozycja | Cena | Klient |
+|---|---|---|---|
+| 28.08 | 438216 | 225 000 zł | Katarzyna Kowalewska — Lynk & Co 900 2025 2.0T Ultra |
+| 31.08 | 453465 | 248 000 zł | Jan Pietrzak — BYD Leopard 5 (Denza B5) 2025 Flagship + hak |
+| 25.08 | bez numeru | 44 625 EUR | SIROMEX SRL (Rumunia) — Exeed VX, VIN LNNBDDEH3SD108343 |
+| 24.08 | bez numeru | 4 463 EUR (zaliczka) | SIROMEX SRL (Rumunia) — Deepal G318, VIN LS6B3G312SA700637 |
+| **Razem** | **4 pozycje** | | |
+
+Dwie ostatnie pozycje to sprzedaż eksportowa poza systemem — proformy 082126-1 i 082126-2
+wystawione przez Ruslana 21.08, potwierdzenia przelewów w `china@primaauto.com.pl`
+(wątek „Proforma Invoices for Deepal G318 and Exeed VX"). Exeed VX opłacony w całości
+(4 463 zaliczki 25.08 + 40 162 dopłaty 28.08), Deepal G318 ma na razie samą zaliczkę.
+
+Odsiane: 438241 (Galaxy A7 — konto Andrzeja, testowe).
+
+---
+
 ## 2026-08-21 — partia 5 (do rozliczenia)
 
 | ID | Zamówienie | Depozyt | Cena | Status | Auto — klient |
 |---|---|---|---|---|---|
-| 387071 | 2026-07-02 | 2026-07-09 | 506 000 | zakupione | Zeekr 8X 2026 Yao Ying 1400PS — Dariusz Bąkowski |
+| 387071 | 2026-07-02 | 2026-07-09 | 516 000 | zakupione | Zeekr 8X 2026 Yao Ying 1400PS — Dariusz Bąkowski |
 | 397416 | 2026-07-30 | 2026-07-31 | 139 000 | umowa_gotowa | Mazda EZ-6 2025 EREV 200 Premium — Szymon Dyk |
 | 407328 | 2026-08-06 | 2026-08-06 | 251 000 | zakupione | Denza N8L DM 2025 Flagship — Mateusz Pacuła |
-| 411381 | 2026-08-12 | 2026-08-13 | 157 000 | zarezerwowane | Mazda EZ-60 2026 EREV 200 Max R21 — Krzysztof Różnicki |
+| 411381 | 2026-08-12 | 2026-08-13 | 157 000 | zakupione | Mazda EZ-60 2026 EREV 200 Max R21 — Krzysztof Różnicki |
 | 422076 | 2026-08-18 | 2026-08-21 | 172 000 | zarezerwowane | Li Auto L6 2026 Max Smart Refresh — Igor Fleytukh |
+| **Razem** | | | **5 pozycji** | | |
 
 387071 (Bąkowski) wypadł z poprzedniej partii mimo depozytu z 09.07 — dołożony tutaj.
+
+Sprostowanie 2026-09-01 (recheck w bazie): cena 387071 to **516 000**, nie 506 000 jak
+wpisano 21.08 — podniesiona po wpisie. Status 411381 przeszedł `zarezerwowane` → `zakupione`.
 
 ### Wyłączone z tej partii
 
 | ID | Powód |
 |---|---|
-| 407331 | NIO ET5 Touring, 193 000, **anulowane** — konto Andrzeja (ID 13). Tego samego dnia co 407351, wygląda na zamianę auta |
-| 407351 | BYD Seal 6 EV, 140 000, podpisane — konto Andrzeja (ID 13). **Decyzja Janka pending:** rozliczać normalnie czy osobnym torem |
+| 407331 | NIO ET5 Touring, anulowane — konto Andrzeja (ID 13), testowe |
+| 407351 | BYD Seal 6 EV, podpisane — konto Andrzeja (ID 13), testowe |
 | 410894 | Seal U, depozyt 1 zł, Jan Schenk — wpis testowy |
 
 ---
@@ -80,6 +108,7 @@ depozyt w partii: **387788, 2026-07-22 19:24**.
 | 387042 | 2026-07-02 | 2026-07-04 | 216 000 | w_drodze | BYD Leopard 7 (Tai 7) 2026 Ultra — Paweł Mroczkowski |
 | 387760 | 2026-07-09 | 2026-07-22 | 132 000 | w_drodze | Mazda EZ-6 2024 EREV 200 Premium — Paweł Wajrak |
 | 387788 | 2026-07-11 | 2026-07-22 | 147 000 | zakupione | BYD Leopard 3 (Tai 3) 2025 Ultra — Piotr Dyba |
+| **Razem** | | | **13 pozycji** | | |
 
 Cztery kwietniowe pozycje to zamówienia stockowe — mają `_order_deposit_paid = 0`,
 rozliczone poza pipeline'em depozytów. Query ich nie wyłapie.
