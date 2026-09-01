@@ -55,10 +55,16 @@ kanału, a filmy z fali sierpniowej, nieużyte w reklamach, mają po 40–420 wy
 oglądanie niż reklamy (21 s vs 10 s), subskrybenci trzykrotnie. Suma wyświetleń kanału jest
 metryką budżetu, nie zainteresowania — przy ocenie nie patrz na nią samą.
 
-## Do naprawy
+## Fałszywy alarm — `private` to nie zawsze porzucony film
 
-Trzy filmy z 26.08 mają `privacy=private` i zero wyświetleń, leżą tak od sześciu dni:
-`WM25drIlPAA` (Denza N9), `1xS5HBbJgXU` i `n9KN2RR-v8M` (Lynk & Co 900).
+Trzy filmy z 26.08 mają `privacy=private` i zero wyświetleń, co wziąłem za usterkę do naprawy.
+Są **zaplanowane** — pola `status.publishAt` (którego początkowo nie pobrałem) mówią:
+`1xS5HBbJgXU` Lynk & Co 900 → 01.09 16:00, `WM25drIlPAA` Denza N9 → 01.09 18:00,
+`n9KN2RR-v8M` Lynk & Co 900 → 02.09 18:00 (czas polski). Kolejka jeden-na-dzień działa
+zgodnie z regułą z 25.07.
+
+**Reguła:** przy `privacyStatus=private` zawsze czytaj `publishAt`, zanim nazwiesz coś usterką.
+Ręczne przestawienie tych filmów na `public` wypuściłoby trzy pozycje naraz i zepsuło harmonogram.
 
 ## Gotchy pomiarowe
 
