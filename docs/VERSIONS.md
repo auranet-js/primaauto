@@ -1,6 +1,33 @@
 # Historia wersji asiaauto-sync
 
 
+## 0.36.1 — 2026-09-02 (hierarchia nagłówków i etykiety grup filtrów)
+
+Znalezione detektorem `impeccable detect` (61 reguł, skanuje kod bez udziału modelu;
+`npx impeccable detect <katalog>`, bez instalacji do repo).
+
+**`skipped-heading`:** `<h1>` strony, a zaraz po nim `<h3>` — najpierw etykiety grup
+w popoverach, po ich naprawie tytuły ofert z `renderCard()`. Czytniki ekranu budują
+nawigację na hierarchii nagłówków, a przeskok poziomu ją łamie. Axe tego nie zgłasza,
+bo to reguła dobrych praktyk, nie kryterium WCAG A/AA — dlatego przeszło przez wszystkie
+wcześniejsze pomiary.
+
+Dwie naprawy, obie bez ruszania `class-asiaauto-inventory.php`:
+- etykiety grup w popoverach (`Marka`, `Cena`, `Fotele i kierownica`…) to nie nagłówki
+  dokumentu, tylko opisy grup kontrolek: `<h3>` → `<p>` + `role="group"` z `aria-labelledby`;
+- dodany poziom `<h2>` („Wyniki wyszukiwania", dla czytników) między `<h1>` strony a `<h3>`
+  w kartach ofert. `/samochody/` ma ten poziom i przechodzi detektor czysto, więc powtarzamy
+  tamtejszy wzorzec zamiast dotykać wspólnej karty.
+
+Po naprawie `/wyszukiwarka/` przechodzi detektor bez uwag, hierarchia to `h1 → h2 → h3` jak
+na `/samochody/`.
+
+**Przy okazji, do zapamiętania:** ten sam detektor puszczony na makietę wariantu D wyłapał
+kontrast **4,2:1** przy akcencie `#E23E3F` w obie strony (biały tekst na czerwieni i czerwień
+na ciemnym tle) — poniżej progu 4,5:1. Makieta nigdy nie przeszła przez axe, więc nikt by tego
+nie złapał. Wniosek na przyszłość: makiety też trzeba mierzyć, nie tylko wdrożony kod.
+
+
 ## 0.36.0 — 2026-09-02 (wyszukiwarka: układ poziomy, filtr rodzaju oferty, przyspieszenie 0–100)
 
 Przeprojektowanie na życzenie Janka. Boczna kolumna z 16 rozwijanymi sekcjami zamieniona

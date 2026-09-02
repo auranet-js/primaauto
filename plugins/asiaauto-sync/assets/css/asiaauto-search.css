@@ -140,6 +140,7 @@
 
 .aas__box + .aas__box { border-top: 1px solid var(--aas-linia); margin-top: 10px; padding-top: 10px; }
 .aas__box-title { margin: 8px 0 6px; font-size: 13px; font-weight: 600; color: var(--aas-szary); }
+/* etykieta grupy kontrolek, nie nagłówek dokumentu (patrz role=group w PHP) */
 .aas__unit { font-weight: 400; }
 
 .aas__opts { display: flex; flex-direction: column; }

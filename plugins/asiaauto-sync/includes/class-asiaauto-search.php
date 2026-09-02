@@ -372,6 +372,11 @@ class AsiaAuto_Search
                     </button>
                 </div>
 
+                <?php /* Poziom h2 między h1 strony a h3 w kartach ofert. Bez niego hierarchia
+                         przeskakuje (detektor impeccable: skipped-heading); /samochody/ ma
+                         ten poziom, więc powtarzamy wzorzec zamiast ruszać renderCard(). */ ?>
+                <h2 class="screen-reader-text">Wyniki wyszukiwania</h2>
+
                 <div class="aas__toolbar">
                     <p class="aas__count" role="status" aria-live="polite">
                         <strong class="aas__count-num"><?= $this->fmtLiczba($res['total']) ?></strong>
@@ -529,8 +534,10 @@ class AsiaAuto_Search
         if (!$opts) return;
         uasort($opts, static fn($a, $b) => $b['n'] <=> $a['n'] ?: strcmp($a['label'], $b['label']));
         ?>
-        <div class="aas__box" data-col="<?= esc_attr($col) ?>">
-            <?php if ($naglowek): ?><h3 class="aas__box-title"><?= esc_html($naglowek) ?></h3><?php endif; ?>
+        <?php $idOpisu = 'aas-lb-' . $col; ?>
+        <div class="aas__box" data-col="<?= esc_attr($col) ?>"
+             <?= $naglowek ? 'role="group" aria-labelledby="' . esc_attr($idOpisu) . '"' : '' ?>>
+            <?php if ($naglowek): ?><p class="aas__box-title" id="<?= esc_attr($idOpisu) ?>"><?= esc_html($naglowek) ?></p><?php endif; ?>
             <div class="aas__opts">
                 <?php foreach ($opts as $slug => $o): ?>
                     <label class="aas__opt<?= $o['n'] === 0 ? ' aas__opt--empty' : '' ?>">
@@ -554,8 +561,9 @@ class AsiaAuto_Search
         $cur = $p['range'][$col] ?? [];
         $g   = $k !== 'rok';
         ?>
-        <div class="aas__box aas__box--range">
-            <h3 class="aas__box-title"><?= esc_html($label) ?><?php if ($unit): ?> <span class="aas__unit"><?= esc_html($unit) ?></span><?php endif; ?></h3>
+        <?php $idOpisu = 'aas-lb-' . sanitize_key($k); ?>
+        <div class="aas__box aas__box--range" role="group" aria-labelledby="<?= esc_attr($idOpisu) ?>">
+            <p class="aas__box-title" id="<?= esc_attr($idOpisu) ?>"><?= esc_html($label) ?><?php if ($unit): ?> <span class="aas__unit"><?= esc_html($unit) ?></span><?php endif; ?></p>
             <div class="aas__range-pair">
                 <label class="aas__range-field">
                     <span class="screen-reader-text"><?= esc_html($label) ?> od</span>
@@ -579,8 +587,9 @@ class AsiaAuto_Search
     private function renderFlagsBox(array $p, array $counts): void
     {
         foreach (self::FLAG_GROUPS as $title => $flagi): ?>
-            <div class="aas__box">
-                <h3 class="aas__box-title"><?= esc_html($title) ?></h3>
+            <?php $idOpisu = 'aas-lb-' . sanitize_key($title); ?>
+            <div class="aas__box" role="group" aria-labelledby="<?= esc_attr($idOpisu) ?>">
+                <p class="aas__box-title" id="<?= esc_attr($idOpisu) ?>"><?= esc_html($title) ?></p>
                 <div class="aas__opts">
                     <?php foreach ($flagi as $flaga => $label):
                         $n = $counts['flags'][$flaga] ?? 0; ?>
