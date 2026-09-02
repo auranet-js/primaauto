@@ -173,7 +173,15 @@ function decodeKeywordMap(html, specid) {
           id: typeof it.id === 'number' ? it.id : null,
           group: dec(g.name),
           name: dec(it.name),
-          value: dec(v ? v.value : ''),
+          // displaytype 1: `value` jest puste, a dane siedzą w `sublist[]` (subname = nazwa funkcji,
+          // subvalue = wartość gdy subname puste). Bez tego 1/3 pozycji (fotele, kamery, mirroring) była pusta.
+          value: dec(v ? (String(v.value || '').trim()
+            ? v.value
+            : (v.sublist || [])
+                .map((x) => (String(x.subname || '').trim() ? x.subname : x.subvalue))
+                .filter((y) => y !== '' && y !== null && y !== undefined)
+                .join(' / ')
+          ) : ''),
         });
       }
     }

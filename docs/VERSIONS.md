@@ -1,6 +1,34 @@
 # Historia wersji asiaauto-sync
 
 
+## 0.34.31 — 2026-09-02 (T-116 etap 2: katalog Autohome jako trzecie ogniwo nocne, backfill wyposażenia)
+
+**Skąd.** Flagi wyposażenia w `extra_prep` miało 51,6% ofert publish; bliźniak (04:35) i bank
+(04:45) wyczerpały dawców (7 ofert ostatniej nocy, 925 ubogich bez dawcy). Katalog Autohome
+po `spec_id` pokrywa 99% ofert che168 niezależnie od stanu lokalnego, ale był uruchamiany
+tylko ręcznie i gubił 1/3 danych. ADR: `docs/decyzje/2026-09-02-katalog-autohome-trzecie-ogniwo-nocne.md`.
+
+| Zmiana | Gdzie | Efekt |
+|---|---|---|
+| fetcher czyta `valueitems[].sublist[]` (`displaytype: 1`) | `scripts/autohome-catalog-fetch.js` | 99/303 pustych pozycji → 0; fotele, kamery, klucze, mirroring, tryby jazdy |
+| trzy tryby mapy: `klucz=wartość`, `['podnazwa' => klucz]`, `nazwa@grupa`; `wp_slash` przy zapisie; flaga `verbose` | `scripts/autohome-catalog-merge.php` | pola złożone rozbite na flagi w kształcie dongchedi; koniec zjadania `\n` |
+| mapa 218 → 314 wpisów (wszystkie pozycje ≥50% próbki inwentarza + 16 tanich) | `data/autohome-catalog-map.php` | +30–56 pól na ofertę względem starej mapy |
+| +39 etykiet z kategoriami, +52 tłumaczenia wartości, +4 jednostki | `data/translations-extra-prep.php` | nowe klucze renderują się na karcie oferty (212 z 227 par w teście) |
+| backfill 2 179 ofert che168 (737 pobrań, 1 442 z cache, 0 błędów, +290 230 pól) | jednorazowo, log `~/.claude/backfill-spec-autohome-2026-09-02.log` | patrz tabela |
+| cron `55 4 * * *` bez `force`, limit 100/dobę | harmonogram cron przez `cron-install` | nowe oferty che168 dostają katalog co noc |
+
+**Pokrycie przed → po (publish):** masaż przód 20,0% → 57,3%, lidar 17,6% → 45,7%, AR-HUD
+11,4% → 25,0%, kamera 360° 46,1% → 92,5%, głośniki 35,5% → 95,8%, marka audio 12,5% → 33,4%,
+**którakolwiek flaga wyposażenia 51,6% → 98,2%** (che168 99,2%). Mediana pól: 283.
+
+**Skaza po drodze, naprawiona.** Merger z lipca zapisywał JSON bez `wp_slash`; backfill zamienił
+`\n` na `n` w 151 wartościach 140 ofert. Wykryte porównaniem z dumpem sprzed biegu, przywrócone
+z dumpu, zweryfikowane: 2 179/2 179 ofert bez odchyleń. Ręczne biegi VII–VIII mogły zrobić to
+samo na ~630 ofertach — niezmierzone.
+
+**Nie dowozi (świadomie):** filtrów, tabeli `wp7j_asiaauto_specs`, UI. Analiza pól i wartości
+do tej decyzji: `docs/roadmapa/T-116-etap2-pola-i-wartosci-wyszukiwarki.md`.
+
 ## 0.34.30 + motyw 1.3.3 — 2026-08-26 (a11y: siedem naruszeń widocznych wyłącznie przy 320 px)
 
 **Skąd.** Próbka audytowa jest mierzona przy 1366 px. Po domknięciu wszystkiego, co widać
