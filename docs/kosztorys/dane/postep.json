@@ -419,6 +419,20 @@
    "realnie_do": 119,
    "rynkowo_od": 225,
    "rynkowo_do": 300
+  },
+  {
+   "id": "T-249",
+   "tytul": "Dokumenty w zamówieniu — wymiana plików z klientem i lista dokumentów oczekiwanych",
+   "opis": "Dziś dokumenty krążą mailem i WhatsAppem. Strona przyjmuje od klienta dokładnie dwa pliki — podpisaną umowę i potwierdzenie wpłaty — i to tylko w krótkim oknie, na etapie umowy. Po podpisaniu klient nie ma już gdzie niczego wysłać, a Ty możesz wgrać do zamówienia wyłącznie własną umowę PDF. Nie da się przy pliku napisać, czym on jest.\n\nPo zmianie: Ty dodajesz do zamówienia dowolny dokument z własnym opisem, klient tak samo — również później, kiedy auto jest już w drodze albo na placu. Zamówienie pokazuje obu stronom listę dokumentów, których jeszcze brakuje: co jest potrzebne, kto to dostarcza i czy już wpłynęło. Dokument przysłany przez klienta możesz przyjąć albo odrzucić z powodem — powód widzi klient, więc poprawia bez telefonu. Na liście zamówień od razu widać, w których czegoś brakuje.\n\nPrzy okazji domykamy sprawę ochrony tych plików. Sprawdziliśmy 2.09: przy zamówieniach wisi 68 dokumentów — umowy z danymi osobowymi i podpisami klientów — i każdy z nich otworzy się bez logowania, jeśli ktoś zna dokładny adres pliku. Chroni je dziś tylko to, że w nazwie jest losowy ciąg znaków. Po zmianie dokument otworzy wyłącznie osoba zalogowana: Ty albo właściciel tego zamówienia. Stare pliki przenosimy razem z resztą, nic nie przepada.\n\nZadanie wymaga wcześniejszego zbudowania konta klienta (pozycja wyżej) — dokumenty mają swoje stałe miejsce dopiero tam, gdzie klient się loguje. Przed startem ustalamy z Tobą jedną rzecz: jakie dokumenty realnie krążą w cyklu importu i na którym etapie — z tego powstaje lista, którą system pilnuje.",
+   "status": "zgłoszone 02.09.2026 — plan i wycena gotowe; wymaga wcześniejszego zbudowania konta klienta",
+   "realnie_od": 45,
+   "realnie_do": 60,
+   "rynkowo_od": 110,
+   "rynkowo_do": 145,
+   "pytania": [
+    "Jakie dokumenty realnie krążą przy imporcie poza umową i potwierdzeniem wpłaty — i na którym etapie każdy z nich jest potrzebny? Z tej listy powstaje wykaz, którego system pilnuje przy każdym zamówieniu.",
+    "Jak długo mamy trzymać dokumenty klienta po zakończeniu zamówienia?"
+   ]
   }
  ],
  "todo_ukryte_id": [
