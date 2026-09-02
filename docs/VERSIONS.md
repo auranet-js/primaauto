@@ -1,6 +1,43 @@
 # Historia wersji asiaauto-sync
 
 
+## 0.35.2 — 2026-09-02 (pola liczbowe nie przyjmowały okrągłych wartości, grupy zakresowe się nie zwijały)
+
+Dwie usterki zgłoszone przez Janka przy jego własnym przeglądzie, obie niewidoczne dla testów.
+
+**1. `step` blokował okrągłe liczby.** Pola „od–do" miały `step` (cena 1000, moc i zasięg 10)
+oraz `min`/`max` z realnego zakresu danych. HTML liczy krok **od wartości `min`**, nie od zera:
+przy `min=95` i `step=10` dozwolone są 95, 105, … 995, 1005 — wpisanie **1000 KM** dawało
+komunikat „najbliższe prawidłowe wartości to 995 i 1005". `max` dodatkowo blokował wpisanie
+czegokolwiek powyżej zmierzonego maksimum.
+
+W filtrze zakresowym krok nie ma sensu — użytkownik wpisuje dowolną liczbę, nie skacze co 10.
+Zostało `step="any"` i `min="0"`, `max` usunięty. Zakres nadal podpowiada placeholder,
+teraz sformatowany („od 100 000" zamiast „od 100000"), z wyjątkiem rocznika — tam separator
+tysięcy w „od 2 022" wyglądał jak błąd.
+
+**2. Grupy zakresowe w ogóle się nie zwijały.** Kliknięcie w „Cena, rocznik, przebieg",
+„Osiągi i bateria" czy „Miejsca i felgi" ustawiało `aria-expanded="false"` i atrybut `hidden`,
+ale sekcja zostawała widoczna. Grupy z checkboxami zwijały się normalnie.
+
+Przyczyna to **ten sam mechanizm, co usterka #1 z 0.35.1**: `[hidden]` jest w arkuszu
+przeglądarki zwykłym `display: none`, więc każda nasza reguła z `display` je bije.
+Tam był `.aas__opt { display: flex }`, tu `.aas__ranges { display: grid }`. Punktowa łatka
+z 0.35.1 zamykała tylko pierwszy przypadek.
+
+Zamiast trzeciej łatki — reguła zbiorcza `.aas [hidden] { display: none !important }`,
+obejmująca wszystko wewnątrz panelu, także elementy dodane w przyszłości.
+
+**Sprawdzone po naprawie:** wszystkie 8 pól zakresowych przyjmuje 1000 bez komunikatu
+walidacji (wynik 0 ofert z czytelnym komunikatem pustego stanu), każda z 16 grup zwija się
+i rozwija w obie strony, axe nadal 0 naruszeń przy 320 i 1366 px, 100 kombinacji = 0 rozjazdów.
+
+**Wniosek:** obie usterki tej sesji dotyczyły `[hidden]` przegrywającego z `display`.
+Przy dokładaniu elementów do panelu nie ma potrzeby o tym pamiętać — reguła zbiorcza to trzyma
+— ale w innych częściach serwisu ten sam wzorzec (`el.hidden = true` przy własnym `display`)
+będzie cichy tak samo.
+
+
 ## 0.35.1 — 2026-09-02 (przegląd w przeglądarce: pięć usterek UI + luka w odświeżaniu ceny)
 
 Przegląd `/wyszukiwarka/` w Chrome zaraz po wdrożeniu 0.35.0. Testy automatyczne (axe, puppeteer,

@@ -445,7 +445,6 @@ class AsiaAuto_Search
                     [$label, $unit] = self::RANGE_LABELS[$k];
                     $b   = $bounds[$k] ?? ['min' => null, 'max' => null];
                     $cur = $p['range'][$col] ?? [];
-                    $step = self::RANGE_LABELS[$k][2];
                 ?>
                     <div class="aas__range">
                         <span class="aas__range-label"><?= esc_html($label) ?><?= $unit ? ' <span class="aas__unit">(' . esc_html($unit) . ')</span>' : '' ?></span>
@@ -454,16 +453,16 @@ class AsiaAuto_Search
                                 <span class="screen-reader-text"><?= esc_html($label) ?> od</span>
                                 <input type="number" inputmode="numeric" name="<?= esc_attr($k) ?>_min"
                                        value="<?= isset($cur['min']) ? esc_attr($cur['min']) : '' ?>"
-                                       placeholder="od <?= esc_attr($b['min'] ?? '') ?>" step="<?= esc_attr($step) ?>"
-                                       min="<?= esc_attr($b['min'] ?? 0) ?>" max="<?= esc_attr($b['max'] ?? '') ?>">
+                                       placeholder="od <?= esc_attr($this->fmtLiczba($b['min'], $k !== 'rok')) ?>"
+                                       step="any" min="0">
                             </label>
                             <span class="aas__range-dash" aria-hidden="true">–</span>
                             <label class="aas__range-field">
                                 <span class="screen-reader-text"><?= esc_html($label) ?> do</span>
                                 <input type="number" inputmode="numeric" name="<?= esc_attr($k) ?>_max"
                                        value="<?= isset($cur['max']) ? esc_attr($cur['max']) : '' ?>"
-                                       placeholder="do <?= esc_attr($b['max'] ?? '') ?>" step="<?= esc_attr($step) ?>"
-                                       min="<?= esc_attr($b['min'] ?? 0) ?>" max="<?= esc_attr($b['max'] ?? '') ?>">
+                                       placeholder="do <?= esc_attr($this->fmtLiczba($b['max'], $k !== 'rok')) ?>"
+                                       step="any" min="0">
                             </label>
                         </div>
                     </div>
@@ -615,7 +614,18 @@ class AsiaAuto_Search
         return self::ENUM_LABELS[$col] ?? [];
     }
 
-    /** Min/max zakresów z tabeli — do placeholderów i walidacji suwaków. */
+    /**
+     * Liczba do placeholdera: spacja co trzy cyfry, przecinek dziesiętny.
+     * `$grupuj=false` dla rocznika — „od 2 022" zamiast „od 2022" wygląda jak błąd.
+     */
+    private function fmtLiczba($n, bool $grupuj = true): string
+    {
+        if ($n === null || $n === '') return '';
+        $dec = (is_float($n) && floor($n) != $n) ? 1 : 0;
+        return number_format((float) $n, $dec, ',', $grupuj ? "\u{a0}" : '');
+    }
+
+    /** Min/max zakresów z tabeli — do placeholderów. */
     public function bounds(): array
     {
         $cached = get_transient(self::CACHE_SALT . 'bounds');
