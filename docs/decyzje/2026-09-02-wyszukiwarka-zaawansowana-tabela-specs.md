@@ -84,3 +84,23 @@ Deep-link odtwarza stan i po stronie SSR, i po odświeżeniu w przeglądarce.
 - backupy: `~/backups/primaauto/2026-09-02-t116e3/wp521-przed-specs.sql.gz` (przed `CREATE TABLE`),
   `asiaauto-sync.php.bak-2026-09-02-t116e3`, `~/backups/crontab/crontab-2026-09-02-154640.bak`
 - log crona: `~/.claude/zbuduj-specs.log`
+
+---
+
+## Dopisek 2026-09-02 wieczorem — co wyszło z przeglądu w przeglądarce (0.35.1)
+
+Przegląd `/wyszukiwarka/` w Chrome, po wdrożeniu 0.35.0 z kompletem zielonych bramek.
+Wyszło pięć usterek UI i jedna luka w odświeżaniu danych. Szczegóły: `docs/VERSIONS.md` 0.35.1.
+
+**Wniosek metodyczny, ważniejszy niż same usterki:** testy sprawdzały, czy **liczby się zgadzają**
+(total, liczniki, pokrycia, czas, axe). Nie sprawdzały, czy **panel zachowuje się sensownie**:
+widoczności opcji, przycisku „Wyczyść", paginacji, sortowania. Cztery z pięciu usterek leżały
+dokładnie w tej luce, a piąta (spacja tysięcy) była niewidoczna, bo test porównywał wartość
+samą ze sobą po obu stronach.
+
+**Luka architektoniczna, warta zapamiętania przy każdej kolejnej kolumnie tabeli:**
+zapis do `postmeta` przez `update_post_meta` **nie odpala** `transition_post_status` ani
+`asiaauto_after_set_taxonomies`. Pipeline cenowy robi dokładnie to — 14 ofert miało w tabeli
+starą cenę. Każda kolumna `specs` brana wprost z meta potrzebuje albo hooka na `updated_post_meta`,
+albo pozycji w siatce bezpieczeństwa `idsToRebuild()`. Dziś objęte: `price`, `mileage`,
+`_asiaauto_horse_power`.

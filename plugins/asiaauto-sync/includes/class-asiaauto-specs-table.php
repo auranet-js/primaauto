@@ -377,13 +377,25 @@ $flags  PRIMARY KEY (`post_id`),
         );
         $ids = array_map('intval', $wpdb->get_col($sql));
         // plus oferty, których w tabeli jeszcze nie ma
+        $t = self::table();
         $missing = array_map('intval', $wpdb->get_col(
             "SELECT p.ID FROM {$wpdb->posts} p
-             LEFT JOIN " . self::table() . " s ON s.post_id = p.ID
+             LEFT JOIN $t s ON s.post_id = p.ID
              WHERE p.post_type='listings' AND p.post_status IN ('publish','draft','private')
                AND s.post_id IS NULL"
         ));
-        return array_values(array_unique(array_merge($ids, $missing)));
+        // ...plus siatka bezpieczeństwa: wiersze, w których cena albo przebieg rozjechały się
+        // z meta. Hook na `updated_post_meta` powinien to łapać na bieżąco, ale zapis meta
+        // z surowego SQL-a albo z importu z wyłączonymi hookami go omija.
+        $rozjazd = array_map('intval', $wpdb->get_col(
+            "SELECT s.post_id FROM $t s
+             JOIN {$wpdb->postmeta} pc ON pc.post_id = s.post_id AND pc.meta_key = 'price'
+             LEFT JOIN {$wpdb->postmeta} pm ON pm.post_id = s.post_id AND pm.meta_key = 'mileage'
+             WHERE s.status = 'publish'
+               AND (s.price <> CAST(pc.meta_value AS SIGNED)
+                    OR s.mileage <> CAST(pm.meta_value AS SIGNED))"
+        ));
+        return array_values(array_unique(array_merge($ids, $missing, $rozjazd)));
     }
 
     // ==================================================================== hooki
@@ -397,6 +409,45 @@ $flags  PRIMARY KEY (`post_id`),
     {
         add_action('asiaauto_after_set_taxonomies', [__CLASS__, 'onAfterImport'], 20, 1);
         add_action('transition_post_status', [__CLASS__, 'onTransition'], 20, 3);
+        // Pipeline cenowy zapisuje `price` przez update_post_meta, BEZ wp_update_post —
+        // ani `asiaauto_after_set_taxonomies`, ani `transition_post_status` się wtedy nie
+        // odpalają i tabela zostaje ze starą ceną. Zmierzone 02.09: 14 ofert po przeliczeniu
+        // kursu, filtr ceny odsiewał je po złej stronie progu.
+        add_action('updated_post_meta', [__CLASS__, 'onMetaChange'], 20, 4);
+        add_action('added_post_meta', [__CLASS__, 'onMetaChange'], 20, 4);
+    }
+
+    /** meta_key => kolumna. Tylko liczby wprost z meta; reszta idzie przez rebuildRow(). */
+    const META_COLUMNS = [
+        'price'                  => 'price',
+        'mileage'                => 'mileage',
+        '_asiaauto_horse_power'  => 'power_km',
+    ];
+
+    /** @var bool czy w tym żądaniu trzeba jeszcze wyczyścić cache liczników */
+    private static $flushPending = false;
+
+    public static function onMetaChange($meta_id, $post_id, $meta_key, $meta_value): void
+    {
+        if (!isset(self::META_COLUMNS[$meta_key])) return;
+        if (!self::tableExists()) return;
+        if (get_post_type((int) $post_id) !== 'listings') return;
+
+        global $wpdb;
+        $col = self::META_COLUMNS[$meta_key];
+        $val = is_numeric($meta_value) ? (int) $meta_value : null;
+        if ($val !== null && $val <= 0 && $col === 'power_km') $val = null;
+
+        $zmieniono = $wpdb->update(self::table(), [$col => $val], ['post_id' => (int) $post_id],
+            [$val === null ? '%s' : '%d'], ['%d']);
+
+        // Przy masowym przeliczaniu cen czyścimy cache RAZ na żądanie, nie raz na ofertę.
+        if ($zmieniono && !self::$flushPending) {
+            self::$flushPending = true;
+            add_action('shutdown', static function () {
+                if (class_exists('AsiaAuto_Search')) AsiaAuto_Search::flushCache();
+            });
+        }
     }
 
     public static function onAfterImport($post_id): void

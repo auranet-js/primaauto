@@ -149,6 +149,12 @@
 .aas__opt--empty { opacity: 0.45; }
 .aas__opt--empty input { cursor: not-allowed; }
 
+/* `[hidden]` to w arkuszu przeglądarki zwykłe `display: none` — nasze `display: flex`
+   wyżej je bije, więc JS ustawiający `label.hidden = true` nic nie dawał: opcje bez
+   trafień zostawały na liście, tylko wyszarzone. Widoczne dopiero po wybraniu marki,
+   gdzie sekcja „Model" pokazywała 220 modeli innych marek z licznikiem 0 (02.09). */
+.aas__opt[hidden] { display: none !important; }
+
 /* ============================================================== zakresy */
 
 .aas__ranges { padding-bottom: 14px; display: grid; gap: 14px; }

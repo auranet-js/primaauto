@@ -21,6 +21,16 @@
     var badgeEl = root.querySelector('.aas__badge');
     var pagWrap = root.querySelector('.aas__results');
 
+    /**
+     * Spacja co trzy cyfry, zawsze — jak `number_format($n, 0, ',', ' ')` w PHP.
+     * `toLocaleString('pl-PL')` NIE grupuje liczb czterocyfrowych (CLDR:
+     * minimumGroupingDigits=2 dla polskiego), więc SSR pokazywał „1 179",
+     * a JS po pierwszym filtrze podmieniał to na „1179". Zmierzone 02.09.
+     */
+    function fmt(n) {
+        return String(n || 0).replace(/\B(?=(\d{3})+(?!\d))/g, '\u00a0');
+    }
+
     var page = parseInt(new URLSearchParams(location.search).get('strona') || '1', 10) || 1;
     var seq = 0;                      // numer żądania — chroni przed wyścigiem odpowiedzi
     var timer = null;
@@ -77,8 +87,8 @@
 
     function setCounts(data) {
         var total = data.total || 0;
-        if (countEl) countEl.textContent = total.toLocaleString('pl-PL');
-        if (applyEl) applyEl.textContent = total.toLocaleString('pl-PL');
+        if (countEl) countEl.textContent = fmt(total);
+        if (applyEl) applyEl.textContent = fmt(total);
 
         AA_SEARCH.enums.forEach(function (col) {
             var section = form.querySelector('.aas__group[data-col="' + col + '"]');
@@ -95,7 +105,7 @@
                 seen[input.value] = true;
                 var n = map[input.value] || 0;
                 var c = label.querySelector('.aas__opt-count');
-                if (c) c.textContent = n.toLocaleString('pl-PL');
+                if (c) c.textContent = fmt(n);
                 label.classList.toggle('aas__opt--empty', n === 0);
                 // opcja bez trafień i bez zaznaczenia znika z listy, ale zostaje w DOM
                 label.hidden = (n === 0 && !input.checked);
@@ -107,11 +117,13 @@
                 box.appendChild(buildOption(param(col), slug, labels[slug] || slug, map[slug]));
             });
 
-            // sekcja „Model" pojawia się dopiero, gdy jest z czego wybierać
+            // Sekcja „Model" tylko przy wybranej marce. Warunkiem NIE może być
+            // „są jakieś modele w licznikach", bo bez marki są wszystkie (2 596 termów)
+            // — po „Wyczyść" panel pokazywał listę modeli bez kontekstu marki (02.09).
             if (col === 'serie') {
-                var any = Object.keys(map).length > 0;
-                section.hidden = !any;
-                section.classList.toggle('aas__group--hidden', !any);
+                var maMarke = form.querySelectorAll('input[name="marka[]"]:checked').length > 0;
+                section.hidden = !maMarke;
+                section.classList.toggle('aas__group--hidden', !maMarke);
             }
         });
 
@@ -122,7 +134,7 @@
                 var label = input.closest('.aas__opt');
                 var n = data.flags[flag] || 0;
                 var c = label && label.querySelector('.aas__opt-count');
-                if (c) c.textContent = n.toLocaleString('pl-PL');
+                if (c) c.textContent = fmt(n);
                 if (label) label.classList.toggle('aas__opt--empty', n === 0);
             });
         }
@@ -136,7 +148,7 @@
         var s = document.createElement('span');
         s.className = 'aas__opt-label'; s.textContent = label;
         var c = document.createElement('span');
-        c.className = 'aas__opt-count'; c.textContent = (n || 0).toLocaleString('pl-PL');
+        c.className = 'aas__opt-count'; c.textContent = fmt(n);
         l.appendChild(i); l.appendChild(s); l.appendChild(c);
         return l;
     }
@@ -161,11 +173,18 @@
             else { el.href = '?' + queryString(state(), false) + (p > 1 ? '&strona=' + p : ''); el.dataset.page = p; }
             li.appendChild(el); ul.appendChild(li);
         };
+        var kropki = function () {
+            var li = document.createElement('li');
+            li.className = 'aas__ellipsis';
+            li.setAttribute('aria-hidden', 'true');
+            li.textContent = '…';
+            ul.appendChild(li);
+        };
         if (cur > 1) add(cur - 1, 'Poprzednia', 'prev');
         var from = Math.max(1, cur - 2), to = Math.min(pages, cur + 2);
-        if (from > 1) add(1, '1');
+        if (from > 1) { add(1, '1'); if (from > 2) kropki(); }
         for (var i = from; i <= to; i++) add(i, String(i), i === cur ? 'current' : '', i === cur);
-        if (to < pages) add(pages, String(pages));
+        if (to < pages) { if (to < pages - 1) kropki(); add(pages, String(pages)); }
         if (cur < pages) add(cur + 1, 'Następna', 'next');
 
         nav.appendChild(ul);
@@ -174,7 +193,7 @@
 
     // -------------------------------------------------------------- fetch
 
-    function refresh(pushUrl) {
+    function refresh(pushUrl, scrollUp) {
         var st = state();
         var qs = queryString(st, true);
         var mine = ++seq;
@@ -202,6 +221,17 @@
             setCounts(counts);
             renderPagination(results.page || 1, results.pages || 1);
             toggleEmpty(results.total === 0);
+            // Przewijamy DOPIERO po podmianie wyników i bez animacji: `behavior:'smooth'`
+            // odpalone przed fetchem Chrome anuluje, gdy zmiana treści przestawia wysokość
+            // dokumentu — użytkownik zostawał na dole listy (zmierzone 02.09, scrollY 5217).
+            if (scrollUp) {
+                // `behavior: 'instant'` jawnie — motyw ustawia `scroll-behavior: smooth`
+                // na <html>, więc samo scrollTo(x, y) też byłoby animowane i znów
+                // przerwane przez zmianę wysokości dokumentu.
+                var cel = Math.max(0, root.getBoundingClientRect().top + window.scrollY - 80);
+                try { window.scrollTo({ top: cel, behavior: 'instant' }); }
+                catch (e) { window.scrollTo(0, cel); }
+            }
         }).catch(function () {
             /* sieć padła — zostawiamy poprzednie wyniki, użytkownik może spróbować ponownie */
         }).finally(function () {
@@ -263,9 +293,7 @@
         if (!a) return;
         e.preventDefault();
         page = parseInt(a.dataset.page, 10) || 1;
-        refresh();
-        var top = root.getBoundingClientRect().top + window.scrollY - 80;
-        window.scrollTo({ top: top, behavior: 'smooth' });
+        refresh(true, true);
     });
 
     // wyczyść

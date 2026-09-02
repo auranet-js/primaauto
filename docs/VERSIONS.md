@@ -1,6 +1,57 @@
 # Historia wersji asiaauto-sync
 
 
+## 0.35.1 — 2026-09-02 (przegląd w przeglądarce: pięć usterek UI + luka w odświeżaniu ceny)
+
+Przegląd `/wyszukiwarka/` w Chrome zaraz po wdrożeniu 0.35.0. Testy automatyczne (axe, puppeteer,
+200 kombinacji filtrów) przechodziły na zielono, a mimo to **oko wyłapało pięć rzeczy** — bo
+sprawdzały, czy liczby się zgadzają, a nie czy panel zachowuje się sensownie.
+
+| # | Usterka | Dlaczego automat nie widział |
+|---|---|---|
+| 1 | Opcje bez trafień nie znikały, tylko się wyszarzały — po wybraniu marki sekcja „Model" pokazywała **220 modeli innych marek** z licznikiem 0 | test sprawdzał `total` i liczniki, nie widoczność opcji |
+| 2 | Po pierwszym filtrze licznik gubił spację tysięcy: „1179" zamiast „1 179" | test porównywał tę samą wartość po obu stronach, więc zgadzała się sama ze sobą |
+| 3 | Po „Wyczyść" sekcja „Model" zostawała widoczna bez wybranej marki | „Wyczyść" w ogóle nie było w scenariuszu testu |
+| 4 | Po zmianie strony widok zostawał na dole listy | paginacja nie była w scenariuszu testu |
+| 5 | Paginacja JS bez wielokropka, inaczej niż ta z SSR | kosmetyka, poza asercjami |
+
+**Przyczyny, warte zapamiętania:**
+
+1. `[hidden]` to w arkuszu przeglądarki zwykłe `display: none` — nasze `.aas__opt { display: flex }`
+   je bije. `label.hidden = true` z JS nie robiło nic. Naprawa: `.aas__opt[hidden] { display: none !important }`.
+2. `toLocaleString('pl-PL')` **nie grupuje liczb czterocyfrowych** (CLDR `minimumGroupingDigits=2`
+   dla polskiego), a PHP `number_format($n, 0, ',', ' ')` grupuje zawsze. SSR i JS pokazywały
+   różne liczby. Naprawa: własny `fmt()` ze spacją co trzy cyfry.
+3. Warunkiem widoczności sekcji „Model" było „są jakieś modele w licznikach" — bez marki są
+   wszystkie 2 596. Naprawa: warunkiem jest wybrana marka.
+4. Motyw ustawia `scroll-behavior: smooth` na `<html>`, więc `window.scrollTo` przed fetchem
+   było animowane i Chrome anulował je przy zmianie wysokości dokumentu. Naprawa: przewijanie
+   **po** podmianie wyników, z jawnym `behavior: 'instant'`.
+
+**Szósta rzecz, znaleziona przy kontrolnym przebiegu — luka w odświeżaniu tabeli.**
+Bramka porównawcza, wcześniej 0 rozjazdów, pokazała 1–2 na 50 kombinacji. Nie regresja kodu:
+**14 ofert miało w tabeli inną cenę niż w `postmeta`**. Pipeline cenowy zapisuje `price` przez
+`update_post_meta` bez `wp_update_post`, więc ani `asiaauto_after_set_taxonomies`, ani
+`transition_post_status` się nie odpalają — przeceny nie docierały do tabeli, a filtr ceny
+odsiewał te oferty po złej stronie progu.
+
+Naprawa dwuwarstwowa:
+- hook `updated_post_meta` / `added_post_meta` na `price`, `mileage`, `_asiaauto_horse_power`
+  → punktowy `UPDATE` jednej kolumny (bez czytania `extra_prep`), z czyszczeniem cache liczników
+  **raz na żądanie** (`shutdown`), nie raz na ofertę — przy masowym przeliczaniu cen to różnica
+  między jednym `DELETE` a trzema tysiącami;
+- siatka bezpieczeństwa w `idsToRebuild()`: cron 05:05 dociąga wiersze, w których cena albo
+  przebieg rozjechały się z meta (zapis surowym SQL-em albo import z wyłączonymi hookami
+  ominie hook).
+
+**Po naprawie:** 0 rozjazdów cena/przebieg w całej tabeli, **5 seedów × 50 kombinacji = 0 rozjazdów**,
+axe nadal 0 naruszeń przy 320 i 1366 px, deep-link odtwarza stan, zero błędów JS.
+
+**Wniosek na przyszłość:** test przeglądarkowy sprawdzał, czy liczby się zgadzają. Nie sprawdzał
+„Wyczyść", paginacji, sortowania ani widoczności opcji. Scenariusz w `scripts/test-ui-wyszukiwarka.mjs`
+warto o nie rozszerzyć, zanim dołożymy drugi rzut pól.
+
+
 ## 0.35.0 — 2026-09-02 (T-116 etap 3: wyszukiwarka zaawansowana na `/wyszukiwarka/`)
 
 Osobna, publiczna strona; **nigdzie nie podlinkowana** (decyzja Janka: nikt nie ma trafiać
