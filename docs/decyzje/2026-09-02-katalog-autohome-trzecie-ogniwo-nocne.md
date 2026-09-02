@@ -91,8 +91,9 @@ tę samą wartość (po naprawie `\n`), licznik dołożonych pól zgodny z logie
   ten sam sens w kilku kluczach, resztki uszkodzonego unicode). Reguły i pełna lista
   pól-kandydatów: `docs/roadmapa/T-116-etap2-pola-i-wartosci-wyszukiwarki.md`.
 - Każdy zapis `_asiaauto_extra_prep` z `update_post_meta` **musi** iść przez `wp_slash`.
-- `air_supply` jest dwuznaczne (che168: doładowanie, dongchedi: rozrząd); moje mapowanie
-  `配气机构 → air_supply` z 02.09 to utrwala. Doładowanie brać z `gas_form`.
+- `air_supply` jest dwuznaczne, bo `che168-param-map.php` mapuje na niego dwa parametry
+  auto-api (13 = doładowanie, 11 = rozrząd). Mapowanie z katalogu (rozrząd) jest zgodne
+  z dongchedi. Naprawa po stronie param-mapy i danych, doładowanie brać z `gas_form`.
 - Oferty dongchedi bez `spec_id` (ok. 140 ofert <100 pól) są poza tym mechanizmem; istnieje
   ścieżka ręczna nazwa CN → specid w 3 requestach, automat wymagałby dopasowywania nazw.
 

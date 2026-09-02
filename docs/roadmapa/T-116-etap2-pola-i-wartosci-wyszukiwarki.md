@@ -29,7 +29,7 @@ filtrować po blobie.
 | 4 | **Liczba z jednostką lub sufiksem** | `max_external_discharge_power`: `6` 618 / `6kW` 326; `min_turning_radius`: `5.7` 192 / `5.7m` 98; `high_voltage_fast_charging_platform_800`: `800` 379 / `800V` 234; `capacity_l`: `2.0` 451 / `2.0T` 48; `oil_tank_volume`: `60` 194 / `60.0` 88; `fast_charge_electricity`: `30-80` 1017 / `30%-80%` 15; `wireless_charging_power`: `50W` | `preg_match('~-?\d+(\.\d+)?~')` → float. Jednostki dopisuje UI, nie dane |
 | 5 | **Wartości parowe „N个 / M个”** (nowe, z katalogu) | 236 wartości: `camera_count` 90, `incar_camera_count_2` 63, `ultrasonic_radar` 32, `millimeter_wave_radar` 32, `laser_radar` 19 (`1个 / 5个`) | to warianty pakietowe wersji (standard / z pakietem). Do liczby brać **pierwszą** (standard). Warto poprawić w mergerze `autohome-catalog-merge.php`: dla kluczy liczbowych zapisywać pierwszą liczbę zamiast łączyć |
 | 6 | **Synonimy i warianty pisowni CN** | `rear_suspension_form`: `多连杆式独立悬架` 1062 / `…悬挂` 314 (架/挂); `gearbox_type`: `湿式双离合变速箱(DCT)` 127 / `（DCT）` 100 (nawias pełnej szerokości); `automatic_drive_level`: `L2` 2232 / `L2级` 541; `fuel_label`: `92号` 592 / `92#` 378; `battery_temperature_management_system_cooling`: `液冷` 1520 / `液态冷却` 255; `oil_supply`: `直喷` 852 / `缸内直喷` 461; `sound_brand`: `丹拿` 102 / `Dynaudio丹拿` 142, `帝瓦雷` 57 / `DEVIALET帝瓦雷` 62; `navigation_assisted_driving_2`: `高速路段` / `高快领航` | słownik kanoniczny per pole (10–20 wpisów na pole, tylko dla pól filtrowanych). Regex pomocnicze: usuń `级`, `号`→`#`, `（）`→`()`, `悬挂`→`悬架` |
-| 7 | **Ten sam klucz, inna semantyka per źródło** | `car_body_struct`: che168 `SUV` 1098, dongchedi `5门5座SUV` 357 — a `body_struct` **odwrotnie** (che168 `5门5座SUV` 733, dongchedi `SUV` 491). `air_supply`: che168 `涡轮增压` 884 (doładowanie), dongchedi `DOHC` 503 (rozrząd). `seat_belt_prompted`, `keyless_entry`: `全车`/`前排`/`驾驶位`/`标配`/`1` | nadwozie: regex na obu kluczach → `SUV|三厢车|掀背车|MPV|旅行车|跑车|皮卡`; drzwi/miejsca są osobno (`door_nums`, `seat_count`). Doładowanie: brać **wyłącznie `gas_form`** (52,9%, czyste), `air_supply` ignorować |
+| 7 | **Ten sam klucz, inna semantyka per źródło** | `car_body_struct`: che168 `SUV` 1098, dongchedi `5门5座SUV` 357 — a `body_struct` **odwrotnie** (che168 `5门5座SUV` 733, dongchedi `SUV` 491). `air_supply`: che168 `涡轮增压` 884 (doładowanie), dongchedi `DOHC` 503 (rozrząd). `seat_belt_prompted`, `keyless_entry`: `全车`/`前排`/`驾驶位`/`标配`/`1` | nadwozie: regex na obu kluczach → `SUV|三厢车|掀背车|MPV|旅行车|跑车|皮卡`; drzwi/miejsca są osobno (`door_nums`, `seat_count`). Doładowanie: brać **wyłącznie `gas_form`**; `air_supply` po naprawie = rozrząd (DOHC) |
 | 8 | **Ten sam sens w kilku kluczach** (zdublowane po dwóch API) | tempomat adaptacyjny: `cruise_system`=`全速自适应巡航` 2270 (80%) ∪ `full_speed_adaptive_cruise` 1053 ∪ `adaptive_cruise` 1060; moc KM: `engine_max_horsepower` 66% ∪ `electric_total_horsepower` 56% ∪ `energy_elect_max_power` `160(218Ps)` 31% ∪ `total_electric_power` kW 80%; zasięg: `cltc_recharge_mileage` 77% ∪ `recharge_mileage` 33%; strefy klimatyzacji `temperature_partition_control_1/2/3`; mapy `map_brand` ∪ `map_brand_高德`; ładowanie indukcyjne `wireless_charging_power` ∪ `wireless_charging_max_power_50` | jedno pole docelowe = **koalescencja** listy kluczy w ustalonej kolejności. Dla mocy logika już istnieje: `AsiaAuto_Spec::km_from_power()` |
 | 9 | **Uszkodzony unicode** `u6807u914d` | **11 ofert** (10 ręcznych, 1 dongchedi), 314 wartości; plus `360u00b0全景影像` w 108 ofertach (90 ręcznych) | jednorazowa naprawa `preg_replace_callback('/u([0-9a-f]{4})/')` na tych 11+108 ofertach, z backupem. Bloker z T-116 („96% bazy”) **nie istnieje** — to relikt sprzed migracji na che168 i importów ręcznych |
 
@@ -197,13 +197,19 @@ z Ruslanem po tym, o co realnie pytają klienci.
 
 ## 5. Co warto poprawić w danych PRZED spłaszczaniem (tanie, wysokozwrotne)
 
+> **Wykonane 2026-09-02 po południu** (wszystkie cztery, wariant B dla mocy; `docs/VERSIONS.md`
+> 0.34.31 dogrywka). Punkty zostają jako opis problemu; liczby w tabelach sekcji 2–3 są sprzed korekt.
+
 1. **Pary „N个 / M个”** w mergerze katalogu: dla kluczy liczbowych zapisywać pierwszą liczbę
    (236 wartości, 5 kluczy). Jedna linia w `autohome-catalog-merge.php`.
 2. **Naprawa unicode** na 11 + 108 ofertach (ręcznych) — jednorazowy skrypt z backupem.
 3. **`_asiaauto_horse_power`** uzupełnić z `km_from_power()` dla 60% ofert bez wartości —
    wtedy moc filtruje się jak cena, bez czekania na tabelę specs.
-4. **`air_supply`** przestać mapować z katalogu (moje mapowanie `配气机构` z 02.09 utrwala
-   dwuznaczność); doładowanie brać z `gas_form`.
+4. **`air_supply`**: źródłem dwuznaczności jest `che168-param-map.php`, który mapuje **dwa**
+   parametry auto-api na ten sam klucz (13 = 进气形式 doładowanie, 11 = 配气机构 rozrząd).
+   Mapowanie z katalogu (`配气机构` → `air_supply` = rozrząd, zgodne z dongchedi i etykietą
+   „Rozrząd”) jest poprawne. Naprawa: param 13 → `gas_form`, a w danych 1 168 ofert che168
+   przenieść wartość doładowania z `air_supply` do `gas_form` (brakuje go tylko w 23).
 
 ## 6. Czego ten dokument nie rozstrzyga
 

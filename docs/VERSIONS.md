@@ -1,6 +1,23 @@
 # Historia wersji asiaauto-sync
 
 
+## 0.34.31 — 2026-09-02 (dogrywka: cztery korekty danych `extra_prep` i mocy, bez zmian kodu pluginu)
+
+Mockup i decyzja Janka (wariant B dla mocy) tego samego dnia. Skrypty w `scripts/`, dump
+`postmeta` przed w `~/backups/primaauto/2026-09-02/postmeta-before-poprawki-1-4.sql.gz`,
+weryfikacja klucz po kluczu po zapisie: 3 367 ofert, zero zmian poza dozwolonymi.
+
+| Korekta | Zasięg | Narzędzie |
+|---|---|---|
+| pary „8个 / 12个" → 8 (standard) w 5 kluczach liczbowych z katalogu | 174 ofert, 264 wartości | `napraw-extra-prep-t116.php pary` + reguła w `$norm` mergera |
+| uszkodzony unicode `u7406u60f3` → znaki, także `360u00b0` | 129 ofert, 491 wartości | `napraw-extra-prep-t116.php unicode` |
+| `air_supply` = doładowanie (che168) → `gas_form`; `air_supply` ← `配气机构` z cache (DOHC) | 1 173 ofert: 1 147 DOHC, 26 usunięte, 28 nowych `gas_form` | `napraw-extra-prep-t116.php air` + `che168-param-map.php` param 13 → `gas_form` |
+| `_asiaauto_horse_power` z `extra_prep`, moc UKŁADU przed mocą silnika | 2 231 uzupełnionych, 204 zmienionych (PHEV: AITO M9 152 → 496), 42 zachowanych (katalog bez mocy układu), 5 bez źródła; pokrycie 40% → 99,6% | `uzupelnij-moc-km.php all` + stempel `_asiaauto_horse_power_source` |
+
+Uwaga: umowa PDF czyta to meta jako „Moc … KM" — nowe umowy dla PHEV/EREV pokażą moc układu,
+tak jak karty ofert (te już wcześniej brały moc układu z `extra_prep`). Wygenerowane PDF-y
+bez zmian.
+
 ## 0.34.31 — 2026-09-02 (T-116 etap 2: katalog Autohome jako trzecie ogniwo nocne, backfill wyposażenia)
 
 **Skąd.** Flagi wyposażenia w `extra_prep` miało 51,6% ofert publish; bliźniak (04:35) i bank

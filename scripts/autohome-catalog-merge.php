@@ -45,6 +45,8 @@ $norm = static function (string $v): string {
     // „12.3英寸" → 12.3, „520线" → 520, „5个" → 5, „32喇叭" → 32: liczba z chińskim sufiksem jednostki nie przeszłaby
     // filtra CJK w translatorze (wiersz z chińskim znakiem jest ukrywany na karcie oferty).
     $v = preg_replace('~^(\d+(?:\.\d+)?)(英寸|线|个|喇叭)$~u', '$1', $v);
+    // „8个 / 12个" (standard / z pakietem) → 8: do liczby bierzemy wariant standardowy.
+    $v = preg_replace('~^(\d+)个 / \d+个$~u', '$1', $v);
     return $v === '-' || $v === '' ? '' : $v;
 };
 $flag = static function (string $v): string {
