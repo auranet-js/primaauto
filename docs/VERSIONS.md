@@ -1,6 +1,83 @@
 # Historia wersji asiaauto-sync
 
 
+## 0.35.0 — 2026-09-02 (T-116 etap 3: wyszukiwarka zaawansowana na `/wyszukiwarka/`)
+
+Osobna, publiczna strona; **nigdzie nie podlinkowana** (decyzja Janka: nikt nie ma trafiać
+celowo w coś, czego jeszcze nie odebraliśmy). Bez `noindex` — indeks i sitemapa jak każda strona.
+`/samochody/` nietknięte: `class-asiaauto-inventory.php` i `asiaauto-inventory.js` mają mtime
+sprzed sesji (25.08 i 20.04), jedyny styk to publiczna od dawna `renderCard()`.
+
+**Co doszło (wszystko addytywnie, nowe pliki):**
+
+| Plik | Rola |
+|---|---|
+| `includes/class-asiaauto-specs-table.php` | tabela `wp7j_asiaauto_specs`, normalizatory (czyste funkcje), `rebuildRow()`, hooki |
+| `includes/class-asiaauto-search.php` | REST `asiaauto/v1/search` i `/search-counts`, shortcode `[asiaauto_search]`, UI |
+| `assets/css/asiaauto-search.css`, `assets/js/asiaauto-search.js` | panel filtrów, wyniki, stan w URL |
+| `scripts/zbuduj-specs.php` | backfill i odświeżanie (`apply`, `since=48h`, `limit=N`), dry-run domyślnie |
+| `scripts/porownaj-search.php` | bramka: stara trasa vs nowa na losowych kombinacjach |
+
+Klasa nazwana `AsiaAuto_Specs_Table`, nie `AsiaAuto_Specs` jak w prompcie — obok żyje
+`AsiaAuto_Spec` (generator tabeli huba) i różnica jednej litery myliłaby przy grepie.
+
+**Tabela** — 3 396 wierszy (2 970 publish), 1,7 MB, 41 kolumn: 8 zakresów, 9 enumów
+(w tym marka/model/kolor, dołożone bo bramka porównawcza filtruje po marce), 20 flag,
+`status`/`source`/`published_at` w tabeli, żeby sortowanie i odsiew draftów nie wymagały
+JOIN-a do `wp_posts`. Indeksy tylko na kolumnach zakresowych i enumach — na flagach
+`tinyint(1)` o kardynalności 2 przy 3,4 tys. wierszy optymalizator i tak wybiera skan.
+
+**Ustalenie, którego nie było w spec danych: pusta wartość klucza znaczy NIE.**
+Dowód na `air_suspension`: 1 653 ofert ma klucz, z tego 804 puste, 41 `选配`, 808 `标配`
+→ 27,1%, dokładnie pokrycie 28% ze spec danych. Ta sama zgodność na `header_display_system`
+(31,9 vs 33%), `heat_pump` (43,7 vs 44%), `sentinel` (69,6 vs 70%), `lane_center` (86,7 vs 87%).
+Bez tej reguły flagi byłyby zawyżone o 10–27 punktów.
+
+**Bramki, wszystkie zdane:**
+
+| Bramka | Wymóg | Wynik |
+|---|---|---|
+| normalizatory na 30 realnych `extra_prep` (10/10/10) | ręczna weryfikacja | 30/30 |
+| pokrycie kolumn vs spec danych | ±2 pkt | zgodne; trzy odchylenia wyjaśnione |
+| nieznane wartości enumów | brak | 0 (słowniki: 24 warianty tapicerki, 16 szyberdachu) |
+| nowa trasa vs `/listings` | 0 rozjazdów | **200 kombinacji × 4 seedy = 0** |
+| `search` przy 6 filtrach | < 200 ms | **64–71 ms** (HTTP, z renderem 24 kart) |
+| `search-counts` | < 300 ms | **49–52 ms** z cache, 106 ms bez |
+| axe WCAG A/AA/2.1/2.2 AA, 320 px i 1366 px | Lighthouse a11y ≥ 95 | **0 naruszeń** na obu |
+| reflow przy 320 px | brak | brak |
+| deep-link z 5 filtrami po odświeżeniu | odtwarza stan | odtwarza (SSR i JS) |
+| import i zmiana statusu | wiersz sam się aktualizuje | hook, `transition_post_status`, trash usuwa wiersz |
+| zero linkowania wewnętrznego | grep = 0 | motyw 0, treści 0, menu 0, `llms.txt` 0 |
+
+**Trzy usterki znalezione i naprawione w trakcie** (każda widoczna dopiero w przeglądarce):
+
+1. `.aas__panel-body` bez `min-height: 0` nie kurczył się jako flex-item — szuflada
+   przestawała przewijać i filtry wypływały poza ekran (checkbox „Lidar" na y=2360 w rzutni 720).
+2. Grid wyników bez klasy `aa-inv` — 15 reguł `asiaauto-inventory.css` stylizuje wnętrze karty
+   selektorem `.aa-inv .aa-card__…`, więc „Szczegóły/Zamów" renderowały się jako gołe linki.
+3. Dwie kolumny kart na szerokim ekranie rozbijały kartę (tytuł łamany po słowie, drugi przycisk
+   poza kartą) — karta jest pozioma i zaprojektowana pod ~840 px. Została jedna kolumna, jak na `/samochody/`.
+
+**Cron 05:05** — czwarte ogniwo nocnej sekwencji (bliźniak 04:35 → bank 04:45 → katalog 04:55
+→ specs 05:05), `zbuduj-specs.php apply since=48h`, przez `~/bin/cron-install`.
+Backup bazy przed `CREATE TABLE`: `~/backups/primaauto/2026-09-02-t116e3/wp521-przed-specs.sql.gz`.
+
+**Rozjazdy prompt vs produkcja, warte zapamiętania:** `_asiaauto_reservation_status` ma
+**1,5%** pokrycia, nie 100% (46 ofert publish: 26 `in_transit`, 19 `on_lot`, 1 `reserved`;
+brak meta = „sprowadzimy"). Publish było 2 977, nie 2 988.
+
+**Zauważone obok, nie ruszane:** 101 ofert PHEV/EREV ma `_asiaauto_horse_power` < 200 KM,
+w tym 66 bez stempla `_..._source` — to moc silnika, nie układu (AITO M9 EREV: 152 KM zamiast
+~490, Leapmotor D19: 0). Filtr mocy na nich kłamie. Naprawa = podniesienie do mocy układu
+przez `km_from_power()`, osobna decyzja. Poza tym duplikat `uywany`/`used` w taksonomii
+`condition` i termy-śmieci z surowym CJK w slugu w `transmission`/`fuel` (scalane aliasem
+w normalizatorze, w bazie zostają).
+
+**Nie dowozi (świadomie, sekcja 9 promptu):** linkowania i promocji strony, podmiany
+`/samochody/`, drugiego rzutu pól, pokazywania wyposażenia opcjonalnego jako „opcja",
+autocomplete, ofert dongchedi bez `spec_id`.
+
+
 ## 0.34.31 — 2026-09-02 (dogrywka: cztery korekty danych `extra_prep` i mocy, bez zmian kodu pluginu)
 
 Mockup i decyzja Janka (wariant B dla mocy) tego samego dnia. Skrypty w `scripts/`, dump

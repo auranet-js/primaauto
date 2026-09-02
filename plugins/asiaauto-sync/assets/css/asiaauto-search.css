@@ -1,0 +1,241 @@
+/**
+ * AsiaAuto Search — wyszukiwarka zaawansowana (T-116 etap 3).
+ *
+ * Mobile-first (79,6% ruchu to mobile): panel filtrów wjeżdża jako szuflada,
+ * na >=769px staje się kolumną obok wyników. Zmienne i breakpoint wspólne
+ * z asiaauto-inventory.css, żeby karta oferty wyglądała identycznie na obu
+ * wyszukiwarkach — dlatego grid nosi też klasę `.aa-inv` (kontekst dla stylów karty),
+ * a jego własny layout nadpisujemy wyżej specyficznym `.aas__grid.aa-inv`.
+ *
+ * Kontrast: wszystkie pary tekst/tło >= 4,5:1 przy 320 px.
+ * @since v0.35.0
+ */
+
+.aas {
+    --aas-primary: #1B2A4A;
+    --aas-text: #2D3748;
+    --aas-muted: #5C6B7F;      /* 4,84:1 na #FFF */
+    --aas-accent: #C92A2B;     /* 6,03:1 na #FFF */
+    --aas-bg: #F5F6F8;
+    --aas-surface: #FFFFFF;
+    --aas-border: #D8DDE3;
+    --aas-radius: 6px;
+    --aas-font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --aas-panel-w: 300px;
+
+    font-family: var(--aas-font);
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--aas-text);
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+/* Reset pod motyw/Elementor — bez tego przyciski i pola dostają cudze tło i paddingi. */
+.aas button, .elementor-page .aas button {
+    font: inherit; color: inherit; background: transparent; border: none;
+    padding: 0; margin: 0; box-shadow: none; cursor: pointer;
+    -webkit-appearance: none; appearance: none; box-sizing: border-box;
+}
+.aas input, .aas select, .elementor-page .aas input, .elementor-page .aas select {
+    font: inherit; box-sizing: border-box; margin: 0;
+}
+.aas label { margin: 0; }
+.aas ul { list-style: none; margin: 0; padding: 0; }
+
+.aas .screen-reader-text {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* Widoczny focus wszędzie — wymóg WCAG 2.4.7, motyw go gasi. */
+.aas :focus-visible {
+    outline: 3px solid var(--aas-primary);
+    outline-offset: 2px;
+    border-radius: 3px;
+}
+
+.aas__form { display: block; }
+
+/* ===================================================== szuflada (mobile) */
+
+.aas__drawer-open {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 18px; margin-bottom: 16px;
+    background: var(--aas-primary); color: #fff;
+    border-radius: var(--aas-radius); font-weight: 600;
+    min-height: 48px;                       /* cel dotykowy */
+}
+.aas__badge {
+    display: inline-block; min-width: 22px; padding: 2px 7px;
+    background: var(--aas-accent); color: #fff;
+    border-radius: 11px; font-size: 13px; font-weight: 700; text-align: center;
+}
+
+.aas__panel {
+    position: fixed; inset: 0 auto 0 0; z-index: 10000;
+    width: min(92vw, 380px); max-width: 100%;
+    background: var(--aas-surface);
+    display: flex; flex-direction: column;
+    transform: translateX(-102%);
+    transition: transform 0.22s ease;
+    box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0);
+}
+.aas.is-open .aas__panel { transform: translateX(0); box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.45); }
+
+.aas__panel-head {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 16px; border-bottom: 1px solid var(--aas-border);
+    flex-shrink: 0;
+}
+.aas__panel-title { margin: 0; font-size: 17px; font-weight: 700; flex: 1; }
+.aas__clear { color: var(--aas-accent); font-weight: 600; padding: 8px !important; text-decoration: underline; }
+.aas__drawer-close { padding: 10px !important; color: var(--aas-muted); line-height: 0; }
+
+/* `min-height: 0` jest tu obowiązkowe: bez niego flex-item nie kurczy się poniżej
+   wysokości treści, panel przestaje przewijać i filtry wypływają poza ekran
+   (zmierzone 02.09 przy 320 px: checkbox „Lidar" na y=2360 w rzutni 720). */
+.aas__panel-body {
+    flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: 4px 16px 16px;
+    overscroll-behavior: contain;
+}
+.aas__panel-foot {
+    flex-shrink: 0; padding: 12px 16px;
+    border-top: 1px solid var(--aas-border); background: var(--aas-surface);
+}
+.aas__apply {
+    display: block; width: 100%; padding: 14px;
+    background: var(--aas-accent) !important; color: #fff !important;
+    border-radius: var(--aas-radius); font-weight: 700; font-size: 16px;
+    min-height: 48px;
+}
+
+/* ======================================================== grupy filtrów */
+
+.aas__group { border-bottom: 1px solid var(--aas-border); }
+.aas__group:last-child { border-bottom: none; }
+.aas__group--hidden[hidden] { display: none; }
+
+.aas__group-title { margin: 0; font-size: 15px; font-weight: 600; }
+.aas__group-toggle {
+    display: flex; align-items: center; justify-content: space-between;
+    width: 100%; padding: 14px 2px !important; text-align: left; min-height: 48px;
+}
+.aas__group-mark {
+    width: 10px; height: 10px; flex-shrink: 0; margin-left: 12px;
+    border-right: 2px solid var(--aas-muted); border-bottom: 2px solid var(--aas-muted);
+    transform: rotate(45deg) translate(-2px, -2px);
+    transition: transform 0.18s;
+}
+.aas__group-toggle[aria-expanded="true"] .aas__group-mark {
+    transform: rotate(225deg) translate(-3px, -3px);
+}
+
+/* W szufladzie przewija się cały panel — zagnieżdżony scroll listy opcji dawałby
+   dwa obszary przewijane jeden w drugim. Limit wysokości wchodzi dopiero na desktopie. */
+.aas__opts { padding-bottom: 12px; }
+
+.aas__opt {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 4px; cursor: pointer; min-height: 44px;
+}
+.aas__opt:hover { background: var(--aas-bg); }
+.aas__opt input[type="checkbox"] {
+    width: 18px; height: 18px; flex-shrink: 0; accent-color: var(--aas-primary);
+    -webkit-appearance: checkbox; appearance: checkbox;
+}
+.aas__opt-label { flex: 1; }
+.aas__opt-count { color: var(--aas-muted); font-size: 13px; font-variant-numeric: tabular-nums; }
+.aas__opt--empty { opacity: 0.45; }
+.aas__opt--empty input { cursor: not-allowed; }
+
+/* ============================================================== zakresy */
+
+.aas__ranges { padding-bottom: 14px; display: grid; gap: 14px; }
+.aas__range-label { display: block; margin-bottom: 6px; font-size: 14px; font-weight: 500; }
+.aas__unit { color: var(--aas-muted); font-weight: 400; }
+.aas__range-pair { display: flex; align-items: center; gap: 8px; }
+.aas__range-field { flex: 1; min-width: 0; }
+.aas__range-field input {
+    width: 100%; padding: 11px 10px; min-height: 44px;
+    border: 1px solid var(--aas-border); border-radius: var(--aas-radius);
+    background: var(--aas-surface); color: var(--aas-text);
+}
+.aas__range-field input::placeholder { color: var(--aas-muted); opacity: 1; }
+.aas__range-dash { color: var(--aas-muted); flex-shrink: 0; }
+
+/* ============================================================== wyniki */
+
+.aas__results { min-width: 0; }
+
+.aas__toolbar {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+    gap: 12px; margin-bottom: 14px;
+}
+.aas__count { margin: 0; color: var(--aas-muted); }
+.aas__count-num { color: var(--aas-text); font-size: 17px; }
+.aas__sort { display: flex; align-items: center; gap: 8px; }
+.aas__sort-label { color: var(--aas-muted); font-size: 14px; }
+.aas__sort-select {
+    padding: 9px 30px 9px 10px; min-height: 44px;
+    border: 1px solid var(--aas-border); border-radius: var(--aas-radius);
+    background: var(--aas-surface) url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235C6B7F' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 10px center;
+    color: var(--aas-text); cursor: pointer;
+    -webkit-appearance: none; appearance: none;
+}
+
+/* Layout kart: nadpisuje `.aa-inv` (flex row) i `.aa-inv__grid` (flex column). */
+.aas__grid.aa-inv {
+    display: grid; grid-template-columns: 1fr; gap: 12px;
+    max-width: none; padding: 0;
+}
+.aas__grid.is-loading { opacity: 0.45; pointer-events: none; }
+
+.aas__empty {
+    padding: 28px 20px; text-align: center; color: var(--aas-muted);
+    background: var(--aas-bg); border-radius: var(--aas-radius);
+}
+
+/* ========================================================== paginacja */
+
+.aas__pagination { margin-top: 20px; }
+.aas__pages { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+.aas__page {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 44px; min-height: 44px; padding: 0 12px;
+    border: 1px solid var(--aas-border); border-radius: var(--aas-radius);
+    background: var(--aas-surface); color: var(--aas-text) !important;
+    text-decoration: none !important;
+}
+.aas__page:hover { border-color: var(--aas-primary); }
+.aas__page--current {
+    background: var(--aas-primary); border-color: var(--aas-primary);
+    color: #fff !important; font-weight: 700;
+}
+.aas__ellipsis { display: inline-flex; align-items: center; padding: 0 4px; color: var(--aas-muted); }
+
+/* =========================================================== desktop */
+
+@media (min-width: 769px) {
+    .aas__form { display: grid; grid-template-columns: var(--aas-panel-w) minmax(0, 1fr); gap: 24px; align-items: start; }
+    .aas__drawer-open, .aas__drawer-close { display: none; }
+    .aas__panel {
+        position: static; width: auto; transform: none; box-shadow: none;
+        border: 1px solid var(--aas-border); border-radius: var(--aas-radius);
+        max-height: none;
+    }
+    .aas.is-open .aas__panel { box-shadow: none; }
+    .aas__panel-body { overflow: visible; max-height: none; min-height: 0; }
+    .aas__opts { max-height: 320px; overflow-y: auto; }
+    .aas__panel-foot { position: sticky; bottom: 0; }
+    .aas__grid.aa-inv { grid-template-columns: 1fr; }
+}
+
+/* Jedna kolumna także na szerokim ekranie — karta `.aa-card` jest pozioma
+   (zdjęcie obok specyfikacji) i zaprojektowana pod ~840 px. Przy dwóch kolumnach
+   (412 px) tytuł łamie się po jednym słowie, znacznik „Dodano…" nachodzi na tytuł,
+   a drugi przycisk akcji wychodzi poza kartę. Zmierzone 02.09. */
+
+@media (prefers-reduced-motion: reduce) {
+    .aas__panel, .aas__group-mark { transition: none; }
+}
