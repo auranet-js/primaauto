@@ -104,3 +104,38 @@ zapis do `postmeta` przez `update_post_meta` **nie odpala** `transition_post_sta
 starą cenę. Każda kolumna `specs` brana wprost z meta potrzebuje albo hooka na `updated_post_meta`,
 albo pozycji w siatce bezpieczeństwa `idsToRebuild()`. Dziś objęte: `price`, `mileage`,
 `_asiaauto_horse_power`.
+
+---
+
+## Dopisek 2026-09-02 wieczorem — ile realnie waży „rodzaj oferty" (pomiar GA4)
+
+Przy projektowaniu paska poziomego rodzaj oferty dostał najwięcej miejsca na stronie
+z uzasadnieniem „to najważniejsza informacja handlowa". **To była hipoteza z modelu
+biznesowego, nie wniosek z pomiaru** — czyli dokładnie to, czego zakazuje nasza własna
+zasada „decyzje wymagają data check". Janek to zakwestionował, więc zmierzone (GA4,
+property 534017542, 90 dni do 2026-09-01):
+
+| strona | sesje | wejścia z zewnątrz (landing) |
+|---|---:|---:|
+| `/samochody/` | 8 158 | — |
+| `/w-rzeszowie/` | 2 690 | 423 |
+| `/w-drodze/` | 2 083 | 218 |
+
+**Wnioski, które zmieniają obraz:**
+
+1. Strony dostępności zbierają **21% ruchu katalogu**, pokazując **1,5% oferty**
+   (45 aut z 2 967). Zainteresowanie jest nieproporcjonalne do udziału w stanie
+   magazynowym, więc wyróżnienie tego wymiaru ma pokrycie w zachowaniu użytkowników.
+2. Ponad **4 000 sesji dociera tam z wnętrza serwisu** (2 690 + 2 083 sesji przy
+   641 wejściach z zewnątrz). „Dostępne od ręki" i „W drodze" to pozycje menu głównego
+   i ludzie z nich korzystają. To nie jest filtr niszowy — to jedna z głównych osi
+   nawigacji po ofercie.
+3. **Forma była mimo to przeskalowana.** Waga uzasadnia wyróżnienie, nie uzasadnia
+   25% wysokości ekranu. Segmentowany przełącznik w jednej linii (48 px, warianty A/B)
+   oddaje tę samą hierarchię.
+
+**Pytanie otwarte, ważniejsze niż rozmiar kontrolki:** skoro `/w-rzeszowie/` i `/w-drodze/`
+mają własny ruch organiczny, własne SEO i miejsce w menu, to filtr w wyszukiwarce ich
+**nie zastępuje** — jest trzecią drogą do tych samych 45 aut. Do rozstrzygnięcia przy
+decyzji o linkowaniu (krok 7 promptu etapu 3): czy wyszukiwarka ma dublować to, co już
+działa jako osobne strony, czy te strony docelowo mają być deep-linkami do niej.
