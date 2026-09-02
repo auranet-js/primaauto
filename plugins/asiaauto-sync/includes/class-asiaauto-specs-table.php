@@ -67,6 +67,7 @@ class AsiaAuto_Specs_Table
         'range_cltc'  => ['keys' => ['cltc_recharge_mileage', 'recharge_mileage'], 'cast' => 'int'],
         'battery_kwh' => ['keys' => ['battery_capacity'], 'cast' => 'float'],
         'seats'       => ['keys' => ['seat_count'], 'cast' => 'int'],
+        'accel_s'     => ['keys' => ['acceleration_time'], 'cast' => 'float'],
     ];
 
     /** Scalenia slugów taksonomii (śmieci i duplikaty w bazie). */
@@ -182,6 +183,10 @@ class AsiaAuto_Specs_Table
     public static function buildRow(array $e, array $meta, array $tax): array
     {
         $row = [
+            // Rodzaj oferty. `stm_car_location` NIE jest wiarygodne (nie odświeża się po
+            // przyjeździe do PL) — jedynym źródłem jest `_asiaauto_reservation_status`.
+            // Brak wartości = auto do sprowadzenia z Chin (2 921 z 2 967 ofert, pomiar 02.09).
+            'reservation'  => !empty($meta['reservation']) ? (string) $meta['reservation'] : null,
             'price'        => isset($meta['price']) ? (int) $meta['price'] : null,
             'mileage'      => isset($meta['mileage']) ? (int) $meta['mileage'] : null,
             'year'         => isset($tax['ca-year']) ? (int) $tax['ca-year'] : null,
@@ -245,6 +250,8 @@ class AsiaAuto_Specs_Table
   `power_km` smallint(5) unsigned DEFAULT NULL,
   `range_cltc` smallint(5) unsigned DEFAULT NULL,
   `battery_kwh` decimal(5,1) DEFAULT NULL,
+  `accel_s` decimal(3,1) DEFAULT NULL,
+  `reservation` varchar(12) DEFAULT NULL,
   `seats` tinyint(3) unsigned DEFAULT NULL,
   `rim_in` tinyint(3) unsigned DEFAULT NULL,
   `make` varchar(48) DEFAULT NULL,
@@ -264,6 +271,8 @@ $flags  PRIMARY KEY (`post_id`),
   KEY `year` (`year`),
   KEY `power_km` (`power_km`),
   KEY `range_cltc` (`range_cltc`),
+  KEY `accel_s` (`accel_s`),
+  KEY `reservation` (`reservation`),
   KEY `make` (`make`),
   KEY `serie` (`serie`),
   KEY `color` (`color`),
@@ -306,6 +315,7 @@ $flags  PRIMARY KEY (`post_id`),
             'price'    => get_post_meta($post_id, 'price', true),
             'mileage'  => get_post_meta($post_id, 'mileage', true),
             'power_km' => get_post_meta($post_id, '_asiaauto_horse_power', true),
+            'reservation' => get_post_meta($post_id, '_asiaauto_reservation_status', true),
         ];
         return [$e, $meta, $tax];
     }
@@ -424,22 +434,33 @@ $flags  PRIMARY KEY (`post_id`),
         '_asiaauto_horse_power'  => 'power_km',
     ];
 
+    /** Meta tekstowe aktualizowane punktowo — status rezerwacji zmienia się bez wp_update_post. */
+    const META_COLUMNS_TEXT = ['_asiaauto_reservation_status' => 'reservation'];
+
     /** @var bool czy w tym żądaniu trzeba jeszcze wyczyścić cache liczników */
     private static $flushPending = false;
 
     public static function onMetaChange($meta_id, $post_id, $meta_key, $meta_value): void
     {
-        if (!isset(self::META_COLUMNS[$meta_key])) return;
+        $tekstowe = isset(self::META_COLUMNS_TEXT[$meta_key]);
+        if (!isset(self::META_COLUMNS[$meta_key]) && !$tekstowe) return;
         if (!self::tableExists()) return;
         if (get_post_type((int) $post_id) !== 'listings') return;
 
         global $wpdb;
-        $col = self::META_COLUMNS[$meta_key];
-        $val = is_numeric($meta_value) ? (int) $meta_value : null;
-        if ($val !== null && $val <= 0 && $col === 'power_km') $val = null;
+        if ($tekstowe) {
+            $col = self::META_COLUMNS_TEXT[$meta_key];
+            $val = ($meta_value === '' || $meta_value === null) ? null : (string) $meta_value;
+            $format = ['%s'];
+        } else {
+            $col = self::META_COLUMNS[$meta_key];
+            $val = is_numeric($meta_value) ? (int) $meta_value : null;
+            if ($val !== null && $val <= 0 && $col === 'power_km') $val = null;
+            $format = [$val === null ? '%s' : '%d'];
+        }
 
         $zmieniono = $wpdb->update(self::table(), [$col => $val], ['post_id' => (int) $post_id],
-            [$val === null ? '%s' : '%d'], ['%d']);
+            $format, ['%d']);
 
         // Przy masowym przeliczaniu cen czyścimy cache RAZ na żądanie, nie raz na ofertę.
         if ($zmieniono && !self::$flushPending) {

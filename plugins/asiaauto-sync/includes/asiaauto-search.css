@@ -34,9 +34,7 @@
     margin: 0 auto;
 }
 
-/* Reset pod motyw/Elementor. UWAGA: `.aas button` to specyficzność 0-1-1, więc bije
-   każdą regułę komponentu zapisaną jako sama klasa (0-1-0). Wszystkie stylowane
-   przyciski poniżej mają dlatego prefiks `.aas ` — bez niego tracą tło i ramkę. */
+/* Reset pod motyw/Elementor. */
 .aas button, .elementor-page .aas button {
     font: inherit; color: inherit; background: transparent; border: none;
     padding: 0; margin: 0; box-shadow: none; cursor: pointer;
@@ -92,7 +90,7 @@
 .aas__chips { display: flex; flex-wrap: wrap; gap: 8px; flex: 1; min-width: 0; }
 
 .aas__chip { position: relative; }
-.aas .aas__chip-btn {
+.aas__chip-btn {
     display: inline-flex; align-items: center; gap: 7px;
     padding: 9px 13px; min-height: 42px;
     background: var(--aas-plaszczyzna);
@@ -101,7 +99,7 @@
     white-space: nowrap;
     transition: border-color .15s, background-color .15s;
 }
-.aas .aas__chip-btn:hover { border-color: var(--aas-linia-mocna); }
+.aas__chip-btn:hover { border-color: var(--aas-linia-mocna); }
 .aas__chip-label { font-weight: 500; }
 .aas__chip-val { color: var(--aas-szary); font-size: 14px; max-width: 190px; overflow: hidden; text-overflow: ellipsis; }
 .aas__chip-caret {
@@ -110,14 +108,14 @@
     transform: rotate(45deg) translate(-1px, -1px);
     opacity: .55;
 }
-.aas .aas__chip-btn[aria-expanded="true"] { border-color: var(--aas-granat); }
+.aas__chip-btn[aria-expanded="true"] { border-color: var(--aas-granat); }
 .aas__chip-btn[aria-expanded="true"] .aas__chip-caret { transform: rotate(225deg) translate(-2px, -2px); }
-.aas .aas__chip.is-active .aas__chip-btn {
+.aas__chip.is-active .aas__chip-btn {
     background: var(--aas-granat); border-color: var(--aas-granat); color: #fff;
 }
 .aas__chip.is-active .aas__chip-val { color: rgba(255,255,255,.8); }
 
-.aas .aas__clear {
+.aas__clear {
     padding: 9px 4px !important; min-height: 42px;
     color: var(--aas-akcent); font-weight: 600; text-decoration: underline;
     white-space: nowrap; flex-shrink: 0;
@@ -178,7 +176,7 @@
 .aas__count-word { color: var(--aas-szary); }
 .aas__sort { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 .aas__sort-label { color: var(--aas-szary); font-size: 14px; }
-.aas .aas__sort-select {
+.aas__sort-select {
     padding: 8px 30px 8px 10px; min-height: 42px;
     border: 1px solid var(--aas-linia); border-radius: var(--aas-r);
     background: var(--aas-plaszczyzna) url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235C6B7F' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 10px center;
@@ -198,15 +196,15 @@
 
 .aas__pagination { margin-top: 20px; }
 .aas__pages { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
-.aas .aas__page {
+.aas__page {
     display: inline-flex; align-items: center; justify-content: center;
     min-width: 44px; min-height: 44px; padding: 0 12px;
     border: 1px solid var(--aas-linia); border-radius: var(--aas-r);
     background: var(--aas-plaszczyzna); color: var(--aas-tekst) !important;
     text-decoration: none !important;
 }
-.aas .aas__page:hover { border-color: var(--aas-granat); }
-.aas .aas__page--current { background: var(--aas-granat); border-color: var(--aas-granat); color: #fff !important; font-weight: 700; }
+.aas__page:hover { border-color: var(--aas-granat); }
+.aas__page--current { background: var(--aas-granat); border-color: var(--aas-granat); color: #fff !important; font-weight: 700; }
 .aas__ellipsis { display: inline-flex; align-items: center; padding: 0 4px; color: var(--aas-szary); }
 
 /* ================================================================ telefon */

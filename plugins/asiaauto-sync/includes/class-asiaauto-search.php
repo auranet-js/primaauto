@@ -46,6 +46,47 @@ class AsiaAuto_Search
         'bateria'  => ['battery_kwh', 'float'],
         'miejsca'  => ['seats', 'int'],
         'felgi'    => ['rim_in', 'int'],
+        'przysp'   => ['accel_s', 'float'],
+    ];
+
+    /**
+     * Rodzaj oferty. „Do sprowadzenia" to brak wartości w `reservation`, nie wartość —
+     * dlatego to nie jest zwykły enum i ma własną obsługę w buildWhere().
+     * `reserved` (1 oferta) celowo zostaje tylko w „Wszystkie": jest zarezerwowana,
+     * więc nie jest ani dostępna do importu, ani w drodze, ani na placu.
+     */
+    const OFERTA = [
+        'do-sprowadzenia' => ['sql' => '`reservation` IS NULL',        'label' => 'Do sprowadzenia'],
+        'w-drodze'        => ['sql' => "`reservation` = 'in_transit'", 'label' => 'W drodze do Polski'],
+        'na-placu'        => ['sql' => "`reservation` = 'on_lot'",     'label' => 'Na placu w Rzeszowie'],
+    ];
+
+
+    /**
+     * Pasek poziomy: każda pigułka otwiera popover z jednym filtrem albo z kilkoma
+     * pokrewnymi. Kolejność wprost z tego, po czym ludzie zawężają najpierw
+     * (marka → cena → rocznik), a nie z kolejności kolumn w tabeli.
+     * `enum`/`range`/`flags` mówią, co popover renderuje w środku.
+     */
+    const CHIPS = [
+        ['id' => 'make',     'label' => 'Marka',        'enum'  => ['make']],
+        ['id' => 'serie',    'label' => 'Model',        'enum'  => ['serie'], 'po_marce' => true],
+        ['id' => 'cena',     'label' => 'Cena',         'range' => ['cena']],
+        ['id' => 'rocznik',  'label' => 'Rocznik',      'range' => ['rok']],
+        ['id' => 'przebieg', 'label' => 'Przebieg',     'range' => ['przebieg']],
+        ['id' => 'fuel',     'label' => 'Napęd',        'enum'  => ['fuel', 'drive', 'transmission']],
+        ['id' => 'body',     'label' => 'Nadwozie',     'enum'  => ['body']],
+        ['id' => 'osiagi',   'label' => 'Osiągi',       'range' => ['moc', 'przysp', 'zasieg', 'bateria']],
+        ['id' => 'wyp',      'label' => 'Wyposażenie',  'flags' => true],
+        ['id' => 'wiecej',   'label' => 'Więcej',       'enum'  => ['upholstery', 'sunroof', 'color'],
+                                                        'range' => ['miejsca', 'felgi']],
+    ];
+
+    /** Etykiety grup w popoverach zbiorczych (gdzie sama pigułka nie wystarcza). */
+    const CHIP_SUBLABELS = [
+        'fuel' => 'Rodzaj napędu', 'drive' => 'Napęd', 'transmission' => 'Skrzynia biegów',
+        'upholstery' => 'Tapicerka', 'sunroof' => 'Szyberdach', 'color' => 'Kolor',
+        'make' => 'Marka', 'serie' => 'Model', 'body' => 'Nadwozie',
     ];
 
     const SORTS = [
@@ -115,6 +156,9 @@ class AsiaAuto_Search
         }
         $p['flags'] = array_values(array_unique($p['flags']));
 
+        $oferta = isset($in['oferta']) ? sanitize_key((string) $in['oferta']) : '';
+        $p['oferta'] = isset(self::OFERTA[$oferta]) ? $oferta : '';
+
         $sort = (string) ($in['sort'] ?? 'date_desc');
         $p['sort'] = isset(self::SORTS[$sort]) ? $sort : 'date_desc';
         $p['page'] = max(1, (int) ($in['strona'] ?? 1));
@@ -131,6 +175,10 @@ class AsiaAuto_Search
         global $wpdb;
         $sql  = ["status = 'publish'"];
         $args = [];
+
+        if (!empty($p['oferta']) && $skipCol !== 'oferta') {
+            $sql[] = self::OFERTA[$p['oferta']]['sql'];
+        }
 
         foreach ($p['enum'] as $col => $vals) {
             if ($col === $skipCol) continue;
@@ -243,6 +291,20 @@ class AsiaAuto_Search
                 : array_combine(array_keys($map), array_keys($map));
         }
 
+        // rodzaj oferty: liczniki liczone bez filtra rodzaju, ale z resztą filtrów —
+        // przełącznik ma pokazywać, ile ofert czeka w każdym stanie przy bieżącym zawężeniu
+        [$whereO] = $this->buildWhere($p, 'oferta');
+        $wyb = [];
+        foreach (self::OFERTA as $klucz => $def) {
+            $wyb[] = "SUM(" . $def['sql'] . ") AS `$klucz`";
+        }
+        $rowO = $wpdb->get_row("SELECT COUNT(*) AS wszystkie, " . implode(', ', $wyb)
+            . " FROM `$t` WHERE $whereO", ARRAY_A) ?: [];
+        $out['oferta'] = ['' => (int) ($rowO['wszystkie'] ?? 0)];
+        foreach (array_keys(self::OFERTA) as $klucz) {
+            $out['oferta'][$klucz] = (int) ($rowO[$klucz] ?? 0);
+        }
+
         // flagi: JEDNO zapytanie z 20 SUM-ami (nie 20 zapytań)
         [$whereF] = $this->buildWhere($p);
         $sums = [];
@@ -286,12 +348,12 @@ class AsiaAuto_Search
         $bounds = $this->bounds();
 
         wp_localize_script('asiaauto-search', 'AA_SEARCH', [
-            'rest'     => esc_url_raw(rest_url('asiaauto/v1/')),
-            'perPage'  => self::PER_PAGE,
-            'base'     => esc_url_raw(get_permalink()),
-            'enums'    => array_values(self::ENUM_PARAMS),
-            'ranges'   => array_keys(self::RANGE_PARAMS),
-            'flags'    => array_keys(AsiaAuto_Specs_Table::FLAGS),
+            'rest'    => esc_url_raw(rest_url('asiaauto/v1/')),
+            'perPage' => self::PER_PAGE,
+            'base'    => esc_url_raw(get_permalink()),
+            'enums'   => array_values(self::ENUM_PARAMS),
+            'ranges'  => array_keys(self::RANGE_PARAMS),
+            'flags'   => array_keys(AsiaAuto_Specs_Table::FLAGS),
         ]);
 
         ob_start();
@@ -299,208 +361,239 @@ class AsiaAuto_Search
         <div class="aas" data-per-page="<?= self::PER_PAGE ?>">
             <form class="aas__form" method="get" action="<?= esc_url(get_permalink()) ?>">
 
-                <button type="button" class="aas__drawer-open" aria-expanded="false" aria-controls="aas-panel">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 6h18M6 12h12M10 18h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-                    Filtry<span class="aas__badge" hidden>0</span>
-                </button>
+                <?php $this->renderOferta($p, $counts); ?>
 
-                <aside class="aas__panel" id="aas-panel">
-                    <div class="aas__panel-head">
-                        <h2 class="aas__panel-title">Filtry</h2>
-                        <button type="button" class="aas__clear">Wyczyść</button>
-                        <button type="button" class="aas__drawer-close" aria-label="Zamknij filtry">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-                        </button>
+                <div class="aas__filtry">
+                    <div class="aas__chips" role="group" aria-label="Filtry">
+                        <?php foreach (self::CHIPS as $chip) $this->renderChip($chip, $p, $counts, $bounds); ?>
                     </div>
-
-                    <div class="aas__panel-body">
-                        <?php
-                        $this->renderEnumGroup('make', 'Marka', $p, $counts, true);
-                        $this->renderEnumGroup('serie', 'Model', $p, $counts, true, !empty($p['enum']['make']));
-                        $this->renderRangeGroup(['cena', 'rok', 'przebieg'], 'Cena, rocznik, przebieg', $p, $bounds, true);
-                        $this->renderEnumGroup('fuel', 'Rodzaj napędu', $p, $counts, true);
-                        $this->renderEnumGroup('body', 'Nadwozie', $p, $counts, true);
-                        $this->renderRangeGroup(['moc', 'zasieg', 'bateria'], 'Osiągi i bateria', $p, $bounds);
-                        $this->renderEnumGroup('drive', 'Napęd', $p, $counts);
-                        $this->renderEnumGroup('transmission', 'Skrzynia biegów', $p, $counts);
-                        $this->renderRangeGroup(['miejsca', 'felgi'], 'Miejsca i felgi', $p, $bounds);
-                        $this->renderEnumGroup('upholstery', 'Tapicerka', $p, $counts);
-                        $this->renderEnumGroup('sunroof', 'Szyberdach', $p, $counts);
-                        $this->renderEnumGroup('color', 'Kolor', $p, $counts);
-                        $this->renderFlagGroups($p, $counts);
-                        ?>
-                    </div>
-
-                    <div class="aas__panel-foot">
-                        <button type="submit" class="aas__apply">Pokaż <span class="aas__apply-count"><?= number_format($res['total'], 0, ',', ' ') ?></span> ofert</button>
-                    </div>
-                </aside>
-
-                <div class="aas__results">
-                    <div class="aas__toolbar">
-                        <p class="aas__count" role="status" aria-live="polite">
-                            Znaleziono <strong class="aas__count-num"><?= number_format($res['total'], 0, ',', ' ') ?></strong> ofert
-                        </p>
-                        <label class="aas__sort">
-                            <span class="aas__sort-label">Sortuj:</span>
-                            <select name="sort" class="aas__sort-select">
-                                <?php foreach ([
-                                    'date_desc'   => 'Najnowsze',
-                                    'price_asc'   => 'Cena rosnąco',
-                                    'price_desc'  => 'Cena malejąco',
-                                    'mileage_asc' => 'Najmniejszy przebieg',
-                                    'power_desc'  => 'Największa moc',
-                                    'range_desc'  => 'Największy zasięg',
-                                ] as $v => $label): ?>
-                                    <option value="<?= esc_attr($v) ?>" <?= selected($p['sort'], $v, false) ?>><?= esc_html($label) ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </label>
-                    </div>
-
-                    <!-- klasa `aa-inv` jest tu KONIECZNA: 15 reguł w asiaauto-inventory.css stylizuje
-                         wnętrze karty selektorem `.aa-inv .aa-card__…` (przyciski akcji, tytuł).
-                         Bez niej „Szczegóły/Zamów" renderują się jako gołe linki. Layout `.aa-inv`
-                         (flex row) nadpisujemy w asiaauto-search.css przez `.aas__grid.aa-inv`. -->
-                    <div class="aas__grid aa-inv" aria-busy="false"><?= $res['html'] ?></div>
-
-                    <?php if ($res['total'] === 0): ?>
-                        <p class="aas__empty">Żadna oferta nie spełnia tych kryteriów. Poluzuj filtry albo wyczyść je w całości.</p>
-                    <?php endif; ?>
-
-                    <?= $this->renderPagination($res['page'], $res['pages']) ?>
+                    <button type="button" class="aas__clear"<?= $this->liczbaFiltrow($p) ? '' : ' hidden' ?>>
+                        Wyczyść<span class="aas__clear-n"><?= $this->liczbaFiltrow($p) ?></span>
+                    </button>
                 </div>
+
+                <div class="aas__toolbar">
+                    <p class="aas__count" role="status" aria-live="polite">
+                        <strong class="aas__count-num"><?= $this->fmtLiczba($res['total']) ?></strong>
+                        <span class="aas__count-word">ofert</span>
+                    </p>
+                    <label class="aas__sort">
+                        <span class="aas__sort-label">Sortuj</span>
+                        <select name="sort" class="aas__sort-select">
+                            <?php foreach ([
+                                'date_desc'   => 'Najnowsze',
+                                'price_asc'   => 'Cena rosnąco',
+                                'price_desc'  => 'Cena malejąco',
+                                'mileage_asc' => 'Najmniejszy przebieg',
+                                'power_desc'  => 'Największa moc',
+                                'range_desc'  => 'Największy zasięg',
+                            ] as $v => $label): ?>
+                                <option value="<?= esc_attr($v) ?>" <?= selected($p['sort'], $v, false) ?>><?= esc_html($label) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="aas__grid aa-inv" aria-busy="false"><?= $res['html'] ?></div>
+
+                <?php if ($res['total'] === 0): ?>
+                    <p class="aas__empty">Żadna oferta nie spełnia tych kryteriów. Poluzuj filtry albo wyczyść je w całości.</p>
+                <?php endif; ?>
+
+                <?= $this->renderPagination($res['page'], $res['pages']) ?>
             </form>
         </div>
         <?php
         return ob_get_clean();
     }
 
-    /** Grupa checkboxów dla kolumny enum, z licznikami zależnymi. */
-    private function renderEnumGroup(string $col, string $title, array $p, array $counts,
-                                     bool $open = false, bool $forceOpen = false): void
+    /** Ile filtrów jest aktywnych — do odznaczenia „Wyczyść". */
+    private function liczbaFiltrow(array $p): int
     {
-        $param   = array_search($col, self::ENUM_PARAMS, true);
-        $labels  = $this->optionLabels($col);
-        $avail   = $counts['enum'][$col] ?? [];
-        $chosen  = $p['enum'][$col] ?? [];
+        $n = count($p['flags']) + count($p['range']);
+        foreach ($p['enum'] as $vals) $n += count($vals);
+        if (!empty($p['oferta'])) $n++;
+        return $n;
+    }
 
-        // model pokazujemy dopiero po wyborze marki — 2 596 termów w jednej liście to nie filtr
-        $hidden = ($col === 'serie' && !$forceOpen);
+    /**
+     * Rodzaj oferty — jedyne mocne miejsce na tej stronie. Niesie informację, której
+     * nie da się wyczytać skądinąd: prawie wszystko trzeba sprowadzić z Chin, ale
+     * kilkanaście aut stoi w Rzeszowie i można je obejrzeć jutro. Dlatego liczby
+     * są przy etykietach, a nie schowane w liczniku wyników.
+     */
+    private function renderOferta(array $p, array $counts): void
+    {
+        $liczby = $counts['oferta'] ?? [];
+        $opcje  = ['' => 'Wszystkie'];
+        foreach (self::OFERTA as $klucz => $def) $opcje[$klucz] = $def['label'];
+        ?>
+        <div class="aas__oferta" role="radiogroup" aria-label="Rodzaj oferty">
+            <?php foreach ($opcje as $wartosc => $label):
+                $n = (int) ($liczby[$wartosc] ?? 0);
+                $wybrane = ($p['oferta'] ?? '') === $wartosc; ?>
+                <label class="aas__seg<?= $wybrane ? ' is-active' : '' ?><?= $n === 0 && !$wybrane ? ' is-empty' : '' ?>">
+                    <input type="radio" name="oferta" value="<?= esc_attr($wartosc) ?>" <?= checked($wybrane, true, false) ?>>
+                    <span class="aas__seg-label"><?= esc_html($label) ?></span>
+                    <span class="aas__seg-n" data-oferta="<?= esc_attr($wartosc) ?>"><?= $this->fmtLiczba($n) ?></span>
+                </label>
+            <?php endforeach; ?>
+        </div>
+        <?php
+    }
+
+    /** Pigułka + popover z zawartością filtra. */
+    private function renderChip(array $chip, array $p, array $counts, array $bounds): void
+    {
+        $id      = 'aas-pop-' . $chip['id'];
+        $wybrane = $this->podsumujChip($chip, $p, $counts);
+        $ukryta  = !empty($chip['po_marce']) && empty($p['enum']['make']);
+        ?>
+        <div class="aas__chip<?= $wybrane ? ' is-active' : '' ?>" data-chip="<?= esc_attr($chip['id']) ?>"<?= $ukryta ? ' hidden' : '' ?>>
+            <button type="button" class="aas__chip-btn" aria-expanded="false" aria-controls="<?= esc_attr($id) ?>">
+                <span class="aas__chip-label"><?= esc_html($chip['label']) ?></span>
+                <span class="aas__chip-val"><?= $wybrane ? esc_html($wybrane) : '' ?></span>
+                <span class="aas__chip-caret" aria-hidden="true"></span>
+            </button>
+            <div class="aas__pop" id="<?= esc_attr($id) ?>" hidden>
+                <?php
+                $wiele = count($chip['enum'] ?? []) + count($chip['range'] ?? []) > 1;
+                foreach ($chip['enum'] ?? [] as $col) {
+                    $this->renderEnumBox($col, $p, $counts, $wiele ? (self::CHIP_SUBLABELS[$col] ?? '') : '');
+                }
+                foreach ($chip['range'] ?? [] as $k) {
+                    $this->renderRangeBox($k, $p, $bounds);
+                }
+                if (!empty($chip['flags'])) $this->renderFlagsBox($p, $counts);
+                ?>
+            </div>
+        </div>
+        <?php
+    }
+
+    /** Skrót wyboru na pigułce: „BYD +2", „od 150 000", „3 wybrane". */
+    private function podsumujChip(array $chip, array $p, array $counts): string
+    {
+        $czesci = [];
+        foreach ($chip['enum'] ?? [] as $col) {
+            $wyb = $p['enum'][$col] ?? [];
+            if (!$wyb) continue;
+            $etykiety = $this->optionLabels($col);
+            $pierwsza = $etykiety[$wyb[0]] ?? $wyb[0];
+            $czesci[] = count($wyb) > 1 ? $pierwsza . ' +' . (count($wyb) - 1) : $pierwsza;
+        }
+        foreach ($chip['range'] ?? [] as $k) {
+            [$col] = self::RANGE_PARAMS[$k];
+            $cur = $p['range'][$col] ?? [];
+            if (!$cur) continue;
+            $grupuj = $k !== 'rok';
+            $od = isset($cur['min']) ? $this->fmtLiczba($cur['min'], $grupuj) : '';
+            $do = isset($cur['max']) ? $this->fmtLiczba($cur['max'], $grupuj) : '';
+            if ($od && $do)      $czesci[] = "$od–$do";
+            elseif ($od)         $czesci[] = "od $od";
+            else                 $czesci[] = "do $do";
+        }
+        if (!empty($chip['flags']) && $p['flags']) {
+            $n = count($p['flags']);
+            $czesci[] = $n === 1
+                ? $this->etykietaFlagi($p['flags'][0])
+                : $n . ' ' . ($n < 5 ? 'wybrane' : 'wybranych');
+        }
+        return implode(' · ', array_slice($czesci, 0, 2)) . (count($czesci) > 2 ? ' …' : '');
+    }
+
+    private function etykietaFlagi(string $flaga): string
+    {
+        foreach (self::FLAG_GROUPS as $flagi) {
+            if (isset($flagi[$flaga])) return $flagi[$flaga];
+        }
+        return $flaga;
+    }
+
+    /** Lista opcji jednej kolumny enum, z licznikami zależnymi. */
+    private function renderEnumBox(string $col, array $p, array $counts, string $naglowek = ''): void
+    {
+        $param  = array_search($col, self::ENUM_PARAMS, true);
+        $labels = $this->optionLabels($col);
+        $avail  = $counts['enum'][$col] ?? [];
+        $chosen = array_map('strval', $p['enum'][$col] ?? []);
 
         $opts = [];
         foreach ($avail as $slug => $n) {
-            if ($n <= 0 && !in_array($slug, $chosen, true)) continue;
+            if ($n <= 0 && !in_array((string) $slug, $chosen, true)) continue;
             $opts[$slug] = ['label' => $labels[$slug] ?? $slug, 'n' => $n];
         }
-        foreach ($chosen as $slug) {                       // wybrane zostają widoczne nawet przy 0
+        foreach ($chosen as $slug) {
             if (!isset($opts[$slug])) $opts[$slug] = ['label' => $labels[$slug] ?? $slug, 'n' => 0];
         }
-        if (!$opts && !$chosen) return;
+        if (!$opts) return;
         uasort($opts, static fn($a, $b) => $b['n'] <=> $a['n'] ?: strcmp($a['label'], $b['label']));
-
-        $id = 'aas-g-' . $col;
         ?>
-        <section class="aas__group<?= $hidden ? ' aas__group--hidden' : '' ?>" data-col="<?= esc_attr($col) ?>"<?= $hidden ? ' hidden' : '' ?>>
-            <h3 class="aas__group-title">
-                <button type="button" class="aas__group-toggle" aria-expanded="<?= $open || $chosen ? 'true' : 'false' ?>" aria-controls="<?= esc_attr($id) ?>">
-                    <?= esc_html($title) ?>
-                    <span class="aas__group-mark" aria-hidden="true"></span>
-                </button>
-            </h3>
-            <div class="aas__opts" id="<?= esc_attr($id) ?>"<?= ($open || $chosen) ? '' : ' hidden' ?>>
+        <div class="aas__box" data-col="<?= esc_attr($col) ?>">
+            <?php if ($naglowek): ?><h3 class="aas__box-title"><?= esc_html($naglowek) ?></h3><?php endif; ?>
+            <div class="aas__opts">
                 <?php foreach ($opts as $slug => $o): ?>
                     <label class="aas__opt<?= $o['n'] === 0 ? ' aas__opt--empty' : '' ?>">
                         <input type="checkbox" name="<?= esc_attr($param) ?>[]" value="<?= esc_attr($slug) ?>"
-                               <?= in_array((string) $slug, array_map('strval', $chosen), true) ? 'checked' : '' ?>>
+                               <?= in_array((string) $slug, $chosen, true) ? 'checked' : '' ?>>
                         <span class="aas__opt-label"><?= esc_html($o['label']) ?></span>
-                        <span class="aas__opt-count"><?= number_format($o['n'], 0, ',', ' ') ?></span>
+                        <span class="aas__opt-count"><?= $this->fmtLiczba($o['n']) ?></span>
                     </label>
                 <?php endforeach; ?>
             </div>
-        </section>
+        </div>
         <?php
     }
 
-    /** Grupa pól „od–do". */
-    private function renderRangeGroup(array $keys, string $title, array $p, array $bounds, bool $open = false): void
+    /** Jedno pole „od–do". */
+    private function renderRangeBox(string $k, array $p, array $bounds): void
     {
-        $anySet = false;
-        foreach ($keys as $k) {
-            $col = self::RANGE_PARAMS[$k][0];
-            if (isset($p['range'][$col])) { $anySet = true; break; }
-        }
-        $id = 'aas-r-' . sanitize_key(implode('-', $keys));
+        [$col] = self::RANGE_PARAMS[$k];
+        [$label, $unit] = self::RANGE_LABELS[$k];
+        $b   = $bounds[$k] ?? ['min' => null, 'max' => null];
+        $cur = $p['range'][$col] ?? [];
+        $g   = $k !== 'rok';
         ?>
-        <section class="aas__group">
-            <h3 class="aas__group-title">
-                <button type="button" class="aas__group-toggle" aria-expanded="<?= $open || $anySet ? 'true' : 'false' ?>" aria-controls="<?= esc_attr($id) ?>">
-                    <?= esc_html($title) ?>
-                    <span class="aas__group-mark" aria-hidden="true"></span>
-                </button>
-            </h3>
-            <div class="aas__ranges" id="<?= esc_attr($id) ?>"<?= ($open || $anySet) ? '' : ' hidden' ?>>
-                <?php foreach ($keys as $k):
-                    [$col, $type] = self::RANGE_PARAMS[$k];
-                    [$label, $unit] = self::RANGE_LABELS[$k];
-                    $b   = $bounds[$k] ?? ['min' => null, 'max' => null];
-                    $cur = $p['range'][$col] ?? [];
-                ?>
-                    <div class="aas__range">
-                        <span class="aas__range-label"><?= esc_html($label) ?><?= $unit ? ' <span class="aas__unit">(' . esc_html($unit) . ')</span>' : '' ?></span>
-                        <div class="aas__range-pair">
-                            <label class="aas__range-field">
-                                <span class="screen-reader-text"><?= esc_html($label) ?> od</span>
-                                <input type="number" inputmode="numeric" name="<?= esc_attr($k) ?>_min"
-                                       value="<?= isset($cur['min']) ? esc_attr($cur['min']) : '' ?>"
-                                       placeholder="od <?= esc_attr($this->fmtLiczba($b['min'], $k !== 'rok')) ?>"
-                                       step="any" min="0">
-                            </label>
-                            <span class="aas__range-dash" aria-hidden="true">–</span>
-                            <label class="aas__range-field">
-                                <span class="screen-reader-text"><?= esc_html($label) ?> do</span>
-                                <input type="number" inputmode="numeric" name="<?= esc_attr($k) ?>_max"
-                                       value="<?= isset($cur['max']) ? esc_attr($cur['max']) : '' ?>"
-                                       placeholder="do <?= esc_attr($this->fmtLiczba($b['max'], $k !== 'rok')) ?>"
-                                       step="any" min="0">
-                            </label>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
+        <div class="aas__box aas__box--range">
+            <h3 class="aas__box-title"><?= esc_html($label) ?><?php if ($unit): ?> <span class="aas__unit"><?= esc_html($unit) ?></span><?php endif; ?></h3>
+            <div class="aas__range-pair">
+                <label class="aas__range-field">
+                    <span class="screen-reader-text"><?= esc_html($label) ?> od</span>
+                    <input type="number" inputmode="decimal" name="<?= esc_attr($k) ?>_min" step="any" min="0"
+                           value="<?= isset($cur['min']) ? esc_attr($cur['min']) : '' ?>"
+                           placeholder="od <?= esc_attr($this->fmtLiczba($b['min'], $g)) ?>">
+                </label>
+                <span class="aas__range-dash" aria-hidden="true">–</span>
+                <label class="aas__range-field">
+                    <span class="screen-reader-text"><?= esc_html($label) ?> do</span>
+                    <input type="number" inputmode="decimal" name="<?= esc_attr($k) ?>_max" step="any" min="0"
+                           value="<?= isset($cur['max']) ? esc_attr($cur['max']) : '' ?>"
+                           placeholder="do <?= esc_attr($this->fmtLiczba($b['max'], $g)) ?>">
+                </label>
             </div>
-        </section>
+        </div>
         <?php
     }
 
-    /** Wyposażenie — 20 flag w czterech grupach, z licznikami. */
-    private function renderFlagGroups(array $p, array $counts): void
+    /** Wyposażenie — 20 flag w czterech grupach. */
+    private function renderFlagsBox(array $p, array $counts): void
     {
-        $chosen = $p['flags'];
-        foreach (self::FLAG_GROUPS as $title => $flags) {
-            $anySet = (bool) array_intersect(array_keys($flags), $chosen);
-            $id = 'aas-f-' . sanitize_key($title);
-            ?>
-            <section class="aas__group">
-                <h3 class="aas__group-title">
-                    <button type="button" class="aas__group-toggle" aria-expanded="<?= $anySet ? 'true' : 'false' ?>" aria-controls="<?= esc_attr($id) ?>">
-                        <?= esc_html($title) ?>
-                        <span class="aas__group-mark" aria-hidden="true"></span>
-                    </button>
-                </h3>
-                <div class="aas__opts" id="<?= esc_attr($id) ?>"<?= $anySet ? '' : ' hidden' ?>>
-                    <?php foreach ($flags as $flag => $label):
-                        $n = $counts['flags'][$flag] ?? 0; ?>
+        foreach (self::FLAG_GROUPS as $title => $flagi): ?>
+            <div class="aas__box">
+                <h3 class="aas__box-title"><?= esc_html($title) ?></h3>
+                <div class="aas__opts">
+                    <?php foreach ($flagi as $flaga => $label):
+                        $n = $counts['flags'][$flaga] ?? 0; ?>
                         <label class="aas__opt<?= $n === 0 ? ' aas__opt--empty' : '' ?>">
-                            <input type="checkbox" name="wyposazenie[]" value="<?= esc_attr($flag) ?>"
-                                   <?= in_array($flag, $chosen, true) ? 'checked' : '' ?>>
+                            <input type="checkbox" name="wyposazenie[]" value="<?= esc_attr($flaga) ?>"
+                                   <?= in_array($flaga, $p['flags'], true) ? 'checked' : '' ?>>
                             <span class="aas__opt-label"><?= esc_html($label) ?></span>
-                            <span class="aas__opt-count"><?= number_format($n, 0, ',', ' ') ?></span>
+                            <span class="aas__opt-count"><?= $this->fmtLiczba($n) ?></span>
                         </label>
                     <?php endforeach; ?>
                 </div>
-            </section>
-            <?php
-        }
+            </div>
+        <?php endforeach;
     }
 
     private function renderPagination(int $current, int $pages): string
@@ -593,6 +686,7 @@ class AsiaAuto_Search
         'bateria'  => ['Bateria', 'kWh', 1],
         'miejsca'  => ['Liczba miejsc', '', 1],
         'felgi'    => ['Felgi', '"', 1],
+        'przysp'   => ['Przyspieszenie 0–100', 's', 0.1],
     ];
 
     /** Etykiety wartości enum: z taksonomii (nazwy termów) albo ze słownika. */

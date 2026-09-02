@@ -1,6 +1,61 @@
 # Historia wersji asiaauto-sync
 
 
+## 0.36.0 — 2026-09-02 (wyszukiwarka: układ poziomy, filtr rodzaju oferty, przyspieszenie 0–100)
+
+Przeprojektowanie na życzenie Janka. Boczna kolumna z 16 rozwijanymi sekcjami zamieniona
+na **pasek poziomy**: przełącznik rodzaju oferty, pod nim rząd pigułek otwierających popovery.
+
+**Dwa nowe filtry:**
+
+| Filtr | Źródło | Pokrycie |
+|---|---|---|
+| Przyspieszenie 0–100 | `acceleration_time` → kolumna `accel_s` | 81,4% (2,0–12,9 s, mediana 5,7) |
+| Rodzaj oferty | `_asiaauto_reservation_status` → kolumna `reservation` | 100% (brak wartości = do sprowadzenia) |
+
+Rodzaj oferty nie jest zwykłym enumem: „Do sprowadzenia" to **brak wartości**, nie wartość,
+więc ma własną obsługę w `buildWhere()`. Rozkład: 2 921 do sprowadzenia, 26 w drodze,
+19 na placu, 1 zarezerwowana. `reserved` celowo zostaje tylko w „Wszystkie" — nie jest ani
+dostępna do importu, ani w drodze, ani na placu.
+
+**Decyzje projektowe** (skill `frontend-design`; `design-taste-frontend` z repo Leonxlnx
+nie jest u nas zainstalowany, Janek zdecydował 02.09, żeby nie instalować):
+
+- **Granat `#1B2A4A` = stan aktywny filtra, czerwień `#C92A2B` wyłącznie akcja i cena.**
+  Gdyby aktywny filtr też był czerwony, pasek konkurowałby wzrokowo z „Zamów" w każdej karcie.
+- **Przełącznik rodzaju oferty to jedyne mocne miejsce na stronie.** Niesie informację,
+  której nie da się wyczytać skądinąd: prawie wszystko trzeba sprowadzić z Chin, ale
+  kilkanaście aut stoi w Polsce i można je obejrzeć. Liczby są przy etykietach, nie schowane
+  w liczniku wyników — i przeliczają się zależnie (przy BYD: 377 wszystkich, 3 na placu).
+- Liczby na `tabular-nums` — zmieniają się w miejscu przy każdym filtrze i nie mogą skakać.
+- Jedna kolumna kart, jak w 0.35.0.
+- Telefon: przełącznik zostaje pionowo (najważniejszy wybór, nie chowamy go), pigułki
+  przewijają się poziomo, popover staje się arkuszem od dołu z zasłoną.
+
+**Trzy usterki złapane przy składaniu:**
+
+1. Pigułki bez tła i ramek — `.aas button` (specyficzność 0-1-1) bije `.aas__chip-btn` (0-1-0).
+   Wszystkie stylowane przyciski mają teraz prefiks `.aas `.
+2. Przełącznik nie przenosił stanu aktywnego po zmianie bez przeładowania — klasę `is-active`
+   ustawiał tylko PHP przy renderze.
+3. Wgrany CSS i JS bez PHP dał stronę bez stylów — przy przepisywaniu szablonu zabrakło `cp`.
+
+**Pomiary:** 150 kombinacji = 0 rozjazdów wobec starej trasy; `search` 70–80 ms przy siedmiu
+filtrach naraz, `search-counts` 58–64 ms z cache; axe 0 naruszeń przy 320 i 1366 px;
+popover otwiera się i zamyka Escapem na obu rzutniach; zero błędów JS.
+
+**Do rozstrzygnięcia przez Janka:** etykieta „Na placu w Rzeszowie" jest niedokładna.
+Z 19 ofert `on_lot` tylko 11 ma `stm_car_location` = Rzeszów; pozostałe to Pabianice (4),
+„W drodze do UE" (2), Kanton (1), Warszawa (1). Część z tego to nieodświeżone pole
+(`stm_car_location` nie jest wiarygodne — patrz memory), ale Pabianice i Warszawa wyglądają
+na realne lokalizacje. Albo etykieta wraca do „Na placu" (jak badge na karcie), albo trzeba
+uporządkować dane.
+
+**Scenariusz testu przeglądarkowego przepisany** pod nowy układ i rozszerzony o rodzaj oferty,
+przyspieszenie oraz mechanikę popovera (otwarcie + Escape) — luka, przez którą 0.35.1 i 0.35.2
+przepuściły osiem usterek.
+
+
 ## 0.35.2 — 2026-09-02 (pola liczbowe nie przyjmowały okrągłych wartości, grupy zakresowe się nie zwijały)
 
 Dwie usterki zgłoszone przez Janka przy jego własnym przeglądzie, obie niewidoczne dla testów.

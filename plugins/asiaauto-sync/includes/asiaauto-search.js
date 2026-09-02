@@ -130,13 +130,9 @@
         if (data.oferta) {
             root.querySelectorAll('.aas__seg-n').forEach(function (el) {
                 var n = data.oferta[el.dataset.oferta] || 0;
-                var seg = el.closest('.aas__seg');
-                var wybrany = seg.querySelector('input').checked;
                 el.textContent = fmt(n);
-                // stan aktywny ustawia PHP przy renderze; po zmianie bez przeładowania
-                // musi go przenieść JS, inaczej podświetlenie zostaje na „Wszystkie"
-                seg.classList.toggle('is-active', wybrany);
-                seg.classList.toggle('is-empty', n === 0 && !wybrany);
+                var seg = el.closest('.aas__seg');
+                seg.classList.toggle('is-empty', n === 0 && !seg.classList.contains('is-active'));
             });
         }
 
