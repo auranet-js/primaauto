@@ -27,7 +27,9 @@ PAGE = '1146829831857839'             # Strona FB (nowa) — tu publikuje Andrze
 IG = '17841457773875233'              # profil Instagram
 PIKSEL = '1634147041766916'
 KATALOG = '2936723456671912'
-DSA_PODMIOT = 'Prima Auto'            # dokładna nazwa zweryfikowanego portfolio
+DSA_PODMIOT = 'PRIMA AUTO RUSLAN PRIMA'   # zarejestrowany podmiot DSA, zweryfikowany 02.09.2026
+# UWAGA: to NIE jest nazwa portfolio („Prima Auto") — ta jest odrzucana kodem 3858196.
+# Musi się zgadzać co do znaku z wpisem w oknie „Wymagane informacje o reklamodawcy".
 
 KATALOG_STANU = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'state')
 
