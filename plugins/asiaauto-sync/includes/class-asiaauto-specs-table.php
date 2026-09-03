@@ -20,7 +20,7 @@ defined('ABSPATH') || exit;
 class AsiaAuto_Specs_Table
 {
     const TABLE = 'asiaauto_specs';
-    const SCHEMA_VERSION = 1;
+    const SCHEMA_VERSION = 5; // 2 = ruch C (2026-09-03): długość, DMC, zasięg łączny, kolor wnętrza, zawieszenie, nagłośnienie, masaż tył, NOA
 
     /**
      * Wartości znaczące NIE / OPCJA. Do flagi liczymy tylko standard.
@@ -60,6 +60,28 @@ class AsiaAuto_Specs_Table
         'heat_pump'       => ['keys' => ['heat_pump_management_system']],
         'air_susp'        => ['keys' => ['air_suspension']],
         'v2l'             => ['keys' => ['vtol_power_station']],
+        // ruch C (2026-09-03) — pod makietę I: masaż na tylnej kanapie, autopilot miejski (NOA),
+        // nagłośnienie z marką (liczone w buildRow z sound_brand, klucz tu tylko dla kompletu)
+        'seat_massage_r'  => ['keys' => ['rear_seat_massage']],
+        'noa_city'        => ['keys' => ['navigation_assisted_driving_1']],
+        'sound_premium'   => ['keys' => ['sound_brand']],
+        // ekrany dla pasażerów (Janek 03.09): tył = rear_lcd_screen; przód = klucze dynamiczne
+        // `vice_screen_size_15.7`, `copilot_screen_resolution_*` — stąd dopasowanie po PREFIKSIE
+        'screen_rear'     => ['keys' => ['rear_lcd_screen']],
+        'screen_copilot'  => ['keys' => [], 'prefix' => ['vice_screen_', 'copilot_screen']],
+        // dach panoramiczny (Janek 03.09: „szyberdach zmień na dach panoramiczny") — pochodna enumu sunroof, liczona w buildRow
+        'roof_panorama'   => ['keys' => []],
+        // wybór Janka z listy 117 kandydatów (03.09): numery 15, 16, 27, 62, 76, 79, 87, 96, 101, 108
+        'mirror_heat'     => ['keys' => ['external_mirror_heat']],
+        'remote_start'    => ['keys' => ['engine_remote_start']],
+        'sign_recog'      => ['keys' => ['road_traffic_sign_recognition']],
+        'rear_steer'      => ['keys' => ['overall_turn']],              // 整体转向 = tylna oś skrętna (4WS)
+        'fridge'          => ['keys' => ['car_refrigerator']],
+        'dolby'           => ['keys' => ['dolby_panoramic_sound']],
+        'zero_gravity'    => ['keys' => ['zero_gravity_seat']],
+        'seat_speakers'   => ['keys' => ['seat_speakers']],
+        'tow_hook'        => ['keys' => ['drag_hook']],
+        'gesture'         => ['keys' => ['gesture_control_system']],
     ];
 
     /** Zakresy liczbowe z extra_prep (moc i cena/przebieg/rok idą z meta i taksonomii). */
@@ -68,6 +90,38 @@ class AsiaAuto_Specs_Table
         'battery_kwh' => ['keys' => ['battery_capacity'], 'cast' => 'float'],
         'seats'       => ['keys' => ['seat_count'], 'cast' => 'int'],
         'accel_s'     => ['keys' => ['acceleration_time'], 'cast' => 'float'],
+        // ruch C: długość w mm (`length` 4 cyfry; fallback pierwsza liczba z `length_width_height`
+        // „N*N*N" / „NxNxN"), DMC w kg, zasięg łączny CLTC (tylko hybrydy; dla EV = zasięg CLTC, patrz buildRow)
+        'length_mm'   => ['keys' => ['length', 'length_width_height'], 'cast' => 'int'],
+        'gvw_kg'      => ['keys' => ['full_load_weight'], 'cast' => 'int'],
+        'range_total' => ['keys' => ['combined_cruising_range_cltc'], 'cast' => 'int'],
+    ];
+
+    /**
+     * Nagłośnienie — słownik kanoniczny. Che168/Autohome mieszają zapis: „Dynaudio丹拿", „丹拿",
+     * „DEVIALET帝瓦雷", „帝瓦雷" to ta sama marka. Klucz = fragment (CN albo EN), wartość = slug.
+     * Kolejność ma znaczenie tylko przy „B&O" vs „BOSE" — sprawdzamy dłuższe wzorce pierwsze.
+     */
+    const SOUND_BRANDS = [
+        'HUAWEI'     => 'huawei-sound',
+        'Dynaudio'   => 'dynaudio',   '丹拿'   => 'dynaudio',
+        'DEVIALET'   => 'devialet',   '帝瓦雷' => 'devialet',
+        'Harman'     => 'harman-kardon', '哈曼卡顿' => 'harman-kardon',
+        'SONY'       => 'sony',       '索尼'   => 'sony',
+        'Infinity'   => 'infinity',   '燕飞利仕' => 'infinity',
+        'Meridian'   => 'meridian',   '英国之宝' => 'meridian',
+        'YAMAHA'     => 'yamaha',     '雅马哈' => 'yamaha',
+        'Bowers'     => 'bowers-wilkins', '宝华韦健' => 'bowers-wilkins',
+        'sennheiser' => 'sennheiser', '森海塞尔' => 'sennheiser',
+        'Pioneer'    => 'pioneer',    '先锋'   => 'pioneer',
+        'Lexicon'    => 'lexicon',    '莱斯康' => 'lexicon',
+        'Burmester'  => 'burmester',  '柏林之声' => 'burmester',
+        '阿尔派'     => 'alpine',     'Alpine' => 'alpine',
+        'BOSE'       => 'bose',
+        'B&amp;O'    => 'bang-olufsen', 'B&O' => 'bang-olufsen',
+        'Naim'       => 'naim',
+        'KEF'        => 'kef',
+        'Beats'      => 'beats',
     ];
 
     /** Scalenia slugów taksonomii (śmieci i duplikaty w bazie). */
@@ -112,6 +166,13 @@ class AsiaAuto_Specs_Table
         foreach ($spec['keys'] as $k) {
             if (!array_key_exists($k, $e) || !is_scalar($e[$k])) continue;
             if (self::isPositive($e[$k], $match)) return 1;
+        }
+        // klucze dynamiczne z sufiksem wartości (Autohome: `vice_screen_size_15.7`) — po prefiksie
+        foreach ($spec['prefix'] ?? [] as $pre) {
+            foreach ($e as $k => $v) {
+                if (!is_scalar($v) || strncmp((string) $k, $pre, strlen($pre)) !== 0) continue;
+                if (self::isPositive($v, $match)) return 1;
+            }
         }
         return 0;
     }
@@ -172,6 +233,31 @@ class AsiaAuto_Specs_Table
         return null;
     }
 
+    /** Nagłośnienie: slug marki ze słownika SOUND_BRANDS, null gdy brak / nieznane (→ raport). */
+    public static function soundBrand(array $e): ?string
+    {
+        if (empty($e['sound_brand']) || !is_scalar($e['sound_brand'])) return null;
+        $v = self::firstVariant($e['sound_brand']);
+        if ($v === '' || in_array($v, self::NEGATIVE, true)) return null;
+        foreach (self::SOUND_BRANDS as $wzor => $slug) {
+            if (stripos($v, $wzor) !== false) return $slug;
+        }
+        return null;
+    }
+
+    /**
+     * Zawieszenie: `pneumatyczne` (air_suspension na standard) albo `adaptacyjne`
+     * (variable_suspension: regulacja twardości i/lub wysokości — „悬架软硬调节", „软硬+高低").
+     * Pneumatyczne ma pierwszeństwo, bo z definicji jest też regulowane.
+     */
+    public static function suspension(array $e): ?string
+    {
+        if (self::flag($e, self::FLAGS['air_susp'])) return 'pneumatyczne';
+        if (!empty($e['variable_suspension']) && is_scalar($e['variable_suspension'])
+            && self::isPositive($e['variable_suspension'], '~软硬|高低|调节~u')) return 'adaptacyjne';
+        return null;
+    }
+
     /** Slug taksonomii po scaleniu aliasów. */
     public static function taxSlug(?string $slug, string $tax): ?string
     {
@@ -201,14 +287,25 @@ class AsiaAuto_Specs_Table
             'transmission' => self::taxSlug($tax['transmission'] ?? null, 'transmission'),
             'upholstery'   => self::upholstery($e),
             'sunroof'      => self::sunroof($e),
+            // ruch C
+            'interior_color' => $tax['interior-color'] ?? null,
+            'suspension'   => self::suspension($e),
+            'sound_brand'  => self::soundBrand($e),
         ];
         foreach (self::RANGES as $col => $spec) {
             $n = self::num($e, $spec['keys']);
             $row[$col] = $n === null ? null : ($spec['cast'] === 'int' ? (int) $n : round($n, 1));
         }
+        // długość poniżej 1000 to nie milimetry (np. „4.9" w metrach) — nie zgadujemy, NULL
+        if ($row['length_mm'] !== null && $row['length_mm'] < 1000) $row['length_mm'] = null;
+        // zasięg łączny: EV nie ma silnika, więc jego zasięg łączny = zasięg CLTC; spalinowe bez wartości
+        if ($row['range_total'] === null && $row['fuel'] === 'electric') $row['range_total'] = $row['range_cltc'];
         foreach (self::FLAGS as $col => $spec) {
             $row[$col] = self::flag($e, $spec);
         }
+        // nagłośnienie premium = rozpoznana marka (sam klucz sound_brand bywa pusty w 705 ofertach)
+        $row['sound_premium'] = $row['sound_brand'] !== null ? 1 : 0;
+        $row['roof_panorama'] = in_array($row['sunroof'], ['panorama-otwierany', 'panorama-staly'], true) ? 1 : 0;
         return $row;
     }
 
@@ -221,7 +318,8 @@ class AsiaAuto_Specs_Table
     }
 
     /** Kolumny enum/tekstowe (poza flagami i zakresami). */
-    const ENUMS = ['make', 'serie', 'color', 'fuel', 'body', 'drive', 'transmission', 'upholstery', 'sunroof'];
+    const ENUMS = ['make', 'serie', 'color', 'fuel', 'body', 'drive', 'transmission', 'upholstery', 'sunroof',
+                   'interior_color', 'suspension', 'sound_brand'];
 
     /**
      * Indeksy świadomie TYLKO na kolumnach zakresowych i enumach.
@@ -263,6 +361,12 @@ class AsiaAuto_Specs_Table
   `transmission` varchar(24) DEFAULT NULL,
   `upholstery` varchar(24) DEFAULT NULL,
   `sunroof` varchar(24) DEFAULT NULL,
+  `length_mm` smallint(5) unsigned DEFAULT NULL,
+  `gvw_kg` smallint(5) unsigned DEFAULT NULL,
+  `range_total` smallint(5) unsigned DEFAULT NULL,
+  `interior_color` varchar(24) DEFAULT NULL,
+  `suspension` varchar(24) DEFAULT NULL,
+  `sound_brand` varchar(24) DEFAULT NULL,
 $flags  PRIMARY KEY (`post_id`),
   KEY `status` (`status`),
   KEY `published_at` (`published_at`),
@@ -279,7 +383,13 @@ $flags  PRIMARY KEY (`post_id`),
   KEY `fuel` (`fuel`),
   KEY `body` (`body`),
   KEY `drive` (`drive`),
-  KEY `transmission` (`transmission`)
+  KEY `transmission` (`transmission`),
+  KEY `length_mm` (`length_mm`),
+  KEY `gvw_kg` (`gvw_kg`),
+  KEY `range_total` (`range_total`),
+  KEY `interior_color` (`interior_color`),
+  KEY `suspension` (`suspension`),
+  KEY `sound_brand` (`sound_brand`)
 ) $collate";
     }
 
@@ -307,7 +417,7 @@ $flags  PRIMARY KEY (`post_id`),
         $e = is_string($raw) ? json_decode($raw, true) : (is_array($raw) ? $raw : null);
         if (!is_array($e)) $e = [];
         $tax = [];
-        foreach (['make', 'serie', 'exterior-color', 'fuel', 'body', 'drive', 'transmission', 'ca-year'] as $t) {
+        foreach (['make', 'serie', 'exterior-color', 'interior-color', 'fuel', 'body', 'drive', 'transmission', 'ca-year'] as $t) {
             $slugs = wp_get_object_terms($post_id, $t, ['fields' => 'slugs']);
             $tax[$t] = (!is_wp_error($slugs) && $slugs) ? $slugs[0] : null;
         }

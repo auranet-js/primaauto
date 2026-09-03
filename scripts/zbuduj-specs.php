@@ -50,10 +50,12 @@ echo "Ofert do przerobienia: " . count($ids) . "\n\n";
 
 $flagCols  = array_keys(AsiaAuto_Specs_Table::FLAGS);
 $valueCols = ['price','mileage','year','power_km','range_cltc','battery_kwh','seats','rim_in',
-              'fuel','body','drive','transmission','upholstery','sunroof'];
+              'fuel','body','drive','transmission','upholstery','sunroof',
+              // ruch C (2026-09-03)
+              'length_mm','gvw_kg','range_total','interior_color','suspension','sound_brand'];
 
 $filled = $nulls = [];
-$unknown = ['upholstery' => [], 'sunroof' => []];
+$unknown = ['upholstery' => [], 'sunroof' => [], 'sound_brand' => []];
 $perStatus = [];
 $written = 0;
 
@@ -73,6 +75,11 @@ foreach ($ids as $id) {
         if ($row['upholstery'] === null && !empty($e['seat_material'])) {
             $k = (string) $e['seat_material'];
             $unknown['upholstery'][$k] = ($unknown['upholstery'][$k] ?? 0) + 1;
+        }
+        if ($row['sound_brand'] === null && !empty($e['sound_brand'])
+            && !in_array(AsiaAuto_Specs_Table::firstVariant($e['sound_brand']), AsiaAuto_Specs_Table::NEGATIVE, true)) {
+            $k = (string) $e['sound_brand'];
+            $unknown['sound_brand'][$k] = ($unknown['sound_brand'][$k] ?? 0) + 1;
         }
         if ($row['sunroof'] === null && array_key_exists('skylight_type', $e)) {
             $k = (string) $e['skylight_type'];

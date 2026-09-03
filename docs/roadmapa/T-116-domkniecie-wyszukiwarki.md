@@ -1,5 +1,11 @@
 # T-116 — domknięcie wyszukiwarki zaawansowanej
 
+> **STAN 2026-09-03 wieczór (0.37.0):** ruch A wykonany (+ cron 05:00), ruch B rozstrzygnięty
+> („Na placu w Polsce"), ruch C wykonany w zakresie pól makiety I (8 kolumn), kierunek wizualny
+> zaakceptowany (makieta I) i wdrożony. **Otwarte: tylko ruch D (linkowanie) i podpięcie
+> pozostałych pól z sekcji 3 etapu 2** (battery_type, driver_form, jb, 800 V…). Poniżej treść
+> pierwotna, liczby historyczne.
+
 > Prompt wykonawczy do odpalenia w nowym wątku w `~/projekty/primaauto`.
 > Powstał 2026-09-03 po sesji, w której wyszukiwarka przeszła z zera do v0.36.1.
 > **Zastępuje** `docs/roadmapa/T-116-po-odbiorze-cztery-ruchy.md` (część jego ruchów wykonana,

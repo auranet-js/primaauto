@@ -139,3 +139,32 @@ mają własny ruch organiczny, własne SEO i miejsce w menu, to filtr w wyszukiw
 **nie zastępuje** — jest trzecią drogą do tych samych 45 aut. Do rozstrzygnięcia przy
 decyzji o linkowaniu (krok 7 promptu etapu 3): czy wyszukiwarka ma dublować to, co już
 działa jako osobne strony, czy te strony docelowo mają być deep-linkami do niej.
+
+---
+
+## Dopisek 2026-09-03 — kierunek wizualny rozstrzygnięty (makieta I), boczna kolumna wycofana
+
+Pięć odrzuceń jednego dnia, z czego jedno kosztowne: po wsadzie Janka („styl nie pasuje do reszty
+serwisu, telefon źle zorganizowany, grupowanie dziwne") zarekomendowałem w quizie „szkielet jak
+`/samochody/`", Janek to kliknął, a zbudowana boczna kolumna (komplet bramek zielony) została
+odrzucona w odbiorze — chodziło o pasek **górny** i pełny zestaw filtrów pod „auto marzeń", nie
+o kopię katalogu. Cofnięte tego samego dnia; `.bak-2026-09-03-sidebar` na serwerze.
+
+**Co jest przyjęte (makieta I, `docs/makiety/gen-i.py`):** wygląd Otomoto (biały panel, rzędy
+kontrolek z etykietą nad polem), pięć sekcji w kolejności Janka — Nadwozie (marka, model, rodzaj,
+4x4, długość od, DMC do) · Napęd (silnik, moc od, przyspieszenie do, bateria od, zasięg od) ·
+Styl i komfort (kolor nadwozia, kolor wnętrza, materiał, zawieszenie) · Technologia i wyposażenie
+(pastylki: lidar, kamera 360°, masaż przód, masaż tył, wentylacja, AR-HUD, NOA, nagłośnienie
+premium, „Więcej filtrów") · **Oferty** na dole jako kafle z liczbami po filtrach (do sprowadzenia /
+w drodze / na placu) i czerwony „Pokaż N ofert". Jeden promień 6 px (`--aa-radius`) na wszystkim,
+bez pigułek 999 px. Cena, rocznik, przebieg nie były we wsadzie — do rozstrzygnięcia przy wdrożeniu.
+
+**Wnioski metodyczne:** (1) rekomendacja w quizie nie może być interpretacją słowa „reszta
+serwisu" — trzeba było najpierw pokazać makietę; (2) makiety trzymać w jednym pliku, desktop,
+iterować z Jankiem do skutku („robimy do skutku"), nie budować pięciu naraz; (3) wsad Janka
+traktować dosłownie — w H dołożyłem pola i pasek „Podstawowe", których nie zamawiał, i to było
+„nie tak, jak chciałem".
+
+**Wdrożone 03.09 wieczorem jako 0.37.0** — makieta I 1:1, plus ruch C (osiem kolumn specs pod jej
+pola). Szczegóły i pomiary: `docs/VERSIONS.md` 0.37.0. Nadal niepodlinkowana — linkowanie (ruch D)
+wymaga osobnej zgody na każdy punkt.

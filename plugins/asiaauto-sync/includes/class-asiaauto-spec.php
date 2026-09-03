@@ -85,6 +85,53 @@ class AsiaAuto_Spec
         return $ehp ? (int) $ehp : null;
     }
 
+    /**
+     * Moc UKŁADU (KM) z extra_prep dla hybryd — bez fallbacku na silnik spalinowy.
+     *
+     * Publiczna, addytywna (T-116 domknięcie, 2026-09-03). `km_from_power()` zostaje bez zmian,
+     * bo tabela huba celowo spada na `engine_max_horsepower` przy ICE. Tutaj chodzi o meta
+     * `_asiaauto_horse_power` w PHEV/EREV, gdzie silnik spalinowy to ułamek mocy układu
+     * (AITO M9: 160 KM silnika, 496 KM układu), a filtr mocy w wyszukiwarce czyta to meta wprost.
+     *
+     * Kolejność źródeł, od najbardziej jednoznacznego:
+     *   1. electric_system_horsepower (Ps) / electric_system_power (kW) — 系统综合功率, moc łączna
+     *   2. electric_max_power / energy_elect_max_power "160(218Ps)"      — dongchedi, moc układu
+     *   3. electric_total_horsepower (Ps) / total_electric_power (kW)   — suma silników el.
+     *      (dla EREV = układ; dla PHEV dolna granica, zawsze >= moc silnika)
+     * Świadomie POMINIĘTE: `system_max_power` — w katalogu Autohome to „最大功率" z nagłówka,
+     * dla BYD DM-i / Denza / VOYAH równe mocy SILNIKA (Denza D9: 115 kW = 156 KM silnika,
+     * a electric_total_horsepower = 333). Klucze `engine_*` nigdy.
+     *
+     * @return array{0:int,1:string} [KM, użyty klucz]; [0, ''] gdy brak źródła mocy układu
+     */
+    public static function system_km_from_extra_prep(array $e): array
+    {
+        $ps = static function ($v): int {
+            if (preg_match('/(\d+)\s*Ps/i', (string) $v, $m)) return (int) $m[1];
+            return preg_match('/\d+/', (string) $v, $m) ? (int) $m[0] : 0;
+        };
+        $kw = static function ($v): int {
+            return preg_match('/\d+(\.\d+)?/', (string) $v, $m) ? (int) round((float) $m[0] * 1.36) : 0;
+        };
+        $order = [
+            'electric_system_horsepower' => $ps,
+            'electric_system_power'      => $kw,
+            'electric_max_power'         => $ps,
+            'energy_elect_max_power'     => $ps,
+            'electric_total_horsepower'  => $ps,
+            'total_electric_power'       => $kw,
+        ];
+        foreach ($order as $key => $fn) {
+            if (empty($e[$key])) continue;
+            // electric_max_power / energy_elect_max_power: tylko forma "kW(Ps)" jest jednoznaczna
+            if (in_array($key, ['electric_max_power', 'energy_elect_max_power'], true)
+                && !preg_match('/\(\s*\d+\s*Ps\s*\)/i', (string) $e[$key])) continue;
+            $km = $fn($e[$key]);
+            if ($km > 0) return [$km, $key];
+        }
+        return [0, ''];
+    }
+
     private static function drivetrain(string $compl, array $e): string
     {
         $c = strtoupper($compl);

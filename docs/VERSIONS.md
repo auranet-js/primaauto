@@ -1,6 +1,263 @@
 # Historia wersji asiaauto-sync
 
 
+## 0.37.9 — 2026-09-03 (szybkość tras REST: −40 zapytań na kartach, cache etykiet, pamięć w przeglądarce)
+
+Pomiar (`wp eval`, czas samych metod, bez startu WP): `counts()` 33–74 ms / 18–34 zapytań,
+`query()` 14 ms / **52 zapytania** — miniatury 24 kart ładowane po jednej (`get_post` + meta
+załącznika). Sam start WordPressa na trasie REST to ~55 ms (tyle trwa odpowiedź z cache).
+Kompresja i cache po stronie serwera już były w porządku: brotli na REST i assetach
+(`search` 120 KB → 3,4 KB), `max-age` 7 dni na CSS/JS.
+
+| zmiana | efekt |
+|---|---|
+| `_prime_post_caches()` na miniaturach strony przed `renderCard()` | `query()` 52 → **9 zapytań** |
+| etykiety termów (`optionLabels`) w transiencie pod solą `asiaauto_search_` — zdejmowane przez `flushCache()` po imporcie | −8 `get_terms` na każde `counts()` |
+| zakresy zależne: jedno zapytanie MIN/MAX dla kolumn bez własnego filtra + osobne tylko dla aktywnych | 12 → 1 + aktywne |
+| pamięć odpowiedzi w JS (klucz = query string, 60 wpisów) | powrót do wcześniejszego stanu filtrów bez sieci |
+
+Po zmianach: REST `search` zimny 93 ms, `search-counts` zimny 85 ms (było 155), z cache 58 ms.
+`EXPLAIN` na typowym GROUP BY: `index_merge intersect(make,status)`, 398 wierszy — indeksy działają.
+
+## 0.37.8 — 2026-09-03 (filtry zależne wg zasad UX + nagłówek „Wyposażenie i technologie")
+
+Pytanie Janka: „czy wybór filtrów nie powinien wpływać na pozostałe (wyszarzać)?". Wcześniej: listy
+ukrywały zera, pastylki i kafle szarzały, ale dało się je kliknąć w zero wyników, podpowiedzi w polach
+liczbowych pokazywały zakres całej bazy. Teraz jedna reguła (wzorce Otomoto / mobile.de / Baymard):
+
+1. **Listy do ~15 opcji**: opcja z zerem widoczna, szara, `disabled`, licznik 0. **Marka i model**:
+   zero ukryte (długie listy). Liczniki liczone bez własnego filtra listy (OR w obrębie listy).
+2. **Pastylki i kafle „Oferty"**: zero = szare i `disabled`.
+3. **Pola liczbowe**: podpowiedź = zakres PO zawężeniu (`bounds` w `search-counts`, np. „Moc od 101"
+   przy PHEV zamiast 95); wartość poza zakresem dostaje „Brak ofert w tym zakresie".
+4. **Zaznaczone zostaje zaznaczone.** Przy 0 wyników pusty stan wypisuje aktywne filtry jako
+   przyciski do zdjęcia jednym kliknięciem; te, których zdjęcie przywraca wyniki, są wyróżnione
+   (serwer liczy `blokady` tylko przy zerze: COUNT bez każdego filtra z osobna, ≤ ~15 zapytań;
+   heurystyka z liczników po stronie JS oznaczała wszystko — cofnięta).
+
+Nagłówek sekcji: „Technologia i wyposażenie" → **„Wyposażenie i technologie"**.
+
+## 0.37.7 — 2026-09-03 (telefon: zwijane sekcje, otwarta tylko „Nadwozie")
+
+Decyzja Janka po pomiarze (filtry ~1 800 px nad wynikami na 390 px): sekcje zwijane na telefonie,
+na start otwarta „Nadwozie" i sekcje z aktywnymi filtrami (SSR z deep-linku), „Oferty" zawsze
+otwarte. Nagłówek sekcji to `<button aria-expanded aria-controls>` w `<h2>` (wzorzec disclosure);
+zwinięta sekcja nosi odznakę z liczbą aktywnych filtrów, odświeżaną w JS przy każdej zmianie.
+Desktop: klasa `is-zwinieta` ignorowana (CSS tylko w `@media ≤ 768 px`), JS przy przejściu na
+szeroki ekran rozwija wszystko.
+
+## 0.37.6 — 2026-09-03 (telefon: pastylki zawijane z „Więcej wyposażenia", przyklejony pasek wyników)
+
+**Pomiar przed (390 px):** do paska wyników 1 566 px, do pierwszej karty 1 690 px (dwa ekrany
+filtrów); 36 pastylek w JEDNYM przewijanym poziomo rzędzie o szerokości 7 124 px — nie do użycia
+palcem. Strona 434 KB, 27 zasobów, `load` 383 ms (headless).
+
+**Zmiany (tylko `@media ≤ 768 px`):**
+- pastylki zawijają się w rzędy; bez rozwinięcia widać 8 pierwszych + zaznaczone, reszta po
+  „Więcej wyposażenia (+28)" (przycisk w PHP, licznik z konfiguracji; desktop nietknięty);
+- przyklejony do dołu pasek „N ofert · Pokaż wyniki", widoczny po przewinięciu > 120 px i tylko
+  dopóki pasek wyników nie wjedzie w widok (IntersectionObserver + scroll); „Pokaż wyniki"
+  przewija do wyników natychmiast (`behavior: instant`).
+
+**Usterka złapana axe po rozwinięciu pastylek:** pastylka z licznikiem 0 miała `opacity: .5`
+→ kontrast 2,79:1. Teraz szary tekst (4,84:1) i przerywana ramka; to samo dla pustych kafli
+„Oferty". axe 0 naruszeń przy 390 i 1366 px z 9 pustymi pastylkami w widoku.
+
+**PageSpeed Insights mobile (03.09):** wynik **68**, FCP 2,3 s, **LCP 7,7 s**, TBT 160 ms, CLS 0,
+SI 4,7 s, waga 1 000 KiB; „nieużywany JS 228 KiB" = GTM + GA4 + Ads (tracking, nie wyszukiwarka).
+**Baseline `/samochody/`: 70, LCP 7,8 s, FCP 2,3 s** — ten sam obraz, więc LCP jest problemem
+motywu/karty, nie tej strony. Zauważone obok, nie ruszane: osobny temat wydajności całego serwisu.
+
+**Kandydaci na kolejne pastylki** zapisani: `docs/roadmapa/T-116-kandydaci-pastylek.md` (129 pozycji,
+wybór 03.09 oznaczony) + skrypt `scripts/kandydaci-pastylek.php`.
+
+## 0.37.5 — 2026-09-03 (osobne moduły sekcji + 10 pastylek z wyboru Janka)
+
+**0.37.4:** sekcje jako osobne białe moduły (odstęp 10 px, bez kresek); „Marka nagłośnienia" na
+końcu wyposażenia, pod pastylkami.
+
+**0.37.5:** pomiar kandydatów na pastylki — 117 cech z ≥ 50 wystąpieniami, po odsianiu tego, co już
+jest, i śmieci (nazwy chipów, tryby jazdy, pojemności); lista wyświetlona Jankowi z numerami.
+Wybór: 15, 16, 27, 62, 76, 79, 87, 96, 101, 108 → nowe flagi (SCHEMA_VERSION 5):
+
+| flaga | klucz extra_prep | ofert |
+|---|---|---:|
+| Ogrzewanie lusterek | `external_mirror_heat` | 2 761 |
+| Zdalny rozruch | `engine_remote_start` | 2 749 |
+| Rozpoznawanie znaków | `road_traffic_sign_recognition` | 2 566 |
+| **Tylna oś skrętna** (4WS, `整体转向`) | `overall_turn` | 192 |
+| Lodówka | `car_refrigerator` | 794 |
+| Dolby Atmos | `dolby_panoramic_sound` | 748 |
+| Fotel zero gravity | `zero_gravity_seat` | 620 |
+| Głośniki w fotelach | `seat_speakers` | 371 |
+| Hak holowniczy | `drag_hook` | 333 |
+| Sterowanie gestami | `gesture_control_system` | 157 |
+
+Sekcja „Technologia i wyposażenie" ma 36 pastylek. Skrypt pomiaru kandydatów:
+`tmp/` sesji (jednorazowy); reguła obecności ta sama co dla reszty flag (NEGATIVE, pierwszy wariant).
+
+## 0.37.3 — 2026-09-03 (koniec „Więcej filtrów": przegrupowanie wg odbioru Janka)
+
+Wsad: „zasięg CLTC do napędu i rozdziel: zasięg całkowity / zasięg na prądzie (CLTC); skrzynię
+chowamy; liczba miejsc do nadwozia na koniec; szyberdach → dach panoramiczny; resztę do
+wyposażenia; rocznik i przebieg do sortowania; felgi wyrzucamy — czyścimy całą sekcję".
+
+- **Napęd** ma dwa pola zasięgu: „Zasięg całkowity od" (`range_total`) i „Zasięg na prądzie
+  (CLTC) od" (`range_cltc`). CLTC = China Light-Duty Vehicle Test Cycle, zapis poprawny.
+- **Nadwozie** kończy się „Liczbą miejsc" (lista, 7 kolumn siatki).
+- **Technologia i wyposażenie**: „Marka nagłośnienia" (lista) + 26 pastylek, w tym nowa
+  **„Dach panoramiczny"** = flaga `roof_panorama` z enumu `sunroof` (panorama otwierana lub
+  stała), **1 658 ofert (54,4%)**, SCHEMA_VERSION 4.
+- **Sortowanie** dostało „Najnowszy rocznik" (`year_desc`); cena i przebieg były tam już wcześniej
+  (Najtańsze / Najdroższe / Najmniejszy przebieg). Założenie: cena filtruje się odtąd tylko przez
+  sortowanie — wsad nie precyzował, do cofnięcia jednym słowem.
+- **Poza UI** (parametry API `skrzynia`, `felgi_*`, `cena_*`, `rocznik`, `przebieg_*` zostają dla
+  deep-linków): skrzynia biegów, felgi, cena, rocznik, przebieg. Sekcja „Więcej filtrów" nie istnieje.
+
+## 0.37.2 — 2026-09-03 (ekrany dla pasażerów + wszystkie pastylki w jednej sekcji)
+
+Odbiór Janka: „sprawdź, czy gdzieś jest opcja ekranu dla pasażerów albo w zagłówkach; przenieś
+[15 pastylek z Więcej filtrów] do Technologia i wyposażenie".
+
+**Pomiar ekranów w `extra_prep`:** ekran tylny `rear_lcd_screen` (klucz w 1 698 ofertach, standard
+w 765, opcja 42), ekran pasażera z przodu w kluczach DYNAMICZNYCH z sufiksem wartości
+(`vice_screen_size_15.7`, `copilot_screen_resolution_*`), ekranów w zagłówkach brak (jedyny ślad:
+`rear_entertainment_screen_resolution` w 116 ofertach = podzbiór ekranu tylnego).
+
+Dwie nowe flagi (SCHEMA_VERSION 3): `screen_rear` „Ekran dla pasażerów z tyłu" **765 (25,1%)**,
+`screen_copilot` „Ekran pasażera (przód)" **225 (7,4%)**; oba naraz 67. Pod klucze dynamiczne
+`AsiaAuto_Specs_Table::flag()` dostało opcję `prefix` (dopasowanie po początku nazwy klucza)
+— reguły NEGATIVE i `firstVariant()` bez zmian. Zgodne ze spec danych etapu 2 (27,5% / 7,6%).
+
+**Sekcja „Technologia i wyposażenie" ma teraz wszystkie 25 pastylek** (8 z makiety + 2 ekrany +
+15 przeniesionych); w „Więcej filtrów" zostały: cena, rocznik, przebieg, liczba miejsc, felgi,
+zasięg na prądzie, skrzynia, szyberdach, marka nagłośnienia.
+
+## 0.37.1 — 2026-09-03 (liczba miejsc jako lista)
+
+Odbiór Janka: „wygląda nieźle, ilość miejsc tylko bym chciał listą, bo to będzie pewnie 4, 5, 6, 7".
+Pole „Liczba miejsc od" (zakres) zamienione na listę rozwijaną z wartościami i licznikami
+zależnymi (w bazie: 2, 4, 5, 6, 7; rosnąco). Nowy parametr URL `miejsca=6,7`; zakres
+`miejsca_min/_max` zostaje w API. Kolumna `seats` dołączona do `ENUM_PARAMS`, więc liczniki
+idą tą samą ścieżką co reszta list. Sprawdzone: SSR 6+7 = 669 = SQL; w przeglądarce liczniki
+i przycisk aktualizują się po wyborze.
+
+## 0.37.0 — 2026-09-03 (wyszukiwarka wg makiety I + ruch C: osiem nowych kolumn specs)
+
+**Kierunek zaakceptowany i wdrożony tego samego dnia.** Po pięciu odrzuceniach (A–D, boczna
+kolumna, E–H) Janek przyjął **makietę I** („teraz jest OK"): wygląd Otomoto — biały panel,
+etykieta nad polem, sekcje w jego kolejności, wszystko widoczne od razu, jeden promień 6 px.
+Wdrożenie 1:1 na `/wyszukiwarka/` (nadal niepodlinkowana, `/samochody/` nietknięte — mtime
+`class-asiaauto-inventory.php` 25.08, `asiaauto-inventory.js` 20.04, `asiaauto-inventory.css` 26.08).
+
+| sekcja | pola |
+|---|---|
+| Nadwozie | marka, model (wyłączony bez marki), rodzaj nadwozia, napęd 4x4, **długość od** (m), **DMC do** (kg) |
+| Napęd | silnik (paliwo), moc od, przyspieszenie do, bateria od, **zasięg od** (łączny; dla EV = CLTC) |
+| Styl i komfort | kolor nadwozia (kropki), **kolor wnętrza** (kropki, 6% pokrycia), materiał tapicerki, **zawieszenie** (pneumatyczne / adaptacyjne) |
+| Technologia i wyposażenie | pastylki: lidar, kamera 360°, masaż przód, **masaż tył**, wentylowane fotele, AR-HUD, **autopilot miejski (NOA)**, **nagłośnienie premium** |
+| Więcej filtrów (zwijane) | cena od–do, rocznik, przebieg do, miejsca od, felgi od, zasięg na prądzie od, skrzynia, szyberdach, **marka nagłośnienia**, pozostałe 15 flag |
+| Oferty (ostatnia) | kafle **do sprowadzenia z Chin / w drodze do Polski / na placu w Polsce** z liczbami PO filtrach; klik = zawęź, drugi klik = wszystkie; czerwony „Pokaż N ofert" przewija do wyników |
+
+Cena, rocznik i przebieg nie były we wsadzie Janka, więc siedzą w „Więcej filtrów". Etykieta
+„Na placu w Polsce" (zamiast „w Rzeszowie") — ruch B z promptu rozstrzygnięty makietą: część
+aut `on_lot` stoi w Pabianicach i Warszawie.
+
+**Ruch C — osiem nowych kolumn `wp7j_asiaauto_specs`** (SCHEMA_VERSION 2, `dbDelta` dodało
+kolumny i indeksy za pierwszym razem, sprawdzone `SHOW COLUMNS`; backup tabeli
+`~/backups/primaauto/2026-09-03/specs-przed-ruch-c.sql.gz`):
+
+| kolumna | źródło | pokrycie publish | uwaga |
+|---|---|---:|---|
+| `length_mm` | `length` (4 cyfry), fallback pierwsza liczba z `length_width_height` | 99,1% | < 1000 → NULL (nie zgadujemy jednostki); 986 ofert ≥ 5 m |
+| `gvw_kg` | `full_load_weight` | 95,2% | |
+| `range_total` | `combined_cruising_range_cltc`; EV = `range_cltc` | 68,7% | spalinowe bez wartości |
+| `interior_color` | taksonomia `interior-color` | 6,0% | filtr z małym pokryciem — świadomie, był we wsadzie |
+| `suspension` | `air_suspension` → pneumatyczne (795); `variable_suspension` z `软硬/高低` → adaptacyjne (631) | 46,9% | pneumatyczne ma pierwszeństwo |
+| `sound_brand` | `sound_brand` przez słownik `SOUND_BRANDS` (29 zapisów CN/EN → 19 slugów) | 32,5% | **0 nieznanych** w raporcie |
+| `seat_massage_r`, `noa_city`, `sound_premium` | flagi: `rear_seat_massage`, `navigation_assisted_driving_1`, rozpoznana marka audio | 994 / 1 284 / 986 | |
+
+Pokrycia zgodne z pomiarem na surowym `extra_prep` (985 ≥ 5 m, 994 masaż tył, 1 284 NOA).
+Nowe parametry URL: `dlugosc_min` (metry, ×1000 w `parseParams`), `dmc_max`, `zasieg_calk_min`,
+`kolor_wnetrza`, `zawieszenie`, `audio`. Pola są tekstowe („5,0", „100 000") — spacje i przecinek
+normalizowane po obu stronach.
+
+**Pomiary (test przepisany pod nowy DOM, `scripts/test-ui-wyszukiwarka.mjs`):** marka → model
+(44 modele po BYD), pastylka, długość 5,0 m → 74 oferty, deep-link po odświeżeniu (TAK), kafel
+„Na placu" zawęża i drugi klik zdejmuje, „Więcej filtrów" z odznaką, sortowanie, „Wyczyść"
+(URL czysty), paginacja, lista (otwarcie + Escape). **axe 0 naruszeń** przy 320 i 1366 px, także
+z otwartą listą; 0 błędów JS; brak reflow; `impeccable detect` 0; bramka porównawcza 50 kombinacji =
+**0 rozjazdów**.
+
+**Pułapki tej wersji:** przycisk `display:flex` zjada spacje między spanami („Pokaż42oferty") —
+`gap` zamiast spacji; szare `.aas__total-slowo` w czerwonym przycisku = kontrast poniżej progu,
+nadpisane na biel. Para pól ceny w siatce 6 kolumn potrzebuje `grid-column: span 2`.
+
+Backupy: `.bak-2026-09-03-makieta-i` przy `class-asiaauto-search.php`, CSS i JS;
+`.bak-2026-09-03-ruch-c` przy `class-asiaauto-specs-table.php`. Kopie klas w repo
+`plugins/asiaauto-sync/`.
+
+
+## 0.36.2 — 2026-09-03 (moc układu w hybrydach + cron 05:00; boczna kolumna zbudowana i wycofana tego samego dnia)
+
+**Kierunek wizualny — rozstrzygnięty makietą I.** Po odrzuceniu makiet A–D Janek podał wsad
+(„styl nie pasuje do reszty serwisu, telefon źle, grupowanie dziwne"), a w quizie wybrał moją
+rekomendację „szkielet jak /samochody/". Zbudowana na tym boczna kolumna (sidebar + szuflada
+mobilna, komplet bramek zielony) została **odrzucona w odbiorze**: chodziło o pasek GÓRNY jak
+w 0.36, jak najwięcej filtrów widocznych od razu i możliwość złożenia „auta marzeń", nie o kopię
+katalogu. Kod cofnięty do 0.36.1 (pliki `.bak-2026-09-03-sidebar` na serwerze), numer 0.36.2, bo
+w środku została naprawa mocy. Wniosek: zła rekomendacja w quizie — „reszta serwisu" przeczytana
+jako „powtórz /samochody/". Runda 2 makiet (E Otomoto, F mobile.de, G pasek z wszystkim, H paski
+sekcji) → runda 3: **makieta I zaakceptowana** („teraz jest OK"): wygląd Otomoto, desktop, pięć
+sekcji wg wsadu Janka (Nadwozie: marka/model/rodzaj/4x4/długość/DMC · Napęd: silnik/moc/
+przyspieszenie/bateria/zasięg · Styl i komfort: kolor nadwozia/kolor wnętrza/materiał/zawieszenie ·
+Technologia i wyposażenie: lidar, kamery, masaże… · **Oferty jako piąta sekcja na dole**: kafle
+do sprowadzenia / w drodze / na placu z liczbami po filtrach + „Pokaż N ofert"), **jeden promień
+6 px** na wszystkich kontrolkach. Generatory: `docs/makiety/gen-e.py` (E–H), `gen-i.py` (I);
+podgląd `https://auratest.pl/fe4f58fec53ctmp/primaauto-makiety/`. Wdrożenie = osobny krok
+(wymaga nowych kolumn specs: długość, DMC, zasięg łączny, masaż tył, kolor wnętrza, zawieszenie
+adaptacyjne, NOA, nagłośnienie).
+
+**Moc układu w hybrydach — ruch A z promptu domknięcia.** Filtr mocy odsiewał PHEV/EREV, bo
+`_asiaauto_horse_power` trzymało moc silnika spalinowego albo było puste (nowe oferty che168
+dostają katalog Autohome nocą, ale nikt z niego mocy do meta nie przepisywał). Stan na starcie:
+**120** ofert PHEV/EREV publish z mocą < 200 KM lub pustą (prompt mówił 98), z tego 85 bez stempla.
+
+Ustalenie, które zmieniło skrypt: **`system_max_power` z katalogu Autohome to „最大功率" z nagłówka,
+dla BYD DM-i / Denza / VOYAH równe mocy SILNIKA** (Denza D9: 115 kW = 156 KM silnika, a
+`electric_total_horsepower` = 333). Stempel „system_max_power" z 02.09 bywał więc fałszywy. Prawdziwą
+moc łączną niesie `electric_system_power` (系统综合功率; Leopard 5: 505 kW = 687 KM, zgodnie
+z producentem). Nowa **publiczna** `AsiaAuto_Spec::system_km_from_extra_prep()` (obok prywatnej
+`km_from_power()`, która zostaje dla tabeli huba) bierze w kolejności: `electric_system_horsepower` /
+`electric_system_power` → `electric_max_power` / `energy_elect_max_power` „kW(Ps)" →
+`electric_total_horsepower` / `total_electric_power`; **bez** `system_max_power`, **nigdy** `engine_*`.
+
+`scripts/napraw-moc-ukladu.php` (dry-run domyślnie, `apply`, `since=48h`, `silnik`, `paliwa=`,
+`raport=`) **tylko podnosi** i stempluje źródło. Dry-run pokazany Jankowi przed zapisem, wybrany
+pełny zakres:
+
+| zakres | podniesione |
+|---|---|
+| PHEV/EREV (w tym 3 ze stemplem silnika: AITO M9 160 → 496, Leopard 5 194 → 687, Volvo S90 310 → 456) | 126 |
+| EV/HEV z pustą mocą | 41 |
+
+Po biegu: PHEV/EREV z mocą 0 KM **22 → 3** (Leapmotor D19, 2× BYD Han DM-i 2025 — brak klucza
+mocy w danych, do ręcznego wpisania), poniżej 200 KM **120 → 47** (BYD DM-i 163–197 KM zgodnie
+z danymi), EV z 0 KM 39 → 1, meta vs tabela specs 0 rozjazdów. Na 72 ofertach karta pokaże inną
+liczbę niż filtr — `resolvePower()` w zamrożonym `class-asiaauto-inventory.php` bierze moc
+przedniego silnika, nie łączną. Nie ruszane.
+
+**Cron 05:00** (`napraw-moc-ukladu.php apply silnik since=48h paliwa=phev,erev,electric,hybrid`,
+przez `cron-install`, log `~/.claude/napraw-moc-ukladu.log`) — piąte ogniwo nocnej sekwencji, po
+katalogu 04:55, **przed** specs 05:05, bo tabela specs czyta moc z meta. Bez niego naprawa wracałaby
+z każdą nową hybrydą che168.
+
+Backupy: `~/backups/primaauto/2026-09-03/postmeta-horse-power-przed-moc-ukladu.sql.gz`,
+`.bak-2026-09-03-sidebar` przy `class-asiaauto-search.php`, CSS i JS, `.bak-2026-09-03-system-km`
+przy `class-asiaauto-spec.php`, `.bak-2026-09-03-v037` przy `asiaauto-sync.php`,
+`~/backups/crontab/crontab-2026-09-03-090155.bak`.
+
+
 ## 0.36.1 — 2026-09-02 (hierarchia nagłówków i etykiety grup filtrów)
 
 Znalezione detektorem `impeccable detect` (61 reguł, skanuje kod bez udziału modelu;
