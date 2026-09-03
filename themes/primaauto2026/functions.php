@@ -1,7 +1,7 @@
 <?php
 defined('ABSPATH') || exit;
 
-const PRIMAAUTO_THEME_VERSION = '1.2.0';
+const PRIMAAUTO_THEME_VERSION = '1.3.5';
 
 add_action('after_setup_theme', function () {
     add_theme_support('title-tag');
@@ -35,6 +35,9 @@ add_action('wp_enqueue_scripts', function () {
         wp_enqueue_style('primaauto-kb', "$base/css/kb.css", ['primaauto-base'], PRIMAAUTO_THEME_VERSION);
     }
     wp_enqueue_script('primaauto-nav',   "$base/js/nav.js", [], PRIMAAUTO_THEME_VERSION, ['strategy' => 'defer', 'in_footer' => true]);
+    // Dostepnosc 2.4.11 (karta N-6): petla fokusu w banerze zgod — patrz naglowek pliku.
+    wp_enqueue_script('primaauto-a11y-consent', "$base/js/a11y-consent-focus.js", [], PRIMAAUTO_THEME_VERSION, ['strategy' => 'defer', 'in_footer' => true]);
+    wp_enqueue_script('primaauto-a11y-scroll', "$base/js/a11y-scroll-regions.js", [], PRIMAAUTO_THEME_VERSION, ['strategy' => 'defer', 'in_footer' => true]);
 });
 
 /**
@@ -87,3 +90,13 @@ add_filter('document_title_parts', function ($parts) {
     }
     return $parts;
 }, 20);
+
+/**
+ * Weryfikacja domeny w Meta Business (portfolio Prima-Auto) — 2026-08-28.
+ * Kod z Ustawienia firmy → Bezpieczeństwo marki → Domeny. Bez niego Meta nie
+ * przypisuje konwersji z iOS do reklam (Aggregated Event Measurement).
+ * RankMath w tej wersji nie ma pola Facebook — stąd wpis w wp_head.
+ */
+add_action('wp_head', function () {
+    echo '<meta name="facebook-domain-verification" content="945aj5ebvux0ph1vonne9nfuz8pb6t" />' . "\n";
+}, 1);
