@@ -1,6 +1,33 @@
 # Historia wersji asiaauto-sync
 
 
+## motyw 1.3.5 — 2026-09-03 (autolinki słownika były NIEWIDOCZNE na ofertach i hubach)
+
+Zgłoszenie Janka przy przeglądzie makiety: „w stanie obecnym nie widzę wykropkowanych linii pod
+linkami na stronie oferty". Zmierzone (computed style, Chrome):
+
+| strona | przed | po |
+|---|---|---|
+| oferta | `text-decoration: none`, kolor = kolor tekstu → **link nierozróżnialny** | kropkowana `#A0AEC0` |
+| hub modelu | `none`, kolor czerwony + własna kropkowana ramka | kropkowana `#A0AEC0` |
+| hasło `/wiki/` | kropkowana (działało) | bez zmian |
+
+**Przyczyna:** `.aa-autolink` w `base.css` ma specyficzność 0-1-0, a `.aa-single a`
+(`asiaauto-single.css:10`, `text-decoration: none`) i `.aa-hub__body a` (`hub.css:77`) mają 0-1-1
+i ładują się PÓŹNIEJ — wygrywały remis. Autolinker działał, linki były w HTML (8 na ofercie AITO M9,
+w tym 6 w tabeli danych technicznych), ale wyglądały jak zwykły tekst. **To także naruszenie
+WCAG 1.4.1** (link w treści nierozróżnialny inaczej niż przez kolor — a tu nie było nawet koloru),
+którego audyt nie złapał, bo próbka nie zawierała oferty z autolinkiem.
+
+Naprawa: blok selektorów kontekstowych (0-2-1) w `base.css` — `.aa-single`, `.aa-hub__body`,
+`.aa-tech__value`, `.aa-desc-content`, `.pa-article__content`; bez `!important`, z wyzerowaniem
+`border-bottom` po regule huba.
+
+**To wyjaśnia pomiar GA4 z T-250:** 3 przejścia oferta → słownik na 50 295 odsłon (0,006 %) przy
+40 przejściach z aktualności. Na ofertach nie było czego kliknąć. Wybór docelowego stylu (warianty
+A–D, `docs/makiety/autolinki-warianty.html`) zostaje u Janka — ta zmiana tylko przywraca stan A tam,
+gdzie go nie było.
+
 ## 0.37.12 — 2026-09-03 (T-250 krok 4: CTA pod hasłem → wyszukiwarka z filtrem)
 
 Sekcja „W ofercie: N aut z technologią X" pod hasłem `/wiki/` prowadziła do całego `/samochody/`.
