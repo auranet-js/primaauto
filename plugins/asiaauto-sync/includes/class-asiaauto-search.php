@@ -217,6 +217,8 @@ class AsiaAuto_Search
         $sort = (string) ($in['sort'] ?? 'date_desc');
         $p['sort'] = isset(self::SORTS[$sort]) ? $sort : 'date_desc';
         $p['page'] = max(1, (int) ($in['strona'] ?? 1));
+        // porównania alfabetyczne po polsku (Ł przed M, Ż na końcu) — bez tego strcoll sortuje po bajtach
+        setlocale(LC_COLLATE, 'pl_PL.UTF-8', 'pl_PL.utf8', 'pl_PL', 'C.UTF-8');
 
         return $p;
     }
@@ -640,8 +642,15 @@ class AsiaAuto_Search
             foreach ($chosen as $slug) {
                 if (!isset($opts[$slug])) $opts[$slug] = ['label' => $labels[$slug] ?? $slug, 'n' => 0];
             }
+            // Marka i model ALFABETYCZNIE (decyzja Janka 03.09): to jedyne pola, w których
+            // użytkownik przychodzi ze znaną nazwą i skanuje listę — 58 marek i 2,6 tys. modeli
+            // ułożonych po liczbie ofert zmusza do czytania wszystkiego. Krótkie listy (paliwo,
+            // nadwozie, kolor) zostają po liczniku: tam liczba mówi, gdzie w ogóle jest oferta.
             if ($col === 'year') krsort($opts, SORT_NUMERIC);
             elseif ($col === 'seats') ksort($opts, SORT_NUMERIC);
+            elseif ($col === 'make' || $col === 'serie') {
+                uasort($opts, static fn($a, $b) => strcoll($a['label'], $b['label']));
+            }
             else uasort($opts, static fn($a, $b) => $b['n'] <=> $a['n'] ?: strcmp($a['label'], $b['label']));
         }
         $tekst = $bezMarki ? 'Najpierw wybierz markę'

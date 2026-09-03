@@ -200,13 +200,25 @@
                 if (seen[slug] || !map[slug]) return;
                 nowe.push(buildOption(param(col), slug, labels[slug] || slug, map[slug], ''));
             });
+            // modele dorysowane po wyborze marki wchodzą na koniec listy — przy sortowaniu
+            // alfabetycznym trzeba przełożyć CAŁĄ listę, nie tylko doklejone
             if (nowe.length) {
                 nowe.sort(function (a, b) {
                     if (col === 'year') return parseInt(b.dataset.value, 10) - parseInt(a.dataset.value, 10);
                     if (col === 'seats') return parseInt(a.dataset.value, 10) - parseInt(b.dataset.value, 10);
+                    // marka i model alfabetycznie — ta sama reguła co w PHP (renderEnum)
+                    if (col === 'make' || col === 'serie') return a.textContent.localeCompare(b.textContent, 'pl');
                     return (parseInt(b.dataset.n, 10) - parseInt(a.dataset.n, 10)) || a.textContent.localeCompare(b.textContent, 'pl');
                 });
                 nowe.forEach(function (el) { box.appendChild(el); });
+                if (col === 'make' || col === 'serie') {
+                    var wszystkie = [].slice.call(box.querySelectorAll('.aas__opt'));
+                    wszystkie.sort(function (a, b) {
+                        return a.querySelector('.aas__opt-label').textContent
+                            .localeCompare(b.querySelector('.aas__opt-label').textContent, 'pl');
+                    });
+                    wszystkie.forEach(function (el) { box.appendChild(el); });
+                }
             }
         });
 

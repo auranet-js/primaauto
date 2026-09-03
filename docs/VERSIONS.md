@@ -1,6 +1,21 @@
 # Historia wersji asiaauto-sync
 
 
+## 0.37.15 — 2026-09-03 (marki i modele alfabetycznie)
+
+Pytanie Janka: „lista marek i modeli niech będzie alfabetyczna, ma to sens?". Ma — i tylko dla
+tych dwóch pól. To jedyne listy, w których użytkownik przychodzi ze **znaną nazwą** i skanuje
+wzrokiem (58 marek, 2,6 tys. modeli); kolejność po liczbie ofert zmusza go wtedy do czytania
+wszystkiego. W krótkich listach (paliwo, nadwozie, kolor, tapicerka) nazw się nie szuka, więc tam
+licznik dalej rządzi kolejnością — mówi, gdzie w ogóle jest oferta. Rocznik malejąco, miejsca
+rosnąco, bez zmian.
+
+Zrobione w PHP (`renderEnum`) i w JS. **Pułapka:** modele dorysowywane po wyborze marki wchodzą
+na koniec listy, więc przy sortowaniu alfabetycznym trzeba przełożyć CAŁĄ listę, nie tylko
+doklejone — inaczej „Atto 2" ląduje pod „Song L". Do tego `setlocale(LC_COLLATE, 'pl_PL')`
+w `parseParams()`, żeby `strcoll` układał polskie znaki, a nie bajty. Sprawdzone na żywo: BYD →
+Atto 2, ATTO 3, BYD e7, Frigate 07, Han DM-i, Han EV… (kolejność zgodna z `localeCompare('pl')`).
+
 ## 0.37.14 — 2026-09-03 (telefon: pasek wyników nie udaje przycisku zamykającego)
 
 Zgłoszenie Janka: „jawny przycisk do pokazywania wyników sugeruje, że zamyka się nim filtr,
