@@ -44,7 +44,7 @@ global $wpdb;
 $sql = "
     SELECT p.ID, p.post_title, ep.meta_value AS ep, cy.meta_value AS yr, cx.meta_value AS compl
       FROM {$wpdb->posts} p
-      JOIN {$wpdb->postmeta} ep ON ep.post_id=p.ID AND ep.meta_key='_asiaauto_extra_prep'
+ LEFT JOIN {$wpdb->postmeta} ep ON ep.post_id=p.ID AND ep.meta_key='_asiaauto_extra_prep'
  LEFT JOIN {$wpdb->postmeta} cy ON cy.post_id=p.ID AND cy.meta_key='ca-year'
  LEFT JOIN {$wpdb->postmeta} cx ON cx.post_id=p.ID AND cx.meta_key='_asiaauto_complectation'
      WHERE p.post_type='listings' AND p.post_status='publish'
@@ -58,8 +58,12 @@ $ubogie = 0; $trafione = 0; $brak = 0; $zmienione = 0; $dolaneRazem = 0;
 $przyklady = []; $brakiKluczy = [];
 
 foreach ($wpdb->get_results($sql) as $r) {
+    // LEFT JOIN + pusty wsad jako 0 pól (2026-09-03): przy INNER JOIN oferta BEZ wiersza meta
+    // `_asiaauto_extra_prep` była dla banku niewidzialna — a to dokładnie te oferty, które
+    // najbardziej potrzebują dolania (18 sztuk dongchedi, 14 z dawcą w banku).
     $ma = json_decode((string) $r->ep, true);
-    if (!is_array($ma) || count($ma) >= $prog) continue;
+    if (!is_array($ma)) $ma = [];
+    if (count($ma) >= $prog) continue;
     $ubogie++;
 
     $mk = wp_get_post_terms($r->ID, 'make',  ['fields' => 'slugs']);

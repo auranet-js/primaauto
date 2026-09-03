@@ -68,7 +68,9 @@ foreach ($rows as $r) {
         }
         if ($uszkodzone > 3) continue;                       // dawca z rozbitym escape
         $dawcy[strtolower("$r->mk|$r->se|$r->comp|$r->yr")][] = $r;
-    } elseif ($r->n > 0 && $r->n < 100 && !$reczny && !isset($zarezerwowane[$r->ID])) {
+    // `n > 0` odrzucało cele z zerem pól (2026-09-03) — czyli oferty bez żadnej specyfikacji,
+    // te najbardziej potrzebujące dawcy. Ochrona ofert ręcznych działa na `$reczny`, nie na liczbie pól.
+    } elseif ($r->n < 100 && !$reczny && !isset($zarezerwowane[$r->ID])) {
         $cele[] = $r;
     }
 }

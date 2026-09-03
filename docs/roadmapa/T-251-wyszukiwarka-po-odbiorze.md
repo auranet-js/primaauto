@@ -46,16 +46,17 @@ Telefon: zwijane sekcje, 8 pastylek + „Więcej wyposażenia", pasek „Wyniki 
 
 ## 1. Domknięcia — najpierw
 
-### A. Wybór wariantu autolinku (decyzja Janka, potem ~0,5 h)
-Makieta: `https://auratest.pl/fe4f58fec53ctmp/primaauto-makiety/autolinki-warianty.html`
-(generator `docs/makiety/gen-autolink.py`). **Kontekst zmieniony 03.09:** autolinki na ofertach
-i hubach **w ogóle nie miały podkreślenia** (`.aa-autolink` 0-1-0 przegrywał z `.aa-single a`
-i `.aa-hub__body a`) — naprawione w motywie 1.3.5, więc wariant A dopiero teraz istnieje naprawdę.
-Janek ogląda ofertę na żywo i decyduje: zostaje A, czy wchodzi B / C / D.
+### A. Wybór wariantu autolinku — ZAMKNIĘTE 03.09
+Decyzja Janka: **zostaje wariant A** (kropkowana szara linia, kolor dziedziczony — stan po
+naprawie specyficzności w motywie 1.3.5). Zero zmian w kodzie. Uzasadnienie: autolinki do
+03.09 nie miały podkreślenia w ogóle, więc najpierw mierzymy, czy sama naprawa ruszyła
+przejścia oferta → hasło (dziś 3 na 50 295 odsłon) — patrz punkt H. Makieta zostaje
+w `docs/makiety/gen-autolink.py` na wypadek powrotu do tematu po pomiarze.
 
-### B. Ikona „i" przy pastylkach (decyzja Janka, potem 1–2 h)
-Trzy warianty na tej samej makiecie. Rekomendacja: osobna ikona obok pastylki (dwa cele dotykowe;
-link **wewnątrz** etykiety = `nested-interactive` w axe). Wdrożenie addytywne, po nim axe 320/1366.
+### B. Ikona „i" przy pastylkach — ZAMKNIĘTE 03.09
+Decyzja Janka: **wariant 3 — bez linku z pastylki.** Wyszukiwarka zostaje narzędziem, nie
+encyklopedią; droga do hasła prowadzi przez `/wiki/` i autolinki w treści oferty. Zero zmian
+w kodzie, bramka axe `nested-interactive` nietknięta.
 
 ### C. Weryfikacja poprawki iOS (Janek)
 0.37.11 dał 16 px na wszystkich polach przy ≤ 768 px i zdjął autofokus w liście na dotyku —
@@ -63,19 +64,52 @@ typowa przyczyna „ekran się rozjeżdża" na iPhonie. **Headless Chrome tego n
 potwierdzenie tylko z telefonu Janka (iPhone 15 Pro). Jeśli zoom nadal jest: sprawdzić `viewport`
 w motywie i `user-scalable`, potem szerokość arkusza listy przy otwartej klawiaturze.
 
-### D. Strona postępu — akcept godzin, wysyłka, commit (0,5 h)
-Wpisy już są w `dane/postep.json` (kopia poprzedniego stanu: `dane/postep.json.bak-2026-09-03`),
-strona zbudowana lokalnie. **Do zrobienia:** (1) Janek akceptuje albo koryguje godziny — zostały
-policzone z rozpiętości commitów w danym dniu, nie z jego realnego czasu; (2) decyzja, czy prace
-przy Meta i Ads (28 i 31.08, razem 12 h) zostają na tej stronie, czy są rozliczane osobno;
-(3) `python3 build_postep.py --deploy`; (4) commit `postep.json` + `postep.html`.
-⚠️ Memory `feedback_nie_pisz_rozliczone_o_godzinach` — dla Ruslana godziny są „zrealizowane".
+### D. Strona postępu — ZAMKNIĘTE 03.09
+Godziny zaakceptowane bez korekty (7 wpisów za lukę 26.08–03.09, +39 h → **287 h** od
+spotkania 16.07). Decyzja Janka: prace przy Meta (28.08) i Ads (31.08), razem 12 h,
+**zostają na tej stronie** — jedna strona na całość, jak wcześniejsze wpisy o PayU, YouTube
+i sesji zdjęciowej. `build_postep.py --deploy` wykonany, strona zweryfikowana na żywo
+(HTTP 200, 287 h i wpis z 03.09 widoczne). Commit nie był potrzebny — rebuild wyszedł
+bajt-identyczny z zawartością `1c7d06e`.
+https://auratest.pl/pa-postep-eb460f6c3c4c12755858/
 
-### E. Trzy oferty bez mocy (Ruslan)
-`396408` Leapmotor D19 2026 EREV (pusty `extra_prep`), `418328` i `434500` BYD Han DM-i 2025
-„1.5T Auto FWD 5 Seater Edition". **Nie wpisywać z bliźniaków** — moc idzie do umowy PDF
-(`class-asiaauto-contract.php:423`), a bliźniak D19 to wersja BEV. Prośba do Ruslana o wpisanie
-w panelu (edytor listingu, pole „Moc (KM)").
+### E. Oferty bez mocy — ZAMKNIĘTE 03.09 (było 21, nie 3)
+Pomiar na produkcji obalił założenie „brak danych w źródle". Ofert `publish` bez mocy było **21**,
+a 18 ofert dongchedi nie miało w ogóle **wiersza** meta `_asiaauto_extra_prep`. Przyczyną były
+trzy sita, każde z innego powodu:
+
+| sito | co odrzucało | naprawa |
+|---|---|---|
+| `dolej-spec-z-banku.php` | `JOIN` na meta `_asiaauto_extra_prep` — oferta bez wiersza meta niewidzialna dla banku | `LEFT JOIN` + pusty wsad liczony jako 0 pól |
+| `merge-spec-from-twin.php` | cel musiał mieć `n > 0` pól, więc oferta z zerem wypadała z listy celów | warunek `n < 100` (ochrona ofert ręcznych działa na `$reczny`, nie na liczbie pól) |
+| `backfill-spec-autohome.php` | twardy filtr `source='che168'` | **nie ruszone** — patrz punkt K |
+
+Moc nie wymagała nowego kodu: `uzupelnij-moc-km.php` ma ścieżkę #4 `engine_max_horsepower`
+dla ICE i przelicza `system_max_power` kW × 1,36.
+
+**Wykonane** (backup `~/backups/primaauto/2026-09-03/wp521-przed-naprawa-sit.sql.gz`, 42 MB):
+bliźniak `apply` → 5 ofert z zera dostało 171–371 pól; bank `apply` → 9 ofert, +2 893 pola;
+`uzupelnij-moc-km.php apply` → **14 ofert, 0 zmienionych istniejących**; `zbuduj-specs.php apply since=48h`.
+Zweryfikowane oczami na żywo: oferta 371636 (przed: 0 pól) renderuje 14 sekcji specyfikacji,
+moc na stronie zgadza się z meta i z tabelą specs. Wartości sprawdzone punktowo — MG 7 2.0T 261 KM,
+Haval Big Dog 238 KM, Arrizo 8 1.6T 197 KM, YU7 4WD Max 691 KM (508 kW).
+
+**Wynik: bez mocy 21 → 7, bez wiersza `extra_prep` 24 → 10** (z tego 6 to oferty ręczne,
+chronione flagą `_asiaauto_manual_entry` w obu skryptach — celowo).
+
+Dlaczego to bezpieczne: bliźniak dolewa pole tylko przy **konsensusie wszystkich dawców** tej samej
+wersji (klucz `marka|seria|wersja|rocznik`), pomija listę `$VOLATILE`, nigdy nie nadpisuje
+istniejącego klucza i weryfikuje zapis odczytem. Leapmotor D19 EREV nie dostał nic — mechanizm sam
+odrzucił brak dokładnego dawcy, czyli ostrzeżenie „nie wpisywać z bliźniaków" pozostaje spełnione.
+
+### K. Katalog Autohome dla dongchedi (nowa pozycja, 2–3 h)
+Zostało **7 ofert bez mocy**: 2 świeże che168 (`460702` Zeekr 009, `460862` GWM Cannon — te weźmie
+cron o 04:55, są w zakresie) i **5 dongchedi bez pokrycia w banku i u bliźniaka**: `374367` Zeekr 001
+Max 103kWh, `388014` BYD Han L EV 701KM, `396408` Leapmotor D19 EREV, `418328` i `434500` BYD Han DM-i.
+Dla nich zostaje czwarta droga — katalog Autohome po nazwie CN (brand → series → config, 3 requesty),
+opisana w memory `reference_autohome_specid_recznie_dla_dongchedi`. `backfill-spec-autohome.php`
+filtruje dziś twardo `source='che168'`, więc dongchedi nigdy go nie dostaje. To jedyny element
+wymagający nowego kodu i zapytań na zewnątrz — świadomie oddzielony od poprawek sit.
 
 ## 2. Filtry — potem
 
@@ -91,8 +125,12 @@ i `impeccable detect` na zerze. Reguły normalizacji: pusta wartość = NIE, `�
 wartości parowe „A / B" tylko po ` / ` ze spacjami.
 
 ### G. Kolejne pastylki z listy 129 (1–3 h)
-`docs/roadmapa/T-116-kandydaci-pastylek.md`. **Janek podaje numery** — nie dobierać samodzielnie
-(wybór z 03.09: 15, 16, 27, 62, 76, 79, 87, 96, 101, 108). Pozycje > 85% pokrycia jako filtry
+`docs/roadmapa/T-116-kandydaci-pastylek.md`. **Janek podaje numery** — nie dobierać samodzielnie.
+⚠️ **Numery z poprzedniego wyboru (15, 16, 27, 62, 76, 79, 87, 96, 101, 108) pochodzą ze starej
+listy 117 kandydatów i DZIŚ WSKAZUJĄ CO INNEGO.** Po pomiarze 03.09 lista ma 129 pozycji, bez
+wdrożonych — numeracja się przesunęła (wtedy 15 = `external_mirror_heat`, dziś 15 = `alloy_wheel`).
+Nazwy wdrożonego wyboru są w `AsiaAuto_Specs_Table::FLAGS` (blok „wybór Janka z listy 117").
+Numery bierz wyłącznie z aktualnego pliku. Pozycje > 85% pokrycia jako filtry
 prawie nic nie zawężają. Procedura dodania jest w tym samym pliku, sekcja „Jak dodać pastylkę".
 
 ### H. Pomiar po dwóch tygodniach (~1 h, nie wcześniej niż 17.09)
