@@ -666,13 +666,27 @@ class AsiaAuto_Search
                     <span class="aas__sel-text" id="<?= $id ?>-t" data-pusty="Wszystkie" data-bez-marki="Najpierw wybierz markę"><?= esc_html($tekst) ?></span>
                     <b class="aas__caret" aria-hidden="true"></b>
                 </button>
-                <div class="aas__pop" id="<?= $id ?>-p" role="group" aria-labelledby="<?= $id ?>-l" hidden>
+                <div class="aas__pop" id="<?= $id ?>-p" role="group" aria-labelledby="<?= $id ?>-l"
+                     data-opcji="<?= count($opts) ?>" hidden>
+                    <?php /* Nagłówek i stopka są widoczne WYŁĄCZNIE na telefonie (@media <=768px).
+                             Bez nich arkusz od dołu nie mówi, co się wybiera ani jak wyjść — T-252. */ ?>
+                    <i class="aas__pop-uchwyt" aria-hidden="true"></i>
+                    <div class="aas__pop-top">
+                        <p class="aas__pop-tyt" aria-hidden="true"><?= esc_html($pole['label']) ?></p>
+                        <span class="aas__pop-ile" aria-hidden="true" hidden>0</span>
+                        <button type="button" class="aas__pop-x" aria-label="Zamknij listę: <?= esc_attr($pole['label']) ?>">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
                     <?php if (!empty($pole['szukaj'])): ?>
                         <div class="aas__szukaj"><input type="text" placeholder="Szukaj..." autocomplete="off" aria-label="Szukaj w filtrze: <?= esc_attr($pole['label']) ?>"></div>
                     <?php endif; ?>
                     <div class="aas__opts">
                         <?php foreach ($opts as $slug => $o) $this->renderOpcja($param . '[]', (string) $slug, $o['label'], $o['n'],
                             in_array((string) $slug, $chosen, true), $kropki ? (self::COLOR_HEX[$slug] ?? '#999') : '', $ukrywaj); ?>
+                    </div>
+                    <div class="aas__pop-stopka">
+                        <button type="button" class="aas__pop-ok">Pokaż wyniki</button>
                     </div>
                 </div>
             </div>
