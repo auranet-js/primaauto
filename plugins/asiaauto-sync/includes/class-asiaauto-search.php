@@ -749,18 +749,48 @@ class AsiaAuto_Search
     {
         // telefon: widać pierwsze 8 pastylek (+ zaznaczone), reszta po „Więcej wyposażenia"; desktop pokazuje wszystkie (CSS)
         $ukryte = max(0, count($pole['flagi']) - 8);
+
+        // T-252: na telefonie wyposażenie idzie na pełny ekran z podziałem na grupy. Kolejność
+        // w markupie zostaje ORYGINALNA (ręcznie ułożona, „wabiki" najpierw — tak działa desktop),
+        // a grupowanie robi `order` we flexie, włączany wyłącznie w @media <=768px.
+        $grupaFlagi = [];
+        $indeks = 0;
+        foreach (self::FLAG_GROUPS as $nazwa => $flagi) {
+            foreach (array_keys($flagi) as $f) $grupaFlagi[$f] = $indeks;
+            $indeks++;
+        }
+        $wybranych = count(array_intersect($p['flags'], $pole['flagi']));
         ?>
         <div class="aas__pole aas__pole--flags">
-            <div class="aas__chips" data-limit="8">
+            <button type="button" class="aas__flags-otworz" aria-expanded="false" aria-controls="aas-wyposazenie">
+                <span class="aas__flags-otworz-t">Wybierz wyposażenie</span>
+                <span class="aas__flags-n"<?= $wybranych ? '' : ' hidden' ?>><?= $wybranych ?></span>
+            </button>
+            <div class="aas__chips" id="aas-wyposazenie" data-limit="8">
+                <div class="aas__chips-top">
+                    <p class="aas__chips-tyt" aria-hidden="true">Wyposażenie i technologie</p>
+                    <span class="aas__chips-ile" aria-hidden="true"<?= $wybranych ? '' : ' hidden' ?>><?= $wybranych ?></span>
+                    <button type="button" class="aas__chips-x" aria-label="Zamknij wyposażenie"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="aas__chips-szukaj">
+                    <input type="text" placeholder="Szukaj wyposażenia..." autocomplete="off" aria-label="Szukaj w wyposażeniu">
+                </div>
+                <?php $g = 0; foreach (array_keys(self::FLAG_GROUPS) as $nazwaGrupy): ?>
+                    <p class="aas__chips-grupa" data-grupa="<?= $g++ ?>" aria-hidden="true"><?= esc_html($nazwaGrupy) ?></p>
+                <?php endforeach; ?>
                 <?php foreach ($pole['flagi'] as $flaga):
                     $n = (int) ($counts['flags'][$flaga] ?? 0);
                     $on = in_array($flaga, $p['flags'], true); ?>
-                    <label class="aas__chip<?= $on ? ' is-active' : '' ?><?= $n === 0 && !$on ? ' is-empty' : '' ?>">
+                    <label class="aas__chip<?= $on ? ' is-active' : '' ?><?= $n === 0 && !$on ? ' is-empty' : '' ?>"
+                           data-grupa="<?= (int) ($grupaFlagi[$flaga] ?? 0) ?>">
                         <input type="checkbox" name="wyposazenie[]" value="<?= esc_attr($flaga) ?>" <?= $on ? 'checked' : '' ?><?= $n === 0 && !$on ? ' disabled' : '' ?>>
                         <span class="aas__chip-label"><?= esc_html($this->etykietaFlagi($flaga)) ?></span>
                         <span class="aas__chip-n"><?= $this->fmtLiczba($n) ?></span>
                     </label>
                 <?php endforeach; ?>
+                <div class="aas__chips-stopka">
+                    <button type="button" class="aas__chips-ok">Pokaż wyniki</button>
+                </div>
             </div>
             <?php if ($ukryte > 0): ?>
                 <button type="button" class="aas__chips-wiecej" aria-expanded="false">Więcej wyposażenia <span class="aas__chips-wiecej-n">(+<?= $ukryte ?>)</span></button>

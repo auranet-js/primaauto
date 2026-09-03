@@ -98,6 +98,7 @@
         root.querySelectorAll('.aas__total-slowo').forEach(function (el) { el.textContent = slowoOfert(total); });
         ostatniTotal = total;
         ustawPrzyciskArkusza(total);
+        ustawStopkeFlag();
     }
 
     /** Stopka arkusza na telefonie: „Pokaż 1 706 ofert". Liczba pochodzi z tego samego
@@ -475,8 +476,9 @@
         `history.back()` jest asynchroniczne — gdyby zamknięcie czekało na `popstate`,
         arkusz zostawałby widoczny przez jeden tick (i tak właśnie oblewał test Escape). */
     function zamknijListy() {
-        if (!otwarta()) return;
+        if (!otwarta() && !panelFlag()) return;
         zamknijListyTeraz();
+        zamknijFlagiTeraz();
         if (popWHistorii) {
             popWHistorii = false;
             ignorujPop = true;
@@ -502,6 +504,62 @@
         if (zaslona) { zaslona.remove(); zaslona = null; }
         document.body.style.overflow = '';
         dotykY = null;
+    }
+
+    // ------------------------------------------- wyposażenie: pełny ekran (telefon, T-252)
+
+    function panelFlag() { return root.querySelector('.aas__chips.is-otwarte'); }
+
+    function otworzFlagi(btn) {
+        var panel = document.getElementById(btn.getAttribute('aria-controls'));
+        if (!panel) return;
+        zamknijListyTeraz();
+        btn.setAttribute('aria-expanded', 'true');
+        panel.classList.add('is-otwarte');
+        document.body.style.overflow = 'hidden';
+        var szukaj = panel.querySelector('.aas__chips-szukaj input');
+        if (szukaj) { szukaj.value = ''; filtrujFlagi(panel); }
+        ustawStopkeFlag();
+        if (!popWHistorii) { history.pushState({ q: (history.state || {}).q, pop: 1 }, ''); popWHistorii = true; }
+    }
+
+    function zamknijFlagiTeraz() {
+        var panel = panelFlag();
+        if (!panel) return;
+        panel.classList.remove('is-otwarte');
+        var btn = root.querySelector('.aas__flags-otworz[aria-expanded="true"]');
+        if (btn) btn.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+    }
+
+    /** Licznik wybranych (na przycisku i w nagłówku) + „Pokaż N ofert" w stopce panelu. */
+    function ustawStopkeFlag() {
+        var panel = root.querySelector('.aas__chips');
+        if (!panel) return;
+        var n = panel.querySelectorAll('.aas__chip input:checked').length;
+        [root.querySelector('.aas__flags-n'), panel.querySelector('.aas__chips-ile')].forEach(function (el) {
+            if (!el) return;
+            el.textContent = n;
+            el.hidden = n === 0;
+        });
+        var ok = panel.querySelector('.aas__chips-ok');
+        if (ok && ostatniTotal !== null) ok.textContent = 'Pokaż ' + fmt(ostatniTotal) + ' ' + slowoOfert(ostatniTotal);
+    }
+
+    function filtrujFlagi(panel) {
+        var input = panel.querySelector('.aas__chips-szukaj input');
+        var q = input ? input.value.trim().toLowerCase() : '';
+        panel.querySelectorAll('.aas__chip').forEach(function (chip) {
+            var nazwa = chip.querySelector('.aas__chip-label').textContent.toLowerCase();
+            chip.classList.toggle('is-hidden', !!q && nazwa.indexOf(q) === -1);
+        });
+        // nagłówek grupy znika, gdy szukanie wycięło z niej wszystko
+        panel.querySelectorAll('.aas__chips-grupa').forEach(function (h) {
+            var g = h.dataset.grupa;
+            var widoczna = [].some.call(panel.querySelectorAll('.aas__chip[data-grupa="' + g + '"]'),
+                function (c) { return !c.classList.contains('is-hidden'); });
+            h.hidden = !widoczna;
+        });
     }
 
     function otworzListe(sel) {
@@ -564,7 +622,13 @@
         // stopka i „×" arkusza (telefon) — obie drogi wyjścia idą przez tę samą ścieżkę
         if (e.target.closest('.aas__pop-x') || e.target.closest('.aas__pop-ok')) { zamknijListy(); return; }
 
-        if (!e.target.closest('.aas__pop')) zamknijListy();
+        var flagiBtn = e.target.closest('.aas__flags-otworz');
+        if (flagiBtn) { e.preventDefault(); otworzFlagi(flagiBtn); return; }
+        if (e.target.closest('.aas__chips-x') || e.target.closest('.aas__chips-ok')) { zamknijListy(); return; }
+
+        // klik wewnątrz otwartego panelu wyposażenia nie zamyka go (zaznaczanie pastylek);
+        // na desktopie `panelFlag()` jest zawsze puste, więc zachowanie się nie zmienia
+        if (!(panelFlag() && e.target.closest('.aas__chips')) && !e.target.closest('.aas__pop')) zamknijListy();
 
         var wiecej = e.target.closest('.aas__wiecej');
         if (wiecej) {
@@ -644,12 +708,14 @@
     form.addEventListener('input', function (e) {
         if (e.target.matches('.aas__inp input')) { odswiez(); odswiezZakresy(); debounced(); }
         else if (e.target.matches('.aas__szukaj input')) filtrujOpcje(e.target);
+        else if (e.target.matches('.aas__chips-szukaj input')) filtrujFlagi(e.target.closest('.aas__chips'));
     });
 
     // Licznik w nagłówku arkusza ma reagować od razu — `search-counts` wraca dopiero po 350 ms.
     root.addEventListener('change', function (e) {
         var pop = e.target.closest('.aas__pop');
         if (pop) ustawLicznikArkusza(pop);
+        if (e.target.closest('.aas__chips')) ustawStopkeFlag();
     });
 
     // Zsuwanie arkusza palcem w dół. Tylko od góry listy, żeby nie kolidowało z przewijaniem opcji.
@@ -677,6 +743,7 @@
         if (popWHistorii) {                                             // systemowe „wstecz" przy otwartym arkuszu
             popWHistorii = false;
             zamknijListyTeraz();
+            zamknijFlagiTeraz();
             przywrocUrl();
             return;
         }
