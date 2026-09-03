@@ -556,30 +556,14 @@ class AsiaAuto_Search
         // desktop ignoruje klasę `is-zwinieta` (CSS tylko w @media ≤ 768 px)
         $otwarta = $sek['id'] === 'nadwozie' || $aktywne > 0;
         ?>
-        <?php
-        // T-252: sekcja z pastylkami wyposażenia na telefonie NIE zwija się, tylko otwiera panel
-        // pełnoekranowy — jej nagłówek jest przyciskiem otwierającym. Wcześniej trzeba było
-        // rozwinąć akordeon, żeby dostać się do jednego przycisku (dwa tapnięcia zamiast jednego).
-        $panel = (bool) array_filter($sek['pola'], static fn($x) => $x['typ'] === 'flags');
-        ?>
-        <section class="aas__sek aas__sek--<?= esc_attr($sek['id']) ?><?= $otwarta ? '' : ' is-zwinieta' ?><?= $panel ? ' aas__sek--panel' : '' ?>" id="<?= $id ?>" aria-labelledby="<?= $id ?>-t"<?= $zwijana && !$aktywne ? ' hidden' : '' ?>>
+        <section class="aas__sek aas__sek--<?= esc_attr($sek['id']) ?><?= $otwarta ? '' : ' is-zwinieta' ?>" id="<?= $id ?>" aria-labelledby="<?= $id ?>-t"<?= $zwijana && !$aktywne ? ' hidden' : '' ?>>
             <h2 class="aas__sek-t" id="<?= $id ?>-t">
-                <button type="button" class="aas__sek-btn" aria-expanded="<?= $otwarta ? 'true' : 'false' ?>" aria-controls="<?= $id ?>-b"<?= $panel ? ' data-panel="1"' : '' ?>>
+                <button type="button" class="aas__sek-btn" aria-expanded="<?= $otwarta ? 'true' : 'false' ?>" aria-controls="<?= $id ?>-b">
                     <?= esc_html($sek['label']) ?><span class="aas__sek-n" data-sek="<?= esc_attr($sek['id']) ?>"<?= $aktywne ? '' : ' hidden' ?>><?= $aktywne ?></span>
                     <b class="aas__caret" aria-hidden="true"></b>
                 </button>
             </h2>
             <div class="aas__sek-body" id="<?= $id ?>-b">
-            <?php if ($panel): ?>
-                <div class="aas__panel-top">
-                    <p class="aas__panel-tyt" aria-hidden="true"><?= esc_html($sek['label']) ?></p>
-                    <span class="aas__panel-ile" aria-hidden="true"<?= $aktywne ? '' : ' hidden' ?>><?= $aktywne ?></span>
-                    <button type="button" class="aas__panel-x" aria-label="Zamknij: <?= esc_attr($sek['label']) ?>"><span aria-hidden="true">&times;</span></button>
-                </div>
-                <div class="aas__panel-szukaj">
-                    <input type="text" placeholder="Szukaj wyposażenia..." autocomplete="off" aria-label="Szukaj w wyposażeniu">
-                </div>
-            <?php endif; ?>
             <div class="aas__siatka aas__siatka--<?= (int) $sek['kol'] ?>">
                 <?php foreach ($sek['pola'] as $pole) {
                     switch ($pole['typ']) {
@@ -589,11 +573,6 @@ class AsiaAuto_Search
                     }
                 } ?>
             </div>
-            <?php if ($panel): ?>
-                <div class="aas__panel-stopka">
-                    <button type="button" class="aas__panel-ok">Pokaż wyniki</button>
-                </div>
-            <?php endif; ?>
             </div>
         </section>
         <?php
@@ -768,34 +747,48 @@ class AsiaAuto_Search
     /** Pastylki wyposażenia z licznikami; opcjonalnie przycisk „Więcej filtrów" na końcu rzędu (dorysowuje renderSekcja). */
     private function renderFlags(array $pole, array $p, array $counts): void
     {
-        // telefon: widać pierwsze 8 pastylek (+ zaznaczone), reszta po „Więcej wyposażenia"; desktop pokazuje wszystkie (CSS)
-        $ukryte = max(0, count($pole['flagi']) - 8);
-
-        // T-252: na telefonie wyposażenie idzie na pełny ekran z podziałem na grupy. Kolejność
-        // w markupie zostaje ORYGINALNA (ręcznie ułożona, „wabiki" najpierw — tak działa desktop),
-        // a grupowanie robi `order` we flexie, włączany wyłącznie w @media <=768px.
-        $grupaFlagi = [];
-        $indeks = 0;
-        foreach (self::FLAG_GROUPS as $nazwa => $flagi) {
-            foreach (array_keys($flagi) as $f) $grupaFlagi[$f] = $indeks;
-            $indeks++;
-        }
+        // telefon: wyposażenie zachowuje się jak każdy inny filtr — pole z arkuszem od dołu,
+        // ten sam markup i ta sama obsługa co marka czy model (Janek 03.09). Desktop dostaje
+        // z tego samego HTML-a płaskie pastylki: `.aas__pop` ma tam `display: contents`,
+        // a `.aas__opts` zachowuje się jak dotąd `.aas__chips`.
+        $ukryte  = max(0, count($pole['flagi']) - 8);
+        $wybrane = array_values(array_intersect($p['flags'], $pole['flagi']));
+        $etykiety = array_map(fn($f) => $this->etykietaFlagi($f), $wybrane);
+        $tekst = $etykiety ? (count($etykiety) === 1 ? $etykiety[0] : $etykiety[0] . ' +' . (count($etykiety) - 1)) : 'Wszystkie';
+        $id = 'aas-wyposazenie';
         ?>
         <div class="aas__pole aas__pole--flags">
-            <div class="aas__chips" data-limit="8">
-                <?php $g = 0; foreach (array_keys(self::FLAG_GROUPS) as $nazwaGrupy): ?>
-                    <p class="aas__chips-grupa" data-grupa="<?= $g++ ?>" aria-hidden="true"><?= esc_html($nazwaGrupy) ?></p>
-                <?php endforeach; ?>
-                <?php foreach ($pole['flagi'] as $flaga):
-                    $n = (int) ($counts['flags'][$flaga] ?? 0);
-                    $on = in_array($flaga, $p['flags'], true); ?>
-                    <label class="aas__chip<?= $on ? ' is-active' : '' ?><?= $n === 0 && !$on ? ' is-empty' : '' ?>"
-                           data-grupa="<?= (int) ($grupaFlagi[$flaga] ?? 0) ?>">
-                        <input type="checkbox" name="wyposazenie[]" value="<?= esc_attr($flaga) ?>" <?= $on ? 'checked' : '' ?><?= $n === 0 && !$on ? ' disabled' : '' ?>>
-                        <span class="aas__chip-label"><?= esc_html($this->etykietaFlagi($flaga)) ?></span>
-                        <span class="aas__chip-n"><?= $this->fmtLiczba($n) ?></span>
-                    </label>
-                <?php endforeach; ?>
+            <p class="aas__label" id="<?= $id ?>-l">Wyposażenie</p>
+            <div class="aas__dd">
+                <button type="button" class="aas__sel<?= $wybrane ? ' is-active' : '' ?>" aria-expanded="false"
+                        aria-controls="<?= $id ?>-p" aria-labelledby="<?= $id ?>-l <?= $id ?>-t">
+                    <span class="aas__sel-text" id="<?= $id ?>-t" data-pusty="Wszystkie"><?= esc_html($tekst) ?></span>
+                    <b class="aas__caret" aria-hidden="true"></b>
+                </button>
+                <div class="aas__pop" id="<?= $id ?>-p" role="group" aria-labelledby="<?= $id ?>-l"
+                     data-opcji="<?= count($pole['flagi']) ?>" hidden>
+                    <i class="aas__pop-uchwyt" aria-hidden="true"></i>
+                    <div class="aas__pop-top">
+                        <p class="aas__pop-tyt" aria-hidden="true">Wyposażenie</p>
+                        <span class="aas__pop-ile" aria-hidden="true"<?= $wybrane ? '' : ' hidden' ?>><?= count($wybrane) ?></span>
+                        <button type="button" class="aas__pop-x" aria-label="Zamknij listę: Wyposażenie"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="aas__szukaj"><input type="text" placeholder="Szukaj..." autocomplete="off" aria-label="Szukaj w filtrze: Wyposażenie"></div>
+                    <div class="aas__opts aas__chips" data-limit="8">
+                        <?php foreach ($pole['flagi'] as $flaga):
+                            $n = (int) ($counts['flags'][$flaga] ?? 0);
+                            $on = in_array($flaga, $p['flags'], true); ?>
+                            <label class="aas__chip<?= $on ? ' is-active' : '' ?><?= $n === 0 && !$on ? ' is-empty' : '' ?>">
+                                <input type="checkbox" name="wyposazenie[]" value="<?= esc_attr($flaga) ?>" <?= $on ? 'checked' : '' ?><?= $n === 0 && !$on ? ' disabled' : '' ?>>
+                                <span class="aas__chip-label"><?= esc_html($this->etykietaFlagi($flaga)) ?></span>
+                                <span class="aas__chip-n"><?= $this->fmtLiczba($n) ?></span>
+                            </label>
+                        <?php endforeach; ?>
+                    </div>
+                    <div class="aas__pop-stopka">
+                        <button type="button" class="aas__pop-ok">Pokaż wyniki</button>
+                    </div>
+                </div>
             </div>
             <?php if ($ukryte > 0): ?>
                 <button type="button" class="aas__chips-wiecej" aria-expanded="false">Więcej wyposażenia <span class="aas__chips-wiecej-n">(+<?= $ukryte ?>)</span></button>

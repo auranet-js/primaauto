@@ -98,7 +98,6 @@
         root.querySelectorAll('.aas__total-slowo').forEach(function (el) { el.textContent = slowoOfert(total); });
         ostatniTotal = total;
         ustawPrzyciskArkusza(total);
-        ustawStopkeFlag();
     }
 
     /** Stopka arkusza na telefonie: „Pokaż 1 706 ofert". Liczba pochodzi z tego samego
@@ -125,7 +124,7 @@
     function ustawLicznikArkusza(pop) {
         var el = pop && pop.querySelector('.aas__pop-ile');
         if (!el) return;
-        var n = pop.querySelectorAll('.aas__opts input:checked').length;
+        var n = pop.querySelectorAll('.aas__opts input:checked, .aas__chip input:checked').length;
         el.textContent = n;
         el.hidden = n === 0;
     }
@@ -134,6 +133,20 @@
     function odswiez() {
         var st = state();
         var bezMarki = !form.querySelector('input[name="marka[]"]:checked');
+
+        // Wyposażenie ma na telefonie własne pole z arkuszem — jego podsumowanie liczymy tak samo
+        // jak w enumach, tylko wiersze noszą klasę `.aas__chip` (na desktopie to pastylki).
+        root.querySelectorAll('.aas__pole--flags').forEach(function (f) {
+            var sel = f.querySelector('.aas__sel'), txt = f.querySelector('.aas__sel-text');
+            if (!sel || !txt) return;
+            var zazn = f.querySelectorAll('.aas__chip input:checked');
+            if (!zazn.length) txt.textContent = txt.dataset.pusty;
+            else {
+                var pierwsza = zazn[0].parentNode.querySelector('.aas__chip-label').textContent.trim();
+                txt.textContent = zazn.length > 1 ? pierwsza + ' +' + (zazn.length - 1) : pierwsza;
+            }
+            sel.classList.toggle('is-active', zazn.length > 0);
+        });
 
         root.querySelectorAll('.aas__pole--enum').forEach(function (f) {
             var sel = f.querySelector('.aas__sel'), txt = f.querySelector('.aas__sel-text'), kropka = f.querySelector('.aas__sel > .aas__kropka');
@@ -485,9 +498,8 @@
         `history.back()` jest asynchroniczne — gdyby zamknięcie czekało na `popstate`,
         arkusz zostawałby widoczny przez jeden tick (i tak właśnie oblewał test Escape). */
     function zamknijListy() {
-        if (!otwarta() && !panelFlag()) return;
+        if (!otwarta()) return;
         zamknijListyTeraz();
-        zamknijFlagiTeraz();
         if (popWHistorii) {
             popWHistorii = false;
             ignorujPop = true;
@@ -513,62 +525,6 @@
         if (zaslona) { zaslona.remove(); zaslona = null; }
         document.body.style.overflow = '';
         dotykY = null;
-    }
-
-    // ------------------------------------------- wyposażenie: pełny ekran (telefon, T-252)
-
-    function panelFlag() { return root.querySelector('.aas__sek--panel.is-panel'); }
-
-    function otworzFlagi(btn) {
-        var sek = btn.closest('.aas__sek--panel');
-        if (!sek) return;
-        zamknijListyTeraz();
-        btn.setAttribute('aria-expanded', 'true');
-        sek.classList.remove('is-zwinieta');          // panel ma własny stan, akordeon go nie dotyczy
-        sek.classList.add('is-panel');
-        document.body.style.overflow = 'hidden';
-        var szukaj = sek.querySelector('.aas__panel-szukaj input');
-        if (szukaj) { szukaj.value = ''; filtrujFlagi(sek); }
-        ustawStopkeFlag();
-        if (!popWHistorii) { history.pushState({ q: (history.state || {}).q, pop: 1 }, ''); popWHistorii = true; }
-    }
-
-    function zamknijFlagiTeraz() {
-        var sek = panelFlag();
-        if (!sek) return;
-        sek.classList.remove('is-panel');
-        sek.classList.add('is-zwinieta');
-        var btn = sek.querySelector('.aas__sek-btn');
-        if (btn) btn.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = '';
-    }
-
-    /** Licznik wybranych (na przycisku i w nagłówku) + „Pokaż N ofert" w stopce panelu. */
-    function ustawStopkeFlag() {
-        var sek = root.querySelector('.aas__sek--panel');
-        if (!sek) return;
-        var n = sek.querySelectorAll('.aas__chip input:checked').length;
-        var el = sek.querySelector('.aas__panel-ile');
-        if (el) { el.textContent = n; el.hidden = n === 0; }
-        totalZeStrony();
-        var ok = sek.querySelector('.aas__panel-ok');
-        if (ok && ostatniTotal !== null) ok.textContent = 'Pokaż ' + fmt(ostatniTotal) + ' ' + slowoOfert(ostatniTotal);
-    }
-
-    function filtrujFlagi(panel) {
-        var input = panel.querySelector('.aas__panel-szukaj input');
-        var q = input ? input.value.trim().toLowerCase() : '';
-        panel.querySelectorAll('.aas__chip').forEach(function (chip) {
-            var nazwa = chip.querySelector('.aas__chip-label').textContent.toLowerCase();
-            chip.classList.toggle('is-hidden', !!q && nazwa.indexOf(q) === -1);
-        });
-        // nagłówek grupy znika, gdy szukanie wycięło z niej wszystko
-        panel.querySelectorAll('.aas__chips-grupa').forEach(function (h) {
-            var g = h.dataset.grupa;
-            var widoczna = [].some.call(panel.querySelectorAll('.aas__chip[data-grupa="' + g + '"]'),
-                function (c) { return !c.classList.contains('is-hidden'); });
-            h.hidden = !widoczna;
-        });
     }
 
     function otworzListe(sel) {
@@ -606,8 +562,9 @@
     /** Szukajka w liście: `is-hidden` dla braku dopasowania; `hidden` z liczników zostaje osobno. */
     function filtrujOpcje(input) {
         var q = input.value.trim().toLowerCase();
-        input.closest('.aas__pop').querySelectorAll('.aas__opt').forEach(function (opt) {
-            var name = opt.querySelector('.aas__opt-label');
+        // `.aas__chip` to opcje wyposażenia — ten sam arkusz, inna klasa wiersza
+        input.closest('.aas__pop').querySelectorAll('.aas__opt, .aas__chip').forEach(function (opt) {
+            var name = opt.querySelector('.aas__opt-label, .aas__chip-label');
             opt.classList.toggle('is-hidden', !!q && name.textContent.toLowerCase().indexOf(q) === -1);
         });
     }
@@ -625,11 +582,8 @@
         // stopka i „×" arkusza (telefon) — obie drogi wyjścia idą przez tę samą ścieżkę
         if (e.target.closest('.aas__pop-x') || e.target.closest('.aas__pop-ok')) { zamknijListy(); return; }
 
-        if (e.target.closest('.aas__panel-x') || e.target.closest('.aas__panel-ok')) { zamknijListy(); return; }
 
-        // klik wewnątrz otwartego panelu wyposażenia nie zamyka go (zaznaczanie pastylek);
-        // na desktopie `panelFlag()` jest zawsze puste, więc zachowanie się nie zmienia
-        if (!(panelFlag() && e.target.closest('.aas__sek--panel')) && !e.target.closest('.aas__pop')) zamknijListy();
+        if (!e.target.closest('.aas__pop')) zamknijListy();
 
         var wiecej = e.target.closest('.aas__wiecej');
         if (wiecej) {
@@ -645,8 +599,6 @@
             // zwijanie tylko na telefonie; sekcja „Oferty" nie ma ciała do zwinięcia
             var sek = sekBtn.closest('.aas__sek');
             if (!window.matchMedia('(max-width: 768px)').matches || !sek.querySelector('.aas__sek-body')) return;
-            // sekcja z pastylkami nie zwija się — jej nagłówek otwiera panel pełnoekranowy (T-252)
-            if (sekBtn.dataset.panel) { otworzFlagi(sekBtn); return; }
             var zwin = !sek.classList.contains('is-zwinieta');
             sek.classList.toggle('is-zwinieta', zwin);
             sekBtn.setAttribute('aria-expanded', zwin ? 'false' : 'true');
@@ -711,14 +663,12 @@
     form.addEventListener('input', function (e) {
         if (e.target.matches('.aas__inp input')) { odswiez(); odswiezZakresy(); debounced(); }
         else if (e.target.matches('.aas__szukaj input')) filtrujOpcje(e.target);
-        else if (e.target.matches('.aas__panel-szukaj input')) filtrujFlagi(e.target.closest('.aas__sek'));
     });
 
     // Licznik w nagłówku arkusza ma reagować od razu — `search-counts` wraca dopiero po 350 ms.
     root.addEventListener('change', function (e) {
         var pop = e.target.closest('.aas__pop');
         if (pop) ustawLicznikArkusza(pop);
-        if (e.target.closest('.aas__sek--panel')) ustawStopkeFlag();
     });
 
     // Zsuwanie arkusza palcem w dół. Tylko od góry listy, żeby nie kolidowało z przewijaniem opcji.
@@ -746,7 +696,6 @@
         if (popWHistorii) {                                             // systemowe „wstecz" przy otwartym arkuszu
             popWHistorii = false;
             zamknijListyTeraz();
-            zamknijFlagiTeraz();
             przywrocUrl();
             return;
         }

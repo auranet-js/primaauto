@@ -299,7 +299,19 @@
 .aas__pop-uchwyt, .aas__pop-top, .aas__pop-stopka { display: none; }
 /* To samo dla panelu wyposażenia: na komputerze zostaje płaska lista pastylek w kolejności
    z konfiguracji („wabiki" najpierw). Pełny ekran z grupami to zachowanie telefonu — T-252. */
-.aas__panel-top, .aas__panel-szukaj, .aas__panel-stopka, .aas__chips-grupa { display: none; }
+/* Wyposażenie dzieli markup z marką i modelem (arkusz), ale na komputerze ma zostać płaską
+   listą pastylek: arkusz się rozpuszcza, a jego nagłówek, szukajka i stopka znikają. */
+.aas__pole--flags > .aas__label,
+.aas__pole--flags .aas__sel { display: none; }
+/* `!important`, bo linia wyżej `.aas [hidden] { display: none !important }` bije zwykłą regułę. */
+.aas__pole--flags .aas__pop[hidden] { display: contents !important; }
+.aas__pole--flags .aas__szukaj { display: none; }
+/* kontener opcji arkusza nosi też klasę `.aas__chips`, ale reguły `.aas__opts` (blok z własnym
+   przewijaniem) wygrywają kolejnością — na komputerze przywracamy układ pastylek wprost. */
+.aas__pole--flags .aas__opts {
+    display: flex; flex-direction: row; flex-wrap: wrap; gap: 8px;
+    max-height: none; overflow: visible; padding: 0;
+}
 
 @media (max-width: 1024px) {
     .aas__siatka--7, .aas__siatka--6, .aas__siatka--5, .aas__siatka--4 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -379,93 +391,35 @@
     .aas__pop .aas__opt { min-height: 44px; }
     .aas__zaslona { position: fixed; inset: 0; z-index: 9999; background: rgba(15, 23, 42, .45); }
     .aas__toolbar { flex-wrap: wrap; }
-    /* Wyposażenie na pełnym ekranie (T-252). Wcześniej: 8 pastylek + „Więcej wyposażenia",
-       po rozwinięciu 36 pastylek w 29 rzędach = 1 535 px, czyli 1,8 ekranu przewijania przed
-       dojściem do wyników — bez grup i bez szukajki, mimo że FLAG_GROUPS istnieje w kodzie.
-       Panelem jest CIAŁO SEKCJI, a jej nagłówek pełni rolę przycisku otwierającego: sekcje na
-       telefonie są zwijane, więc osobny przycisk w środku kosztowałby drugie tapnięcie. */
+    /* Wyposażenie na telefonie to zwykły filtr z arkuszem — ta sama obsługa co marka i model
+       (Janek 03.09: „lista wyposażenia ma być taka jak lista modeli czy marek"). 36 pozycji >
+       11, więc arkusz otwiera się na pełną wysokość z szukajką. Wcześniej: 8 pastylek
+       + „Więcej wyposażenia", po rozwinięciu 1 535 px = 1,8 ekranu przewijania. */
     .aas .aas__chips-wiecej { display: none; }
-    .aas__sek--panel .aas__sek-body { display: none; }
-    .aas__sek--panel.is-panel .aas__sek-body {
-        display: flex; flex-direction: column; flex-wrap: nowrap;
-        position: fixed; inset: 0; z-index: 9990;
-        background: var(--aas-plaszczyzna); padding: env(safe-area-inset-top) 0 0;
-        overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain;
-    }
-    .aas__sek--panel.is-panel .aas__siatka { display: contents; }
-    .aas__panel-ile, .aas__sek--panel .aas__sek-n {
-        min-width: 22px; height: 22px; padding: 0 7px; border-radius: 11px;
-        background: var(--aas-granat); color: #fff;
-        font-size: 12px; font-weight: 700; line-height: 22px; text-align: center;
-    }
-    .aas__panel-ile[hidden] { display: none; }
-
-    .aas__sek--panel.is-panel .aas__panel-top {
-        display: flex; align-items: center; gap: 10px; order: 0; flex: 0 0 auto;
-        position: sticky; top: 0; z-index: 2; background: var(--aas-plaszczyzna);
-        padding: 10px 16px; border-bottom: 1px solid var(--aas-linia);
-    }
-    .aas__panel-tyt { margin: 0; font-size: 16px; font-weight: 700; color: var(--aas-granat); }
-    .aas .aas__panel-x {
-        margin-left: auto; width: 44px; height: 44px; padding: 0;
-        border: 0; background: none; color: var(--aas-szary); font-size: 26px; line-height: 1;
-    }
-    .aas__sek--panel.is-panel .aas__panel-szukaj {
-        display: block; order: 1; flex: 0 0 auto; position: sticky; top: 65px; z-index: 2;
-        background: var(--aas-plaszczyzna); padding: 10px 16px;
-    }
-    .aas__panel-szukaj input {
-        width: 100%; min-height: 44px; padding: 0 12px; font-size: 16px;
-        border: 1px solid var(--aas-linia-mocna); border-radius: var(--aas-r);
-    }
-    /* Grupowanie wyłącznie wizualne: markup zachowuje kolejność z konfiguracji („wabiki" najpierw,
-       tak działa desktop), a tu ustawiamy kolejność tematyczną — nagłówek grupy k ma order k*10,
-       jej pastylki k*10+1. Marka nagłośnienia (pole enum) ląduje na końcu. */
-    /* `display: contents` na obu opakowaniach — inaczej pastylki są flex itemami pola, a nie
-       panelu, więc ich `order` działa lokalnie i szukajka ląduje za całym blokiem pastylek. */
-    .aas__sek--panel.is-panel .aas__pole--flags,
-    .aas__sek--panel.is-panel .aas__chips { display: contents; }
-    .aas__chips-grupa[data-grupa="0"] { order: 10; } .aas__chip[data-grupa="0"] { order: 11; }
-    .aas__chips-grupa[data-grupa="1"] { order: 20; } .aas__chip[data-grupa="1"] { order: 21; }
-    .aas__chips-grupa[data-grupa="2"] { order: 30; } .aas__chip[data-grupa="2"] { order: 31; }
-    .aas__chips-grupa[data-grupa="3"] { order: 40; } .aas__chip[data-grupa="3"] { order: 41; }
-    .aas__sek--panel.is-panel .aas__pole--enum { order: 50; margin: 14px 16px 0; }
-    .aas__panel-stopka { order: 100; }
-    .aas__sek--panel.is-panel .aas__chips-grupa {
-        display: block; flex: 0 0 auto; margin: 14px 16px 4px; padding: 0;
-        font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
-        color: var(--aas-szary);
-    }
-    /* pastylka staje się wierszem listy: pełna szerokość, licznik po prawej, 48 px pod palec */
-    .aas__sek--panel.is-panel .aas__chip {
-        width: auto; flex: 0 0 auto; margin: 0 10px; padding: 0 6px; min-height: 48px;
+    .aas__pole--flags > .aas__label { display: block; }
+    .aas__pole--flags .aas__sel { display: flex; }
+    .aas__pole--flags .aas__pop[hidden] { display: none !important; }
+    .aas__pole--flags .aas__szukaj { display: block; }
+    /* pastylka staje się wierszem listy, jak opcja w arkuszu marki */
+    .aas__pop .aas__opts.aas__chips { display: block; }
+    .aas__pop .aas__chip {
+        display: flex; width: auto; margin: 0; padding: 0 6px; min-height: 44px;
         border: 0; border-radius: var(--aas-r); background: none; color: var(--aas-tekst);
-        justify-content: flex-start; gap: 12px;
+        justify-content: flex-start; gap: 10px; white-space: normal;
     }
-    .aas__sek--panel.is-panel .aas__chip::before {
+    .aas__pop .aas__chip::before {
         content: ''; flex: 0 0 auto; width: 22px; height: 22px;
         border: 2px solid var(--aas-linia-mocna); border-radius: 4px; font-size: 0;
     }
-    .aas__sek--panel.is-panel .aas__chip.is-active { background: none; border: 0; color: var(--aas-tekst); }
-    .aas__sek--panel.is-panel .aas__chip.is-active::before {
+    .aas__pop .aas__chip.is-active { background: none; border: 0; color: var(--aas-tekst); }
+    .aas__pop .aas__chip.is-active::before {
         content: '✓'; background: var(--aas-granat); border-color: var(--aas-granat);
         color: #fff; font-size: 14px; line-height: 20px; text-align: center;
     }
-    .aas__sek--panel.is-panel .aas__chip.is-active .aas__chip-n { color: var(--aas-szary); }
-    .aas__sek--panel.is-panel .aas__chip-label { flex: 1 1 auto; font-size: 15.5px; }
-    .aas__sek--panel.is-panel .aas__chip-n { margin-left: auto; font-size: 13px; }
-    .aas__sek--panel.is-panel .aas__chip.is-hidden { display: none; }
-    .aas__sek--panel.is-panel .aas__panel-stopka {
-        display: block; flex: 0 0 auto; margin-top: auto;
-        position: sticky; bottom: 0; z-index: 2;
-        background: var(--aas-plaszczyzna); border-top: 1px solid var(--aas-linia);
-        padding: 10px 16px calc(12px + env(safe-area-inset-bottom));
-    }
-    .aas .aas__panel-ok {
-        display: flex; align-items: center; justify-content: center;
-        width: 100%; min-height: 48px; border: 0; border-radius: var(--aas-r);
-        background: var(--aas-akcent); color: #fff; font: 600 16px/1 var(--aas-font);
-    }
+    .aas__pop .aas__chip.is-active .aas__chip-n { color: var(--aas-szary); }
+    .aas__pop .aas__chip-label { flex: 1 1 auto; font-size: 15px; }
+    .aas__pop .aas__chip-n { margin-left: auto; font-size: 13px; }
+    .aas__pop .aas__chip.is-hidden { display: none; }
     .aas__pasek-dol {
         position: fixed; left: 0; right: 0; bottom: 0; z-index: 900;
         display: flex; align-items: center; justify-content: space-between; gap: 12px;

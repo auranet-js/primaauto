@@ -20,16 +20,22 @@ licznik zaznaczonych, „×" 44 × 44 i stopka **„Pokaż N ofert"**, gdzie lic
 (marka 58, model do 44 po marce) dostają pełną wysokość ekranu. Zsuwanie palcem w dół zamyka,
 ale tylko od góry listy, żeby nie kolidowało z przewijaniem opcji.
 
-**Wyposażenie — pełny ekran z grupami.** Sekcja po rozwinięciu miała **1 535 px, czyli 1,8 ekranu**:
-36 pastylek w 29 rzędach, płaską listą, bez grup i bez szukajki — mimo że `FLAG_GROUPS` z czterema
-zestawami siedzi w kodzie od dawna i służył wyłącznie do wyciągania etykiet. Teraz na telefonie
-sekcja to **sam nagłówek (64 px)**, a jedno tapnięcie w niego otwiera pełny ekran z nagłówkami grup,
-szukajką i stopką z liczbą wyników. Panelem jest ciało sekcji, nie osobny kontener — pierwsze
-podejście dokładało przycisk *wewnątrz* sekcji, a że sekcje na telefonie są zwijane, kosztowało to
-dwa tapnięcia zamiast jednego (wyłapane przez Janka). Przy okazji „Marka nagłośnienia" wjechała
-do panelu na koniec listy, więc cała sekcja jest w jednym miejscu. Pastylka stała się wierszem listy
-o wysokości 48 px — było 38 px, poniżej progu z iOS HIG i Material; axe tego nie zgłaszał,
-bo WCAG 2.5.8 AA wymaga tylko 24 × 24, więc bramka świeciła na zielono, a palec trafiał w sąsiada.
+**Wyposażenie — ten sam arkusz co marka i model.** Sekcja po rozwinięciu miała **1 535 px, czyli
+1,8 ekranu**: 36 pastylek w 29 rzędach, płaską listą, bez szukajki. Teraz na telefonie wyposażenie
+jest **zwykłym polem filtra** — „Wyposażenie" z przyciskiem, który otwiera ten sam arkusz od dołu
+co marka czy model, z tą samą obsługą: nagłówek, szukajka (36 pozycji > 11, więc pełna wysokość),
+wiersze z checkboxem i liczbą ofert, stopka „Pokaż N ofert". Podsumowanie w polu działa jak
+w enumach („Lidar +1").
+
+Droga do tego była okrężna i warto to zapisać. Pierwsze podejście dało pełnoekranowy panel
+z podziałem na cztery grupy z `FLAG_GROUPS` — ładny, ale **inny niż wszystkie pozostałe filtry**,
+a przycisk otwierający siedział wewnątrz sekcji, więc przy zwijanych sekcjach kosztował dwa
+tapnięcia zamiast jednego. Janek uciął to jednym zdaniem: „lista wyposażenia ma być taka jak lista
+modeli czy marek". Spójność interfejsu wygrywa z pomysłowością — pastylki i grupy zostają tam,
+gdzie mają sens, czyli na komputerze.
+
+**Desktop nietknięty.** Z tego samego HTML-a powstają płaskie pastylki w 7 rzędach: arkusz
+rozpuszcza się przez `display: contents`, a jego nagłówek, szukajka i stopka są ukryte.
 
 **Historia przeglądarki.** Otwarcie arkusza lub panelu dokłada wpis (`pushState`), `popstate`
 zamyka go zamiast przeładowywać stronę, a po zamknięciu adres wraca z filtrami zaznaczonymi
@@ -37,17 +43,14 @@ w środku (`przywrocUrl()`). Zamknięcie działa natychmiast, wpis z historii zd
 `history.back()` jest asynchroniczne i arkusz zostawałby widoczny przez jeden tick (na tym
 oblewał się test `Escape` na 320 px).
 
-**Desktop nietknięty.** Kolejność pastylek zostaje oryginalna, ręcznie ułożona („wabiki" najpierw):
-markup jej nie zmienia, a grupowanie robi `order` we flexie, włączany wyłącznie w `@media (max-width: 768px)`;
-nagłówki grup i elementy panelu są tam `display: none`.
-
 Trzy pułapki warte zapamiętania. Reset `.aas button` (0-1-1) bije klasę komponentu — przycisk
 stopki wyszedł bez tła, a „×" bez `margin-left: auto`; komentarz w pliku wprost każe dawać prefiks
 `.aas `. Klik w pastylkę zamykał panel, bo łapała go reguła „klik poza listą zamyka". Panel łamał
 się na dwie kolumny, bo dziedziczył `flex-wrap: wrap` z bazowej reguły `.aas__chips` — połowa listy
-wychodziła poza ekran w prawo. I `display: contents` musi być na OBU opakowaniach (`.aas__pole--flags`
-i `.aas__chips`) — inaczej pastylki są flex itemami pola, a nie panelu, ich `order` działa lokalnie
-i szukajka ląduje pod całym blokiem pastylek zamiast pod nagłówkiem. Żadnej z nich nie złapałyby liczby: wszystkie trzy widać dopiero
+wychodziła poza ekran w prawo. Na komputerze arkusz rozpuszczany
+przez `display: contents` i tak zostawał niewidoczny, bo `.aas [hidden] { display: none !important }`
+bije zwykłą regułę — potrzebny był `!important`; a `.aas__opts` ma `flex-direction: column`, więc
+bez jawnego `row` pastylki ustawiały się jedna pod drugą na całą szerokość. Żadnej z nich nie złapałyby liczby: wszystkie trzy widać dopiero
 na zrzucie ekranu.
 
 Bramki: axe 320 / 390 / 1366 px, także z otwartym arkuszem i otwartym panelem — **0 naruszeń**;
