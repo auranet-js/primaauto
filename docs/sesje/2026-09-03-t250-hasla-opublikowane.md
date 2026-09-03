@@ -40,7 +40,20 @@ publikacji jest umowna. 21 szkiców przełączone na `publish` jedną komendą 1
 pastylek w wyszukiwarce (dach 1 716 vs 1 658, Dolby 871 vs 748), bo `AsiaAuto_Wiki_Cars` traktuje
 `选配` (opcja) jako „ma", a tabela specs liczy tylko standard — świadoma różnica z 02.09.
 
-Słownik: 89 → **112 haseł** publish (21 + 2 z dogrywki; dogrywka poszła od razu z `--status publish`). Sitemap i indeksowanie: jak dotąd
+Słownik: 89 → **112 haseł** publish (21 + 2 z dogrywki; dogrywka poszła od razu z `--status publish`).
+
+**Widoczność i indeksowanie (03.09 wieczorem):**
+- Indeks `/wiki/` gubił 12 haseł przez brakujące kategorie — naprawione, `docs/VERSIONS.md` 0.37.13.
+- **Sitemapa była nieaktualna**: 90 wpisów z `lastmod` 04.08 (cache RankMath, jak w T-192).
+  Po ręcznym `wp rankmath sitemap generate`: **113 wpisów**, wszystkie nowe hasła w środku.
+  Cron 05:40 i tak by to zrobił, ale wtedy Google zobaczyłby je dobę później.
+- **Indexing API: zgłoszone 24 URL, 24 OK, 0 błędów** (`~/bin/index-submit --project primaauto
+  --type URL_UPDATED`), budżet ad-hoc 24/100 na dobę 2026-09-03. Auto-indexing pluginu obejmuje
+  wyłącznie `listings` (`class-asiaauto-indexing.php:35`), więc hasła trzeba zgłaszać ręcznie
+  albo zostawić sitemapie (historycznie skuteczna: 69/74 haseł w indeksie bez zgłoszeń).
+- Pułapka: `wp db query --skip-column-names` kończy wyjście PUSTĄ linią — moje `sed` zrobiło z niej
+  `https://primaauto.com.pl/wiki//` i zmarnowało jedno zgłoszenie z puli. Przy budowaniu list URL
+  do Indexing API filtruj puste linie (`sed '/^$/d'`). Sitemap i indeksowanie: jak dotąd
 z sitemapy RankMath (cron 05:40), bez Indexing API (memory `reference_indexing_zakres_newsy_wiki`).
 
 **Krok 4 — WYKONANY** (0.37.12): CTA pod hasłem prowadzi do wyszukiwarki z zaznaczonym filtrem,
