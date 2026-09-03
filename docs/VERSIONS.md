@@ -1,6 +1,27 @@
 # Historia wersji asiaauto-sync
 
 
+## 0.37.12 — 2026-09-03 (T-250 krok 4: CTA pod hasłem → wyszukiwarka z filtrem)
+
+Sekcja „W ofercie: N aut z technologią X" pod hasłem `/wiki/` prowadziła do całego `/samochody/`.
+Teraz, gdy hasło ma odpowiednik w filtrach, CTA brzmi **„Wszystkie auta z tą funkcją →"** i wiedzie
+do `/wyszukiwarka/` z zaznaczonym filtrem; pozostałe hasła zostają na katalogu.
+
+Mapowanie liczone **raz przy budowie indeksu** (`AsiaAuto_Wiki_Cars::filtrDlaHasla()`, cron co 6 h),
+nie przy renderze: klucz `_wiki_term_keys` szukany w `AsiaAuto_Specs_Table::FLAGS` (także po
+prefiksie, np. `vice_screen_size_*`), plus jawne wyjątki — `skylight_type 全景` → `roof_panorama`,
+`air_suspension` → `air_susp`, `variable_suspension` → `zawieszenie=adaptacyjne`, `seat_material` →
+`tapicerka=<slug>`, `sound_brand` → `audio=<marka>`, `fuel_form` → `paliwo=erev|phev|electric|hybrid`.
+
+**Pokrycie: 46 haseł z 104** ma filtr (43 po flagach i enumach + 3 hasła napędów). Sprawdzone na
+żywo: `/wiki/tylna-os-skretna/` → `?wyposazenie=rear_steer` (192 oferty), `dach-panoramiczny` →
+`roof_panorama` (1 606), `devialet` → `audio=devialet` (119), `erev` → `paliwo=erev`, `lidar` →
+`wyposazenie=lidar`. Hasła bez odpowiednika (`materialy-tapicerki` — ogólne, bez jednej wartości;
+zawieszenia konstrukcyjne; procesory) zostają na `/samochody/`.
+
+Pułapka zaliczona: `match()` przepisywał wynik do nowej tablicy i gubił nowy klucz `filtr` —
+indeks miał dane, a render pokazywał stary CTA.
+
 ## 0.37.11 — 2026-09-03 (iPhone: pola 16 px, bez autofokusu na dotyku)
 
 Janek (iPhone 15 Pro): „wybieranie filtrów rozszerza ekran, przez co się rozjeżdża". Typowa
