@@ -113,6 +113,15 @@
         ustawLicznikArkusza(pop);
     }
 
+    /** Przed pierwszym `search-counts` liczba stoi w pasku narzędzi z SSR — bierzemy ją stamtąd,
+        żeby przycisk nigdy nie pokazał bezużytecznego „Pokaż wyniki". */
+    function totalZeStrony() {
+        if (ostatniTotal !== null) return;
+        var zDom = (root.querySelector('.aas__total') || {}).textContent || '';
+        var n = parseInt(zDom.replace(/[^0-9]/g, ''), 10);
+        ostatniTotal = isNaN(n) ? null : n;
+    }
+
     function ustawLicznikArkusza(pop) {
         var el = pop && pop.querySelector('.aas__pop-ile');
         if (!el) return;
@@ -508,46 +517,46 @@
 
     // ------------------------------------------- wyposażenie: pełny ekran (telefon, T-252)
 
-    function panelFlag() { return root.querySelector('.aas__chips.is-otwarte'); }
+    function panelFlag() { return root.querySelector('.aas__sek--panel.is-panel'); }
 
     function otworzFlagi(btn) {
-        var panel = document.getElementById(btn.getAttribute('aria-controls'));
-        if (!panel) return;
+        var sek = btn.closest('.aas__sek--panel');
+        if (!sek) return;
         zamknijListyTeraz();
         btn.setAttribute('aria-expanded', 'true');
-        panel.classList.add('is-otwarte');
+        sek.classList.remove('is-zwinieta');          // panel ma własny stan, akordeon go nie dotyczy
+        sek.classList.add('is-panel');
         document.body.style.overflow = 'hidden';
-        var szukaj = panel.querySelector('.aas__chips-szukaj input');
-        if (szukaj) { szukaj.value = ''; filtrujFlagi(panel); }
+        var szukaj = sek.querySelector('.aas__panel-szukaj input');
+        if (szukaj) { szukaj.value = ''; filtrujFlagi(sek); }
         ustawStopkeFlag();
         if (!popWHistorii) { history.pushState({ q: (history.state || {}).q, pop: 1 }, ''); popWHistorii = true; }
     }
 
     function zamknijFlagiTeraz() {
-        var panel = panelFlag();
-        if (!panel) return;
-        panel.classList.remove('is-otwarte');
-        var btn = root.querySelector('.aas__flags-otworz[aria-expanded="true"]');
+        var sek = panelFlag();
+        if (!sek) return;
+        sek.classList.remove('is-panel');
+        sek.classList.add('is-zwinieta');
+        var btn = sek.querySelector('.aas__sek-btn');
         if (btn) btn.setAttribute('aria-expanded', 'false');
         document.body.style.overflow = '';
     }
 
     /** Licznik wybranych (na przycisku i w nagłówku) + „Pokaż N ofert" w stopce panelu. */
     function ustawStopkeFlag() {
-        var panel = root.querySelector('.aas__chips');
-        if (!panel) return;
-        var n = panel.querySelectorAll('.aas__chip input:checked').length;
-        [root.querySelector('.aas__flags-n'), panel.querySelector('.aas__chips-ile')].forEach(function (el) {
-            if (!el) return;
-            el.textContent = n;
-            el.hidden = n === 0;
-        });
-        var ok = panel.querySelector('.aas__chips-ok');
+        var sek = root.querySelector('.aas__sek--panel');
+        if (!sek) return;
+        var n = sek.querySelectorAll('.aas__chip input:checked').length;
+        var el = sek.querySelector('.aas__panel-ile');
+        if (el) { el.textContent = n; el.hidden = n === 0; }
+        totalZeStrony();
+        var ok = sek.querySelector('.aas__panel-ok');
         if (ok && ostatniTotal !== null) ok.textContent = 'Pokaż ' + fmt(ostatniTotal) + ' ' + slowoOfert(ostatniTotal);
     }
 
     function filtrujFlagi(panel) {
-        var input = panel.querySelector('.aas__chips-szukaj input');
+        var input = panel.querySelector('.aas__panel-szukaj input');
         var q = input ? input.value.trim().toLowerCase() : '';
         panel.querySelectorAll('.aas__chip').forEach(function (chip) {
             var nazwa = chip.querySelector('.aas__chip-label').textContent.toLowerCase();
@@ -572,13 +581,7 @@
             // dostają pełną wysokość, bo i tak się przewijają — T-252 §2.
             pop.classList.toggle('is-dluga', (+pop.dataset.opcji || 0) > 11);
             ustawLicznikArkusza(pop);
-            // przed pierwszym `search-counts` liczba stoi w pasku narzędzi z SSR — bierzemy stamtąd,
-            // żeby przycisk nigdy nie pokazał bezużytecznego „Pokaż wyniki"
-            if (ostatniTotal === null) {
-                var zDom = (root.querySelector('.aas__total') || {}).textContent || '';
-                ostatniTotal = parseInt(zDom.replace(/[^0-9]/g, ''), 10);
-                if (isNaN(ostatniTotal)) ostatniTotal = null;
-            }
+            totalZeStrony();
             if (ostatniTotal !== null) ustawPrzyciskArkusza(ostatniTotal);
             if (!popWHistorii) { history.pushState({ q: (history.state || {}).q, pop: 1 }, ''); popWHistorii = true; }
             zaslona = document.createElement('div');
@@ -622,13 +625,11 @@
         // stopka i „×" arkusza (telefon) — obie drogi wyjścia idą przez tę samą ścieżkę
         if (e.target.closest('.aas__pop-x') || e.target.closest('.aas__pop-ok')) { zamknijListy(); return; }
 
-        var flagiBtn = e.target.closest('.aas__flags-otworz');
-        if (flagiBtn) { e.preventDefault(); otworzFlagi(flagiBtn); return; }
-        if (e.target.closest('.aas__chips-x') || e.target.closest('.aas__chips-ok')) { zamknijListy(); return; }
+        if (e.target.closest('.aas__panel-x') || e.target.closest('.aas__panel-ok')) { zamknijListy(); return; }
 
         // klik wewnątrz otwartego panelu wyposażenia nie zamyka go (zaznaczanie pastylek);
         // na desktopie `panelFlag()` jest zawsze puste, więc zachowanie się nie zmienia
-        if (!(panelFlag() && e.target.closest('.aas__chips')) && !e.target.closest('.aas__pop')) zamknijListy();
+        if (!(panelFlag() && e.target.closest('.aas__sek--panel')) && !e.target.closest('.aas__pop')) zamknijListy();
 
         var wiecej = e.target.closest('.aas__wiecej');
         if (wiecej) {
@@ -644,6 +645,8 @@
             // zwijanie tylko na telefonie; sekcja „Oferty" nie ma ciała do zwinięcia
             var sek = sekBtn.closest('.aas__sek');
             if (!window.matchMedia('(max-width: 768px)').matches || !sek.querySelector('.aas__sek-body')) return;
+            // sekcja z pastylkami nie zwija się — jej nagłówek otwiera panel pełnoekranowy (T-252)
+            if (sekBtn.dataset.panel) { otworzFlagi(sekBtn); return; }
             var zwin = !sek.classList.contains('is-zwinieta');
             sek.classList.toggle('is-zwinieta', zwin);
             sekBtn.setAttribute('aria-expanded', zwin ? 'false' : 'true');
@@ -708,14 +711,14 @@
     form.addEventListener('input', function (e) {
         if (e.target.matches('.aas__inp input')) { odswiez(); odswiezZakresy(); debounced(); }
         else if (e.target.matches('.aas__szukaj input')) filtrujOpcje(e.target);
-        else if (e.target.matches('.aas__chips-szukaj input')) filtrujFlagi(e.target.closest('.aas__chips'));
+        else if (e.target.matches('.aas__panel-szukaj input')) filtrujFlagi(e.target.closest('.aas__sek'));
     });
 
     // Licznik w nagłówku arkusza ma reagować od razu — `search-counts` wraca dopiero po 350 ms.
     root.addEventListener('change', function (e) {
         var pop = e.target.closest('.aas__pop');
         if (pop) ustawLicznikArkusza(pop);
-        if (e.target.closest('.aas__chips')) ustawStopkeFlag();
+        if (e.target.closest('.aas__sek--panel')) ustawStopkeFlag();
     });
 
     // Zsuwanie arkusza palcem w dół. Tylko od góry listy, żeby nie kolidowało z przewijaniem opcji.

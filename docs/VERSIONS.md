@@ -23,8 +23,11 @@ ale tylko od góry listy, żeby nie kolidowało z przewijaniem opcji.
 **Wyposażenie — pełny ekran z grupami.** Sekcja po rozwinięciu miała **1 535 px, czyli 1,8 ekranu**:
 36 pastylek w 29 rzędach, płaską listą, bez grup i bez szukajki — mimo że `FLAG_GROUPS` z czterema
 zestawami siedzi w kodzie od dawna i służył wyłącznie do wyciągania etykiet. Teraz na telefonie
-sekcja to jeden przycisk z licznikiem (**204 px zamiast 1 535**), a wyposażenie otwiera się na pełny
-ekran z nagłówkami grup, szukajką i stopką z liczbą wyników. Pastylka stała się wierszem listy
+sekcja to **sam nagłówek (64 px)**, a jedno tapnięcie w niego otwiera pełny ekran z nagłówkami grup,
+szukajką i stopką z liczbą wyników. Panelem jest ciało sekcji, nie osobny kontener — pierwsze
+podejście dokładało przycisk *wewnątrz* sekcji, a że sekcje na telefonie są zwijane, kosztowało to
+dwa tapnięcia zamiast jednego (wyłapane przez Janka). Przy okazji „Marka nagłośnienia" wjechała
+do panelu na koniec listy, więc cała sekcja jest w jednym miejscu. Pastylka stała się wierszem listy
 o wysokości 48 px — było 38 px, poniżej progu z iOS HIG i Material; axe tego nie zgłaszał,
 bo WCAG 2.5.8 AA wymaga tylko 24 × 24, więc bramka świeciła na zielono, a palec trafiał w sąsiada.
 
@@ -42,7 +45,9 @@ Trzy pułapki warte zapamiętania. Reset `.aas button` (0-1-1) bije klasę kompo
 stopki wyszedł bez tła, a „×" bez `margin-left: auto`; komentarz w pliku wprost każe dawać prefiks
 `.aas `. Klik w pastylkę zamykał panel, bo łapała go reguła „klik poza listą zamyka". Panel łamał
 się na dwie kolumny, bo dziedziczył `flex-wrap: wrap` z bazowej reguły `.aas__chips` — połowa listy
-wychodziła poza ekran w prawo. Żadnej z nich nie złapałyby liczby: wszystkie trzy widać dopiero
+wychodziła poza ekran w prawo. I `display: contents` musi być na OBU opakowaniach (`.aas__pole--flags`
+i `.aas__chips`) — inaczej pastylki są flex itemami pola, a nie panelu, ich `order` działa lokalnie
+i szukajka ląduje pod całym blokiem pastylek zamiast pod nagłówkiem. Żadnej z nich nie złapałyby liczby: wszystkie trzy widać dopiero
 na zrzucie ekranu.
 
 Bramki: axe 320 / 390 / 1366 px, także z otwartym arkuszem i otwartym panelem — **0 naruszeń**;

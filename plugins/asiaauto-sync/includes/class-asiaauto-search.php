@@ -556,14 +556,30 @@ class AsiaAuto_Search
         // desktop ignoruje klasę `is-zwinieta` (CSS tylko w @media ≤ 768 px)
         $otwarta = $sek['id'] === 'nadwozie' || $aktywne > 0;
         ?>
-        <section class="aas__sek aas__sek--<?= esc_attr($sek['id']) ?><?= $otwarta ? '' : ' is-zwinieta' ?>" id="<?= $id ?>" aria-labelledby="<?= $id ?>-t"<?= $zwijana && !$aktywne ? ' hidden' : '' ?>>
+        <?php
+        // T-252: sekcja z pastylkami wyposażenia na telefonie NIE zwija się, tylko otwiera panel
+        // pełnoekranowy — jej nagłówek jest przyciskiem otwierającym. Wcześniej trzeba było
+        // rozwinąć akordeon, żeby dostać się do jednego przycisku (dwa tapnięcia zamiast jednego).
+        $panel = (bool) array_filter($sek['pola'], static fn($x) => $x['typ'] === 'flags');
+        ?>
+        <section class="aas__sek aas__sek--<?= esc_attr($sek['id']) ?><?= $otwarta ? '' : ' is-zwinieta' ?><?= $panel ? ' aas__sek--panel' : '' ?>" id="<?= $id ?>" aria-labelledby="<?= $id ?>-t"<?= $zwijana && !$aktywne ? ' hidden' : '' ?>>
             <h2 class="aas__sek-t" id="<?= $id ?>-t">
-                <button type="button" class="aas__sek-btn" aria-expanded="<?= $otwarta ? 'true' : 'false' ?>" aria-controls="<?= $id ?>-b">
+                <button type="button" class="aas__sek-btn" aria-expanded="<?= $otwarta ? 'true' : 'false' ?>" aria-controls="<?= $id ?>-b"<?= $panel ? ' data-panel="1"' : '' ?>>
                     <?= esc_html($sek['label']) ?><span class="aas__sek-n" data-sek="<?= esc_attr($sek['id']) ?>"<?= $aktywne ? '' : ' hidden' ?>><?= $aktywne ?></span>
                     <b class="aas__caret" aria-hidden="true"></b>
                 </button>
             </h2>
             <div class="aas__sek-body" id="<?= $id ?>-b">
+            <?php if ($panel): ?>
+                <div class="aas__panel-top">
+                    <p class="aas__panel-tyt" aria-hidden="true"><?= esc_html($sek['label']) ?></p>
+                    <span class="aas__panel-ile" aria-hidden="true"<?= $aktywne ? '' : ' hidden' ?>><?= $aktywne ?></span>
+                    <button type="button" class="aas__panel-x" aria-label="Zamknij: <?= esc_attr($sek['label']) ?>"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="aas__panel-szukaj">
+                    <input type="text" placeholder="Szukaj wyposażenia..." autocomplete="off" aria-label="Szukaj w wyposażeniu">
+                </div>
+            <?php endif; ?>
             <div class="aas__siatka aas__siatka--<?= (int) $sek['kol'] ?>">
                 <?php foreach ($sek['pola'] as $pole) {
                     switch ($pole['typ']) {
@@ -573,6 +589,11 @@ class AsiaAuto_Search
                     }
                 } ?>
             </div>
+            <?php if ($panel): ?>
+                <div class="aas__panel-stopka">
+                    <button type="button" class="aas__panel-ok">Pokaż wyniki</button>
+                </div>
+            <?php endif; ?>
             </div>
         </section>
         <?php
@@ -759,22 +780,9 @@ class AsiaAuto_Search
             foreach (array_keys($flagi) as $f) $grupaFlagi[$f] = $indeks;
             $indeks++;
         }
-        $wybranych = count(array_intersect($p['flags'], $pole['flagi']));
         ?>
         <div class="aas__pole aas__pole--flags">
-            <button type="button" class="aas__flags-otworz" aria-expanded="false" aria-controls="aas-wyposazenie">
-                <span class="aas__flags-otworz-t">Wybierz wyposażenie</span>
-                <span class="aas__flags-n"<?= $wybranych ? '' : ' hidden' ?>><?= $wybranych ?></span>
-            </button>
-            <div class="aas__chips" id="aas-wyposazenie" data-limit="8">
-                <div class="aas__chips-top">
-                    <p class="aas__chips-tyt" aria-hidden="true">Wyposażenie i technologie</p>
-                    <span class="aas__chips-ile" aria-hidden="true"<?= $wybranych ? '' : ' hidden' ?>><?= $wybranych ?></span>
-                    <button type="button" class="aas__chips-x" aria-label="Zamknij wyposażenie"><span aria-hidden="true">&times;</span></button>
-                </div>
-                <div class="aas__chips-szukaj">
-                    <input type="text" placeholder="Szukaj wyposażenia..." autocomplete="off" aria-label="Szukaj w wyposażeniu">
-                </div>
+            <div class="aas__chips" data-limit="8">
                 <?php $g = 0; foreach (array_keys(self::FLAG_GROUPS) as $nazwaGrupy): ?>
                     <p class="aas__chips-grupa" data-grupa="<?= $g++ ?>" aria-hidden="true"><?= esc_html($nazwaGrupy) ?></p>
                 <?php endforeach; ?>
@@ -788,9 +796,6 @@ class AsiaAuto_Search
                         <span class="aas__chip-n"><?= $this->fmtLiczba($n) ?></span>
                     </label>
                 <?php endforeach; ?>
-                <div class="aas__chips-stopka">
-                    <button type="button" class="aas__chips-ok">Pokaż wyniki</button>
-                </div>
             </div>
             <?php if ($ukryte > 0): ?>
                 <button type="button" class="aas__chips-wiecej" aria-expanded="false">Więcej wyposażenia <span class="aas__chips-wiecej-n">(+<?= $ukryte ?>)</span></button>

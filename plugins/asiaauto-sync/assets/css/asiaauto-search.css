@@ -299,8 +299,7 @@
 .aas__pop-uchwyt, .aas__pop-top, .aas__pop-stopka { display: none; }
 /* To samo dla panelu wyposażenia: na komputerze zostaje płaska lista pastylek w kolejności
    z konfiguracji („wabiki" najpierw). Pełny ekran z grupami to zachowanie telefonu — T-252. */
-.aas .aas__flags-otworz, .aas__chips-top, .aas__chips-szukaj, .aas__chips-stopka,
-.aas__chips-grupa { display: none; }
+.aas__panel-top, .aas__panel-szukaj, .aas__panel-stopka, .aas__chips-grupa { display: none; }
 
 @media (max-width: 1024px) {
     .aas__siatka--7, .aas__siatka--6, .aas__siatka--5, .aas__siatka--4 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -381,95 +380,88 @@
     .aas__zaslona { position: fixed; inset: 0; z-index: 9999; background: rgba(15, 23, 42, .45); }
     .aas__toolbar { flex-wrap: wrap; }
     /* Wyposażenie na pełnym ekranie (T-252). Wcześniej: 8 pastylek + „Więcej wyposażenia",
-       po rozwinięciu 36 pastylek w 29 rzędach = 1 535 px, czyli 1,8 ekranu przewijania
-       przed dojściem do wyników — bez grup i bez szukajki, mimo że FLAG_GROUPS istnieje. */
+       po rozwinięciu 36 pastylek w 29 rzędach = 1 535 px, czyli 1,8 ekranu przewijania przed
+       dojściem do wyników — bez grup i bez szukajki, mimo że FLAG_GROUPS istnieje w kodzie.
+       Panelem jest CIAŁO SEKCJI, a jej nagłówek pełni rolę przycisku otwierającego: sekcje na
+       telefonie są zwijane, więc osobny przycisk w środku kosztowałby drugie tapnięcie. */
     .aas .aas__chips-wiecej { display: none; }
-    .aas .aas__flags-otworz {
-        display: flex; align-items: center; gap: 10px; width: 100%; min-height: 48px;
-        padding: 0 12px; background: var(--aas-plaszczyzna);
-        border: 1px solid var(--aas-linia-mocna); border-radius: var(--aas-r);
-        font: 400 16px/1 var(--aas-font); color: var(--aas-tekst); text-align: left;
+    .aas__sek--panel .aas__sek-body { display: none; }
+    .aas__sek--panel.is-panel .aas__sek-body {
+        display: flex; flex-direction: column; flex-wrap: nowrap;
+        position: fixed; inset: 0; z-index: 9990;
+        background: var(--aas-plaszczyzna); padding: env(safe-area-inset-top) 0 0;
+        overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain;
     }
-    .aas .aas__flags-otworz[aria-expanded="true"] { visibility: hidden; }
-    .aas__flags-n, .aas__chips-ile {
+    .aas__sek--panel.is-panel .aas__siatka { display: contents; }
+    .aas__panel-ile, .aas__sek--panel .aas__sek-n {
         min-width: 22px; height: 22px; padding: 0 7px; border-radius: 11px;
         background: var(--aas-granat); color: #fff;
         font-size: 12px; font-weight: 700; line-height: 22px; text-align: center;
     }
-    .aas__flags-n { margin-left: auto; }
-    .aas__flags-n[hidden], .aas__chips-ile[hidden] { display: none; }
+    .aas__panel-ile[hidden] { display: none; }
 
-    .aas__chips { display: none; }
-    .aas__chips.is-otwarte {
-        /* `flex-wrap: wrap` z reguły bazowej pastylek zawijało kolumnę na drugą kolumnę,
-           przez co połowa listy wychodziła poza ekran w prawo. */
-        display: flex; flex-direction: column; flex-wrap: nowrap; gap: 0;
-        position: fixed; inset: 0; z-index: 10000;
-        background: var(--aas-plaszczyzna);
-        padding-top: env(safe-area-inset-top);
-        overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain;
-    }
-    .aas__chips.is-otwarte .aas__chips-top {
-        display: flex; align-items: center; gap: 10px; flex: 0 0 auto;
+    .aas__sek--panel.is-panel .aas__panel-top {
+        display: flex; align-items: center; gap: 10px; order: 0; flex: 0 0 auto;
         position: sticky; top: 0; z-index: 2; background: var(--aas-plaszczyzna);
         padding: 10px 16px; border-bottom: 1px solid var(--aas-linia);
     }
-    .aas__chips-tyt { margin: 0; font-size: 16px; font-weight: 700; color: var(--aas-granat); }
-    .aas .aas__chips-x {
+    .aas__panel-tyt { margin: 0; font-size: 16px; font-weight: 700; color: var(--aas-granat); }
+    .aas .aas__panel-x {
         margin-left: auto; width: 44px; height: 44px; padding: 0;
         border: 0; background: none; color: var(--aas-szary); font-size: 26px; line-height: 1;
     }
-    .aas__chips.is-otwarte .aas__chips-szukaj {
-        display: block; flex: 0 0 auto; position: sticky; top: 65px; z-index: 2;
+    .aas__sek--panel.is-panel .aas__panel-szukaj {
+        display: block; order: 1; flex: 0 0 auto; position: sticky; top: 65px; z-index: 2;
         background: var(--aas-plaszczyzna); padding: 10px 16px;
     }
-    .aas__chips-szukaj input {
+    .aas__panel-szukaj input {
         width: 100%; min-height: 44px; padding: 0 12px; font-size: 16px;
         border: 1px solid var(--aas-linia-mocna); border-radius: var(--aas-r);
     }
-    /* Grupowanie wyłącznie wizualne: markup zachowuje kolejność z konfiguracji, a tu ustawiamy
-       kolejność tematyczną. Nagłówek grupy k ma order k*10, jej pastylki k*10+1. */
-    .aas__chips.is-otwarte .aas__chips-grupa,
-    .aas__chips.is-otwarte .aas__chip { flex: 0 0 auto; }
+    /* Grupowanie wyłącznie wizualne: markup zachowuje kolejność z konfiguracji („wabiki" najpierw,
+       tak działa desktop), a tu ustawiamy kolejność tematyczną — nagłówek grupy k ma order k*10,
+       jej pastylki k*10+1. Marka nagłośnienia (pole enum) ląduje na końcu. */
+    /* `display: contents` na obu opakowaniach — inaczej pastylki są flex itemami pola, a nie
+       panelu, więc ich `order` działa lokalnie i szukajka ląduje za całym blokiem pastylek. */
+    .aas__sek--panel.is-panel .aas__pole--flags,
+    .aas__sek--panel.is-panel .aas__chips { display: contents; }
     .aas__chips-grupa[data-grupa="0"] { order: 10; } .aas__chip[data-grupa="0"] { order: 11; }
     .aas__chips-grupa[data-grupa="1"] { order: 20; } .aas__chip[data-grupa="1"] { order: 21; }
     .aas__chips-grupa[data-grupa="2"] { order: 30; } .aas__chip[data-grupa="2"] { order: 31; }
     .aas__chips-grupa[data-grupa="3"] { order: 40; } .aas__chip[data-grupa="3"] { order: 41; }
-    .aas__chips-top { order: 0; } .aas__chips-szukaj { order: 1; }
-    .aas__chips-stopka { order: 100; }
-    .aas__chips.is-otwarte .aas__chips-grupa {
-        display: block; margin: 14px 16px 4px; padding: 0;
+    .aas__sek--panel.is-panel .aas__pole--enum { order: 50; margin: 14px 16px 0; }
+    .aas__panel-stopka { order: 100; }
+    .aas__sek--panel.is-panel .aas__chips-grupa {
+        display: block; flex: 0 0 auto; margin: 14px 16px 4px; padding: 0;
         font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
         color: var(--aas-szary);
     }
     /* pastylka staje się wierszem listy: pełna szerokość, licznik po prawej, 48 px pod palec */
-    .aas__chips.is-otwarte .aas__chip {
-        width: auto; margin: 0 10px; padding: 0 6px; min-height: 48px;
+    .aas__sek--panel.is-panel .aas__chip {
+        width: auto; flex: 0 0 auto; margin: 0 10px; padding: 0 6px; min-height: 48px;
         border: 0; border-radius: var(--aas-r); background: none; color: var(--aas-tekst);
         justify-content: flex-start; gap: 12px;
     }
-    .aas__chips.is-otwarte .aas__chip::before {
+    .aas__sek--panel.is-panel .aas__chip::before {
         content: ''; flex: 0 0 auto; width: 22px; height: 22px;
         border: 2px solid var(--aas-linia-mocna); border-radius: 4px; font-size: 0;
     }
-    .aas__chips.is-otwarte .aas__chip.is-active {
-        background: none; border: 0; color: var(--aas-tekst);
-    }
-    .aas__chips.is-otwarte .aas__chip.is-active::before {
+    .aas__sek--panel.is-panel .aas__chip.is-active { background: none; border: 0; color: var(--aas-tekst); }
+    .aas__sek--panel.is-panel .aas__chip.is-active::before {
         content: '✓'; background: var(--aas-granat); border-color: var(--aas-granat);
         color: #fff; font-size: 14px; line-height: 20px; text-align: center;
     }
-    .aas__chips.is-otwarte .aas__chip.is-active .aas__chip-n { color: var(--aas-szary); }
-    .aas__chips.is-otwarte .aas__chip-label { flex: 1 1 auto; font-size: 15.5px; }
-    .aas__chips.is-otwarte .aas__chip-n { margin-left: auto; font-size: 13px; }
-    .aas__chips.is-otwarte .aas__chip.is-hidden { display: none; }
-    .aas__chips.is-otwarte .aas__chips-stopka {
+    .aas__sek--panel.is-panel .aas__chip.is-active .aas__chip-n { color: var(--aas-szary); }
+    .aas__sek--panel.is-panel .aas__chip-label { flex: 1 1 auto; font-size: 15.5px; }
+    .aas__sek--panel.is-panel .aas__chip-n { margin-left: auto; font-size: 13px; }
+    .aas__sek--panel.is-panel .aas__chip.is-hidden { display: none; }
+    .aas__sek--panel.is-panel .aas__panel-stopka {
         display: block; flex: 0 0 auto; margin-top: auto;
         position: sticky; bottom: 0; z-index: 2;
         background: var(--aas-plaszczyzna); border-top: 1px solid var(--aas-linia);
         padding: 10px 16px calc(12px + env(safe-area-inset-bottom));
     }
-    .aas .aas__chips-ok {
+    .aas .aas__panel-ok {
         display: flex; align-items: center; justify-content: center;
         width: 100%; min-height: 48px; border: 0; border-radius: var(--aas-r);
         background: var(--aas-akcent); color: #fff; font: 600 16px/1 var(--aas-font);
