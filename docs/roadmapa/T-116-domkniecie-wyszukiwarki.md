@@ -1,10 +1,11 @@
 # T-116 — domknięcie wyszukiwarki zaawansowanej
 
-> **STAN 2026-09-03 wieczór (0.37.0):** ruch A wykonany (+ cron 05:00), ruch B rozstrzygnięty
-> („Na placu w Polsce"), ruch C wykonany w zakresie pól makiety I (8 kolumn), kierunek wizualny
-> zaakceptowany (makieta I) i wdrożony. **Otwarte: tylko ruch D (linkowanie) i podpięcie
-> pozostałych pól z sekcji 3 etapu 2** (battery_type, driver_form, jb, 800 V…). Poniżej treść
-> pierwotna, liczby historyczne.
+> **STAN 2026-09-03, 0.37.10:** ruchy A, B, C i D **wykonane** (D = współistnienie z katalogiem,
+> 4 linki bez przenoszenia filtrów; CTA pod hasłami `/wiki/` przeniesione do T-250). Wyszukiwarka
+> w kształcie makiety I, 36 pastylek, filtry zależne, telefon ze zwijanymi sekcjami. Historia
+> w `docs/VERSIONS.md` 0.36.2 → 0.37.10. **Ten prompt jest domknięty.** Otwarte obok: T-250
+> (słownik pod wyszukiwarkę), rozszerzanie pastylek z `T-116-kandydaci-pastylek.md`, LCP serwisu.
+> Poniżej treść pierwotna, liczby historyczne.
 
 > Prompt wykonawczy do odpalenia w nowym wątku w `~/projekty/primaauto`.
 > Powstał 2026-09-03 po sesji, w której wyszukiwarka przeszła z zera do v0.36.1.
