@@ -39,3 +39,4 @@ __pycache__/
 # === Scratch sesji (konwencja: globalny CLAUDE.md sekcja 16) ===
 # Brudnopis. Wartosciowe destylowac do docs/ przed commitem. Retencja 14 dni.
 tmp/
+docs/makiety/out/
