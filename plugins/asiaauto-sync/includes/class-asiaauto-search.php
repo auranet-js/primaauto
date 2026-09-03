@@ -472,7 +472,9 @@ class AsiaAuto_Search
             <?php /* telefon: przyklejony pasek z licznikiem, dopóki wyniki nie wjadą w widok (JS chowa) */ ?>
             <div class="aas__pasek-dol" hidden>
                 <span class="aas__pasek-dol-t"><strong class="aas__total"><?= $this->fmtLiczba($res['total']) ?></strong> <span class="aas__total-slowo"><?= $this->slowoOfert($res['total']) ?></span></span>
-                <button type="button" class="aas__pokaz aas__pokaz--dol">Pokaż wyniki</button>
+                <?php /* „Pokaż wyniki" sugerowało zamknięcie panelu, a to jest przewinięcie do listy
+                         (zgłoszenie Janka 03.09) — strzałka w dół i słowo „Wyniki" mówią, co się stanie. */ ?>
+                <button type="button" class="aas__pokaz aas__pokaz--dol">Wyniki <span aria-hidden="true">↓</span></button>
             </div>
             <div class="aas__toolbar">
                 <p class="aas__count" role="status" aria-live="polite">
@@ -597,7 +599,7 @@ class AsiaAuto_Search
                     </label>
                 <?php endforeach; ?>
                 <input type="radio" name="oferta" value="" class="screen-reader-text" <?= checked(empty($p['oferta']), true, false) ?> aria-label="Wszystkie oferty">
-                <button type="button" class="aas__pokaz">Pokaż <span class="aas__total"><?= $this->fmtLiczba($total) ?></span> <span class="aas__total-slowo"><?= $this->slowoOfert($total) ?></span></button>
+                <button type="button" class="aas__pokaz">Pokaż <span class="aas__total"><?= $this->fmtLiczba($total) ?></span> <span class="aas__total-slowo"><?= $this->slowoOfert($total) ?></span> <span aria-hidden="true">↓</span></button>
             </div>
         </section>
         <?php

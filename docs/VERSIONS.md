@@ -1,6 +1,29 @@
 # Historia wersji asiaauto-sync
 
 
+## 0.37.14 — 2026-09-03 (telefon: pasek wyników nie udaje przycisku zamykającego)
+
+Zgłoszenie Janka: „jawny przycisk do pokazywania wyników sugeruje, że zamyka się nim filtr,
+podczas gdy on jest submitem pokazującym wyniki i w ten sposób opuszczam od razu szafę filtrów".
+Przyklejony pasek na telefonie miał napis „Pokaż wyniki" — czytało się jak „zamknij i pokaż".
+
+Teraz: **„Wyniki ↓"** ze strzałką (jawna nawigacja w dół, nie akcja) plus dopisek przy liczniku
+**„— filtry zostają"**. Przycisk w sekcji „Oferty" też dostał strzałkę: „Pokaż N ofert ↓".
+Zmierzone po zmianie: klik przewija z y=419 na y=1012, liczba otwartych sekcji filtrów bez zmian
+(2 → 2), stan filtrów nietknięty.
+
+**Przy okazji, poza wersją pluginu:** ręczny bieg `napraw-moc-ukladu.php apply` — **46 ofert**
+PHEV/EREV/EV z dzisiejszego importu che168 dostało moc układu (nie czekały do crona 05:00).
+Zostają **3 oferty bez mocy w danych**: Leapmotor D19 2026 EREV (pusty `extra_prep`) i dwa
+BYD Han DM-i 2025 „1.5T Auto FWD 5 Seater Edition" (22 klucze, żaden mocowy). **Świadomie
+nie wpisano wartości z bliźniaków** — moc trafia do umowy PDF (`class-asiaauto-contract.php:423`),
+a dla D19 jedyny bliźniak w serii to wersja BEV (inna technologia). Do uzupełnienia przez Ruslana
+w panelu (edytor listingu ma pole „Moc (KM)").
+
+**Sprawdzone przy okazji (punkt „osiągalność haseł"):** wszystkie 112 haseł słownika jest
+osiągalnych z indeksu `/wiki/` (porównanie listy z bazą — zero brakujących), sidebar bierze
+10 haseł alfabetycznie bez filtrowania kategorii, więc niczego nie gubi.
+
 ## 0.37.13 + motyw 1.3.6 — 2026-09-03 (12 haseł słownika nie istniało na indeksie `/wiki/`)
 
 Zgłoszenie Janka: „nie widzę tam pojęcia tylne koła skrętne". Sprawdzone: hasło było opublikowane
