@@ -1,5 +1,9 @@
 # T-116 po odbiorze — cztery ruchy (log crona, moc układu, linkowanie, drugi rzut pól)
 
+> **NIEAKTUALNY od 2026-09-03.** Zastąpiony przez `T-116-domkniecie-wyszukiwarki.md`:
+> ruch 0 (log crona) wykonany, wyszukiwarka doszła do v0.36.1 z układem poziomym i dwoma
+> nowymi filtrami, liczby w tym pliku są sprzed tych zmian. Zostawiony dla historii.
+
 > Prompt wykonawczy do odpalenia w nowym wątku w `~/projekty/primaauto`.
 > Powstał 2026-09-02 po wdrożeniu etapu 3 (v0.35.0). **Startujesz dopiero po tym, jak Janek
 > obejrzy `/wyszukiwarka/` w przeglądarce i potwierdzi, że działa.** Jeśli zgłosi usterki
