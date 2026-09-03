@@ -1,6 +1,55 @@
 # Historia wersji asiaauto-sync
 
 
+## 0.38.0 — 2026-09-03 (telefon: arkusz filtra i wyposażenie)
+
+Pytanie Janka: **„wybrałem kombi i SUV — i co teraz z tym oknem?"**. Odpowiedź brzmiała: nic tego
+nie mówi. Arkusz od dołu był samą listą — bez tytułu, bez przycisku, bez widocznego licznika.
+Wyjścia, jakie istniały: tap w pasek zasłony nad arkuszem (lista zajmowała 78vh, zostawało ~180 px),
+`Escape` (klawiatury na telefonie nie ma) i gest wstecz na Androidzie, który **wychodził z całej
+strony** — otwarcie arkusza nie robiło `pushState`, a `popstate` wołał `location.reload()`.
+Kreska u góry sugerowała zsuwanie, którego nie było.
+
+Pomiar rozstrzygnął, że to dwa różne problemy, więc dostały dwie różne formy.
+
+**Listy rozwijane — arkusz z nagłówkiem i stopką.** 11 z 13 list ma tyle pozycji, że mieści się
+bez przewijania (arkusz 78vh = 658 px, minus nagłówek i stopka, daje 11 wierszy po 48 px); pełny
+ekran dałby 13, czyli dwie więcej — za mało, by uzasadnić przebudowę. Doszły: tytuł filtra,
+licznik zaznaczonych, „×" 44 × 44 i stopka **„Pokaż N ofert"**, gdzie liczba pochodzi z tego samego
+`search-counts`, który odświeża pasek narzędzi — zero nowych zapytań. Listy dłuższe niż 11 pozycji
+(marka 58, model do 44 po marce) dostają pełną wysokość ekranu. Zsuwanie palcem w dół zamyka,
+ale tylko od góry listy, żeby nie kolidowało z przewijaniem opcji.
+
+**Wyposażenie — pełny ekran z grupami.** Sekcja po rozwinięciu miała **1 535 px, czyli 1,8 ekranu**:
+36 pastylek w 29 rzędach, płaską listą, bez grup i bez szukajki — mimo że `FLAG_GROUPS` z czterema
+zestawami siedzi w kodzie od dawna i służył wyłącznie do wyciągania etykiet. Teraz na telefonie
+sekcja to jeden przycisk z licznikiem (**204 px zamiast 1 535**), a wyposażenie otwiera się na pełny
+ekran z nagłówkami grup, szukajką i stopką z liczbą wyników. Pastylka stała się wierszem listy
+o wysokości 48 px — było 38 px, poniżej progu z iOS HIG i Material; axe tego nie zgłaszał,
+bo WCAG 2.5.8 AA wymaga tylko 24 × 24, więc bramka świeciła na zielono, a palec trafiał w sąsiada.
+
+**Historia przeglądarki.** Otwarcie arkusza lub panelu dokłada wpis (`pushState`), `popstate`
+zamyka go zamiast przeładowywać stronę, a po zamknięciu adres wraca z filtrami zaznaczonymi
+w środku (`przywrocUrl()`). Zamknięcie działa natychmiast, wpis z historii zdejmowany jest w tle —
+`history.back()` jest asynchroniczne i arkusz zostawałby widoczny przez jeden tick (na tym
+oblewał się test `Escape` na 320 px).
+
+**Desktop nietknięty.** Kolejność pastylek zostaje oryginalna, ręcznie ułożona („wabiki" najpierw):
+markup jej nie zmienia, a grupowanie robi `order` we flexie, włączany wyłącznie w `@media (max-width: 768px)`;
+nagłówki grup i elementy panelu są tam `display: none`.
+
+Trzy pułapki warte zapamiętania. Reset `.aas button` (0-1-1) bije klasę komponentu — przycisk
+stopki wyszedł bez tła, a „×" bez `margin-left: auto`; komentarz w pliku wprost każe dawać prefiks
+`.aas `. Klik w pastylkę zamykał panel, bo łapała go reguła „klik poza listą zamyka". Panel łamał
+się na dwie kolumny, bo dziedziczył `flex-wrap: wrap` z bazowej reguły `.aas__chips` — połowa listy
+wychodziła poza ekran w prawo. Żadnej z nich nie złapałyby liczby: wszystkie trzy widać dopiero
+na zrzucie ekranu.
+
+Bramki: axe 320 / 390 / 1366 px, także z otwartym arkuszem i otwartym panelem — **0 naruszeń**;
+`test-ui-wyszukiwarka.mjs` bez błędów na obu szerokościach; `porownaj-search.php` 50 kombinacji,
+**0 rozjazdów**, średnio 3 ms. Prompt i pomiary: `docs/roadmapa/T-252-wyszukiwarka-na-telefonie.md`.
+
+
 ## 0.37.15 — 2026-09-03 (marki i modele alfabetycznie)
 
 Pytanie Janka: „lista marek i modeli niech będzie alfabetyczna, ma to sens?". Ma — i tylko dla
