@@ -1,6 +1,18 @@
 # Historia wersji asiaauto-sync
 
 
+## 0.37.11 — 2026-09-03 (iPhone: pola 16 px, bez autofokusu na dotyku)
+
+Janek (iPhone 15 Pro): „wybieranie filtrów rozszerza ekran, przez co się rozjeżdża". Typowa
+przyczyna na iOS Safari: fokus w polu z fontem < 16 px powiększa stronę i nie cofa powiększenia;
+do tego arkusz listy sam ustawiał fokus w szukajce → klawiatura wypychała arkusz. Naprawa:
+16 px na wszystkich polach i selektach w panelu przy ≤ 768 px, autofokus tylko na desktopie.
+Do potwierdzenia zrzutem z telefonu Janka — headless Chrome tego nie odtwarza.
+
+**Zgłoszone, nierozwiązane:** przyklejony pasek „N ofert · Pokaż wyniki" na telefonie sugeruje
+zamknięcie panelu, a przewija do wyników (submit), przez co użytkownik wypada z filtrów.
+Kierunek: pasek jako sam licznik albo jawna nawigacja „Wyniki ↓" — decyzja przy zrzucie.
+
 ## 0.37.10 + motyw 1.3.4 — 2026-09-03 (ruch D: wyszukiwarka podlinkowana, obok katalogu)
 
 Decyzja Janka: współistnienie z `/samochody/`, `/w-rzeszowie/`, `/w-drodze/` (nic nie zastępujemy,

@@ -297,6 +297,10 @@
     .aas__siatka--7, .aas__siatka--6, .aas__siatka--5, .aas__siatka--4 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 @media (max-width: 768px) {
+    /* iOS Safari powiększa stronę przy fokusie na polu z fontem < 16 px i już jej nie zmniejsza —
+       Janek (iPhone 15 Pro): „wybieranie filtrów rozszerza ekran i się rozjeżdża". 16 px na każdym
+       polu i selekcie w panelu. */
+    .aas input, .aas select, .aas .aas__sel, .aas .aas__sort-select, .aas__szukaj input, .aas__inp input { font-size: 16px; }
     .aas__siatka--7, .aas__siatka--6, .aas__siatka--5, .aas__siatka--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .aas__pole--range[data-range="cena"] { grid-column: 1 / -1; }
     .aas__oferty { grid-template-columns: 1fr 1fr; }

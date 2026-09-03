@@ -151,7 +151,7 @@ def build_entry(cfg, system_prompt, model="sonnet"):
     return entry
 
 
-def create_wiki_entry(cfg, entry, model="sonnet"):
+def create_wiki_entry(cfg, entry, model="sonnet", status="publish"):
     """Publikuje hasło od razu (sekcja /wiki/ jest noindex do akceptu Janka —
     review odbywa się na żywym layoutcie, nie w mailu-atrapie)."""
     from make_cover import make_cover
@@ -167,7 +167,7 @@ def create_wiki_entry(cfg, entry, model="sonnet"):
     body_file.write_text(content)
     post_id = kb.wp(
         "post", "create", str(body_file),
-        "--post_status=publish", "--post_type=asiaauto_wiki",
+        f"--post_status={status}", "--post_type=asiaauto_wiki",
         "--post_author=55",
         f"--post_title={cfg['title']}",
         f"--post_name={cfg['slug']}",
@@ -195,7 +195,8 @@ def create_wiki_entry(cfg, entry, model="sonnet"):
         Path(cover).unlink(missing_ok=True)
     except Exception as e:
         print(f"    okładka nieudana (nie blokuje): {e}", flush=True)
-    live_url = f"{SITE}/wiki/{cfg['slug']}/"
+    live_url = (f"{SITE}/wiki/{cfg['slug']}/" if status == "publish"
+                else f"{SITE}/wp-admin/post.php?post={post_id}&action=edit")
     return post_id, live_url
 
 
@@ -218,6 +219,8 @@ def main():
     ap.add_argument("--slugs", help="comma-separated")
     ap.add_argument("--no-mail", action="store_true")
     ap.add_argument("--config", default="wiki_tier1.json", help="plik konfiguracji haseł")
+    ap.add_argument("--status", default="publish", choices=["publish", "draft"],
+                    help="draft = szkice do przeglądu Janka (T-250: publikacja wymaga osobnej zgody)")
     ap.add_argument("--model", default="sonnet", help="model do generacji (opus/sonnet) — sonnet ~2x szybszy, porównywalna jakość (test A/B 22.07)")
     args = ap.parse_args()
 
@@ -238,7 +241,7 @@ def main():
 
     def run_one(cfg):
         entry = build_entry(cfg, system_prompt, model=args.model)
-        post_id, live_url = create_wiki_entry(cfg, entry, model=args.model)
+        post_id, live_url = create_wiki_entry(cfg, entry, model=args.model, status=args.status)
         return {"cfg": cfg, "entry": entry, "post_id": post_id, "live_url": live_url}
 
     from concurrent.futures import ThreadPoolExecutor, as_completed

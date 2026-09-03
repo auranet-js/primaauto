@@ -1,0 +1,238 @@
+[
+  {
+    "title": "Dach panoramiczny w chińskich autach — otwierany, stały i szklany dach",
+    "headword": "Dach panoramiczny",
+    "slug": "dach-panoramiczny",
+    "category": "nadwozie",
+    "aliases": "dach panoramiczny, szyberdach panoramiczny, panoramiczny dach szklany, szklany dach, 全景天窗, 天幕",
+    "term_keys": {"skylight_type": "全景天窗"},
+    "main_kw": "dach panoramiczny",
+    "context": "W chińskich specyfikacjach pole 'rodzaj dachu' (skylight_type) rozróżnia: otwierany dach panoramiczny (可开启全景天窗, ok. 860 aut w naszej bazie), stały dach panoramiczny bez otwierania (不可开启全景天窗, ok. 750), dzielony szyberdach (分段式, ok. 560), szklany dach bez żadnej ruchomej części, tzw. 'canopy' (全景天幕, ok. 380) i zwykły mały szyberdach (ok. 80). Razem jakaś forma szklanego dachu jest w ponad 90% ofert — w Chinach to standard, nie dopłata. Typowe pułapki dla kupującego: stały szklany dach bez rolety w upał (część marek daje tylko powłokę odbijającą IR/UV, część roletę elektryczną — pole 'roleta panoramiczna' jest w ok. 330 ofertach), gorsze wygłuszenie, większa masa w górnej części nadwozia, koszt wymiany szyby po uszkodzeniu. Wyszukiwarka Prima-Auto ma pastylkę 'Dach panoramiczny' = dach otwierany lub stały panoramiczny (bez canopy i dzielonych)."
+  },
+  {
+    "title": "Tylna oś skrętna (4WS) — jak działa skręt czterech kół",
+    "headword": "Tylna oś skrętna",
+    "slug": "tylna-os-skretna",
+    "category": "podwozie",
+    "aliases": "tylna oś skrętna, skrętne tylne koła, 4WS, four-wheel steering, rear-wheel steering, 后轮转向, 整体转向",
+    "term_keys": {"overall_turn": ""},
+    "main_kw": "tylna oś skrętna",
+    "context": "Skrętna tylna oś: przy małych prędkościach tylne koła skręcają przeciwnie do przednich (mniejszy promień zawracania, typowo o 0,5-1 m), przy wyższych prędkościach zgodnie z przednimi (stabilniejsza zmiana pasa). Kąt skrętu tylnych kół w dużych chińskich SUV-ach i sedanach sięga zwykle 3-10 stopni; maksymalne wartości (ok. 12-15 stopni) mają topowe modele, np. Nio ET9 czy Xiaomi SU7 Ultra w wybranych wersjach. W naszej bazie ok. 190 aut ma tę funkcję — to auta duże (ponad 5 m długości), np. Li Auto Mega, Denza Z9 GT, Xpeng X9, BYD Yangwang U8, Zeekr 009. W specyfikacjach chińskich pole nazywa się 整体转向 ('sterowanie całościowe'), w Autohome bywa też opisane jako 后轮转向. Dla kupującego: dodatkowy układ = dodatkowe koszty serwisu (siłownik, czujniki), kalibracja po naprawie geometrii; w kabinie odczuwalne przy parkowaniu i zawracaniu. Wyszukiwarka Prima-Auto ma pastylkę 'Tylna oś skrętna'."
+  },
+  {
+    "title": "Tempomat adaptacyjny (ACC) w chińskich autach — od zwykłego tempomatu do pełnego zakresu prędkości",
+    "headword": "Tempomat adaptacyjny",
+    "slug": "tempomat-adaptacyjny",
+    "category": "adas",
+    "aliases": "tempomat adaptacyjny, ACC, adaptive cruise control, aktywny tempomat, tempomat pełnozakresowy, 自适应巡航, 全速自适应巡航",
+    "term_keys": {"cruise_system": "自适应", "full_speed_adaptive_cruise": "", "adaptive_cruise": ""},
+    "main_kw": "tempomat adaptacyjny",
+    "context": "Chińskie specyfikacje rozróżniają trzy poziomy: zwykły tempomat (定速巡航 — tylko utrzymuje zadaną prędkość; ok. 100 aut w naszej bazie ma wyłącznie ten), tempomat adaptacyjny (自适应巡航 — radar/kamera mierzy dystans do poprzedzającego auta, działa zwykle powyżej 30 km/h) i tempomat adaptacyjny pełnozakresowy (全速自适应巡航 — od 0 km/h, sam zatrzymuje i rusza w korku; ok. 2 200 aut, czyli ponad 70% oferty). Sensory: radar milimetrowy + kamera przednia, w wyższych wersjach LiDAR. W Chinach ACC jest w praktyce standardem także w tanich kompaktach (BYD Dolphin, Geely Galaxy E5), podczas gdy w Europie w tej klasie bywa dopłatą. Pułapki: różne strategie dystansu (chińskie kalibracje bywają 'bliżej' niż europejskie), zachowanie po zatrzymaniu (niektóre systemy po ok. 3 s wymagają dotknięcia gazu lub przycisku), ACC ≠ centrowanie na pasie (to osobna funkcja, w naszym słowniku osobne hasło). Wyszukiwarka Prima-Auto ma pastylkę 'Tempomat adaptacyjny' = wersje adaptacyjne (bez zwykłego tempomatu)."
+  },
+  {
+    "title": "Centrowanie na pasie (LCC) — czym różni się od asystenta pasa ruchu",
+    "headword": "Centrowanie na pasie",
+    "slug": "centrowanie-na-pasie",
+    "category": "adas",
+    "aliases": "centrowanie na pasie, lane centering, LCC, lane centering control, aktywne utrzymanie pasa, 车道居中, 车道居中辅助",
+    "term_keys": {"lane_center": ""},
+    "main_kw": "centrowanie na pasie",
+    "context": "Centrowanie na pasie (lane_center, 车道居中辅助, LCC) to ciągłe prowadzenie auta środkiem pasa przez układ kierowniczy — w odróżnieniu od asystenta pasa ruchu (LKA, 车道保持辅助), który tylko koryguje, gdy auto zbliża się do linii, i od ostrzeżenia o opuszczeniu pasa (LDW), które jedynie wibruje/pika. W chińskich autach LCC razem z pełnozakresowym ACC tworzy tzw. 'autopilot na autostradzie' poziomu L2; w naszej bazie ma je ok. 2 500 aut (ponad 80% oferty), w tym auta za równowartość 60-80 tys. zł. W Europie funkcja jest zwykle częścią pakietów 'Travel Assist', 'Highway Assist' itp. Pułapki: konieczność trzymania rąk na kierownicy (czujniki momentu lub pojemnościowe — wykrywanie rąk jest w ok. 1 200 ofert), zachowanie na łukach o małym promieniu i przy niewyraźnych liniach, jakość map dla polskich dróg nie ma tu znaczenia (system działa na kamerze), ale ostrzeżenia i menu bywają po chińsku w autach bez polskiego oprogramowania. Wyszukiwarka Prima-Auto ma pastylkę 'Centrowanie na pasie'."
+  },
+  {
+    "title": "Wyświetlacz HUD w samochodzie — head-up display bez rozszerzonej rzeczywistości",
+    "headword": "Wyświetlacz HUD",
+    "slug": "hud",
+    "category": "komfort",
+    "aliases": "HUD, head-up display, wyświetlacz przezierny, wyświetlacz na szybie, W-HUD, 抬头显示, HUD抬头显示系统",
+    "term_keys": {"header_display_system": ""},
+    "main_kw": "wyświetlacz hud",
+    "context": "HUD (header_display_system, 抬头显示系统) rzutuje prędkość, wskazówki nawigacji i ostrzeżenia ADAS na przednią szybę (W-HUD, windshield HUD) albo na wysuwaną szybkę (C-HUD, combiner, tańsze i mniej wygodne rozwiązanie znane z tanich aut). W naszej bazie zwykły HUD ma ok. 950 aut; osobno liczymy AR-HUD (ok. 350 aut — ma własne hasło w słowniku), gdzie obraz jest 'wklejany' w drogę na większej odległości wirtualnej (7-10 m zamiast 2-3 m) i większym polu widzenia. W chińskich autach HUD jest częsty już w klasie kompaktów (BYD Seal, Xpeng P7, Zeekr 007), europejskie odpowiedniki oferują go głównie w pakietach. Pułapki: HUD nie działa z częścią okularów polaryzacyjnych, jakość obrazu spada w mocnym słońcu, w autach bez europejskiego oprogramowania jednostki bywają w km/h, ale nawigacja chińska bez map Polski — wtedy HUD pokazuje tylko prędkość. Wyszukiwarka Prima-Auto ma pastylkę 'Wyświetlacz HUD'."
+  },
+  {
+    "title": "Ekran pasażera z przodu (ekran współkierowcy) w chińskich autach",
+    "headword": "Ekran pasażera",
+    "slug": "ekran-pasazera",
+    "category": "komfort",
+    "aliases": "ekran pasażera, ekran współkierowcy, ekran przed pasażerem, passenger display, co-pilot screen, 副驾屏, 副驾驶娱乐屏",
+    "term_keys": {
+      "copilot_screen_resolution": "", "copilot_screen_resolution_2.4K": "", "copilot_screen_resolution_2.5K": "", "copilot_screen_resolution_3K": "",
+      "vice_screen_ppi_167": "", "vice_screen_ppi_190": "", "vice_screen_ppi_200": "", "vice_screen_ppi_210": "",
+      "vice_screen_resolution_1920x720": "", "vice_screen_resolution_2488x720": "", "vice_screen_resolution_2880x1080": "", "vice_screen_resolution_2880x1620": "",
+      "vice_screen_size_10.25": "", "vice_screen_size_10.33": "", "vice_screen_size_12.3": "", "vice_screen_size_12.6": "", "vice_screen_size_13": "", "vice_screen_size_13.2": "",
+      "vice_screen_size_14.6": "", "vice_screen_size_14.96": "", "vice_screen_size_15.5": "", "vice_screen_size_15.6": "", "vice_screen_size_15.7": "", "vice_screen_size_16": "", "vice_screen_size_16.2": "", "vice_screen_size_23.6": ""
+    },
+    "main_kw": "ekran pasażera w samochodzie",
+    "context": "Osobny ekran przed pasażerem z przodu (副驾屏, w danych Autohome pola vice_screen_size_* / copilot_screen_resolution_*) — typowo 10,25-16 cali, w naszej bazie ok. 225 aut (7% oferty). Pełni rolę ekranu rozrywkowego (wideo, gry, karaoke) i pozwala pasażerowi obsługiwać nawigację i multimedia bez rozpraszania kierowcy; w części aut ma folię prywatyzującą, żeby kierowca nie widział filmu (wymóg przepisów w Chinach i UE). Przykłady z naszej oferty: Li Auto L9/L8 (ekrany 15,7 cala), Xiaomi SU7 z ekranem opcjonalnym, Denza D9, Zeekr 009, AITO M9. W Europie to rozwiązanie znane z Porsche Taycan czy Mercedesa (MBUX Hyperscreen), w Chinach schodzi do klasy średniej. Różni się od ekranu dla pasażerów z tyłu (osobne hasło). Pułapki: ekran działa w ekosystemie chińskim (aplikacje wideo, sklep) — po imporcie część treści jest niedostępna; jasność w słońcu; brak wsparcia dla polskich serwisów. Wyszukiwarka Prima-Auto ma pastylkę 'Ekran pasażera (przód)'."
+  },
+  {
+    "title": "Ekran dla pasażerów z tyłu — tylny system rozrywki w chińskich autach",
+    "headword": "Ekran dla pasażerów z tyłu",
+    "slug": "ekran-tylny",
+    "category": "komfort",
+    "aliases": "ekran tylny, ekran dla pasażerów z tyłu, tylny ekran rozrywki, rear entertainment screen, rear seat entertainment, 后排屏幕, 后排液晶屏, 后排娱乐屏",
+    "term_keys": {"rear_lcd_screen": ""},
+    "main_kw": "ekran dla pasażerów z tyłu",
+    "context": "Ekran dla pasażerów z tyłu (rear_lcd_screen, 后排液晶屏): albo duży opuszczany z sufitu (15-21 cali, typowe w vanach i dużych SUV-ach — Li Auto L9/Mega, Denza D9, Zeekr 009, AITO M9, Xpeng X9), albo dwa ekrany w zagłówkach (rzadsze w Chinach), albo ekran sterowania w podłokietniku (klimatyzacja, fotele — to osobna rzecz, 'panel dotykowy tył'). W naszej bazie ekran tylny ma ok. 765 aut (25% oferty), rozdzielczość podana w ok. 115 ofertach. Chińskie 'auta rodzinne' (家庭用车) traktują tył jako salon: ekran + lodówka + fotele z masażem to typowy zestaw. Pułapki: treści z chińskich serwisów po imporcie zwykle niedostępne, ale HDMI/miracast i odtwarzanie z USB działają; masa i cena naprawy opuszczanego ekranu; ekran dotykowy w zasięgu dzieci. Wyszukiwarka Prima-Auto ma pastylkę 'Ekran dla pasażerów z tyłu'."
+  },
+  {
+    "title": "Dolby Atmos w samochodzie — dźwięk przestrzenny w chińskich autach",
+    "headword": "Dolby Atmos",
+    "slug": "dolby-atmos",
+    "category": "audio",
+    "aliases": "Dolby Atmos, dźwięk przestrzenny, dźwięk panoramiczny, 杜比全景声, spatial audio, 7.1.4",
+    "term_keys": {"dolby_panoramic_sound": ""},
+    "main_kw": "dolby atmos w samochodzie",
+    "context": "Dolby Atmos (dolby_panoramic_sound, 杜比全景声) to obiektowy format dźwięku przestrzennego: zamiast kanałów przypisanych do głośników miksuje się 'obiekty' z pozycją w przestrzeni, a dekoder w aucie rozkłada je na dostępne głośniki, w tym sufitowe (kanały 'wysokościowe', w chińskich specyfikacjach 'sky_sound_channel', ok. 470 aut). W naszej bazie Atmos ma ok. 745 aut w standardzie i kolejne ok. 130 jako opcję. Występuje w zestawach 18-28 głośników: Devialet (Zeekr), Dynaudio (Lynk & Co, Zeekr, Xpeng), Huawei Sound (AITO), Xiaomi, Yamaha (Li Auto), Meridian, Harman Kardon — w słowniku są osobne hasła o markach. Warunki działania: potrzebne źródło zmiksowane w Atmos (Apple Music, Tidal, NetEase w Chinach) — zwykły stream stereo tylko jest 'upmixowany'. Pułapki po imporcie: chińskie aplikacje muzyczne niedostępne, Atmos przez Bluetooth nie działa (kompresja), pełne wykorzystanie przez USB/Apple CarPlay z odpowiednim źródłem albo przez wbudowaną aplikację, jeśli działa poza Chinami. Wyszukiwarka Prima-Auto ma pastylkę 'Dolby Atmos'."
+  },
+  {
+    "title": "Głośniki w fotelach i zagłówkach — strefowe audio w chińskich autach",
+    "headword": "Głośniki w fotelach",
+    "slug": "glosniki-w-fotelach",
+    "category": "audio",
+    "aliases": "głośniki w fotelach, głośniki w zagłówkach, headrest speakers, seat speakers, 座椅音响, 头枕音响, 头枕扬声器",
+    "term_keys": {"seat_speakers": ""},
+    "main_kw": "głośniki w zagłówkach",
+    "context": "Głośniki w fotelach (seat_speakers, 座椅音响/头枕音响) — zwykle po dwa w zagłówku fotela kierowcy, rzadziej w każdym z przednich foteli lub także z tyłu. Zastosowania: prywatne rozmowy telefoniczne i komunikaty nawigacji tylko dla kierowcy (reszta kabiny słucha muzyki), wzmocnienie sceny dźwiękowej przy Dolby Atmos, w kilku modelach tzw. 'strefy ciszy' (dźwięk odseparowany dla przednich i tylnych pasażerów). W naszej bazie ma je ok. 370 aut w standardzie (12% oferty) i ok. 40 w opcji: Li Auto (L6/L7/L8/L9), Xpeng G6/G9, Nio ET5/ES6, AITO M7/M9, Zeekr 001, Xiaomi SU7. W Europie znane głównie z Mercedesa i BMW z zestawami Burmester/Bowers & Wilkins w topowych wersjach. Pułapki: głośniki w zagłówku nie zastępują pełnego systemu — liczy się cały zestaw; sprawdzać, czy fotel z głośnikami ma jednocześnie wentylację i masaż (elektronika w oparciu ogranicza konfiguracje). Wyszukiwarka Prima-Auto ma pastylkę 'Głośniki w fotelach'."
+  },
+  {
+    "title": "Sterowanie gestami w samochodzie — jak działa i po co jest",
+    "headword": "Sterowanie gestami",
+    "slug": "sterowanie-gestami",
+    "category": "komfort",
+    "aliases": "sterowanie gestami, gesture control, obsługa gestami, 手势控制, 手势控制系统",
+    "term_keys": {"gesture_control_system": ""},
+    "main_kw": "sterowanie gestami w samochodzie",
+    "context": "Sterowanie gestami (gesture_control_system, 手势控制系统): kamera 3D/ToF lub kamera monitoringu kierowcy nad ekranem rozpoznaje gesty dłoni — obrót palcem to głośność, machnięcie odrzuca połączenie, wskazanie 'zrób zdjęcie', kciuk w górę potwierdza. W naszej bazie ma je ok. 155 aut (5% oferty) — funkcja niszowa, w Chinach rozwijana głównie przez Li Auto, Xpeng, Nio, BYD (Yangwang U8, Denza), Zeekr, w Europie znana z BMW od 2015 r. (Seria 7). Chińskie systemy łączą gesty z rozpoznawaniem głosu bez słowa budzącego i z ekranem pasażera; niektóre pozwalają gestem przesunąć film z ekranu centralnego na tylny. Krytyka: rozpoznawanie nie zawsze pewne (rękawiczki, słońce), łatwo o przypadkowe wywołanie, w praktyce większość kierowców używa głosu. Dla kupującego: obecność funkcji jest raczej wskaźnikiem bogatego wyposażenia wersji niż realną wartością. Wyszukiwarka Prima-Auto ma pastylkę 'Sterowanie gestami'."
+  },
+  {
+    "title": "Rozpoznawanie znaków drogowych (TSR) w autach z Chin — co działa w Polsce",
+    "headword": "Rozpoznawanie znaków drogowych",
+    "slug": "rozpoznawanie-znakow",
+    "category": "adas",
+    "aliases": "rozpoznawanie znaków, rozpoznawanie znaków drogowych, TSR, traffic sign recognition, 交通标志识别, 道路交通标识识别",
+    "term_keys": {"road_traffic_sign_recognition": ""},
+    "main_kw": "rozpoznawanie znaków drogowych",
+    "context": "Rozpoznawanie znaków drogowych (road_traffic_sign_recognition, 道路交通标识识别, TSR) — kamera przednia odczytuje znaki ograniczenia prędkości, zakazu wyprzedzania, czasem sygnalizację świetlną (osobne pole 'rozpoznawanie sygnalizacji', ok. 1 440 aut) i pokazuje je na zestawie wskaźników lub HUD. W naszej bazie funkcję deklaruje ok. 2 550 aut (85% oferty) — w Chinach to standard w każdej klasie. Kluczowe dla importu: chińskie znaki ograniczenia prędkości są okrągłe, białe z czerwoną obwódką jak w Polsce (konwencja wiedeńska), więc podstawowe rozpoznawanie działa; różnice dotyczą znaków uzupełniających (tabliczki po chińsku), znaków strefowych i końca ograniczenia. Od lipca 2024 r. nowe auta w UE muszą mieć ISA (inteligentny asystent prędkości) — auto z Chin sprowadzone indywidualnie nie podlega temu obowiązkowi, ale funkcja działa podobnie. Pułapki: fałszywe odczyty znaków z naczep i dróg równoległych, ostrzeżenia dźwiękowe trudne do wyłączenia w chińskim menu, brak bazy map ograniczeń dla Polski (system polega tylko na kamerze). Wyszukiwarka Prima-Auto ma pastylkę 'Rozpoznawanie znaków'."
+  },
+  {
+    "title": "Mirroring telefonu w chińskich autach — CarPlay, HiCar, Carlink i inne",
+    "headword": "Mirroring telefonu",
+    "slug": "mirroring-telefonu",
+    "category": "komfort",
+    "aliases": "mirroring telefonu, projekcja telefonu, phone mirroring, integracja telefonu, CarPlay, HiCar, Carlink, CarLife, Flyme Link, 手机互联, 手机映射",
+    "term_keys": {"mobile_system_8": "", "mobile_system_11": "", "mobile_system_1": ""},
+    "main_kw": "mirroring telefonu w samochodzie",
+    "context": "Mirroring telefonu = wyświetlanie aplikacji telefonu na ekranie auta. W chińskich specyfikacjach pole 'integracja z telefonem' (mobile_system_*) ma osobne warianty: HUAWEI HiCar (ok. 1 370 aut w naszej bazie — najczęstszy, wymaga telefonu Huawei/Honor z HarmonyOS lub EMUI), Carlink (ok. 1 030 — chiński standard ICCOA wspierany przez telefony Xiaomi, Oppo, Vivo, Honor), Apple CarPlay (ok. 630 — coraz rzadziej w chińskich EV, bo producenci promują własne systemy), Baidu CarLife (kilka), Flyme Link (Meizu/Geely, ok. 50), Honor 荣耀车联 (ok. 20). Android Auto w autach z rynku chińskiego praktycznie nie występuje (usługi Google są w Chinach zablokowane) — to najważniejsza informacja dla kupującego z telefonem Android: alternatywą jest Carlink (jeśli telefon go wspiera), bezprzewodowy CarPlay (iPhone), albo apki instalowane bezpośrednio w systemie auta (Android-owe systemy typu DiLink/HarmonyOS pozwalają instalować APK, część aut ma Google Maps/YouTube po sideloadingu). Dla firm sprowadzających: zdolność do mirroringu polskich map (Google Maps, Waze) to jedno z najczęstszych pytań klientów. W słowniku są osobne hasła CarPlay i Android Auto oraz Huawei HiCar. Wyszukiwarka Prima-Auto ma pastylkę 'Mirroring telefonu' = HiCar lub Carlink lub CarPlay."
+  },
+  {
+    "title": "Internet 5G w samochodzie — łączność w chińskich autach po imporcie",
+    "headword": "Internet 5G",
+    "slug": "internet-5g",
+    "category": "komfort",
+    "aliases": "5G, internet 5G w samochodzie, modem 5G, łączność 5G, 5G网络, 车载5G, eSIM w aucie",
+    "term_keys": {"data_network_2": ""},
+    "main_kw": "5g w samochodzie",
+    "context": "Wbudowany modem 5G (data_network_2 = 5G, 车载网络: 5G) ma w naszej bazie ok. 1 700 aut (57% oferty); reszta ma 4G. Modem obsługuje: nawigację online i mapy HD, streaming muzyki/wideo, aktualizacje OTA, zdalne funkcje z aplikacji (podgrzanie, otwarcie, lokalizacja), hotspot WiFi dla pasażerów, w części aut komunikację V2X. Kluczowa sprawa przy imporcie: karta SIM/eSIM jest zwykle powiązana z chińskim operatorem (China Mobile/Unicom/Telecom) i konto producenta — po sprowadzeniu do Polski łączność często nie działa lub działa w roamingu ograniczony czas; rozwiązania to fizyczne gniazdo SIM (część aut ma), wymiana eSIM przez serwis, albo hotspot z telefonu. Bez łączności nie działa większość funkcji 'inteligentnych' (asystent głosowy online, mapy online, aplikacja mobilna, sklep). Pasma: chińskie modemy 5G obsługują n1/n3/n28/n41/n78 — pokrywają się z pasmami polskich operatorów (n78 3,6 GHz, n1/n3, n28), więc technicznie 5G w Polsce jest osiągalne po aktywacji. Wyszukiwarka Prima-Auto ma pastylkę 'Internet 5G'."
+  },
+  {
+    "title": "Ładowanie indukcyjne telefonu w samochodzie — moc, chłodzenie, ile stanowisk",
+    "headword": "Ładowanie indukcyjne telefonu",
+    "slug": "ladowanie-indukcyjne",
+    "category": "komfort",
+    "aliases": "ładowanie indukcyjne, ładowarka bezprzewodowa w aucie, ładowanie bezprzewodowe telefonu, Qi, 手机无线充电, 无线充电",
+    "term_keys": {"mobile_wireless_charging": ""},
+    "main_kw": "ładowanie indukcyjne w samochodzie",
+    "context": "Ładowanie indukcyjne telefonu (mobile_wireless_charging, 手机无线充电) jest w naszej bazie w ok. 2 500 aut (84% oferty): w większości tylko z przodu (前排), w ok. 125 także z tyłu (前排/后排). Chińskie auta wyróżniają się mocą ładowania — pole 'moc ładowania bezprzewodowego' (wireless_charging_power) podaje zwykle 15 W, w nowszych modelach 40-50 W (Xiaomi SU7 50 W, Li Auto 50 W, Zeekr, Nio) oraz aktywne chłodzenie płytki (wentylator), czego w Europie prawie nie ma (standard 5-15 W). Warunek: telefon musi wspierać Qi (iPhone: max 7,5 W przez Qi, 15 W przez MagSafe; szybkie 50 W wymaga telefonu z tym samym protokołem, np. Xiaomi). Pułapki: nagrzewanie telefonu w słońcu, etui z magnesami, kieszeń pionowa vs pozioma (ślizganie się telefonu na zakrętach — w nowszych autach uchwyty lub magnes). Wyszukiwarka Prima-Auto ma pastylkę 'Ładowanie indukcyjne'."
+  },
+  {
+    "title": "Podgrzewane fotele przednie — standard w chińskich autach, ale nie zawsze w obu fotelach",
+    "headword": "Podgrzewane fotele",
+    "slug": "podgrzewane-fotele",
+    "category": "komfort",
+    "aliases": "podgrzewane fotele, ogrzewanie foteli, grzane fotele, seat heating, 座椅加热, 前排座椅加热",
+    "term_keys": {"front_seat_heating_1": ""},
+    "main_kw": "podgrzewane fotele",
+    "context": "Ogrzewanie przednich foteli (front_seat_heating_1 = 加热, 前排座椅加热) ma w naszej bazie ok. 2 590 aut (86% oferty) — w Chinach to standard nawet w wersjach bazowych aut za równowartość 60-70 tys. zł, podczas gdy w Europie w tej klasie bywa pakietem. Chińskie specyfikacje rozbijają fotele na pola: kierowca/pasażer osobno (przez sufiksy _1/_2), ogrzewanie tylnej kanapy osobno (ok. 1 690 aut — w słowniku osobne hasło), trzeci rząd osobno (ok. 370). W autach elektrycznych ogrzewanie foteli i kierownicy jest ważne dla zasięgu zimą: grzeje ciało bezpośrednio (50-100 W na fotel) zamiast całej kabiny (2-6 kW), producenci wprost promują 'tryb oszczędny zimą'. Pułapki: w tańszych wersjach tylko fotel kierowcy (sprawdzić pole dla pasażera), sterowanie wyłącznie z ekranu (bez fizycznych przycisków), automatyka powiązana z temperaturą zewnętrzną w części modeli. Wyszukiwarka Prima-Auto ma pastylkę 'Podgrzewane fotele przód'."
+  },
+  {
+    "title": "Wentylowane fotele — chłodzenie foteli w chińskich autach",
+    "headword": "Wentylowane fotele",
+    "slug": "wentylowane-fotele",
+    "category": "komfort",
+    "aliases": "wentylowane fotele, wentylacja foteli, chłodzone fotele, klimatyzowane fotele, seat ventilation, 座椅通风, 前排座椅通风",
+    "term_keys": {"front_seat_ventilation_1": ""},
+    "main_kw": "wentylowane fotele",
+    "context": "Wentylacja przednich foteli (front_seat_ventilation_1 = 通风, 前排座椅通风) — wentylatory w siedzisku i oparciu przedmuchują powietrze przez perforowaną tapicerkę; w większości aut to wentylacja 'wyciągowa' (odprowadza wilgoć), w droższych nawiew powietrza z klimatyzacji (aktywne chłodzenie). W naszej bazie ma ją ok. 2 470 aut (82% oferty) — w Chinach wynika to z klimatu południa (Guangdong, Szanghaj: lato 35 stopni i wilgoć), więc trafia do wersji podstawowych; w Europie to wyposażenie klasy premium. Wentylacja tylnej kanapy w ok. 1 160 ofert. Warunek: tapicerka perforowana (skóra naturalna lub ekoskóra) — tkanina nie występuje z wentylacją. Pułapki: hałas wentylatorów przy najwyższym stopniu, w tańszych wersjach tylko fotel kierowcy, zużycie wentylatorów i filtrów przy dużym przebiegu, wentylacja + masaż + głośniki w jednym fotelu to rzadka kombinacja. Wyszukiwarka Prima-Auto ma pastylkę 'Wentylowane fotele przód'."
+  },
+  {
+    "title": "Pamięć ustawień fotela — profile kierowcy w chińskich autach",
+    "headword": "Pamięć ustawień fotela",
+    "slug": "pamiec-fotela",
+    "category": "komfort",
+    "aliases": "pamięć fotela, pamięć ustawień fotela, fotel z pamięcią, profil kierowcy, seat memory, 座椅记忆, 主驾座椅记忆",
+    "term_keys": {"front_seat_memory_1": ""},
+    "main_kw": "pamięć ustawień fotela",
+    "context": "Pamięć fotela kierowcy (front_seat_memory_1 = 记忆, 主驾座椅记忆) zapisuje pozycję fotela elektrycznego (zwykle 6-12 kierunków regulacji), a w chińskich autach coraz częściej cały profil: lusterka (pole 'pamięć lusterek' w ok. 2 120 ofert), kierownica (ok. 1 100), HUD, klimatyzacja, ulubione stacje. Profil aktywuje się z kluczyka, z aplikacji, a w wielu modelach z rozpoznawania twarzy (kamera DMS, ok. 1 580 aut) — bez naciskania przycisku. W naszej bazie pamięć fotela kierowcy ma ok. 2 030 aut (68% oferty), pamięć fotela pasażera ok. 1 400, drugiego rzędu ok. 270 (vany typu Denza D9, Zeekr 009). W Europie w tej cenie pamięć fotela to zwykle opcja w pakiecie. Pułapki: przyciski pamięci na drzwiach vs tylko na ekranie, profil powiązany z kontem chińskim (po imporcie działa lokalnie, ale bez synchronizacji w chmurze), fotel elektryczny bez pamięci (samo pole 'regulacja elektryczna' nie oznacza pamięci). Wyszukiwarka Prima-Auto ma pastylkę 'Pamięć ustawień fotela'."
+  },
+  {
+    "title": "Podgrzewana tylna kanapa — ogrzewanie foteli z tyłu w chińskich autach",
+    "headword": "Podgrzewana kanapa",
+    "slug": "podgrzewana-kanapa",
+    "category": "komfort",
+    "aliases": "podgrzewana kanapa, ogrzewanie tylnej kanapy, podgrzewane tylne fotele, rear seat heating, 后排座椅加热",
+    "term_keys": {"rear_seat_heating": ""},
+    "main_kw": "podgrzewana tylna kanapa",
+    "context": "Ogrzewanie tylnej kanapy (rear_seat_heating = 加热, 后排座椅加热) — grzałki w skrajnych miejscach drugiego rzędu (środkowe zwykle bez), w vanach i dużych SUV-ach także w trzecim rzędzie (osobne pole, ok. 370 aut). W naszej bazie ma je ok. 1 690 aut (56% oferty) — w Chinach tylne siedzenia są traktowane jako miejsce 'szefa' lub rodziny (kierowca zawodowy, dziadkowie), stąd bogate wyposażenie tyłu: podgrzewanie, wentylacja (ok. 1 160), masaż (ok. 990), regulacja elektryczna, przycisk 'boss' do przesuwania fotela pasażera z tyłu (ok. 1 070). W Europie ogrzewanie tylnej kanapy to wyposażenie klasy wyższej. Pułapki: sterowanie z panelu tylnego (bywa po chińsku) lub tylko z ekranu przedniego, moc grzałek podobna jak z przodu, brak ogrzewania środkowego miejsca. Wyszukiwarka Prima-Auto ma pastylkę 'Podgrzewana kanapa'."
+  },
+  {
+    "title": "Podgrzewana kierownica — dlaczego w chińskich autach elektrycznych jest tak częsta",
+    "headword": "Podgrzewana kierownica",
+    "slug": "podgrzewana-kierownica",
+    "category": "komfort",
+    "aliases": "podgrzewana kierownica, ogrzewanie kierownicy, grzana kierownica, heated steering wheel, 方向盘加热",
+    "term_keys": {"steer_wheel_heating": ""},
+    "main_kw": "podgrzewana kierownica",
+    "context": "Podgrzewana kierownica (steer_wheel_heating, 方向盘加热) — grzałka w wieńcu, zwykle w strefach uchwytu, 30-50 W, w chińskich autach włączana z ekranu lub automatycznie z 'trybem zimowym' razem z fotelami; w naszej bazie ma ją ok. 1 900 aut w standardzie (63% oferty) i ok. 120 w opcji. W autach elektrycznych to element strategii zasięgu zimą: grzanie punktowe (fotele + kierownica ok. 150-250 W) zamiast nagrzewania kabiny (2-6 kW) — chińscy producenci (BYD, Li Auto, Nio, Zeekr) promują to wprost w interfejsie. Kierownica podgrzewana występuje niemal wyłącznie w kierownicach obszytych skórą/ekoskórą; pole 'materiał kierownicy' w specyfikacjach to osobna informacja. Pułapki: sterowanie tylko z ekranu (w części modeli bez fizycznego przycisku), wyłączanie po czasie, brak podgrzewania w wersjach bazowych mimo podgrzewanych foteli. Wyszukiwarka Prima-Auto ma pastylkę 'Podgrzewana kierownica'."
+  },
+  {
+    "title": "Masaż tylnej kanapy — fotele z masażem z tyłu w chińskich autach",
+    "headword": "Masaż tylnej kanapy",
+    "slug": "masaz-tylnej-kanapy",
+    "category": "komfort",
+    "aliases": "masaż tylnej kanapy, masaż foteli tył, fotele z masażem z tyłu, rear seat massage, 后排座椅按摩",
+    "term_keys": {"rear_seat_massage": ""},
+    "main_kw": "masaż foteli z tyłu",
+    "context": "Masaż tylnych foteli (rear_seat_massage = 按摩, 后排座椅按摩): komory pneumatyczne w oparciu (typowo 8-16 punktów) z kilkoma programami (fale, ugniatanie, odcinek lędźwiowy), w topowych vanach z dodatkową funkcją podgrzewania. W naszej bazie ma go ok. 990 aut (33% oferty) — dużo więcej niż w Europie, gdzie masaż tylnej kanapy jest zarezerwowany dla limuzyn klasy S/7. Typowe modele: Li Auto L7/L8/L9/Mega, Denza D9, Zeekr 009, AITO M9, Xpeng X9, BYD Tang, Voyah Dream, Geely Galaxy E8 w wyższych wersjach. Razem z wentylacją, podgrzewaniem, ekranem tylnym, lodówką i fotelami zero-gravity tworzy 'tylny salon' typowy dla chińskich aut rodzinnych i biznesowych. W słowniku osobne hasło 'Masaż foteli' dotyczy przednich. Pułapki: masaż tylko w skrajnych miejscach (środkowe nie), w wersjach 6-osobowych z niezależnymi fotelami częstszy niż w kanapie, sterowanie z tylnego panelu lub ekranu. Wyszukiwarka Prima-Auto ma pastylkę 'Masaż foteli tył'."
+  },
+  {
+    "title": "Ogrzewanie lusterek — podgrzewane lusterka boczne w autach z Chin",
+    "headword": "Ogrzewanie lusterek",
+    "slug": "ogrzewanie-lusterek",
+    "category": "komfort",
+    "aliases": "ogrzewanie lusterek, podgrzewane lusterka, podgrzewane lusterka boczne, heated mirrors, 外后视镜加热, 后视镜加热",
+    "term_keys": {"external_mirror_heat": ""},
+    "main_kw": "podgrzewane lusterka",
+    "context": "Ogrzewanie lusterek zewnętrznych (external_mirror_heat = 加热, 外后视镜加热) — folia grzewcza za szkłem lusterka, włączana z ogrzewaniem tylnej szyby lub automatycznie od czujnika temperatury/deszczu. W naszej bazie ma je ok. 2 740 aut (91% oferty) — czyli praktycznie każde auto, także wersje bazowe; w Europie to od dawna standard klasy kompakt i wyżej, więc różnicy między rynkami tu nie ma. Ważniejsze przy imporcie: powiązane pola specyfikacji — lusterka składane elektrycznie, z pamięcią (ok. 2 120), automatycznie przyciemniane (fotochromatyczne), z funkcją opuszczania przy cofaniu, a w kilku modelach lusterka kamerowe zamiast szklanych (osobne hasło w słowniku). Dla zimy w Polsce istotne: czas nagrzewania lusterka (1-3 min), automatyka włączania poniżej ok. 5 stopni w części chińskich aut, sprzężenie z czujnikiem deszczu. Wyszukiwarka Prima-Auto ma pastylkę 'Ogrzewanie lusterek'."
+  },
+  {
+    "title": "Zdalny rozruch i klimatyzacja z aplikacji — co działa po imporcie auta z Chin",
+    "headword": "Zdalny rozruch",
+    "slug": "zdalny-rozruch",
+    "category": "komfort",
+    "aliases": "zdalny rozruch, zdalne uruchamianie, remote start, zdalna klimatyzacja, sterowanie z aplikacji, 远程启动, 发动机远程启动",
+    "term_keys": {"engine_remote_start": ""},
+    "main_kw": "zdalny rozruch silnika",
+    "context": "Zdalny rozruch (engine_remote_start, 远程启动) w chińskich specyfikacjach oznacza uruchomienie auta z aplikacji lub kluczyka, żeby przed jazdą nagrzać/schłodzić kabinę, włączyć podgrzewanie foteli i wstępnie ogrzać baterię (w EV 'rozruch' = włączenie układów wysokiego napięcia i klimatyzacji, nie ma silnika do odpalenia; w PHEV/EREV może uruchomić także silnik spalinowy). W naszej bazie funkcję deklaruje ok. 2 730 aut (91% oferty). Powiązane pola: 'zdalne sterowanie z telefonu' (ok. 2 640 — zamki, szyby, lokalizacja, klimatyzacja), 'zdalne manewrowanie' (ok. 2 020 — wyjazd z miejsca parkingowego z aplikacji), harmonogram klimatyzacji. Kluczowe przy imporcie: aplikacja producenta (BYD App, Li Auto, Nio, Xiaomi Car) wymaga chińskiego konta i numeru telefonu oraz działającej łączności w aucie (chińska eSIM) — po sprowadzeniu do Polski zdalny rozruch z aplikacji często nie działa lub wymaga usług pośredników; zdalny rozruch z kluczyka (jeśli auto ma taki przycisk) działa zawsze. W Europie funkcja jest znana z Tesli i aut z usługami connected. Wyszukiwarka Prima-Auto ma pastylkę 'Zdalny rozruch'."
+  },
+  {
+    "title": "Hak holowniczy w chińskich autach elektrycznych — uciąg, homologacja, montaż w Polsce",
+    "headword": "Hak holowniczy",
+    "slug": "hak-holowniczy",
+    "category": "nadwozie",
+    "aliases": "hak holowniczy, hak w aucie elektrycznym, uciąg przyczepy, tow hook, tow bar, 拖车钩, 拖钩",
+    "term_keys": {"drag_hook": ""},
+    "main_kw": "hak holowniczy auto elektryczne",
+    "context": "Hak holowniczy (drag_hook, 拖车钩) w chińskich specyfikacjach: w standardzie w ok. 330 aut w naszej bazie (11% oferty), jako opcja fabryczna w kolejnych ok. 120. Uwaga na znaczenie pola: w części aut (zwłaszcza SUV-ów terenowych, jak BYD Yangwang U8, Fangchengbao Bao 5, Tank 300/500) to pełny hak do ciągnięcia przyczepy, w innych tylko zaczep holowniczy/ucho; rozstrzyga pole 'dopuszczalna masa przyczepy' (w chińskich danych rzadko wypełniane, bo w Chinach ciągnięcie przyczep osobowymi jest mało popularne i prawnie ograniczone). Dla kupującego w Polsce: auta z Chin rzadko mają w dokumentach homologacyjnych wpisaną masę holowaną — przy rejestracji z indywidualnym dopuszczeniem uciąg może być zerowy, co uniemożliwia legalne ciągnięcie przyczepy mimo fizycznego haka; montaż haka po sprowadzeniu wymaga odpowiedniego zestawu (chińskie EV mają często dedykowane mocowania, ale brak europejskich zestawów dla wielu modeli), a w EV ciągnięcie przyczepy skraca zasięg o 30-50%. Wyszukiwarka Prima-Auto ma pastylkę 'Hak holowniczy'."
+  }
+]

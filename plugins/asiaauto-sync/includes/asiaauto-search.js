@@ -459,8 +459,13 @@
             if (pop.getBoundingClientRect().right > window.innerWidth - 8) pop.classList.add('aas__pop--right');
         }
         var szukaj = pop.querySelector('.aas__szukaj input');
-        if (szukaj) { szukaj.value = ''; filtrujOpcje(szukaj); szukaj.focus({ preventScroll: true }); }
-        else { var pierwszy = pop.querySelector('input'); if (pierwszy) pierwszy.focus({ preventScroll: true }); }
+        if (szukaj) { szukaj.value = ''; filtrujOpcje(szukaj); }
+        // fokus tylko na desktopie: na dotyku automatyczny fokus w polu wywołuje klawiaturę,
+        // która wypycha arkusz od dołu i przewija stronę (iOS) — użytkownik sam stuknie w szukajkę
+        if (!window.matchMedia('(max-width: 768px)').matches) {
+            var pierwszy = szukaj || pop.querySelector('input');
+            if (pierwszy) pierwszy.focus({ preventScroll: true });
+        }
     }
 
     /** Szukajka w liście: `is-hidden` dla braku dopasowania; `hidden` z liczników zostaje osobno. */
