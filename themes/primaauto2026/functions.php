@@ -1,7 +1,7 @@
 <?php
 defined('ABSPATH') || exit;
 
-const PRIMAAUTO_THEME_VERSION = '1.3.5';
+const PRIMAAUTO_THEME_VERSION = '1.3.6';
 
 add_action('after_setup_theme', function () {
     add_theme_support('title-tag');

@@ -1,6 +1,26 @@
 # Historia wersji asiaauto-sync
 
 
+## 0.37.13 + motyw 1.3.6 — 2026-09-03 (12 haseł słownika nie istniało na indeksie `/wiki/`)
+
+Zgłoszenie Janka: „nie widzę tam pojęcia tylne koła skrętne". Sprawdzone: hasło było opublikowane
+i dostępne pod własnym adresem, ale **na indeksie `/wiki/` go nie było**.
+
+**Przyczyna.** `archive-asiaauto_wiki.php` grupuje hasła po `_wiki_category`, a potem iteruje po
+`AsiaAuto_Wiki::CATEGORIES` — więc renderuje wyłącznie kategorie z tej listy. Lista miała sześć
+pozycji (`bateria`, `naped`, `adas`, `audio`, `komfort`, `normy`), a w bazie żyły jeszcze dwie:
+`podwozie` (9 haseł) i `nadwozie` (3). **Dwanaście haseł znikało bez śladu** — nie trafiały nawet
+do grupy „Pozostałe", bo ta zbiera tylko hasła z PUSTĄ kategorią. Dotyczyło to również haseł sprzed
+tej sesji: wszystkie zawieszenia (McPherson, wielowahaczowe, dwuwahaczowe, pięciowahaczowe,
+zależne, regulowane), hamulce, EPB i nadwozie samonośne.
+
+**Naprawa dwuwarstwowa:** (1) `CATEGORIES` dostaje `podwozie` → „Podwozie i zawieszenie"
+i `nadwozie` → „Nadwozie" (przy okazji `komfort` z „Komfort i nadwozie" na „Komfort i wnętrze",
+żeby nagłówki się nie dublowały); (2) szablon przypisuje hasło z kategorią **spoza listy** do
+„Pozostałe" zamiast je gubić — kolejna nieznana kategoria już niczego nie ukryje.
+
+Po zmianie indeks pokazuje **113 haseł w ośmiu grupach** (było 101 w sześciu).
+
 ## motyw 1.3.5 — 2026-09-03 (autolinki słownika były NIEWIDOCZNE na ofertach i hubach)
 
 Zgłoszenie Janka przy przeglądzie makiety: „w stanie obecnym nie widzę wykropkowanych linii pod
