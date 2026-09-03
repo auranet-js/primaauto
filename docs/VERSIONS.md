@@ -1,6 +1,24 @@
 # Historia wersji asiaauto-sync
 
 
+## 0.37.10 + motyw 1.3.4 — 2026-09-03 (ruch D: wyszukiwarka podlinkowana, obok katalogu)
+
+Decyzja Janka: współistnienie z `/samochody/`, `/w-rzeszowie/`, `/w-drodze/` (nic nie zastępujemy,
+stare strony zostają ze swoim SEO), **bez przenoszenia filtrów** z katalogu do wyszukiwarki
+(„ktoś może mieć inną intencję wyszukiwania"). Cztery miejsca, wszystkie na czysty `/wyszukiwarka/`:
+
+| miejsce | tekst | gdzie w kodzie |
+|---|---|---|
+| strona główna, pod polem marka/model | „Szukaj po wyposażeniu →" | `class-asiaauto-homepage.php` `renderHero()` + 3 linie CSS inline |
+| `/samochody/` pod filtrami (desktop: kolumna; telefon: szuflada nad „Pokaż N wyników") | „Wyszukiwarka zaawansowana →" | `class-asiaauto-inventory.php` — **pierwsza zmiana od 25.08, jedna linia**; styl w `asiaauto-inventory.css` |
+| menu mobilne, ostatnia pozycja pod Kontaktem | „Wyszukiwarka zaawansowana" | `header.php` przez `items_wrap` (menu WP nietknięte, desktop bez zmian) |
+| stopka, kolumna Nawigacja, po „Samochody z Chin" | „Wyszukiwarka zaawansowana" | `footer.php` (statyczna lista fallback — `menu-2` nie jest podpięte) |
+
+Pomiar: strona główna i `/samochody/` mają po 3 linki do wyszukiwarki, każda inna podstrona 2
+(menu + stopka). axe na stronie głównej, `/samochody/` i otwartym menu mobilnym — patrz log sesji.
+Backupy `.bak-2026-09-03-link-wyszukiwarka` przy pięciu plikach. Krok 1 ruchu D (CTA pod hasłami
+`/wiki/`) idzie w T-250.
+
 ## 0.37.9 — 2026-09-03 (szybkość tras REST: −40 zapytań na kartach, cache etykiet, pamięć w przeglądarce)
 
 Pomiar (`wp eval`, czas samych metod, bez startu WP): `counts()` 33–74 ms / 18–34 zapytań,
