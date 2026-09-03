@@ -1,7 +1,8 @@
 # T-251 — wyszukiwarka po odbiorze: domknięcia, filtry, pomiar
 
 > Prompt wykonawczy do nowego wątku w `~/projekty/primaauto`. Powstał 2026-09-03 po sesji,
-> w której wyszukiwarka przeszła z 0.36.1 do **0.37.14**, a słownik z 89 do 112 haseł.
+> w której wyszukiwarka przeszła z 0.36.1 do **0.37.15**, a słownik z 89 do 112 haseł.
+> **Zaktualizowany 03.09 wieczorem** — część pozycji wykonana jeszcze w tamtej sesji, patrz „Zrobione".
 > Kolejność ustalona przez Janka: **najpierw domknięcia, potem filtry, na końcu wydajność.**
 >
 > Przeczytaj przed startem:
@@ -13,7 +14,8 @@
 ## 0. Stan na 2026-09-03 (zweryfikuj na starcie)
 
 `/wyszukiwarka/` **podlinkowana** w czterech miejscach (home, `/samochody/` pod filtrami, menu
-mobilne, stopka), plugin **0.37.14**, motyw **1.3.6**. Sekcje: Nadwozie · Napęd · Styl i komfort ·
+mobilne, stopka), plugin **0.37.15**, motyw **1.3.6**. Marki i modele sortowane **alfabetycznie**
+(decyzja Janka 03.09; pozostałe listy po liczbie ofert — tam liczba mówi, gdzie jest oferta). Sekcje: Nadwozie · Napęd · Styl i komfort ·
 Wyposażenie i technologie (36 pastylek + marka nagłośnienia) · Oferty (kafle). Filtry zależne
 (zero = szare i wyłączone, podpowiedzi = zakres po zawężeniu, pusty stan z filtrami do zdjęcia).
 Telefon: zwijane sekcje, 8 pastylek + „Więcej wyposażenia", pasek „Wyniki ↓".
@@ -25,6 +27,22 @@ Telefon: zwijane sekcje, 8 pastylek + „Więcej wyposażenia", pasek „Wyniki 
 | `porownaj-search.php` 50 kombinacji | 0 rozjazdów |
 | REST `search` / `search-counts` | ~90 ms / 85 ms zimno, 58 ms z cache |
 | `class-asiaauto-inventory.php` | zmieniony 03.09 **jedną linią** (link pod filtrami) |
+
+## 0b. Zrobione po napisaniu tego promptu (nie powtarzaj)
+
+- **Pasek wyników na telefonie** (0.37.14): „Pokaż wyniki" → **„Wyniki ↓"** + dopisek „filtry
+  zostają". Zmierzone: klik przewija, sekcje filtrów zostają otwarte.
+- **Alfabetyczne marki i modele** (0.37.15) — w PHP i w JS (modele dorysowane po wyborze marki
+  przekładają całą listę, nie doklejają na koniec); `setlocale(LC_COLLATE, 'pl_PL')` w `parseParams()`.
+- **Moc układu**: ręczny bieg `napraw-moc-ukladu.php apply` → **46 ofert** z importu 03.09.
+  Zostają 3 bez danych (punkt E).
+- **Osiągalność haseł** (dawny punkt 12): sprawdzone — wszystkie 112 haseł osiągalnych z indeksu
+  `/wiki/`, sidebar bierze 10 alfabetycznie i niczego nie filtruje. **Zamknięte.**
+- **Strona postępu**: changelog uzupełniony o lukę **26.08–03.09** (7 wpisów, +39 h → **287 h**
+  od spotkania), `T-116` dopisany do `todo_ukryte_id`, strona **zbudowana lokalnie**
+  (`docs/kosztorys/postep.html`). **NIE wysłana** — patrz punkt D.
+  ⚠️ Korekta wcześniejszej diagnozy: changelog sortuje od najnowszych, więc „urywa się 16.07"
+  było błędem odczytu (`c[-1]` to najstarszy wpis). Luka wynosiła 9 dni, nie 7 tygodni.
 
 ## 1. Domknięcia — najpierw
 
@@ -45,11 +63,12 @@ typowa przyczyna „ekran się rozjeżdża" na iPhonie. **Headless Chrome tego n
 potwierdzenie tylko z telefonu Janka (iPhone 15 Pro). Jeśli zoom nadal jest: sprawdzić `viewport`
 w motywie i `user-scalable`, potem szerokość arkusza listy przy otwartej klawiaturze.
 
-### D. Strona postępu prac dla Ruslana — luka 7 tygodni (decyzja + 2–4 h)
-`docs/kosztorys/dane/postep.json` → `changelog` kończy się na **16.07.2026**. Od tego czasu weszły
-m.in. katalog Autohome, T-116 w całości, słownik +23 hasła, Meta/DSA. Dopisanie samego T-116
-zrobi dziurę w narracji. Do rozstrzygnięcia z Jankiem: uzupełniamy całą lukę czy tylko ostatnie
-prace. Po decyzji: wpisy + `T-116` do `todo_ukryte_id` + `build_postep.py --deploy`.
+### D. Strona postępu — akcept godzin, wysyłka, commit (0,5 h)
+Wpisy już są w `dane/postep.json` (kopia poprzedniego stanu: `dane/postep.json.bak-2026-09-03`),
+strona zbudowana lokalnie. **Do zrobienia:** (1) Janek akceptuje albo koryguje godziny — zostały
+policzone z rozpiętości commitów w danym dniu, nie z jego realnego czasu; (2) decyzja, czy prace
+przy Meta i Ads (28 i 31.08, razem 12 h) zostają na tej stronie, czy są rozliczane osobno;
+(3) `python3 build_postep.py --deploy`; (4) commit `postep.json` + `postep.html`.
 ⚠️ Memory `feedback_nie_pisz_rozliczone_o_godzinach` — dla Ruslana godziny są „zrealizowane".
 
 ### E. Trzy oferty bez mocy (Ruslan)

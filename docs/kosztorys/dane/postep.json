@@ -6,6 +6,55 @@
  },
  "changelog": [
   {
+   "data": "03.09.2026",
+   "tytul": "Słownik pojęć — 23 nowe hasła powiązane z filtrami wyszukiwarki",
+   "opis": "Nowe hasła tłumaczące wyposażenie, po którym można teraz filtrować (dach panoramiczny, tylna oś skrętna, ekrany dla pasażerów, Dolby Atmos i inne). Każde hasło pokazuje, ile aut z tą funkcją mamy w ofercie, i prowadzi do gotowej listy w wyszukiwarce. Przy okazji naprawione: odnośniki do słownika w opisach aut były niewidoczne, a dwanaście haseł nie pojawiało się na liście słownika.",
+   "wersje": "",
+   "godz": 4
+  },
+  {
+   "data": "02.09.2026",
+   "tytul": "Wyszukiwarka zaawansowana — filtrowanie po wyposażeniu i parametrach",
+   "opis": "Nowa strona wyszukiwarki obok dotychczasowego katalogu: filtrowanie po nadwoziu, napędzie, stylu i 36 elementach wyposażenia (masaże, lidar, kamery, nagłośnienie, dach panoramiczny). Wybór jednego filtru od razu pokazuje, co jest jeszcze dostępne, a wynik dzieli się na auta do sprowadzenia, w drodze i stojące w Polsce. Osobny układ na telefon. Podlinkowana ze strony głównej, katalogu, menu i stopki.",
+   "wersje": "",
+   "godz": 14
+  },
+  {
+   "data": "02.09.2026",
+   "tytul": "Wyposażenie aut z katalogu producenta — trzecie źródło danych",
+   "opis": "Nocne uzupełnianie danych o wyposażeniu z katalogu producenta dla aut, którym brakowało opisu. Auta z pełną listą wyposażenia: z 52% do 98%. To fundament, bez którego filtrowanie po wyposażeniu nie miałoby po czym szukać.",
+   "wersje": "",
+   "godz": 3
+  },
+  {
+   "data": "01.09.2026",
+   "tytul": "YouTube — odzyskany dostęp do kanału i pomiar źródeł ruchu",
+   "opis": "Odzyskany dostęp do kanału i sprawdzenie, skąd bierze się jego oglądalność.",
+   "wersje": "",
+   "godz": 2
+  },
+  {
+   "data": "31.08.2026",
+   "tytul": "Google Ads — audyt kampanii, przebudowa budżetów, kampania wideo",
+   "opis": "Przegląd wszystkich kampanii, przesunięcie budżetów tam, gdzie realnie przychodzą kontakty, uruchomienie kampanii wideo Demand Gen oraz automatyczny strażnik pilnujący, żeby reklamy nie prowadziły na nieistniejące strony.",
+   "wersje": "",
+   "godz": 6
+  },
+  {
+   "data": "28.08.2026",
+   "tytul": "Reklamy Meta — odblokowanie konta i katalog aut",
+   "opis": "Zdjęta blokada, która nie pozwalała wyświetlać reklam w Polsce, weryfikacja domeny i uruchomienie katalogu aut z podziałem na dostępne w Polsce, w drodze i do sprowadzenia.",
+   "wersje": "",
+   "godz": 6
+  },
+  {
+   "data": "26.08.2026",
+   "tytul": "Dostępność serwisu — pełna zgodność WCAG 2.2 AA",
+   "opis": "Domknięcie poprawek dostępności po audycie, sprawdzone osobno na telefonie i na komputerze. Serwis spełnia wszystkie stosowalne kryteria WCAG 2.2 AA — wymóg ustawy o dostępności obowiązujący od czerwca 2025.",
+   "wersje": "",
+   "godz": 4
+  },
+  {
    "data": "25.08.2026",
    "tytul": "Montaż 12 filmów — 6 poziomych i 6 pionowych",
    "opis": "Z materiału nagranego dzień wcześniej w Rzeszowie zmontowane 12 filmów: sześć poziomych prezentacji aut i sześć krótkich pionowych pod format Shorts, z oprawą graficzną i planszą końcową — ten sam standard, co przy pierwszej serii z lipca. Dwa kadry tego samego auta to nie duplikat: pionowy zbiera zasięg w rekomendacjach YouTube, poziomy służy jako kreacja reklamowa i materiał do wysłania klientowi. Filmy są gotowe do publikacji na kanale i do wykorzystania w kampaniach wideo.",
@@ -440,7 +489,8 @@
   "T-187",
   "T-209",
   "T-220",
-  "T-186"
+  "T-186",
+  "T-116"
  ],
  "todo_pierwsze": [
   "T-205"
