@@ -43,6 +43,15 @@ pastylek w wyszukiwarce (dach 1 716 vs 1 658, Dolby 871 vs 748), bo `AsiaAuto_Wi
 Słownik: 89 → **112 haseł** publish (21 + 2 z dogrywki; dogrywka poszła od razu z `--status publish`). Sitemap i indeksowanie: jak dotąd
 z sitemapy RankMath (cron 05:40), bez Indexing API (memory `reference_indexing_zakres_newsy_wiki`).
 
-**Otwarte z T-250:** krok 4 (CTA pod hasłem → `/wyszukiwarka/?wyposazenie=<flaga>`), krok 5 (styl
-autolinków + ikona „i" przy pastylkach — na makiecie, po pomiarze GA4: autolinki w ofertach dały
-3 przejścia na 50 tys. odsłon).
+**Krok 4 — WYKONANY** (0.37.12): CTA pod hasłem prowadzi do wyszukiwarki z zaznaczonym filtrem,
+46 ze 104 haseł ma odpowiednik. Szczegóły: `docs/VERSIONS.md` 0.37.12.
+
+**Krok 5 — makieta czeka na decyzję Janka:**
+`https://auratest.pl/fe4f58fec53ctmp/primaauto-makiety/autolinki-warianty.html`
+(generator `docs/makiety/gen-autolink.py`). Cztery warianty widoczności autolinku w treści
+(A obecny, B kropkowana linia w kolorze marki, C granatowy półgruby, D podkreślenie + ikonka „i")
+oraz trzy warianty dojścia z pastylki do hasła (osobna ikona „i", podkreślenie w pastylce, brak linku).
+
+**Korekta pomiaru:** tabela danych technicznych na ofercie (`aa-tech__table`) **jest** autolinkowana
+— 6 linków w wartościach. Wcześniejszy zapis („tabela nie jest autolinkowana wcale") wynikał
+ze sprawdzania nieistniejącej klasy `aa-spec`. Problem to widoczność linków, nie ich brak.
