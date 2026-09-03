@@ -53,6 +53,12 @@ bije zwykłą regułę — potrzebny był `!important`; a `.aas__opts` ma `flex-
 bez jawnego `row` pastylki ustawiały się jedna pod drugą na całą szerokość. Żadnej z nich nie złapałyby liczby: wszystkie trzy widać dopiero
 na zrzucie ekranu.
 
+**Wersjonowanie assetów po `filemtime`.** Arkusz i skrypt wyszukiwarki wisiały na stałej
+`ASIAAUTO_VERSION`, a jedna wersja objęła kilka poprawek pod rząd — Janek zobaczył wtedy arkusz
+wyposażenia **bez pozycji**, bo jego przeglądarka trzymała CSS z etapu pośredniego, w którym
+pastylki miały `display: none`. Teraz `?ver` bierze się z czasu modyfikacji pliku (wzorzec
+z `asiaauto-tracking`), więc każda zmiana unieważnia cache sama.
+
 Bramki: axe 320 / 390 / 1366 px, także z otwartym arkuszem i otwartym panelem — **0 naruszeń**;
 `test-ui-wyszukiwarka.mjs` bez błędów na obu szerokościach; `porownaj-search.php` 50 kombinacji,
 **0 rozjazdów**, średnio 3 ms. Prompt i pomiary: `docs/roadmapa/T-252-wyszukiwarka-na-telefonie.md`.

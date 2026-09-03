@@ -436,10 +436,17 @@ class AsiaAuto_Search
     public function registerAssets(): void
     {
         // rejestracja bez enqueue — assety wchodzą dopiero w renderShortcode()
+        // Wersja z `filemtime`, nie ze stałej wtyczki (wzorzec z `asiaauto-tracking`): przy kilku
+        // poprawkach pod jednym numerem wersji przeglądarka trzymała stary CSS i użytkownik widział
+        // stan pośredni — 2026-09-03 arkusz wyposażenia bez pozycji, bo poprzedni CSS chował pastylki.
         $dir = ASIAAUTO_PLUGIN_URL . 'assets/';
-        $ver = defined('ASIAAUTO_VERSION') ? ASIAAUTO_VERSION : '1';
-        wp_register_style('asiaauto-search', $dir . 'css/asiaauto-search.css', [], $ver);
-        wp_register_script('asiaauto-search', $dir . 'js/asiaauto-search.js', [], $ver, true);
+        $kat = ASIAAUTO_PLUGIN_DIR . 'assets/';
+        $fallback = defined('ASIAAUTO_VERSION') ? ASIAAUTO_VERSION : '1';
+        $ver = static function (string $plik) use ($kat, $fallback) {
+            return file_exists($kat . $plik) ? (string) filemtime($kat . $plik) : $fallback;
+        };
+        wp_register_style('asiaauto-search', $dir . 'css/asiaauto-search.css', [], $ver('css/asiaauto-search.css'));
+        wp_register_script('asiaauto-search', $dir . 'js/asiaauto-search.js', [], $ver('js/asiaauto-search.js'), true);
     }
 
     public function renderShortcode(array $atts = []): string
