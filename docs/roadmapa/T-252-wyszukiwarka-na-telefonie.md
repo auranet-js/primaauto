@@ -1,5 +1,11 @@
 # T-252 — wyszukiwarka na telefonie: arkusz filtra i wyposażenie
 
+> **STATUS: WYKONANE 2026-09-03, wtyczka 0.38.0.** Ten plik zostaje jako zapis diagnozy i pomiarów.
+> Realizacja odbiegła od sekcji 2–3 w jednym punkcie: **wyposażenie NIE dostało pełnoekranowego
+> panelu z grupami** — na żądanie Janka („lista wyposażenia ma być taka jak lista modeli czy marek")
+> jest zwykłym polem z tym samym arkuszem co marka i model. Powód i konsekwencje: wpis 0.38.0
+> w `docs/VERSIONS.md`. Sekcje 2–3 poniżej opisują stan PRZED tą decyzją.
+
 > Prompt wykonawczy. Powstał 2026-09-03 z pytania Janka: **„wybrałem kombi i SUV — i co teraz
 > z tym oknem?"**. Odpowiedź: dziś nic tego nie mówi. Diagnoza i pomiary poniżej są zrobione,
 > nie trzeba ich powtarzać — od razu do wdrożenia.
@@ -57,7 +63,12 @@ arkusz dla wyposażenia nie ma zastosowania, bo pastylki nie siedzą w arkuszu �
 | | listy rozwijane | wyposażenie |
 |---|---|---|
 | ile pozycji | **11 z 13 list ≤ 11 pozycji** | 36 dziś, do 129 docelowo |
-| forma | **A** — arkusz z nagłówkiem i stopką | **C** — pełny ekran z grupami |
+| forma zakładana | **A** — arkusz z nagłówkiem i stopką | **C** — pełny ekran z grupami |
+| forma wdrożona | A | **A** — decyzja Janka: jeden wzorzec dla wszystkich filtrów |
+
+⚠️ Wariant C zbudowano i odrzucono w tej samej sesji. Wniosek do zapamiętania: jeden filtr
+zachowujący się inaczej niż pozostałe jest gorszy niż wszystkie zachowujące się tak samo,
+nawet gdy osobno wygląda lepiej. Przeróbka na arkusz **usunęła** kod, nie dołożyła.
 
 Rozmiary list (`wp7j_asiaauto_specs`, publish, 03.09), bo to one przesądziły:
 `serie` 269 globalnie / do 44 po marce (BYD), `make` 58 (40 z ofertami), `sound_brand` 19,
@@ -85,7 +96,7 @@ gdzie zawartość jest naprawdę duża.
    trzeba rozróżnić stan „arkusz otwarty" od zmiany filtrów w URL.
 6. Kreska u góry zostaje — od tej chwili mówi prawdę.
 
-### C. Wyposażenie (pełny ekran)
+### C. Wyposażenie (ODRZUCONE — patrz status na górze; wdrożone jako arkusz)
 1. Sekcja „Wyposażenie i technologie" na telefonie: zamiast 36 pastylek inline — **przycisk
    otwierający pełnoekranowy widok** z podsumowaniem („Wyposażenie · 3 wybrane").
 2. Widok: pasek górny (strzałka wstecz + tytuł, bez „×" — jedna droga wyjścia), szukajka,
@@ -145,3 +156,16 @@ gdzie zawartość jest naprawdę duża.
 
 Plugin **0.37.15**, motyw **1.3.6**, repo czyste na `c9cabe2`. Wyszukiwarka: `/wyszukiwarka/`
 podlinkowana w czterech miejscach, 36 pastylek, filtry zależne, bramki na zerze.
+
+## 9. Co ostatecznie weszło (2026-09-03)
+
+- `49127bc` — arkusz filtra: nagłówek, stopka „Pokaż N ofert", `pushState`, gest w dół, wiersz 44 px.
+- `53b7865`, `1c1eca4` — wariant C (pełny ekran z grupami) i próba otwierania go z nagłówka sekcji.
+- `b2d5c50` — **zwrot**: wyposażenie jako zwykłe pole z arkuszem; cały kod panelu usunięty.
+- `df39de8` — assety wersjonowane przez `filemtime`, nie stałą wtyczki.
+
+Bramki na koniec: axe 320/390/1366 z otwartym arkuszem — 0 naruszeń; `test-ui-wyszukiwarka.mjs`
+bez błędów na obu szerokościach; `porownaj-search.php` 50 kombinacji — 0 rozjazdów, śr. 3 ms.
+
+**Otwarte:** potwierdzenie z iPhone'a (zoom przy fokusie w szukajce, zsuwanie palcem, pasek gestów
+u dołu) — headless tego nie odtwarza. Punkt C z T-251 nadal czeka na tę samą weryfikację.
