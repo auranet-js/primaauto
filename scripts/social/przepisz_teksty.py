@@ -1,16 +1,23 @@
 #!/usr/bin/env python3
-"""Przepisanie tekstów [VID] — cechy aut z bazy, nie z głowy modelu.
+"""Teksty reklam [VID] — dosłownie z assetów Google Ads, nic własnego.
 
-Powód powstania: 04.09 cztery opisy były zmyślone (Z9 GT „kombi", Jetour T2 „PHEV" przy
-serii benzynowej, Exeed VX i Denza N9 „siedmioosobowe" przy sześciu miejscach), a wszystkie
-dziesięć zawierało słowo „homologacja", którego w treściach do klienta nie używamy
-(feedback_nigdy_slowo_homologacja — zawsze „przygotowanie do rejestracji").
+Zasada Janka z 04.09: „po to ci kazałem wziąć assety z google ads, bo tam nie ma faktów
+liczbowych i fantazji". Wersja poprzednia (w .bak) układała zdania z pól bazy i wpadała
+w cechy zmyślone oraz w liczby, które się starzeją — kreacji w Mecie nie da się edytować.
 
-Każda cecha w tekście pochodzi z pola w bazie: `fuel`, `body`, `drive` z meta oferty
-i `seat_count` z `_asiaauto_extra_prep`. Czego nie ma w bazie, tego skrypt nie napisze.
+Tu każde zdanie jest kopią assetu z konta 9506068500 (30 dni, konw/klik przy wpisie).
+Skrypt NIE pisze zdań. Jedyne, co robi z bazą, to STRAŻNIK: nagłówek mówiący coś o aucie
+(„6-osobowy SUV premium", „Terenowy PHEV z napędem 4x4", „Hybryda plug-in prosto z Chin")
+wchodzi tylko wtedy, gdy `body`/`fuel`/`drive`/`seat_count` w bazie to potwierdzają.
 
-    python3 scripts/social/przepisz_teksty.py --pokaz     # tylko wypisuje teksty
-    python3 scripts/social/przepisz_teksty.py --wgraj     # nowe kreacje + podmiana reklam
+Wybrane assety pomijają: liczby, które rotują (ceny, zapas), słowo „homologacja" oraz
+obietnicę rejestracji („rejestracja po naszej stronie") — my przygotowujemy, klient rejestruje.
+
+    python3 scripts/social/przepisz_teksty.py --pokaz    # wypisuje teksty + wynik strażnika
+    python3 scripts/social/przepisz_teksty.py --wgraj    # nowe kreacje + podmiana reklam
+
+Podmiana zachowuje status reklamy zastępowanej: ACTIVE zostaje ACTIVE (dostawa nie staje,
+faza uczenia zestawu zostaje), PAUSED zostaje PAUSED. Stara reklama idzie do archiwum.
 """
 import argparse
 import json
@@ -25,83 +32,78 @@ WP = '/home/host476470/domains/primaauto.com.pl/public_html'
 BAZA = 'https://primaauto.com.pl'
 STAN = 'meta-start.json'
 
-# klucz wideo → (nazwa handlowa, term `serie`, landing)
-# Jetour: na sesji stał C-DM (hybryda, 5 miejsc, na placu w Rzeszowie) — nie seria benzynowa.
-MODELE = {
-    'jetour-t2':           ('Jetour T2 C-DM', 'T2 C-DM',                    '/samochody/jetour/t2-c-dm/#oferty'),
-    'exeed-vx':            ('Exeed VX',       'VX',                         '/samochody/exeed/vx/#oferty'),
-    'g318':                ('Deepal G318',    'G318',                       '/samochody/deepal/g318/#oferty'),
-    'leopard-5-czarny':    ('BYD Leopard 5',  'Leopard 5 (Denza B5)',       '/samochody/byd/leopard-5/#oferty'),
-    'leopard-5-niebieski': ('BYD Leopard 5',  'Leopard 5 (Denza B5)',       '/samochody/byd/leopard-5/#oferty'),
-    'leopard-7':           ('BYD Leopard 7',  'Leopard 7 (Tai 7) FCB, PHEV','/samochody/byd/leopard-7/#oferty'),
-    'z9-gt':               ('Denza Z9 GT',    'Z9 GT DM-i',                 '/samochody/denza/z9-gt-dm-i/#oferty'),
-    'shark-6':             ('BYD Shark 6',    'Shark 6',                    '/samochody/byd/shark-6/#oferty'),
-    'lynk-900':            ('Lynk & Co 900',  '900',                        '/samochody/lynk-co/900/#oferty'),
-    'n9':                  ('Denza N9',       'N9 DM-i',                    '/samochody/denza/n9-dm-i/#oferty'),
+# ── Bank tekstów: kopiuj-wklej z assetów Google Ads (30 dni do 04.09.2026) ────────────
+# kod: (tekst, konw/klik, kliki). Tekstów NIE przepisujemy — zmiana = inny asset z konta.
+H = {
+    'oferta':  ('Zobacz Ofertę Aut z Chin',     4.62, 173),
+    'aktualne':('Aktualne Oferty z Chin',       4.24, 440),
+    'phev':    ('Hybryda plug-in prosto z Chin',2.83, 106),
+    'bezpo':   ('Import bezpośredni z Chin',    2.75, 409),
+    'marka':   ('Prima-Auto - Samochody z Chin',2.67, 699),
+    'rejestr': ('Gotowe do Rejestracji w PL',   2.05, 175),
+    'importpa':('Import Aut z Chin - Prima Auto',1.93, 415),
+    'szesc':   ('6-osobowy SUV premium',        5.30, 132),
+    'teren':   ('Terenowy PHEV z napędem 4x4',  0.00, 149),
+}
+D = {
+    'A': ('Prima-Auto — bezpośredni importer aut z Chin. Ceny w ogłoszeniach, zamów online.', 3.25, 727),
+    'B': ('Aktualne ogłoszenia z Chin — codziennie. Umowa agencyjna, transport, cło.', 2.87, 650),
+    'C': ('Bezpośredni Importer samochodów z Chin. Ceny w ogłoszeniach — zamów online w 1 klik.', 1.71, 351),
+    'E': ('Auta na placu w Rzeszowie i w drodze do Polski. Sprawdź ceny i dostępność.', 8.70, 46),
+    'F': ('Zamów auto online i zleć import pod dom w całej Polsce', 1.82, 161),
+    'G': ('Każdy samochód przed zakupem jest przez nas weryfikowany, następnie sprowadzany do Polski', 4.26, 47),
+    'J': ('Terenówki, pickup i GT prosto z Chin. Zobacz ceny i dostępność od ręki.', 0.46, 218),
+    'K': ('Obejrzyj auto na żywo w Rzeszowie albo zamów online. Dostawa w całej Polsce.', 5.56, 18),
+}
+PODPIS = H['marka'][0]      # link_description — też asset, nie nasze zdanie
+
+# Warunek z bazy, który musi być spełniony, żeby nagłówek mówiący o aucie mógł wejść.
+STRAZNIK = {
+    'szesc': (lambda f: f['body'] == 'suv' and str(f['seats']) == '6', 'SUV z 6 miejscami'),
+    'teren': (lambda f: f['body'] == 'suv' and f['fuel'] == 'phev' and f['drive'] == 'awd',
+              'SUV PHEV z napędem 4x4'),
+    'phev':  (lambda f: f['fuel'] == 'phev', 'napęd PHEV'),
 }
 
-# Zdanie zamykające — bez słowa „homologacja". „Gotowe do rejestracji" to przy okazji jeden
-# z lepiej konwertujących nagłówków w Google Ads (2,05% konw/klik).
-OGON = ('Transport, cło i przygotowanie do rejestracji po naszej stronie — '
-        'auto gotowe do rejestracji w Polsce.')
-STOPKA = 'Prima-Auto — bezpośredni importer aut z Chin'
-NADWOZIE = {'suv': 'SUV', 'sedan': 'sedan', 'liftback': 'liftback', 'hatchback': 'hatchback',
-            'pickup': 'pickup', 'coupe': 'coupé', 'kombi': 'kombi', 'van': 'van'}
-PALIWO = {'phev': 'hybryda plug-in', 'erev': 'napęd elektryczny z agregatem',
-          'petrol': 'benzyna', 'ev': 'napęd elektryczny', 'hybrid': 'hybryda',
-          'diesel': 'diesel'}
+# klucz wideo → (term `serie`, landing, nagłówek, opisy)
+# Jetour: na sesji stał C-DM (hybryda) — landing prowadzi na serię C-DM, nie benzynową.
+MODELE = {
+    'leopard-5-czarny':    ('Leopard 5 (Denza B5)',        '/samochody/byd/leopard-5/#oferty',      'aktualne', 'AB'),
+    'z9-gt':               ('Z9 GT DM-i',                  '/samochody/denza/z9-gt-dm-i/#oferty',   'oferta',   'AE'),
+    'leopard-5-niebieski': ('Leopard 5 (Denza B5)',        '/samochody/byd/leopard-5/#oferty',      'teren',    'BE'),
+    'leopard-7':           ('Leopard 7 (Tai 7) FCB, PHEV', '/samochody/byd/leopard-7/#oferty',      'phev',     'AG'),
+    'shark-6':             ('Shark 6',                     '/samochody/byd/shark-6/#oferty',        'bezpo',    'JA'),
+    'jetour-t2':           ('T2 C-DM',                     '/samochody/jetour/t2-c-dm/#oferty',     'phev',     'CF'),
+    'exeed-vx':            ('VX',                          '/samochody/exeed/vx/#oferty',           'szesc',    'AG'),
+    'g318':                ('G318',                        '/samochody/deepal/g318/#oferty',        'importpa', 'BE'),
+    'lynk-900':            ('900',                         '/samochody/lynk-co/900/#oferty',        'szesc',    'BF'),
+    'n9':                  ('N9 DM-i',                     '/samochody/denza/n9-dm-i/#oferty',      'rejestr',  'AK'),
+}
 
 
 def fakty():
-    """Nadwozie, paliwo, napęd, miejsca i cena wejścia — wszystko z bazy, wartość najczęstsza."""
-    termy = ','.join('"%s"' % m[1].replace('"', '') for m in MODELE.values())
+    """Nadwozie, paliwo, napęd i liczba miejsc per seria — wyłącznie dla strażnika."""
+    termy = ','.join('"%s"' % m[0].replace('"', '') for m in MODELE.values())
     kod = ('$o=[]; foreach ([%s] as $n) { $t=get_term_by("name",$n,"serie"); if(!$t) continue; '
            '$q=new WP_Query(["post_type"=>"listings","post_status"=>"publish","posts_per_page"=>-1,'
            '"fields"=>"ids","tax_query"=>[["taxonomy"=>"serie","field"=>"term_id","terms"=>$t->term_id]]]);'
-           '$c=[]; $b=[]; $f=[]; $d=[]; $s=[];'
+           '$b=[]; $f=[]; $d=[]; $s=[];'
            'foreach($q->posts as $id){'
-           '  $p=(int)get_post_meta($id,"price",true); if($p>0)$c[]=$p;'
            '  foreach(["body"=>&$b,"fuel"=>&$f,"drive"=>&$d] as $k=>&$kosz){'
            '    $v=get_post_meta($id,$k,true); if($v)$kosz[$v]=($kosz[$v]??0)+1; }'
            '  $e=json_decode(get_post_meta($id,"_asiaauto_extra_prep",true),true); $tab=(array)$e;'
            '  array_walk_recursive($tab, function($v,$k) use (&$s){ if($k==="seat_count") $s[$v]=($s[$v]??0)+1; });'
            '}'
            'foreach([&$b,&$f,&$d,&$s] as &$kosz){ arsort($kosz); }'
-           '$o[$n]=["cena"=>$c?min($c):0,"sztuk"=>count($q->posts),'
-           '"body"=>$b?array_key_first($b):"","fuel"=>$f?array_key_first($f):"",'
-           '"drive"=>$d?array_key_first($d):"","seats"=>$s?array_key_first($s):""];'
+           '$o[$n]=["sztuk"=>count($q->posts),"body"=>$b?array_key_first($b):"",'
+           '"fuel"=>$f?array_key_first($f):"","drive"=>$d?array_key_first($d):"",'
+           '"seats"=>$s?array_key_first($s):""];'
            '} echo json_encode($o);') % termy
     r = subprocess.run(['wp', 'eval', kod], cwd=WP, capture_output=True, text=True)
     try:
         return json.loads(r.stdout.strip().splitlines()[-1])
     except Exception:
         sys.exit(f'baza nie oddała faktów: {r.stderr[:300]}')
-
-
-def zapas_globalny():
-    kod = ('$w=new WP_Query(["post_type"=>"listings","post_status"=>"publish","posts_per_page"=>1,'
-           '"fields"=>"ids"]); $f=function($v){ $q=new WP_Query(["post_type"=>"listings",'
-           '"post_status"=>"publish","posts_per_page"=>1,"fields"=>"ids","meta_query"=>[['
-           '"key"=>"_asiaauto_reservation_status","value"=>$v]]]); return $q->found_posts; };'
-           'echo json_encode(["ofert"=>$w->found_posts,"plac"=>$f("on_lot"),"droga"=>$f("in_transit")]);')
-    r = subprocess.run(['wp', 'eval', kod], cwd=WP, capture_output=True, text=True)
-    return json.loads(r.stdout.strip().splitlines()[-1])
-
-
-def teksty(klucz, f, g):
-    nazwa, term, land = MODELE[klucz]
-    cechy = [NADWOZIE.get(f['body'], f['body']), PALIWO.get(f['fuel'], f['fuel'])]
-    if f['drive'] == 'awd':
-        cechy.append('napęd 4x4')
-    if f['seats']:
-        cechy.append(f"{f['seats']} miejsc")
-    cena = f"{f['cena'] // 1000} 000 zł"
-    ofert = f"{g['ofert'] // 100 * 100:,}".replace(',', ' ')
-    naglowek = f'{nazwa} — od {cena}'
-    tekst = (f'{STOPKA}. {nazwa}: ' + ', '.join(c for c in cechy if c) + f', od {cena}. '
-             f"Ponad {ofert} ofert do sprowadzenia, {g['plac']} aut na placu w Rzeszowie, "
-             f"{g['droga']} w drodze do Polski. {OGON}")
-    return naglowek, tekst, BAZA + land
 
 
 def main():
@@ -112,23 +114,42 @@ def main():
     if not (a.pokaz or a.wgraj):
         ap.error('podaj --pokaz albo --wgraj')
 
-    f_all, g = fakty(), zapas_globalny()
+    f_all = fakty()
     stan = api.stan_wczytaj(STAN)
     wideo = api.stan_wczytaj('meta-wideo.json').get('wgrane', {})
 
-    for klucz, (nazwa, term, land) in MODELE.items():
+    statusy = {}
+    if a.wgraj:
+        d, e = api.get(stan['zestaw_vid'] + '/ads?fields=id,status&limit=50')
+        if e:
+            sys.exit(f'nie mogę odczytać statusów reklam: {e}')
+        statusy = {x['id']: x['status'] for x in d['data']}
+
+    for klucz, (term, land, hk, dk) in MODELE.items():
         f = f_all.get(term)
         if not f:
             print(f'{klucz}: brak serii „{term}" w bazie — pomijam'); continue
-        naglowek, tekst, landing = teksty(klucz, f, g)
-        kod = api.landing_zyje(landing)
-        print(f'\n=== {klucz}  [{term}: {f["sztuk"]} szt., landing {kod}]')
-        print(f'  {naglowek}')
-        print(f'  {tekst}')
+        naglowek = H[hk][0]
+        tekst = ' '.join(D[k][0] for k in dk)
+        landing = BAZA + land
+        print(f'\n=== {klucz}  [{term}: {f["sztuk"]} szt.]')
+        print(f'  nagłówek: {naglowek}   ({H[hk][1]}% konw/klik, {H[hk][2]} kl)')
+        print(f'  tekst:    {tekst}')
+        print(f'  podpis:   {PODPIS}   →  {landing}')
+
+        war = STRAZNIK.get(hk)
+        if war and not war[0](f):
+            print(f'  STRAŻNIK ODRZUCA: nagłówek zakłada {war[1]}, a baza mówi '
+                  f'body={f["body"]} fuel={f["fuel"]} drive={f["drive"]} miejsca={f["seats"]}')
+            continue
+        if war:
+            print(f'  strażnik OK — baza potwierdza {war[1]}')
         if not a.wgraj:
             continue
+
+        kod = api.landing_zyje(landing)
         if kod != 200:
-            print('  landing nie zwraca 200 — pomijam'); continue
+            print(f'  landing zwraca {kod} — pomijam'); continue
         vid = (wideo.get(klucz) or {}).get('video_id')
         if not vid:
             print('  brak wgranego wideo — pomijam'); continue
@@ -136,26 +157,29 @@ def main():
         mini = [t for t in (d or {}).get('data', []) if t.get('is_preferred')] or (d or {}).get('data', [])
         spec = {'page_id': api.PAGE, 'instagram_user_id': api.IG, 'video_data': {
             'video_id': vid, 'image_url': mini[0]['uri'], 'title': naglowek, 'message': tekst,
-            'link_description': STOPKA,
+            'link_description': PODPIS,
             'call_to_action': {'type': 'LEARN_MORE', 'value': {'link': landing}}}}
         r, e = api.post(f'{api.ACT}/adcreatives',
-                        {'name': f'[VID] {klucz} v2', 'object_story_spec': json.dumps(spec)},
+                        {'name': f'[VID] {klucz} v3-ads', 'object_story_spec': json.dumps(spec)},
                         waliduj=False)
         if e:
             print('  BŁĄD kreacji:', e); continue
         kre = r['id']
+        stara = stan.get(f'ad_{klucz}')
+        status = statusy.get(stara, 'PAUSED')
         r, e = api.post(f'{api.ACT}/ads', {
             'name': f'[VID] {klucz}', 'adset_id': stan['zestaw_vid'],
-            'creative': json.dumps({'creative_id': kre}), 'status': 'PAUSED'}, waliduj=False)
+            'creative': json.dumps({'creative_id': kre}), 'status': status}, waliduj=False)
         if e:
             print('  BŁĄD reklamy:', e); continue
-        stara = stan.get(f'ad_{klucz}')
         if stara:
-            api.post(stara, {'status': 'ARCHIVED'}, waliduj=False)
+            _, e2 = api.post(stara, {'status': 'ARCHIVED'}, waliduj=False)
+            if e2:
+                print('  UWAGA: stara reklama NIE poszła do archiwum:', e2)
         stan[f'ad_{klucz}'] = r['id']
         stan[f'kreacja_{klucz}'] = kre
         api.stan_zapisz(STAN, stan)
-        print(f'  nowa reklama {r["id"]}, stara {stara} do archiwum')
+        print(f'  nowa reklama {r["id"]} ({status}), stara {stara} do archiwum')
 
 
 if __name__ == '__main__':

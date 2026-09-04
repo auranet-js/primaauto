@@ -35,44 +35,29 @@ BUDZET_GR = '1500'
 BAZA = 'https://primaauto.com.pl'
 WP = '/home/host476470/domains/primaauto.com.pl/public_html'
 
-# folder na Dysku → (klucz, nazwa handlowa, term taksonomii `serie`, landing)
+# folder na Dysku → (klucz, term taksonomii `serie`, landing)
+# Nazwa karty i cena idą z bazy (`_serie_full_title` + `price`) — nic nie wpisujemy z ręki,
+# bo to na ręcznych opisach powstały „Z9 GT kombi", „VX 7 osób" i „T2 PHEV" przy serii benzynowej.
 MODELE = {
-    'Jetour-T2/Srebrny':   ('jetour-t2', 'Jetour T2 PHEV',  'T2',                   '/samochody/jetour/t2/#oferty', 'SUV PHEV'),
-    'Exceed-VX/Granatowy': ('exeed-vx',  'Exeed VX',        'VX',                   '/samochody/exeed/vx/#oferty', 'SUV 7 osób'),
-    'Deepal-G318':         ('g318',      'Deepal G318',     'G318',                 '/samochody/deepal/g318/#oferty', 'SUV EREV'),
-    'Leopard-5/Czarny':    ('leopard-5', 'BYD Leopard 5',   'Leopard 5 (Denza B5)', '/samochody/byd/leopard-5/#oferty', 'SUV 4x4 PHEV'),
-    'Leopard-7':           ('leopard-7', 'BYD Leopard 7',   'Leopard 7 (Tai 7) FCB, PHEV', '/samochody/byd/leopard-7/#oferty', 'SUV PHEV'),
-    'Denza-Z9GT':          ('z9-gt',     'Denza Z9 GT',     'Z9 GT DM-i',           '/samochody/denza/z9-gt-dm-i/#oferty', 'kombi PHEV'),
-    'Byd-Shark-6':         ('shark-6',   'BYD Shark 6',     'Shark 6',              '/samochody/byd/shark-6/#oferty', 'pickup PHEV'),
-    'Lynk-Co-900':         ('lynk-900',  'Lynk & Co 900',   '900',                  '/samochody/lynk-co/900/#oferty', 'SUV 6 osób'),
-    'Denza-N9':            ('n9',        'Denza N9',        'N9 DM-i',              '/samochody/denza/n9-dm-i/#oferty', 'SUV 7 osób'),
+    'Jetour-T2/Srebrny':   ('jetour-t2', 'T2 C-DM',                    '/samochody/jetour/t2-c-dm/#oferty'),
+    'Exceed-VX/Granatowy': ('exeed-vx',  'VX',                         '/samochody/exeed/vx/#oferty'),
+    'Deepal-G318':         ('g318',      'G318',                       '/samochody/deepal/g318/#oferty'),
+    'Leopard-5/Czarny':    ('leopard-5', 'Leopard 5 (Denza B5)',       '/samochody/byd/leopard-5/#oferty'),
+    'Leopard-7':           ('leopard-7', 'Leopard 7 (Tai 7) FCB, PHEV','/samochody/byd/leopard-7/#oferty'),
+    'Denza-Z9GT':          ('z9-gt',     'Z9 GT DM-i',                 '/samochody/denza/z9-gt-dm-i/#oferty'),
+    'Byd-Shark-6':         ('shark-6',   'Shark 6',                    '/samochody/byd/shark-6/#oferty'),
+    'Lynk-Co-900':         ('lynk-900',  '900',                        '/samochody/lynk-co/900/#oferty'),
+    'Denza-N9':            ('n9',        'N9 DM-i',                    '/samochody/denza/n9-dm-i/#oferty'),
     # Leopard-5/Niebieski to ta sama seria co Czarny — do karuzeli przekrojowej wchodzi raz.
 }
 
-# Teksty NIE z wyczucia — z zasobów Google Ads, konto 9506068500, ostatnie 30 dni,
-# sortowane po konwersji na klik (pomiar 04.09):
-#   „Prima-Auto — bezpośredni importer aut z Chin. Ceny w ogłoszeniach"  3,25% konw/klik
-#   „Import bezpośredni z Chin"                                          2,75%
-#   „Aktualne ogłoszenia z Chin — codziennie. Umowa agencyjna…"          2,87%
-#   „6-osobowy SUV premium"                                              5,30%  (stąd typ na karcie)
-#   „Exeed VX (Omoda 11) — 189 000 zł"                                   7,32%  (stąd cena w nagłówku)
-# Liczby ofert zaokrąglone w dół — kreacji w Mecie nie da się edytować, a zapas rośnie,
-# więc „ponad 2 900" będzie prawdą także za miesiąc.
-def tekst_glowny():
-    kod = ('$w=new WP_Query(["post_type"=>"listings","post_status"=>"publish",'
-           '"posts_per_page"=>1,"fields"=>"ids"]); $n=$w->found_posts;'
-           '$f=function($v){ $q=new WP_Query(["post_type"=>"listings","post_status"=>"publish",'
-           '"posts_per_page"=>1,"fields"=>"ids","meta_query"=>[["key"=>"_asiaauto_reservation_status",'
-           '"value"=>$v]]]); return $q->found_posts; };'
-           'echo json_encode(["ofert"=>$n,"plac"=>$f("on_lot"),"droga"=>$f("in_transit")]);')
-    r = subprocess.run(['wp', 'eval', kod], cwd=WP, capture_output=True, text=True)
-    d = json.loads(r.stdout.strip().splitlines()[-1])
-    # spacja jako separator tysięcy — podmiana TYLKO w liczbie, nie w całym zdaniu
-    ofert = f"{d['ofert'] // 100 * 100:,}".replace(',', ' ')
-    return (f"Prima-Auto — bezpośredni importer aut z Chin. Ponad {ofert} ofert do sprowadzenia, "
-            f"{d['plac']} aut na placu w Rzeszowie i {d['droga']} w drodze do Polski. "
-            f"Ceny w ogłoszeniach, umowa agencyjna, transport, cło, homologacja "
-            f"i rejestracja po naszej stronie.")
+# Tekst główny to dwa assety Google Ads sklejone dosłownie (konto 9506068500, 30 dni):
+#   „Prima-Auto — bezpośredni importer aut z Chin. Ceny w ogłoszeniach, zamów online."  3,25% konw/klik
+#   „Auta na placu w Rzeszowie i w drodze do Polski. Sprawdź ceny i dostępność."        8,70%
+# Zero liczb, które rotują (zapas, ceny), zero słowa „homologacja", zero obietnicy rejestracji —
+# kreacji w Mecie nie da się edytować, więc każde takie zdanie zestarzeje się razem z reklamą.
+TEKST = ('Prima-Auto — bezpośredni importer aut z Chin. Ceny w ogłoszeniach, zamów online. '
+         'Auta na placu w Rzeszowie i w drodze do Polski. Sprawdź ceny i dostępność.')
 
 
 DOMENA = 'primaauto.com.pl'
@@ -109,7 +94,7 @@ def zapas(termy):
 def ceny():
     """Cena wejścia w serię prosto z bazy — karta bez ceny nie robi selekcji, a cena
     wpisana na sztywno starzeje się razem z zapasem."""
-    termy = ','.join('"%s"' % m[2].replace('"', '') for m in MODELE.values())
+    termy = ','.join('"%s"' % m[1].replace('"', '') for m in MODELE.values())
     kod = ('$o=[]; foreach ([%s] as $n) { $t=get_term_by("name",$n,"serie"); if(!$t) continue; '
            '$q=new WP_Query(["post_type"=>"listings","post_status"=>"publish","posts_per_page"=>-1,'
            '"fields"=>"ids","tax_query"=>[["taxonomy"=>"serie","field"=>"term_id","terms"=>$t->term_id]]]);'
@@ -120,6 +105,23 @@ def ceny():
         return json.loads(r.stdout.strip().splitlines()[-1])
     except Exception:
         sys.exit(f'nie mam cen z bazy: {r.stderr[:200]}')
+
+
+def tytuly():
+    """Nazwa karty = tytuł huba serii z bazy (`_serie_full_title`), np. „Exeed VX (Omoda 11)".
+
+    Janek, 04.09: „w tytułach ogłoszeń jest wszystko" — wariant, napęd i przydomek rynkowy
+    siedzą już w tytule, więc karta nie potrzebuje naszego opisu cech i nie ma go skąd zmyślić.
+    """
+    termy = ','.join('"%s"' % m[1].replace('"', '') for m in MODELE.values())
+    kod = ('$o=[]; foreach ([%s] as $n) { $t=get_term_by("name",$n,"serie"); if(!$t) continue; '
+           '$f=get_term_meta($t->term_id,"_serie_full_title",true); $o[$n]=$f?:$t->name; } '
+           'echo json_encode($o);') % termy
+    r = subprocess.run(['wp', 'eval', kod], cwd=WP, capture_output=True, text=True)
+    try:
+        return json.loads(r.stdout.strip().splitlines()[-1])
+    except Exception:
+        sys.exit(f'nie mam tytułów serii z bazy: {r.stderr[:200]}')
 
 
 def kadry(tok):
@@ -177,31 +179,35 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--sonda', action='store_true')
     ap.add_argument('--buduj', action='store_true')
+    ap.add_argument('--przepisz', action='store_true',
+                    help='przebuduj kreacje z aktualnych tekstów i podmień istniejące reklamy '
+                         '(status zachowany, stara reklama do archiwum)')
     a = ap.parse_args()
-    if not (a.sonda or a.buduj):
-        ap.error('podaj --sonda albo --buduj')
-    waliduj = not a.buduj
+    if not (a.sonda or a.buduj or a.przepisz):
+        ap.error('podaj --sonda, --buduj albo --przepisz')
+    waliduj = not (a.buduj or a.przepisz)
     stan = api.stan_wczytaj(STAN)
     os.makedirs(SCRATCH, exist_ok=True)
 
-    cennik = ceny()
+    cennik, tytul = ceny(), tytuly()
     print('CENY WEJŚCIA W SERIĘ')
-    for folder, (klucz, nazwa, term, land, cecha) in MODELE.items():
-        print(f'  {nazwa:18} {cennik.get(term, 0)//1000:>4} tys.  {land}')
+    for folder, (klucz, term, land) in MODELE.items():
+        print(f'  {tytul[term]:26} {cennik.get(term, 0)//1000:>4} tys.  {land}')
 
     print('\nLANDINGI')
-    for folder, (klucz, nazwa, term, land, cecha) in MODELE.items():
+    for folder, (klucz, term, land) in MODELE.items():
         kod = api.landing_zyje(BAZA + land)
-        print(f'  {nazwa:18} {kod}')
+        print(f'  {tytul[term]:26} {kod}')
         if kod != 200:
-            sys.exit(f'{nazwa}: landing nie zwraca 200 — przerywam, reklama marnowałaby budżet')
+            sys.exit(f'{term}: landing nie zwraca 200 — przerywam, reklama marnowałaby budżet')
 
-    print('\nKADRY Z DYSKU → KWADRAT 1080 → META')
-    tok = dl.access_token()
-    wybrane = kadry(tok)
     hasze = stan.setdefault('hasze', {})
-    for folder, (klucz, nazwa, term, land, cecha) in MODELE.items():
-        for i, f in enumerate(wybrane[klucz]):
+    print('\nKADRY Z DYSKU → KWADRAT 1080 → META')
+    if a.przepisz:
+        print(f'  przepisanie tekstów — korzystam z {len(hasze)} wgranych kadrów, Dysku nie ruszam')
+    wybrane = {} if a.przepisz else kadry(dl.access_token())
+    for folder, (klucz, term, land) in MODELE.items():
+        for i, f in enumerate(wybrane.get(klucz, [])):
             etykieta = f'{klucz}-{i}'
             if etykieta in hasze:
                 print(f'  {etykieta:22} już wgrany')
@@ -273,36 +279,70 @@ def main():
     elif zestaw:
         print('  zestaw: już istnieje', zestaw)
 
-    tekst = tekst_glowny()
+    tekst = TEKST
     print('\nTEKST GŁÓWNY:', tekst)
 
     print('KREACJE')
     po_kluczu = {m[0]: (folder, *m) for folder, m in MODELE.items()}
-    zapasy = zapas([m[2] for m in MODELE.values()])
+    zapasy = zapas([m[1] for m in MODELE.values()])
     kreacje = []
-    for tytul, klucze, kadry_nr in KARUZELE:
+    for tytul_kar, klucze, kadry_nr in KARUZELE:
         for nr in kadry_nr:
             karty = []
             for kl in klucze:
-                folder, _, nazwa, term, land, cecha = po_kluczu[kl]
+                folder, _, term, land = po_kluczu[kl]
                 h = hasze.get(f'{kl}-{nr}')
                 if not h:
                     continue
                 sztuk = zapasy.get(term, 0)
                 if sztuk < MIN_ZAPAS:
-                    print(f'    {nazwa}: zapas {sztuk} — pomijam kartę')
+                    print(f'    {tytul[term]}: zapas {sztuk} — pomijam kartę')
                     continue
-                # Sam cennik. Liczba sztuk starzeje się szybciej niż kreacja, której
-                # w Mecie nie da się edytować — zapas służy tylko za filtr powyżej.
-                opis = cecha
-                nazwa_karty = f'{nazwa} — od {cennik[term]//1000} 000 zł'
-                karty.append(karta(h, nazwa_karty, opis, BAZA + land))
+                # Nazwa z bazy, cena z bazy, nic pomiędzy. Liczba sztuk starzeje się
+                # szybciej niż kreacja — zapas służy tylko za filtr powyżej.
+                karty.append(karta(h, tytul[term], f'od {cennik[term]//1000} 000 zł',
+                                   BAZA + land))
             if len(karty) >= 2:
-                etykieta = f'[FOTO] {tytul}' + (f' — kadr {nr + 1}' if len(kadry_nr) > 1 else '')
+                etykieta = f'[FOTO] {tytul_kar}' + (f' — kadr {nr + 1}' if len(kadry_nr) > 1 else '')
                 kreacje.append((etykieta, karty))
+
+    statusy = {}
+    if a.przepisz:
+        d, e = api.get(f'{zestaw}/ads?fields=id,status&limit=50')
+        if e:
+            sys.exit(f'nie mogę odczytać statusów reklam: {e}')
+        statusy = {x['id']: x['status'] for x in d['data']}
 
     for nazwa_kre, karty in kreacje:
         klucz_stanu = f'kreacja:{nazwa_kre}'
+        if a.przepisz:
+            spec = {'page_id': api.PAGE, 'instagram_user_id': api.IG,
+                    'link_data': {'link': karty[0]['link'], 'message': tekst,
+                                  'caption': DOMENA, 'child_attachments': karty,
+                                  'multi_share_optimized': True, 'multi_share_end_card': True}}
+            r, e = api.post(f'{api.ACT}/adcreatives',
+                            {'name': f'{nazwa_kre} v2', 'object_story_spec': json.dumps(spec)},
+                            waliduj=False)
+            print(f'  {nazwa_kre} ({len(karty)} kart): kreacja {r or e}')
+            if e:
+                continue
+            kre = r['id']
+            stara = stan.get(f'reklama:{nazwa_kre}')
+            status = statusy.get(stara, 'PAUSED')
+            r, e = api.post(f'{api.ACT}/ads', {
+                'name': nazwa_kre, 'adset_id': zestaw,
+                'creative': json.dumps({'creative_id': kre}), 'status': status}, waliduj=False)
+            if e:
+                print('    BŁĄD reklamy:', e); continue
+            if stara:
+                _, e2 = api.post(stara, {'status': 'ARCHIVED'}, waliduj=False)
+                if e2:
+                    print('    UWAGA: stara reklama NIE poszła do archiwum:', e2)
+            stan[klucz_stanu] = kre
+            stan[f'reklama:{nazwa_kre}'] = r['id']
+            api.stan_zapisz(STAN, stan)
+            print(f'    nowa reklama {r["id"]} ({status}), stara {stara} do archiwum')
+            continue
         # Gotowa kreacja nie zwalnia z zrobienia reklamy — pomijamy krok, nie pozycję.
         if klucz_stanu in stan:
             print(f'  {nazwa_kre}: kreacja już istnieje ({stan[klucz_stanu]})')
@@ -337,7 +377,8 @@ def main():
                 stan[f'reklama:{nazwa_kre}'] = r['id']
                 api.stan_zapisz(STAN, stan)
 
-    print('\nWszystko PAUSED. Nic się nie wyświetla.')
+    if not a.przepisz:
+        print('\nWszystko PAUSED. Nic się nie wyświetla.')
 
 
 if __name__ == '__main__':

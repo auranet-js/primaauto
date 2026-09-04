@@ -1,9 +1,19 @@
-# Meta Ads — prompt kontynuacyjny, stan na 2026-09-04 wieczór
+# Meta Ads — prompt kontynuacyjny, stan na 2026-09-04, 20:00
 
-> Sesja: budowa kampanii Meta po zdjęciu blokera DSA. Zbudowane wszystko, uruchomione
-> prawie nic, teksty do przepisania od nowa według zasady, którą Janek postawił na końcu.
+> Sesja: budowa kampanii Meta po zdjęciu blokera DSA, a wieczorem przepisanie wszystkich
+> tekstów. Chodzi 6 reklam (2 filmy, 2 posty, 2 karuzele). Następny ruch to RECHECK —
+> wyników jeszcze nie ma, konto wydało 0,05 zł w dwie godziny.
+>
+> **Domknięte wieczorem 04.09:** teksty 10 reklam `[VID]` przepisane na assety Ads
+> (`przepisz_teksty.py`, strażnik sprawdza każdą cechę w bazie), 4 karuzele przebudowane —
+> nazwa karty = `_serie_full_title` z bazy, opis = cena wejścia, koniec z ręcznymi cechami
+> („kombi", „7 osób"); z tekstu głównego karuzel zniknęła „homologacja i rejestracja po
+> naszej stronie". Podmiany szły na żywych reklamach: nowa kreacja → nowa reklama w tym
+> samym zestawie ze statusem starej → stara do archiwum. Dostawa nie stanęła.
+>
+> **Budżet `[POST]` 10 → 15 zł: temat zamknięty, Janek go odwołał 04.09. Nie wracaj do niego.**
 
-## Zacznij od tego
+## Zasada tekstów — obowiązuje dalej
 
 **Teksty reklam bierzemy z zasobów Google Ads, dosłownie — nie układamy własnych zdań.**
 Polecenie Janka, wieczór 04.09, po tym jak wstawiłem do kreacji własne opisy z liczbami
@@ -19,8 +29,14 @@ i fantazji"*. Sprawdzone teksty (konto `9506068500`, 30 dni, konwersja na klik):
 | HEADLINE | Import bezpośredni z Chin | 2,75% | 409 |
 | HEADLINE | Zobacz Ofertę Aut z Chin | 4,62% | 173 |
 
-Ostatnie zestawienie zostało przerwane przez Janka słowem „nie" — **nie zakładaj, że wybór
-tekstów jest zatwierdzony.** Pokaż propozycję opartą na powyższych zasobach i czekaj.
+Pełne zestawienie assetów z wynikiem (30 dni, 04.09) leży w `tmp/gads-assety-2026-09-04.txt`,
+odtwarza je `tmp/gads-assety-teksty-2026-09-04.py`. Bank użytych zdań siedzi w słownikach
+`H` i `D` w `scripts/social/przepisz_teksty.py` — zmiana tekstu = wybór innego assetu z konta,
+nigdy przeredagowanie.
+
+Druga zasada, z tej samej rozmowy: **nazwy aut biorą się z tytułów ogłoszeń, nie z opisu cech.**
+Janek: „w tytułach ogłoszeń jest wszystko". Karta karuzeli nosi `_serie_full_title` huba
+(„Exeed VX (Omoda 11)", „Jetour T2 C-DM Traveller") i cenę wejścia — nic pomiędzy.
 
 ## Czego NIE robić — błędy tej sesji
 
@@ -53,19 +69,18 @@ act_1038563008906171 · aktywne · karta OK · wydane 0,00 zł z limitu 1 000 z�
 DSA zdjęty 02.09, podmiot „PRIMA AUTO RUSLAN PRIMA" (nazwa portfolio jest odrzucana)
 
 [VID] Auta z Chin — nowi odbiorcy       ACTIVE   25 zł/dz · ViewContent · PL 25-65
-  10 reklam v2; WŁĄCZONE 2: leopard-5-czarny, z9-gt (teksty v2 — do wymiany, patrz wyżej)
+  10 reklam v3-ads (teksty z assetów Ads); WŁĄCZONE 2: leopard-5-czarny, z9-gt
 [POST] Promowanie postów — ruch         ACTIVE   10 zł/dz · LINK_CLICKS
   10 reklam z postów Andrzeja; WŁĄCZONE 2: Mazda EZ-6, Denza Z9 DM-i
 [FOTO] Zdjęcia z sesji — karuzele       ACTIVE   15 zł/dz · ViewContent
   4 karuzele; WŁĄCZONE 2: „Cała oferta — kadr 1" i „kadr 2" (po 8 kart)
-  Opisy kart mają jeszcze błędy (Z9 GT „kombi", T2 „PHEV" i link na serię benzynową,
-  VX i N9 „7 osób") — poprawiamy je NA DZIAŁAJĄCYCH reklamach, nie przez pauzowanie.
+  Karty przepisane 04.09 wieczorem — nazwy z bazy, ceny wejścia, T2 wskazuje na `t2-c-dm`.
+  Shark 6 wypada z kart: 1 sztuka w zapasie przy progu 3.
 ```
 
-Janek oczekuje docelowo: **po 2 filmy, 2 posty, 2 karuzele włączone, budżety 25 / 15 / 15**.
-Na 04.09 wieczorem chodzi **6 reklam: 2 filmy, 2 posty, 2 karuzele** — zgodnie z tym,
-czego chciał. Zostaje podniesienie `[POST]` z 10 na 15 zł — **nie ruszaj bez jego słowa**,
-zapytał o budżet, a nie zlecił zmianę.
+Chodzi **6 reklam: 2 filmy, 2 posty, 2 karuzele** — dokładnie tyle, ile Janek chciał.
+Budżety zostają **25 / 10 / 15 zł**; podnoszenia `[POST]` do 15 zł nie ruszamy, Janek
+odwołał ten temat 04.09.
 
 **Poprawki robimy na działających reklamach.** Polecenie Janka 04.09: *„będziemy w kolejnym
 wątku poprawiać działające reklamy, a nie co chwilę pauzować"*. Zmiana treści = nowa kreacja
@@ -82,13 +97,14 @@ zostaje `home` + `frequently_in` (Meta dopina drugie sama, nie da się rozdzieli
 | Skrypt | Do czego |
 |---|---|
 | `scripts/social/buduj_start.py` | `[VID]` i `[POST]` — kampanie, zestawy, reklamy (idempotentny) |
-| `scripts/social/buduj_foto.py` | `[FOTO]` — kadry z Dysku → kwadrat 1080 → karuzele |
-| `scripts/social/przepisz_teksty.py` | podmiana tekstów `[VID]` na cechy z bazy |
-| `scripts/social/mockup_kampanii.py` | makieta wszystkiego na jednej stronie HTML |
+| `scripts/social/buduj_foto.py` | `[FOTO]` — kadry z Dysku → kwadrat 1080 → karuzele; `--przepisz` podmienia teksty bez ruszania Dysku |
+| `scripts/social/przepisz_teksty.py` | teksty `[VID]` z assetów Ads + strażnik cech z bazy |
+| `scripts/social/mockup_kampanii.py` | makieta na jednej stronie HTML (`--aktywne` = tylko chodzące) |
 | `scripts/social/kontaktowka_sesji.py` | 196 zdjęć z sesji na jednej stronie, do wyboru kadrów |
 | `scripts/social/recheck_start.py` | recheck: status weryfikacji, wyświetlenia, koszt |
 
 Makieta: `https://auratest.pl/fe4f58fec53ctmp/primaauto-meta-makieta-2026-09-04.html`
+Chodzące reklamy (6 sztuk, stan 19:50): `https://auratest.pl/fe4f58fec53ctmp/primaauto-meta-chodzace-2026-09-04-1950.html`
 Kontaktówka: `https://auratest.pl/fe4f58fec53ctmp/primaauto-sesje-kontaktowka-2026-09-04.html`
 
 10 filmów z sesji wgranych do Mety (7 przeszło remuks faststart), 27 kadrów wgranych jako
@@ -96,17 +112,16 @@ Kontaktówka: `https://auratest.pl/fe4f58fec53ctmp/primaauto-sesje-kontaktowka-2
 
 ## Otwarte, w kolejności
 
-1. **Teksty od nowa z zasobów Ads** — patrz góra. Bez tego nic nie włączamy.
-2. **Karuzele do przebudowy** — opisy kart mają błędy, T2 musi wskazywać na `t2-c-dm`
-   (od 153 tys.), nie na serię benzynową.
-3. **Budżet `[POST]` 10 → 15 zł** — czeka na zgodę.
-4. **Grupy z obejrzenia wideo** — API odbija każdy format reguły (`1870049`, tak samo v19/v21/v25),
+1. **RECHECK** — pierwszy sensowny odczyt po pełnej dobie: `python3 scripts/social/recheck_start.py`.
+   Do 04.09 wieczór całe konto zrobiło 11 wyświetleń i 2 kliknięcia za 0,05 zł; faza uczenia
+   zestawu to 2–3 dni, wcześniej nie wyciągaj wniosków o kreacjach.
+2. **Grupy z obejrzenia wideo** — API odbija każdy format reguły (`1870049`, tak samo v19/v21/v25),
    dokumentacja tego nie opisuje. Zrobić ręcznie w Menedżerze Reklam; Meta wypełnia wstecz 365 dni.
-5. **Remarketing dynamiczny z katalogu** — katalog 2 990 aut, feed dobowy bez błędów, piksel
+3. **Remarketing dynamiczny z katalogu** — katalog 2 990 aut, feed dobowy bez błędów, piksel
    wpięty, 7 zestawów produktów (w tym „Na placu w Polsce" i „W drodze do Polski"). Nie zbudowany.
-6. **Kampania na WhatsApp** — nietknięta, a to nasz najlepszy kanał kontaktu (43 kontakty/30 dni
+4. **Kampania na WhatsApp** — nietknięta, a to nasz najlepszy kanał kontaktu (43 kontakty/30 dni
    w Ads). Konto ma `WHATSAPP_DESTINATION_ADS`.
-7. **`spend_cap` 1 000 zł łącznie** — przy 50 zł dziennie limit pęka po 20 dniach. Decyzja
+5. **`spend_cap` 1 000 zł łącznie** — przy 50 zł dziennie limit pęka po 20 dniach. Decyzja
    Janka i Ruslana, nie nasza.
 
 ## Zasady, które obowiązują

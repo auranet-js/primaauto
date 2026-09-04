@@ -6,6 +6,7 @@ z jakim budżetem i targetem, a przy każdej reklamie miniatura, nagłówek, tek
 i landing z kodem odpowiedzi. Do przeglądu przed decyzją, które reklamy odpauzować.
 
     python3 scripts/social/mockup_kampanii.py > /tmp/makieta.html
+    python3 scripts/social/mockup_kampanii.py --aktywne > /tmp/chodzace.html   # tylko to, co się wyświetla
 """
 import html
 import json
@@ -67,6 +68,8 @@ def main():
             'campaign{id,name,objective,effective_status},'
             'creative{id,object_story_spec,body,title,thumbnail_url,object_story_id}')
     dane = pobierz(f'{api.ACT}/ads?fields={pola}&limit=100')
+    if '--aktywne' in sys.argv:
+        dane['data'] = [a for a in dane.get('data', []) if a['effective_status'] == 'ACTIVE']
 
     hasze = {k[0] for a in dane.get('data', [])
              for k in kreacja_tresc(a.get('creative', {})).get('karty', []) if k[0]}
@@ -134,7 +137,7 @@ def main():
     # oddać go jako ISO-8859-1 i polskie znaki się sypią.
     print(f"""<!doctype html><html lang=pl><head><meta charset=utf-8>
 <meta name=viewport content="width=device-width,initial-scale=1">
-<title>Makieta kampanii Meta — Prima-Auto</title>
+<title>Reklamy Meta, które chodzą — Prima-Auto</title>
 <style>
 :root {{ --tlo:#faf9f7; --karta:#fff; --tekst:#1a1a1a; --szary:#6b6b6b; --linia:#e4e1dc;
         --zle:#b3261e; --ok:#1e6b3a; }}
