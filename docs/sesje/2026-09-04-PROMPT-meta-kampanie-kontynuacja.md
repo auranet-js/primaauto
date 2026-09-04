@@ -38,7 +38,12 @@ tekstów jest zatwierdzony.** Pokaż propozycję opartą na powyższych zasobach
    klient rejestruje.
 4. **Nie wsadzaj liczb, które się starzeją** (zapas, liczba ofert) do kreacji — Mety nie da
    się edytować, trzeba budować nową.
-5. **Nie czekaj na pytania Janka.** Cztery razy pod rząd to on podniósł temat (karuzele,
+5. **Nie wyłączaj i nie włączaj niczego z własnej inicjatywy.** Wyłączyłem dwie chodzące
+   reklamy, bo zobaczyłem w nich błąd merytoryczny — Janek tego nie zlecił i słusznie to
+   wytknął. Błąd w żywej reklamie zgłaszasz jednym zdaniem i czekasz; decyzja o wyłączeniu
+   jest jego, nie twoja. To samo dotyczy budżetów: pytanie „czy mamy 25/15/15?" jest pytaniem
+   o stan, nie poleceniem zmiany.
+6. **Nie czekaj na pytania Janka.** Cztery razy pod rząd to on podniósł temat (karuzele,
    opisy kart, CPC, strategia). Kładź propozycje sam.
 
 ## Stan konta — sprawdzony przez API 04.09 wieczorem
@@ -48,15 +53,24 @@ act_1038563008906171 · aktywne · karta OK · wydane 0,00 zł z limitu 1 000 z�
 DSA zdjęty 02.09, podmiot „PRIMA AUTO RUSLAN PRIMA" (nazwa portfolio jest odrzucana)
 
 [VID] Auta z Chin — nowi odbiorcy       ACTIVE   25 zł/dz · ViewContent · PL 25-65
-  10 reklam v2 (przepisane teksty, ale wg starej zasady — do wymiany)   WSZYSTKIE PAUSED
+  10 reklam v2; WŁĄCZONE 2: leopard-5-czarny, z9-gt (teksty v2 — do wymiany, patrz wyżej)
 [POST] Promowanie postów — ruch         ACTIVE   10 zł/dz · LINK_CLICKS
   10 reklam z postów Andrzeja; WŁĄCZONE 2: Mazda EZ-6, Denza Z9 DM-i
-[FOTO] Zdjęcia z sesji — karuzele       PAUSED   15 zł/dz · ViewContent
-  4 karuzele; WSZYSTKIE PAUSED, opisy kart nadal z błędami (kombi, T2 PHEV, 7 osób)
+[FOTO] Zdjęcia z sesji — karuzele       ACTIVE   15 zł/dz · ViewContent
+  4 karuzele; WŁĄCZONE 2: „Cała oferta — kadr 1" i „kadr 2" (po 8 kart)
+  Opisy kart mają jeszcze błędy (Z9 GT „kombi", T2 „PHEV" i link na serię benzynową,
+  VX i N9 „7 osób") — poprawiamy je NA DZIAŁAJĄCYCH reklamach, nie przez pauzowanie.
 ```
 
-Janek oczekuje docelowo: **po 2 filmy, 2 posty, 2 karuzele włączone, budżety 25 / 15 / 15**
-(`[POST]` trzeba podnieść z 10 — **nie zrobione, czeka na jego słowo**).
+Janek oczekuje docelowo: **po 2 filmy, 2 posty, 2 karuzele włączone, budżety 25 / 15 / 15**.
+Na 04.09 wieczorem chodzi **6 reklam: 2 filmy, 2 posty, 2 karuzele** — zgodnie z tym,
+czego chciał. Zostaje podniesienie `[POST]` z 10 na 15 zł — **nie ruszaj bez jego słowa**,
+zapytał o budżet, a nie zlecił zmianę.
+
+**Poprawki robimy na działających reklamach.** Polecenie Janka 04.09: *„będziemy w kolejnym
+wątku poprawiać działające reklamy, a nie co chwilę pauzować"*. Zmiana treści = nowa kreacja
+obok, podmiana reklamy w tym samym zestawie, stara do archiwum — dostawa nie staje ani na
+chwilę, faza uczenia zestawu zostaje.
 
 Grupy odbiorców: 8 z piksela i zaangażowania + 2 lookalike 1% PL (FB, IG) — wszystkie gotowe.
 Wykluczenia w `[VID]` i `[FOTO]`: odwiedzający 180 dni + kontakt 180 dni; w `[POST]` sam kontakt.
