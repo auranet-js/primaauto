@@ -1,6 +1,44 @@
 # Historia wersji asiaauto-sync
 
 
+## 0.38.2 — 2026-09-04 (szerokość w miejsce DMC, „Silnik i osiągi")
+
+Po zdjęciu DMC (0.38.1) w sekcji „Nadwozie" została dziura po siódmym polu. Weszła w nią
+**szerokość** — pytanie „czy zmieści się w moim garażu" jest realne, a przy chińskich SUV-ach
+z 2 090 mm bardziej niż dopuszczalna masa.
+
+**Nowa kolumna `width_mm` w banku specyfikacji** (`SCHEMA_VERSION` 5 → 6, `install()` przez dbDelta
++ indeks). Źródło: wyłącznie klucz `width` z `extra_prep` — **bez fallbacku na `length_width_height`**,
+bo `num()` bierze z „5000*1980*1750" PIERWSZĄ liczbę, czyli długość; taki fallback byłby cichą
+pomyłką na 2 844 ofertach. Guard jak przy długości: wartość < 1000 to nie milimetry, więc NULL.
+
+Pomiar po przebudowie (`zbuduj-specs.php apply`, 3 340 wierszy): **2 922 z 3 019 ofert publish
+mają szerokość (96,8%)**, zakres 1 800–2 090 mm, średnia 1 944. Filtr realnie dzieli — „do 1 900 mm"
+zostawia 835 ofert z 3 019.
+
+**Jednostki ujednolicone na milimetry — również przy długości.** Pierwsze podejście dało szerokość
+w mm obok długości w metrach, czyli dwie jednostki w jednej sekcji (zgłoszone przez Janka). Metry
+przy długości były wyjątkiem wprowadzonym 03.09 i to one wypadły: kolumny w bazie są w mm, dane
+techniczne aut podaje się w mm, a przy rozpiętości szerokości 1 800–2 090 krok 0,1 m dawałby trzy
+wartości do wyboru. `RANGE_PARAMS['dlugosc']` traci trzeci element (mnożnik 1000) i typ `float` na
+rzecz `int` — **w całym UI wyszukiwarki nie ma już ani jednego przeliczania jednostek**, `data-mult`
+wszędzie równy 1, JS działa bez zmian (obsługuje mnożnik generycznie). Zapisane deep-linki w starej
+jednostce (`dlugosc_min=5`) degradują się bezpiecznie: 5 mm nie odsiewa niczego, więc użytkownik
+widzi pełną listę zamiast błędu.
+
+**Sekcja „Napęd" → „Silnik i osiągi"** (wybór Janka z czterech wariantów). Stara nazwa myliła się
+z filtrem „Napęd 4x4", który siedzi piętro wyżej, w „Nadwoziu"; nowa obejmuje wszystkie sześć pól —
+rodzaj silnika, moc, przyspieszenie, baterię i dwa zasięgi.
+
+Nocny cron 05:05 (`zbuduj-specs.php apply since=48h`) uzupełnia `width_mm` w nowych ofertach sam —
+bez ręcznego przebiegu. `flushCache()` zdjął liczniki i etykiety po przebudowie.
+
+Zweryfikowane na produkcji: oba pola z jednostką „mm" i `data-mult="1"` — „Szerokość do" (podpowiedź
+2 090) i „Długość od" (podpowiedź 4 220), `aria-label` z jednostką, nagłówek „Silnik i osiągi";
+REST `?szerokosc_max=1900` → 835 z 3 019, `?dlugosc_min=5000` → 1 001 z 3 019. Backupy: `class-asiaauto-specs-table.php.bak-2026-09-04-szerokosc`,
+`assets/js/asiaauto-search.js.bak-2026-09-04-szerokosc`.
+
+
 ## 0.38.1 — 2026-09-04 (DMC poza filtrami)
 
 Filtr „DMC do" zdjęty z wyszukiwarki na życzenie Janka. Dopuszczalna masa całkowita nie jest
