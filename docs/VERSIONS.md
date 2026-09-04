@@ -4764,3 +4764,29 @@ Realizacja punktów z `docs/audyty/2026-07-31-dostepnosc-wcag22-aa.md`.
 Wyniki PSI: oferta 89 → 93, listing bez zmiany punktowej (reguły landmarków nie są punktowane przez Lighthouse), axe potwierdza usunięcie trzech reguł.
 
 Backupy: `class-asiaauto-single.php.bak-2026-07-31-a11y-headings`, `class-asiaauto-inventory.php.bak-2026-07-31-a11y-main`, `*.bak-2026-07-31-a11y`.
+
+## 2026-09-04 — naprawa 4 zepsutych hubów (recheck SEO)
+
+Znalezione w `docs/seo/recheck-2026-09-04.md` (skan 275 hubów z ofertami).
+Skrypt: `scripts/fix-huby-zepsute-2026-09-04.php` (symulacja domyślnie, `apply` zapisuje).
+Backup taksonomii: `~/backups/primaauto/2026-09-04-huby-fix/taksonomia-przed.sql` (9,3 MB).
+
+| Problem | Naprawa |
+|---|---|
+| `seal-07-ev-2` — duplikat Sealion 7 (to samo auto, 海狮07EV) | oferta 455246 → `sealion-7`; skasowane termy 7236 i 7172 |
+| `king-kong-cannon` — pusty `_asiaauto_primary_make_slug`, URL `/samochody//king-kong-cannon/` | oferta 447190 → `cannon-king-kong` (zgodnie z brand-mappingiem, make=GWM); skasowany term 6763 |
+| `v9-2` „智界V9" — marka CJK zamiast Luxeed | oferta 447607 → `v9` + make `luxeed`; skasowane termy 7240 i marka 7239 |
+| `avatr-07l` — jedyny hub z ofertami bez `rank_math_title` | `_serie_full_title` = „Avatr 07L", title przez `AsiaAuto_HubTitleGenerator::regenerateForTerm()` |
+
+**Przekierowania** (`class-asiaauto-redirects.php`, backup `.bak-2026-09-04`):
+`byd/seal-07-ev` i `byd/seal-07-ev-2` → `byd/sealion-7` (stary URL miał 32 imp / 2 kliki w 90 dniach),
+`luxeed/v9-2` → `luxeed/v9`, marka `智界` → `luxeed` (**oba warianty zapisu** — `$wp->request`
+trzyma ścieżkę **URL-zakodowaną wielkimi literami**, wariant zdekodowany nie łapie).
+
+Weryfikacja: wszystkie 4 huby HTTP 200, 3 stare URL-e 301 na właściwy cel.
+`/samochody//king-kong-cannon/` zostaje 404 — świadomie, 0 impresji w GSC.
+Zgłoszone do Indexing API (4/100 budżetu ad-hoc).
+
+**Znalezisko poboczne, NIE naprawione:** `AsiaAuto_HubTitleGenerator::buildDescription()` generuje
+błędną fleksję — „1 egzemplarzy" (**181 hubów**) i „2–4 egzemplarzy" (**80 hubów**).
+Poprawnie: „1 egzemplarz", „2 egzemplarze". Widoczne w meta description w SERP. Do decyzji.
