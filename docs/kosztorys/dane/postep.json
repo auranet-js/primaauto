@@ -450,6 +450,16 @@
    "status": "kierunek do rozstrzygnięcia — wycena po pierwszym przebiegu na Leopardzie 5"
   },
   {
+   "id": "T-253",
+   "tytul": "Termin dostawy ustawiany osobno dla każdego zamówienia",
+   "opis": "Liczba dni dostawy, która trafia do umowy, jest dziś jedna dla całego systemu — ustawiona raz w konfiguracji. Kiedy przy konkretnym aucie trzeba wpisać inny termin, jedyną drogą jest zmiana ustawienia globalnego, wygenerowanie umowy i cofnięcie ustawienia z powrotem. Przy kilku zamówieniach prowadzonych równolegle łatwo o pomyłkę: umowa wystawiona w międzyczasie dostanie termin przeznaczony dla innego klienta.\n\nPo zmianie w karcie zamówienia, obok numeru VIN, pojawia się pole z liczbą dni. Domyślnie podpowiada wartość z ustawień, więc przy zwykłym zamówieniu nic nie trzeba robić. Gdy termin ma być inny, wpisujesz go w tym jednym zamówieniu i umowa generuje się z tą liczbą — bez ruszania ustawień i bez wpływu na pozostałe zamówienia. Przy okazji naprawiamy rozjazd, przez który kreator zamówienia pokazuje klientowi inną liczbę dni niż ta, która ostatecznie wchodzi do umowy.",
+   "status": "zgłoszone 04.09.2026 — rozpoznane w kodzie, dane są już zapisywane przy zamówieniu, brakuje samego pola do edycji",
+   "realnie_od": 1,
+   "realnie_do": 2,
+   "rynkowo_od": 3,
+   "rynkowo_do": 4
+  },
+  {
    "id": "T-248",
    "tytul": "Śledzenie statku — numer przesyłki w zamówieniu i status przewoźnika przy aucie w drodze",
    "opis": "Kiedy zamówienie wchodzi w etap „w drodze”, klient wie tylko tyle, że auto płynie. O termin dopytuje mailem albo telefonem, a żeby odpowiedzieć, ktoś po Waszej stronie musi zajrzeć do dokumentów przewoźnika i przepisać to, co tam widać.\n\nPo zmianie w karcie zamówienia dochodzi pole na numer przesyłki od przewoźnika (numer kontenera lub listu przewozowego Maersk). Po jego wpisaniu system sam pyta przewoźnika o stan przesyłki i przy statusie „w drodze” pokazuje aktualne dane: gdzie jest ładunek, jaki port jest następny i jaka jest przewidywana data przypłynięcia. Widzi to Ruslan w panelu i klient przy swoim zamówieniu — bez telefonu do Was. Dane odświeżają się same, więc przesunięcie terminu przez armatora dociera do klienta bez Waszego udziału.\n\nDo sprawdzenia przed wyceną: na jakich zasadach Maersk udostępnia dane śledzenia dla naszych przesyłek — od tego zależy zakres i koszt. Wariant zapasowy, gdyby dostęp do danych okazał się niedostępny lub płatny ponad sens: pole na numer przesyłki plus link prowadzący klienta wprost do śledzenia u przewoźnika, bez przepisywania statusu na naszą stronę. Do ustalenia też, czy poza Maerskiem korzystacie z innych armatorów — obsługa kolejnego przewoźnika to osobna praca.",

@@ -70,7 +70,7 @@ footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line);
 <header class="top">
 <h1>Prima Auto — postęp prac i plan rozwoju</h1>
 <div class="sub">Platforma importu samochodów z Chin · primaauto.com.pl · opracowanie: Auranet (Jan Schenk)</div>
-<div class="stamp">Stan na 03.09.2026 · dokument roboczy, aktualizowany na bieżąco wraz z postępem prac</div>
+<div class="stamp">Stan na 04.09.2026 · dokument roboczy, aktualizowany na bieżąco wraz z postępem prac</div>
 </header>
 
 <div class="cols">
@@ -298,6 +298,11 @@ Pierwszy przebieg: BYD Leopard 5. Jego strona przyciąga dziś 3 709 wyświetle�
 <td><strong>T-240 — Indywidualne strony modeli tam, gdzie mamy własne materiały</strong> <div class="opis"><span class="badge new">nowe</span> Wszystkie 317 stron modeli powstaje dziś z jednego szablonu i jest odświeżanych automatycznie — ceny, liczba sztuk i parametry aktualizują się same, bo oferta rotuje codziennie. To jest zaleta, ale zamyka drogę do ręcznego dopracowania pojedynczej strony: przy najbliższym automatycznym przebiegu taka praca zostałaby nadpisana. Modele, przy których mamy własne zdjęcia, filmy i materiały wideo, zasługują na bogatsze potraktowanie niż reszta katalogu, więc do rozstrzygnięcia zostaje, jak pogodzić jedno z drugim: dane mają dalej rotować automatem, a warstwa opisowa i zdjęciowa pozostać nietknięta. Ile takich stron ma sens i ile to kosztuje, będziemy wiedzieć po pierwszym przebiegu na Leopardzie 5.</div><div class="skala">Status: kierunek do rozstrzygnięcia — wycena po pierwszym przebiegu na Leopardzie 5</div></td>
 <td class="num">—</td></tr>
 <tr>
+<td><strong>T-253 — Termin dostawy ustawiany osobno dla każdego zamówienia</strong> <div class="opis"><span class="badge new">nowe</span> Liczba dni dostawy, która trafia do umowy, jest dziś jedna dla całego systemu — ustawiona raz w konfiguracji. Kiedy przy konkretnym aucie trzeba wpisać inny termin, jedyną drogą jest zmiana ustawienia globalnego, wygenerowanie umowy i cofnięcie ustawienia z powrotem. Przy kilku zamówieniach prowadzonych równolegle łatwo o pomyłkę: umowa wystawiona w międzyczasie dostanie termin przeznaczony dla innego klienta.
+
+Po zmianie w karcie zamówienia, obok numeru VIN, pojawia się pole z liczbą dni. Domyślnie podpowiada wartość z ustawień, więc przy zwykłym zamówieniu nic nie trzeba robić. Gdy termin ma być inny, wpisujesz go w tym jednym zamówieniu i umowa generuje się z tą liczbą — bez ruszania ustawień i bez wpływu na pozostałe zamówienia. Przy okazji naprawiamy rozjazd, przez który kreator zamówienia pokazuje klientowi inną liczbę dni niż ta, która ostatecznie wchodzi do umowy.</div><div class="skala">Status: zgłoszone 04.09.2026 — rozpoznane w kodzie, dane są już zapisywane przy zamówieniu, brakuje samego pola do edycji</div></td>
+<td class="num">1–2</td></tr>
+<tr>
 <td><strong>T-248 — Śledzenie statku — numer przesyłki w zamówieniu i status przewoźnika przy aucie w drodze</strong> <div class="opis"><span class="badge new">nowe</span> Kiedy zamówienie wchodzi w etap „w drodze”, klient wie tylko tyle, że auto płynie. O termin dopytuje mailem albo telefonem, a żeby odpowiedzieć, ktoś po Waszej stronie musi zajrzeć do dokumentów przewoźnika i przepisać to, co tam widać.
 
 Po zmianie w karcie zamówienia dochodzi pole na numer przesyłki od przewoźnika (numer kontenera lub listu przewozowego Maersk). Po jego wpisaniu system sam pyta przewoźnika o stan przesyłki i przy statusie „w drodze” pokazuje aktualne dane: gdzie jest ładunek, jaki port jest następny i jaka jest przewidywana data przypłynięcia. Widzi to Ruslan w panelu i klient przy swoim zamówieniu — bez telefonu do Was. Dane odświeżają się same, więc przesunięcie terminu przez armatora dociera do klienta bez Waszego udziału.
@@ -397,7 +402,7 @@ Zadanie wymaga wcześniejszego zbudowania konta klienta (pozycja wyżej) — dok
 <td><strong>T-214 — Ujednolicenie i wzmocnienie stron modeli (hubów) pod frazy zakupowe</strong> <span class='rozmiar'>skala: średnia</span><div class="opis">Strony modeli to nasza najmocniejsza broń w Google — stoją na 1.-2. miejscu na frazy typu 'zeekr 9x cena'. Przegląd 14.07 wykazał trzy luki do domknięcia. (1) 34 z 302 stron modeli ma słabszy nagłówek — brakuje w nim słów 'cena w Polsce', bo powstały po ostatnim ujednoliceniu i nie dostały automatycznie tego dopisku; wśród nich ważne modele: Zeekr 9X, Zeekr 8X, Denza Z9 GT. (2) Strona modelu BAW wyświetla się w Google jako 'Beijing' zamiast 'BAW' — a to marka, której szuka 1300 osób miesięcznie; podobnie Zeekr 8X ma zbędny dopisek 'PHEV' rozmywający dopasowanie. (3) Strony modeli opisują wersje słownie, ale nie podają ceny osobno dla każdej wersji (np. 'Ultra od 426 tys.') — dane już mamy, wystarczy je pokazać. Pracujemy ostrożnie, pojedynczo, z pomiarem przed i po (strony z 1. miejsca mają najwięcej do stracenia), bo nadrzędna zasada brzmi: nie zepsuć tego, co już rankuje.</div><div class="skala">Status: znaleziska zapisane (docs/seo/znaleziska-huby-2026-07-14); wymaga pilota + progów wycofania z T-203-baseline</div></td>
 <td class="num">11–14</td></tr>
 </tbody>
-<tfoot><tr><td>Razem pełna lista (widełki)</td><td class="num">593–785</td></tr></tfoot>
+<tfoot><tr><td>Razem pełna lista (widełki)</td><td class="num">594–787</td></tr></tfoot>
 </table>
 </section>
 </div>
