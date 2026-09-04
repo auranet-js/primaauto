@@ -1,509 +1,523 @@
 {
- "_komentarz": "Dane strony 'Postęp prac i plan rozwoju' (build_postep.py). Changelog: najświeższe wpisy DOPISUJ NA POCZĄTEK listy, każdy z polem 'godz' (godziny realne jak w kosztorysie). todo_nowe: taski jeszcze bez wyceny (po wycenie przenieś do etap3.json). todo_ukryte_id: pozycje etap3 już zrealizowane/nieaktualne — znikają z listy na stronie.",
- "zamkniecie": {
-  "data": "16.07.2026",
-  "opis": "Rozliczenie godzin pracy do dnia spotkania 16.07.2026 zostało zamknięte i podsumowane w kosztorysie: etapy 1-2 łącznie 926 h. Poniższa strona rejestruje wszystko, co dzieje się od tego momentu."
- },
- "changelog": [
-  {
-   "data": "03.09.2026",
-   "tytul": "Słownik pojęć — 23 nowe hasła powiązane z filtrami wyszukiwarki",
-   "opis": "Nowe hasła tłumaczące wyposażenie, po którym można teraz filtrować (dach panoramiczny, tylna oś skrętna, ekrany dla pasażerów, Dolby Atmos i inne). Każde hasło pokazuje, ile aut z tą funkcją mamy w ofercie, i prowadzi do gotowej listy w wyszukiwarce. Przy okazji naprawione: odnośniki do słownika w opisach aut były niewidoczne, a dwanaście haseł nie pojawiało się na liście słownika.",
-   "wersje": "",
-   "godz": 4
+  "_komentarz": "Dane strony 'Postęp prac i plan rozwoju' (build_postep.py). Changelog: najświeższe wpisy DOPISUJ NA POCZĄTEK listy, każdy z polem 'godz' (godziny realne jak w kosztorysie). todo_nowe: taski jeszcze bez wyceny (po wycenie przenieś do etap3.json). todo_ukryte_id: pozycje etap3 już zrealizowane/nieaktualne — znikają z listy na stronie.",
+  "zamkniecie": {
+    "data": "16.07.2026",
+    "opis": "Rozliczenie godzin pracy do dnia spotkania 16.07.2026 zostało zamknięte i podsumowane w kosztorysie: etapy 1-2 łącznie 926 h. Poniższa strona rejestruje wszystko, co dzieje się od tego momentu."
   },
-  {
-   "data": "02.09.2026",
-   "tytul": "Wyszukiwarka zaawansowana — filtrowanie po wyposażeniu i parametrach",
-   "opis": "Nowa strona wyszukiwarki obok dotychczasowego katalogu: filtrowanie po nadwoziu, napędzie, stylu i 36 elementach wyposażenia (masaże, lidar, kamery, nagłośnienie, dach panoramiczny). Wybór jednego filtru od razu pokazuje, co jest jeszcze dostępne, a wynik dzieli się na auta do sprowadzenia, w drodze i stojące w Polsce. Osobny układ na telefon. Podlinkowana ze strony głównej, katalogu, menu i stopki.",
-   "wersje": "",
-   "godz": 14
-  },
-  {
-   "data": "02.09.2026",
-   "tytul": "Wyposażenie aut z katalogu producenta — trzecie źródło danych",
-   "opis": "Nocne uzupełnianie danych o wyposażeniu z katalogu producenta dla aut, którym brakowało opisu. Auta z pełną listą wyposażenia: z 52% do 98%. To fundament, bez którego filtrowanie po wyposażeniu nie miałoby po czym szukać.",
-   "wersje": "",
-   "godz": 3
-  },
-  {
-   "data": "01.09.2026",
-   "tytul": "YouTube — odzyskany dostęp do kanału i pomiar źródeł ruchu",
-   "opis": "Odzyskany dostęp do kanału i sprawdzenie, skąd bierze się jego oglądalność.",
-   "wersje": "",
-   "godz": 2
-  },
-  {
-   "data": "31.08.2026",
-   "tytul": "Google Ads — audyt kampanii, przebudowa budżetów, kampania wideo",
-   "opis": "Przegląd wszystkich kampanii, przesunięcie budżetów tam, gdzie realnie przychodzą kontakty, uruchomienie kampanii wideo Demand Gen oraz automatyczny strażnik pilnujący, żeby reklamy nie prowadziły na nieistniejące strony.",
-   "wersje": "",
-   "godz": 6
-  },
-  {
-   "data": "28.08.2026",
-   "tytul": "Reklamy Meta — odblokowanie konta i katalog aut",
-   "opis": "Zdjęta blokada, która nie pozwalała wyświetlać reklam w Polsce, weryfikacja domeny i uruchomienie katalogu aut z podziałem na dostępne w Polsce, w drodze i do sprowadzenia.",
-   "wersje": "",
-   "godz": 6
-  },
-  {
-   "data": "26.08.2026",
-   "tytul": "Dostępność serwisu — pełna zgodność WCAG 2.2 AA",
-   "opis": "Domknięcie poprawek dostępności po audycie, sprawdzone osobno na telefonie i na komputerze. Serwis spełnia wszystkie stosowalne kryteria WCAG 2.2 AA — wymóg ustawy o dostępności obowiązujący od czerwca 2025.",
-   "wersje": "",
-   "godz": 4
-  },
-  {
-   "data": "25.08.2026",
-   "tytul": "Montaż 12 filmów — 6 poziomych i 6 pionowych",
-   "opis": "Z materiału nagranego dzień wcześniej w Rzeszowie zmontowane 12 filmów: sześć poziomych prezentacji aut i sześć krótkich pionowych pod format Shorts, z oprawą graficzną i planszą końcową — ten sam standard, co przy pierwszej serii z lipca. Dwa kadry tego samego auta to nie duplikat: pionowy zbiera zasięg w rekomendacjach YouTube, poziomy służy jako kreacja reklamowa i materiał do wysłania klientowi. Filmy są gotowe do publikacji na kanale i do wykorzystania w kampaniach wideo.",
-   "godz": 5
-  },
-  {
-   "data": "25.08.2026",
-   "tytul": "Postprodukcja zdjęć z sesji",
-   "opis": "Obróbka około 130 zdjęć sześciu aut pod trzy zastosowania: miniatury filmów, materiały do reklam graficznych oraz zdjęcia realnych egzemplarzy na strony modeli. Zdjęcia własne zamiast fotografii producenta to różnica w wiarygodności — pokazują konkretny samochód stojący na placu, nie render z katalogu.",
-   "godz": 2.5
-  },
-  {
-   "data": "24.08.2026",
-   "tytul": "Sesja zdjęciowa i filmowa na placu w Rzeszowie",
-   "opis": "Druga sesja na placu, po lipcowej. Materiał filmowy do sześciu aut, każde nagrane w dwóch kadrach — poziomym i pionowym — plus dokumentacja zdjęciowa egzemplarzy, około 130 ujęć. Trzy godziny zdjęć na miejscu i dojazd w obie strony.",
-   "godz": 4.5
-  },
-  {
-   "data": "21.08.2026",
-   "tytul": "Opisy ogłoszeń po polsku — naprawa tłumaczenia",
-   "opis": "Część opisów przy ogłoszeniach wyświetlała się po chińsku, a znacznie większa część urywała się w połowie zdania — na przykład „Trzynaście lat skupienia na samochodach w dobrym stanie! Shunxiang: 200 starannie wyselekcjonowanych” i koniec. Klient wchodzący w takie ogłoszenie widział tekst, który nagle się urywa, albo znaki, których nie przeczyta.\n\nPrzyczyna leżała w automacie tłumaczącym opisy z chińskiego. Program, który wykonuje tłumaczenie, dostawał zbyt ciasny limit na odpowiedź i większość tego limitu zużywał na wewnętrzne rozważania, zanim zdążył napisać tłumaczenie — zostawało mu miejsce na kilka pierwszych zdań. Gdy nie zostawało nic, do ogłoszenia trafiał oryginalny chiński tekst. Wyłączyliśmy te rozważania (przy tłumaczeniu opisu handlowego nie są do niczego potrzebne) i poszerzyliśmy limit. Dołożyliśmy też zabezpieczenie: jeśli tłumaczenie wróci ucięte, system je odrzuca zamiast wstawiać do ogłoszenia.\n\nPrzy okazji sprawdziliśmy, czy nie taniej byłoby użyć zwykłego tłumacza maszynowego zamiast programu rozumiejącego kontekst. Porównanie na dziewięciu prawdziwych opisach pokazało, że nie: zwykły tłumacz zamienia markę Voyah na „Lantu” (chińska nazwa, której klient nie skojarzy z naszą ofertą), z zapisu „czarny lakier, beżowe wnętrze” robi „czarne nadwozie i wnętrze”, a rocznik 2024 potrafi przeczytać jako „24 sztuki”. W jednym opisie zgubił cały akapit o zakupie na raty. Zostajemy przy dotychczasowym rozwiązaniu — po poprawce działa też pięć razy szybciej i taniej niż przed nią.\n\nPoprawka obejmuje wszystkie ogłoszenia, które wchodzą od teraz. Dodatkowo przetłumaczyliśmy ponownie 162 najświeższe ogłoszenia. Starszych świadomie nie ruszamy — przy naszej rotacji ofert i tak schodzą z serwisu w ciągu kilku dni.",
-   "wersje": "wtyczka 0.34.24",
-   "godz": 1
-  },
-  {
-   "data": "20.08.2026",
-   "tytul": "Płatność online za depozyt — bramka PayU uruchomiona",
-   "opis": "Na stronie zamówienia działa płatność online za depozyt zwrotny: kod BLIK wpisywany bez opuszczania naszej strony, a obok przycisk płatności kartą i przelewem online przez PayU. Wcześniej pozostawał wyłącznie zwykły przelew bankowy — klient musiał wyjść ze zgłoszenia, otworzyć bankowość i przepisać dane.\n\nDroga do uruchomienia zajęła kilka tygodni i nie całą po naszej stronie. Mechanizm był gotowy i sprawdzony na koncie testowym już 10 sierpnia — pełna ścieżka od zgłoszenia do potwierdzenia wpłaty przeszła bez błędu. Na koncie produkcyjnym płatności jednak nie ruszały i dopiero mail z działu weryfikacji PayU wyjaśnił dlaczego: konto było w trakcie weryfikacji, nie chodziło o nasz kod. PayU postawiło dwa warunki — dokumenty tożsamości po Twojej stronie oraz komplet informacji na stronie: polityka zwrotów i reklamacji, adres do kontaktu, czas rozpatrzenia reklamacji, maksymalny czas realizacji zamówienia w dniach roboczych, pełne dane firmy i wskazanie administratora danych osobowych.\n\nUzupełniliśmy to wszystko: regulamin usługi dostał maksymalny czas realizacji (20 dni roboczych od skompletowania dokumentów), a regulamin, polityka prywatności i strona o depozycie trafiły do stopki i menu, żeby weryfikator — i klient — trafiał na nie z każdej strony bez szukania. Przygotowaliśmy też odpowiedź na pytania działu weryfikacji PayU o model biznesowy i przedmiot płatności, z wyjaśnieniem, że pobierany jest wyłącznie zwrotny depozyt za usługę organizacji importu, oraz zrzut ekranu płatności — widać ją dopiero po założeniu zgłoszenia, więc weryfikator przeglądający stronę anonimowo by jej nie zobaczył.\n\nOd 20 sierpnia bramka jest włączona na produkcji. Samej wpłaty nie testowaliśmy — to prawdziwe pieniądze, więc decyzja o próbnej płatności należy do Was; zamówienie testowe na 1 zł czeka gotowe. Godziny obejmują obie części: mechanizm płatności i pakiet dokumentów wymaganych przez PayU. Zostawiamy zapas na poprawki, które wyjdą, gdy przez bramkę przejdą pierwsi klienci.",
-   "godz": 27,
-   "task": [
-    "T-121",
-    "T-221"
-   ]
-  },
-  {
-   "data": "20.08.2026",
-   "tytul": "Dostępność strony — poprawki po audycie",
-   "godz": 3,
-   "opis": "Serwis przeszedł audyt dostępności (16 adresów, 55 kryteriów normy WCAG 2.2) i wdrożyliśmy poprawki. Najważniejsza dotyczy osób, które poruszają się po stronie klawiaturą zamiast myszy: na liście aut siedemnaście kolejnych elementów nie pokazywało, gdzie użytkownik się aktualnie znajduje — dziś każdy z nich ma widoczną obwódkę. Baner zgód przestał zasłaniać element, na którym stoi kursor klawiatury. Poprawiony został kontrast tekstów pomocniczych i rozmiar drobnych elementów dotykowych: automatyczny pomiar na sześciu stronach pokazuje 266 usterek przed zmianą i 15 po niej, a te 15 to jeden powtarzający się przypadek — czerwień marki jako drobny tekst na szarym tle, o włos poniżej progu. Zostawiliśmy ją świadomie: zmiana tego odcienia dotknęłaby cen, przycisków i linków w całym serwisie.\n\nDwie uwagi audytu okazały się nieprawdziwe — wskazywały pole wyszukiwarki i przycisk logowania jako pozbawione opisu, a oba opisy są w kodzie i widzi je czytnik ekranu. Sprawdziliśmy to narzędziem przeglądarki, z którego korzystają czytniki. Zgodności nie orzekamy sami — stronę ogląda ponownie audytor.",
-   "task": [
-    "T-246"
-   ]
-  },
-  {
-   "data": "20.08.2026",
-   "tytul": "Przycisk filtrów na telefonie — widoczny i podpisany",
-   "godz": 1,
-   "opis": "Na liście aut na telefonie przycisk otwierający filtry był najsłabszym elementem paska — szary napis „Filtry”, słabszy wizualnie niż sortowanie obok, mimo że przy blisko 80% ruchu z telefonów to główne wejście do zawężania listy. Dziś jest w kolorze marki, z białym napisem „Marka / model”, więc od razu widać, co się pod nim kryje. Żeby dłuższy napis się zmieścił, skróciliśmy etykiety sortowania do „Najnowsze / Najtańsze / Najdroższe” — przy okazji przestał się ucinać licznik znalezionych ofert, który na wąskich telefonach znikał już wcześniej.",
-   "task": [
-    "T-247"
-   ]
-  },
-  {
-   "data": "19.08.2026",
-   "tytul": "Pomiar efektów wcześniejszych prac i porządek w kampaniach",
-   "godz": 4,
-   "opis": "Domknęliśmy cztery zaległe sprawdzenia: czy zmiany z lipca dowiozły to, co miały. Punkt odniesienia dla wszystkich liczb: w porównywanym okresie czterech tygodni cała strona urosła z 3 738 do 12 913 wejść z Google, czyli ponad trzykrotnie. Bez tego tła każdy wzrost pojedynczej strony wygląda jak sukces poprawki, a często jest tylko falą całego serwisu.\n\nPolskie znaki w pytaniach i odpowiedziach na stronach modeli: przed poprawką jedna trzecia wpisów była uszkodzona, dziś zero na blisko tysiąc sprawdzonych rekordów. Strony modeli po przepisaniu tytułów i opisów: klikalność w wynikach wyszukiwania wzrosła wyraźnie powyżej średniej serwisu na trzech z siedmiu badanych (Shark 6, Li Auto, Xiaomi YU7).\n\nPo stronie reklam powstała jedna mapa wszystkich kampanii — co jest włączone, na co kieruje, ile kosztuje — zamiast rozproszonej wiedzy w panelu. Przy jej robieniu wyszło, że dziewięć kampanii miało wśród celów subskrypcję kanału YouTube. Google optymalizował je więc pod subskrypcje, a nie pod telefon, WhatsApp i formularz. Cel został zdjęty ze wszystkich dziewięciu.",
-   "task": [
-    "T-192",
-    "T-193",
-    "T-198",
-    "T-203"
-   ]
-  },
-  {
-   "data": "18.08.2026",
-   "tytul": "Drugie źródło ogłoszeń — pełne dopięcie i praca równoległa obu kanałów",
-   "godz": 76,
-   "opis": "Podsumowanie długiego wątku, który ciągnie się od czerwca: budowy drugiego, niezależnego źródła ogłoszeń obok dotychczasowego. Powód jest prosty — jeden dostawca to jeden punkt awarii, co boleśnie potwierdziło się w tym roku dwa razy.\n\nCo przez ten czas powstało: ręczny import pojedynczego ogłoszenia z podanego adresu, automatyczne pobieranie co kwadrans z filtrami, które ustaliliśmy (rocznik, przebieg, próg ceny, lista miast), słownik marek i modeli tłumaczący chińskie nazwy na nasze — trafność automatycznego dopasowania auta do właściwej strony modelu podniosła się z 61% do ponad 98%, wyposażenie dociągane z katalogu producenta tam, gdzie giełda podaje samą listę podstawową, wykluczanie pojedynczych modeli w panelu oraz przeglądarka ofert z podglądem ceny w złotówkach i importem jednym kliknięciem.\n\nSierpień zszedł na utrzymaniu ciągłości. Dostawca drugiego kanału od 12 sierpnia przestał przysyłać nowe ogłoszenia — reklamacja leży u niego bez odpowiedzi, a strona przez ten czas nie dostawała nowych aut z żadnej strony. Wróciliśmy więc do pełnego pobierania z pierwszego kanału i od tej pory oba pracują równolegle. Uruchomiliśmy też nocne uzupełnianie danych technicznych: gdy nowe ogłoszenie przychodzi z okrojoną specyfikacją, system szuka bliźniaczej sztuki tej samej wersji i rocznika i dolewa brakujące pozycje, nigdy nie nadpisując tego, co już jest. Przy pierwszym uruchomieniu uzupełniło się 30 aut, średnio o ponad 300 pozycji wyposażenia każde. Doszło zabezpieczenie przed przypisaniem auta do niewłaściwej strony modelu przy odświeżaniu oferty oraz porządek w nazwach — 128 nieużywanych wpisów usuniętych z katalogu.\n\n24 sierpnia doszła naprawa po zmianie u dostawcy drugiego kanału. Bez uprzedzenia zaczął podawać w polu wersji wyposażenia całą nazwę auta zamiast samego oznaczenia wersji. Widać to było w tytułach ogłoszeń — nazwa modelu powtarzała się dwa razy, na przykład „Geely Galaxy L7 2024 Geely Galaxy L7 2023 1.5T 115km MAX”. Objęło to 1256 ogłoszeń z 34 marek, wszystkie dodane po 19 sierpnia. Zmieniliśmy sposób odczytu tak, żeby oznaczenie wersji brać z katalogu producenta, a nie z pola dostawcy, i poprawiliśmy tytuły wszystkich dotkniętych ogłoszeń. Adresy stron zostały nietknięte, więc pozycje w wyszukiwarce na tym nie ucierpiały. Przy okazji wyszło, że Geely Galaxy M9 wchodził jako osobna marka „Galaxy”, bo brakowało go w słowniku nazw — uzupełniliśmy, a jedno auto przepięliśmy na właściwą stronę modelu.\n\nTego samego dnia doszło sterowanie kanałami z panelu. Do tej pory każde źródło ogłoszeń można było tylko włączyć albo wyłączyć, a wyłączenie zatrzymywało również odświeżanie tego, co już jest na stronie — ceny stały w miejscu, a auta sprzedane u źródła zostawały w ofercie jako dostępne. Teraz każdy kanał ma trzy stany: pełne pobieranie, samo odświeżanie i wyłączony. Środkowy stan przydaje się, gdy oba kanały działają naraz: jeden dowozi nowe auta, drugi nie dokłada nic nowego, ale swoją dotychczasową ofertę trzyma w aktualności i sam wycofuje sztuki, które zeszły ze sprzedaży. Nie dublujemy wtedy napływu, który kosztuje transfer i limity u dostawców, a oferta nie starzeje się w tle. Gdy któryś dostawca znów przestanie działać — a w tym roku zdarzyło się to obu — drugi wraca do pełnego pobierania jednym kliknięciem, bez zmian w kodzie.\n\nGodziny obejmują cały wątek od czerwca poza tym, co pokazaliśmy już we wpisie z 20 lipca. Praca nie jest domknięta — zostaje dostrojenie filtrów po Twoich testach i wyjaśnienie sprawy z dostawcą.",
-   "task": [
-    "T-185",
-    "T-186",
-    "T-222"
-   ]
-  },
-  {
-   "data": "10.08.2026",
-   "tytul": "Maile do klientów w nowej szacie i naprawa linku do zamówienia",
-   "godz": 14,
-   "opis": "Szesnaście wiadomości wysyłanych klientom — od potwierdzenia zgłoszenia po informacje o kolejnych etapach — dostało jednolitą szatę: nagłówek z aktualnym statusem, pasek pokazujący, na którym etapie jest zamówienie, stopka z danymi firmy i podpis z telefonem. Do każdej dołączana jest wersja tekstowa, żeby wiadomość wyświetliła się poprawnie także w starszych programach pocztowych i nie wpadała w spam. Maile przychodzące do Was zostają bez zmian, w prostej formie.\n\nPrzy okazji naprawiliśmy dwie usterki w linku, którym klient wchodzi ze swojego maila prosto do zamówienia. Link działał tylko raz — po pierwszym otwarciu przestawał, więc powrót do wiadomości kończył się komunikatem o błędzie; wystarczyło też, że skaner poczty firmowej otworzył go przed człowiekiem. Drugi błąd był gorszy: klient z dwoma zamówieniami tracił dostęp do pierwszego, bo nowy link kasował poprzedni. Dziś każde zamówienie ma własny link, ważny 48 godzin i działający wielokrotnie. Linki wysłane wcześniej nadal działają — nic nie umarło w skrzynkach klientów.",
-   "task": [
-    "T-209",
-    "T-244"
-   ]
-  },
-  {
-   "data": "07.08.2026",
-   "tytul": "Plan automatycznej dystrybucji materiałów na kanały społecznościowe",
-   "opis": "Rozpoznanie i plan wykonawczy dla obiegu, w którym zdjęcia i filmy z sesji na placu trafiają na wszystkie kanały bez ręcznego klikania: wskazujesz auto w panelu, a system przygotowuje gotowe posty z ceną w tytule, opisem, hashtagami i linkiem do konkretnej oferty, i wstawia je do kalendarza jako zaplanowane — do zatwierdzenia, zmiany albo skasowania przed publikacją. Przy okazji policzyliśmy, ile poszczególne kanały realnie dowożą: przez ostatnie 90 dni Facebook przysłał 1 310 wejść i 30 kontaktów, czyli dokładnie tyle, co płatna kampania remarketingowa — tyle że za darmo. Sprawdziliśmy też publiczny rejestr reklam Meta i wiemy już na pewno, że osoba, która przejęła konto w czerwcu, nigdy nie użyła Waszej strony do reklam — chodziło jej o konto rozliczeniowe, nie o Waszych obserwujących. Powstał komplet dokumentów: opis rozwiązania z podziałem na osiem etapów i wyceną, instrukcja uporządkowania dostępów do kont wysłana do Prima-Auto oraz rejestr decyzji do podjęcia.",
-   "godz": 4,
-   "task": [
-    "T-243"
-   ]
-  },
-  {
-   "data": "06.08.2026",
-   "tytul": "Numer VIN w umowie i aneks do umowy",
-   "opis": "Dwie zmiany składające się na jeden obieg dla aut, przy których numer VIN poznajemy dopiero po weryfikacji. Po pierwsze: umowa bierze teraz VIN wyłącznie z pola w zamówieniu. Wcześniej system podstawiał numer z ogłoszenia, przez co wyczyszczone pole nie miało skutku — numer wracał do dokumentu przy każdej regeneracji, a zapis karty zamówienia (choćby po zmianie prowizji) po cichu utrwalał niezweryfikowany numer sprzedającego. Numer z oferty jest teraz pokazany obok pola, opisany jako niezweryfikowany, z przyciskiem „Wstaw”. Po drugie: aneks uzupełniający VIN powstaje w panelu, a nie ręcznie poza systemem — przycisk „Generuj aneks VIN” w sekcji dokumentów, aktywny dopiero gdy w zamówieniu jest pełny, siedemnastoznakowy numer. Dokument ma szatę umowy, mieści się na jednej stronie i odwołuje się do numeru oraz daty umowy; obsługuje oba wzorce (pośrednictwo i leasing). Samo wygenerowanie nie wysyła nic — mail z aneksem w załączniku wychodzi dopiero po świadomym przestawieniu znacznika na „wysłany”. Przy okazji umowa pośrednictwa bez VIN-u zapowiada teraz aneks zamiast drukować kreskę, a ucięte numery z chińskich ogłoszeń przestały wchodzić do dokumentów. Umowy z wpisanym VIN-em wyglądają dokładnie jak dotąd — potwierdzone porównaniem wygenerowanych plików co do znaku.",
-   "godz": 9,
-   "task": [
-    "T-220",
-    "T-242"
-   ]
-  },
-  {
-   "data": "06.08.2026",
-   "tytul": "Promocja z Terenwizją na stronie głównej",
-   "opis": "Na stronie głównej, zaraz pod wyszukiwarką, pojawiła się informacja o promocji: szkolenie off-road z Terenwizją i film pamiątkowy na ich kanale do pierwszego terenowego SUV-a 4x4 sprowadzonego z Chin, którego nie ma jeszcze nikt w Polsce. Przycisk prowadzi wprost do 670 samochodów z napędem 4x4 w naszej ofercie.\n\nNiżej doszła osobna sekcja „Nasze auta w Terenwizji” z testem Leoparda 5, który został kupiony w Prima-Auto — mówi o tym sam właściciel w materiale. Kanał ma 394 tys. subskrybentów, a ten jeden film 249 tys. wyświetleń, więc to mocny dowód, że sprowadzane przez nas auta jeżdżą i są testowane w Polsce. Sekcja jest przygotowana tak, żeby przy nowym filmie wystarczyło podmienić materiał, bez przebudowy strony.\n\nOsobno zapisana wzmianka o haśle „Terenwizja” przy ładowarce i filtrach nie wymagała zmian na stronie — oba elementy są już standardowo w cenie każdego auta i tak to na stronie opisujemy.",
-   "wersje": "wtyczka 0.34.20",
-   "godz": 1,
-   "task": [
-    "T-239"
-   ]
-  },
-  {
-   "data": "05.08.2026",
-   "tytul": "Porządek cen i tytułów na stronach modeli",
-   "opis": "Ceny w tytułach dwunastu stron modeli rozjechały się z tym, co realnie mamy w ofercie. Część kusiła kwotą niższą niż w bazie — klient klikał obietnicę i widział drożej; część zawyżała i odbierała nam przewagę cenową w wynikach wyszukiwania. Łączny rozjazd to 156 000 zł. Wszystkie ceny zsynchronizowane z realną ceną wejścia.\n\nNa trzech stronach (Denza Z9 GT, Zeekr 9X, Zeekr 8X) Google podmieniał nasz tytuł na własny i pokazywał wynik bez ceny, czyli bez naszego najmocniejszego argumentu. Przyczyną był rozjazd między tytułem a nagłówkiem na stronie — uzupełnione nagłówki naprawiły to u źródła. Odświeżone też opisy dwudziestu czterech stron.\n\nPrzy okazji poprawiona nieprawdziwa informacja na stronie Denzy Z9 GT, że model dopiero wchodzi do polskiej dystrybucji. Jest już w oficjalnym konfiguratorze producenta za 526 320 zł, wobec naszych 197 000 zł — to porównanie weszło wprost w treść razem z odpowiedzią na pytanie, ile ten model kosztuje.",
-   "wersje": "",
-   "godz": 1,
-   "task": [
-    "T-238"
-   ]
-  },
-  {
-   "data": "05.08.2026",
-   "tytul": "Rankingi rynkowe w dziale wiedzy — siedem zestawień",
-   "opis": "Ruszył dział rankingów. Siedem zestawień opartych na realnej sprzedaży na rynku chińskim za czerwiec 2026 oraz na danych katalogowych: najchętniej kupowane SUV-y, sedany, vany i MPV, elektryki o największym zasięgu, auta z największą baterią, najszybsze i najdroższe.\n\nKażda tabela ma kolumnę „u nas”: przy modelach, które mamy w ofercie, pokazuje liczbę sztuk i cenę od, i prowadzi wprost do ogłoszeń. To jest sedno tego rozwiązania — czytelnik szukający „co się najlepiej sprzedaje w Chinach” trafia na zestawienie i od razu widzi, które z tych aut może kupić u nas.\n\nDane sprawdzone z niezależnym źródłem: sprzedaż NIO ES8 za czerwiec wyszła 8 966 sztuk wobec 8 969 podawanych gdzie indziej, czyli różnica 0,03%. Daty publikacji wpisów są rozsunięte w czasie, żeby dział wyglądał na prowadzony regularnie, a nie wrzucony jednego dnia. Mechanizm jest powtarzalny — kolejne rankingi powstają z gotowego szablonu, bez pisania od zera.",
-   "wersje": "",
-   "godz": 4,
-   "task": [
-    "T-229",
-    "T-230"
-   ]
-  },
-  {
-   "data": "04.08.2026",
-   "tytul": "Porządkowanie treści w całym serwisie — marki, karty aut, słownik pojęć",
-   "opis": "Dzień pracy nad tym, co klient czyta na stronie, w pięciu obszarach — łącznie 7 h.\n\nStrona „Chińskie marki samochodów” była dotąd samą siatką nazw z licznikami — jedno zdanie tekstu i nic więcej. Przez trzy miesiące zebrała 631 wyświetleń w Google i tylko 2 wejścia, mimo że samo hasło ma 5400 wyszukań miesięcznie. Teraz tłumaczy rynek: kto do kogo należy (osiem koncernów i ich marki), czym są marki tworzone razem z Huawei, dlaczego Volvo i MG to dziś marki chińskie. Doszły zdjęcia sześciu aut z naszej oferty, odpowiedzi na najczęstsze pytania i oznaczenie koncernu przy każdej marce — widać od razu, że Denza należy do BYD, a Hongqi do FAW. Z listy zniknęły Volkswagen, Toyota, Mazda i pozostałe marki globalne, bo nie są chińskie; ich własne strony działają bez zmian. Kolejność „najpopularniejszych” liczy się teraz z liczby aut w ofercie — wcześniej Volkswagen z ośmioma sztukami stał przed Hongqi ze stu dziewiętnastoma. (1 h)\n\nSłownik pojęć urósł do 89 haseł. Piętnaście nowych opisuje rzeczy, które klient widzi w tabeli danych technicznych, a które nigdzie nie były wyjaśnione: rodzaje zawieszenia, hamulce, nadwozie samonośne i ramowe, brak skrzyni biegów w samochodzie elektrycznym, radar, mapy Amap i procesory kokpitu. Dla skali: 74 wcześniejsze hasła przyniosły w ostatnim miesiącu 2330 wyświetleń w Google. (3 h)\n\nSprawdziliśmy wszystkie 58 marek w ofercie pod kątem kompletności treści. Sześć nie miało żadnego opisu, dziewięć pytań i odpowiedzi, jedenaście zdania wprowadzającego. Najgorzej wypadły Maxus i Foton — marki wyszukiwane w Polsce odpowiednio 9900 i 8100 razy miesięcznie. Obie mają teraz pełne strony, podobnie jak BAW, Shangjie i Dongfeng Fengxing. To akurat marki obsługujące segmenty, o które ludzie pytają najczęściej, a my ich nie opisywaliśmy: Foton to pickupy, BAW terenówki, Shangjie kombi elektryczne. (1 h)\n\nSekcja „Dane podstawowe” na stronie auta zaczynała się od rocznika i od razu przechodziła do wymiarów — brakowało odpowiedzi na najprostsze pytanie, czym ten samochód właściwie jest. Teraz otwiera ją marka, model, wersja wyposażenia, rok i kolor nadwozia; dane uzupełniają się same również dla aut dodawanych ręcznie. Poprawiliśmy też dobór pojęć podlinkowanych do słownika: wcześniej system tłumaczył „rok modelowy”, teraz w pierwszej kolejności to, co przy chińskich autach naprawdę wymaga wyjaśnienia — zasięg CLTC, typ ogniw czy producenta baterii. (1 h)\n\nNa koniec uporządkowaliśmy to, co obiecujemy klientowi w opisach aut. Powstawały w różnym czasie i rozjechały się ze stronami informacyjnymi. W 372 miejscach poprawiliśmy trzy rzeczy: transport morski podawany jako 4–6 tygodni (na stronie „Proces zamawiania” jest 6–8), obietnicę odbioru auta „z polskimi tablicami” (a strona o rejestracji mówi wprost, że wniosek składa klient) oraz opis procedury dopuszczenia do ruchu, który wskazywał niewłaściwy organ. Przyjęliśmy zasadę, że w opisach aut piszemy o tym, co klient dostaje, a nie jak przebiega nasz proces — szczegóły się zmieniają, a poza tym to informacja dla konkurencji. (1 h)",
-   "wersje": "wtyczka 0.34.18, motyw 1.2.1",
-   "godz": 7
-  },
-  {
-   "data": "03.08.2026",
-   "tytul": "Strona o leasingu — od zera do widocznej w całym serwisie",
-   "opis": "Powstała osobna strona „Leasing samochodu z Chin”, która tłumaczy całą ścieżkę: kto dobiera firmę leasingową, co robimy my, co robi klient, jak wygląda kolejność od wyboru auta do odbioru, ile trwa przygotowanie samochodu i co wchodzi w cenę. Treść przeszła przez Pana korektę i weszła w Pana brzmieniu.\n\nSama strona to jednak dopiero połowa roboty — dotąd nikt nie miał jak na nią trafić. Dlatego leasing pojawia się teraz w trzech miejscach, w których klient faktycznie się zatrzymuje. Po pierwsze: na 2174 ofertach zdanie „Możliwy leasing” pod ceną stało się linkiem — to dokładnie ten moment, gdy ktoś patrzy na kwotę i się waha. Po drugie: na 317 stronach modeli doszedł krótki blok „{model} leasing”, bo w Google ludzie szukają właśnie tak — „zeekr 9x leasing”, „geely monjaro leasing”. Po trzecie: link w stopce na każdej stronie i na stronie o finansowaniu.\n\nŚwiadomie nie wpisaliśmy na stronach modeli żadnych kwot ani procentów. Ceny się zmieniają wraz z rotacją ofert, a wysokość depozytu jest ustawieniem, które zmienia się w panelu — gdyby te liczby siedziały w treści 317 stron, każda zmiana oznaczałaby 317 stron mówiących nieprawdę. Wszystkie warunki są w jednym miejscu, na stronie o leasingu.\n\nStrona została też zgłoszona do Google i dopisana do plików, z których korzystają ChatGPT i podobne narzędzia — tak, żeby na pytanie „czy auto z Chin można wziąć w leasing” istniała nasza odpowiedź.",
-   "wersje": "wtyczka 0.34.16, motyw 1.2.0",
-   "godz": 7,
-   "task": [
-    "T-219"
-   ]
-  },
-  {
-   "data": "30.07.2026",
-   "tytul": "Umowa leasingowa generowana z panelu — drugi wzorzec obok umowy pośrednictwa",
-   "opis": "Umowa leasingowa jest już generowana przez system. Do tej pory trzeba ją było składać ręcznie w Wordzie, a numer nadawać poza kolejnością — od teraz wybiera się ją na karcie zamówienia jednym polem „Wzorzec umowy” i dokument powstaje tak samo jak umowa pośrednictwa: z danymi z zamówienia, w naszej szacie graficznej, z załącznikiem ze specyfikacją auta.\n\nTreść prawna jest odtworzona z podpisanego egzemplarza co do słowa — zmieniliśmy wyłącznie skład i wygląd. Umowy leasingowe mają własną numerację (UL/2026/0001 i dalej), niezależną od dotychczasowej — dzięki temu w żadnej z dwóch numeracji nie robią się dziury. Dochodzi też osobny rachunek bankowy do depozytu leasingowego, ustawiany w panelu obok dotychczasowego; rachunek przy umowie pośrednictwa zostaje bez zmian. Depozyt zabezpieczający podpowiada się jako 10% ceny auta i można go poprawić ręcznie na konkretnym zamówieniu.\n\nDoszła też ochrona przed pomyłką w numerze VIN. Zdarza się, że dostawca podaje numer ucięty (np. „HACRA0B3XS1S…”) — wcześniej taka wartość wchodziła do dokumentu jako prawdziwy numer nadwozia. Teraz umowa leasingowa rozpoznaje numer niepełny i wpisuje w to miejsce zapis z wzorca o uzupełnieniu numeru aneksem po weryfikacji auta.\n\nCała dotychczasowa ścieżka została sprawdzona pod kątem tego, czy nic się nie zepsuło: umowy pośrednictwa generują się dokładnie tak samo jak przed zmianą (porównane znak po znaku na pięciu zamówieniach), a możliwość wgrania własnej umowy zamiast generowanej działa bez zmian, również przy zamówieniach leasingowych.",
-   "wersje": "",
-   "godz": 9,
-   "task": [
-    "T-217"
-   ]
-  },
-  {
-   "data": "29.07.2026",
-   "tytul": "Auta dodane ręcznie 28.07 — uporządkowanie marek, uzupełnienie danych i strony modeli",
-   "opis": "Sprawdziliśmy jedenaście aut dodanych ręcznie poprzedniego dnia. Cztery z nich trafiły pod nieistniejące marki i ich strony modeli nie otwierały się wcale — Google widziało komunikat o braku strony. Przyczyna: przy autach marek, których wcześniej nie mieliśmy w bazie, system zakłada markę sam, z chińskiej nazwy. Naprawione i zabezpieczone na przyszłość: te marki są już opisane w słowniku systemu, więc kolejne auta wejdą poprawnie.\n\nPrzy okazji poprawiliśmy nazwy modeli pod to, czego ludzie realnie szukają w Google. Dwa pickupy Fotona były opisane chińską nazwą Mars — na eksport te same auta nazywają się Tunland V9 i V7, a tej nazwy szuka się w Polsce kilkadziesiąt razy częściej. Rozdzieliliśmy też auto Dongfenga: strona modelu stała pod marką Mengshi, której prawie nikt nie wpisuje, podczas gdy nazwy M-Hero szuka się regularnie. Stare adresy przekierowane, żeby nic nie zginęło z dotychczasowej pozycji w Google.\n\nUzupełniliśmy dane techniczne wszystkich jedenastu aut. Chiński dostawca przy autach dostawczych i pickupach oddaje niemal puste specyfikacje — jedno auto miało dosłownie jedną pozycję. Pobraliśmy pełne dane z katalogu producenta i rozszerzyliśmy słownik tłumaczeń parametrów, dzięki czemu auta użytkowe mają teraz od 43 do 93 pozycji zamiast kilku, a osobowe od 120 do 181. To działa również dla wszystkich przyszłych aut.\n\nOsiem nowych stron modeli dostało pełny opis: wstęp z ceną, sekcje o dostępności w Polsce, wyposażeniu i porównaniu z europejską konkurencją oraz pytania i odpowiedzi. Przy Mercedesie EQE SUV pokazujemy wprost różnicę: w polskim salonie od 436 400 zł, u nas 262 000 zł. Przy vanie Toyoty opisaliśmy jawnie, że nadwozie ma podwyższony dach od chińskiego producenta zabudów — kupujący powinien to wiedzieć przed obejrzeniem auta. Wszystkie zmienione strony zgłoszone do Google.",
-   "wersje": "",
-   "godz": 1
-  },
-  {
-   "data": "27.07.2026",
-   "tytul": "Umowa leasingowa i aneks VIN — analiza dokumentów, regulamin usługi i strona o depozycie",
-   "opis": "Przeanalizowaliśmy podpisany egzemplarz umowy leasingowej oraz wzorzec aneksu VIN i ustaliliśmy, jak obie rzeczy mają działać w systemie: drugi szablon umowy generowany obok obecnego (treść bez zmian, tylko nasz skład), aneks VIN uzupełniający już wygenerowaną umowę oraz osobny status informujący o nim klienta. Przy okazji prac nad płatnością online sprawdziliśmy dokumenty prawne na stronie — okazało się, że oba regulaminy od prawnika dotyczą wyłącznie korzystania ze strony, a opublikowany mówi wprost, że usługi są nieodpłatne. Nie ma dokumentu opisującego samą usługę i depozyt, co blokuje uruchomienie płatności BLIK/kartą. Przygotowaliśmy treść regulaminu usługi oraz stronę wyjaśniającą klientowi depozyt (czym jest, kiedy wraca, komu płaci, faktura VAT) — obie czekają na akceptację i weryfikację prawnika. Zaplanowaliśmy też, jak ma wyglądać płatność depozytu: przycisk pojawia się od razu po potwierdzeniu zamówienia, z informacją, że zgłoszenia z opłaconym depozytem realizujemy w pierwszej kolejności.",
-   "wersje": "",
-   "godz": 6,
-   "task": [
-    "T-217",
-    "T-220",
-    "T-221"
-   ]
-  },
-  {
-   "data": "25.07.2026",
-   "tytul": "Nowe kampanie na YouTube: budowa, naprawa kierowania i zasady doboru kanałów",
-   "opis": "Uruchomiliśmy dwie nowe kampanie wideo na YouTube — bez powiększania budżetu, przez przesunięcie pieniędzy z reklam dynamicznych. Pierwsza celuje w świeży ruch: ludzi, którzy szukają haseł o imporcie aut z Chin i odwiedzają strony konkurencji, z wykluczeniem osób, które już były na naszej stronie (tych obsługuje remarketing, nie chcemy płacić dwa razy za tę samą osobę). Druga pokazuje nasze filmy bezpośrednio przy materiałach konkretnych kanałów motoryzacyjnych. Do obu przygotowane reklamy wideo z linkiem do konkretnej oferty oraz reklama karuzelowa z czterema autami z placu.\n\nPierwsza doba pokazała, że pierwsza kampania trafiała w zupełnie nie tę widownię: prawie 30% wyświetleń i 39% kosztu zjadły kanały z bajkami dla dzieci, a kanały motoryzacyjne dostały dokładnie jedno wyświetlenie. Przyczyną była funkcja Google, która na własną rękę „poszerza” grupę odbiorców — nasza lista haseł i stron konkurencji dostała 6 wyświetleń z 2632, całą resztę rozdał automat. Wyłączyliśmy poszerzanie, wykluczyliśmy 47 kanałów dziecięcych i rozbudowaliśmy treści reklam, bo Google dławi wyświetlenia reklamom mającym jeden nagłówek. Reklamy chodzą teraz od 6:00 do 1:00 i na widownię 25+.\n\nDruga kampania dwa dni w ogóle nie startowała, bo stawka za obejrzenie była poniżej progu aukcji — podniesiona do 0,10 zł, z limitem 3 wyświetleń na osobę tygodniowo, żeby nie męczyć tych samych ludzi. Ustaliliśmy też zasady doboru kanałów, na których się pokazujemy: polskie, 10–60 tys. subskrybentów, tematyka chińskie marki / elektryki / import, a częstotliwość publikacji ważniejsza od liczby subskrybentów. Największe kanały motoryzacyjne (100–450 tys. subskrybentów) świadomie odpuszczone: przy naszym budżecie utoniemy tam, płacąc najwyższe stawki, a ten sam pieniądz daje dwa razy więcej obejrzeń na mniejszych kanałach tematycznych. Kanały bezpośredniej konkurencji zostawiamy niezależnie od ich zasięgu.",
-   "wersje": "",
-   "godz": 4,
-   "task": [
-    "T-201"
-   ]
-  },
-  {
-   "data": "24.07.2026",
-   "tytul": "Konfiguracja kanału YouTube i publikacja 8 filmów",
-   "opis": "Wszystkie filmy opublikowane z tytułami zawierającymi cenę w złotych — nikt w tej niszy tego nie robi, a to filtruje widzów na tych, którzy realnie pytają o zakup, zamiast zbierać przypadkowe wyświetlenia. W pierwszej linii opisu link do konkretnej oferty, pod nim odnośnik do strony modelu, żeby ruch z YouTube wpadał nie tylko na jedno auto, ale na cały wybór. Do tego konfiguracja samego kanału: słowa kluczowe, linki do najważniejszych stron, trzy poziomy dostępności w opisach (auta od ręki na placu, auta kupione w drodze do Polski, katalog do importu) oraz dwie publiczne playlisty — „Auta na placu w Rzeszowie” i „W drodze do Polski”. Uzupełnione tagi i ujednolicona komunikacja: wszędzie występujemy jako bezpośredni importer.\n\nEfekt bez wsparcia reklamowego: w dwie doby filmy zebrały ponad 3800 wyświetleń, z czego trzy czwarte przypadło na krótkie formaty pionowe. Udział reklam w tym ruchu to niecałe 300 obejrzeń — resztę dał sam YouTube.",
-   "wersje": "",
-   "godz": 4,
-   "task": [
-    "T-201",
-    "T-215"
-   ]
-  },
-  {
-   "data": "24.07.2026",
-   "tytul": "Montaż 8 filmów — 4 poziome i 4 pionowe",
-   "opis": "Z materiału nagranego w Rzeszowie zmontowane 8 filmów: 4 poziome prezentacje aut i 4 krótkie pionowe pod format Shorts, z oprawą graficzną i planszą końcową. Dwa formaty tego samego auta to nie duplikat — pionowy zbiera zasięg w rekomendacjach YouTube, poziomy służy jako kreacja reklamowa i materiał do wysłania klientowi.",
-   "wersje": "",
-   "godz": 3,
-   "task": [
-    "T-201"
-   ]
-  },
-  {
-   "data": "23.07.2026",
-   "tytul": "Postprodukcja zdjęć z sesji",
-   "opis": "Obróbka około 50 zdjęć pod dwa zastosowania: miniatury filmów oraz materiały do reklam graficznych. Zdjęcia własne zamiast fotografii producenta to różnica w wiarygodności — pokazują konkretny egzemplarz stojący na placu, nie render z katalogu.",
-   "wersje": "",
-   "godz": 2
-  },
-  {
-   "data": "23.07.2026",
-   "tytul": "Sesja zdjęciowa i filmowa na placu w Rzeszowie",
-   "opis": "Materiał filmowy do czterech aut (Leopard 5 w dwóch wersjach, Jetour T2, Exeed VX) w wariantach poziomym i pionowym, plus dokumentacja zdjęciowa placu. To pierwsze materiały spełniające standardy jakościowe — nadają się zarówno jako media reklamowe, jak i pod pozostałe kanały social.",
-   "wersje": "",
-   "godz": 4
-  },
-  {
-   "data": "22.07.2026",
-   "tytul": "Leksykon rozbudowany do 74 haseł i spięty z ofertą",
-   "opis": "Hasła dobierane nie „z głowy”, tylko z realnych danych: policzyliśmy, ile aut w naszej bazie faktycznie ma daną funkcję (np. sterowanie głosem bez wybudzania — 2494 auta, rozpoznawanie twarzy — 1706, mapy HD — 314) i o tych funkcjach napisaliśmy. Najważniejsza zmiana to powiązanie wiedzy ze sprzedażą w obie strony: fachowe pojęcie pojawiające się w opisie oferty staje się teraz automatycznie linkiem do wyjaśnienia w Leksykonie, a na stronie hasła wyświetla się sekcja „auta z tą technologią” z kartami konkretnych ofert z magazynu. Klient czytający, czym jest dana funkcja, jednym kliknięciem widzi auta, które ją mają. Doszły też okruszki nawigacyjne na stronach haseł i poprawiony tytuł działu w wynikach Google.",
-   "wersje": "v0.34.0",
-   "godz": 4,
-   "task": [
-    "T-214"
-   ]
-  },
-  {
-   "data": "22.07.2026",
-   "tytul": "Aktualności: pełna automatyzacja i kontrola jakości",
-   "opis": "Newsy publikują się teraz same, bez akceptacji mailem — mail przychodzi już tylko jako podsumowanie tego, co poszło na stronę. Do artykułów wchodzą dodatkowe zdjęcia dobrane z galerii źródła, a podpis pod zdjęciem podaje autora tylko wtedy, gdy źródło go jawnie deklaruje — nigdy „na wyczucie”. Przed włączeniem automatu na noc przepuściliśmy przez niego 12 archiwalnych newsów jako próbkę i wyłapaliśmy siedem rodzajów usterek, każdą naprawiono: linki prowadzące do koncernu zamiast do właściwej submarki (BYD Denza, Great Wall Tank), błędne przypisanie autorstwa zdjęć (6 z 9 podpisów było źle), zachęta do zakupu doklejana do newsa o wadzie fabrycznej, niespójne nazewnictwo skrótów. Powstał też automatyczny kontroler, który po każdej publikacji sprawdza artykuł w dziewięciu punktach i zgłasza odstępstwa. Sprawdzone zostało również, jak newsy widzi Google: mapa strony dla wiadomości została jawnie zgłoszona w Search Console, dane strukturalne artykułów są kompletne, pierwsze artykuły zaindeksowały się w ciągu doby.",
-   "wersje": "v0.34.0",
-   "godz": 5,
-   "task": [
-    "T-214"
-   ]
-  },
-  {
-   "data": "21.07.2026",
-   "tytul": "Nowy dział wiedzy: Leksykon i Aktualności",
-   "opis": "Serwis dostał dwie zupełnie nowe sekcje, obie zaprojektowane pod wyszukiwarkę i pod klienta, który dopiero poznaje chińskie auta. Leksykon (/wiki/) — słownik pojęć, które pojawiają się w opisach naszych aut, a których polski kupujący zwykle nie zna: rodzaje baterii, systemy asystujące, normy, technologie napędu. Każde hasło to pełne wyjaśnienie (4-7 tys. znaków), sekcja pytań i odpowiedzi zbudowana z realnych pytań zadawanych w Google, zdjęcie z galerii auta, które tę funkcję faktycznie ma. Hasła powstają automatycznie, ale każde przechodzi recenzję techniczną i korektę językową, zanim trafi na stronę. Aktualności — codzienny automat: o 6:45 przegląda branżowe źródła z Chin, wybiera newsy dotyczące marek z naszej oferty, przygotowuje polski tekst z okładką z oficjalnych materiałów prasowych i weryfikuje fakty (ceny, wymiary, moce) ze źródłem, zanim cokolwiek opublikuje. Do tego: pozycja „Wiedza” w menu, zajawka najnowszych artykułów na stronie głównej, obie sekcje dopisane do pliku dla robotów AI (llms.txt), własny układ graficzny stron.",
-   "wersje": "v0.34.0, motyw 1.1.0-1.1.1",
-   "godz": 9,
-   "task": [
-    "T-214"
-   ]
-  },
-  {
-   "data": "20.07.2026",
-   "tytul": "Che168: analiza danych i filtr modeli (etap testów)",
-   "opis": "Duża analiza danych giełdy Che168 pod kątem roczników 2024-2026: przekrój 3550 ofert z 46 marek. Wynik: przygotowany zaawansowany filtr importu — oprócz marek można wykluczać pojedyncze modele (niesprzedajne), z pełnym słownikiem modeli pobieranym z API. Do tego 33 nowe mapowania modeli na polskie nazwy i huby (m.in. Leapmotor T03, Li Auto L7/L8, Smart #1/#3, Xiaomi YU7, Jetour Traveller) — trafność automatycznego dopasowania ofert wzrosła z 61% do ok. 81%. Funkcja przechodzi teraz testy wewnętrzne; po okresie prób zostanie udostępniona w panelu. Wdrożona została też przeglądarka ofert Che168: wybór dowolnej marki z giełdy, zawężanie do modeli, karty ze zdjęciami, podgląd z wyceną w złotówkach i import jednym kliknięciem — również w testach wewnętrznych.",
-   "wersje": "v0.33.37, v0.33.38",
-   "godz": 5.5,
-   "task": [
-    "T-185",
-    "T-186"
-   ]
-  },
-  {
-   "data": "20.07.2026",
-   "tytul": "Przebudowa panelu zamówień",
-   "opis": "Lista zamówień dostała trzy filtry działające razem: rodzaj zamówienia (klientów / wewnętrzne / wszystkie), status z pełnej listy oraz przełącznik „ukryj anulowane”, domyślnie włączony. Po wejściu w panel widać od razu 41 realnych zamówień klientów zamiast 140 pozycji zmieszanych z anulowanymi i magazynowymi — anulowane to dziś 38 ze 140 zamówień, a po stronie klientów aż 35 z 76. Liczniki przy filtrach same się przeliczają. Kolumny „depozyt” i „CIF” połączone w jedną czytelną (kwota po najechaniu kursorem), poprawione łamanie numeru zamówienia. Na telefonie zamiast rozjeżdżającej się tabeli — karty ze zdjęciem auta i kompletem informacji, bez przewijania na boki. Na jednej stronie mieści się teraz 30 zamówień zamiast 20.",
-   "wersje": "v0.33.33, v0.33.36",
-   "godz": 3.5
-  },
-  {
-   "data": "20.07.2026",
-   "tytul": "Naprawa błędu zamówień po usuniętych ofertach + zabezpieczenie na przyszłość",
-   "opis": "Przy okazji przebudowy panelu wyszło, że 27 zamówień (16 wciąż aktywnych) nie dawało się otworzyć — pojawiał się komunikat o błędzie krytycznym. Powód: ogłoszenia tych aut zostały wcześniej usunięte z bazy przy automatycznym sprzątaniu ofert, a karta zamówienia nie była na to przygotowana. Błąd istniał od dawna, tylko trudno było na te zamówienia trafić. Karta otwiera się teraz normalnie i wyjaśnia, co się stało — dane zamówienia (ceny, klient, umowa, historia) są nienaruszone, brakuje jedynie zdjęcia i nazwy auta, które rozpoznać można po linku źródłowym. Druga, ważniejsza część: automat sprzątający nie usunie już ogłoszenia, do którego przypisane jest niezakończone zamówienie. Wcześniej chronione były tylko auta zarezerwowane, w drodze i na placu — auto czekające na weryfikację mogło zniknąć. Ochrona zwalnia się sama po anulowaniu zamówienia. W chwili wdrożenia 5 ogłoszeń czekało już w koszu na skasowanie.",
-   "wersje": "v0.33.34, v0.33.35",
-   "godz": 1
-  },
-  {
-   "data": "18.07.2026",
-   "tytul": "Porządki w widoczności stron modeli w Google",
-   "opis": "Naprawione adresy kanoniczne 6 stron modeli — część wskazywała Google model innego producenta (Haval H6 → Hongqi H6, Wey 07 → Avatr 07, GAC M8 → AITO M8); weryfikacja objęła 436 wariantów adresów. Usunięta zdublowana lista /oferta/ (sklejała pełne opisy kolejnych aut = duplikat treści) i strona-spis /informacje/, która konkurowała ze stroną główną o frazę „import samochodów z Chin”. Zgłoszone do Google 200 adresów (auta na placu i w drodze + świeże oferty) plus automat nadrabiający zaległe oferty. Audyt potwierdził, że strony modeli są zdrowe — dają 91% ruchu, Geely Monjaro pojawia się w odpowiedziach AI Google.",
-   "wersje": "v0.33.32",
-   "godz": 3
-  },
-  {
-   "data": "17.07.2026",
-   "tytul": "Reklamy dynamiczne — zasięg, stabilność i pomiar na żywo",
-   "opis": "Reklamy wyświetlały się tylko w 2 województwach i 6 miastach — rozszerzone na całą Polskę, bo auto dostarczamy pod dom w całym kraju. Zatrzymana codzienna rotacja reklamowanych ofert: automat podmieniał sztukę na „najtańszą”, ale w 6 na 7 przypadków różnica ceny wynosiła 0 zł (przerzucanie między bliźniakami), a każda podmiana kosztuje kilka dni przetwarzania po stronie Google — teraz oferta zostaje w reklamach, dopóki auto jest dostępne. Uruchomiony podgląd ruchu i kontaktów na żywo z podziałem na kampanie.",
-   "wersje": "",
-   "godz": 3,
-   "link": {
-    "url": "https://auratest.pl/pa-live-8aaf08d6ece0db176603/",
-    "tekst": "→ Podgląd ruchu na żywo"
-   }
-  },
-  {
-   "data": "17.07.2026",
-   "tytul": "Analiza wzorca umowy leasingowej",
-   "opis": "Przegląd wzorca „Umowy organizacji importu samochodu” pod leasing (konstrukcja trójstronna: Prima-Auto, firma leasingowa, klient). Zmapowane pola, kwoty i miejsca w systemie wymagające zmian — podstawa do wyceny zadania T-217. Uruchomiona też niniejsza strona postępu prac.",
-   "godz": 1,
-   "task": [
-    "T-217"
-   ]
-  },
-  {
-   "data": "16.07.2026",
-   "tytul": "Blok „Inne egzemplarze tego modelu” na stronach ofert",
-   "opis": "Każda oferta pokazuje teraz karty innych egzemplarzy tego samego modelu, posortowane od najtańszego, z przejściem do pełnej listy z cenami. Klient od razu widzi tańsze i inne wersje, zamiast wracać do katalogu. Działa na 2990+ ofertach, także na telefonie.",
-   "wersje": "v0.33.28–29",
-   "godz": 4,
-   "task": [
-    "T-187"
-   ]
-  },
-  {
-   "data": "16.07.2026",
-   "tytul": "Elementy zaufania na stronie oferty",
-   "opis": "Nad opisem auta pojawiło się zdanie o łącznej cenie „pod klucz” (bez ukrytych dopłat) oraz pasek atutów — m.in. „Możliwy leasing”. Moment oglądania oferty dostał pierwsze dowody wiarygodności.",
-   "wersje": "v0.33.30–31",
-   "godz": 2
-  },
-  {
-   "data": "16.07.2026",
-   "tytul": "Reklamy dynamiczne Google (DSA) — celowanie w najtańsze oferty",
-   "opis": "Feed reklam przestawiony ze stron modeli na najtańszą aktualną ofertę każdego modelu, z automatyczną codzienną aktualizacją. Do tego nowa treść reklamy (wymiana jednej z dwóch kreacji).",
-   "wersje": "",
-   "godz": 3
-  }
- ],
- "todo_nowe": [
-  {
-   "id": "T-241",
-   "tytul": "Zdjęcia i filmy z sesji — wykorzystanie na stronach modeli i w reklamach",
-   "opis": "Po każdej sesji zdjęciowej na placu powstaje komplet materiałów konkretnych egzemplarzy: zdjęcia w kilku kolorach i filmy w dwóch kadrach — poziomym i pionowym. Dziś te materiały trafiają wyłącznie na YouTube i do reklam, a strony modeli zostają na zdjęciach z chińskich placów. Po zmianie każda nowa sesja uruchamia jeden powtarzalny cykl: zdjęcia idą na stronę modelu razem z filmami i opisem realnego egzemplarza, świeże kreacje wchodzą do kampanii wideo i Demand Gen, a filmy są publikowane na kanale pojedynczo, dzień po dniu, bo tak utrzymują zasięg. Przy okazji sprawdzamy, które modele z sesji nie mają jeszcze własnej strony.\n\nPierwszy przebieg: BYD Leopard 5. Jego strona przyciąga dziś 3 709 wyświetleń w Google miesięcznie i 228 wejść. Przy zapytaniach o cenę jesteśmy w ścisłej czołówce — przy „denza bao 5 cena” na drugim–trzecim miejscu, przy „denza b5 cena” na pierwszym. Ale przy dwóch najważniejszych hasłach, samym „leopard 5” i „byd leopard 5”, jesteśmy dopiero na piątym i dziewiątym miejscu, a to razem 1 625 wyświetleń, z których dostajemy zaledwie 23 wejścia. Google przy takim zapytaniu szuka strony, która pokazuje realny samochód, a nie opis katalogowy — i dokładnie to mamy: 29 zdjęć obu egzemplarzy z placu, cztery filmy oraz test tego auta w Terenwizji, kanale z 394 tys. subskrybentów, gdzie właściciel mówi wprost, że kupił je u Ciebie.",
-   "status": "materiały z sesji 23.07 uporządkowane (Leopard 5, Exeed VX, Jetour T2) — pierwszy przebieg gotowy do startu",
-   "realnie_od": 3,
-   "realnie_do": 4,
-   "rynkowo_od": 7,
-   "rynkowo_do": 10
-  },
-  {
-   "id": "T-224",
-   "tytul": "Formularz „Zapytaj o leasing” na stronie leasingowej",
-   "opis": "Dziś przycisk na stronie o leasingu prowadzi do zakładki Kontakt, czyli do zwykłego maila. Zapytanie trafia więc do skrzynki i nigdzie się nie zapisuje — nie widać go w panelu, nie da się policzyć, ile osób pyta o leasing i z których modeli przychodzą. Formularz to zmienia: zapytanie ląduje na liście w panelu, przychodzi powiadomienie na maila i zliczamy je jako zapytanie w statystykach. Pod ten sam formularz podepniemy później kalkulator raty (T-189).",
-   "status": "plan wykonawczy gotowy",
-   "realnie_od": 5,
-   "realnie_do": 6,
-   "rynkowo_od": 12,
-   "rynkowo_do": 16
-  },
-  {
-   "id": "T-220",
-   "tytul": "Aneks VIN do umowy — generowanie, status i wysyłka do klienta",
-   "opis": "Umowa bywa podpisywana, zanim znany jest numer VIN — w umowie leasingowej jest to zapisane wprost („VIN zostanie dodany aneksem po weryfikacji auta”). Dziś aneks powstaje ręcznie poza systemem. Po zmianie: w karcie zamówienia, przy dokumentach, dochodzi przycisk „Generuj aneks VIN” — aktywny dopiero gdy numer VIN jest wpisany. Powstaje gotowy PDF w szacie Prima-Auto; samo wygenerowanie niczego nie wysyła. Osobno, obok statusu zamówienia, pojawia się pole „Aneks VIN” (brak / wygenerowany / wysłany) — przełączasz je ręcznie, gdy aneks jest gotowy, a klient dostaje wtedy powiadomienie i pobiera aneks w tym samym miejscu co umowę. Zamówienie nie traci przy tym swojego etapu (auto „w drodze” dalej jest „w drodze”). Aneks to ścieżka wyjątkowa: przy płatności depozytu online klient wiąże się przed umową, więc VIN zwykle znamy już przy jej generowaniu i umowa wychodzi od razu z numerem. Zakres aneksu na teraz: wyłącznie numer VIN (potwierdzone 27.07) — ale generator budujemy tak, żeby w przyszłości dało się dołożyć aneksy do innych pól (cena, termin, specyfikacja) bez przebudowy. Jeden szablon obsługuje obie umowy (pośrednictwa i leasingową) — różni je tylko odwołanie do zmienianego punktu. Dodatkowo: gdy umowa jest generowana bez VIN-u, w polu VIN drukuje się „Numer VIN zostanie uzupełniony w formie aneksu do niniejszej umowy” zamiast dzisiejszej kreski.",
-   "status": "wzorzec aneksu przeanalizowany (27.07), zakres i sposób działania uzgodnione — gotowe do budowy",
-   "realnie_od": 5,
-   "realnie_do": 7,
-   "rynkowo_od": 12,
-   "rynkowo_do": 18
-  },
-  {
-   "id": "T-221",
-   "tytul": "Regulamin usługi i strona o depozycie — domknięcie przed uruchomieniem płatności online",
-   "opis": "Przy okazji prac nad płatnościami online sprawdziliśmy dokumenty na stronie. Od prawnika są dwa regulaminy i oba dotyczą wyłącznie korzystania ze strony internetowej — ten opublikowany mówi wprost, że usługi są nieodpłatne. Nie istnieje żaden dokument regulujący samą usługę: depozyt, zasady i terminy zwrotu, reklamację usługi, odstąpienie konsumenta. Przygotowaliśmy więc treść regulaminu usługi (w konwencji dokumentów prawnika, żeby domykał jego pakiet, a nie przepisywał jego pracy) oraz stronę wyjaśniającą klientowi, czym jest depozyt, kiedy wraca i komu dokładnie płaci. Strona o depozycie trafi w okolice przycisku płatności w kreatorze — dokładnie w momencie, w którym klient decyduje o wpłacie i ma najwięcej wątpliwości. Obie strony są już napisane i opublikowane pod własnymi adresami (na razie bez linków i bez indeksowania) — ta praca jest ujęta w sekcji „Zrealizowane”. Sprawa z operatorem płatności jest załatwiona — dostęp produkcyjny mamy od 06.08. Zostały trzy rzeczy porządkowe: dopisanie operatora płatności do polityki prywatności (wymóg ochrony danych od chwili, gdy zaczynamy pobierać płatności), udostępnienie obu stron w serwisie i podlinkowanie ich z kreatora oraz usunięcie sprzeczności ze starym regulaminem, który wciąż mówi o nieodpłatnych usługach. Korekta strony „Finansowanie” czeka na Twoją odpowiedź w sprawie modelu płatności.",
-   "status": "dokumenty napisane i opublikowane 27.07; dostęp produkcyjny do operatora płatności uzyskany 06.08 — nie blokuje już płatności online, zostały trzy zadania porządkowe",
-   "realnie_od": 2,
-   "realnie_do": 3,
-   "rynkowo_od": 5,
-   "rynkowo_do": 8,
-   "pytania": [
-    "Na depozyt wystawiana jest pełna faktura VAT. Do potwierdzenia przez księgowość, czy depozyt jest księgowany jako kaucja zabezpieczająca (co do zasady poza VAT), czy jako zaliczka na poczet usługi — od tego zależy sposób dokumentowania zwrotu.",
-    "Strona „Finansowanie” obiecuje model „30% zaliczki przy podpisaniu + 70% na 10 dni przed portem”, którego nie ma w żadnej z umów. Który model jest aktualny? Poprawimy treść pod odpowiedź."
-   ],
-   "linki": [
+  "changelog": [
     {
-     "tekst": "Regulamin usługi",
-     "url": "https://primaauto.com.pl/regulamin-uslugi/"
+      "data": "03.09.2026",
+      "tytul": "Słownik pojęć — 23 nowe hasła powiązane z filtrami wyszukiwarki",
+      "opis": "Nowe hasła tłumaczące wyposażenie, po którym można teraz filtrować (dach panoramiczny, tylna oś skrętna, ekrany dla pasażerów, Dolby Atmos i inne). Każde hasło pokazuje, ile aut z tą funkcją mamy w ofercie, i prowadzi do gotowej listy w wyszukiwarce. Przy okazji naprawione: odnośniki do słownika w opisach aut były niewidoczne, a dwanaście haseł nie pojawiało się na liście słownika.",
+      "wersje": "",
+      "godz": 4
     },
     {
-     "tekst": "Strona o depozycie",
-     "url": "https://primaauto.com.pl/depozyt/"
+      "data": "02.09.2026",
+      "tytul": "Wyszukiwarka zaawansowana — filtrowanie po wyposażeniu i parametrach",
+      "opis": "Nowa strona wyszukiwarki obok dotychczasowego katalogu: filtrowanie po nadwoziu, napędzie, stylu i 36 elementach wyposażenia (masaże, lidar, kamery, nagłośnienie, dach panoramiczny). Wybór jednego filtru od razu pokazuje, co jest jeszcze dostępne, a wynik dzieli się na auta do sprowadzenia, w drodze i stojące w Polsce. Osobny układ na telefon. Podlinkowana ze strony głównej, katalogu, menu i stopki.",
+      "wersje": "",
+      "godz": 24
+    },
+    {
+      "data": "02.09.2026",
+      "tytul": "Wyposażenie aut z katalogu producenta — trzecie źródło danych",
+      "opis": "Nocne uzupełnianie danych o wyposażeniu z katalogu producenta dla aut, którym brakowało opisu. Auta z pełną listą wyposażenia: z 52% do 98%. To fundament, bez którego filtrowanie po wyposażeniu nie miałoby po czym szukać.",
+      "wersje": "",
+      "godz": 3
+    },
+    {
+      "data": "01.09.2026",
+      "tytul": "YouTube — odzyskany dostęp do kanału i pomiar źródeł ruchu",
+      "opis": "Odzyskany dostęp do kanału i sprawdzenie, skąd bierze się jego oglądalność.",
+      "wersje": "",
+      "godz": 2
+    },
+    {
+      "data": "31.08.2026",
+      "tytul": "Google Ads — audyt kampanii, przebudowa budżetów, kampania wideo",
+      "opis": "Przegląd wszystkich kampanii, przesunięcie budżetów tam, gdzie realnie przychodzą kontakty, uruchomienie kampanii wideo Demand Gen oraz automatyczny strażnik pilnujący, żeby reklamy nie prowadziły na nieistniejące strony.",
+      "wersje": "",
+      "godz": 6
+    },
+    {
+      "data": "28.08.2026",
+      "tytul": "Reklamy Meta — odblokowanie konta i katalog aut",
+      "opis": "Zdjęta blokada, która nie pozwalała wyświetlać reklam w Polsce, weryfikacja domeny i uruchomienie katalogu aut z podziałem na dostępne w Polsce, w drodze i do sprowadzenia.",
+      "wersje": "",
+      "godz": 6
+    },
+    {
+      "data": "26.08.2026",
+      "tytul": "Dostępność serwisu — pełna zgodność WCAG 2.2 AA",
+      "opis": "Domknięcie poprawek dostępności po audycie, sprawdzone osobno na telefonie i na komputerze. Serwis spełnia wszystkie stosowalne kryteria WCAG 2.2 AA — wymóg ustawy o dostępności obowiązujący od czerwca 2025.",
+      "wersje": "",
+      "godz": 4
+    },
+    {
+      "data": "25.08.2026",
+      "tytul": "Montaż 12 filmów — 6 poziomych i 6 pionowych",
+      "opis": "Z materiału nagranego dzień wcześniej w Rzeszowie zmontowane 12 filmów: sześć poziomych prezentacji aut i sześć krótkich pionowych pod format Shorts, z oprawą graficzną i planszą końcową — ten sam standard, co przy pierwszej serii z lipca. Dwa kadry tego samego auta to nie duplikat: pionowy zbiera zasięg w rekomendacjach YouTube, poziomy służy jako kreacja reklamowa i materiał do wysłania klientowi. Filmy są gotowe do publikacji na kanale i do wykorzystania w kampaniach wideo.",
+      "godz": 5
+    },
+    {
+      "data": "25.08.2026",
+      "tytul": "Postprodukcja zdjęć z sesji",
+      "opis": "Obróbka około 130 zdjęć sześciu aut pod trzy zastosowania: miniatury filmów, materiały do reklam graficznych oraz zdjęcia realnych egzemplarzy na strony modeli. Zdjęcia własne zamiast fotografii producenta to różnica w wiarygodności — pokazują konkretny samochód stojący na placu, nie render z katalogu.",
+      "godz": 2.5
+    },
+    {
+      "data": "24.08.2026",
+      "tytul": "Sesja zdjęciowa i filmowa na placu w Rzeszowie",
+      "opis": "Druga sesja na placu, po lipcowej. Materiał filmowy do sześciu aut, każde nagrane w dwóch kadrach — poziomym i pionowym — plus dokumentacja zdjęciowa egzemplarzy, około 130 ujęć. Trzy godziny zdjęć na miejscu i dojazd w obie strony.",
+      "godz": 4.5
+    },
+    {
+      "data": "21.08.2026",
+      "tytul": "Opisy ogłoszeń po polsku — naprawa tłumaczenia",
+      "opis": "Część opisów przy ogłoszeniach wyświetlała się po chińsku, a znacznie większa część urywała się w połowie zdania — na przykład „Trzynaście lat skupienia na samochodach w dobrym stanie! Shunxiang: 200 starannie wyselekcjonowanych” i koniec. Klient wchodzący w takie ogłoszenie widział tekst, który nagle się urywa, albo znaki, których nie przeczyta.\n\nPrzyczyna leżała w automacie tłumaczącym opisy z chińskiego. Program, który wykonuje tłumaczenie, dostawał zbyt ciasny limit na odpowiedź i większość tego limitu zużywał na wewnętrzne rozważania, zanim zdążył napisać tłumaczenie — zostawało mu miejsce na kilka pierwszych zdań. Gdy nie zostawało nic, do ogłoszenia trafiał oryginalny chiński tekst. Wyłączyliśmy te rozważania (przy tłumaczeniu opisu handlowego nie są do niczego potrzebne) i poszerzyliśmy limit. Dołożyliśmy też zabezpieczenie: jeśli tłumaczenie wróci ucięte, system je odrzuca zamiast wstawiać do ogłoszenia.\n\nPrzy okazji sprawdziliśmy, czy nie taniej byłoby użyć zwykłego tłumacza maszynowego zamiast programu rozumiejącego kontekst. Porównanie na dziewięciu prawdziwych opisach pokazało, że nie: zwykły tłumacz zamienia markę Voyah na „Lantu” (chińska nazwa, której klient nie skojarzy z naszą ofertą), z zapisu „czarny lakier, beżowe wnętrze” robi „czarne nadwozie i wnętrze”, a rocznik 2024 potrafi przeczytać jako „24 sztuki”. W jednym opisie zgubił cały akapit o zakupie na raty. Zostajemy przy dotychczasowym rozwiązaniu — po poprawce działa też pięć razy szybciej i taniej niż przed nią.\n\nPoprawka obejmuje wszystkie ogłoszenia, które wchodzą od teraz. Dodatkowo przetłumaczyliśmy ponownie 162 najświeższe ogłoszenia. Starszych świadomie nie ruszamy — przy naszej rotacji ofert i tak schodzą z serwisu w ciągu kilku dni.",
+      "wersje": "wtyczka 0.34.24",
+      "godz": 1
+    },
+    {
+      "data": "20.08.2026",
+      "tytul": "Płatność online za depozyt — bramka PayU uruchomiona",
+      "opis": "Na stronie zamówienia działa płatność online za depozyt zwrotny: kod BLIK wpisywany bez opuszczania naszej strony, a obok przycisk płatności kartą i przelewem online przez PayU. Wcześniej pozostawał wyłącznie zwykły przelew bankowy — klient musiał wyjść ze zgłoszenia, otworzyć bankowość i przepisać dane.\n\nDroga do uruchomienia zajęła kilka tygodni i nie całą po naszej stronie. Mechanizm był gotowy i sprawdzony na koncie testowym już 10 sierpnia — pełna ścieżka od zgłoszenia do potwierdzenia wpłaty przeszła bez błędu. Na koncie produkcyjnym płatności jednak nie ruszały i dopiero mail z działu weryfikacji PayU wyjaśnił dlaczego: konto było w trakcie weryfikacji, nie chodziło o nasz kod. PayU postawiło dwa warunki — dokumenty tożsamości po Twojej stronie oraz komplet informacji na stronie: polityka zwrotów i reklamacji, adres do kontaktu, czas rozpatrzenia reklamacji, maksymalny czas realizacji zamówienia w dniach roboczych, pełne dane firmy i wskazanie administratora danych osobowych.\n\nUzupełniliśmy to wszystko: regulamin usługi dostał maksymalny czas realizacji (20 dni roboczych od skompletowania dokumentów), a regulamin, polityka prywatności i strona o depozycie trafiły do stopki i menu, żeby weryfikator — i klient — trafiał na nie z każdej strony bez szukania. Przygotowaliśmy też odpowiedź na pytania działu weryfikacji PayU o model biznesowy i przedmiot płatności, z wyjaśnieniem, że pobierany jest wyłącznie zwrotny depozyt za usługę organizacji importu, oraz zrzut ekranu płatności — widać ją dopiero po założeniu zgłoszenia, więc weryfikator przeglądający stronę anonimowo by jej nie zobaczył.\n\nOd 20 sierpnia bramka jest włączona na produkcji. Samej wpłaty nie testowaliśmy — to prawdziwe pieniądze, więc decyzja o próbnej płatności należy do Was; zamówienie testowe na 1 zł czeka gotowe. Godziny obejmują obie części: mechanizm płatności i pakiet dokumentów wymaganych przez PayU. Zostawiamy zapas na poprawki, które wyjdą, gdy przez bramkę przejdą pierwsi klienci.",
+      "godz": 27,
+      "task": [
+        "T-121",
+        "T-221"
+      ]
+    },
+    {
+      "data": "20.08.2026",
+      "tytul": "Dostępność strony — poprawki po audycie",
+      "godz": 3,
+      "opis": "Serwis przeszedł audyt dostępności (16 adresów, 55 kryteriów normy WCAG 2.2) i wdrożyliśmy poprawki. Najważniejsza dotyczy osób, które poruszają się po stronie klawiaturą zamiast myszy: na liście aut siedemnaście kolejnych elementów nie pokazywało, gdzie użytkownik się aktualnie znajduje — dziś każdy z nich ma widoczną obwódkę. Baner zgód przestał zasłaniać element, na którym stoi kursor klawiatury. Poprawiony został kontrast tekstów pomocniczych i rozmiar drobnych elementów dotykowych: automatyczny pomiar na sześciu stronach pokazuje 266 usterek przed zmianą i 15 po niej, a te 15 to jeden powtarzający się przypadek — czerwień marki jako drobny tekst na szarym tle, o włos poniżej progu. Zostawiliśmy ją świadomie: zmiana tego odcienia dotknęłaby cen, przycisków i linków w całym serwisie.\n\nDwie uwagi audytu okazały się nieprawdziwe — wskazywały pole wyszukiwarki i przycisk logowania jako pozbawione opisu, a oba opisy są w kodzie i widzi je czytnik ekranu. Sprawdziliśmy to narzędziem przeglądarki, z którego korzystają czytniki. Zgodności nie orzekamy sami — stronę ogląda ponownie audytor.",
+      "task": [
+        "T-246"
+      ]
+    },
+    {
+      "data": "20.08.2026",
+      "tytul": "Przycisk filtrów na telefonie — widoczny i podpisany",
+      "godz": 1,
+      "opis": "Na liście aut na telefonie przycisk otwierający filtry był najsłabszym elementem paska — szary napis „Filtry”, słabszy wizualnie niż sortowanie obok, mimo że przy blisko 80% ruchu z telefonów to główne wejście do zawężania listy. Dziś jest w kolorze marki, z białym napisem „Marka / model”, więc od razu widać, co się pod nim kryje. Żeby dłuższy napis się zmieścił, skróciliśmy etykiety sortowania do „Najnowsze / Najtańsze / Najdroższe” — przy okazji przestał się ucinać licznik znalezionych ofert, który na wąskich telefonach znikał już wcześniej.",
+      "task": [
+        "T-247"
+      ]
+    },
+    {
+      "data": "19.08.2026",
+      "tytul": "Pomiar efektów wcześniejszych prac i porządek w kampaniach",
+      "godz": 4,
+      "opis": "Domknęliśmy cztery zaległe sprawdzenia: czy zmiany z lipca dowiozły to, co miały. Punkt odniesienia dla wszystkich liczb: w porównywanym okresie czterech tygodni cała strona urosła z 3 738 do 12 913 wejść z Google, czyli ponad trzykrotnie. Bez tego tła każdy wzrost pojedynczej strony wygląda jak sukces poprawki, a często jest tylko falą całego serwisu.\n\nPolskie znaki w pytaniach i odpowiedziach na stronach modeli: przed poprawką jedna trzecia wpisów była uszkodzona, dziś zero na blisko tysiąc sprawdzonych rekordów. Strony modeli po przepisaniu tytułów i opisów: klikalność w wynikach wyszukiwania wzrosła wyraźnie powyżej średniej serwisu na trzech z siedmiu badanych (Shark 6, Li Auto, Xiaomi YU7).\n\nPo stronie reklam powstała jedna mapa wszystkich kampanii — co jest włączone, na co kieruje, ile kosztuje — zamiast rozproszonej wiedzy w panelu. Przy jej robieniu wyszło, że dziewięć kampanii miało wśród celów subskrypcję kanału YouTube. Google optymalizował je więc pod subskrypcje, a nie pod telefon, WhatsApp i formularz. Cel został zdjęty ze wszystkich dziewięciu.",
+      "task": [
+        "T-192",
+        "T-193",
+        "T-198",
+        "T-203"
+      ]
+    },
+    {
+      "data": "18.08.2026",
+      "tytul": "Drugie źródło ogłoszeń — pełne dopięcie i praca równoległa obu kanałów",
+      "godz": 76,
+      "opis": "Podsumowanie długiego wątku, który ciągnie się od czerwca: budowy drugiego, niezależnego źródła ogłoszeń obok dotychczasowego. Powód jest prosty — jeden dostawca to jeden punkt awarii, co boleśnie potwierdziło się w tym roku dwa razy.\n\nCo przez ten czas powstało: ręczny import pojedynczego ogłoszenia z podanego adresu, automatyczne pobieranie co kwadrans z filtrami, które ustaliliśmy (rocznik, przebieg, próg ceny, lista miast), słownik marek i modeli tłumaczący chińskie nazwy na nasze — trafność automatycznego dopasowania auta do właściwej strony modelu podniosła się z 61% do ponad 98%, wyposażenie dociągane z katalogu producenta tam, gdzie giełda podaje samą listę podstawową, wykluczanie pojedynczych modeli w panelu oraz przeglądarka ofert z podglądem ceny w złotówkach i importem jednym kliknięciem.\n\nSierpień zszedł na utrzymaniu ciągłości. Dostawca drugiego kanału od 12 sierpnia przestał przysyłać nowe ogłoszenia — reklamacja leży u niego bez odpowiedzi, a strona przez ten czas nie dostawała nowych aut z żadnej strony. Wróciliśmy więc do pełnego pobierania z pierwszego kanału i od tej pory oba pracują równolegle. Uruchomiliśmy też nocne uzupełnianie danych technicznych: gdy nowe ogłoszenie przychodzi z okrojoną specyfikacją, system szuka bliźniaczej sztuki tej samej wersji i rocznika i dolewa brakujące pozycje, nigdy nie nadpisując tego, co już jest. Przy pierwszym uruchomieniu uzupełniło się 30 aut, średnio o ponad 300 pozycji wyposażenia każde. Doszło zabezpieczenie przed przypisaniem auta do niewłaściwej strony modelu przy odświeżaniu oferty oraz porządek w nazwach — 128 nieużywanych wpisów usuniętych z katalogu.\n\n24 sierpnia doszła naprawa po zmianie u dostawcy drugiego kanału. Bez uprzedzenia zaczął podawać w polu wersji wyposażenia całą nazwę auta zamiast samego oznaczenia wersji. Widać to było w tytułach ogłoszeń — nazwa modelu powtarzała się dwa razy, na przykład „Geely Galaxy L7 2024 Geely Galaxy L7 2023 1.5T 115km MAX”. Objęło to 1256 ogłoszeń z 34 marek, wszystkie dodane po 19 sierpnia. Zmieniliśmy sposób odczytu tak, żeby oznaczenie wersji brać z katalogu producenta, a nie z pola dostawcy, i poprawiliśmy tytuły wszystkich dotkniętych ogłoszeń. Adresy stron zostały nietknięte, więc pozycje w wyszukiwarce na tym nie ucierpiały. Przy okazji wyszło, że Geely Galaxy M9 wchodził jako osobna marka „Galaxy”, bo brakowało go w słowniku nazw — uzupełniliśmy, a jedno auto przepięliśmy na właściwą stronę modelu.\n\nTego samego dnia doszło sterowanie kanałami z panelu. Do tej pory każde źródło ogłoszeń można było tylko włączyć albo wyłączyć, a wyłączenie zatrzymywało również odświeżanie tego, co już jest na stronie — ceny stały w miejscu, a auta sprzedane u źródła zostawały w ofercie jako dostępne. Teraz każdy kanał ma trzy stany: pełne pobieranie, samo odświeżanie i wyłączony. Środkowy stan przydaje się, gdy oba kanały działają naraz: jeden dowozi nowe auta, drugi nie dokłada nic nowego, ale swoją dotychczasową ofertę trzyma w aktualności i sam wycofuje sztuki, które zeszły ze sprzedaży. Nie dublujemy wtedy napływu, który kosztuje transfer i limity u dostawców, a oferta nie starzeje się w tle. Gdy któryś dostawca znów przestanie działać — a w tym roku zdarzyło się to obu — drugi wraca do pełnego pobierania jednym kliknięciem, bez zmian w kodzie.\n\nGodziny obejmują cały wątek od czerwca poza tym, co pokazaliśmy już we wpisie z 20 lipca. Praca nie jest domknięta — zostaje dostrojenie filtrów po Twoich testach i wyjaśnienie sprawy z dostawcą.",
+      "task": [
+        "T-185",
+        "T-186",
+        "T-222"
+      ]
+    },
+    {
+      "data": "10.08.2026",
+      "tytul": "Maile do klientów w nowej szacie i naprawa linku do zamówienia",
+      "godz": 14,
+      "opis": "Szesnaście wiadomości wysyłanych klientom — od potwierdzenia zgłoszenia po informacje o kolejnych etapach — dostało jednolitą szatę: nagłówek z aktualnym statusem, pasek pokazujący, na którym etapie jest zamówienie, stopka z danymi firmy i podpis z telefonem. Do każdej dołączana jest wersja tekstowa, żeby wiadomość wyświetliła się poprawnie także w starszych programach pocztowych i nie wpadała w spam. Maile przychodzące do Was zostają bez zmian, w prostej formie.\n\nPrzy okazji naprawiliśmy dwie usterki w linku, którym klient wchodzi ze swojego maila prosto do zamówienia. Link działał tylko raz — po pierwszym otwarciu przestawał, więc powrót do wiadomości kończył się komunikatem o błędzie; wystarczyło też, że skaner poczty firmowej otworzył go przed człowiekiem. Drugi błąd był gorszy: klient z dwoma zamówieniami tracił dostęp do pierwszego, bo nowy link kasował poprzedni. Dziś każde zamówienie ma własny link, ważny 48 godzin i działający wielokrotnie. Linki wysłane wcześniej nadal działają — nic nie umarło w skrzynkach klientów.",
+      "task": [
+        "T-209",
+        "T-244"
+      ]
+    },
+    {
+      "data": "07.08.2026",
+      "tytul": "Plan automatycznej dystrybucji materiałów na kanały społecznościowe",
+      "opis": "Rozpoznanie i plan wykonawczy dla obiegu, w którym zdjęcia i filmy z sesji na placu trafiają na wszystkie kanały bez ręcznego klikania: wskazujesz auto w panelu, a system przygotowuje gotowe posty z ceną w tytule, opisem, hashtagami i linkiem do konkretnej oferty, i wstawia je do kalendarza jako zaplanowane — do zatwierdzenia, zmiany albo skasowania przed publikacją. Przy okazji policzyliśmy, ile poszczególne kanały realnie dowożą: przez ostatnie 90 dni Facebook przysłał 1 310 wejść i 30 kontaktów, czyli dokładnie tyle, co płatna kampania remarketingowa — tyle że za darmo. Sprawdziliśmy też publiczny rejestr reklam Meta i wiemy już na pewno, że osoba, która przejęła konto w czerwcu, nigdy nie użyła Waszej strony do reklam — chodziło jej o konto rozliczeniowe, nie o Waszych obserwujących. Powstał komplet dokumentów: opis rozwiązania z podziałem na osiem etapów i wyceną, instrukcja uporządkowania dostępów do kont wysłana do Prima-Auto oraz rejestr decyzji do podjęcia.",
+      "godz": 4,
+      "task": [
+        "T-243"
+      ]
+    },
+    {
+      "data": "06.08.2026",
+      "tytul": "Numer VIN w umowie i aneks do umowy",
+      "opis": "Dwie zmiany składające się na jeden obieg dla aut, przy których numer VIN poznajemy dopiero po weryfikacji. Po pierwsze: umowa bierze teraz VIN wyłącznie z pola w zamówieniu. Wcześniej system podstawiał numer z ogłoszenia, przez co wyczyszczone pole nie miało skutku — numer wracał do dokumentu przy każdej regeneracji, a zapis karty zamówienia (choćby po zmianie prowizji) po cichu utrwalał niezweryfikowany numer sprzedającego. Numer z oferty jest teraz pokazany obok pola, opisany jako niezweryfikowany, z przyciskiem „Wstaw”. Po drugie: aneks uzupełniający VIN powstaje w panelu, a nie ręcznie poza systemem — przycisk „Generuj aneks VIN” w sekcji dokumentów, aktywny dopiero gdy w zamówieniu jest pełny, siedemnastoznakowy numer. Dokument ma szatę umowy, mieści się na jednej stronie i odwołuje się do numeru oraz daty umowy; obsługuje oba wzorce (pośrednictwo i leasing). Samo wygenerowanie nie wysyła nic — mail z aneksem w załączniku wychodzi dopiero po świadomym przestawieniu znacznika na „wysłany”. Przy okazji umowa pośrednictwa bez VIN-u zapowiada teraz aneks zamiast drukować kreskę, a ucięte numery z chińskich ogłoszeń przestały wchodzić do dokumentów. Umowy z wpisanym VIN-em wyglądają dokładnie jak dotąd — potwierdzone porównaniem wygenerowanych plików co do znaku.",
+      "godz": 9,
+      "task": [
+        "T-220",
+        "T-242"
+      ]
+    },
+    {
+      "data": "06.08.2026",
+      "tytul": "Promocja z Terenwizją na stronie głównej",
+      "opis": "Na stronie głównej, zaraz pod wyszukiwarką, pojawiła się informacja o promocji: szkolenie off-road z Terenwizją i film pamiątkowy na ich kanale do pierwszego terenowego SUV-a 4x4 sprowadzonego z Chin, którego nie ma jeszcze nikt w Polsce. Przycisk prowadzi wprost do 670 samochodów z napędem 4x4 w naszej ofercie.\n\nNiżej doszła osobna sekcja „Nasze auta w Terenwizji” z testem Leoparda 5, który został kupiony w Prima-Auto — mówi o tym sam właściciel w materiale. Kanał ma 394 tys. subskrybentów, a ten jeden film 249 tys. wyświetleń, więc to mocny dowód, że sprowadzane przez nas auta jeżdżą i są testowane w Polsce. Sekcja jest przygotowana tak, żeby przy nowym filmie wystarczyło podmienić materiał, bez przebudowy strony.\n\nOsobno zapisana wzmianka o haśle „Terenwizja” przy ładowarce i filtrach nie wymagała zmian na stronie — oba elementy są już standardowo w cenie każdego auta i tak to na stronie opisujemy.",
+      "wersje": "wtyczka 0.34.20",
+      "godz": 1,
+      "task": [
+        "T-239"
+      ]
+    },
+    {
+      "data": "05.08.2026",
+      "tytul": "Porządek cen i tytułów na stronach modeli",
+      "opis": "Ceny w tytułach dwunastu stron modeli rozjechały się z tym, co realnie mamy w ofercie. Część kusiła kwotą niższą niż w bazie — klient klikał obietnicę i widział drożej; część zawyżała i odbierała nam przewagę cenową w wynikach wyszukiwania. Łączny rozjazd to 156 000 zł. Wszystkie ceny zsynchronizowane z realną ceną wejścia.\n\nNa trzech stronach (Denza Z9 GT, Zeekr 9X, Zeekr 8X) Google podmieniał nasz tytuł na własny i pokazywał wynik bez ceny, czyli bez naszego najmocniejszego argumentu. Przyczyną był rozjazd między tytułem a nagłówkiem na stronie — uzupełnione nagłówki naprawiły to u źródła. Odświeżone też opisy dwudziestu czterech stron.\n\nPrzy okazji poprawiona nieprawdziwa informacja na stronie Denzy Z9 GT, że model dopiero wchodzi do polskiej dystrybucji. Jest już w oficjalnym konfiguratorze producenta za 526 320 zł, wobec naszych 197 000 zł — to porównanie weszło wprost w treść razem z odpowiedzią na pytanie, ile ten model kosztuje.",
+      "wersje": "",
+      "godz": 1,
+      "task": [
+        "T-238"
+      ]
+    },
+    {
+      "data": "05.08.2026",
+      "tytul": "Rankingi rynkowe w dziale wiedzy — siedem zestawień",
+      "opis": "Ruszył dział rankingów. Siedem zestawień opartych na realnej sprzedaży na rynku chińskim za czerwiec 2026 oraz na danych katalogowych: najchętniej kupowane SUV-y, sedany, vany i MPV, elektryki o największym zasięgu, auta z największą baterią, najszybsze i najdroższe.\n\nKażda tabela ma kolumnę „u nas”: przy modelach, które mamy w ofercie, pokazuje liczbę sztuk i cenę od, i prowadzi wprost do ogłoszeń. To jest sedno tego rozwiązania — czytelnik szukający „co się najlepiej sprzedaje w Chinach” trafia na zestawienie i od razu widzi, które z tych aut może kupić u nas.\n\nDane sprawdzone z niezależnym źródłem: sprzedaż NIO ES8 za czerwiec wyszła 8 966 sztuk wobec 8 969 podawanych gdzie indziej, czyli różnica 0,03%. Daty publikacji wpisów są rozsunięte w czasie, żeby dział wyglądał na prowadzony regularnie, a nie wrzucony jednego dnia. Mechanizm jest powtarzalny — kolejne rankingi powstają z gotowego szablonu, bez pisania od zera.",
+      "wersje": "",
+      "godz": 4,
+      "task": [
+        "T-229",
+        "T-230"
+      ]
+    },
+    {
+      "data": "04.08.2026",
+      "tytul": "Porządkowanie treści w całym serwisie — marki, karty aut, słownik pojęć",
+      "opis": "Dzień pracy nad tym, co klient czyta na stronie, w pięciu obszarach — łącznie 7 h.\n\nStrona „Chińskie marki samochodów” była dotąd samą siatką nazw z licznikami — jedno zdanie tekstu i nic więcej. Przez trzy miesiące zebrała 631 wyświetleń w Google i tylko 2 wejścia, mimo że samo hasło ma 5400 wyszukań miesięcznie. Teraz tłumaczy rynek: kto do kogo należy (osiem koncernów i ich marki), czym są marki tworzone razem z Huawei, dlaczego Volvo i MG to dziś marki chińskie. Doszły zdjęcia sześciu aut z naszej oferty, odpowiedzi na najczęstsze pytania i oznaczenie koncernu przy każdej marce — widać od razu, że Denza należy do BYD, a Hongqi do FAW. Z listy zniknęły Volkswagen, Toyota, Mazda i pozostałe marki globalne, bo nie są chińskie; ich własne strony działają bez zmian. Kolejność „najpopularniejszych” liczy się teraz z liczby aut w ofercie — wcześniej Volkswagen z ośmioma sztukami stał przed Hongqi ze stu dziewiętnastoma. (1 h)\n\nSłownik pojęć urósł do 89 haseł. Piętnaście nowych opisuje rzeczy, które klient widzi w tabeli danych technicznych, a które nigdzie nie były wyjaśnione: rodzaje zawieszenia, hamulce, nadwozie samonośne i ramowe, brak skrzyni biegów w samochodzie elektrycznym, radar, mapy Amap i procesory kokpitu. Dla skali: 74 wcześniejsze hasła przyniosły w ostatnim miesiącu 2330 wyświetleń w Google. (3 h)\n\nSprawdziliśmy wszystkie 58 marek w ofercie pod kątem kompletności treści. Sześć nie miało żadnego opisu, dziewięć pytań i odpowiedzi, jedenaście zdania wprowadzającego. Najgorzej wypadły Maxus i Foton — marki wyszukiwane w Polsce odpowiednio 9900 i 8100 razy miesięcznie. Obie mają teraz pełne strony, podobnie jak BAW, Shangjie i Dongfeng Fengxing. To akurat marki obsługujące segmenty, o które ludzie pytają najczęściej, a my ich nie opisywaliśmy: Foton to pickupy, BAW terenówki, Shangjie kombi elektryczne. (1 h)\n\nSekcja „Dane podstawowe” na stronie auta zaczynała się od rocznika i od razu przechodziła do wymiarów — brakowało odpowiedzi na najprostsze pytanie, czym ten samochód właściwie jest. Teraz otwiera ją marka, model, wersja wyposażenia, rok i kolor nadwozia; dane uzupełniają się same również dla aut dodawanych ręcznie. Poprawiliśmy też dobór pojęć podlinkowanych do słownika: wcześniej system tłumaczył „rok modelowy”, teraz w pierwszej kolejności to, co przy chińskich autach naprawdę wymaga wyjaśnienia — zasięg CLTC, typ ogniw czy producenta baterii. (1 h)\n\nNa koniec uporządkowaliśmy to, co obiecujemy klientowi w opisach aut. Powstawały w różnym czasie i rozjechały się ze stronami informacyjnymi. W 372 miejscach poprawiliśmy trzy rzeczy: transport morski podawany jako 4–6 tygodni (na stronie „Proces zamawiania” jest 6–8), obietnicę odbioru auta „z polskimi tablicami” (a strona o rejestracji mówi wprost, że wniosek składa klient) oraz opis procedury dopuszczenia do ruchu, który wskazywał niewłaściwy organ. Przyjęliśmy zasadę, że w opisach aut piszemy o tym, co klient dostaje, a nie jak przebiega nasz proces — szczegóły się zmieniają, a poza tym to informacja dla konkurencji. (1 h)",
+      "wersje": "wtyczka 0.34.18, motyw 1.2.1",
+      "godz": 7
+    },
+    {
+      "data": "03.08.2026",
+      "tytul": "Strona o leasingu — od zera do widocznej w całym serwisie",
+      "opis": "Powstała osobna strona „Leasing samochodu z Chin”, która tłumaczy całą ścieżkę: kto dobiera firmę leasingową, co robimy my, co robi klient, jak wygląda kolejność od wyboru auta do odbioru, ile trwa przygotowanie samochodu i co wchodzi w cenę. Treść przeszła przez Pana korektę i weszła w Pana brzmieniu.\n\nSama strona to jednak dopiero połowa roboty — dotąd nikt nie miał jak na nią trafić. Dlatego leasing pojawia się teraz w trzech miejscach, w których klient faktycznie się zatrzymuje. Po pierwsze: na 2174 ofertach zdanie „Możliwy leasing” pod ceną stało się linkiem — to dokładnie ten moment, gdy ktoś patrzy na kwotę i się waha. Po drugie: na 317 stronach modeli doszedł krótki blok „{model} leasing”, bo w Google ludzie szukają właśnie tak — „zeekr 9x leasing”, „geely monjaro leasing”. Po trzecie: link w stopce na każdej stronie i na stronie o finansowaniu.\n\nŚwiadomie nie wpisaliśmy na stronach modeli żadnych kwot ani procentów. Ceny się zmieniają wraz z rotacją ofert, a wysokość depozytu jest ustawieniem, które zmienia się w panelu — gdyby te liczby siedziały w treści 317 stron, każda zmiana oznaczałaby 317 stron mówiących nieprawdę. Wszystkie warunki są w jednym miejscu, na stronie o leasingu.\n\nStrona została też zgłoszona do Google i dopisana do plików, z których korzystają ChatGPT i podobne narzędzia — tak, żeby na pytanie „czy auto z Chin można wziąć w leasing” istniała nasza odpowiedź.",
+      "wersje": "wtyczka 0.34.16, motyw 1.2.0",
+      "godz": 7,
+      "task": [
+        "T-219"
+      ]
+    },
+    {
+      "data": "30.07.2026",
+      "tytul": "Umowa leasingowa generowana z panelu — drugi wzorzec obok umowy pośrednictwa",
+      "opis": "Umowa leasingowa jest już generowana przez system. Do tej pory trzeba ją było składać ręcznie w Wordzie, a numer nadawać poza kolejnością — od teraz wybiera się ją na karcie zamówienia jednym polem „Wzorzec umowy” i dokument powstaje tak samo jak umowa pośrednictwa: z danymi z zamówienia, w naszej szacie graficznej, z załącznikiem ze specyfikacją auta.\n\nTreść prawna jest odtworzona z podpisanego egzemplarza co do słowa — zmieniliśmy wyłącznie skład i wygląd. Umowy leasingowe mają własną numerację (UL/2026/0001 i dalej), niezależną od dotychczasowej — dzięki temu w żadnej z dwóch numeracji nie robią się dziury. Dochodzi też osobny rachunek bankowy do depozytu leasingowego, ustawiany w panelu obok dotychczasowego; rachunek przy umowie pośrednictwa zostaje bez zmian. Depozyt zabezpieczający podpowiada się jako 10% ceny auta i można go poprawić ręcznie na konkretnym zamówieniu.\n\nDoszła też ochrona przed pomyłką w numerze VIN. Zdarza się, że dostawca podaje numer ucięty (np. „HACRA0B3XS1S…”) — wcześniej taka wartość wchodziła do dokumentu jako prawdziwy numer nadwozia. Teraz umowa leasingowa rozpoznaje numer niepełny i wpisuje w to miejsce zapis z wzorca o uzupełnieniu numeru aneksem po weryfikacji auta.\n\nCała dotychczasowa ścieżka została sprawdzona pod kątem tego, czy nic się nie zepsuło: umowy pośrednictwa generują się dokładnie tak samo jak przed zmianą (porównane znak po znaku na pięciu zamówieniach), a możliwość wgrania własnej umowy zamiast generowanej działa bez zmian, również przy zamówieniach leasingowych.",
+      "wersje": "",
+      "godz": 9,
+      "task": [
+        "T-217"
+      ]
+    },
+    {
+      "data": "29.07.2026",
+      "tytul": "Auta dodane ręcznie 28.07 — uporządkowanie marek, uzupełnienie danych i strony modeli",
+      "opis": "Sprawdziliśmy jedenaście aut dodanych ręcznie poprzedniego dnia. Cztery z nich trafiły pod nieistniejące marki i ich strony modeli nie otwierały się wcale — Google widziało komunikat o braku strony. Przyczyna: przy autach marek, których wcześniej nie mieliśmy w bazie, system zakłada markę sam, z chińskiej nazwy. Naprawione i zabezpieczone na przyszłość: te marki są już opisane w słowniku systemu, więc kolejne auta wejdą poprawnie.\n\nPrzy okazji poprawiliśmy nazwy modeli pod to, czego ludzie realnie szukają w Google. Dwa pickupy Fotona były opisane chińską nazwą Mars — na eksport te same auta nazywają się Tunland V9 i V7, a tej nazwy szuka się w Polsce kilkadziesiąt razy częściej. Rozdzieliliśmy też auto Dongfenga: strona modelu stała pod marką Mengshi, której prawie nikt nie wpisuje, podczas gdy nazwy M-Hero szuka się regularnie. Stare adresy przekierowane, żeby nic nie zginęło z dotychczasowej pozycji w Google.\n\nUzupełniliśmy dane techniczne wszystkich jedenastu aut. Chiński dostawca przy autach dostawczych i pickupach oddaje niemal puste specyfikacje — jedno auto miało dosłownie jedną pozycję. Pobraliśmy pełne dane z katalogu producenta i rozszerzyliśmy słownik tłumaczeń parametrów, dzięki czemu auta użytkowe mają teraz od 43 do 93 pozycji zamiast kilku, a osobowe od 120 do 181. To działa również dla wszystkich przyszłych aut.\n\nOsiem nowych stron modeli dostało pełny opis: wstęp z ceną, sekcje o dostępności w Polsce, wyposażeniu i porównaniu z europejską konkurencją oraz pytania i odpowiedzi. Przy Mercedesie EQE SUV pokazujemy wprost różnicę: w polskim salonie od 436 400 zł, u nas 262 000 zł. Przy vanie Toyoty opisaliśmy jawnie, że nadwozie ma podwyższony dach od chińskiego producenta zabudów — kupujący powinien to wiedzieć przed obejrzeniem auta. Wszystkie zmienione strony zgłoszone do Google.",
+      "wersje": "",
+      "godz": 1
+    },
+    {
+      "data": "27.07.2026",
+      "tytul": "Umowa leasingowa i aneks VIN — analiza dokumentów, regulamin usługi i strona o depozycie",
+      "opis": "Przeanalizowaliśmy podpisany egzemplarz umowy leasingowej oraz wzorzec aneksu VIN i ustaliliśmy, jak obie rzeczy mają działać w systemie: drugi szablon umowy generowany obok obecnego (treść bez zmian, tylko nasz skład), aneks VIN uzupełniający już wygenerowaną umowę oraz osobny status informujący o nim klienta. Przy okazji prac nad płatnością online sprawdziliśmy dokumenty prawne na stronie — okazało się, że oba regulaminy od prawnika dotyczą wyłącznie korzystania ze strony, a opublikowany mówi wprost, że usługi są nieodpłatne. Nie ma dokumentu opisującego samą usługę i depozyt, co blokuje uruchomienie płatności BLIK/kartą. Przygotowaliśmy treść regulaminu usługi oraz stronę wyjaśniającą klientowi depozyt (czym jest, kiedy wraca, komu płaci, faktura VAT) — obie czekają na akceptację i weryfikację prawnika. Zaplanowaliśmy też, jak ma wyglądać płatność depozytu: przycisk pojawia się od razu po potwierdzeniu zamówienia, z informacją, że zgłoszenia z opłaconym depozytem realizujemy w pierwszej kolejności.",
+      "wersje": "",
+      "godz": 6,
+      "task": [
+        "T-217",
+        "T-220",
+        "T-221"
+      ]
+    },
+    {
+      "data": "25.07.2026",
+      "tytul": "Nowe kampanie na YouTube: budowa, naprawa kierowania i zasady doboru kanałów",
+      "opis": "Uruchomiliśmy dwie nowe kampanie wideo na YouTube — bez powiększania budżetu, przez przesunięcie pieniędzy z reklam dynamicznych. Pierwsza celuje w świeży ruch: ludzi, którzy szukają haseł o imporcie aut z Chin i odwiedzają strony konkurencji, z wykluczeniem osób, które już były na naszej stronie (tych obsługuje remarketing, nie chcemy płacić dwa razy za tę samą osobę). Druga pokazuje nasze filmy bezpośrednio przy materiałach konkretnych kanałów motoryzacyjnych. Do obu przygotowane reklamy wideo z linkiem do konkretnej oferty oraz reklama karuzelowa z czterema autami z placu.\n\nPierwsza doba pokazała, że pierwsza kampania trafiała w zupełnie nie tę widownię: prawie 30% wyświetleń i 39% kosztu zjadły kanały z bajkami dla dzieci, a kanały motoryzacyjne dostały dokładnie jedno wyświetlenie. Przyczyną była funkcja Google, która na własną rękę „poszerza” grupę odbiorców — nasza lista haseł i stron konkurencji dostała 6 wyświetleń z 2632, całą resztę rozdał automat. Wyłączyliśmy poszerzanie, wykluczyliśmy 47 kanałów dziecięcych i rozbudowaliśmy treści reklam, bo Google dławi wyświetlenia reklamom mającym jeden nagłówek. Reklamy chodzą teraz od 6:00 do 1:00 i na widownię 25+.\n\nDruga kampania dwa dni w ogóle nie startowała, bo stawka za obejrzenie była poniżej progu aukcji — podniesiona do 0,10 zł, z limitem 3 wyświetleń na osobę tygodniowo, żeby nie męczyć tych samych ludzi. Ustaliliśmy też zasady doboru kanałów, na których się pokazujemy: polskie, 10–60 tys. subskrybentów, tematyka chińskie marki / elektryki / import, a częstotliwość publikacji ważniejsza od liczby subskrybentów. Największe kanały motoryzacyjne (100–450 tys. subskrybentów) świadomie odpuszczone: przy naszym budżecie utoniemy tam, płacąc najwyższe stawki, a ten sam pieniądz daje dwa razy więcej obejrzeń na mniejszych kanałach tematycznych. Kanały bezpośredniej konkurencji zostawiamy niezależnie od ich zasięgu.",
+      "wersje": "",
+      "godz": 4,
+      "task": [
+        "T-201"
+      ]
+    },
+    {
+      "data": "24.07.2026",
+      "tytul": "Konfiguracja kanału YouTube i publikacja 8 filmów",
+      "opis": "Wszystkie filmy opublikowane z tytułami zawierającymi cenę w złotych — nikt w tej niszy tego nie robi, a to filtruje widzów na tych, którzy realnie pytają o zakup, zamiast zbierać przypadkowe wyświetlenia. W pierwszej linii opisu link do konkretnej oferty, pod nim odnośnik do strony modelu, żeby ruch z YouTube wpadał nie tylko na jedno auto, ale na cały wybór. Do tego konfiguracja samego kanału: słowa kluczowe, linki do najważniejszych stron, trzy poziomy dostępności w opisach (auta od ręki na placu, auta kupione w drodze do Polski, katalog do importu) oraz dwie publiczne playlisty — „Auta na placu w Rzeszowie” i „W drodze do Polski”. Uzupełnione tagi i ujednolicona komunikacja: wszędzie występujemy jako bezpośredni importer.\n\nEfekt bez wsparcia reklamowego: w dwie doby filmy zebrały ponad 3800 wyświetleń, z czego trzy czwarte przypadło na krótkie formaty pionowe. Udział reklam w tym ruchu to niecałe 300 obejrzeń — resztę dał sam YouTube.",
+      "wersje": "",
+      "godz": 4,
+      "task": [
+        "T-201",
+        "T-215"
+      ]
+    },
+    {
+      "data": "24.07.2026",
+      "tytul": "Montaż 8 filmów — 4 poziome i 4 pionowe",
+      "opis": "Z materiału nagranego w Rzeszowie zmontowane 8 filmów: 4 poziome prezentacje aut i 4 krótkie pionowe pod format Shorts, z oprawą graficzną i planszą końcową. Dwa formaty tego samego auta to nie duplikat — pionowy zbiera zasięg w rekomendacjach YouTube, poziomy służy jako kreacja reklamowa i materiał do wysłania klientowi.",
+      "wersje": "",
+      "godz": 3,
+      "task": [
+        "T-201"
+      ]
+    },
+    {
+      "data": "23.07.2026",
+      "tytul": "Postprodukcja zdjęć z sesji",
+      "opis": "Obróbka około 50 zdjęć pod dwa zastosowania: miniatury filmów oraz materiały do reklam graficznych. Zdjęcia własne zamiast fotografii producenta to różnica w wiarygodności — pokazują konkretny egzemplarz stojący na placu, nie render z katalogu.",
+      "wersje": "",
+      "godz": 2
+    },
+    {
+      "data": "23.07.2026",
+      "tytul": "Sesja zdjęciowa i filmowa na placu w Rzeszowie",
+      "opis": "Materiał filmowy do czterech aut (Leopard 5 w dwóch wersjach, Jetour T2, Exeed VX) w wariantach poziomym i pionowym, plus dokumentacja zdjęciowa placu. To pierwsze materiały spełniające standardy jakościowe — nadają się zarówno jako media reklamowe, jak i pod pozostałe kanały social.",
+      "wersje": "",
+      "godz": 4
+    },
+    {
+      "data": "22.07.2026",
+      "tytul": "Leksykon rozbudowany do 74 haseł i spięty z ofertą",
+      "opis": "Hasła dobierane nie „z głowy”, tylko z realnych danych: policzyliśmy, ile aut w naszej bazie faktycznie ma daną funkcję (np. sterowanie głosem bez wybudzania — 2494 auta, rozpoznawanie twarzy — 1706, mapy HD — 314) i o tych funkcjach napisaliśmy. Najważniejsza zmiana to powiązanie wiedzy ze sprzedażą w obie strony: fachowe pojęcie pojawiające się w opisie oferty staje się teraz automatycznie linkiem do wyjaśnienia w Leksykonie, a na stronie hasła wyświetla się sekcja „auta z tą technologią” z kartami konkretnych ofert z magazynu. Klient czytający, czym jest dana funkcja, jednym kliknięciem widzi auta, które ją mają. Doszły też okruszki nawigacyjne na stronach haseł i poprawiony tytuł działu w wynikach Google.",
+      "wersje": "v0.34.0",
+      "godz": 4,
+      "task": [
+        "T-214"
+      ]
+    },
+    {
+      "data": "22.07.2026",
+      "tytul": "Aktualności: pełna automatyzacja i kontrola jakości",
+      "opis": "Newsy publikują się teraz same, bez akceptacji mailem — mail przychodzi już tylko jako podsumowanie tego, co poszło na stronę. Do artykułów wchodzą dodatkowe zdjęcia dobrane z galerii źródła, a podpis pod zdjęciem podaje autora tylko wtedy, gdy źródło go jawnie deklaruje — nigdy „na wyczucie”. Przed włączeniem automatu na noc przepuściliśmy przez niego 12 archiwalnych newsów jako próbkę i wyłapaliśmy siedem rodzajów usterek, każdą naprawiono: linki prowadzące do koncernu zamiast do właściwej submarki (BYD Denza, Great Wall Tank), błędne przypisanie autorstwa zdjęć (6 z 9 podpisów było źle), zachęta do zakupu doklejana do newsa o wadzie fabrycznej, niespójne nazewnictwo skrótów. Powstał też automatyczny kontroler, który po każdej publikacji sprawdza artykuł w dziewięciu punktach i zgłasza odstępstwa. Sprawdzone zostało również, jak newsy widzi Google: mapa strony dla wiadomości została jawnie zgłoszona w Search Console, dane strukturalne artykułów są kompletne, pierwsze artykuły zaindeksowały się w ciągu doby.",
+      "wersje": "v0.34.0",
+      "godz": 5,
+      "task": [
+        "T-214"
+      ]
+    },
+    {
+      "data": "21.07.2026",
+      "tytul": "Nowy dział wiedzy: Leksykon i Aktualności",
+      "opis": "Serwis dostał dwie zupełnie nowe sekcje, obie zaprojektowane pod wyszukiwarkę i pod klienta, który dopiero poznaje chińskie auta. Leksykon (/wiki/) — słownik pojęć, które pojawiają się w opisach naszych aut, a których polski kupujący zwykle nie zna: rodzaje baterii, systemy asystujące, normy, technologie napędu. Każde hasło to pełne wyjaśnienie (4-7 tys. znaków), sekcja pytań i odpowiedzi zbudowana z realnych pytań zadawanych w Google, zdjęcie z galerii auta, które tę funkcję faktycznie ma. Hasła powstają automatycznie, ale każde przechodzi recenzję techniczną i korektę językową, zanim trafi na stronę. Aktualności — codzienny automat: o 6:45 przegląda branżowe źródła z Chin, wybiera newsy dotyczące marek z naszej oferty, przygotowuje polski tekst z okładką z oficjalnych materiałów prasowych i weryfikuje fakty (ceny, wymiary, moce) ze źródłem, zanim cokolwiek opublikuje. Do tego: pozycja „Wiedza” w menu, zajawka najnowszych artykułów na stronie głównej, obie sekcje dopisane do pliku dla robotów AI (llms.txt), własny układ graficzny stron.",
+      "wersje": "v0.34.0, motyw 1.1.0-1.1.1",
+      "godz": 9,
+      "task": [
+        "T-214"
+      ]
+    },
+    {
+      "data": "20.07.2026",
+      "tytul": "Che168: analiza danych i filtr modeli (etap testów)",
+      "opis": "Duża analiza danych giełdy Che168 pod kątem roczników 2024-2026: przekrój 3550 ofert z 46 marek. Wynik: przygotowany zaawansowany filtr importu — oprócz marek można wykluczać pojedyncze modele (niesprzedajne), z pełnym słownikiem modeli pobieranym z API. Do tego 33 nowe mapowania modeli na polskie nazwy i huby (m.in. Leapmotor T03, Li Auto L7/L8, Smart #1/#3, Xiaomi YU7, Jetour Traveller) — trafność automatycznego dopasowania ofert wzrosła z 61% do ok. 81%. Funkcja przechodzi teraz testy wewnętrzne; po okresie prób zostanie udostępniona w panelu. Wdrożona została też przeglądarka ofert Che168: wybór dowolnej marki z giełdy, zawężanie do modeli, karty ze zdjęciami, podgląd z wyceną w złotówkach i import jednym kliknięciem — również w testach wewnętrznych.",
+      "wersje": "v0.33.37, v0.33.38",
+      "godz": 5.5,
+      "task": [
+        "T-185",
+        "T-186"
+      ]
+    },
+    {
+      "data": "20.07.2026",
+      "tytul": "Przebudowa panelu zamówień",
+      "opis": "Lista zamówień dostała trzy filtry działające razem: rodzaj zamówienia (klientów / wewnętrzne / wszystkie), status z pełnej listy oraz przełącznik „ukryj anulowane”, domyślnie włączony. Po wejściu w panel widać od razu 41 realnych zamówień klientów zamiast 140 pozycji zmieszanych z anulowanymi i magazynowymi — anulowane to dziś 38 ze 140 zamówień, a po stronie klientów aż 35 z 76. Liczniki przy filtrach same się przeliczają. Kolumny „depozyt” i „CIF” połączone w jedną czytelną (kwota po najechaniu kursorem), poprawione łamanie numeru zamówienia. Na telefonie zamiast rozjeżdżającej się tabeli — karty ze zdjęciem auta i kompletem informacji, bez przewijania na boki. Na jednej stronie mieści się teraz 30 zamówień zamiast 20.",
+      "wersje": "v0.33.33, v0.33.36",
+      "godz": 3.5
+    },
+    {
+      "data": "20.07.2026",
+      "tytul": "Naprawa błędu zamówień po usuniętych ofertach + zabezpieczenie na przyszłość",
+      "opis": "Przy okazji przebudowy panelu wyszło, że 27 zamówień (16 wciąż aktywnych) nie dawało się otworzyć — pojawiał się komunikat o błędzie krytycznym. Powód: ogłoszenia tych aut zostały wcześniej usunięte z bazy przy automatycznym sprzątaniu ofert, a karta zamówienia nie była na to przygotowana. Błąd istniał od dawna, tylko trudno było na te zamówienia trafić. Karta otwiera się teraz normalnie i wyjaśnia, co się stało — dane zamówienia (ceny, klient, umowa, historia) są nienaruszone, brakuje jedynie zdjęcia i nazwy auta, które rozpoznać można po linku źródłowym. Druga, ważniejsza część: automat sprzątający nie usunie już ogłoszenia, do którego przypisane jest niezakończone zamówienie. Wcześniej chronione były tylko auta zarezerwowane, w drodze i na placu — auto czekające na weryfikację mogło zniknąć. Ochrona zwalnia się sama po anulowaniu zamówienia. W chwili wdrożenia 5 ogłoszeń czekało już w koszu na skasowanie.",
+      "wersje": "v0.33.34, v0.33.35",
+      "godz": 1
+    },
+    {
+      "data": "18.07.2026",
+      "tytul": "Porządki w widoczności stron modeli w Google",
+      "opis": "Naprawione adresy kanoniczne 6 stron modeli — część wskazywała Google model innego producenta (Haval H6 → Hongqi H6, Wey 07 → Avatr 07, GAC M8 → AITO M8); weryfikacja objęła 436 wariantów adresów. Usunięta zdublowana lista /oferta/ (sklejała pełne opisy kolejnych aut = duplikat treści) i strona-spis /informacje/, która konkurowała ze stroną główną o frazę „import samochodów z Chin”. Zgłoszone do Google 200 adresów (auta na placu i w drodze + świeże oferty) plus automat nadrabiający zaległe oferty. Audyt potwierdził, że strony modeli są zdrowe — dają 91% ruchu, Geely Monjaro pojawia się w odpowiedziach AI Google.",
+      "wersje": "v0.33.32",
+      "godz": 3
+    },
+    {
+      "data": "17.07.2026",
+      "tytul": "Reklamy dynamiczne — zasięg, stabilność i pomiar na żywo",
+      "opis": "Reklamy wyświetlały się tylko w 2 województwach i 6 miastach — rozszerzone na całą Polskę, bo auto dostarczamy pod dom w całym kraju. Zatrzymana codzienna rotacja reklamowanych ofert: automat podmieniał sztukę na „najtańszą”, ale w 6 na 7 przypadków różnica ceny wynosiła 0 zł (przerzucanie między bliźniakami), a każda podmiana kosztuje kilka dni przetwarzania po stronie Google — teraz oferta zostaje w reklamach, dopóki auto jest dostępne. Uruchomiony podgląd ruchu i kontaktów na żywo z podziałem na kampanie.",
+      "wersje": "",
+      "godz": 3,
+      "link": {
+        "url": "https://auratest.pl/pa-live-8aaf08d6ece0db176603/",
+        "tekst": "→ Podgląd ruchu na żywo"
+      }
+    },
+    {
+      "data": "17.07.2026",
+      "tytul": "Analiza wzorca umowy leasingowej",
+      "opis": "Przegląd wzorca „Umowy organizacji importu samochodu” pod leasing (konstrukcja trójstronna: Prima-Auto, firma leasingowa, klient). Zmapowane pola, kwoty i miejsca w systemie wymagające zmian — podstawa do wyceny zadania T-217. Uruchomiona też niniejsza strona postępu prac.",
+      "godz": 1,
+      "task": [
+        "T-217"
+      ]
+    },
+    {
+      "data": "16.07.2026",
+      "tytul": "Blok „Inne egzemplarze tego modelu” na stronach ofert",
+      "opis": "Każda oferta pokazuje teraz karty innych egzemplarzy tego samego modelu, posortowane od najtańszego, z przejściem do pełnej listy z cenami. Klient od razu widzi tańsze i inne wersje, zamiast wracać do katalogu. Działa na 2990+ ofertach, także na telefonie.",
+      "wersje": "v0.33.28–29",
+      "godz": 4,
+      "task": [
+        "T-187"
+      ]
+    },
+    {
+      "data": "16.07.2026",
+      "tytul": "Elementy zaufania na stronie oferty",
+      "opis": "Nad opisem auta pojawiło się zdanie o łącznej cenie „pod klucz” (bez ukrytych dopłat) oraz pasek atutów — m.in. „Możliwy leasing”. Moment oglądania oferty dostał pierwsze dowody wiarygodności.",
+      "wersje": "v0.33.30–31",
+      "godz": 2
+    },
+    {
+      "data": "16.07.2026",
+      "tytul": "Reklamy dynamiczne Google (DSA) — celowanie w najtańsze oferty",
+      "opis": "Feed reklam przestawiony ze stron modeli na najtańszą aktualną ofertę każdego modelu, z automatyczną codzienną aktualizacją. Do tego nowa treść reklamy (wymiana jednej z dwóch kreacji).",
+      "wersje": "",
+      "godz": 3
     }
-   ]
-  },
-  {
-   "id": "T-240",
-   "tytul": "Indywidualne strony modeli tam, gdzie mamy własne materiały",
-   "opis": "Wszystkie 317 stron modeli powstaje dziś z jednego szablonu i jest odświeżanych automatycznie — ceny, liczba sztuk i parametry aktualizują się same, bo oferta rotuje codziennie. To jest zaleta, ale zamyka drogę do ręcznego dopracowania pojedynczej strony: przy najbliższym automatycznym przebiegu taka praca zostałaby nadpisana. Modele, przy których mamy własne zdjęcia, filmy i materiały wideo, zasługują na bogatsze potraktowanie niż reszta katalogu, więc do rozstrzygnięcia zostaje, jak pogodzić jedno z drugim: dane mają dalej rotować automatem, a warstwa opisowa i zdjęciowa pozostać nietknięta. Ile takich stron ma sens i ile to kosztuje, będziemy wiedzieć po pierwszym przebiegu na Leopardzie 5.",
-   "status": "kierunek do rozstrzygnięcia — wycena po pierwszym przebiegu na Leopardzie 5"
-  },
-  {
-   "id": "T-253",
-   "tytul": "Termin dostawy ustawiany osobno dla każdego zamówienia",
-   "opis": "Liczba dni dostawy, która trafia do umowy, jest dziś jedna dla całego systemu — ustawiona raz w konfiguracji. Kiedy przy konkretnym aucie trzeba wpisać inny termin, jedyną drogą jest zmiana ustawienia globalnego, wygenerowanie umowy i cofnięcie ustawienia z powrotem. Przy kilku zamówieniach prowadzonych równolegle łatwo o pomyłkę: umowa wystawiona w międzyczasie dostanie termin przeznaczony dla innego klienta.\n\nPo zmianie w karcie zamówienia, obok numeru VIN, pojawia się pole z liczbą dni. Domyślnie podpowiada wartość z ustawień, więc przy zwykłym zamówieniu nic nie trzeba robić. Gdy termin ma być inny, wpisujesz go w tym jednym zamówieniu i umowa generuje się z tą liczbą — bez ruszania ustawień i bez wpływu na pozostałe zamówienia. Przy okazji naprawiamy rozjazd, przez który kreator zamówienia pokazuje klientowi inną liczbę dni niż ta, która ostatecznie wchodzi do umowy.",
-   "status": "zgłoszone 04.09.2026 — rozpoznane w kodzie, dane są już zapisywane przy zamówieniu, brakuje samego pola do edycji",
-   "realnie_od": 1,
-   "realnie_do": 2,
-   "rynkowo_od": 3,
-   "rynkowo_do": 4
-  },
-  {
-   "id": "T-248",
-   "tytul": "Śledzenie statku — numer przesyłki w zamówieniu i status przewoźnika przy aucie w drodze",
-   "opis": "Kiedy zamówienie wchodzi w etap „w drodze”, klient wie tylko tyle, że auto płynie. O termin dopytuje mailem albo telefonem, a żeby odpowiedzieć, ktoś po Waszej stronie musi zajrzeć do dokumentów przewoźnika i przepisać to, co tam widać.\n\nPo zmianie w karcie zamówienia dochodzi pole na numer przesyłki od przewoźnika (numer kontenera lub listu przewozowego Maersk). Po jego wpisaniu system sam pyta przewoźnika o stan przesyłki i przy statusie „w drodze” pokazuje aktualne dane: gdzie jest ładunek, jaki port jest następny i jaka jest przewidywana data przypłynięcia. Widzi to Ruslan w panelu i klient przy swoim zamówieniu — bez telefonu do Was. Dane odświeżają się same, więc przesunięcie terminu przez armatora dociera do klienta bez Waszego udziału.\n\nDo sprawdzenia przed wyceną: na jakich zasadach Maersk udostępnia dane śledzenia dla naszych przesyłek — od tego zależy zakres i koszt. Wariant zapasowy, gdyby dostęp do danych okazał się niedostępny lub płatny ponad sens: pole na numer przesyłki plus link prowadzący klienta wprost do śledzenia u przewoźnika, bez przepisywania statusu na naszą stronę. Do ustalenia też, czy poza Maerskiem korzystacie z innych armatorów — obsługa kolejnego przewoźnika to osobna praca.",
-   "status": "zgłoszone 24.08.2026 — wycenione wstępnie, zakres do potwierdzenia po sprawdzeniu dostępu do danych Maersk",
-   "realnie_od": 3,
-   "realnie_do": 3,
-   "rynkowo_od": 7,
-   "rynkowo_do": 9
-  },
-  {
-   "id": "T-243",
-   "tytul": "Automatyczna dystrybucja zdjęć i filmów na wszystkie kanały społecznościowe",
-   "opis": "Po każdej sesji na placu powstaje komplet materiałów: zdjęcia każdego auta i filmy w dwóch kadrach, poziomym i pionowym. Dziś opublikowanie ich to robota ręczna — ktoś musi wymyślić tytuł, opis i hashtagi, dobrać właściwy kadr do platformy i wrzucić plik osobno na Facebooka, Instagrama, YouTube'a i TikToka. Przy sesji z dziesięcioma autami to kilka godzin klikania, a część materiałów nigdy nie wychodzi. Na Facebooku posty powstają ręcznie do dziś.\n\nPo zmianie wskazujesz auto w panelu i dostajesz gotowy komplet postów na wszystkie kanały — z ceną w tytule, opisem, hashtagami i linkiem prowadzącym wprost do tej oferty. Materiały z nowej sesji zgłaszają się same, z folderu na Dysku. Posty trafiają do kalendarza jako zaplanowane, więc widzisz je z wyprzedzeniem i możesz je zmienić, przesunąć albo skasować, zanim się ukażą — nic nie publikuje się bez Twojej wiedzy. System pilnuje też rytmu: nie wypuści dwóch postów o tym samym aucie pod rząd, a w tygodniach bez nowych dostaw sam zaproponuje powtórkę wcześniejszych ofert w nowym ujęciu, żeby kanały nie milczały.\n\nDrugi powód, dla którego to się liczy: materiał trzeba najpierw opublikować, żeby móc go promować. Film wgrany na YouTube można wypromować kampanią wideo, post na Facebooku można podbić, rolkę na TikToku wypuścić w reklamę. Post, którego nie ma, nie jest kandydatem do promocji. Dziś każda taka publikacja kosztuje osobną sesję pracy, więc materiał z sesji trafia do reklam w ułamku.\n\nDo tego jedna wspólna strona z podglądem: co poszło na który kanał, co czeka w kolejce, co się nie udało i jak to zadziałało. Dziś tego widoku nie ma nigdzie.\n\nPodział na osiem etapów. Pierwszy — uporządkowanie dostępów do kont — jest po Waszej stronie i blokuje resztę; instrukcja jest gotowa. Osobny, mały etap to czujnik pilnujący, czy ruch z Facebooka nie zamarł — bo dziś nikt nas o tym nie powiadomi. Wersja, która realnie zdejmuje ręczną robotę na Facebooku i Instagramie, to 57–75 godzin; YouTube, TikTok, podgląd wyników i rotacja dochodzą po kolei.",
-   "status": "spec i instrukcja dostępów gotowe — czeka na uporządkowanie uprawnień do kont",
-   "realnie_od": 89,
-   "realnie_do": 119,
-   "rynkowo_od": 225,
-   "rynkowo_do": 300
-  },
-  {
-   "id": "T-249",
-   "tytul": "Dokumenty w zamówieniu — wymiana plików z klientem i lista dokumentów oczekiwanych",
-   "opis": "Dziś dokumenty krążą mailem i WhatsAppem. Strona przyjmuje od klienta dokładnie dwa pliki — podpisaną umowę i potwierdzenie wpłaty — i to tylko w krótkim oknie, na etapie umowy. Po podpisaniu klient nie ma już gdzie niczego wysłać, a Ty możesz wgrać do zamówienia wyłącznie własną umowę PDF. Nie da się przy pliku napisać, czym on jest.\n\nPo zmianie: Ty dodajesz do zamówienia dowolny dokument z własnym opisem, klient tak samo — również później, kiedy auto jest już w drodze albo na placu. Zamówienie pokazuje obu stronom listę dokumentów, których jeszcze brakuje: co jest potrzebne, kto to dostarcza i czy już wpłynęło. Dokument przysłany przez klienta możesz przyjąć albo odrzucić z powodem — powód widzi klient, więc poprawia bez telefonu. Na liście zamówień od razu widać, w których czegoś brakuje.\n\nPrzy okazji domykamy sprawę ochrony tych plików. Sprawdziliśmy 2.09: przy zamówieniach wisi 68 dokumentów — umowy z danymi osobowymi i podpisami klientów — i każdy z nich otworzy się bez logowania, jeśli ktoś zna dokładny adres pliku. Chroni je dziś tylko to, że w nazwie jest losowy ciąg znaków. Po zmianie dokument otworzy wyłącznie osoba zalogowana: Ty albo właściciel tego zamówienia. Stare pliki przenosimy razem z resztą, nic nie przepada.\n\nZadanie wymaga wcześniejszego zbudowania konta klienta (pozycja wyżej) — dokumenty mają swoje stałe miejsce dopiero tam, gdzie klient się loguje. Przed startem ustalamy z Tobą jedną rzecz: jakie dokumenty realnie krążą w cyklu importu i na którym etapie — z tego powstaje lista, którą system pilnuje.",
-   "status": "zgłoszone 02.09.2026 — plan i wycena gotowe; wymaga wcześniejszego zbudowania konta klienta",
-   "realnie_od": 45,
-   "realnie_do": 60,
-   "rynkowo_od": 110,
-   "rynkowo_do": 145,
-   "pytania": [
-    "Jakie dokumenty realnie krążą przy imporcie poza umową i potwierdzeniem wpłaty — i na którym etapie każdy z nich jest potrzebny? Z tej listy powstaje wykaz, którego system pilnuje przy każdym zamówieniu.",
-    "Jak długo mamy trzymać dokumenty klienta po zakończeniu zamówienia?"
-   ]
-  }
- ],
- "todo_ukryte_id": [
-  "T-121",
-  "T-187",
-  "T-209",
-  "T-220",
-  "T-186",
-  "T-116"
- ],
- "todo_pierwsze": [
-  "T-205"
- ],
- "todo_po_nowych": []
+  ],
+  "todo_nowe": [
+    {
+      "id": "T-241",
+      "tytul": "Zdjęcia i filmy z sesji — wykorzystanie na stronach modeli i w reklamach",
+      "opis": "Po każdej sesji zdjęciowej na placu powstaje komplet materiałów konkretnych egzemplarzy: zdjęcia w kilku kolorach i filmy w dwóch kadrach — poziomym i pionowym. Dziś te materiały trafiają wyłącznie na YouTube i do reklam, a strony modeli zostają na zdjęciach z chińskich placów. Po zmianie każda nowa sesja uruchamia jeden powtarzalny cykl: zdjęcia idą na stronę modelu razem z filmami i opisem realnego egzemplarza, świeże kreacje wchodzą do kampanii wideo i Demand Gen, a filmy są publikowane na kanale pojedynczo, dzień po dniu, bo tak utrzymują zasięg. Przy okazji sprawdzamy, które modele z sesji nie mają jeszcze własnej strony.\n\nPierwszy przebieg: BYD Leopard 5. Jego strona przyciąga dziś 3 709 wyświetleń w Google miesięcznie i 228 wejść. Przy zapytaniach o cenę jesteśmy w ścisłej czołówce — przy „denza bao 5 cena” na drugim–trzecim miejscu, przy „denza b5 cena” na pierwszym. Ale przy dwóch najważniejszych hasłach, samym „leopard 5” i „byd leopard 5”, jesteśmy dopiero na piątym i dziewiątym miejscu, a to razem 1 625 wyświetleń, z których dostajemy zaledwie 23 wejścia. Google przy takim zapytaniu szuka strony, która pokazuje realny samochód, a nie opis katalogowy — i dokładnie to mamy: 29 zdjęć obu egzemplarzy z placu, cztery filmy oraz test tego auta w Terenwizji, kanale z 394 tys. subskrybentów, gdzie właściciel mówi wprost, że kupił je u Ciebie.",
+      "status": "materiały z sesji 23.07 uporządkowane (Leopard 5, Exeed VX, Jetour T2) — pierwszy przebieg gotowy do startu",
+      "realnie_od": 3,
+      "realnie_do": 4,
+      "rynkowo_od": 7,
+      "rynkowo_do": 10
+    },
+    {
+      "id": "T-224",
+      "tytul": "Formularz „Zapytaj o leasing” na stronie leasingowej",
+      "opis": "Dziś przycisk na stronie o leasingu prowadzi do zakładki Kontakt, czyli do zwykłego maila. Zapytanie trafia więc do skrzynki i nigdzie się nie zapisuje — nie widać go w panelu, nie da się policzyć, ile osób pyta o leasing i z których modeli przychodzą. Formularz to zmienia: zapytanie ląduje na liście w panelu, przychodzi powiadomienie na maila i zliczamy je jako zapytanie w statystykach. Pod ten sam formularz podepniemy później kalkulator raty (T-189).",
+      "status": "plan wykonawczy gotowy",
+      "realnie_od": 5,
+      "realnie_do": 6,
+      "rynkowo_od": 12,
+      "rynkowo_do": 16
+    },
+    {
+      "id": "T-220",
+      "tytul": "Aneks VIN do umowy — generowanie, status i wysyłka do klienta",
+      "opis": "Umowa bywa podpisywana, zanim znany jest numer VIN — w umowie leasingowej jest to zapisane wprost („VIN zostanie dodany aneksem po weryfikacji auta”). Dziś aneks powstaje ręcznie poza systemem. Po zmianie: w karcie zamówienia, przy dokumentach, dochodzi przycisk „Generuj aneks VIN” — aktywny dopiero gdy numer VIN jest wpisany. Powstaje gotowy PDF w szacie Prima-Auto; samo wygenerowanie niczego nie wysyła. Osobno, obok statusu zamówienia, pojawia się pole „Aneks VIN” (brak / wygenerowany / wysłany) — przełączasz je ręcznie, gdy aneks jest gotowy, a klient dostaje wtedy powiadomienie i pobiera aneks w tym samym miejscu co umowę. Zamówienie nie traci przy tym swojego etapu (auto „w drodze” dalej jest „w drodze”). Aneks to ścieżka wyjątkowa: przy płatności depozytu online klient wiąże się przed umową, więc VIN zwykle znamy już przy jej generowaniu i umowa wychodzi od razu z numerem. Zakres aneksu na teraz: wyłącznie numer VIN (potwierdzone 27.07) — ale generator budujemy tak, żeby w przyszłości dało się dołożyć aneksy do innych pól (cena, termin, specyfikacja) bez przebudowy. Jeden szablon obsługuje obie umowy (pośrednictwa i leasingową) — różni je tylko odwołanie do zmienianego punktu. Dodatkowo: gdy umowa jest generowana bez VIN-u, w polu VIN drukuje się „Numer VIN zostanie uzupełniony w formie aneksu do niniejszej umowy” zamiast dzisiejszej kreski.",
+      "status": "wzorzec aneksu przeanalizowany (27.07), zakres i sposób działania uzgodnione — gotowe do budowy",
+      "realnie_od": 5,
+      "realnie_do": 7,
+      "rynkowo_od": 12,
+      "rynkowo_do": 18
+    },
+    {
+      "id": "T-221",
+      "tytul": "Regulamin usługi i strona o depozycie — domknięcie przed uruchomieniem płatności online",
+      "opis": "Przy okazji prac nad płatnościami online sprawdziliśmy dokumenty na stronie. Od prawnika są dwa regulaminy i oba dotyczą wyłącznie korzystania ze strony internetowej — ten opublikowany mówi wprost, że usługi są nieodpłatne. Nie istnieje żaden dokument regulujący samą usługę: depozyt, zasady i terminy zwrotu, reklamację usługi, odstąpienie konsumenta. Przygotowaliśmy więc treść regulaminu usługi (w konwencji dokumentów prawnika, żeby domykał jego pakiet, a nie przepisywał jego pracy) oraz stronę wyjaśniającą klientowi, czym jest depozyt, kiedy wraca i komu dokładnie płaci. Strona o depozycie trafi w okolice przycisku płatności w kreatorze — dokładnie w momencie, w którym klient decyduje o wpłacie i ma najwięcej wątpliwości. Obie strony są już napisane i opublikowane pod własnymi adresami (na razie bez linków i bez indeksowania) — ta praca jest ujęta w sekcji „Zrealizowane”. Sprawa z operatorem płatności jest załatwiona — dostęp produkcyjny mamy od 06.08. Zostały trzy rzeczy porządkowe: dopisanie operatora płatności do polityki prywatności (wymóg ochrony danych od chwili, gdy zaczynamy pobierać płatności), udostępnienie obu stron w serwisie i podlinkowanie ich z kreatora oraz usunięcie sprzeczności ze starym regulaminem, który wciąż mówi o nieodpłatnych usługach. Korekta strony „Finansowanie” czeka na Twoją odpowiedź w sprawie modelu płatności.",
+      "status": "dokumenty napisane i opublikowane 27.07; dostęp produkcyjny do operatora płatności uzyskany 06.08 — nie blokuje już płatności online, zostały trzy zadania porządkowe",
+      "realnie_od": 2,
+      "realnie_do": 3,
+      "rynkowo_od": 5,
+      "rynkowo_do": 8,
+      "pytania": [
+        "Na depozyt wystawiana jest pełna faktura VAT. Do potwierdzenia przez księgowość, czy depozyt jest księgowany jako kaucja zabezpieczająca (co do zasady poza VAT), czy jako zaliczka na poczet usługi — od tego zależy sposób dokumentowania zwrotu.",
+        "Strona „Finansowanie” obiecuje model „30% zaliczki przy podpisaniu + 70% na 10 dni przed portem”, którego nie ma w żadnej z umów. Który model jest aktualny? Poprawimy treść pod odpowiedź."
+      ],
+      "linki": [
+        {
+          "tekst": "Regulamin usługi",
+          "url": "https://primaauto.com.pl/regulamin-uslugi/"
+        },
+        {
+          "tekst": "Strona o depozycie",
+          "url": "https://primaauto.com.pl/depozyt/"
+        }
+      ]
+    },
+    {
+      "id": "T-240",
+      "tytul": "Indywidualne strony modeli tam, gdzie mamy własne materiały",
+      "opis": "Wszystkie 317 stron modeli powstaje dziś z jednego szablonu i jest odświeżanych automatycznie — ceny, liczba sztuk i parametry aktualizują się same, bo oferta rotuje codziennie. To jest zaleta, ale zamyka drogę do ręcznego dopracowania pojedynczej strony: przy najbliższym automatycznym przebiegu taka praca zostałaby nadpisana. Modele, przy których mamy własne zdjęcia, filmy i materiały wideo, zasługują na bogatsze potraktowanie niż reszta katalogu, więc do rozstrzygnięcia zostaje, jak pogodzić jedno z drugim: dane mają dalej rotować automatem, a warstwa opisowa i zdjęciowa pozostać nietknięta. Ile takich stron ma sens i ile to kosztuje, będziemy wiedzieć po pierwszym przebiegu na Leopardzie 5.",
+      "status": "kierunek do rozstrzygnięcia — wycena po pierwszym przebiegu na Leopardzie 5"
+    },
+    {
+      "id": "T-253",
+      "tytul": "Termin dostawy ustawiany osobno dla każdego zamówienia",
+      "opis": "Liczba dni dostawy, która trafia do umowy, jest dziś jedna dla całego systemu — ustawiona raz w konfiguracji. Kiedy przy konkretnym aucie trzeba wpisać inny termin, jedyną drogą jest zmiana ustawienia globalnego, wygenerowanie umowy i cofnięcie ustawienia z powrotem. Przy kilku zamówieniach prowadzonych równolegle łatwo o pomyłkę: umowa wystawiona w międzyczasie dostanie termin przeznaczony dla innego klienta.\n\nPo zmianie w karcie zamówienia, obok numeru VIN, pojawia się pole z liczbą dni. Domyślnie podpowiada wartość z ustawień, więc przy zwykłym zamówieniu nic nie trzeba robić. Gdy termin ma być inny, wpisujesz go w tym jednym zamówieniu i umowa generuje się z tą liczbą — bez ruszania ustawień i bez wpływu na pozostałe zamówienia. Przy okazji naprawiamy rozjazd, przez który kreator zamówienia pokazuje klientowi inną liczbę dni niż ta, która ostatecznie wchodzi do umowy.",
+      "status": "zgłoszone 04.09.2026 — rozpoznane w kodzie, plan wykonawczy gotowy; robione razem z numerem przesyłki",
+      "realnie_od": 2,
+      "realnie_do": 2,
+      "rynkowo_od": 4,
+      "rynkowo_do": 5
+    },
+    {
+      "id": "T-248",
+      "tytul": "Numer przesyłki w zamówieniu i informacja o transporcie dla klienta",
+      "opis": "Kiedy zamówienie wchodzi w etap „w drodze”, klient wie tylko tyle, że auto płynie. O numer przesyłki dopytuje mailem albo telefonem, a numer nie jest dziś nigdzie zapisany — krąży w korespondencji.\n\nPo zmianie w karcie zamówienia dochodzi pole na numer przesyłki od przewoźnika. Numer zostaje przy zamówieniu na stałe, a obok niego masz gotowy odnośnik do śledzenia u przewoźnika — jedno kliknięcie zamiast szukania w dokumentach. Obok pojawia się przycisk „wyślij informację o transporcie”: klient dostaje maila w naszej oprawie, z numerem przesyłki i przyciskiem do swojego zamówienia. Sam status zamówienia się przy tym nie zmienia — decydujesz, kiedy i czy wysłać.\n\nNumer widzi też klient w swoim zamówieniu, na ekranie transportu, razem z odnośnikiem do śledzenia. Dzięki temu wraca po tę informację na naszą stronę, zamiast szukać jej w starych mailach.\n\nŚwiadomie nie wysyłamy w mailu odnośnika do strony przewoźnika: chcemy, żeby klient zaglądał do swojego zamówienia u nas, gdzie widzi cały postęp, a nie tylko pozycję statku.\n\nAutomatyczne pobieranie danych od armatora (pozycja, następny port, przewidywana data przypłynięcia) wydzieliliśmy do osobnej pozycji — wymaga sprawdzenia, na jakich zasadach Maersk te dane udostępnia, i jest pracą innej skali niż samo pole na numer.",
+      "status": "zgłoszone 24.08.2026, zakres uzgodniony 04.09 — rozpoznane w kodzie, plan wykonawczy gotowy",
+      "realnie_od": 4,
+      "realnie_do": 5,
+      "rynkowo_od": 10,
+      "rynkowo_do": 13,
+      "pytania": [
+        "Jakim przewoźnikiem chodzą przesyłki (Maersk, ktoś jeszcze) i pod jakim adresem sprawdzasz numer? Potrzebujemy adresu, żeby odnośnik do śledzenia składał się sam.",
+        "Co ma być w mailu do klienta poza numerem przesyłki — sama informacja, że auto płynie, czy coś jeszcze (np. przewidywany termin, co się dzieje po przypłynięciu)?"
+      ]
+    },
+    {
+      "id": "T-254",
+      "tytul": "Automatyczne dane od armatora przy aucie w drodze (pozycja, port, data przypłynięcia)",
+      "opis": "Rozwinięcie pozycji o numerze przesyłki. Po wpisaniu numeru system sam pytałby przewoźnika o stan przesyłki i pokazywał w zamówieniu — Tobie i klientowi — gdzie jest ładunek, jaki port jest następny i kiedy przewidywane jest przypłynięcie. Dane odświeżałyby się same, więc przesunięcie terminu przez armatora docierałoby do klienta bez Waszego udziału.\n\nZanim to wycenimy, trzeba sprawdzić, na jakich zasadach Maersk udostępnia dane śledzenia dla Waszych przesyłek — czy w ogóle, czy odpłatnie i z jakimi ograniczeniami. Do ustalenia też, czy poza Maerskiem korzystacie z innych armatorów; obsługa każdego kolejnego to osobna praca.",
+      "status": "wydzielone 04.09.2026 z pozycji o numerze przesyłki — czeka na sprawdzenie dostępu do danych Maersk",
+      "realnie_od": null,
+      "realnie_do": null,
+      "rynkowo_od": null,
+      "rynkowo_do": null
+    },
+    {
+      "id": "T-243",
+      "tytul": "Automatyczna dystrybucja zdjęć i filmów na wszystkie kanały społecznościowe",
+      "opis": "Po każdej sesji na placu powstaje komplet materiałów: zdjęcia każdego auta i filmy w dwóch kadrach, poziomym i pionowym. Dziś opublikowanie ich to robota ręczna — ktoś musi wymyślić tytuł, opis i hashtagi, dobrać właściwy kadr do platformy i wrzucić plik osobno na Facebooka, Instagrama, YouTube'a i TikToka. Przy sesji z dziesięcioma autami to kilka godzin klikania, a część materiałów nigdy nie wychodzi. Na Facebooku posty powstają ręcznie do dziś.\n\nPo zmianie wskazujesz auto w panelu i dostajesz gotowy komplet postów na wszystkie kanały — z ceną w tytule, opisem, hashtagami i linkiem prowadzącym wprost do tej oferty. Materiały z nowej sesji zgłaszają się same, z folderu na Dysku. Posty trafiają do kalendarza jako zaplanowane, więc widzisz je z wyprzedzeniem i możesz je zmienić, przesunąć albo skasować, zanim się ukażą — nic nie publikuje się bez Twojej wiedzy. System pilnuje też rytmu: nie wypuści dwóch postów o tym samym aucie pod rząd, a w tygodniach bez nowych dostaw sam zaproponuje powtórkę wcześniejszych ofert w nowym ujęciu, żeby kanały nie milczały.\n\nDrugi powód, dla którego to się liczy: materiał trzeba najpierw opublikować, żeby móc go promować. Film wgrany na YouTube można wypromować kampanią wideo, post na Facebooku można podbić, rolkę na TikToku wypuścić w reklamę. Post, którego nie ma, nie jest kandydatem do promocji. Dziś każda taka publikacja kosztuje osobną sesję pracy, więc materiał z sesji trafia do reklam w ułamku.\n\nDo tego jedna wspólna strona z podglądem: co poszło na który kanał, co czeka w kolejce, co się nie udało i jak to zadziałało. Dziś tego widoku nie ma nigdzie.\n\nPodział na osiem etapów. Pierwszy — uporządkowanie dostępów do kont — jest po Waszej stronie i blokuje resztę; instrukcja jest gotowa. Osobny, mały etap to czujnik pilnujący, czy ruch z Facebooka nie zamarł — bo dziś nikt nas o tym nie powiadomi. Wersja, która realnie zdejmuje ręczną robotę na Facebooku i Instagramie, to 57–75 godzin; YouTube, TikTok, podgląd wyników i rotacja dochodzą po kolei.",
+      "status": "spec i instrukcja dostępów gotowe — czeka na uporządkowanie uprawnień do kont",
+      "realnie_od": 89,
+      "realnie_do": 119,
+      "rynkowo_od": 225,
+      "rynkowo_do": 300
+    },
+    {
+      "id": "T-249",
+      "tytul": "Dokumenty w zamówieniu — wymiana plików z klientem i lista dokumentów oczekiwanych",
+      "opis": "Dziś dokumenty krążą mailem i WhatsAppem. Strona przyjmuje od klienta dokładnie dwa pliki — podpisaną umowę i potwierdzenie wpłaty — i to tylko w krótkim oknie, na etapie umowy. Po podpisaniu klient nie ma już gdzie niczego wysłać, a Ty możesz wgrać do zamówienia wyłącznie własną umowę PDF. Nie da się przy pliku napisać, czym on jest.\n\nPo zmianie: Ty dodajesz do zamówienia dowolny dokument z własnym opisem, klient tak samo — również później, kiedy auto jest już w drodze albo na placu. Zamówienie pokazuje obu stronom listę dokumentów, których jeszcze brakuje: co jest potrzebne, kto to dostarcza i czy już wpłynęło. Dokument przysłany przez klienta możesz przyjąć albo odrzucić z powodem — powód widzi klient, więc poprawia bez telefonu. Na liście zamówień od razu widać, w których czegoś brakuje.\n\nPrzy okazji domykamy sprawę ochrony tych plików. Sprawdziliśmy 2.09: przy zamówieniach wisi 68 dokumentów — umowy z danymi osobowymi i podpisami klientów — i każdy z nich otworzy się bez logowania, jeśli ktoś zna dokładny adres pliku. Chroni je dziś tylko to, że w nazwie jest losowy ciąg znaków. Po zmianie dokument otworzy wyłącznie osoba zalogowana: Ty albo właściciel tego zamówienia. Stare pliki przenosimy razem z resztą, nic nie przepada.\n\nZadanie wymaga wcześniejszego zbudowania konta klienta (pozycja wyżej) — dokumenty mają swoje stałe miejsce dopiero tam, gdzie klient się loguje. Przed startem ustalamy z Tobą jedną rzecz: jakie dokumenty realnie krążą w cyklu importu i na którym etapie — z tego powstaje lista, którą system pilnuje.",
+      "status": "zgłoszone 02.09.2026 — plan i wycena gotowe; wymaga wcześniejszego zbudowania konta klienta",
+      "realnie_od": 45,
+      "realnie_do": 60,
+      "rynkowo_od": 110,
+      "rynkowo_do": 145,
+      "pytania": [
+        "Jakie dokumenty realnie krążą przy imporcie poza umową i potwierdzeniem wpłaty — i na którym etapie każdy z nich jest potrzebny? Z tej listy powstaje wykaz, którego system pilnuje przy każdym zamówieniu.",
+        "Jak długo mamy trzymać dokumenty klienta po zakończeniu zamówienia?"
+      ]
+    }
+  ],
+  "todo_ukryte_id": [
+    "T-121",
+    "T-187",
+    "T-209",
+    "T-220",
+    "T-186",
+    "T-116"
+  ],
+  "todo_pierwsze": [
+    "T-205"
+  ],
+  "todo_po_nowych": []
 }

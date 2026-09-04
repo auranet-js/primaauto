@@ -87,7 +87,7 @@ footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line);
 <tr>
 <td class="data-col">02.09.2026</td>
 <td><strong>Wyszukiwarka zaawansowana — filtrowanie po wyposażeniu i parametrach</strong> <div class="opis">Nowa strona wyszukiwarki obok dotychczasowego katalogu: filtrowanie po nadwoziu, napędzie, stylu i 36 elementach wyposażenia (masaże, lidar, kamery, nagłośnienie, dach panoramiczny). Wybór jednego filtru od razu pokazuje, co jest jeszcze dostępne, a wynik dzieli się na auta do sprowadzenia, w drodze i stojące w Polsce. Osobny układ na telefon. Podlinkowana ze strony głównej, katalogu, menu i stopki.</div></td>
-<td class="num">14</td></tr>
+<td class="num">24</td></tr>
 <tr>
 <td class="data-col">02.09.2026</td>
 <td><strong>Wyposażenie aut z katalogu producenta — trzecie źródło danych</strong> <div class="opis">Nocne uzupełnianie danych o wyposażeniu z katalogu producenta dla aut, którym brakowało opisu. Auta z pełną listą wyposażenia: z 52% do 98%. To fundament, bez którego filtrowanie po wyposażeniu nie miałoby po czym szukać.</div></td>
@@ -257,7 +257,7 @@ footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line);
 <td><strong>Reklamy dynamiczne Google (DSA) — celowanie w najtańsze oferty</strong> <div class="opis">Feed reklam przestawiony ze stron modeli na najtańszą aktualną ofertę każdego modelu, z automatyczną codzienną aktualizacją. Do tego nowa treść reklamy (wymiana jednej z dwóch kreacji).</div></td>
 <td class="num">3</td></tr>
 </tbody>
-<tfoot><tr><td colspan="2">Razem od spotkania 16.07.2026</td><td class="num">287</td></tr></tfoot>
+<tfoot><tr><td colspan="2">Razem od spotkania 16.07.2026</td><td class="num">297</td></tr></tfoot>
 </table>
 
 <div class="note przed-spotkaniem">Godziny zrealizowane do spotkania 16.07.2026 (etapy 1–2 kosztorysu): <strong>926 h</strong></div>
@@ -300,15 +300,24 @@ Pierwszy przebieg: BYD Leopard 5. Jego strona przyciąga dziś 3 709 wyświetle�
 <tr>
 <td><strong>T-253 — Termin dostawy ustawiany osobno dla każdego zamówienia</strong> <div class="opis"><span class="badge new">nowe</span> Liczba dni dostawy, która trafia do umowy, jest dziś jedna dla całego systemu — ustawiona raz w konfiguracji. Kiedy przy konkretnym aucie trzeba wpisać inny termin, jedyną drogą jest zmiana ustawienia globalnego, wygenerowanie umowy i cofnięcie ustawienia z powrotem. Przy kilku zamówieniach prowadzonych równolegle łatwo o pomyłkę: umowa wystawiona w międzyczasie dostanie termin przeznaczony dla innego klienta.
 
-Po zmianie w karcie zamówienia, obok numeru VIN, pojawia się pole z liczbą dni. Domyślnie podpowiada wartość z ustawień, więc przy zwykłym zamówieniu nic nie trzeba robić. Gdy termin ma być inny, wpisujesz go w tym jednym zamówieniu i umowa generuje się z tą liczbą — bez ruszania ustawień i bez wpływu na pozostałe zamówienia. Przy okazji naprawiamy rozjazd, przez który kreator zamówienia pokazuje klientowi inną liczbę dni niż ta, która ostatecznie wchodzi do umowy.</div><div class="skala">Status: zgłoszone 04.09.2026 — rozpoznane w kodzie, dane są już zapisywane przy zamówieniu, brakuje samego pola do edycji</div></td>
-<td class="num">1–2</td></tr>
+Po zmianie w karcie zamówienia, obok numeru VIN, pojawia się pole z liczbą dni. Domyślnie podpowiada wartość z ustawień, więc przy zwykłym zamówieniu nic nie trzeba robić. Gdy termin ma być inny, wpisujesz go w tym jednym zamówieniu i umowa generuje się z tą liczbą — bez ruszania ustawień i bez wpływu na pozostałe zamówienia. Przy okazji naprawiamy rozjazd, przez który kreator zamówienia pokazuje klientowi inną liczbę dni niż ta, która ostatecznie wchodzi do umowy.</div><div class="skala">Status: zgłoszone 04.09.2026 — rozpoznane w kodzie, plan wykonawczy gotowy; robione razem z numerem przesyłki</div></td>
+<td class="num">2</td></tr>
 <tr>
-<td><strong>T-248 — Śledzenie statku — numer przesyłki w zamówieniu i status przewoźnika przy aucie w drodze</strong> <div class="opis"><span class="badge new">nowe</span> Kiedy zamówienie wchodzi w etap „w drodze”, klient wie tylko tyle, że auto płynie. O termin dopytuje mailem albo telefonem, a żeby odpowiedzieć, ktoś po Waszej stronie musi zajrzeć do dokumentów przewoźnika i przepisać to, co tam widać.
+<td><strong>T-248 — Numer przesyłki w zamówieniu i informacja o transporcie dla klienta</strong> <div class="opis"><span class="badge new">nowe</span> Kiedy zamówienie wchodzi w etap „w drodze”, klient wie tylko tyle, że auto płynie. O numer przesyłki dopytuje mailem albo telefonem, a numer nie jest dziś nigdzie zapisany — krąży w korespondencji.
 
-Po zmianie w karcie zamówienia dochodzi pole na numer przesyłki od przewoźnika (numer kontenera lub listu przewozowego Maersk). Po jego wpisaniu system sam pyta przewoźnika o stan przesyłki i przy statusie „w drodze” pokazuje aktualne dane: gdzie jest ładunek, jaki port jest następny i jaka jest przewidywana data przypłynięcia. Widzi to Ruslan w panelu i klient przy swoim zamówieniu — bez telefonu do Was. Dane odświeżają się same, więc przesunięcie terminu przez armatora dociera do klienta bez Waszego udziału.
+Po zmianie w karcie zamówienia dochodzi pole na numer przesyłki od przewoźnika. Numer zostaje przy zamówieniu na stałe, a obok niego masz gotowy odnośnik do śledzenia u przewoźnika — jedno kliknięcie zamiast szukania w dokumentach. Obok pojawia się przycisk „wyślij informację o transporcie”: klient dostaje maila w naszej oprawie, z numerem przesyłki i przyciskiem do swojego zamówienia. Sam status zamówienia się przy tym nie zmienia — decydujesz, kiedy i czy wysłać.
 
-Do sprawdzenia przed wyceną: na jakich zasadach Maersk udostępnia dane śledzenia dla naszych przesyłek — od tego zależy zakres i koszt. Wariant zapasowy, gdyby dostęp do danych okazał się niedostępny lub płatny ponad sens: pole na numer przesyłki plus link prowadzący klienta wprost do śledzenia u przewoźnika, bez przepisywania statusu na naszą stronę. Do ustalenia też, czy poza Maerskiem korzystacie z innych armatorów — obsługa kolejnego przewoźnika to osobna praca.</div><div class="skala">Status: zgłoszone 24.08.2026 — wycenione wstępnie, zakres do potwierdzenia po sprawdzeniu dostępu do danych Maersk</div></td>
-<td class="num">3</td></tr>
+Numer widzi też klient w swoim zamówieniu, na ekranie transportu, razem z odnośnikiem do śledzenia. Dzięki temu wraca po tę informację na naszą stronę, zamiast szukać jej w starych mailach.
+
+Świadomie nie wysyłamy w mailu odnośnika do strony przewoźnika: chcemy, żeby klient zaglądał do swojego zamówienia u nas, gdzie widzi cały postęp, a nie tylko pozycję statku.
+
+Automatyczne pobieranie danych od armatora (pozycja, następny port, przewidywana data przypłynięcia) wydzieliliśmy do osobnej pozycji — wymaga sprawdzenia, na jakich zasadach Maersk te dane udostępnia, i jest pracą innej skali niż samo pole na numer.</div><div class="pytania"><strong>Do potwierdzenia z Tobą:</strong><ul><li>Jakim przewoźnikiem chodzą przesyłki (Maersk, ktoś jeszcze) i pod jakim adresem sprawdzasz numer? Potrzebujemy adresu, żeby odnośnik do śledzenia składał się sam.</li><li>Co ma być w mailu do klienta poza numerem przesyłki — sama informacja, że auto płynie, czy coś jeszcze (np. przewidywany termin, co się dzieje po przypłynięciu)?</li></ul></div><div class="skala">Status: zgłoszone 24.08.2026, zakres uzgodniony 04.09 — rozpoznane w kodzie, plan wykonawczy gotowy</div></td>
+<td class="num">4–5</td></tr>
+<tr>
+<td><strong>T-254 — Automatyczne dane od armatora przy aucie w drodze (pozycja, port, data przypłynięcia)</strong> <div class="opis"><span class="badge new">nowe</span> Rozwinięcie pozycji o numerze przesyłki. Po wpisaniu numeru system sam pytałby przewoźnika o stan przesyłki i pokazywał w zamówieniu — Tobie i klientowi — gdzie jest ładunek, jaki port jest następny i kiedy przewidywane jest przypłynięcie. Dane odświeżałyby się same, więc przesunięcie terminu przez armatora docierałoby do klienta bez Waszego udziału.
+
+Zanim to wycenimy, trzeba sprawdzić, na jakich zasadach Maersk udostępnia dane śledzenia dla Waszych przesyłek — czy w ogóle, czy odpłatnie i z jakimi ograniczeniami. Do ustalenia też, czy poza Maerskiem korzystacie z innych armatorów; obsługa każdego kolejnego to osobna praca.</div><div class="skala">Status: wydzielone 04.09.2026 z pozycji o numerze przesyłki — czeka na sprawdzenie dostępu do danych Maersk</div></td>
+<td class="num">—</td></tr>
 <tr>
 <td><strong>T-243 — Automatyczna dystrybucja zdjęć i filmów na wszystkie kanały społecznościowe</strong> <div class="opis"><span class="badge new">nowe</span> Po każdej sesji na placu powstaje komplet materiałów: zdjęcia każdego auta i filmy w dwóch kadrach, poziomym i pionowym. Dziś opublikowanie ich to robota ręczna — ktoś musi wymyślić tytuł, opis i hashtagi, dobrać właściwy kadr do platformy i wrzucić plik osobno na Facebooka, Instagrama, YouTube'a i TikToka. Przy sesji z dziesięcioma autami to kilka godzin klikania, a część materiałów nigdy nie wychodzi. Na Facebooku posty powstają ręcznie do dziś.
 
@@ -402,7 +411,7 @@ Zadanie wymaga wcześniejszego zbudowania konta klienta (pozycja wyżej) — dok
 <td><strong>T-214 — Ujednolicenie i wzmocnienie stron modeli (hubów) pod frazy zakupowe</strong> <span class='rozmiar'>skala: średnia</span><div class="opis">Strony modeli to nasza najmocniejsza broń w Google — stoją na 1.-2. miejscu na frazy typu 'zeekr 9x cena'. Przegląd 14.07 wykazał trzy luki do domknięcia. (1) 34 z 302 stron modeli ma słabszy nagłówek — brakuje w nim słów 'cena w Polsce', bo powstały po ostatnim ujednoliceniu i nie dostały automatycznie tego dopisku; wśród nich ważne modele: Zeekr 9X, Zeekr 8X, Denza Z9 GT. (2) Strona modelu BAW wyświetla się w Google jako 'Beijing' zamiast 'BAW' — a to marka, której szuka 1300 osób miesięcznie; podobnie Zeekr 8X ma zbędny dopisek 'PHEV' rozmywający dopasowanie. (3) Strony modeli opisują wersje słownie, ale nie podają ceny osobno dla każdej wersji (np. 'Ultra od 426 tys.') — dane już mamy, wystarczy je pokazać. Pracujemy ostrożnie, pojedynczo, z pomiarem przed i po (strony z 1. miejsca mają najwięcej do stracenia), bo nadrzędna zasada brzmi: nie zepsuć tego, co już rankuje.</div><div class="skala">Status: znaleziska zapisane (docs/seo/znaleziska-huby-2026-07-14); wymaga pilota + progów wycofania z T-203-baseline</div></td>
 <td class="num">11–14</td></tr>
 </tbody>
-<tfoot><tr><td>Razem pełna lista (widełki)</td><td class="num">594–787</td></tr></tfoot>
+<tfoot><tr><td>Razem pełna lista (widełki)</td><td class="num">596–789</td></tr></tfoot>
 </table>
 </section>
 </div>
