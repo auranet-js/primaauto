@@ -1,0 +1,99 @@
+<!doctype html><html lang=pl><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noindex,nofollow">
+<title>Reklamy Meta — Prima-Auto</title>
+<style>
+:root{--tlo:#faf9f7;--karta:#fff;--tekst:#161616;--szary:#6d6a66;--linia:#e6e2dc;
+      --akcent:#1e5f3f;--alarm:#b3261e;--cien:0 1px 2px rgba(0,0,0,.05)}
+@media(prefers-color-scheme:dark){:root{--tlo:#151513;--karta:#1f1e1c;--tekst:#f0eeea;
+      --szary:#9c9891;--linia:#332f2b;--akcent:#6fbf8e;--alarm:#f2705f;--cien:none}}
+*{box-sizing:border-box}
+body{margin:0;padding:16px 14px 48px;background:var(--tlo);color:var(--tekst);
+     font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+.owijka{max-width:940px;margin:0 auto}
+h1{font-size:19px;margin:0 0 2px;letter-spacing:-.01em}
+h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--szary);
+   margin:28px 0 10px;font-weight:600}
+.stopka,.meta{color:var(--szary);font-size:12.5px;margin:0}
+.alarm{background:var(--alarm);color:#fff;border-radius:8px;padding:10px 12px;margin:14px 0;
+       font-size:13.5px}
+.alarm p{margin:2px 0}
+.kafle{display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));gap:9px;margin-top:12px}
+.kafel{background:var(--karta);border:1px solid var(--linia);border-radius:10px;padding:11px 12px;
+       box-shadow:var(--cien)}
+.kafel b{display:block;font-size:25px;font-weight:600;letter-spacing:-.02em;line-height:1.15}
+.kafel span{display:block;font-size:12px;color:var(--szary);margin-top:3px}
+.kafel i{font-style:normal;font-size:12px;color:var(--szary)}
+table{width:100%;border-collapse:collapse;background:var(--karta);border:1px solid var(--linia);
+      border-radius:10px;overflow:hidden;font-size:13.5px}
+th,td{padding:8px 10px;text-align:right;border-bottom:1px solid var(--linia);white-space:nowrap}
+th:first-child,td:first-child{text-align:left;white-space:normal}
+th{font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--szary);font-weight:600}
+tr:last-child td{border-bottom:none}
+tr.stoi td{color:var(--szary)}
+.kropka{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--akcent);
+        margin-right:7px;vertical-align:middle}
+tr.stoi .kropka{background:var(--linia)}
+.pasek{height:6px;background:var(--linia);border-radius:3px;overflow:hidden;margin-top:8px}
+.pasek div{height:100%;background:var(--akcent)}
+.przewin{overflow-x:auto;-webkit-overflow-scrolling:touch}
+</style></head><body><div class=owijka>
+<h1>Reklamy Meta — Prima-Auto</h1>
+<p class=stopka id=czas>wczytuję…</p>
+<div id=tresc></div>
+<p class=stopka style="margin-top:34px">Dane prosto z Meta Ads API, odświeżane cronem co 30 minut.
+Strona sama sięga po nie co minutę — możesz ją zostawić otwartą.</p>
+</div>
+<script>
+const zl = n => (n||0).toLocaleString('pl-PL',{minimumFractionDigits:2,maximumFractionDigits:2})+' zł';
+const lb = n => (n||0).toLocaleString('pl-PL');
+const esc = s => String(s||'').replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
+
+function kafle(d){
+  return `<div class=kafle>
+    <div class=kafel><b>${zl(d.koszt)}</b><span>wydane</span></div>
+    <div class=kafel><b>${lb(d.wyswietlenia)}</b><span>wyświetleń</span></div>
+    <div class=kafel><b>${lb(d.kliki)}</b><span>kliknięć · CTR ${d.ctr||0}%</span></div>
+    <div class=kafel><b>${zl(d.cpc)}</b><span>za kliknięcie</span></div>
+    <div class=kafel><b>${lb(d.oferty)}</b><span>otwartych ofert</span></div>
+    <div class=kafel><b>${lb(d.kontakty)}</b><span>kontaktów</span></div>
+  </div>`;
+}
+
+function wiersz(r){
+  const d = r.dzis||{}, c = r.razem||{}, chodzi = r.status === 'ACTIVE';
+  return `<tr class="${chodzi?'':'stoi'}"><td><span class=kropka></span>${esc(r.nazwa)}
+    <br><span class=meta>${esc(r.kampania)}${chodzi?'':' · '+esc(r.status.toLowerCase())}</span></td>
+    <td>${lb(d.wyswietlenia)}</td><td>${lb(d.kliki)}</td><td>${zl(d.koszt)}</td>
+    <td>${lb(c.wyswietlenia)}</td><td>${lb(c.kliki)}</td><td>${lb(c.oferty)}</td><td>${zl(c.koszt)}</td></tr>`;
+}
+
+async function wczytaj(){
+  const d = await (await fetch('meta.json?t='+Date.now(), {cache:'no-store'})).json();
+  const wiek = Math.round((Date.now() - new Date(d.aktualizacja.replace(' ','T')).getTime())/60000);
+  document.getElementById('czas').textContent =
+    `stan na ${d.aktualizacja}${wiek>45 ? ` — UWAGA: dane sprzed ${wiek} min, cron mógł stanąć` : ''}`;
+
+  const k = d.konto, procent = k.limit ? Math.min(100, 100*k.wydane/k.limit) : 0;
+  document.getElementById('tresc').innerHTML =
+    (d.ostrzezenia.length ? `<div class=alarm>${d.ostrzezenia.map(o=>`<p>${esc(o)}</p>`).join('')}</div>` : '')
+    + `<h2>Dzisiaj</h2>${kafle(d.dzis)}`
+    + `<h2>Od startu kampanii</h2>${kafle(d.razem)}`
+    + `<h2>Kampanie</h2><div class=przewin><table><tr><th>kampania</th><th>budżet</th>
+        <th>chodzi</th><th>dziś wyśw.</th><th>dziś kliki</th><th>dziś koszt</th><th>razem koszt</th></tr>`
+    + d.kampanie.map(c=>`<tr class="${c.chodzi?'':'stoi'}"><td><span class=kropka></span>${esc(c.nazwa)}</td>
+        <td>${c.budzet} zł/dz</td><td>${c.chodzi}/${c.reklam}</td><td>${lb(c.dzis.wyswietlenia)}</td>
+        <td>${lb(c.dzis.kliki)}</td><td>${zl(c.dzis.koszt)}</td><td>${zl(c.razem.koszt)}</td></tr>`).join('')
+    + `</table></div>`
+    + `<h2>Reklamy</h2><div class=przewin><table><tr><th>reklama</th><th colspan=3 style="text-align:center">dzisiaj</th>
+        <th colspan=4 style="text-align:center">od startu</th></tr>
+        <tr><th></th><th>wyśw.</th><th>kliki</th><th>koszt</th>
+        <th>wyśw.</th><th>kliki</th><th>oferty</th><th>koszt</th></tr>`
+    + d.reklamy.map(wiersz).join('') + `</table></div>`
+    + `<h2>Konto</h2><div class=kafel><b>${zl(k.wydane)}</b>
+        <span>z limitu ${zl(k.limit)} · ${k.budzet_dzienny} zł dziennie</span>
+        <div class=pasek><div style="width:${procent}%"></div></div></div>`;
+}
+wczytaj(); setInterval(wczytaj, 60000);
+document.addEventListener('visibilitychange', () => !document.hidden && wczytaj());
+</script></body></html>
