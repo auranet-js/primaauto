@@ -1,6 +1,22 @@
 # Historia wersji asiaauto-sync
 
 
+## 0.38.1 — 2026-09-04 (DMC poza filtrami)
+
+Filtr „DMC do" zdjęty z wyszukiwarki na życzenie Janka. Dopuszczalna masa całkowita nie jest
+kryterium, którym ktoś szuka auta osobowego — pole zajmowało miejsce w sekcji „Nadwozie" obok
+długości, która mówi to samo w sposób zrozumiały. Pomiar 04.09: 2 893 oferty z wartością,
+zakres 1 750–3 985 kg, z czego 1 009 (33%) w przedziale 2,0–2,5 t.
+
+Usunięty wyłącznie wpis w `SEKCJE`; `RANGE_PARAMS['dmc']` i `RANGE_LABELS['dmc']` zostają, tak samo
+jak przy skrzyni i felgach zdjętych 03.09 — parametr `dmc_max` dalej działa w REST (`/search?dmc_max=2000`
+→ 127 z 3 020) i w deep-linkach, które ktoś mógł zapisać. Kolumna `gvw_kg` w banku specyfikacji
+nietknięta, bo karmi też tabelę danych technicznych na ofercie.
+
+Zweryfikowane na produkcji: `data-range` w HTML wyszukiwarki to `dlugosc`, `moc`, `przysp`,
+`bateria`, `zasieg_calk`, `zasieg` — bez `dmc`; ciąg „DMC" nie występuje w wyjściu strony.
+
+
 ## 0.38.0 — 2026-09-03 (telefon: arkusz filtra i wyposażenie)
 
 Pytanie Janka: **„wybrałem kombi i SUV — i co teraz z tym oknem?"**. Odpowiedź brzmiała: nic tego
