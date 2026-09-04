@@ -1,0 +1,265 @@
+<!doctype html><html lang=pl><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<meta name=robots content="noindex,nofollow">
+<title>Prima-Auto — pomiar</title>
+<style>
+:root{--tlo:#faf9f7;--karta:#fff;--tekst:#161616;--szary:#6d6a66;--linia:#e6e2dc;
+      --akcent:#1e5f3f;--alarm:#b3261e;--uwaga:#8a6100;--cien:0 1px 2px rgba(0,0,0,.05)}
+@media(prefers-color-scheme:dark){:root{--tlo:#151513;--karta:#1f1e1c;--tekst:#f0eeea;
+      --szary:#9c9891;--linia:#332f2b;--akcent:#6fbf8e;--alarm:#f2705f;--uwaga:#e0b050;--cien:none}}
+*{box-sizing:border-box}
+body{margin:0;padding:16px 14px 48px;background:var(--tlo);color:var(--tekst);
+     font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+.owijka{max-width:1080px;margin:0 auto}
+h1{font-size:19px;margin:0 0 2px;letter-spacing:-.01em}
+h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--szary);
+   margin:30px 0 10px;font-weight:600}
+h2 span{text-transform:none;letter-spacing:0;font-weight:400;font-size:12.5px}
+.stopka,.meta{color:var(--szary);font-size:12.5px;margin:0}
+.alarm{background:var(--alarm);color:#fff;border-radius:8px;padding:10px 12px;margin:14px 0;font-size:13.5px}
+.alarm p{margin:2px 0}
+/* pasek stanu pomiaru — pierwsze, co widać: czy liczbom niżej można wierzyć */
+.stan{background:var(--karta);border:1px solid var(--linia);border-radius:10px;padding:12px 14px;
+      margin-top:14px;box-shadow:var(--cien)}
+.stan .naglowek{display:flex;gap:16px;align-items:baseline;flex-wrap:wrap}
+.stan b{font-size:16px}
+.plakietka{display:inline-block;font-size:12px;font-weight:600;padding:2px 9px;border-radius:20px}
+.pl-ok{background:rgba(31,95,63,.12);color:var(--akcent)}
+.pl-uw{background:rgba(138,97,0,.14);color:var(--uwaga)}
+.pl-al{background:rgba(179,38,30,.14);color:var(--alarm)}
+.lista{margin:10px 0 0;padding:0;list-style:none;font-size:13px}
+.lista li{padding:4px 0;border-top:1px solid var(--linia)}
+.lista .kod{font-weight:600;margin-right:8px}
+.kolumny{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin-top:12px}
+.blok{background:var(--karta);border:1px solid var(--linia);border-radius:10px;padding:13px 14px;
+      box-shadow:var(--cien)}
+.blok h3{margin:0 0 10px;font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--szary)}
+.pary{display:grid;grid-template-columns:1fr auto;gap:4px 10px;font-size:14px}
+.pary span{color:var(--szary);font-size:13px}
+.pary b{font-variant-numeric:tabular-nums;font-weight:600}
+.kafle{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:9px;margin-top:12px}
+.kafel{background:var(--karta);border:1px solid var(--linia);border-radius:10px;padding:11px 12px;
+       box-shadow:var(--cien)}
+.kafel b{display:block;font-size:25px;font-weight:600;letter-spacing:-.02em;line-height:1.15;
+         font-variant-numeric:tabular-nums}
+.kafel span{display:block;font-size:12px;color:var(--szary);margin-top:3px}
+table{width:100%;border-collapse:collapse;background:var(--karta);border:1px solid var(--linia);
+      border-radius:10px;overflow:hidden;font-size:13.5px}
+th,td{padding:8px 10px;text-align:right;border-bottom:1px solid var(--linia);white-space:nowrap}
+th:first-child,td:first-child{text-align:left;white-space:normal}
+th{font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--szary);font-weight:600}
+tr:last-child td{border-bottom:none}
+tr.stoi td{color:var(--szary)}
+.kropka{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--akcent);
+        margin-right:7px;vertical-align:middle}
+tr.stoi .kropka{background:var(--linia)}
+.pasek{height:6px;background:var(--linia);border-radius:3px;overflow:hidden;margin-top:8px}
+.pasek div{height:100%;background:var(--akcent)}
+.przewin{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.iskra{display:flex;align-items:flex-end;gap:2px;height:40px;margin-top:10px}
+.iskra i{flex:1;background:var(--akcent);border-radius:2px 2px 0 0;min-height:2px;opacity:.75}
+.iskra i.teraz{opacity:1}
+.puste{color:var(--szary);font-style:italic;font-size:13px}
+.znacznik{display:inline-block;font-size:11px;padding:1px 7px;border-radius:20px;
+          background:rgba(139,152,169,.15);color:var(--szary)}
+</style></head><body><div class=owijka>
+
+<h1>Prima-Auto — pomiar</h1>
+<p class=stopka id=czas>wczytuję…</p>
+
+<div id=stan></div>
+<div id=tresc></div>
+
+<p class=stopka style="margin-top:34px">
+Meta Ads API co 30 min · GA4 realtime co 3 min · Google Ads co 30 min · checki co godzinę.
+Wszystko liczone po stronie serwera, ta strona tylko odczytuje gotowe pliki.<br>
+Realtime GA4 nie zna źródła ani kampanii (ograniczenie Google), a atrybucja bieżącej doby
+liczy się do ~24 h — dlatego struktura kanałów pokazywana jest z doby zamkniętej.
+</p>
+</div>
+<script>
+const zl = n => (n||0).toLocaleString('pl-PL',{minimumFractionDigits:2,maximumFractionDigits:2})+' zł';
+const lb = n => (n||0).toLocaleString('pl-PL');
+const proc = n => (n||0).toLocaleString('pl-PL',{minimumFractionDigits:1,maximumFractionDigits:2})+'%';
+const esc = s => String(s==null?'':s).replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
+const minut = t => t ? Math.round((Date.now() - new Date(String(t).replace(' ','T')).getTime())/60000) : null;
+
+// Progi wieku per plik — powyżej nich cron stanął, a liczby na stronie są nieaktualne.
+const ZRODLA = [
+  {plik:'meta.json',   nazwa:'Meta',   prog:70},
+  {plik:'data.json',   nazwa:'GA4',    prog:12},
+  {plik:'ads.json',    nazwa:'Ads',    prog:70},
+  {plik:'checki.json', nazwa:'checki', prog:130},
+];
+
+async function pobierz(plik){
+  try { return await (await fetch(plik+'?t='+Date.now(), {cache:'no-store'})).json(); }
+  catch(e){ return null; }
+}
+
+function pasekStanu(c, przeterminowane){
+  if(!c) return '<div class=alarm><p>Nie udało się wczytać checki.json — nie wiadomo, czy pomiar działa.</p></div>';
+  const klasa = c.awarie ? 'pl-al' : (c.uwagi ? 'pl-uw' : 'pl-ok');
+  const slowo = c.awarie ? (c.awarie+' awaria') : (c.uwagi ? c.uwagi+' do sprawdzenia' : 'wszystko gra');
+  const zle = c.checki.filter(x => x.stan !== 'ok');
+  return `${przeterminowane.length ? `<div class=alarm><p>Cron stanął: ${przeterminowane.join(', ')}.
+      Liczby niżej są sprzed tego czasu.</p></div>` : ''}
+    <div class=stan>
+      <div class=naglowek>
+        <b>Czy pomiar działa?</b>
+        <span class="plakietka ${klasa}">${slowo}</span>
+        <span class=meta>${c.gra} z ${c.checki.length} checków bez zastrzeżeń · sprawdzone ${esc(c.czas)}</span>
+      </div>
+      ${zle.length ? `<ul class=lista>${zle.map(x =>
+        `<li><span class="kod" style="color:var(--${x.stan==='awaria'?'alarm':'uwaga'})">${x.stan==='awaria'?'NIE':'?'}</span>
+         ${esc(x.check)} — <span class=meta>${esc(x.opis)}</span></li>`).join('')}</ul>` : ''}
+    </div>`;
+}
+
+function podsumowanie(meta, ga4, ads, doba){
+  const m = (meta&&meta.dzis)||{}, a = (ads&&ads.dzis)||{};
+  const sesjeDzis = (ga4&&ga4.today_campaigns||[]).reduce((s,c)=>s+(c.sessions||0),0);
+  const zdarzeniaDzis = (ga4&&ga4.today_events||[]).reduce((s,e)=>s+(e.count||0),0);
+  return `<div class=kolumny>
+    <div class=blok><h3>Meta — dziś</h3><div class=pary>
+      <span>wydane</span><b>${zl(m.koszt)}</b>
+      <span>wyświetlenia</span><b>${lb(m.wyswietlenia)}</b>
+      <span>kliknięcia</span><b>${lb(m.kliki)} · CTR ${proc(m.ctr)}</b>
+      <span>otwarte oferty</span><b>${lb(m.oferty)}</b>
+      <span>kontakty</span><b>${lb(m.kontakty)}</b>
+    </div></div>
+    <div class=blok><h3>GA4 — dziś</h3><div class=pary>
+      <span>aktywni teraz (30 min)</span><b>${lb(ga4&&ga4.active_30)}</b>
+      <span>aktywni (5 min)</span><b>${lb(ga4&&ga4.active_5)}</b>
+      <span>sesje dziś</span><b>${lb(sesjeDzis)}</b>
+      <span>zdarzenia kontaktu dziś</span><b>${lb(zdarzeniaDzis)}</b>
+      <span>bez przypisania (doba zamkn.)</span><b>${doba&&doba.doba_bez_przypisania!=null?proc(doba.doba_bez_przypisania):'–'}</b>
+    </div></div>
+    <div class=blok><h3>Google Ads — dziś</h3><div class=pary>
+      <span>koszt</span><b>${zl(a.koszt)}</b>
+      <span>wyświetlenia</span><b>${lb(a.wyswietlenia)}</b>
+      <span>kliknięcia</span><b>${lb(a.kliki)} · CTR ${proc(a.ctr)}</b>
+      <span>konwersje kontaktowe</span><b>${lb(a.konwersje)}</b>
+      <span>kampanii chodzi</span><b>${lb(ads&&ads.zywych)}</b>
+    </div></div>
+  </div>`;
+}
+
+function naZywo(d){
+  if(!d) return '';
+  const max = Math.max(1, ...(d.spark||[1]));
+  return `<h2>Na żywo <span>— GA4 realtime, bez źródła i kampanii</span></h2>
+    <div class=kolumny>
+      <div class=blok><h3>Aktywni</h3>
+        <div style="display:flex;gap:26px;align-items:flex-end">
+          <div><div style="font-size:38px;font-weight:600;line-height:1">${lb(d.active_30)}</div>
+               <span class=meta>ostatnie 30 min</span></div>
+          <div><div style="font-size:26px;font-weight:600;line-height:1">${lb(d.active_5)}</div>
+               <span class=meta>ostatnie 5 min</span></div>
+        </div>
+        <div class=iskra>${(d.spark||[]).map((v,i)=>
+          `<i class="${i===d.spark.length-1?'teraz':''}" style="height:${Math.round(v/max*100)}%" title="${v}"></i>`).join('')}</div>
+        <p class=meta style="margin-top:5px">← 30 min temu · teraz →</p>
+      </div>
+      <div class=blok><h3>Strony</h3>${(d.pages_live||[]).length
+        ? `<div class=pary>${d.pages_live.slice(0,8).map(p =>
+            `<span>${esc(p.name.replace(/ \| Prima-Auto$/,'').slice(0,46))}</span><b>${p.users}</b>`).join('')}</div>`
+        : '<p class=puste>brak aktywnych</p>'}</div>
+      <div class=blok><h3>Miasta</h3>${(d.cities_live||[]).length
+        ? `<div class=pary>${d.cities_live.slice(0,8).map(c =>
+            `<span>${esc(c.name)}</span><b>${c.users}</b>`).join('')}</div>`
+        : '<p class=puste>brak danych</p>'}</div>
+    </div>`;
+}
+
+function tabelaMeta(d){
+  if(!d) return '';
+  const k = d.konto||{}, procent = k.limit ? Math.min(100, 100*k.wydane/k.limit) : 0;
+  return `<h2>Meta — kampanie i reklamy</h2>
+    ${(d.ostrzezenia&&d.ostrzezenia.length) ? `<div class=alarm>${d.ostrzezenia.map(o=>`<p>${esc(o)}</p>`).join('')}</div>` : ''}
+    <div class=przewin><table>
+      <tr><th>kampania</th><th>budżet</th><th>chodzi</th><th>dziś wyśw.</th><th>dziś kliki</th>
+          <th>dziś koszt</th><th>razem koszt</th></tr>
+      ${(d.kampanie||[]).map(c => `<tr class="${c.chodzi?'':'stoi'}">
+        <td><span class=kropka></span>${esc(c.nazwa)}</td><td>${c.budzet} zł/dz</td>
+        <td>${c.chodzi}/${c.reklam}</td><td>${lb(c.dzis.wyswietlenia)}</td><td>${lb(c.dzis.kliki)}</td>
+        <td>${zl(c.dzis.koszt)}</td><td>${zl(c.razem.koszt)}</td></tr>`).join('')}
+    </table></div>
+    <div class=przewin style="margin-top:10px"><table>
+      <tr><th>reklama</th><th colspan=3 style="text-align:center">dzisiaj</th>
+          <th colspan=4 style="text-align:center">od startu</th></tr>
+      <tr><th></th><th>wyśw.</th><th>kliki</th><th>koszt</th><th>wyśw.</th><th>kliki</th><th>oferty</th><th>koszt</th></tr>
+      ${(d.reklamy||[]).map(r => {
+        const x = r.dzis||{}, c = r.razem||{}, chodzi = r.status === 'ACTIVE';
+        return `<tr class="${chodzi?'':'stoi'}"><td><span class=kropka></span>${esc(r.nazwa)}
+          <br><span class=meta>${esc(r.kampania)}${chodzi?'':' · '+esc(String(r.status).toLowerCase())}</span></td>
+          <td>${lb(x.wyswietlenia)}</td><td>${lb(x.kliki)}</td><td>${zl(x.koszt)}</td>
+          <td>${lb(c.wyswietlenia)}</td><td>${lb(c.kliki)}</td><td>${lb(c.oferty)}</td><td>${zl(c.koszt)}</td></tr>`;
+      }).join('')}
+    </table></div>
+    <div class=kafel style="margin-top:10px"><b>${zl(k.wydane)}</b>
+      <span>z limitu ${zl(k.limit)} · ${k.budzet_dzienny} zł dziennie</span>
+      <div class=pasek><div style="width:${procent}%"></div></div></div>`;
+}
+
+function tabelaAds(d){
+  if(!d) return '';
+  return `<h2>Google Ads — kampanie</h2>
+    ${(d.odrzucone&&d.odrzucone.length) ? `<div class=alarm><p>Reklamy odrzucone (DISAPPROVED) w kampaniach:
+      ${d.odrzucone.map(o=>esc(o.kampania)).join(', ')} — kampania chodzi, ale reklamy nie ma.</p></div>` : ''}
+    <div class=przewin><table>
+      <tr><th>kampania</th><th>dziś wyśw.</th><th>dziś kliki</th><th>dziś koszt</th><th>dziś konw.</th>
+          <th>wczoraj koszt</th><th>wczoraj konw.</th></tr>
+      ${(d.kampanie||[]).map(c => `<tr class="${c.status==='ENABLED'?'':'stoi'}">
+        <td><span class=kropka></span>${esc(c.nazwa)}${c.status==='ENABLED'?'':' <span class=meta>· '+esc(c.status.toLowerCase())+'</span>'}</td>
+        <td>${lb(c.dzis.wyswietlenia)}</td><td>${lb(c.dzis.kliki)}</td><td>${zl(c.dzis.koszt)}</td>
+        <td>${lb(c.dzis.konwersje)}</td><td>${zl(c.wczoraj.koszt)}</td><td>${lb(c.wczoraj.konwersje)}</td></tr>`).join('')}
+    </table></div>`;
+}
+
+function kanalyDoby(doba){
+  if(!doba || !doba.doba_zrodla) return '';
+  const razem = doba.doba_sesje || 1;
+  return `<h2>Kanały ruchu <span>— doba zamknięta (wczoraj), ${lb(razem)} sesji</span></h2>
+    <div class=przewin><table>
+      <tr><th>źródło / medium</th><th>sesje</th><th>udział</th></tr>
+      ${doba.doba_zrodla.map(z => `<tr><td>${esc(z.zrodlo)}
+        ${/not set|not available/.test(z.zrodlo) ? ' <span class=znacznik>atrybucja niepoliczona</span>' : ''}</td>
+        <td>${lb(z.sesje)}</td><td>${proc(100*z.sesje/razem)}</td></tr>`).join('')}
+    </table></div>
+    <p class=meta style="margin-top:8px">Kontakty w tej dobie:
+      ${Object.entries(doba.doba_kontakty||{}).map(([k,v])=>`${esc(k)} ${v}`).join(' · ') || 'brak'}.
+      Bez przypisania ${proc(doba.doba_bez_przypisania)} — powyżej 10% oznacza realny ubytek sygnału,
+      nie opóźnienie atrybucji.</p>`;
+}
+
+async function wczytaj(){
+  const [meta, ga4, ads, checki] = await Promise.all(ZRODLA.map(z => pobierz(z.plik)));
+  const dane = {meta, ga4, ads, checki};
+  const wieki = {
+    meta:  meta  ? minut(meta.aktualizacja) : null,
+    ga4:   ga4   ? Math.round((Date.now()/1000 - ga4.ts)/60) : null,
+    ads:   ads   ? minut(ads.aktualizacja) : null,
+    checki:checki? minut(checki.czas) : null,
+  };
+  const przeterminowane = ZRODLA
+    .filter(z => { const w = wieki[z.nazwa==='checki'?'checki':z.nazwa.toLowerCase()]; return w!=null && w > z.prog; })
+    .map(z => `${z.nazwa} sprzed ${wieki[z.nazwa==='checki'?'checki':z.nazwa.toLowerCase()]} min`);
+
+  const najstarszy = Math.max(...Object.values(wieki).filter(w => w!=null));
+  document.getElementById('czas').textContent =
+    `Meta ${wieki.meta ?? '–'} min temu · GA4 ${wieki.ga4 ?? '–'} min · Ads ${wieki.ads ?? '–'} min · `
+    + `checki ${wieki.checki ?? '–'} min — najstarsza liczba na stronie ma ${najstarszy} min`;
+
+  const doba = checki && checki.doba;
+  document.getElementById('stan').innerHTML = pasekStanu(checki, przeterminowane);
+  document.getElementById('tresc').innerHTML =
+      podsumowanie(meta, ga4, ads, doba)
+    + naZywo(ga4)
+    + tabelaMeta(meta)
+    + tabelaAds(ads)
+    + kanalyDoby(doba);
+}
+wczytaj(); setInterval(wczytaj, 60000);
+document.addEventListener('visibilitychange', () => !document.hidden && wczytaj());
+</script></body></html>
