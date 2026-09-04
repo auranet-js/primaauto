@@ -22,7 +22,10 @@ ACT = 'act_1038563008906171'
 PAGE = '1146829831857839'
 IG = '17841457773875233'
 PIKSEL = '1634147041766916'
-DSA_PODMIOT = 'Prima Auto'   # dokładna nazwa zweryfikowanego portfolio (verification_status: verified)
+# Podmiot DSA — jedno źródło prawdy w meta_api. Nazwa portfolio („Prima Auto") jest
+# ODRZUCANA kodem 3858196; działa wyłącznie zarejestrowany podmiot z CEIDG.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from meta_api import DSA_PODMIOT
 GRAPH = 'https://graph.facebook.com/v21.0/'
 STAN = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'state', 'meta-kampanie.json')
 
@@ -37,7 +40,7 @@ KAMPANIA = {
               'homologacją i rejestracją w Polsce. 21 egzemplarzy w ofercie.'),
     'opis': 'Prima-Auto — bezpośredni importer aut z Chin',
     'cta': 'LEARN_MORE',
-    'kraj': 'PL', 'wiek_od': 25, 'wiek_do': 55,
+    'kraj': 'PL', 'wiek_od': 25, 'wiek_do': 65,
 }
 
 
@@ -102,7 +105,7 @@ def domknij():
 
     print('\n--- ZESTAW REKLAM ---')
     r, e = wywolaj(f'{ACT}/adsets', {
-        'name': 'Leopard 5 — PL 25-55', 'campaign_id': stan['kampania'], 'status': 'PAUSED',
+        'name': 'Prospecting PL 25-65 — wideo z sesji', 'campaign_id': stan['kampania'], 'status': 'PAUSED',
         'daily_budget': str(k['budzet_dz_gr']),
         'billing_event': 'IMPRESSIONS', 'optimization_goal': 'OFFSITE_CONVERSIONS',
         'bid_strategy': 'LOWEST_COST_WITHOUT_CAP', 'destination_type': 'WEBSITE',
@@ -180,7 +183,7 @@ def main():
 
     print("--- 2. ZESTAW REKLAM ---")
     r, e = wywolaj(f'{ACT}/adsets', {
-        'name': 'Leopard 5 — PL 25-55', 'campaign_id': camp, 'status': 'PAUSED',
+        'name': 'Prospecting PL 25-65 — wideo z sesji', 'campaign_id': camp, 'status': 'PAUSED',
         'daily_budget': str(k['budzet_dz_gr']),
         'billing_event': 'IMPRESSIONS', 'optimization_goal': 'OFFSITE_CONVERSIONS',
         'bid_strategy': 'LOWEST_COST_WITHOUT_CAP', 'destination_type': 'WEBSITE',
