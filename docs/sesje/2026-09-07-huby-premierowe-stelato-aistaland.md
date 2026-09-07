@@ -118,3 +118,29 @@ Wykonane:
 - hub marki dostał treść, tytuł: „Changan Qiyuan — od 134 000 PLN, 9 sztuk"
 - **V63_MAKE_SERIE_REDIRECTS**: stare URL-e `/changan/qiyuan-*` i `/nevo/*` prowadzą jednym
   skokiem do nowych, zamiast lądować na hubie marki Changan
+
+## Domknięcie dnia — spec_id i czystka taksonomii
+
+**spec_id (decyzja: naprawiamy).** Adapter che168 czytał `specid` wyłącznie z
+`extra.configuration.specid`; gdy źródło nie oddało specyfikacji dla oferty, pole przychodziło
+puste, choć `specid` bywał wypełniony na **głównym poziomie odpowiedzi**. Bez tego klucza oferta
+nigdy nie dostanie wyposażenia, bo `backfill-spec-autohome.php` kluczuje właśnie po nim.
+
+- adapter: fallback na `$raw['specid']` (`class-asiaauto-che168-adapter.php`)
+- dane historyczne: `scripts/backfill-spec-id-che168.php`
+- z 27 ofert bez klucza odzyskano **5** (w tym 3 dzisiejsze Stelato); 21 to oferty, których API
+  już nie zwraca — zdjęte u źródła, w drodze do rotacji; 1 nie ma `specid` w żadnym miejscu
+
+**Czystka taksonomii (decyzja: wszystkie cztery).** Skasowane puste termy-widma, każdy z regułą
+301 na żywy odpowiednik: `Jishi 01` (5083) i `Extreme Stone 01` (7198) → `rox/01`,
+`Changan Qiyuan Q05 Classic` (6881) → `changan-qiyuan/q05`. Backup:
+`~/backups/primaauto/terms-przed-czystka-2026-09-07.sql`.
+
+**Znalezisko przy czystce:** czwarty term, `Xiangjie S9T` (6994), był sierotą (`parent=0`), więc
+jego URL miał wzorzec `/model/<serie>/`, a nie `/samochody/<make>/<serie>/`. Reguły V61–V63 działają
+tylko na ten drugi, więc po skasowaniu adres daje **404 zamiast 301**. Dotyczy każdej kasowanej
+sieroty, nie tylko tej — mechanizmu dla `/model/` po prostu nie ma.
+
+**Świadomie NIE zrobione** (decyzje Janka): filtr miast zostaje bez zmian mimo 140 ofert poza nim
+(123 to Stelato) — lista 31 miast to wybór logistyczny Ruslana, pojedyncze sztuki dobieramy ręcznie.
+Odmiana liczebnika w `buildDescription()` („1 egzemplarzy") wraca do kolejki.
