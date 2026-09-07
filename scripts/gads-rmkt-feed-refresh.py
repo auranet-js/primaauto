@@ -28,7 +28,9 @@ from datetime import datetime
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from gads_client import load, refresh  # noqa: E402
 
-API = "v21"
+# Wersja API z ~/secrets/google/ads-config.json — hardkod "v21" cicho zabił cron
+# na cztery tygodnie (16.08–06.09: push 404, feed stał na stanie z 09.08).
+API = json.load(open("/home/host476470/secrets/google/ads-config.json")).get("api_version", "v25")
 CID = "9506068500"
 FEED_SET = f"customers/{CID}/assetSets/9118300013"
 BACKUP_ROOT = os.path.expanduser("~/backups/primaauto/rmkt-feed")

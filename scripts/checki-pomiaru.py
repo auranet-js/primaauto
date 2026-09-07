@@ -253,13 +253,65 @@ def check_ads():
 
 # ── wyjście ───────────────────────────────────────────────────────────────────
 
+def check_feed_rmkt():
+    """Wiek feedu dynamic remarketing.
+
+    Cron odświeża go w niedziele, ale sam push potrafi paść po cichu: 16.08–06.09 leciał
+    404 (hardkod wersji API), nikt nie czytał logu i przez cztery tygodnie [RMKT] reklamował
+    ceny z 09.08 — 64% wpisów rozjechane, konwersje 24,7 -> 8,8 przy niezmienionym ruchu.
+    Ten check jest po to, żeby druga taka awaria trwała dzień, nie miesiąc.
+    """
+    from gads_client import load as _load, refresh as _refresh
+    FEED_SET = "customers/9506068500/assetSets/9118300013"
+    o, t, c = _load()
+    api = c.get("api_version", "v25")
+    h = {"Authorization": f"Bearer {_refresh(o, t)}", "developer-token": c["developer_token"],
+         "login-customer-id": "9506068500", "Content-Type": "application/json"}
+    q = ("SELECT asset.dynamic_custom_asset.id, asset.dynamic_custom_asset.price "
+         f"FROM asset_set_asset WHERE asset_set_asset.asset_set = '{FEED_SET}' "
+         "AND asset_set_asset.status = 'ENABLED'")
+    u = f"https://googleads.googleapis.com/{api}/customers/9506068500/googleAds:searchStream"
+    d = json.loads(urllib.request.urlopen(urllib.request.Request(
+        u, data=json.dumps({"query": q}).encode(), headers=h), timeout=60).read())
+    konto = {r["asset"]["dynamicCustomAsset"]["id"]: r["asset"]["dynamicCustomAsset"].get("price")
+             for b in (d or []) for r in b.get("results", [])}
+
+    logi = sorted(Path("/home/host476470/.claude").glob("rmkt-feed-*.json"))
+    if not logi:
+        zapisz("RMKT — feed remarketingu", UWAGA, "brak lokalnego buildu do porównania")
+        return
+    ostatni = logi[-1]
+    dni = wiek_minut(ostatni) / 1440
+    baza = {a["dynamicCustomAsset"]["id"]: a["dynamicCustomAsset"].get("price")
+            for a in json.loads(ostatni.read_text())}
+    rozjazd = [k for k in baza if k in konto and konto[k] != baza[k]]
+    brak = [k for k in baza if k not in konto]
+    kontekst["rmkt_feed_wpisow"] = len(konto)
+    kontekst["rmkt_feed_rozjazd"] = len(rozjazd)
+
+    if not konto:
+        zapisz("RMKT — feed remarketingu", AWARIA, "feed na koncie PUSTY")
+    elif dni > 10:
+        zapisz("RMKT — feed remarketingu", AWARIA,
+               f"ostatni build sprzed {dni:.0f} dni — cron odświeżania stanął")
+    elif len(rozjazd) + len(brak) > len(baza) * 0.15:
+        zapisz("RMKT — feed remarketingu", AWARIA,
+               f"{len(rozjazd)} cen rozjechanych + {len(brak)} braków z {len(baza)} — push nie przechodzi")
+    elif rozjazd or brak:
+        zapisz("RMKT — feed remarketingu", UWAGA,
+               f"{len(rozjazd)} cen rozjechanych, {len(brak)} braków z {len(baza)}")
+    else:
+        zapisz("RMKT — feed remarketingu", OK,
+               f"{len(konto)} wpisów, ceny zgodne z bazą (build sprzed {dni:.1f} dnia)")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--json", metavar="PLIK", help="zapisz wynik do pliku JSON")
     ap.add_argument("--cicho", action="store_true", help="wypisz tylko to, co nie gra")
     a = ap.parse_args()
 
-    for f in (check_swiezosc, check_logi_bledow, check_meta, check_piksel, check_ga4, check_ads):
+    for f in (check_swiezosc, check_logi_bledow, check_meta, check_piksel, check_ga4, check_ads, check_feed_rmkt):
         try:
             f()
         except Exception as e:                    # noqa: BLE001 — jeden zdechły check nie kładzie reszty

@@ -5,7 +5,7 @@
 > `python3 scripts/ads-recheck.py` (dodaj `--md`, żeby wkleić tabelę niżej).
 >
 > **Konto:** `9506068500` (direct access, **nie** pod MCC AURANET — `login-customer-id` = to samo ID)
-> **GA4:** property `534017542` · **Ostatni recheck:** 2026-08-31
+> **GA4:** property `534017542` · **Ostatni recheck:** 2026-09-07
 
 ---
 
@@ -361,13 +361,41 @@ Rozważane przy budowie drugiej karuzeli. Zostajemy przy ofertach:
 4. **Pozostałe ślady marki Xiaomi** (po usunięciu dwóch reklam 31.08, patrz sekcja 6):
    - aktywna RSA `[Topic]` (ad 811967380201) ma nagłówek **„Leopard, Geely, iCAR, Xiaomi"**,
    - `[DSA]` łapie przez page-feed zapytanie **„xiaomi su7 ultra"** (12,67 zł/30 dni),
-   - słowa kluczowe `xiaomi *` żyją w `[SKAG]` i `[SKAG-1]` — obie kampanie PAUSED, zero wydatku.
-   Do decyzji, czy mail ws. marki Xiaomi obejmuje też te miejsca.
+   - słowa kluczowe `xiaomi *` żyją w `[SKAG]` i `[SKAG-1]` — obie kampanie PAUSED, zero wydatku,
+   - ~~**feed `[RMKT]`** (SU7, SU7 Ultra, YU7)~~ — czwarte miejsce, którego ta lista nie znała;
+     **zdjęte 07.09** decyzją Janka, a builder wyklucza markę na stałe (`$WYCOFANE_MARKI`),
+     więc cotygodniowy cron nie wciągnie jej z powrotem.
+   Do decyzji, czy mail ws. marki Xiaomi obejmuje też pozostałe miejsca.
 5. **Wykluczenie „auto prima bełchatów"** z `[Brand]` — 31 zł za 4 kliknięcia, 0 konwersji, obcy brand.
 6. **[Topic] jest nasycone** (IS 98%, utracone przez budżet 0%) przy CPA 77 zł i rosnącym CPC
    (2,12 zł). Nie ma gdzie rosnąć — pytanie brzmi, czy nie zabrać stąd budżetu na [DG].
-7. **[RMKT] słabnie** — z 6–8 konwersji/tydz. na 1–2 przy ~110 zł/tydz. Drugi miesiąc z rzędu.
-   Kandydat do reworku feedu albo cięcia.
+7. ~~**[RMKT] słabnie**~~ — **przyczyna ustalona 07.09: feed stał od 09.08.**
+   `gads-rmkt-feed-refresh.py` miał `API = "v21"` na sztywno; po wygaszeniu v21 push leciał 404
+   przez cztery niedziele (16.08, 23.08, 30.08, 06.09), a błąd szedł tylko do logu, którego nikt
+   nie czytał. Kampania reklamowała ceny sprzed miesiąca — **168 z 261 wpisów (64%)** rozjechane,
+   w 100 przypadkach auto wyglądało **drożej** niż realnie (XPeng GX: 324 tys. w reklamie przy
+   225 tys. w bazie). Ruch i koszt w oknach A/B identyczne co do procenta (1449 → 1448 kliknięć,
+   450 → 455 zł), konwersje 24,7 → 8,8. To druga odsłona incydentu z 12.07 (wtedy GAC M8 za
+   278 tys. przy realnych 147) — ten sam feed, ten sam mechanizm, dwa miesiące później.
+
+   **Domknięte 07.09 jednym ruchem:** feed odbudowany, 11 placementów bez konwersji wykluczonych
+   (101,61 zł/mies. = 21% budżetu), desktop i tablet na `bid_modifier 0` (0 konwersji za 12,40 zł),
+   druga kreacja RDA (kampania miała JEDNĄ — tak zginęła [DSA] 22.08), harmonogram 07:00–23:00
+   i geo Polska.
+
+   **Nauczka o harmonogramie — rozkład godzinowy pokazuje co innego niż rozkład dni.** Noc
+   (23–07) brała **27% wydatku i 9% konwersji** (CPA 177 zł wobec 46,87 zł w dzień), a godziny
+   01–04 to 4 589 impresji i ZERO konwersji. Po 16:00 impresje spadały niemal do zera — kampania
+   nie chodziła „całą dobę”, tylko startowała o północy i wypalała 17 zł budżetu do 16:00.
+   Wieczoru nigdy nie zmierzono, bo do niego nie dożywała.
+
+   **CPC świadomie NIE ruszone:** bid 0,56 zł przy realnym średnim CPC **0,31 zł** — bid nie jest
+   wiążący, więc jego zmiana nie zrobi nic poza ruszeniem teoretycznego sufitu. Zmiana strategii
+   (`MANUAL_CPC` → automat) czeka na dane: automat chce ~15 konwersji/mies., kampania ma 8,4.
+
+   **Do oceny 14.09:** czy konwersje wróciły w okolice 20+/mies. Uwaga przy interpretacji — sześć
+   zmian tego samego dnia oznacza, że atrybucja będzie nieczytelna; feed jest jedyną z nich, która
+   tłumaczy spadek, reszta to higiena.
 8. **Landing `galaxy-yizhen-l380-2025-251809` zwraca 410** (reklama w zapauzowanej grupie `[SKAG-2]`).
    Sygnał szerszy: reklamy SKAG celują w konkretne oferty, a te rotują — przy odmrażaniu SKAG-2
    trzeba dołożyć kontrolę landingów.
@@ -382,6 +410,11 @@ Rozważane przy budowie drugiej karuzeli. Zostajemy przy ofertach:
 | 2026-08-31 | odbudowa drugiej reklamy `[DSA]` — nowa 822835403980 (w recenzji), usunięta martwa 816552895918 | `scripts/gads-dsa-odbuduj-reklame-2026-08-31.py --apply`, zweryfikowane odczytem |
 | 2026-08-31 | `[DG]` bid_modifier 0 na desktop/tablet/TV (0 konwersji ze 143 kliknięć) | `scripts/gads-dg-wylacz-desktop-2026-08-31.py --apply`, zweryfikowane odczytem |
 | 2026-08-31 | `[Brand]` → TARGET_IMPRESSION_SHARE (górna 90%, sufit 1,50 zł) + druga reklama 822849281734 + wykluczenie „bełchatów" | `scripts/gads-brand-optymalizacja-2026-08-31.py --apply`, zweryfikowane odczytem; cele konwersji sprawdzone — YouTube nie wrócił |
+| 2026-09-07 | `[RMKT]` feed odświeżony po 4 tygodniach awarii — 257 wpisów (35 usuniętych, 31 nowych, 165 nowych cen) | `scripts/gads-rmkt-feed-refresh.py --apply`, dump w `~/backups/primaauto/rmkt-feed/2026-09-07/`, zweryfikowane odczytem: 0 rozjazdów |
+| 2026-09-07 | marka **Xiaomi** wycięta z feedu RMKT (SU7, SU7 Ultra, YU7) + wykluczona na stałe w builderze | `scripts/build-gads-hub-feed.php` (`$WYCOFANE_MARKI`), zweryfikowane: 0 wpisów Xiaomi na koncie |
+| 2026-09-07 | `[RMKT]` 11 placementów wykluczonych, desktop/tablet bid_modifier 0, druga reklama RDA 823752322983 | `scripts/gads-rmkt-optymalizacja-2026-09-07.py --apply`, zweryfikowane odczytem |
+| 2026-09-07 | `[RMKT]` harmonogram 7× 07:00–23:00 + geo Polska (kampania nie miała ŻADNEGO kryterium LOCATION) | `scripts/gads-rmkt-harmonogram-geo-2026-09-07.py --apply`, zweryfikowane odczytem |
+| 2026-09-07 | check „wiek feedu RMKT” dołożony do monitoringu godzinowego | `scripts/checki-pomiaru.py` (`check_feed_rmkt`), pierwszy bieg: TAK, 257 wpisów |
 | 2026-08-31 | strażnik landingów + `DISAPPROVED` wbudowany w `ads-recheck.py` (sekcja 4) | pierwszy bieg: 86 landingów, 1 × 410, 1 reklama DISAPPROVED |
 | 2026-08-31 | `[DG]` +4 reklamy wideo (Shorty: Shark 6, Deepal G318, Leopard 7, Denza Z9 GT) | `scripts/gads-dg-nowe-filmy-2026-08-31.py --apply`, zweryfikowane odczytem |
 | 2026-08-31 | `[DG]` „wideo — Exeed VX" → sam Short (poziomy miał 371 kliknięć i 0 konwersji) | `scripts/gads-dg-exeed-tylko-short-2026-08-31.py --apply`, zweryfikowane: 1 wideo |

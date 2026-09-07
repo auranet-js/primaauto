@@ -16,6 +16,10 @@ $out = $argv[1] ?? (__DIR__ . '/gads-hub-feed.json');
 const MAX_TITLE=25, MAX_SUBTITLE=25, MAX_DESC=25, MAX_CATEGORY=25, MAX_KW=10;
 // marki nie-chińskie — wykluczone (spójnie z scripts/build-dsa-pagefeed.php)
 $NON_CHINESE = ['volkswagen','volvo','nissan','mazda','audi','mg','smart','mini','lotus','lotus-cars','toyota','iveco'];
+// Marki wycofane z reklam decyzją biznesową (nie z powodu pochodzenia).
+// xiaomi — mail ws. marki; 31.08 usunięto reklamy z [SKAG-1], 07.09 wycięte także z feedu RMKT
+// (SU7, SU7 Ultra, YU7 jechały tam nieodnotowane). Decyzja Janka 2026-09-07.
+$WYCOFANE_MARKI = ['xiaomi'];
 
 function clip($s,$n){ $s=trim((string)$s); return (mb_strlen($s)>$n)?trim(mb_substr($s,0,$n)):$s; }
 function enc_url($u){ $p=parse_url($u); if(!$p||empty($p['path'])) return $u;
@@ -48,10 +52,11 @@ foreach($rows as $r){
 }
 
 $assets=[]; $no_img=0; $by_make=[];
-$skip_nonchinese=0;
+$skip_nonchinese=0; $skip_wycofane=0;
 foreach($hubs as $sid=>$h){
   $serie=$h['serie']; $make=$h['make'];
   if($make && in_array($make->slug, $NON_CHINESE, true)){ $skip_nonchinese++; continue; }
+  if($make && in_array($make->slug, $WYCOFANE_MARKI, true)){ $skip_wycofane++; continue; }
   asort($h['prices']); // od najtańszego
   // reprezentatywne zdjęcie: pierwszy (najtańszy) listing z obrazem
   $img='';
@@ -99,7 +104,7 @@ foreach($hubs as $sid=>$h){
 
 file_put_contents($out, json_encode($assets, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES));
 fwrite(STDERR,"OK zapisano: $out\n");
-fwrite(STDERR,"model-hubów: ".count($assets)." | pominięto bez obrazu: $no_img\n");
+fwrite(STDERR,"model-hubów: ".count($assets)." | pominięto bez obrazu: $no_img | marki wycofane: $skip_wycofane\n");
 arsort($by_make);
 fwrite(STDERR,"\n--- huby per marka (top 25) ---\n");
 $i=0; foreach($by_make as $m=>$c){ fwrite(STDERR,sprintf("  %-22s %d\n",$m,$c)); if(++$i>=25)break; }
