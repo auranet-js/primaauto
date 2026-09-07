@@ -12,6 +12,34 @@
 
 ---
 
+## 0. Stan po trzech dobach dostawy — recheck 07.09
+
+Pełny odczyt: `docs/sesje/2026-09-07-recheck-meta.md`. Skrót, bo sekcje niżej opisują stan
+sprzed startu (28.08) i nie zostały przepisane:
+
+- **Sześć reklam chodzi bez alarmów.** 04–07.09: 18 430 wyświetleń, 1 263 kliknięcia,
+  683 kliknięcia w link, **130,65 zł**. CTR całości 6,85%.
+- **Budżet:** zostało 869 zł z 1 000 zł, tempo 52,95 zł/dobę z dwóch zamkniętych dób →
+  **~16 dób, sufit około 23–24.09.**
+- **UTM-y działają.** `facebook / paid_social` jest w GA4 od 04.09 (pełna dostawa od 05.09),
+  155 sesji, nazwa kampanii i nazwa reklamy na miejscu. Wszystkie 6 kreacji trzyma `url_tags`.
+- **Pomiar zgadza się dla `[VID]` i `[FOTO]`** (21–41% kliknięć w link odnajduje się jako
+  sesje GA4 — norma). **`[POST]` odstaje**: 94 kliknięcia → 9 sesji, bo w promowanym poście
+  Meta liczy jako „kliknięcie w link" także rozwinięcia posta i kliknięcia w Stronę.
+  CPC `[POST]` nie jest porównywalne z resztą — tę kampanię oceniamy po sesjach GA4.
+- **Jakość ruchu dobra:** zaangażowanie 82,6% wobec 58,1% dla `google / cpc`.
+- **Kontakt: jeden.** Kliknięcie w WhatsApp z `[FOTO] Cała oferta — kadr 1`. Zero telefonów,
+  zero formularzy. Przy 155 sesjach to szum, nie werdykt.
+- **Wygrywają:** `[VID] z9-gt` (CTR 14,4%, 39 wejść) i `[FOTO] kadr 1` (0,50 zł za wejście,
+  105 ViewContent). `leopard-5-czarny` zbiera obejrzenia wideo, ale nie przenosi ich na ruch
+  (79 kliknięć w link → 4 wczytania strony) — jego wartość to grupa z obejrzenia, nie ruch.
+
+Otwarte, w kolejności po rechecku: **kampania WhatsApp** (konto ma `WHATSAPP_DESTINATION_ADS`,
+w Ads to najlepszy kanał kontaktu), remarketing dynamiczny z katalogu, grupy z obejrzenia
+wideo (ręcznie — API odbija regułę `1870049`), czyszczenie `fbclid` w GA4.
+
+---
+
 ## 1. Cele — jedno źródło prawdy dla obu systemów
 
 Konwersje przenosimy 1:1 z Google Ads (konto `9506068500`), gdzie kampania stoi od miesięcy.
