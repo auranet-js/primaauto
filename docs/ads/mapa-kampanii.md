@@ -368,7 +368,46 @@ Rozważane przy budowie drugiej karuzeli. Zostajemy przy ofertach:
    **`[DG]` NIE DA SIĘ sterować formatami przez API** — `video_ad_inventory_control`
    (`allow_in_feed` / `allow_shorts` / `allow_in_stream`) zwraca
    `OPERATION_NOT_PERMITTED_FOR_CONTEXT`; to pole żyje tylko dla kampanii typu VIDEO.
-   **Wyłączenie in-feed zostaje do zrobienia w panelu** — 237 zł/mies. za 3 konwersje.
+   **Zrobione 07.09 w panelu:** grupa reklam → Kanały → „Samodzielny wybór" → odznaczone
+   „Reklama In-Feed w YouTube". Zostały In-Stream i Shorts.
+   `ad_group.demand_gen_ad_group_settings.channel_controls` czyta się przez API jako pusty
+   obiekt, więc **weryfikacja tej zmiany jest możliwa wyłącznie wzrokowo w panelu** —
+   pamiętać przy każdym następnym rechecku.
+
+   **Budżetu w Demand Gen NIE DA SIĘ dzielić procentowo między kreacje** (sprawdzone 07.09):
+   rotacja stoi na `OPTIMIZE`, nie istnieje pole ze stawką ani budżetem per reklama/asset,
+   `cpc_bid`/`cpm_bid` grupy to wartości szczątkowe (0,01 zł) bez wpływu przy
+   `MAXIMIZE_CONVERSIONS`, a grupa reklam jest jedna. **Jedyne sterowanie alokacją to
+   włączanie i wyłączanie kreacji.** Rozbicie na osobne kampanie z własnymi budżetami
+   odrzucone — przy 32 konw./mies. rozdrobniłoby sygnał i automat by się nie nauczył.
+
+   **Alokacja budżetu wg kreacji (30 dni), źródło decyzji o pauzach:**
+
+   | kreacja | dni | koszt | konw. | CPA | udział |
+   |---|---|---|---|---|---|
+   | Exeed VX | 30 | 148,27 zł | 13 | **11,42 zł** | 19,1% |
+   | BYD Shark 6 | 7 | 11,70 zł | 1 | 11,70 zł | 1,5% |
+   | karuzela na placu | 22 | 214,78 zł | 9 | 23,86 zł | 27,6% |
+   | karuzela nowa dostawa | 6 | 32,57 zł | 1 | 32,57 zł | 4,2% |
+   | Leopard 5 czarny | 30 | 252,99 zł | 7 | 36,14 zł | **32,5%** |
+   | Deepal G318 | 7 | 60,97 zł | 1 | 60,97 zł | 7,8% → **PAUSED** |
+
+   **Leopard 5 świadomie ZOSTAJE** mimo że zjada 32,5% budżetu przy CPA o połowę gorszym od
+   średniej — ma 30 dni stażu i 7 konwersji, więc pauza kosztowałaby wolumen. Decyzja Janka
+   07.09: ciąć tylko Deepala. Do ponownej oceny 14.09 — te same 253 zł u Exeeda dałyby ~22 konw.
+
+   **Stan kreacji po 07.09 — 6 aktywnych:** karuzela „auta na placu", Leopard 5, Exeed VX,
+   karuzela „nowa dostawa", BYD Shark 6, Lynk & Co 900.
+   **4 zapauzowane** (PAUSED, nie REMOVED — wracają jedną mutacją): Denza Z9 GT, BYD Leopard 7,
+   Deepal G318, Denza N9. Przy N9 pauza to decyzja o **liczbie kreacji w rotacji**, nie werdykt
+   o filmie — miał 2 dni emisji i 6,13 zł, czyli próbkę bez wartości dowodowej. Lynk & Co 900
+   (ten sam start 05.09, 6,71 zł, 0 konw.) został jako jedyny przedstawiciel fali 2.
+
+   **Harmonogram 08:00–24:00 potwierdzony przez Janka 07.09** — rozważane skrócenie do 23:00
+   ODRZUCONE na danych: godzina 23:00–24:00 ma CPA **13,30 zł**, czwarta najlepsza w dobie przy
+   średniej 24,31. Wieczór jest najmocniejszy: 19:00 (CPA 6,52), 15:00 (6,85), 22:00 (10,77),
+   23:00 (13,30). Słabe jest rano — 9:00 i 11:00 po ~44 zł, 8:00 zero konwersji przy 21 zł.
+   Jeśli kiedyś skracać, to start na 09:00, nie koniec na 23:00.
 
    **Do oceny 14.09:** Z9 GT będzie miała 14 dni, N9 i Lynk po tygodniu realnej emisji
    (ich assety weszły do Ads dopiero 05.09, choć filmy były na kanale od 31.08–02.09).
@@ -442,6 +481,9 @@ Rozważane przy budowie drugiej karuzeli. Zostajemy przy ofertach:
 | 2026-09-07 | check „wiek feedu RMKT” dołożony do monitoringu godzinowego | `scripts/checki-pomiaru.py` (`check_feed_rmkt`), pierwszy bieg: TAK, 257 wpisów |
 | 2026-09-07 | `[DG]` budżet 45 → **35 zł/dz** (decyzja Janka), harmonogram 08:00–24:00, 22 kanały YT wykluczone (69 łącznie) | `scripts/gads-dg-optymalizacja-2026-09-07.py --apply`, zweryfikowane odczytem |
 | 2026-09-07 | `[DG]` pauza 2 kreacji bez konwersji: Denza Z9 GT (822803999502), BYD Leopard 7 (822846696946) — 10 → 8 aktywnych | `scripts/gads-dg-pauza-slabych-2026-09-07.py --apply`, PAUSED (nie REMOVED) |
+| 2026-09-07 | `[DG]` **in-feed wyłączony** — kanały grupy: In-Stream + Shorts | **panel** (API odmawia), zweryfikowane odczytem pola Kanały |
+| 2026-09-07 | `[DG]` pauza Deepal G318 (822846696928) — CPA 60,97 zł przy średniej 24,31 | `scripts/gads-dg-pauza-slabych-2026-09-07.py --apply`, 8 → 7 aktywnych |
+| 2026-09-07 | `[DG]` pauza Denza N9 (823595812283) — redukcja liczby assetów, decyzja Janka | ten sam skrypt, 7 → **6 aktywnych** |
 | 2026-08-31 | strażnik landingów + `DISAPPROVED` wbudowany w `ads-recheck.py` (sekcja 4) | pierwszy bieg: 86 landingów, 1 × 410, 1 reklama DISAPPROVED |
 | 2026-08-31 | `[DG]` +4 reklamy wideo (Shorty: Shark 6, Deepal G318, Leopard 7, Denza Z9 GT) | `scripts/gads-dg-nowe-filmy-2026-08-31.py --apply`, zweryfikowane odczytem |
 | 2026-08-31 | `[DG]` „wideo — Exeed VX" → sam Short (poziomy miał 371 kliknięć i 0 konwersji) | `scripts/gads-dg-exeed-tylko-short-2026-08-31.py --apply`, zweryfikowane: 1 wideo |
