@@ -4844,3 +4844,37 @@ Zgłoszone do Indexing API (4/100 budżetu ad-hoc).
 **Znalezisko poboczne, NIE naprawione:** `AsiaAuto_HubTitleGenerator::buildDescription()` generuje
 błędną fleksję — „1 egzemplarzy" (**181 hubów**) i „2–4 egzemplarzy" (**80 hubów**).
 Poprawnie: „1 egzemplarz", „2 egzemplarze". Widoczne w meta description w SERP. Do decyzji.
+
+---
+
+## 2026-09-07 — mapowania T-191 P1 + klasyfikacja marek (bez bumpa wersji: dane, nie kod)
+
+**`data/brand-mapping-v6.1.php`** (340 → 347 wpisów, backup `.bak-2026-09-07-t191`) — 7 par, które
+dotąd wchodziły fallbackiem `translateModel`: `Haval|Haval H9`, `Changan|Changan UNI-K`,
+`Changan|Changan UNI-K iDD` (dongchedi, klucze z `wp asiaauto inspect` na żywych ofertach
+356507335 i 356501255) oraz `Zeekr|8X`, `Yangwang|Yangwang U9`, `Ford|Bronco`,
+`Ford|Bronco Basecamp` (che168, klucze z sondy `getOffers` na żywym strumieniu).
+
+**Pułapka warta zapamiętania:** dla che168 wpis w `che168-model-map.php` sam **nie działa** —
+adapter kanonizuje przez `canonicalKeyForSource()`, która dla pary bez bliźniaka w brand-mappingu
+zwraca best-effort `[mark, model]` i kończy fallbackiem (zmierzone: 4/4 FAIL przed przeniesieniem
+wpisów, 4/4 OK po). Dlatego pozycje che168 też trafiły do brand-mappingu, a `che168-model-map.php`
+został przywrócony z backupu bez zmian.
+
+`serie_eu` celowo bez marki (`H9`, `UNI-K`, `Bronco`, `8X`) — importer składa tytuł jako
+`mark_eu + serie_eu` (`class-asiaauto-importer.php:127`), więc marka w `serie_eu` daje dublet.
+Ten defekt widać dziś na hubie Li Auto MEGA („Li Auto Li Auto MEGA 2025…", 43 oferty) — NIE naprawiany.
+Wyjątek świadomy: `Yangwang U9` zostaje z submarką, wzorzec U7/U8 (marka = BYD).
+
+Weryfikacja bez importu (`canonicalKeyForSource` + `getEuForCn`): 7/7 par trafia w istniejące huby
+(term 4412, 4047, 4044, 6569, 6607, 4156), żaden tytuł nie dubluje marki, regresja na 5 parach
+sprzed patcha (BYD Song L EV, AITO M9, Haval H6, Zeekr 7X, Qiyuan A07) bez zmian.
+Istniejące oferty NIE ruszane — mapa działa przy następnym syncu.
+
+**`scripts/set-brand-origin-group.php`** — 5 marek dopisanych do mapy klasyfikacji, apply na
+produkcji, diff = dokładnie 5 zmian meta: BMW → `global_jv` (bez wpisu stało w siatce
+„Pozostałe chińskie marki" na `/marki/`), Great Wall → `chinese`/GWM, Stelato → „BAIC i Huawei",
+Aistaland → „GAC i Huawei", Changan Qiyuan → „Changan". `/marki/` po zmianie: 55 kafli, HTTP 200.
+
+**Sync repo:** `plugins/asiaauto-sync/data/` był rozjechany z produkcją o ~350 linii (mapowania
+dokładane na serwerze w wielu sesjach bez kopii do repo) — wciągnięty pełny stan serwera.

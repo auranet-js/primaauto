@@ -44,12 +44,14 @@ $MAPA = [
     'luxeed'         => ['chinese', 'Chery i Huawei'],
 
     // ——— Changan
-    'changan' => ['chinese', 'Changan'],
-    'deepal'  => ['chinese', 'Changan'],
-    'avatr'   => ['chinese', 'Changan i Huawei'],
+    'changan'        => ['chinese', 'Changan'],
+    'changan-qiyuan' => ['chinese', 'Changan'],   // 2026-09-07: wydzielona jako osobna marka
+    'deepal'         => ['chinese', 'Changan'],
+    'avatr'          => ['chinese', 'Changan i Huawei'],
 
     // ——— Great Wall Motor
-    'gwm'   => ['chinese', 'GWM'],
+    'gwm'         => ['chinese', 'GWM'],
+    'great-wall'  => ['chinese', 'GWM'],   // 2026-09-07: term obok 'gwm', wcześniej bez origin
     'haval' => ['chinese', 'GWM'],
     'tank'  => ['chinese', 'GWM'],
     'wey'   => ['chinese', 'GWM'],
@@ -77,8 +79,10 @@ $MAPA = [
     'foton'  => ['chinese', 'BAIC'],
 
     // ——— sojusz HIMA (Huawei + producent)
-    'aito'    => ['chinese', 'Seres i Huawei'],
-    'maextro' => ['chinese', 'JAC i Huawei'],
+    'aito'       => ['chinese', 'Seres i Huawei'],
+    'maextro'    => ['chinese', 'JAC i Huawei'],
+    'stelato'    => ['chinese', 'BAIC i Huawei'],   // 2026-09-07, 享界
+    'aistaland'  => ['chinese', 'GAC i Huawei'],    // 2026-09-07, 启境
 
     // ——— marki niezależne (bez etykiety grupy)
     'xiaomi'    => ['chinese', ''],
@@ -100,6 +104,7 @@ $MAPA = [
     'mazda'         => ['global_jv', ''],
     'ford'          => ['global_jv', ''],
     'mercedes-benz' => ['global_jv', ''],
+    'bmw'           => ['global_jv', ''],   // 2026-09-07: bez wpisu stało w siatce „Pozostałe chińskie marki"
 ];
 
 $terms = get_terms(['taxonomy' => 'make', 'hide_empty' => true]);

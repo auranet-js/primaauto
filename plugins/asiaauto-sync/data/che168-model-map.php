@@ -1198,4 +1198,179 @@ return array (
     'title_eu' => 'Exeed VX',
     'slug' => 'vx',
   ),
+  // Geely Galaxy M9 (2026-08-24). Ręczny import 22.08 wszedł bez kanonizacji: auto-api podaje
+  // mark='Galaxy', model='银河M9', a pary nie było ani tu, ani w brand-mappingu — importer wziął
+  // markCN dosłownie i założył term make 'Galaxy' (7234) + serie '银河M9' (7235).
+  // Term docelowy: 'Galaxy M9' (6550, slug m9, parent Geely) — slug kolizyjny z AITO M9 (5304),
+  // rozstrzyga guard make-aware T-190.
+  'Galaxy|银河M9' =>
+  array (
+    'mark_eu' => 'Geely',
+    'serie_eu' => 'Galaxy M9',
+    'title_eu' => 'Geely Galaxy M9',
+    'slug' => 'm9',
+  ),
+  // --- v6.5 (2026-09-07): premiery wrzesien 2026, mapowanie z wyprzedzeniem.
+  //     Changan Qiyuan Q06 (przedsprzedaz 147 900 CNY), Aistaland GX7 (+ GT7,
+  //     ktory JUZ jest w feedach), Xiaomi SkyNomad N90/N70. Klucze SkyNomada sa
+  //     przewidywane w 3 wariantach — modelu nie ma jeszcze w zadnym feedzie. ---
+  'Qiyuan|Qiyuan Q06' =>
+  array (
+    'mark_eu' => 'Changan Qiyuan',
+    'serie_eu' => 'Q06',
+    'title_eu' => 'Changan Qiyuan Q06',
+    'slug' => 'q06',
+  ),
+  'Qiyuan|启源Q06' =>
+  array (
+    'mark_eu' => 'Changan Qiyuan',
+    'serie_eu' => 'Q06',
+    'title_eu' => 'Changan Qiyuan Q06',
+    'slug' => 'q06',
+  ),
+  'Qijing|Qijing GX7' =>
+  array (
+    'mark_eu' => 'Aistaland',
+    'serie_eu' => 'GX7',
+    'title_eu' => 'Aistaland GX7',
+    'slug' => 'gx7',
+  ),
+  'Qijing|Qijing GT7' =>
+  array (
+    'mark_eu' => 'Aistaland',
+    'serie_eu' => 'GT7',
+    'title_eu' => 'Aistaland GT7',
+    'slug' => 'gt7',
+  ),
+  'Xiaomi|N90' =>
+  array (
+    'mark_eu' => 'Xiaomi',
+    'serie_eu' => 'SkyNomad N90',
+    'title_eu' => 'Xiaomi SkyNomad N90',
+    'slug' => 'skynomad-n90',
+  ),
+  'Xiaomi|小米澎程N90' =>
+  array (
+    'mark_eu' => 'Xiaomi',
+    'serie_eu' => 'SkyNomad N90',
+    'title_eu' => 'Xiaomi SkyNomad N90',
+    'slug' => 'skynomad-n90',
+  ),
+  'Xiaomi|Pengcheng N90' =>
+  array (
+    'mark_eu' => 'Xiaomi',
+    'serie_eu' => 'SkyNomad N90',
+    'title_eu' => 'Xiaomi SkyNomad N90',
+    'slug' => 'skynomad-n90',
+  ),
+  'Xiaomi|N70' =>
+  array (
+    'mark_eu' => 'Xiaomi',
+    'serie_eu' => 'SkyNomad N70',
+    'title_eu' => 'Xiaomi SkyNomad N70',
+    'slug' => 'skynomad-n70',
+  ),
+  'Xiaomi|小米澎程N70' =>
+  array (
+    'mark_eu' => 'Xiaomi',
+    'serie_eu' => 'SkyNomad N70',
+    'title_eu' => 'Xiaomi SkyNomad N70',
+    'slug' => 'skynomad-n70',
+  ),
+  'Xiaomi|Pengcheng N70' =>
+  array (
+    'mark_eu' => 'Xiaomi',
+    'serie_eu' => 'SkyNomad N70',
+    'title_eu' => 'Xiaomi SkyNomad N70',
+    'slug' => 'skynomad-n70',
+  ),
+  // --- 2026-09-07: modele sub-marki Qiyuan z realna podaza (A06: 5 szt., Q05: 3 szt.) ---
+  'Qiyuan|Qiyuan A06' =>
+  array (
+    'mark_eu' => 'Changan Qiyuan',
+    'serie_eu' => 'A06',
+    'title_eu' => 'Changan Qiyuan A06',
+    'slug' => 'a06',
+  ),
+  'Qiyuan|Qiyuan Q05' =>
+  array (
+    'mark_eu' => 'Changan Qiyuan',
+    'serie_eu' => 'Q05',
+    'title_eu' => 'Changan Qiyuan Q05',
+    'slug' => 'q05',
+  ),
+  // --- 2026-09-07: Stelato (享界, BAIC + Huawei) — 58 ofert w magazynie che168.
+  //     Nazwa EU wg DFS PL: 'stelato s9' 480/mc vs 'xiangjie' 10/mc. ---
+  'Xiangjie|Xiangjie S9' =>
+  array (
+    'mark_eu' => 'Stelato',
+    'serie_eu' => 'S9',
+    'title_eu' => 'Stelato S9',
+    'slug' => 's9',
+  ),
+  'Xiangjie|Xiangjie S9T' =>
+  array (
+    'mark_eu' => 'Stelato',
+    'serie_eu' => 'S9T',
+    'title_eu' => 'Stelato S9T',
+    'slug' => 's9t',
+  ),
+  // --- 2026-09-07: ROX Adamas. W v6.5 (27.07) odlozony swiadomie („osobny hub, gdy wpadnie
+  //     egzemplarz") — dzis hub powstaje PRZED podaza, bo DFS PL urosl 70 -> 90/mc,
+  //     a 'rox adamas cena' ma wlasne 40/mc. Ofert w feedach nadal ZERO (che168: tylko
+  //     'Extreme Stone 01', dongchedi: 'Jishi 01'), wiec klucze sa przewidywane.
+  //     Katalog Autohome ma ADAMAS jako ODREBNA serie (8430) obok 极石01 (7302) — to nie
+  //     lifting 01, tylko nastepca: inne nadwozie, 6/7 miejsc, EREV 350 kW. ---
+  'ROX|Extreme Stone ADAMAS' =>
+  array (
+    'mark_eu' => 'ROX',
+    'serie_eu' => 'Adamas',
+    'title_eu' => 'ROX Adamas',
+    'slug' => 'adamas',
+  ),
+  'ROX|ADAMAS' =>
+  array (
+    'mark_eu' => 'ROX',
+    'serie_eu' => 'Adamas',
+    'title_eu' => 'ROX Adamas',
+    'slug' => 'adamas',
+  ),
+  'ROX|极石ADAMAS' =>
+  array (
+    'mark_eu' => 'ROX',
+    'serie_eu' => 'Adamas',
+    'title_eu' => 'ROX Adamas',
+    'slug' => 'adamas',
+  ),
+  // --- 2026-09-07: domkniecie mapy che168 dla Qiyuana. Q07 i A07 mialy wpisy tylko
+  //     po stronie brand-mappingu (forma dongchedi) — che168 wysyla 'Qiyuan|Qiyuan Q07'
+  //     i bez tych kluczy resolveChe168() zwracalo surowe pola, a guard odrzucal oferte. ---
+  'Qiyuan|Qiyuan Q07' =>
+  array (
+    'mark_eu' => 'Changan Qiyuan',
+    'serie_eu' => 'Q07',
+    'title_eu' => 'Changan Qiyuan Q07',
+    'slug' => 'q07',
+  ),
+  'Qiyuan|Qiyuan A07' =>
+  array (
+    'mark_eu' => 'Changan Qiyuan',
+    'serie_eu' => 'A07',
+    'title_eu' => 'Changan Qiyuan A07',
+    'slug' => 'a07',
+  ),
+  'Qiyuan|Qiyuan A05' =>
+  array (
+    'mark_eu' => 'Changan Qiyuan',
+    'serie_eu' => 'A05',
+    'title_eu' => 'Changan Qiyuan A05',
+    'slug' => 'a05',
+  ),
+  'Qiyuan|Qiyuan E07' =>
+  array (
+    'mark_eu' => 'Changan Qiyuan',
+    'serie_eu' => 'E07',
+    'title_eu' => 'Changan Qiyuan E07',
+    'slug' => 'e07',
+  ),
 );

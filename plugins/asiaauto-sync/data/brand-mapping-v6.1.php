@@ -693,12 +693,24 @@ return array (
   // rankującego /denza/n8l-dm/. Bez tego wpisu krok 3 dokleja wariant napędu i kandydat
   // „N8L DM" trafia przez reverse-index w 'Denza|Denza N8L DM' (serie_eu 'N8L DM'), czyli
   // tam gdzie oferty dongchedi. Jeden hub na oba źródła.
-  'Dongfeng Fengxing|Xinghai V9' => 
+  'Dongfeng Fengxing|Xinghai V9' =>
   array (
     'mark_eu' => 'Dongfeng',
     'serie_eu' => 'Forting U-Tour V9',
     'title_eu' => 'Dongfeng Forting U-Tour V9',
     'slug' => 'forting-u-tour-v9',
+  ),
+  // Bez tego wpisu importer zrobil osobna marke 'dongfeng-fengxing' (#7188), a poniewaz
+  // AsiaAuto_Redirects foldem 'dongfeng-fengxing' => 'dongfeng' przekierowuje sam URL marki,
+  // hub /samochody/dongfeng-fengxing/lingzhi-plus/ szedl 301 na /dongfeng/lingzhi-plus/, gdzie
+  // termu nie ma — strona renderowala sie bez tresci. Fengxing foldujemy do Dongfeng, jak
+  // Xinghai V9 wyzej. (2026-08-10)
+  'Dongfeng Fengxing|Lingzhi PLUS' =>
+  array (
+    'mark_eu' => 'Dongfeng',
+    'serie_eu' => 'Lingzhi PLUS',
+    'title_eu' => 'Dongfeng Lingzhi PLUS',
+    'slug' => 'lingzhi-plus',
   ),
   'Dongfeng Yipai|eπ008' =>
   array (
@@ -819,14 +831,8 @@ return array (
     'title_eu' => 'GAC E9 PHEV',
     'slug' => 'e9-phev',
   ),
-  'GAC Aion Hyper|Hyptec HT' =>
-  array (
-    'mark_eu' => 'GAC',
-    'serie_eu' => 'Hyptec HT',
-    'title_eu' => 'GAC Hyptec HT',
-    'slug' => 'hyptec-ht',
-  ),
-  'Geely|Xingyue L' => 
+  // 'GAC Aion Hyper|Hyptec HT' przeniesiony do sekcji v6.8 (koniec pliku) — patrz komentarz tam.
+  'Geely|Xingyue L' =>
   array (
     'mark_eu' => 'Geely',
     'serie_eu' => 'Monjaro',
@@ -1481,16 +1487,16 @@ return array (
   ),
   'Changan Qiyuan|Changan Qiyuan A07' => 
   array (
-    'mark_eu' => 'Nevo',
+    'mark_eu' => 'Changan Qiyuan',
     'serie_eu' => 'A07',
-    'title_eu' => 'Qiyuan Nevo A07',
+    'title_eu' => 'Changan Qiyuan A07',
     'slug' => 'a07',
   ),
   'Changan Qiyuan|Changan Qiyuan Q07' => 
   array (
-    'mark_eu' => 'Nevo',
+    'mark_eu' => 'Changan Qiyuan',
     'serie_eu' => 'Q07',
-    'title_eu' => 'Qiyuan Nevo Q07',
+    'title_eu' => 'Changan Qiyuan Q07',
     'slug' => 'q07',
   ),
   'Smart|smart #5' => 
@@ -2199,5 +2205,392 @@ return array (
     'serie_eu' => '10 EM-P',
     'title_eu' => 'Lynk & Co 10 EM-P',
     'slug' => '10-em-p',
+  ),
+
+  // --- v6.8 (2026-07-28): rodzina GAC Hyptec (昊铂; do 2024 „Aion Hyper"). ---
+  // Cała rodzina była orphanem mappingu — importer budował post_title z surowego mark+model,
+  // stąd 9 tytułów z duplikacją „GAC Aion Hyper Hyper HT". Klucze CN zostają w formie
+  // dongchedi ('GAC Aion Hyper|Hyper *'), bo tak przychodzą z API; zmieniamy tylko stronę EU.
+  //
+  // Nazwy EU = Hyptec, rozstrzygnięte wolumenami wyszukiwań PL (Google Ads, 2026-07-28),
+  // NIE rebrandingiem producenta: suma wariantów „hyptec *" = 3540/mc vs „aion hyper *" = 210/mc.
+  // Per model: HT 2300 vs 50, HL 890 vs 30, SSR 280 vs 170, GT 40 vs 40, A800 30 vs 0.
+  // Trend 12 mies. pokazuje migrację ZACHOWAŃ: „aion hyper ssr" 70→10, „hyptec ssr" 40→320.
+  // Kontrola: Wikipedia PL ma hasła Hyptec HT/HL/SSR/GT, a west-motors (konkurent importowy)
+  // pisze „GAC Hyptec HL z Chin". Wcześniejszy odczyt z GSC („hyptec = 0 wyświetleń") był
+  // błędnym kołem — GSC pokazuje tylko frazy, na których już się wyświetlamy.
+  // „Aion Hyper" zostaje jako alias w treści wiki hubów (istotny dla SSR i GT).
+  'GAC Aion Hyper|Hyper HT' =>
+  array (
+    'mark_eu' => 'GAC',
+    'serie_eu' => 'Hyptec HT',
+    'title_eu' => 'GAC Hyptec HT',
+    'slug' => 'hyptec-ht',
+  ),
+  'GAC Aion Hyper|Hyper HL' =>
+  array (
+    'mark_eu' => 'GAC',
+    'serie_eu' => 'Hyptec HL',
+    'title_eu' => 'GAC Hyptec HL',
+    'slug' => 'hyptec-hl',
+  ),
+  'GAC Aion Hyper|Hyper GT' =>
+  array (
+    'mark_eu' => 'GAC',
+    'serie_eu' => 'Hyptec GT',
+    'title_eu' => 'GAC Hyptec GT',
+    'slug' => 'hyptec-gt',
+  ),
+  'GAC Aion Hyper|Hyper SSR' =>
+  array (
+    'mark_eu' => 'GAC',
+    'serie_eu' => 'Hyptec SSR',
+    'title_eu' => 'GAC Hyptec SSR',
+    'slug' => 'hyptec-ssr',
+  ),
+  'GAC Aion Hyper|Hyper A800' =>
+  array (
+    'mark_eu' => 'GAC',
+    'serie_eu' => 'Hyptec A800',
+    'title_eu' => 'GAC Hyptec A800',
+    'slug' => 'hyptec-a800',
+  ),
+  // Stary wpis (do v6.7 stał przy GAC Trumpchi) — zostaje jako fallback, gdyby dongchedi
+  // wrócił do nazwy 'Hyptec HT', ale celuje już w kanoniczny term 'Aion Hyper HT'.
+  // MUSI stać PO 'GAC Aion Hyper|Hyper HT': sigToKey() bierze PIERWSZY klucz dla danej
+  // sygnatury 'GAC|Aion Hyper HT', a adapter che168 podmienia nim mark/model.
+  'GAC Aion Hyper|Hyptec HT' =>
+  array (
+    'mark_eu' => 'GAC',
+    'serie_eu' => 'Hyptec HT',
+    'title_eu' => 'GAC Hyptec HT',
+    'slug' => 'hyptec-ht',
+  ),
+
+  // === v6.8 / 2026-07-29 — sygnatury dla zaciągu ręcznego 28.07 ===
+  'Mercedes-Benz|EQE SUV' =>
+  array (
+    'mark_eu' => 'Mercedes-Benz',
+    'serie_eu' => 'EQE SUV',
+    'title_eu' => 'Mercedes-Benz EQE SUV',
+    'slug' => 'eqe-suv',
+  ),
+  'Foton|Tunland V9' =>
+  array (
+    'mark_eu' => 'Foton',
+    'serie_eu' => 'Tunland V9',
+    'title_eu' => 'Foton Tunland V9',
+    'slug' => 'tunland-v9',
+  ),
+  'Foton|Tunland V7' =>
+  array (
+    'mark_eu' => 'Foton',
+    'serie_eu' => 'Tunland V7',
+    'title_eu' => 'Foton Tunland V7',
+    'slug' => 'tunland-v7',
+  ),
+  'Foton|Toano Da V' =>
+  array (
+    'mark_eu' => 'Foton',
+    'serie_eu' => 'Toano Da V',
+    'title_eu' => 'Foton Toano Da V',
+    'slug' => 'toano-da-v',
+  ),
+  'Maxus|V70' =>
+  array (
+    'mark_eu' => 'Maxus',
+    'serie_eu' => 'V70',
+    'title_eu' => 'Maxus V70',
+    'slug' => 'v70',
+  ),
+  'Maxus|Interstellar' =>
+  array (
+    'mark_eu' => 'Maxus',
+    'serie_eu' => 'Interstellar',
+    'title_eu' => 'Maxus Interstellar',
+    'slug' => 'interstellar',
+  ),
+  'Maxus|G90' =>
+  array (
+    'mark_eu' => 'Maxus',
+    'serie_eu' => 'G90',
+    'title_eu' => 'Maxus G90',
+    'slug' => 'g90',
+  ),
+  'Dongfeng|M-Hero 917' =>
+  array (
+    'mark_eu' => 'Dongfeng',
+    'serie_eu' => 'M-Hero 917',
+    'title_eu' => 'Dongfeng M-Hero 917',
+    'slug' => 'm-hero-917',
+  ),
+  'Toyota|Sienna' =>
+  array (
+    'mark_eu' => 'Toyota',
+    'serie_eu' => 'Sienna',
+    'title_eu' => 'Toyota Sienna',
+    'slug' => 'sienna',
+  ),
+
+  // --- v6.8 (2026-07-29): sieroty z kanału dongchedi -------------------------------
+  // Guard mapowania w `normalizeForSource()` działa WYŁĄCZNIE dla che168, więc dongchedi
+  // wpuszcza niezmapowane pary i importer buduje taksonomię fallbackiem. Klucze poniżej
+  // zmierzone ścieżką getOffer() → getEuForCn() (nie zgadywane) — wszystkie wracały NULL.
+  //
+  // Kierunek scalenia potwierdzony DFS + GSC (90 dni):
+  //   passion 320/mc, 39 imp  vs  zhuiguang —, 1 imp
+  //   fulwin   90/mc, 91 imp  vs  fengyun 30/mc, 4 imp
+  'Voyah|Voyah Zhuiguang L' =>
+  array (
+    'mark_eu' => 'Voyah',
+    'serie_eu' => 'Passion L',
+    'title_eu' => 'Voyah Passion L',
+    'slug' => 'passion-l',
+  ),
+  // Nazwa „T10" bez prefiksu — DFS nie ma danych dla żadnego wariantu, rozstrzyga
+  // konwencja większości pod tą marką (T8, T9, T11, A8L, A9L, X3 PLUS).
+  'Chery Fengyun|Fengyun T10' =>
+  array (
+    'mark_eu' => 'Chery Fulwin',
+    'serie_eu' => 'T10',
+    'title_eu' => 'Chery Fulwin T10',
+    'slug' => 'fengyun-t10',
+  ),
+  'Chery Fengyun|Fengyun X3L' =>
+  array (
+    'mark_eu' => 'Chery Fulwin',
+    'serie_eu' => 'X3L',
+    'title_eu' => 'Chery Fulwin X3L',
+    'slug' => 'x3l',
+  ),
+
+  // === v6.9 / 2026-08-18 — modele z dongchedi sprzed guarda (NIO ES9, Luxeed V9, Voyah Taishan) — klucze źródłowe dongchedi ===
+  'Maextro|智界V9' =>
+  array (
+    'mark_eu' => 'Luxeed',
+    'serie_eu' => 'V9',
+    'title_eu' => 'Luxeed V9',
+    'slug' => 'v9',
+  ),
+  'NIO|蔚来ES9' =>
+  array (
+    'mark_eu' => 'NIO',
+    'serie_eu' => 'ES9',
+    'title_eu' => 'NIO ES9',
+    'slug' => 'es9',
+  ),
+  'Voyah|岚图泰山 PHEV' =>
+  array (
+    'mark_eu' => 'Voyah',
+    'serie_eu' => 'Taishan',
+    'title_eu' => 'Voyah Taishan',
+    'slug' => 'taishan',
+  ),
+
+  // === v6.9 / 2026-08-18 — modele z dongchedi sprzed guarda (NIO ES9, Luxeed V9, Voyah Taishan) — sygnatury EU ===
+  'Luxeed|V9' =>
+  array (
+    'mark_eu' => 'Luxeed',
+    'serie_eu' => 'V9',
+    'title_eu' => 'Luxeed V9',
+    'slug' => 'v9',
+  ),
+  'NIO|ES9' =>
+  array (
+    'mark_eu' => 'NIO',
+    'serie_eu' => 'ES9',
+    'title_eu' => 'NIO ES9',
+    'slug' => 'es9',
+  ),
+  'Voyah|Taishan' =>
+  array (
+    'mark_eu' => 'Voyah',
+    'serie_eu' => 'Taishan',
+    'title_eu' => 'Voyah Taishan',
+    'slug' => 'taishan',
+  ),
+  // Docelowy kształt klucza dla 'Galaxy|银河M9' z che168-model-map.php (2026-08-24).
+  // Bez tego wpisu canonicalKeyForSource() nie ma sygnatury 'Geely|Galaxy M9' i zwraca surowiec.
+  'Galaxy|Galaxy M9' =>
+  array (
+    'mark_eu' => 'Geely',
+    'serie_eu' => 'Galaxy M9',
+    'title_eu' => 'Geely Galaxy M9',
+    'slug' => 'm9',
+  ),
+  // --- v6.5 (2026-09-07): premiery wrzesien 2026, mapowanie z wyprzedzeniem.
+  //     Changan Qiyuan Q06 (przedsprzedaz 147 900 CNY), Aistaland GX7 (+ GT7,
+  //     ktory JUZ jest w feedach), Xiaomi SkyNomad N90/N70. Klucze SkyNomada sa
+  //     przewidywane w 3 wariantach — modelu nie ma jeszcze w zadnym feedzie. ---
+  'Changan Qiyuan|Changan Qiyuan Q06' =>
+  array (
+    'mark_eu' => 'Changan Qiyuan',
+    'serie_eu' => 'Q06',
+    'title_eu' => 'Changan Qiyuan Q06',
+    'slug' => 'q06',
+  ),
+  '启境|启境GX7' =>
+  array (
+    'mark_eu' => 'Aistaland',
+    'serie_eu' => 'GX7',
+    'title_eu' => 'Aistaland GX7',
+    'slug' => 'gx7',
+  ),
+  '启境|启境GT7' =>
+  array (
+    'mark_eu' => 'Aistaland',
+    'serie_eu' => 'GT7',
+    'title_eu' => 'Aistaland GT7',
+    'slug' => 'gt7',
+  ),
+  'Xiaomi|Xiaomi N90' =>
+  array (
+    'mark_eu' => 'Xiaomi',
+    'serie_eu' => 'SkyNomad N90',
+    'title_eu' => 'Xiaomi SkyNomad N90',
+    'slug' => 'skynomad-n90',
+  ),
+  'Xiaomi|Xiaomi 澎程N90' =>
+  array (
+    'mark_eu' => 'Xiaomi',
+    'serie_eu' => 'SkyNomad N90',
+    'title_eu' => 'Xiaomi SkyNomad N90',
+    'slug' => 'skynomad-n90',
+  ),
+  'Xiaomi|Xiaomi SkyNomad N90' =>
+  array (
+    'mark_eu' => 'Xiaomi',
+    'serie_eu' => 'SkyNomad N90',
+    'title_eu' => 'Xiaomi SkyNomad N90',
+    'slug' => 'skynomad-n90',
+  ),
+  'Xiaomi|Xiaomi N70' =>
+  array (
+    'mark_eu' => 'Xiaomi',
+    'serie_eu' => 'SkyNomad N70',
+    'title_eu' => 'Xiaomi SkyNomad N70',
+    'slug' => 'skynomad-n70',
+  ),
+  'Xiaomi|Xiaomi 澎程N70' =>
+  array (
+    'mark_eu' => 'Xiaomi',
+    'serie_eu' => 'SkyNomad N70',
+    'title_eu' => 'Xiaomi SkyNomad N70',
+    'slug' => 'skynomad-n70',
+  ),
+  'Xiaomi|Xiaomi SkyNomad N70' =>
+  array (
+    'mark_eu' => 'Xiaomi',
+    'serie_eu' => 'SkyNomad N70',
+    'title_eu' => 'Xiaomi SkyNomad N70',
+    'slug' => 'skynomad-n70',
+  ),
+  // --- 2026-09-07: modele sub-marki Qiyuan z realna podaza (A06: 5 szt., Q05: 3 szt.) ---
+  'Changan Qiyuan|Changan Qiyuan A06' =>
+  array (
+    'mark_eu' => 'Changan Qiyuan',
+    'serie_eu' => 'A06',
+    'title_eu' => 'Changan Qiyuan A06',
+    'slug' => 'a06',
+  ),
+  'Changan Qiyuan|Changan Qiyuan Q05' =>
+  array (
+    'mark_eu' => 'Changan Qiyuan',
+    'serie_eu' => 'Q05',
+    'title_eu' => 'Changan Qiyuan Q05',
+    'slug' => 'q05',
+  ),
+  // --- 2026-09-07: Stelato (享界, BAIC + Huawei) — 58 ofert w magazynie che168.
+  //     Nazwa EU wg DFS PL: 'stelato s9' 480/mc vs 'xiangjie' 10/mc. ---
+  'Xiangjie|Stelato S9' =>
+  array (
+    'mark_eu' => 'Stelato',
+    'serie_eu' => 'S9',
+    'title_eu' => 'Stelato S9',
+    'slug' => 's9',
+  ),
+  'Xiangjie|Xiangjie S9T' =>
+  array (
+    'mark_eu' => 'Stelato',
+    'serie_eu' => 'S9T',
+    'title_eu' => 'Stelato S9T',
+    'slug' => 's9t',
+  ),
+  // --- 2026-09-07: ROX Adamas. W v6.5 (27.07) odlozony swiadomie („osobny hub, gdy wpadnie
+  //     egzemplarz") — dzis hub powstaje PRZED podaza, bo DFS PL urosl 70 -> 90/mc,
+  //     a 'rox adamas cena' ma wlasne 40/mc. Ofert w feedach nadal ZERO (che168: tylko
+  //     'Extreme Stone 01', dongchedi: 'Jishi 01'), wiec klucze sa przewidywane.
+  //     Katalog Autohome ma ADAMAS jako ODREBNA serie (8430) obok 极石01 (7302) — to nie
+  //     lifting 01, tylko nastepca: inne nadwozie, 6/7 miejsc, EREV 350 kW. ---
+  'ROX|Jishi ADAMAS' =>
+  array (
+    'mark_eu' => 'ROX',
+    'serie_eu' => 'Adamas',
+    'title_eu' => 'ROX Adamas',
+    'slug' => 'adamas',
+  ),
+  // --- 2026-09-07 T-191: huby z podaza, ktore szly fallbackiem `translateModel` (audyt DFS
+  //     T-190 z 07.07). Klucze potwierdzone `wp asiaauto inspect` na zywych ofertach
+  //     dongchedi (356507335 = Haval H9, 356501255 = Changan UNI-K), nie przewidywane.
+  //     serie_eu CELOWO bez marki — importer sklada tytul jako mark_eu + serie_eu
+  //     (class-asiaauto-importer.php:127), wiec 'Haval H9' w serie_eu dalby
+  //     „Haval Haval H9" (defekt widoczny dzis na hubie Li Auto MEGA).
+  //     slug = keeper istniejacego termu, zeby nie tworzyc duplikatu. ---
+  'Haval|Haval H9' =>
+  array (
+    'mark_eu' => 'Haval',
+    'serie_eu' => 'H9',
+    'title_eu' => 'Haval H9',
+    'slug' => 'haval-h9',
+  ),
+  'Changan|Changan UNI-K' =>
+  array (
+    'mark_eu' => 'Changan',
+    'serie_eu' => 'UNI-K',
+    'title_eu' => 'Changan UNI-K',
+    'slug' => 'changan-uni-k',
+  ),
+  'Changan|Changan UNI-K iDD' =>
+  array (
+    'mark_eu' => 'Changan',
+    'serie_eu' => 'UNI-K iDD',
+    'title_eu' => 'Changan UNI-K iDD',
+    'slug' => 'changan-uni-k-idd',
+  ),
+  // --- 2026-09-07 T-191 cd.: pozycje che168. Klucze = surowe pary mark|model odczytane
+  //     z zywego strumienia (sonda read-only na getOffers, 3-4 strony per marka).
+  //     Wpis MUSI byc tutaj, nie w che168-model-map: adapter kanonizuje che168 przez
+  //     canonicalKeyForSource(), ktora dla pary bez blizniaka w brand-mappingu zwraca
+  //     best-effort [mark, model] i konczy fallbackiem (zmierzone 07.09). ---
+  'Zeekr|8X' =>
+  array (
+    'mark_eu' => 'Zeekr',
+    'serie_eu' => '8X',
+    'title_eu' => 'Zeekr 8X',
+    'slug' => '8x',
+  ),
+  // Yangwang = submarka BYD — wzorzec U7/U8: marka BYD, submarka zostaje w serie_eu.
+  'Yangwang|Yangwang U9' =>
+  array (
+    'mark_eu' => 'BYD',
+    'serie_eu' => 'Yangwang U9',
+    'title_eu' => 'BYD Yangwang U9',
+    'slug' => 'yangwang-u9',
+  ),
+  // Basecamp to wersja terenowa Bronco, nie osobny model — swiadomie ten sam hub,
+  // zeby nie fragmentowac podazy (13 + 3 szt. w strumieniu 07.09).
+  'Ford|Bronco' =>
+  array (
+    'mark_eu' => 'Ford',
+    'serie_eu' => 'Bronco',
+    'title_eu' => 'Ford Bronco',
+    'slug' => 'ford-bronco',
+  ),
+  'Ford|Bronco Basecamp' =>
+  array (
+    'mark_eu' => 'Ford',
+    'serie_eu' => 'Bronco',
+    'title_eu' => 'Ford Bronco',
+    'slug' => 'ford-bronco',
   ),
 );
