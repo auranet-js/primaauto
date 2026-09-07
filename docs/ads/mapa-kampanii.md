@@ -436,6 +436,26 @@ i `[Topic]` (811967380201). API nie ma ścieżki odwoławczej dla reklam search.
 porównujący tylko RSA wypisze na nich „teksty identyczne" na dwóch pustych zbiorach (pomyłka
 zaliczona 31.08).
 
+## 8a. [DG] — fala 2 domknięta i zwrot w tekstach (2026-09-05)
+
+Filmy Denzy N9 i Lynk & Co 900 poszły na kanał 31.08–02.09, ale jako jedyne z fali 2 nie miały
+assetów na koncie, więc nie rotowały: 146 + 43 i 532 + 29 wyświetleń wobec 1 500–4 200 na autach
+z kreacją. Dołożone 05.09 (`scripts/gads-dg-n9-lynk-2026-09-05.py`) — [DG] ma teraz 8 reklam
+wideo i 2 karuzele.
+
+**Zwrot w tekstach — decyzja Janka 05.09.** Kreacje wideo mówią o katalogu, nie o egzemplarzu:
+trzon to „auta dostępne od ręki", „auta w drodze do Polski", „przeglądaj katalog ofert do importu",
+**żadnej liczby poza nazwą modelu**, landing na **hub modelu**, nie na ofertę. Powód: jeden film
+odpowiada kilkunastu ofertom, cena rotuje co 15 min (Lynk & Co: 242 tys. w dniu filmu, 254 tys.
+sześć dni później), „od ręki" przypięte do sztuki kłamie po jej zejściu z placu, a landing na
+ofertę po rotacji i tak kończy jako przekierowanie na hub. Przepisane:
+`scripts/gads-dg-teksty-katalogowe-2026-09-05.py` (kontrola liczb i słów z sekcji 7 przed wysyłką).
+
+**Otwarte:** cztery kreacje z 31.08 (Shark 6, Deepal G318, Leopard 7, Denza Z9 GT) nadal niosą
+stary wzorzec — cena w trzech miejscach i link do jednej sztuki. Ich przepisanie resetuje uczenie
+(zbierają dane od 31.08), więc czeka na decyzję. Wzorzec `gads-dg-nowe-filmy-2026-08-31.py`
+jest od 05.09 **nie do powielania**.
+
 ## 8. [DG] Demand Gen — analiza 2026-08-31
 
 **Reklamy (60 dni):**
