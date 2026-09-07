@@ -94,3 +94,27 @@ Backupy: `*.bak-2026-09-07-*` obok każdego pliku, `~/backups/primaauto/`.
 - `calculateFromCny()` zwraca akcyzę 0% także dla `gasoline` (dla BEV/EREV poprawne).
 - 21 ofert Qiyuan zablokowanych filtrem miast (17 miast spoza listy 31) — 9 najlepszych wzięte
   ręcznym importem, reszta czeka.
+
+## Korekta: Changan Qiyuan jednak jako osobna marka (ta sama sesja)
+
+Fold pod Changana został **cofnięty** po kontrargumencie Janka: w bazie stoją osobne marki
+`Chery Fulwin` (5 ofert) i `Dongfeng Fengshen` (2), więc „konsekwentna polityka foldowania"
+była moją nadinterpretacją — polityka jest mieszana, a prawdziwym kryterium jest wolumen frazy.
+
+Pomiar (Google Ads + Labs, oba źródła zgodne dla fraz powyżej progu):
+`chery fulwin` 110/mc · `m-hero` 1300/mc · `qiyuan` 50/mc · `changan qiyuan` 10/mc ·
+`dongfeng fengshen` 10/mc (a mimo to osobna marka — niespójność projektu).
+
+Argument, który przeważył: rano osobna marka byłaby pustym hubem, ale po imporcie
+**Changan Qiyuan ma 9 ofert**, a rozdzielenie kosztuje najmniej właśnie teraz — huby są świeże,
+bez ruchu i linków.
+
+Wykonane:
+- reguła `'changan-qiyuan' => 'changan'` **zdjęta** z `class-asiaauto-redirects.php`
+- 5 serii przepiętych pod term 6528, slugi bez prefiksu (`a07`, `a06`, `q05`, `q06`, `q07`)
+  — konwencja jak w Chery Fulwin (`t11`, nie `fengyun-t11`)
+- 9 ofert przepiętych na taksonomię `make` = Changan Qiyuan (Changan: 49 → 40)
+- mapowania: `mark_eu` → `Changan Qiyuan`, `serie_eu` i slug bez prefiksu (9 wpisów)
+- hub marki dostał treść, tytuł: „Changan Qiyuan — od 134 000 PLN, 9 sztuk"
+- **V63_MAKE_SERIE_REDIRECTS**: stare URL-e `/changan/qiyuan-*` i `/nevo/*` prowadzą jednym
+  skokiem do nowych, zamiast lądować na hubie marki Changan
