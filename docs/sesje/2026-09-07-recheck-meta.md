@@ -214,16 +214,6 @@ API — kontener pobrany z `googletagmanager.com/gtm.js?id=GTM-T4GTZ2JB` niesie 
 `fbclid gclid wbraid gbraid msclkid ttclid` i trzy wystąpienia `page_location`.
 Działa od teraz w przód; danych z 04–07.09 nie naprawia.
 
-## 5. Podglądy reklam bez konta na Facebooku
-
-Janek nie ma konta na FB, więc Menedżer Reklam jest dla niego ślepy. `scripts/social/podglady.py`
-ciągnie z Mety `/previews` — ten sam render, który widzi klient — i składa jedną stronę HTML
-z iframe'ami (Facebook telefon + Instagram) dla każdej reklamy. Adresy iframe niosą token
-z terminem ważności, więc strona jest podglądem na teraz, nie archiwum.
-
-- chodzące (8 reklam, 16 podglądów): `primaauto-reklamy-chodzace-2026-09-07.html`
-- wszystkie (26 reklam, 52 podglądy): `primaauto-reklamy-wszystkie-2026-09-07.html`
-
 ## 4. Dashboard — dwie zmiany, obie z naszych ustaleń
 
 Struktura okazała się w pełni dynamiczna: `[RMKT]` pojawiło się samo, budżet łączny
@@ -235,6 +225,16 @@ przeliczył się na 62 zł, rotacja widoczna. Zmieniły się natomiast progi:
   rośnie szybko, a twardego limitu nie da się ustawić przy optymalizacji na ViewContent.
   Ostrzeżenie zapala się przy 4.
 
+## 5. Podglądy reklam bez konta na Facebooku
+
+Janek nie ma konta na FB, więc Menedżer Reklam jest dla niego ślepy. `scripts/social/podglady.py`
+ciągnie z Mety `/previews` — ten sam render, który widzi klient — i składa jedną stronę HTML
+z iframe'ami (Facebook telefon + Instagram) dla każdej reklamy. Adresy iframe niosą token
+z terminem ważności, więc strona jest podglądem na teraz, nie archiwum.
+
+- chodzące (8 reklam, 16 podglądów): `primaauto-reklamy-chodzace-2026-09-07.html`
+- wszystkie (26 reklam, 52 podglądy): `primaauto-reklamy-wszystkie-2026-09-07.html`
+
 ## Stan na koniec sesji
 
 Konto: **131,34 zł** wydane, 869 zł zostało, **62 zł/dz**.
@@ -242,6 +242,6 @@ Chodzi: `[VID] z9-gt`, `[VID] g318` (przegląd), `[FOTO] kadr 1`, `[FOTO] kadr 2
 `[POST] Denza Z9 DM-i`, `[POST] Zeekr 8X`, `[RMKT] Oglądane`, `[RMKT] Na placu`
 (dwa ostatnie w przetwarzaniu). Bez alarmów.
 
-**Otwarte:** publikacja GTM, `spend_cap` (potrzeba ~2 500 zł, żeby ocenić trzy kampanie
+**Otwarte:** `spend_cap` (potrzeba ~2 500 zł, żeby ocenić trzy kampanie
 osobno), grupy z obejrzenia wideo ≥25% ręcznie w Menedżerze, kolejna rotacja
 (Voyah Taishan, M-Hero 917, ROX 01).
