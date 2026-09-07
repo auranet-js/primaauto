@@ -339,16 +339,41 @@ Rozważane przy budowie drugiej karuzeli. Zostajemy przy ofertach:
 
 ## 5. Otwarte decyzje (nie wykonane — czekają na Janka)
 
-0. **TERMIN 2026-09-07 — próg dla `[DG]` po skoku budżetu 20 → 45 zł.** Sprawdź 7-dniowe CPA
-   (`python3 scripts/ads-recheck.py`) i zastosuj:
-   - **CPA > 40 zł** → zejdź na **32 zł/dz** (skok 2,25× był za duży na strategii automatycznej),
-   - **CPA ≤ 30 zł** → zostaje 45 zł,
-   - **30–40 zł** → trzymaj i sprawdź ponownie 14.09.
+0. ~~**TERMIN 2026-09-07 — próg dla `[DG]`**~~ — **wykonane 07.09, ale nie wg reguły.**
+   7-dniowe CPA wyszło **41,11 zł** (328,90 zł / 8,0 konw.), czyli formalnie próg „> 40 → zejdź
+   na 32 zł". Rozbicie okna pokazało jednak, że **przesłanka reguły była błędna**: CPA wynosił
+   43,49 zł już **przed** skokiem budżetu, przy 20 zł/dz. Budżet nie był przyczyną, więc zejście
+   na 32 zł nie naprawiłoby tego, co miało naprawiać.
 
-   Kontekst: podnieśliśmy budżet 2,25× **tego samego dnia**, co wycięcie trzech urządzeń, cztery nowe
-   reklamy, edycję Exeeda (reset uczenia) i drugą karuzelę. Przyjęta praktyka to 20–30% na raz —
-   ten krok był świadomie za duży i dlatego atrybucja będzie nieczytelna. Świadoma decyzja Janka:
-   testujemy mimo to, zamiast cofać (cofnięcie = piąta zmiana i kolejny reset).
+   | okno | zł/dz | CPA |
+   |---|---|---|
+   | 24–30.08 (przed skokiem, budżet 20) | 18,64 | 43,49 zł |
+   | 31.08–04.09 (po skoku 45, stare teksty) | 46,77 | 46,72 zł |
+   | 05–06.09 (po tekstach katalogowych) | 47,54 | **31,74 zł** |
+
+   **Decyzja Janka 07.09: budżet na 35 zł** (nie 32) wraz z pełną optymalizacją kampanii.
+
+   **Co pokazał rozkład na czynniki pierwsze:**
+   - **formaty** — SHORTS 244,61 zł / 18 konw. (CPA **13,59**), UNKNOWN 247,35 / 10 (24,74),
+     INFEED 237,28 / **3** (CPA **79,09**), INSTREAM 48,59 / 1. In-feed zjada tyle co Shorts
+     i dowozi sześć razy mniej;
+   - **placementy** — 4 531 kanałów YT: 264,05 zł / 29 konw. (CPA 9,10) wobec samego
+     youtube.com: 182,27 zł / 3 konw. (CPA 60,76);
+   - **godziny** — okno 00:00–01:00 i 06:00–08:00 to 32 zł przy zerze konwersji; pierwsza
+     konwersja doby wpada o 09:00, szczyt o 19:00 (9 konw.), 15:00 (7), 22:00 (4);
+   - **urządzenia** — `bid_modifier 0` z 31.08 **działa**: od 01.09 leci wyłącznie MOBILE;
+   - **kreacje** — Exeed VX to najlepsza w stawce (13 konw., CPA **11,42 zł**) i dostaje
+     najmniej ruchu; Leopard 5 przy tym samym stażu ma 7 konw. i CPA 36,14 zł.
+
+   **`[DG]` NIE DA SIĘ sterować formatami przez API** — `video_ad_inventory_control`
+   (`allow_in_feed` / `allow_shorts` / `allow_in_stream`) zwraca
+   `OPERATION_NOT_PERMITTED_FOR_CONTEXT`; to pole żyje tylko dla kampanii typu VIDEO.
+   **Wyłączenie in-feed zostaje do zrobienia w panelu** — 237 zł/mies. za 3 konwersje.
+
+   **Do oceny 14.09:** Z9 GT będzie miała 14 dni, N9 i Lynk po tygodniu realnej emisji
+   (ich assety weszły do Ads dopiero 05.09, choć filmy były na kanale od 31.08–02.09).
+   Uwaga przy interpretacji: 07.09 poszły w tej kampanii **cztery** zmiany naraz
+   (budżet, harmonogram, kanały, pauza kreacji) — atrybucja będzie nieczytelna.
 
 1. **[VID] — właściwa pauza w panelu.** Reklamy zapauzowane przez API 31.08, ale sama kampania
    formalnie `ENABLED` (API nie przyjmuje mutacji kampanii VIDEO). Do zamknięcia ręcznie.
@@ -415,6 +440,8 @@ Rozważane przy budowie drugiej karuzeli. Zostajemy przy ofertach:
 | 2026-09-07 | `[RMKT]` 11 placementów wykluczonych, desktop/tablet bid_modifier 0, druga reklama RDA 823752322983 | `scripts/gads-rmkt-optymalizacja-2026-09-07.py --apply`, zweryfikowane odczytem |
 | 2026-09-07 | `[RMKT]` harmonogram 7× 07:00–23:00 + geo Polska (kampania nie miała ŻADNEGO kryterium LOCATION) | `scripts/gads-rmkt-harmonogram-geo-2026-09-07.py --apply`, zweryfikowane odczytem |
 | 2026-09-07 | check „wiek feedu RMKT” dołożony do monitoringu godzinowego | `scripts/checki-pomiaru.py` (`check_feed_rmkt`), pierwszy bieg: TAK, 257 wpisów |
+| 2026-09-07 | `[DG]` budżet 45 → **35 zł/dz** (decyzja Janka), harmonogram 08:00–24:00, 22 kanały YT wykluczone (69 łącznie) | `scripts/gads-dg-optymalizacja-2026-09-07.py --apply`, zweryfikowane odczytem |
+| 2026-09-07 | `[DG]` pauza 2 kreacji bez konwersji: Denza Z9 GT (822803999502), BYD Leopard 7 (822846696946) — 10 → 8 aktywnych | `scripts/gads-dg-pauza-slabych-2026-09-07.py --apply`, PAUSED (nie REMOVED) |
 | 2026-08-31 | strażnik landingów + `DISAPPROVED` wbudowany w `ads-recheck.py` (sekcja 4) | pierwszy bieg: 86 landingów, 1 × 410, 1 reklama DISAPPROVED |
 | 2026-08-31 | `[DG]` +4 reklamy wideo (Shorty: Shark 6, Deepal G318, Leopard 7, Denza Z9 GT) | `scripts/gads-dg-nowe-filmy-2026-08-31.py --apply`, zweryfikowane odczytem |
 | 2026-08-31 | `[DG]` „wideo — Exeed VX" → sam Short (poziomy miał 371 kliknięć i 0 konwersji) | `scripts/gads-dg-exeed-tylko-short-2026-08-31.py --apply`, zweryfikowane: 1 wideo |
