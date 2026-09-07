@@ -235,6 +235,16 @@ z terminem ważności, więc strona jest podglądem na teraz, nie archiwum.
 - chodzące (8 reklam, 16 podglądów): `primaauto-reklamy-chodzace-2026-09-07.html`
 - wszystkie (26 reklam, 52 podglądy): `primaauto-reklamy-wszystkie-2026-09-07.html`
 
+**Stały podgląd bez tokenu** — Biblioteka Reklam Meta, publiczna, bez logowania,
+sprawdzona przez Janka 07.09 (curl dostaje 403, przeglądarka otwiera normalnie):
+
+```
+https://www.facebook.com/ads/library/?active_status=active&ad_type=all&country=PL&q=Prima-Auto&search_type=keyword_unordered
+```
+
+Wyszukiwanie po nazwie obejmuje obie Strony — nową i starą `prima1auto`. Wariant zawężony
+do jednej Strony: ten sam adres z `view_all_page_id=1146829831857839` zamiast `q=`.
+
 ## Stan na koniec sesji
 
 Konto: **131,34 zł** wydane, 869 zł zostało, **62 zł/dz**.
