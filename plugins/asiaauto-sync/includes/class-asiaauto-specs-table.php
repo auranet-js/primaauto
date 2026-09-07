@@ -20,7 +20,7 @@ defined('ABSPATH') || exit;
 class AsiaAuto_Specs_Table
 {
     const TABLE = 'asiaauto_specs';
-    const SCHEMA_VERSION = 5; // 2 = ruch C (2026-09-03): długość, DMC, zasięg łączny, kolor wnętrza, zawieszenie, nagłośnienie, masaż tył, NOA
+    const SCHEMA_VERSION = 7; // 7 = lusterko streaming, szyby wygłuszające, rejestrator (2026-09-07); 6 = szerokość (2026-09-04, w miejsce DMC); 5 = ruch C (2026-09-03): długość, DMC, zasięg łączny, kolor wnętrza, zawieszenie, nagłośnienie, masaż tył, NOA
 
     /**
      * Wartości znaczące NIE / OPCJA. Do flagi liczymy tylko standard.
@@ -82,6 +82,13 @@ class AsiaAuto_Specs_Table
         'seat_speakers'   => ['keys' => ['seat_speakers']],
         'tow_hook'        => ['keys' => ['drag_hook']],
         'gesture'         => ['keys' => ['gesture_control_system']],
+        // ruch 07.09 (Janek): lusterko z obrazem z kamery, szyby wygłuszające, rejestrator jazdy.
+        // `multilayer_soundproof_glass` jest STOPNIOWALNE (前排 / 后排 / 前排+后排 / 全车), ale po
+        // firstVariant() rozkład to 252 „przód" na 280 wypełnionych — enum nie różnicowałby niczego,
+        // więc świadomie flaga „ma wygłuszane". `built_in_tachograph` = 内置行车记录仪 (pokrycie 88%).
+        'mirror_stream'   => ['keys' => ['stream_media_inside_mirror']],
+        'glass_sound'     => ['keys' => ['multilayer_soundproof_glass']],
+        'dashcam'         => ['keys' => ['built_in_tachograph']],
     ];
 
     /** Zakresy liczbowe z extra_prep (moc i cena/przebieg/rok idą z meta i taksonomii). */
@@ -94,6 +101,9 @@ class AsiaAuto_Specs_Table
         // „N*N*N" / „NxNxN"), DMC w kg, zasięg łączny CLTC (tylko hybrydy; dla EV = zasięg CLTC, patrz buildRow)
         'length_mm'   => ['keys' => ['length', 'length_width_height'], 'cast' => 'int'],
         'gvw_kg'      => ['keys' => ['full_load_weight'], 'cast' => 'int'],
+        // szerokość w mm (04.09, w miejsce zdjętego DMC). Tylko klucz `width` (pokrycie 97,1%) —
+        // fallback na `length_width_height` dałby długość, bo num() bierze PIERWSZĄ liczbę z „N*N*N".
+        'width_mm'    => ['keys' => ['width'], 'cast' => 'int'],
         'range_total' => ['keys' => ['combined_cruising_range_cltc'], 'cast' => 'int'],
     ];
 
@@ -298,6 +308,7 @@ class AsiaAuto_Specs_Table
         }
         // długość poniżej 1000 to nie milimetry (np. „4.9" w metrach) — nie zgadujemy, NULL
         if ($row['length_mm'] !== null && $row['length_mm'] < 1000) $row['length_mm'] = null;
+        if ($row['width_mm'] !== null && $row['width_mm'] < 1000) $row['width_mm'] = null;
         // zasięg łączny: EV nie ma silnika, więc jego zasięg łączny = zasięg CLTC; spalinowe bez wartości
         if ($row['range_total'] === null && $row['fuel'] === 'electric') $row['range_total'] = $row['range_cltc'];
         foreach (self::FLAGS as $col => $spec) {
@@ -362,6 +373,7 @@ class AsiaAuto_Specs_Table
   `upholstery` varchar(24) DEFAULT NULL,
   `sunroof` varchar(24) DEFAULT NULL,
   `length_mm` smallint(5) unsigned DEFAULT NULL,
+  `width_mm` smallint(5) unsigned DEFAULT NULL,
   `gvw_kg` smallint(5) unsigned DEFAULT NULL,
   `range_total` smallint(5) unsigned DEFAULT NULL,
   `interior_color` varchar(24) DEFAULT NULL,
@@ -385,6 +397,7 @@ $flags  PRIMARY KEY (`post_id`),
   KEY `drive` (`drive`),
   KEY `transmission` (`transmission`),
   KEY `length_mm` (`length_mm`),
+  KEY `width_mm` (`width_mm`),
   KEY `gvw_kg` (`gvw_kg`),
   KEY `range_total` (`range_total`),
   KEY `interior_color` (`interior_color`),

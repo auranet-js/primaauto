@@ -53,9 +53,11 @@ class AsiaAuto_Search
         'miejsca'  => ['seats', 'int'],
         'felgi'    => ['rim_in', 'int'],
         'przysp'   => ['accel_s', 'float'],
-        // ruch C; trzeci element = mnożnik z jednostki UI na jednostkę kolumny (m → mm)
-        'dlugosc'     => ['length_mm', 'float', 1000],
-        'dmc'         => ['gvw_kg', 'int'],
+        // ruch C. 04.09: długość przeszła z metrów na milimetry — sekcja miała dwie jednostki naraz
+        // (długość w m, szerokość w mm), a kolumny i dane techniczne aut są w mm. Mnożnik znika.
+        'dlugosc'     => ['length_mm', 'int'],
+        'dmc'         => ['gvw_kg', 'int'],   // poza UI od 04.09 (Janek) — parametr API zostaje
+        'szerokosc'   => ['width_mm', 'int'],
         'zasieg_calk' => ['range_total', 'int'],
     ];
 
@@ -88,11 +90,11 @@ class AsiaAuto_Search
             ['typ' => 'enum',  'col' => 'serie', 'label' => 'Model pojazdu', 'szukaj' => true, 'po_marce' => true],
             ['typ' => 'enum',  'col' => 'body',  'label' => 'Rodzaj nadwozia'],
             ['typ' => 'enum',  'col' => 'drive', 'label' => 'Napęd 4x4'],
-            ['typ' => 'range', 'k' => 'dlugosc', 'side' => 'min'],
-            ['typ' => 'range', 'k' => 'dmc',     'side' => 'max'],
+            ['typ' => 'range', 'k' => 'dlugosc',   'side' => 'min'],
+            ['typ' => 'range', 'k' => 'szerokosc', 'side' => 'max'],
             ['typ' => 'enum',  'col' => 'seats', 'label' => 'Liczba miejsc'],
         ]],
-        ['id' => 'naped', 'label' => 'Napęd', 'kol' => 6, 'pola' => [
+        ['id' => 'naped', 'label' => 'Silnik i osiągi', 'kol' => 6, 'pola' => [
             ['typ' => 'enum',  'col' => 'fuel', 'label' => 'Silnik'],
             ['typ' => 'range', 'k' => 'moc',         'side' => 'min'],
             ['typ' => 'range', 'k' => 'przysp',      'side' => 'max'],
@@ -100,11 +102,16 @@ class AsiaAuto_Search
             ['typ' => 'range', 'k' => 'zasieg_calk', 'side' => 'min'],
             ['typ' => 'range', 'k' => 'zasieg',      'side' => 'min'],
         ]],
+        // Skład i kolejność wg Janka 07.09. „Kolor wnętrza" zdjęty: źródło (che168 przez auto-api
+        // ORAZ katalog Autohome) nie oddaje tego pola w ogóle — pokrycie 209/3422 (6,1%), z czego
+        // 84 z 85 ofert che168 to wpisy ręczne. Kolumna `interior_color` i taksonomia `interior-color`
+        // ZOSTAJĄ w bazie (karta oferty nadal je pokazuje), znika tylko filtr.
+        // „Marka nagłośnienia" przeniesiona tutaj z sekcji „Wyposażenie i technologie".
         ['id' => 'styl', 'label' => 'Styl i komfort', 'kol' => 4, 'pola' => [
-            ['typ' => 'enum', 'col' => 'color',          'label' => 'Kolor nadwozia', 'kropki' => true],
-            ['typ' => 'enum', 'col' => 'interior_color', 'label' => 'Kolor wnętrza',  'kropki' => true],
-            ['typ' => 'enum', 'col' => 'upholstery',     'label' => 'Materiał tapicerki'],
-            ['typ' => 'enum', 'col' => 'suspension',     'label' => 'Zawieszenie'],
+            ['typ' => 'enum', 'col' => 'color',       'label' => 'Kolor nadwozia', 'kropki' => true],
+            ['typ' => 'enum', 'col' => 'suspension',  'label' => 'Rodzaj zawieszenia'],
+            ['typ' => 'enum', 'col' => 'upholstery',  'label' => 'Materiał tapicerki'],
+            ['typ' => 'enum', 'col' => 'sound_brand', 'label' => 'Marka nagłośnienia'],
         ]],
         // wszystkie flagi w jednej sekcji + marka nagłośnienia; „Więcej filtrów" zlikwidowane (Janek 03.09):
         // skrzynia i felgi poza UI (parametry API zostają), cena/rocznik/przebieg tylko przez sortowanie
@@ -115,8 +122,8 @@ class AsiaAuto_Search
                                            'adaptive_cruise', 'lane_center', 'auto_park', 'sentinel', 'hud', 'phone_mirror',
                                            'net_5g', 'wireless_charge', 'heat_pump', 'air_susp', 'v2l',
                                            'rear_steer', 'zero_gravity', 'seat_speakers', 'dolby', 'fridge', 'gesture',
-                                           'sign_recog', 'remote_start', 'mirror_heat', 'tow_hook']],
-            ['typ' => 'enum',  'col' => 'sound_brand',  'label' => 'Marka nagłośnienia'],
+                                           'sign_recog', 'mirror_heat', 'tow_hook',
+                                           'mirror_stream', 'glass_sound', 'dashcam']],
         ]],
     ];
 
@@ -890,6 +897,8 @@ class AsiaAuto_Search
             'auto_park'       => 'Automatyczne parkowanie',
             'sentinel'        => 'Tryb wartownika',
             'noa_city'        => 'Autopilot miejski (NOA)',
+            'mirror_stream'   => 'Lusterko z obrazem z kamery',
+            'dashcam'         => 'Rejestrator jazdy',
         ],
         'Ekrany i multimedia' => [
             'hud'             => 'Wyświetlacz HUD',
@@ -913,9 +922,9 @@ class AsiaAuto_Search
             'fridge'        => 'Lodówka',
             'gesture'       => 'Sterowanie gestami',
             'sign_recog'    => 'Rozpoznawanie znaków',
-            'remote_start'  => 'Zdalny rozruch',
             'mirror_heat'   => 'Ogrzewanie lusterek',
             'tow_hook'      => 'Hak holowniczy',
+            'glass_sound'   => 'Szyby wygłuszające',
         ],
     ];
 
@@ -929,8 +938,9 @@ class AsiaAuto_Search
         'miejsca'  => ['Liczba miejsc', '', 1],
         'felgi'    => ['Felgi', '"', 1],
         'przysp'   => ['Przyspieszenie 0–100', 's', 0.1],
-        'dlugosc'     => ['Długość', 'm', 0.1],
+        'dlugosc'     => ['Długość', 'mm', 50],
         'dmc'         => ['DMC', 'kg', 100],
+        'szerokosc'   => ['Szerokość', 'mm', 50],
         'zasieg_calk' => ['Zasięg całkowity', 'km', 10],
         'zasieg'      => ['Zasięg na prądzie (CLTC)', 'km', 10],
     ];
