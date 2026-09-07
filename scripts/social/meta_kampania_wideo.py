@@ -212,7 +212,9 @@ def main():
         'link_description': k['opis'], 'image_url': mini,
         'call_to_action': {'type': k['cta'], 'value': {'link': k['link']}}}}
     r, e = wywolaj(f'{ACT}/adcreatives', {
-        'name': 'Leopard 5 — wideo 9:16', 'object_story_spec': json.dumps(spec)}, tok)
+        'name': 'Leopard 5 — wideo 9:16', 'object_story_spec': json.dumps(spec),
+        'url_tags': ('utm_source=facebook&utm_medium=paid_social'
+                     '&utm_campaign={{campaign.name}}&utm_content={{ad.name}}')}, tok)
     if e:
         print('   BŁĄD:', e)
         print('\nSTAN:', json.dumps(zrobione)); return

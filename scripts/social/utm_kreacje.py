@@ -41,8 +41,7 @@ import meta_api as api
 
 # {{campaign.name}} i {{ad.name}} to makra Mety — podstawia je przy kliknięciu,
 # dzięki czemu jeden ciąg działa dla każdej kampanii i każdej reklamy.
-TAGI = ('utm_source=facebook&utm_medium=paid_social'
-        '&utm_campaign={{campaign.name}}&utm_content={{ad.name}}')
+TAGI = api.UTM_TAGI
 
 POLA = ('name,effective_status,status,'
         'creative{id,name,url_tags,object_story_spec,degrees_of_freedom_spec,'
@@ -51,7 +50,9 @@ POLA = ('name,effective_status,status,'
 
 def reklamy(statusy):
     d, e = api.get(f'{api.ACT}/ads?fields={POLA}&limit=100&'
-                   f'effective_status={json.dumps(statusy)}')
+                   # separators bez spacji — Meta dostaje ten JSON w URL-u, a spacja
+                   # po przecinku wywala urllib („URL can't contain control characters").
+                   f'effective_status={json.dumps(statusy, separators=(",", ":"))}')
     if e:
         sys.exit(f'nie mogę odczytać reklam: {e}')
     return d.get('data', [])

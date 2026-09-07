@@ -247,7 +247,8 @@ def wstaw(klucz, stan):
         'video_id': wgrane['video_id'], 'image_url': mini[0]['uri'],
         'call_to_action': {'type': 'LEARN_MORE', 'value': {'link': landing}}}}
     r, e = api.post(f'{api.ACT}/adcreatives', {'name': f'[VID] {klucz}',
-                                               'object_story_spec': json.dumps(spec)}, waliduj=False)
+                                               'object_story_spec': json.dumps(spec),
+                                               'url_tags': api.UTM_TAGI}, waliduj=False)
     if e:
         return print('BŁĄD kreacji:', e)
     kre = r['id']

@@ -177,6 +177,7 @@ def main():
             continue
         kre = krok(f'kreacja {klucz}', f'{api.ACT}/adcreatives', {
             'name': f'[VID] {klucz}',
+            'url_tags': api.UTM_TAGI,
             'object_story_spec': json.dumps({
                 'page_id': api.PAGE, 'instagram_user_id': api.IG,
                 'video_data': {'video_id': vid, 'image_url': mini[0]['uri'],
@@ -221,7 +222,8 @@ def main():
             # wspólne („…75416024"), więc skracanie sklejało dwa różne posty w jeden wpis.
             pid = post_id.split('_')[-1]
             kre = krok(f'kreacja {opis}', f'{api.ACT}/adcreatives',
-                       {'name': f'[POST] {opis}', 'object_story_id': post_id},
+                       {'name': f'[POST] {opis}', 'object_story_id': post_id,
+                        'url_tags': api.UTM_TAGI},
                        stan, f'kreacja_post_{pid}', waliduj)
             if kre:
                 krok(f'reklama {opis}', f'{api.ACT}/ads', {

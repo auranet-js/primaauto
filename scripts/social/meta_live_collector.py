@@ -134,8 +134,17 @@ def main():
     budzet_dzienny = sum(w['budzet'] for w in kampanie.values())
     if limit and budzet_dzienny:
         dni = (limit - wydane) / budzet_dzienny
-        if dni < 7:
+        # 14, nie 7. Przy 7 dniach zostaje ~430 zł i jest za późno, żeby rozmawiać
+        # z Ruslanem o podniesieniu `spend_cap` — a od tego zależy, czy zdążymy zebrać
+        # ~450 sesji na kampanię, czyli próg, poniżej którego ocena kampanii jest rzutem
+        # monetą (policzone 07.09 ze stopy kontaktu 0,68% dla `facebook / paid_social`).
+        if dni < 14:
             ostrzezenia.append(f'limit konta wystarczy na {dni:.0f} dni przy {budzet_dzienny:.0f} zł/dobę')
+    for k, w in kampanie.items():
+        czest = w['razem'].get('czestotliwosc', 0)
+        if k.startswith('[RMKT]') and czest >= 4:
+            ostrzezenia.append(f'{k}: częstotliwość {czest:.1f} — pula się wypala, '
+                               f'zetnij budżet zestawu')
     if konto.get('account_status') != 1:
         ostrzezenia.append(f'konto reklamowe w stanie {konto.get("account_status")} — nie wyda budżetu')
 

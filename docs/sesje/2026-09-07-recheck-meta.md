@@ -132,3 +132,102 @@ Janka 04.09, a łączne 50 zł/dz daje sensowne 16 dni pod sufitem.
 
 Nic nie zostało zmienione na koncie — recheck był czytaniem. Do rozstrzygnięcia zostaje,
 czy ruszamy z WhatsAppem (punkt 1) i czy przy okazji budujemy remarketing z katalogu (2).
+
+---
+
+# Wykonanie — 07.09 wieczorem
+
+Decyzje Janka: WhatsApp odrzucony, remarketing tak, budżet wariant **A** (12 zł/dz z sufitu,
+prospecting nietknięty), rotacja z Zeekrem 8X zamiast Voyaha, `fbclid` do naprawy.
+
+## 0. `url_tags` w skryptach budujących — źródło problemu, nie objaw
+
+Do 07.09 `url_tags` ustawiał **wyłącznie** `utm_kreacje.py`, doklejany po fakcie. Każda
+nowa kreacja rodziła się bez pomiaru, a naprawa kosztuje dostawę: Meta nie pozwala dopisać
+`url_tags` do gotowej kreacji (100/1815573), a podmiana kreacji wysyła żywą reklamę do
+`PENDING_REVIEW`.
+
+Stała **`api.UTM_TAGI`** w `meta_api.py` + wpięcie w **sześć** ścieżek tworzenia kreacji:
+`buduj_start.py` (×2), `buduj_foto.py` (×2), `przepisz_teksty.py`, `rotator_wideo.py`,
+`rotator_postow.py`, `meta_kampania_wideo.py`. `utm_kreacje.py` przestał trzymać własną kopię.
+
+Przy okazji dwa błędy w narzędziach:
+- `utm_kreacje.py --ze-wstrzymanymi` **nigdy nie działało** — `json.dumps` wstawiał spację
+  po przecinku, a urllib odrzuca URL ze spacją (`URL can't contain control characters`).
+  Naprawione przez `separators=(",", ":")`.
+- `rotator_postow.py` nazywał reklamy ośmioma ostatnimi cyframi id posta, a nazwa reklamy
+  idzie do `utm_content` w GA4. Doszedł `--nazwa`.
+
+Doszło też `przepisz_teksty.py --tylko KLUCZ` — do rotacji pojedynczej kreacji zamiast
+przebudowy wszystkich dziesięciu.
+
+## 1. Rotacja
+
+| | wyszło | weszło | dowód |
+|---|---|---|---|
+| `[VID]` | leopard-5-czarny → PAUSED | **G318** `120248990795070243` | `url_tags` obecne w kreacji `1853914768909584` |
+| `[POST]` | Mazda EZ-6 → PAUSED | **Zeekr 8X** `120248941786980243` | kreacja podmieniona na wersję z `url_tags` |
+
+Nagłówek G318 zmieniony z assetu `Import Aut z Chin - Prima Auto` (1,93% konw/klik) na
+`Aktualne Oferty z Chin` (4,24%, 440 kliknięć) — inny asset z tego samego banku Google Ads,
+nie przeredagowanie. Slot zwolnił leopard, który go używał.
+
+Nowe narzędzie `scripts/social/rotacja.py`: `--stan` pokazuje wszystkie reklamy z flagą UTM,
+`--wlacz/--wylacz` robi wymianę jednym ruchem (najpierw włącz nową, potem gaś starą —
+odwrotnie zestaw traci dostawę i Meta resetuje fazę uczenia).
+
+## 2. `[RMKT]` — kampania zbudowana i uruchomiona
+
+`scripts/social/buduj_rmkt.py`, kampania `120248991023540243`, cel `OUTCOME_SALES`.
+
+| Zestaw | budżet | lista (zasięg) | katalog | id |
+|---|---:|---|---|---|
+| `[RMKT] Oglądane — 30 dni` | 7 zł/dz | Oglądający oferty — 30 dni (1 400–1 700) | wszystkie 2 941 aut | `120248991023860243` |
+| `[RMKT] Na placu w Polsce` | 5 zł/dz | Wszyscy odwiedzający — 180 dni (2 200–2 600) | Na placu w Polsce (19) | `120248991026870243` |
+
+Oba wykluczają `Kontakt tel./WhatsApp — 180 dni` i `Formularz zamówienia — 180 dni`.
+`advantage_audience: 0`. Karta niesie `{{vehicle.title}}` i `{{vehicle.price}}` z feedu —
+ta sama zasada, co przy `[FOTO]`: nazwy aut z ogłoszeń, nie z opisu cech. Teksty główne
+z banku assetów Ads (`A+G` dla „Oglądane", `A+E` dla „Na placu").
+
+Optymalizacja na **ViewContent**, nie na kontakt — Meta uczy się przy ~15–20 zdarzeniach
+tygodniowo, kontaktów mamy jeden na cztery doby. Rozliczamy się z kontaktów, uczymy na
+ViewContent.
+
+Sonda `validate_only` przeszła dla kampanii, obu zestawów i obu kreacji przed zapisem.
+
+**Budżet dzienny wzrósł z 50 na 62 zł** → sufit ok. 21.09.
+
+## 3. `fbclid` — przygotowane, NIEOPUBLIKOWANE
+
+`scripts/gtm-fbclid.py`. W Default Workspace 15 (0 zmian przed nami, teraz 2):
+- zmienna **`URL bez fbclid`** (id 39, typ jsm) — zdejmuje `fbclid`, `gclid`, `wbraid`,
+  `gbraid`, `msclkid`, `ttclid` przez `URL.searchParams.delete`, z `try/catch` na fallback
+- tag **`GA4 Tag`** (id 4, `googtag`) — `configSettingsTable` z `page_location = {{URL bez fbclid}}`
+
+Nadpisanie w tagu konfiguracyjnym obejmuje wszystkie zdarzenia GA4, więc `click_phone`,
+`click_whatsapp` i `generate_lead` zostały nietknięte.
+
+**Publikacja czeka na osobne „ok"** — zgodnie z regułą kontenera. Komenda: `--publikuj`.
+
+## 4. Dashboard — dwie zmiany, obie z naszych ustaleń
+
+Struktura okazała się w pełni dynamiczna: `[RMKT]` pojawiło się samo, budżet łączny
+przeliczył się na 62 zł, rotacja widoczna. Zmieniły się natomiast progi:
+
+- **Ostrzeżenie o suficie: 7 → 14 dni.** Przy siedmiu dniach zostaje ~430 zł i jest za
+  późno, żeby rozmawiać z Ruslanem o `spend_cap`. Zapali się jutro (dziś 14,01 dnia).
+- **Strażnik częstotliwości `[RMKT]`.** Przy puli 1 400–1 700 osób i 7 zł/dz częstotliwość
+  rośnie szybko, a twardego limitu nie da się ustawić przy optymalizacji na ViewContent.
+  Ostrzeżenie zapala się przy 4.
+
+## Stan na koniec sesji
+
+Konto: **131,34 zł** wydane, 869 zł zostało, **62 zł/dz**.
+Chodzi: `[VID] z9-gt`, `[VID] g318` (przegląd), `[FOTO] kadr 1`, `[FOTO] kadr 2`,
+`[POST] Denza Z9 DM-i`, `[POST] Zeekr 8X`, `[RMKT] Oglądane`, `[RMKT] Na placu`
+(dwa ostatnie w przetwarzaniu). Bez alarmów.
+
+**Otwarte:** publikacja GTM, `spend_cap` (potrzeba ~2 500 zł, żeby ocenić trzy kampanie
+osobno), grupy z obejrzenia wideo ≥25% ręcznie w Menedżerze, kolejna rotacja
+(Voyah Taishan, M-Hero 917, ROX 01).

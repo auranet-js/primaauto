@@ -75,7 +75,9 @@ MODELE = {
     'shark-6':             ('Shark 6',                     '/samochody/byd/shark-6/#oferty',        'bezpo',    'JA'),
     'jetour-t2':           ('T2 C-DM',                     '/samochody/jetour/t2-c-dm/#oferty',     'phev',     'CF'),
     'exeed-vx':            ('VX',                          '/samochody/exeed/vx/#oferty',           'szesc',    'AG'),
-    'g318':                ('G318',                        '/samochody/deepal/g318/#oferty',        'importpa', 'BE'),
+    # 'aktualne' (4,24%/440 kl) zamiast 'importpa' (1,93%/415 kl) — ten sam bank assetów Ads,
+    # lepszy wynik przy porównywalnej próbce. Slot zwolnił leopard-5-czarny, który wychodzi.
+    'g318':                ('G318',                        '/samochody/deepal/g318/#oferty',        'aktualne', 'BE'),
     'lynk-900':            ('900',                         '/samochody/lynk-co/900/#oferty',        'szesc',    'BF'),
     'n9':                  ('N9 DM-i',                     '/samochody/denza/n9-dm-i/#oferty',      'rejestr',  'AK'),
 }
@@ -110,6 +112,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--pokaz', action='store_true')
     ap.add_argument('--wgraj', action='store_true')
+    ap.add_argument('--tylko', metavar='KLUCZ',
+                    help='jeden model zamiast wszystkich — do rotacji pojedynczej kreacji')
     a = ap.parse_args()
     if not (a.pokaz or a.wgraj):
         ap.error('podaj --pokaz albo --wgraj')
@@ -126,6 +130,8 @@ def main():
         statusy = {x['id']: x['status'] for x in d['data']}
 
     for klucz, (term, land, hk, dk) in MODELE.items():
+        if a.tylko and klucz != a.tylko:
+            continue
         f = f_all.get(term)
         if not f:
             print(f'{klucz}: brak serii „{term}" w bazie — pomijam'); continue
@@ -160,7 +166,8 @@ def main():
             'link_description': PODPIS,
             'call_to_action': {'type': 'LEARN_MORE', 'value': {'link': landing}}}}
         r, e = api.post(f'{api.ACT}/adcreatives',
-                        {'name': f'[VID] {klucz} v3-ads', 'object_story_spec': json.dumps(spec)},
+                        {'name': f'[VID] {klucz} v3-ads', 'object_story_spec': json.dumps(spec),
+                         'url_tags': api.UTM_TAGI},
                         waliduj=False)
         if e:
             print('  BŁĄD kreacji:', e); continue

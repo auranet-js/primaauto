@@ -171,7 +171,7 @@ def infrastruktura():
     return kampania, zestaw, braki
 
 
-def wstaw(post_id, stan):
+def wstaw(post_id, stan, nazwa=None):
     kampania, zestaw, braki = infrastruktura()
     if braki:
         print('WSTRZYMANE — nic nie wysłano:')
@@ -181,12 +181,14 @@ def wstaw(post_id, stan):
     if len(stan.get('aktywne', [])) >= SLOTY:
         print(f'wszystkie {SLOTY} sloty zajęte — najpierw --wyjmij')
         return
-    r, e = api.post(f'{api.ACT}/adcreatives', {'name': f'[POST] {post_id[-8:]}',
-                                               'object_story_id': post_id}, waliduj=False)
+    etykieta = nazwa or post_id[-8:]
+    r, e = api.post(f'{api.ACT}/adcreatives', {'name': f'[POST] {etykieta}',
+                                               'object_story_id': post_id,
+                                               'url_tags': api.UTM_TAGI}, waliduj=False)
     if e:
         return print('BŁĄD kreacji:', e)
     kre = r['id']
-    r, e = api.post(f'{api.ACT}/ads', {'name': f'[POST] {post_id[-8:]}', 'adset_id': zestaw['id'],
+    r, e = api.post(f'{api.ACT}/ads', {'name': f'[POST] {etykieta}', 'adset_id': zestaw['id'],
                                        'creative': json.dumps({'creative_id': kre}),
                                        'status': 'PAUSED'}, waliduj=False)
     if e:
@@ -220,11 +222,13 @@ def wyjmij(ad_id, stan):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--wstaw', metavar='POST_ID')
+    ap.add_argument('--nazwa', metavar='OPIS',
+                    help='czytelna nazwa reklamy — trafia do utm_content w GA4')
     ap.add_argument('--wyjmij', metavar='AD_ID')
     a = ap.parse_args()
     stan = api.stan_wczytaj(STAN, {'aktywne': [], 'historia': {}})
     if a.wstaw:
-        return wstaw(a.wstaw, stan)
+        return wstaw(a.wstaw, stan, a.nazwa)
     if a.wyjmij:
         return wyjmij(a.wyjmij, stan)
     sekcja_aktywne(stan)

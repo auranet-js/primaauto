@@ -31,6 +31,13 @@ DSA_PODMIOT = 'PRIMA AUTO RUSLAN PRIMA'   # zarejestrowany podmiot DSA, zweryfik
 # UWAGA: to NIE jest nazwa portfolio („Prima Auto") — ta jest odrzucana kodem 3858196.
 # Musi się zgadzać co do znaku z wpisem w oknie „Wymagane informacje o reklamodawcy".
 
+# UTM-y doklejane do KAŻDEJ nowej kreacji. `{{campaign.name}}` i `{{ad.name}}` to makra
+# Mety — podstawia je przy kliknięciu, więc jeden ciąg obsługuje wszystkie kampanie.
+# Nie da się ich dopisać do gotowej kreacji (Meta odbija 100/1815573), a podmiana kreacji
+# wysyła żywą reklamę do PENDING_REVIEW — dlatego ustawiamy je PRZY TWORZENIU, nie potem.
+UTM_TAGI = ('utm_source=facebook&utm_medium=paid_social'
+            '&utm_campaign={{campaign.name}}&utm_content={{ad.name}}')
+
 KATALOG_STANU = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'state')
 
 _token_cache = {}

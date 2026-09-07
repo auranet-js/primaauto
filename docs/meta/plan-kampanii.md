@@ -34,6 +34,14 @@ sprzed startu (28.08) i nie zostały przepisane:
   105 ViewContent). `leopard-5-czarny` zbiera obejrzenia wideo, ale nie przenosi ich na ruch
   (79 kliknięć w link → 4 wczytania strony) — jego wartość to grupa z obejrzenia, nie ruch.
 
+**Wykonane 07.09 wieczorem** (szczegóły i identyfikatory: `docs/sesje/2026-09-07-recheck-meta.md`):
+`url_tags` wpięte w sześć ścieżek tworzenia kreacji (`api.UTM_TAGI`) — nowa kreacja nie rodzi
+się już bez pomiaru; rotacja **G318 za leoparda-5-czarnego** i **Zeekr 8X za Mazdę EZ-6**;
+kampania **`[RMKT]`** z dwoma zestawami (7 + 5 zł/dz, listy „Oglądający oferty — 30 dni"
+i „Wszyscy odwiedzający — 180 dni", oba wykluczają kontakt i formularz). Budżet dzienny
+**50 → 62 zł**, sufit ok. **21.09**. WhatsApp odrzucony przez Janka — przy aucie za 300–400 tys.
+kontakt bez obejrzenia oferty to lead, który nie wie, o co pyta.
+
 Otwarte, w kolejności po rechecku: **kampania WhatsApp** (konto ma `WHATSAPP_DESTINATION_ADS`,
 w Ads to najlepszy kanał kontaktu), remarketing dynamiczny z katalogu, grupy z obejrzenia
 wideo (ręcznie — API odbija regułę `1870049`), czyszczenie `fbclid` w GA4.

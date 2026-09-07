@@ -321,7 +321,8 @@ def main():
                                   'caption': DOMENA, 'child_attachments': karty,
                                   'multi_share_optimized': True, 'multi_share_end_card': True}}
             r, e = api.post(f'{api.ACT}/adcreatives',
-                            {'name': f'{nazwa_kre} v2', 'object_story_spec': json.dumps(spec)},
+                            {'name': f'{nazwa_kre} v2', 'object_story_spec': json.dumps(spec),
+                             'url_tags': api.UTM_TAGI},
                             waliduj=False)
             print(f'  {nazwa_kre} ({len(karty)} kart): kreacja {r or e}')
             if e:
@@ -362,7 +363,8 @@ def main():
                               'caption': DOMENA, 'child_attachments': karty,
                               'multi_share_optimized': True, 'multi_share_end_card': True}}
         r, e = api.post(f'{api.ACT}/adcreatives',
-                        {'name': nazwa_kre, 'object_story_spec': json.dumps(spec)}, waliduj=waliduj)
+                        {'name': nazwa_kre, 'object_story_spec': json.dumps(spec),
+                         'url_tags': api.UTM_TAGI}, waliduj=waliduj)
         print(f'  {nazwa_kre} ({len(karty)} kart): {r or e}')
         kre = (r or {}).get('id')
         if kre and not waliduj:
