@@ -198,7 +198,7 @@ Sonda `validate_only` przeszła dla kampanii, obu zestawów i obu kreacji przed 
 
 **Budżet dzienny wzrósł z 50 na 62 zł** → sufit ok. 21.09.
 
-## 3. `fbclid` — przygotowane, NIEOPUBLIKOWANE
+## 3. `fbclid` — wdrożone
 
 `scripts/gtm-fbclid.py`. W Default Workspace 15 (0 zmian przed nami, teraz 2):
 - zmienna **`URL bez fbclid`** (id 39, typ jsm) — zdejmuje `fbclid`, `gclid`, `wbraid`,
@@ -208,7 +208,21 @@ Sonda `validate_only` przeszła dla kampanii, obu zestawów i obu kreacji przed 
 Nadpisanie w tagu konfiguracyjnym obejmuje wszystkie zdarzenia GA4, więc `click_phone`,
 `click_whatsapp` i `generate_lead` zostały nietknięte.
 
-**Publikacja czeka na osobne „ok"** — zgodnie z regułą kontenera. Komenda: `--publikuj`.
+**OPUBLIKOWANE** 07.09: wersja **13** („fbclid poza page_location") jest live, workspace
+przeskoczył na 16 z zerem niezapisanych zmian. Potwierdzone na produkcji, nie samą odpowiedzią
+API — kontener pobrany z `googletagmanager.com/gtm.js?id=GTM-T4GTZ2JB` niesie ciąg
+`fbclid gclid wbraid gbraid msclkid ttclid` i trzy wystąpienia `page_location`.
+Działa od teraz w przód; danych z 04–07.09 nie naprawia.
+
+## 5. Podglądy reklam bez konta na Facebooku
+
+Janek nie ma konta na FB, więc Menedżer Reklam jest dla niego ślepy. `scripts/social/podglady.py`
+ciągnie z Mety `/previews` — ten sam render, który widzi klient — i składa jedną stronę HTML
+z iframe'ami (Facebook telefon + Instagram) dla każdej reklamy. Adresy iframe niosą token
+z terminem ważności, więc strona jest podglądem na teraz, nie archiwum.
+
+- chodzące (8 reklam, 16 podglądów): `primaauto-reklamy-chodzace-2026-09-07.html`
+- wszystkie (26 reklam, 52 podglądy): `primaauto-reklamy-wszystkie-2026-09-07.html`
 
 ## 4. Dashboard — dwie zmiany, obie z naszych ustaleń
 
