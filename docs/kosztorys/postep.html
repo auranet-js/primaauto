@@ -34,6 +34,9 @@ tr:last-child td { border-bottom: none; }
 td.num { font-variant-numeric: tabular-nums; font-weight: 600; white-space: nowrap; }
 td.data-col { white-space: nowrap; color: var(--ink-2); font-size: 13px; font-variant-numeric: tabular-nums; }
 tfoot td { background: var(--accent-soft); font-weight: 700; }
+tr.msc td { background: var(--ink); color: #fff; font-weight: 700; font-size: 13px;
+  text-transform: uppercase; letter-spacing: 0.5px; padding: 9px 14px; border-bottom: none; }
+tr.msc td.num { font-size: 14px; letter-spacing: 0; }
 .opis { color: var(--ink-2); font-weight: 400; margin-top: 4px; font-size: 14px; }
 .opis p { margin: 0 0 9px; }
 .opis p:last-child { margin-bottom: 0; }
@@ -80,6 +83,7 @@ footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line);
 <table>
 <thead><tr><th>Data</th><th>Praca</th><th class="num">Godziny [h]</th></tr></thead>
 <tbody>
+<tr class="msc"><td colspan="2">Wrzesień 2026</td><td class="num">79</td></tr>
 <tr>
 <td class="data-col">08.09.2026</td>
 <td><strong>Numer przesyłki w zamówieniu i informacja o transporcie dla klienta</strong> <span class='wersje'>0.39.3 – 0.39.5</span><div class="opis"><p>Auto w drodze to najdłuższa cisza w całym zamówieniu — klient wiedział tylko tyle, że płynie. Numer przesyłki wpisujesz teraz w karcie zamówienia, obok numeru VIN, i masz przy nim gotowy odnośnik do śledzenia u przewoźnika. Adres składa się z szablonu w ustawieniach (domyślnie Maersk), więc zmiana armatora nie wymaga naszej ingerencji w system — wystarczy podmienić adres w konfiguracji. Możesz też wkleić pełny odnośnik prosto od spedytora, wtedy użyjemy go bez zmian.</p><p>Klient widzi numer w swoim panelu jako osobną, wyróżnioną kartę „Transport”, razem z odnośnikiem do przewoźnika. Karta pojawia się od razu po wpisaniu numeru — nie czeka, aż zamówienie przejdzie na etap „w drodze”, bo numer zwykle dostajesz od spedytora wcześniej, niż zmieniasz status.</p><p>Osobno jest przycisk „Wyślij informację o transporcie” — mail do klienta z numerem i odesłaniem do panelu. Wysyłka wychodzi wyłącznie po kliknięciu: samo wpisanie numeru ani zmiana statusu nie wysyłają nic. Przy przycisku widzisz datę ostatniej wysyłki, więc wiadomo, czy klient już dostał informację.</p></div></td>
@@ -132,6 +136,7 @@ footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line);
 <td class="data-col">01.09.2026</td>
 <td><strong>YouTube — odzyskany dostęp do kanału i pomiar źródeł ruchu</strong> <div class="opis">Odzyskany dostęp do kanału i sprawdzenie, skąd bierze się jego oglądalność.</div></td>
 <td class="num">2</td></tr>
+<tr class="msc"><td colspan="2">Sierpień 2026</td><td class="num">187</td></tr>
 <tr>
 <td class="data-col">31.08.2026</td>
 <td><strong>Google Ads — audyt kampanii, przebudowa budżetów, kampania wideo</strong> <div class="opis">Przegląd wszystkich kampanii, przesunięcie budżetów tam, gdzie realnie przychodzą kontakty, uruchomienie kampanii wideo Demand Gen oraz automatyczny strażnik pilnujący, żeby reklamy nie prowadziły na nieistniejące strony.</div></td>
@@ -212,6 +217,7 @@ footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line);
 <td class="data-col">03.08.2026</td>
 <td><span class='task'>T-219</span> <strong>Strona o leasingu — od zera do widocznej w całym serwisie</strong> <span class='wersje'>wtyczka 0.34.16, motyw 1.2.0</span><div class="opis"><p>Powstała osobna strona „Leasing samochodu z Chin”, która tłumaczy całą ścieżkę: kto dobiera firmę leasingową, co robimy my, co robi klient, jak wygląda kolejność od wyboru auta do odbioru, ile trwa przygotowanie samochodu i co wchodzi w cenę. Treść przeszła przez Pana korektę i weszła w Pana brzmieniu.</p><p>Sama strona to jednak dopiero połowa roboty — dotąd nikt nie miał jak na nią trafić. Dlatego leasing pojawia się teraz w trzech miejscach, w których klient faktycznie się zatrzymuje. Po pierwsze: na 2174 ofertach zdanie „Możliwy leasing” pod ceną stało się linkiem — to dokładnie ten moment, gdy ktoś patrzy na kwotę i się waha. Po drugie: na 317 stronach modeli doszedł krótki blok „{model} leasing”, bo w Google ludzie szukają właśnie tak — „zeekr 9x leasing”, „geely monjaro leasing”. Po trzecie: link w stopce na każdej stronie i na stronie o finansowaniu.</p><p>Świadomie nie wpisaliśmy na stronach modeli żadnych kwot ani procentów. Ceny się zmieniają wraz z rotacją ofert, a wysokość depozytu jest ustawieniem, które zmienia się w panelu — gdyby te liczby siedziały w treści 317 stron, każda zmiana oznaczałaby 317 stron mówiących nieprawdę. Wszystkie warunki są w jednym miejscu, na stronie o leasingu.</p><p>Strona została też zgłoszona do Google i dopisana do plików, z których korzystają ChatGPT i podobne narzędzia — tak, żeby na pytanie „czy auto z Chin można wziąć w leasing” istniała nasza odpowiedź.</p></div></td>
 <td class="num">7</td></tr>
+<tr class="msc"><td colspan="2">Lipiec 2026</td><td class="num">77</td></tr>
 <tr>
 <td class="data-col">30.07.2026</td>
 <td><span class='task'>T-217</span> <strong>Umowa leasingowa generowana z panelu — drugi wzorzec obok umowy pośrednictwa</strong> <div class="opis"><p>Umowa leasingowa jest już generowana przez system. Do tej pory trzeba ją było składać ręcznie w Wordzie, a numer nadawać poza kolejnością — od teraz wybiera się ją na karcie zamówienia jednym polem „Wzorzec umowy” i dokument powstaje tak samo jak umowa pośrednictwa: z danymi z zamówienia, w naszej szacie graficznej, z załącznikiem ze specyfikacją auta.</p><p>Treść prawna jest odtworzona z podpisanego egzemplarza co do słowa — zmieniliśmy wyłącznie skład i wygląd. Umowy leasingowe mają własną numerację (UL/2026/0001 i dalej), niezależną od dotychczasowej — dzięki temu w żadnej z dwóch numeracji nie robią się dziury. Dochodzi też osobny rachunek bankowy do depozytu leasingowego, ustawiany w panelu obok dotychczasowego; rachunek przy umowie pośrednictwa zostaje bez zmian. Depozyt zabezpieczający podpowiada się jako 10% ceny auta i można go poprawić ręcznie na konkretnym zamówieniu.</p><p>Doszła też ochrona przed pomyłką w numerze VIN. Zdarza się, że dostawca podaje numer ucięty (np. „HACRA0B3XS1S…”) — wcześniej taka wartość wchodziła do dokumentu jako prawdziwy numer nadwozia. Teraz umowa leasingowa rozpoznaje numer niepełny i wpisuje w to miejsce zapis z wzorca o uzupełnieniu numeru aneksem po weryfikacji auta.</p><p>Cała dotychczasowa ścieżka została sprawdzona pod kątem tego, czy nic się nie zepsuło: umowy pośrednictwa generują się dokładnie tak samo jak przed zmianą (porównane znak po znaku na pięciu zamówieniach), a możliwość wgrania własnej umowy zamiast generowanej działa bez zmian, również przy zamówieniach leasingowych.</p></div></td>

@@ -71,9 +71,45 @@ nowe_ids = {t['id'] for t in postep['todo_nowe']}
 
 today = datetime.date.today().strftime('%d.%m.%Y')
 
+MIESIACE_PL = {
+    '01': 'Styczeń', '02': 'Luty', '03': 'Marzec', '04': 'Kwiecień',
+    '05': 'Maj', '06': 'Czerwiec', '07': 'Lipiec', '08': 'Sierpień',
+    '09': 'Wrzesień', '10': 'Październik', '11': 'Listopad', '12': 'Grudzień',
+}
+
+
+def klucz_miesiaca(data: str) -> str:
+    """„08.09.2026" → „09.2026". Wpis bez poprawnej daty trafia do kubełka bez nazwy."""
+    czesci = data.split('.')
+    return f'{czesci[1]}.{czesci[2]}' if len(czesci) == 3 else data
+
+
+def nazwa_miesiaca(klucz: str) -> str:
+    mm, _, rrrr = klucz.partition('.')
+    return f'{MIESIACE_PL.get(mm, klucz)} {rrrr}'.strip()
+
+
+def wiersz_naglowka_miesiaca(klucz: str, godziny: float) -> str:
+    """Nagłówek miesiąca z sumą — changelog jest malejąco, więc suma jest znana z góry."""
+    return (f'<tr class="msc"><td colspan="2">{esc(nazwa_miesiaca(klucz))}</td>'
+            f'<td class="num">{fmt_h(godziny)}</td></tr>')
+
+
 def rows_changelog():
-    out = []
+    # 2026-09-08: podział na miesiące z sumą godzin (prośba Janka). Suma stoi
+    # w nagłówku miesiąca, nie pod nim — przy wpisach na kilkanaście linii opisu
+    # podsumowanie na dole miesiąca byłoby o dwa ekrany od jego początku.
+    godziny_msc = {}
     for c in postep['changelog']:
+        godziny_msc[klucz_miesiaca(c['data'])] = godziny_msc.get(klucz_miesiaca(c['data']), 0) + c.get('godz', 0)
+
+    out = []
+    biezacy = None
+    for c in postep['changelog']:
+        klucz = klucz_miesiaca(c['data'])
+        if klucz != biezacy:
+            out.append(wiersz_naglowka_miesiaca(klucz, godziny_msc[klucz]))
+            biezacy = klucz
         wersje = f"<span class='wersje'>{esc(c['wersje'])}</span>" if c.get('wersje') else ''
         # 2026-08-21: numer taska przy wpisie — Ruslan zestawia „Zrealizowane" z „W kolejce"
         # po numerach; do tej pory pokazywała je wyłącznie kolejka.
@@ -163,6 +199,9 @@ tr:last-child td {{ border-bottom: none; }}
 td.num {{ font-variant-numeric: tabular-nums; font-weight: 600; white-space: nowrap; }}
 td.data-col {{ white-space: nowrap; color: var(--ink-2); font-size: 13px; font-variant-numeric: tabular-nums; }}
 tfoot td {{ background: var(--accent-soft); font-weight: 700; }}
+tr.msc td {{ background: var(--ink); color: #fff; font-weight: 700; font-size: 13px;
+  text-transform: uppercase; letter-spacing: 0.5px; padding: 9px 14px; border-bottom: none; }}
+tr.msc td.num {{ font-size: 14px; letter-spacing: 0; }}
 .opis {{ color: var(--ink-2); font-weight: 400; margin-top: 4px; font-size: 14px; }}
 .opis p {{ margin: 0 0 9px; }}
 .opis p:last-child {{ margin-bottom: 0; }}
