@@ -1,6 +1,66 @@
 # Historia wersji asiaauto-sync
 
 
+## 0.39.0 — 2026-09-08 (grupa „Drzwi i klapa", wyposażenie w kolumnach, zwijanie na komputerze)
+
+Trzy zmiany naraz, wszystkie w wyszukiwarce zaawansowanej. Punkt wyjścia: zrzut z mobile.de
+przysłany przez Janka i pytanie, czemu nie ma filtra „elektryczne otwieranie drzwi".
+
+**Filtra otwierania drzwi nie ma, bo źródło go nie zna.** Klucz `electric_door` to w oryginale
+`电动吸合车门`, czyli elektryczne **domykanie** (soft-close). Elektrycznie otwierane są wyłącznie
+drzwi przesuwne w MPV (`sliding_door_4` = `双侧电动开闭`, 53 oferty) i klapa bagażnika. Etykieta
+„Drzwi elektryczne" z pierwszej wersji makiety była myląca — poprawiona na „Drzwi domykane
+elektrycznie". Pomiar na CAŁEJ bazie, nie na próbce 595 ofert z zapasu kandydatów, i to zmieniło
+liczby: karaoke 42% → 59,3%, ukryte klamki 43% → 54,8%, ambient 39% → 46,8%, frunk 25% → 20,3%.
+
+**11 nowych cech** (`SCHEMA_VERSION` 7 → 8, przebudowa 11,5 s, 3 377 wierszy bez ubytku):
+grupa „Drzwi i klapa" w całości (`tailgate_el` 2 366 · `tailgate_mem` 2 172 · `door_handle_hidden`
+1 657 · `door_softclose` 1 220 · `tailgate_sensor` 772 · `door_frameless` 270 · `door_sliding` 53 ·
+`door_wing` 52) plus `karaoke` 1 793, `seat_vent_r` 1 242, `ac_rear` 1 172. Do sekcji „Nadwozie"
+doszły dwa enumy: `door_count` (5/4/2) i `door_type` (klasyczne / przesuwne / przesuwne z tyłu /
+motylkowe / przeciwbieżne). Sekcja przeszła z 7 na 5 kolumn — przy 9 polach siedmiokolumnowa
+siatka dawała paski po 90 px.
+
+**„Zawieszenie pneumatyczne" zdjęte z wyposażenia — duplikat.** Wychwycone przez Janka na makiecie:
+enum „Rodzaj zawieszenia → Pneumatyczne" powstaje z tej samej flagi `air_suspension`
+(`AsiaAuto_Specs_Table::suspension()`), więc pastylka i lista pokazywały te same 882 oferty.
+Został enum, bo ma jeszcze „Adaptacyjne" (644). Kolumna i parametr API `air_susp` zostają.
+
+**Wyposażenie na komputerze to kolumny checkboxów z nagłówkami grup**, wzorem sekcji „Extras"
+z mobile.de — przy 48 cechach płaskie pastylki zajmowały pół ekranu. Markup bez zmian (te same
+`.aas__chip` z `input[type=checkbox]`), zmienił się wyłącznie CSS plus nagłówki grup renderowane
+z `FLAG_GROUPS`. Kolejność cech bierze się teraz z `FLAG_GROUPS` (grupami, w grupie alfabetycznie),
+a lista w `SEKCJE` mówi już tylko, które flagi wchodzą do UI.
+
+**Zwijanie sekcji na komputerze** — mechanizm istniał od 03.09 dla telefonu (`.is-zwinieta`),
+tu został odblokowany szerzej i uzupełniony o trzy rzeczy: podsumowanie w nagłówku zwiniętej sekcji
+(„BYD · SUV"), pamięć stanu w `localStorage` i przycisk „Zwiń filtry / Rozwiń filtry" (desktop-only).
+Bez podsumowania zwijanie ukrywa filtry, o których użytkownik zapomina, a wyniki zostają zawężone.
+
+**Telefon bez zmian wyglądu — sprawdzone pomiarem, nie na oko.** Dwa regresy złapane na zrzutach
+przed publikacją: (1) desktopowy styl checkboxa przeciekł do arkusza i dawał DWA kwadraty w wierszu;
+(2) próba nadpisania paddingu zmieniła wysokość wiersza. Po naprawie computed styles arkusza zgadzają
+się z wersją sprzed zmian co do piksela: wiersz `min-height: 44px`, `padding: 0 6px`, `gap: 10px`,
+input schowany (`opacity: 0`, 1 px), znacznik `::before` 22×22 z ramką 2 px, etykieta 15 px,
+siatka 2 × 174 px; nagłówki grup, podsumowanie sekcji i pasek „Zwiń filtry" mają `display: none`.
+Na telefon weszły wyłącznie parametry: arkusz ma 48 pozycji zamiast 37.
+
+**Bramki:** axe WCAG A/AA/2.1/2.2 AA — 0 naruszeń przy 320 px i 1366 px (pierwszy przebieg dał
+`target-size` serious: natywny checkbox 17×17 px; naprawione wzorcem z arkusza — input rozciągnięty
+na cały wiersz, kwadracik rysowany pseudo-elementem). `porownaj-search.php` 2 × 50 kombinacji wobec
+`/listings` — 0 rozjazdów, 2–3 ms. Test UI: 0 błędów JS, deep-link, sortowanie, paginacja, kafle OK.
+REST po zmianie: `door_softclose` 1 220, `tailgate_sensor` 788, `karaoke,ac_rear` 898, `drzwi=5` 2 232,
+`typ_drzwi=przesuwne,przesuwne-tyl` 158, `air_susp` 882 (parametr API działa mimo zniknięcia z UI).
+
+**Poprawiony test bramkowy:** `test-ui-wyszukiwarka.mjs` sprawdzał `dlugosc_min === '5,0'`, a od
+04.09 długość jest w milimetrach — od pół roku raportowałby „deep-link NIE" niezależnie od stanu.
+
+Makiety: `docs/makiety/gen-j.py` (kolumny, wariant A/B), `gen-j2.py` (wybrany B + zwijanie),
+`gen-m.py` (arkusz na telefonie — propozycja nagłówków grup, do decyzji).
+Backupy: `*.bak-2026-09-08-drzwi` (search, specs-table, CSS, JS) na serwerze,
+`~/backups/primaauto/2026-09-08/asiaauto_specs-przed-drzwiami.sql`.
+
+
 ## 0.38.2 — 2026-09-04 (szerokość w miejsce DMC, „Silnik i osiągi")
 
 Po zdjęciu DMC (0.38.1) w sekcji „Nadwozie" została dziura po siódmym polu. Weszła w nią

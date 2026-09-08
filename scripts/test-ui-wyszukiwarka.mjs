@@ -80,7 +80,7 @@ for (const [nazwa, w, h] of [['mobile', 320, 720], ['desktop', 1366, 900]]) {
   const lidarZazn = await p.$eval('input[name="wyposazenie[]"][value="lidar"]', el => el.checked);
   const dlVal = await p.$eval('input[name="dlugosc_min"]', el => el.value);
   say(`Po odświeżeniu: ${poReload} ofert, lidar=${lidarZazn}, dlugosc_min="${dlVal}", Wyczyść: ${await p.$eval('.aas__clear', el => el.textContent.trim())}`);
-  say(`Deep-link odtwarza stan: ${poReload === poDl && lidarZazn && dlVal === '5,0' ? 'TAK' : 'NIE'}`);
+  say(`Deep-link odtwarza stan: ${poReload === poDl && lidarZazn && dlVal === '5' ? 'TAK' : 'NIE'}`);
 
   // kafel „Do sprowadzenia": zawęża; drugi klik = wszystkie; kafel z zerem jest wyłączony
   const doSprN = await kafelN('do-sprowadzenia');
