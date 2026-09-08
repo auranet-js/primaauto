@@ -1,6 +1,39 @@
 # Historia wersji asiaauto-sync
 
 
+## 0.39.1 — 2026-09-08 (arkusz na telefonie: nagłówki grup + otwarcie od razu)
+
+Wariant B z makiety M, wybrany przez Janka, plus jego uwaga z użytkowania: po rozwinięciu sekcji
+„Wyposażenie i technologie" na telefonie było widać **puste pole „Wyposażenie / Wszystkie"**, które
+trzeba było dokliknąć, żeby zobaczyć listę. Zweryfikowane puppeteerem przed zmianą: po kliknięciu
+nagłówka sekcji widoczne było wyłącznie pole 360×42 px, `widoczne_pozycje: 0`.
+
+**Arkusz otwiera się od razu po rozwinięciu sekcji** (telefon). Sekcja wyposażenia ma jedno pole,
+więc pośredni krok niczego nie wnosił; zwinięcie sekcji arkusz zamyka. Pozostałe sekcje mają po
+kilka pól i tam wybór zostaje u użytkownika. Warunek na `mqSek.matches` — na komputerze nic się
+nie zmienia.
+
+**Nagłówki grup w arkuszu, przyklejone przy przewijaniu.** Element był już w HTML od 0.39.0
+(renderowany z `FLAG_GROUPS`), na telefonie chowany przez `display: none` — teraz dostał
+`position: sticky`. Przy 48 pozycjach bez nagłówka nie wiadomo, w której części listy się jest.
+`top: -6px` i `margin: 0 -16px` zjadają padding listy: bez tego nad przyklejonym nagłówkiem
+prześwitywał sześciopikselowy pasek przewijanego wiersza (widoczne na zrzucie, nie w liczbach).
+
+**Szukajka chowa nagłówek grupy, z której nic nie zostało** (`widoczneWGrupie()`) — po wpisaniu
+„klapa" arkusz pokazuje 2 pozycje i 1 nagłówek zamiast 5 pustych.
+
+**Bramki:** axe WCAG A/AA/2.1/2.2 AA z OTWARTYM arkuszem — 0 naruszeń przy 390 i 320 px (nowy
+przebieg, poprzednie testowały tylko listę marki). Test UI: 0 błędów JS, deep-link TAK, axe 0
+przy 320 i 1366 px. Ścieżka na telefonie zweryfikowana puppeteerem krok po kroku: rozwinięcie
+sekcji → arkusz otwarty, 48 pozycji, 5 nagłówków, `position: sticky`; przewinięcie → nagłówek
+przyklejony; szukajka → grupy filtrowane; zwinięcie → arkusz zamknięty.
+
+**Wpadka warta zapisania:** podbicie wersji `sed`-em z nawiasami w wzorcu zjadło `)` w
+`define('ASIAAUTO_VERSION', …)` i zostawiło na produkcji plik z parse error na kilkadziesiąt
+sekund (złapane przez `php -l` zaraz po zapisie). Wersje podbijamy podmianą przez skrypt
+w Pythonie albo z jawnym `php -l` PRZED zapisem, nie `sed`-em po nawiasach.
+
+
 ## 0.39.0 — 2026-09-08 (grupa „Drzwi i klapa", wyposażenie w kolumnach, zwijanie na komputerze)
 
 Trzy zmiany naraz, wszystkie w wyszukiwarce zaawansowanej. Punkt wyjścia: zrzut z mobile.de
