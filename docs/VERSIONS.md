@@ -1,5 +1,46 @@
 # Historia wersji asiaauto-sync
 
+## 0.39.6 — 2026-09-08 (ręczny import che168 bez kanonizacji — CJK w tytule)
+
+Zgłoszenie Janka: chiński znak na ofercie `/oferta/byd-sealion-8-tang-l-ev-2025-470577/` —
+„mapowanie złe? powinno wejść do tang l ev?".
+
+Mapowanie było dobre. Term `serie` = `Sealion 8 (Tang L) EV`, slug oferty, breadcrumb huba i
+wpis `BYD|Tang L EV` w `brand-mapping-v6.1.php` — wszystko poprawne. CJK siedział wyłącznie
+w `post_title` (`BYD 唐L 2025 EV 600KM 4WD LiDAR Flagship`) i stamtąd wyciekał do breadcrumbu,
+`schema.org Product.name`, `og:image:alt`, altów zdjęć, kafli „podobne oferty" i `dataLayer`
+GA4 (`item_name`). H1 i `<title>` CJK nie miały — theme buduje je osobno (T-203) i wycinał
+znak, dając okaleczone „BYD L EV 600KM…".
+
+**Przyczyna:** `AsiaAuto_Admin_Manual_Import::ajaxImport()` wołał `importListing()` na surowej
+odpowiedzi `getOffer()`, z pominięciem kanonizacji, którą automatyczny sync robi w
+`normalizeForSource()`. Bez niej model che168 dociera jako `唐L`, klucz `BYD|Tang L EV` nie
+trafia, `getEuForCn()` zwraca `null`, importer wpada w fallback `translateModel()` — a ten
+zwraca surowe CJK i loguje `Unknown model value: '唐L' — add to translations`.
+
+**Patch:** `AsiaAuto_Che168_Adapter::normalize()` przed `importListing()` w `ajaxImport()`.
+Świadomie **bez** guarda `isMappedForImport()`, którego używa `normalizeForSource()`: sync nim
+odrzuca niezmapowane oferty, ale w imporcie ręcznym ofertę wskazuje człowiek (`force=true`)
+i odrzucenie byłoby błędem — niezmapowana wchodzi jak dotąd, z CN do ręcznej poprawy.
+
+**Dane naprawione** (backup `~/backups/primaauto/2026-09-08/wp7j_posts-przed-fix-cjk.sql`):
+3 oferty publish (399762, 401019, 470577 — trzy egzemplarze tego Tang L) + 16 altów zdjęć.
+Tytuł złożony wzorcem importera (`marka + serie_eu + rok + wersja`), slugi podane jawnie w
+`wp_update_post()` — URL-e bez zmian, zero przekierowań. Po zmianie 3× HTTP 200, zero CJK
+w treści stron i na hubie `/samochody/byd/sealion-8-ev/`; H1 = „BYD Sealion 8 (Tang L) EV
+Flagship EV 600KM 4WD LiDAR 2025".
+
+**Nie naprawiane, do decyzji:**
+- nazwy plików zdjęć (`byd-唐l-2025-chongqing-58399021-2.webp`) — rename w `uploads/` grozi 404
+  na zaindeksowanych obrazkach; szerzej: 13,7 tys. plików z CJK w nazwie, głównie miasta
+  (`江门`, `吴忠`)
+- ~487 altów przy ~31 innych ofertach z tym samym wzorcem (np. `Galaxy 银河A7 EM 2025`) —
+  tytuły tych ofert ktoś poprawił ręcznie, alty zostały ze starym CJK
+- draft 355636 (`Geely Coolray 2025 缤越L 1.5TD DCT Star 钻`) — inna przyczyna: brak termu
+  `serie` i CJK w `_asiaauto_complectation`, nie w modelu
+- slug 399762 (`sealion-8-dm-i-tang-l`) przy termie wariantu **EV** — zmiana = 301
+- tytuł zamówienia 470579 (`#470577 — BYD 唐L …`) — CPT `asiaauto_order`, `in_transit`
+
 
 ## 0.39.5 — 2026-09-08 (karta transportu w panelu klienta, osobna od kwot)
 
