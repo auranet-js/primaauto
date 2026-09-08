@@ -30,6 +30,9 @@ REPLACEMENTS = [
     ('1042/2026', '{contract_number}'),
     ('1042', '{order_id}'),
     ('+48 721 730 507', '{company_phone}'),
+    # T-248 — numer przesyłki z makiety. Bez tego każdy klient dostawał numer
+    # przykładowy zaszyty na sztywno (wykryte przed wgraniem 08.09).
+    ('MAEU7841239', '{tracking_number}'),
 ]
 
 # Linki. Makiety mają przykładowy adres zamówienia zaszyty na sztywno — bez tej podmiany

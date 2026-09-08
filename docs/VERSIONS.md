@@ -1,6 +1,64 @@
 # Historia wersji asiaauto-sync
 
 
+## 0.39.5 — 2026-09-08 (karta transportu w panelu klienta, osobna od kwot)
+
+Zgłoszenie Janka po obejrzeniu 0.39.4: numer przesyłki jako kolejny wiersz w karcie cenowej
+ginął wśród kwot — „możemy tę sekcję jakby oddzielić osobno? np. na innym tle?".
+
+Numer przesyłki wyjęty z `aa-wiz__price-card` do samodzielnej karty `aa-wiz__tracking-card`:
+granatowe tło marki (`--wiz-primary`), nagłówek „TRANSPORT" z ikoną kontenera, numer
+monospace 19 px, podkreślony odnośnik do przewoźnika. Karta pojawia się wyłącznie, gdy numer
+jest wpisany — bez numeru znika w całości, nie zostaje pusty nagłówek.
+
+Kontrasty zmierzone (WCAG 2.2 AA, wszystkie z zapasem): nagłówek i etykieta na półprzezroczystej
+bieli `rgba(255,255,255,.72)` = efektywnie `#BFC3CC` — **8,05:1**; numer i odnośnik — **14,22:1**;
+hover bursztynowy — **9,86:1**; krawędź karty wobec tła strony — **13,15:1**. Wskaźnik fokusu
+dziedziczy dwubarwną regułę z T-246 (`asiaauto-order-wizard.css:1133`): na granacie widoczna
+jest biała warstwa, **14,22:1**.
+
+
+## 0.39.4 — 2026-09-08 (numer przesyłki niezależny od kroku kreatora)
+
+Zgłoszenie Janka: numer wpisany w karcie zamówienia nie pokazywał się w panelu klienta.
+
+Przyczyna: wiersz siedział w panelu kroku 5, a `resolveWizardStep()` daje krok 5 dopiero dla
+statusów `zarezerwowane`…`zakonczone`. Zamówienie #410903 stoi na „potwierdzone" (krok 3), więc
+panel był `display:none` mimo numeru w payloadzie. W praktyce numer trafia do systemu wcześniej,
+niż status wchodzi w fazę transportową — Ruslan dostaje go od spedytora zaraz po załadunku.
+
+Numer wchodzi teraz do `$init` kreatora (obie ścieżki budowy) i renderuje się w panelu bocznym,
+poza panelami kroków. Warunkiem widoczności jest **sam numer**, nie krok. Wiersz w kroku 5 zostaje.
+
+
+## 0.39.3 — 2026-09-08 (T-253 termin dostawy + T-248 numer przesyłki)
+
+**T-253** — pole „Termin dostawy (dni)" w karcie zamówienia, obok VIN-u, z podglądem wyliczonej
+daty. Puste = fallback do `default_delivery_days` z konfiguracji. `META_DELIVERY_ESTIMATE`
+istniała od dawna, ale zapisywała się tylko przy zakładaniu zamówienia — nie było jak jej zmienić.
+Zweryfikowane na PDF-ach obu wzorców: pośrednictwo „w terminie 90 dni" (§4 ust. 1), leasing
+„wynosi do 90 dni" (§4), pusta meta → 120 z konfiguracji.
+
+Przy okazji ujednolicony rozjazd fallbacku **60 vs 120** w siedmiu miejscach: `order-wizard.php`
+(4×), `order-api.php` (1×) oraz `asiaauto-order-wizard.js:749,750` — klient w kreatorze widział
+inną liczbę dni niż ta, która wchodziła do umowy.
+
+**T-248** — numer przesyłki w karcie zamówienia (`META_TRACKING_NUMBER`), odnośnik do przewoźnika
+składany z szablonu `tracking_url_template` w konfiguracji (domyślnie Maersk, placeholder
+`{tracking_number}`), przycisk „Wyślij informację o transporcie" i numer w panelu klienta.
+Wklejony pełny adres `https://…` jest używany zamiast szablonu. Sanityzacja: wielkie litery,
+`A-Z0-9-/`, 40 znaków. Zapis numeru i zmiana statusu **nie wysyłają nic** — mail wychodzi
+wyłącznie po kliknięciu przycisku (D-4). Statusy nietknięte (D-5).
+
+Szablon maila `tracking_sent` przeszedł pełną ścieżkę normalizacyjną T-209
+(`t209_build_tresci.py` → `t209_export_templates.py` → opcja `asiaauto_order_email_templates`),
+więc jest siedemnastym obok szesnastu istniejących: „Dzień dobry", ramka z numerem, CTA bez
+jawnego magic tokenu. Do eksportera dopisana reguła na numer z makiety — bez niej każdy klient
+dostałby przykładowe `MAEU7841239` na sztywno.
+
+Automat armatora (pozycja statku, ETA) świadomie poza zakresem — T-254, parking.
+
+
 ## 0.39.2 — 2026-09-08 (znacznik zaznaczonej cechy wraca na komputerze)
 
 Zgłoszenie Janka: po zaznaczeniu cechy na komputerze **znikał kwadracik**, a zostawał sam

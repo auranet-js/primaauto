@@ -851,6 +851,50 @@ Zespół Prima-Auto
 ))
 
 
+# ---- 17. tracking_sent (T-248) ---------------------------------------------
+MAILS.append(dict(
+    num='17', key='tracking_sent', title='Informacja o transporcie (numer przesyłki)',
+    state='changed',
+    where='class-asiaauto-order-admin.php — nowa akcja „Wyślij informację o transporcie”, wyłącznie po kliknięciu',
+    verdict='Nowy mail w ścieżce — numer przesyłki bez wyprowadzania klienta na stronę armatora',
+    why="""Transport morski trwa tygodnie i to jest najdłuższa cisza w całym zamówieniu. Numer przesyłki
+jest jedynym twardym dowodem, że auto realnie płynie. Numeru nie podajemy z linkiem do przewoźnika:
+strona armatora bywa nieczytelna, a klient wyprowadzony na zewnątrz nie wraca do panelu — dlatego
+odnośnik do śledzenia siedzi w panelu zamówienia, razem z numerem i paskiem postępu. W mailu numer
+jest tekstem do skopiowania. Lewa kolumna to zapasowa treść tekstowa z kodu, prawa — wersja
+docelowa we wrapperze.""",
+    subj_before='Prima-Auto — Twoje auto jest w drodze (zamówienie #1042)',
+    subj_after='Prima-Auto — Twoje auto płynie do Polski (zamówienie #1042)',
+    before="""Cześć Marcin,
+
+BYD Sealion 7 Excellence AWD 82,5 kWh 2024 został przekazany do transportu.
+
+Numer przesyłki: MAEU7841239
+
+Bieżący stan transportu, numer przesyłki i odnośnik do śledzenia
+znajdziesz w panelu zamówienia: https://primaauto.com.pl/zamowienie/?k=a7f3e91b2c4d8e6f
+
+Pozdrawiamy,
+Zespół Prima-Auto
++48 721 730 507""",
+    after=wrap(
+        body(head('W DRODZE', '#0A66C2') + """
+    <p style="margin:0 0 16px;">Twój samochód został załadowany i płynie do Polski. Poniżej numer przesyłki — to po nim przewoźnik rozpoznaje kontener, w którym jedzie Twoje auto.</p>
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;background:#F8FAFC;border:1px solid #E5E7EB;margin:0 0 16px;">
+      <tr><td style="padding:14px 16px;">
+        <p style="margin:0 0 2px;font-size:12px;color:#6B7280;">Numer przesyłki</p>
+        <p style="margin:0 0 8px;font-size:18px;font-weight:bold;color:#1B2A4A;font-family:Consolas,Menlo,monospace;">MAEU7841239</p>
+        <p style="margin:0;font-size:12px;color:#6B7280;">Rejs morski trwa zwykle 5–7 tygodni. Po zawinięciu do portu przejmujemy odprawę celną i transport krajowy.</p>
+      </td></tr>
+    </table>
+    <p style="margin:0 0 16px;">Aktualny etap transportu i odnośnik do śledzenia u przewoźnika masz w panelu zamówienia — tam wszystko jest w jednym miejscu i nie musisz nic przepisywać.</p>""")
+        + cta('Sprawdź stan transportu', LINK)
+        + progress(4)
+        + SIGNOFF
+    ),
+))
+
+
 # ─────────────────────────────────────────────────────────────────────────────
 def render():
     secs = []
