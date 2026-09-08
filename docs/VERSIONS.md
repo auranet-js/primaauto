@@ -1,6 +1,25 @@
 # Historia wersji asiaauto-sync
 
 
+## 0.39.2 — 2026-09-08 (znacznik zaznaczonej cechy wraca na komputerze)
+
+Zgłoszenie Janka: po zaznaczeniu cechy na komputerze **znikał kwadracik**, a zostawał sam
+pogrubiony tekst — czyli jedyny sygnał „to jest wybrane" był typograficzny.
+
+Przyczyna: martwa reguła `.aas__pole--flags .aas__chip.is-active::before { content: none }`
+z pierwszej wersji układu kolumnowego, kiedy checkbox był jeszcze natywnym `input`-em.
+Po przejściu na znacznik rysowany pseudo-elementem (0.39.0, naprawa `target-size`) reguła
+została w pliku i stała PÓŹNIEJ niż `content: '✓'`, więc ją przebijała. Potwierdzone pomiarem
+computed style: `::before content` = `none` dla `.is-active`, `""` dla niezaznaczonej.
+
+Po usunięciu: zaznaczona cecha ma granatowy kwadracik `#1B2A4A` z białą fiszką i pogrubioną
+etykietę — ten sam znacznik co w arkuszu na telefonie, więc oba widoki wyglądają tak samo.
+Czerwień świadomie odrzucona (Janek sam ją zakwestionował): w tym interfejsie znaczy „akcja"
+(przycisk „Pokaż oferty") i „uwaga", nie „wybrane".
+
+Bramka: axe WCAG A/AA/2.1/2.2 AA na 1366 px z trzema zaznaczonymi filtrami — 0 naruszeń.
+
+
 ## 0.39.1 — 2026-09-08 (arkusz na telefonie: nagłówki grup + otwarcie od razu)
 
 Wariant B z makiety M, wybrany przez Janka, plus jego uwaga z użytkowania: po rozwinięciu sekcji
