@@ -1,6 +1,6 @@
 # T-114 — Ulubione auta (schowek klienta / „parking")
 
-> Status: **gated na T-204** (panel klienta) + **T-212** (komponent karty) · Rozmiar: M
+> Status: **T-204 ODBLOKOWANY 2026-09-08** (panel klienta LIVE, zakładka „Ulubione" czeka pusta) · nadal gated na **T-212** (komponent karty) · Rozmiar: M
 > Godziny realnie: **11–15 h** (Janek ~1,5 h, AI ~9–13 h) · Rynkowo: 28–35 h
 > Korekta 2026-07-14 (uwaga Janka): **podniesione z 8–10 h.** Poprzednia estymata liczyła „samo serce na karcie" i pomijała pełną ścieżkę konwersji na konto — a to jest sedno tej funkcji.
 > Wzorzec: „parking" z mobile.de (życzenie Janka)
@@ -39,7 +39,7 @@ Zero `localStorage` w `assets/js/`.
 3. **Serce (ikona) na karcie oferty** — w helperze karty z T-187 (jedno miejsce → działa wszędzie: katalog, huby, homepage, blok „inne egzemplarze"). Stan wypełnione/puste.
 4. **Serce na stronie oferty** — w sticky headerze i przy cenie.
 5. **Niezalogowany klika serce** → modal „Zaloguj się, żeby zapisać" + zapamiętanie intencji (po zalogowaniu auto ląduje w ulubionych). To jest **moment konwersji na konto** — nie może być tarcia.
-6. **Zakładka „Ulubione" w panelu** (slot z T-204) — siatka kart + licznik w headerze.
+6. **Zakładka „Ulubione" w panelu** — slot już istnieje (`AsiaAuto_Account::renderTabPlaceholder`, T-204); wypełnić siatką kart. Licznik w headerze **czeka na mockup wejścia do konta** — headera T-204 świadomie nie ruszał.
 7. **Obsługa auta, które zniknęło/zostało zarezerwowane** — karta zostaje, ale wyszarzona z etykietą „Zarezerwowane" / „Niedostępne". To jest paliwo dla T-188 (FOMO-alert).
 
 ## Strefy kruche

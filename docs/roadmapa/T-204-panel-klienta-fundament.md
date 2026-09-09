@@ -1,8 +1,18 @@
 # T-204 — Panel klienta (konto zalogowanego) — FUNDAMENT
 
-> Status: **nowa pozycja** (decyzja Janka 2026-07-14) · Rozmiar: M
-> Godziny realnie: **18–24 h** (Janek ~3–4 h, AI ~15–20 h) · Rynkowo: 45–55 h
-> **Odblokowuje:** T-114 (ulubione), T-188 (alerty), częściowo T-115 (porównywarka)
+> Status: ✅ **WDROŻONE 2026-09-08, plugin 0.40.0** · Rozmiar: M
+> Godziny realnie: **15–20 h** (spec mówił 18–24; krok 5 odpadł, bo zrobił go T-244) · Rynkowo: 45–55 h
+> **Odblokowuje:** T-114 (ulubione), T-188 (alerty), T-249 (dokumenty), częściowo T-115 (porównywarka)
+> Changelog i pełna weryfikacja: `docs/VERSIONS.md` → 0.40.0
+>
+> **Zakres faktyczny:** kroki 1–4 i 7. **Krok 6 (wejście w menu/headerze) świadomie pominięty** —
+> decyzja Janka 08.09: logowanie i rejestracja zostają niepodlinkowane, wejście rozstrzyga osobny mockup.
+> **Krok 5 (hasło plaintextem) był już zrobiony** przez T-244, odebrany 10.08.
+>
+> **Rzecz, której spec z 14.07 nie przewidział:** umowa PDF czyta dane klienta na żywo z `usermeta`
+> (`class-asiaauto-contract.php:220`), więc edycja adresu czy PESEL-u po podpisaniu rozjechałaby
+> przyszłą regenerację z podpisanym dokumentem. Rozstrzygnięcie (Janek, 08.09): telefon i e-mail
+> edytowalne zawsze, dane umowne tylko dopóki żadne zamówienie nie przekroczyło statusu `podpisane`.
 
 ## Po co
 

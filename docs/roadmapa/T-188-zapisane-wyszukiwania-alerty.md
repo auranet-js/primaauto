@@ -1,6 +1,6 @@
 # T-188 — Zapisane wyszukiwania + alerty mailowe
 
-> Status: **gated na T-204** (panel) i T-114 (ulubione, dla alertu o rezerwacji) · Rozmiar: L
+> Status: **T-204 ODBLOKOWANY 2026-09-08** (panel LIVE, zakładka „Alerty" czeka pusta) · nadal gated na T-114 (ulubione, dla alertu o rezerwacji) · Rozmiar: L
 > Godziny realnie: **33–40 h** (Janek ~4–5 h, AI ~28–35 h) · Rynkowo: 85–100 h
 > Zakres wybrany przez Janka 2026-07-14 (quiz): nowe auto + tryb zbiorczy + alert o rezerwacji. **Bez** alertu o spadku ceny.
 
@@ -30,7 +30,7 @@ Klient zapisuje kryteria („czarny Leopard 5 do 150 tys.") i dostaje maila, gdy
 
 1. **Model danych:** CPT `asiaauto_alert` (albo tabela) — `user_id`, `criteria_json` (kształt = parametry wyszukiwarki), `tryb` (`instant`/`weekly`), `active`, `last_notified_at`, `last_seen_listing_id`.
 2. **UI zapisu w wyszukiwarce:** przycisk „Zapisz to wyszukiwanie i powiadom mnie" nad wynikami (widoczny, gdy jakikolwiek filtr aktywny). Niezalogowany → modal rejestracji (ta sama ścieżka co T-114).
-3. **Zakładka „Alerty" w panelu** (slot z T-204): lista zapisanych, edycja kryteriów, przełącznik trybu, pauza, usunięcie. Każdy alert pokazuje „ile aut pasuje dziś" (reuse `filter-counts`).
+3. **Zakładka „Alerty" w panelu** — slot już istnieje (T-204): lista zapisanych, edycja kryteriów, przełącznik trybu, pauza, usunięcie. Każdy alert pokazuje „ile aut pasuje dziś" (reuse `filter-counts`).
 4. **Silnik dopasowania (cron):** po każdym imporcie (hook na `importListing`) kolejkuj nowe post_id; cron co godzinę bierze kolejkę, dla każdego alertu odpala WP_Query z zapisanymi kryteriami zawężony do nowych ID. **Nie odwrotnie** (nie skanujemy całej bazy per alert) — to jest różnica między zapytaniem w sekundę a w minutę.
 5. **Wysyłka `instant`:** mail „Nowe auto pasujące do Twojego wyszukiwania" z kartą auta (zdjęcie, cena, link). Throttle: max 1 mail / alert / dobę (zbiorczo, jeśli w oknie wpadło kilka aut).
 6. **Wysyłka `weekly`:** cron tygodniowy, zbiorczy mail z listą (max 8 aut + „zobacz wszystkie").
@@ -40,7 +40,7 @@ Klient zapisuje kryteria („czarny Leopard 5 do 150 tys.") i dostaje maila, gdy
 ## Strefy kruche
 
 - **Hook w imporcie** — `importListing()` jest w strefie kruchej. Wpinamy się **wyłącznie** przez `do_action` na końcu udanego importu (dodanie akcji, zero zmian w logice). Kolejkowanie asynchroniczne — **import nie może czekać na maile**.
-- **Magic link:** alerty linkują do panelu **bez tokenu** (klient loguje się normalnie). Token magic link zostaje zarezerwowany dla flow zamówienia — inaczej mail alertowy skasowałby token z maila o zamówieniu (są per-user, nadpisują się).
+- **Magic link:** alerty linkują do panelu **bez tokenu** (klient loguje się normalnie). ⚠️ Uzasadnienie z 14.07 („token jest per-user i nadpisuje się") jest **nieaktualne** — T-244 przeniósł token na zamówienie (`_order_magic_token`, wielokrotny użytek w oknie 48 h), więc mail alertowy niczego już nie kasuje. Zasada zostaje mimo to: token to droga do konkretnego zamówienia, nie do panelu.
 
 ## Testy
 

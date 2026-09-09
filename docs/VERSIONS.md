@@ -1,5 +1,85 @@
 # Historia wersji asiaauto-sync
 
+## 0.40.0 — 2026-09-08 (T-204: panel klienta na /klient/)
+
+`/klient/` przestaje być ekranem logowania, który natychmiast przerzucał zalogowanego
+klienta na jego ostatnie zamówienie, i staje się panelem z czterema zakładkami.
+
+**Nowy plik:** `includes/class-asiaauto-account.php` (klasa `AsiaAuto_Account`).
+Panel dostał własny plik, bo `class-asiaauto-shortcodes.php` miał już 2865 linii,
+a T-114, T-188 i T-249 będą dokładać kolejne zakładki.
+
+**Zakres wdrożenia (kroki 1–4 i 7 ze specu):**
+
+- **Zakładka „Moje zamówienia"** — lista zamówień klienta ze statusem, datą i numerem.
+  Ożywiony kod, który wcześniej był nieosiągalny („Shouldn't normally reach here").
+- **Zakładka „Moje dane"** — edycja danych kontaktowych i zmiana hasła.
+- **Rejestracja i logowanie z frontu** — `/klient/?rejestracja=1`, honeypot, limit
+  5 prób na IP na godzinę, wymagana zgoda na regulamin i politykę prywatności.
+- **Puste sloty „Ulubione" i „Alerty"** — miejsca dla T-114 i T-188.
+
+**Świadomie POZA zakresem:** wejście do panelu w menu i headerze (krok 6 specu).
+Decyzja Janka 08.09 — logowanie i rejestracja zostają niepodlinkowane, kształt
+wejścia rozstrzyga osobny mockup. Do panelu wchodzi się adresem, po wylogowaniu
+i po odbiciu z wp-admin.
+
+**Krok 5 specu (hasło plaintextem w mailu) odpadł** — zrobiony przy T-244, odebrany
+10.08: mail `welcome` jest domyślnie wyłączony, klient ustawia hasło przez
+„Nie pamiętasz hasła?".
+
+### Zamrożenie danych umownych
+
+Umowa PDF czyta dane klienta **na żywo z `usermeta`** przy każdym generowaniu
+(`class-asiaauto-contract.php:220` → `getCustomerData()`), nie ze snapshotu na
+zamówieniu. Gdyby panel pozwalał zmienić adres czy PESEL po podpisaniu, kolejna
+regeneracja umowy dałaby dokument niezgodny z podpisanym egzemplarzem.
+
+Dlatego: **telefon i e-mail edytowalne zawsze, dane umowne tylko dopóki żadne
+zamówienie klienta nie przekroczyło statusu `podpisane`** (decyzja Janka 08.09).
+Po tej granicy pola są `readonly` z odesłaniem do kontaktu. Pomiar z dnia wdrożenia:
+18 z 67 klientów ma dane zamrożone, 49 może je edytować.
+
+Panel **nie woła** `AsiaAuto_Contract::regenerate()` — poprawki do umowy robi się
+w kreatorze, tam gdzie dotąd (`POST /order/{id}/billing`).
+
+### Nazwa auta w liście zamówień
+
+`getOrderData()['listing_title']` bierze tytuł z ogłoszenia, a rotacja kasuje
+ogłoszenia po kilku dniach — **56 z 206 zamówień wskazuje dziś na nieistniejący wpis**.
+Bez fallbacku co czwarta pozycja w panelu byłaby bezimiennym „Zamówienie #ID".
+Nazwa auta jest jednak utrwalona w tytule samego zamówienia
+(`#{listing_id} — {auto} — {klient}`) i stamtąd ją teraz bierzemy (`orderLabel()`).
+
+### Zmiany w istniejących plikach
+
+| Plik | Zmiana |
+|---|---|
+| `asiaauto-sync.php` | `require` nowej klasy + `new AsiaAuto_Account()` w bootstrapie |
+| `class-asiaauto-order.php` | usunięty hak `redirectLoggedInCustomerFromLoginPage` (przekierowanie z `/klient/` na zamówienie); `customerLoginRedirect` prowadzi teraz do `/klient/`, nie `/zamow/` |
+| `class-asiaauto-shortcodes.php` | `renderKlientPanel()` deleguje do `AsiaAuto_Account`; usunięte 290 linii martwego kodu i starego CSS (2865 → 2593 linie) |
+
+Zdjęcie przekierowania jest bezpieczne: żaden mail nie linkuje do `/klient/`
+(sprawdzone w kodzie i w 16 szablonach z bazy) — magic linki prowadzą do
+`/zamow/?magic_token=…`.
+
+### Weryfikacja na produkcji
+
+| Test | Wynik |
+|---|---|
+| Rejestracja przez HTTP → konto z rolą `asiaauto_customer` | ✅ konto utworzone, klient zalogowany |
+| Honeypot wypełniony przez „bota" | ✅ konto nie powstało |
+| Rejestracja bez zgody na regulamin | ✅ odrzucona z komunikatem |
+| Zapis danych → `usermeta` | ✅ telefon, adres, PESEL zapisane |
+| Zmiana hasła ze złym obecnym | ✅ odrzucona |
+| Zmiana hasła poprawna | ✅ zmienione, sesja zachowana |
+| Klient A wchodzi na zamówienie klienta B | ✅ 403 |
+| REST cudzego zamówienia | ✅ 401 |
+| Klient wchodzi na `/wp-admin/` | ✅ 302 → `/klient/` |
+| **Magic link z maila (regresja)** | ✅ loguje i ląduje w kreatorze |
+| Blokada pól umownych | ✅ `readonly` dla klienta ze statusem `podpisane`+ |
+
+Konto testowe użyte do testów zostało usunięte, podglądy HTML skasowane.
+
 ## 0.39.6 — 2026-09-08 (ręczny import che168 bez kanonizacji — CJK w tytule)
 
 Zgłoszenie Janka: chiński znak na ofercie `/oferta/byd-sealion-8-tang-l-ev-2025-470577/` —
