@@ -20,6 +20,37 @@ $NON_CHINESE = ['volkswagen','volvo','nissan','mazda','audi','mg','smart','mini'
 // xiaomi — mail ws. marki; 31.08 usunięto reklamy z [SKAG-1], 07.09 wycięte także z feedu RMKT
 // (SU7, SU7 Ultra, YU7 jechały tam nieodnotowane). Decyzja Janka 2026-09-07.
 $WYCOFANE_MARKI = ['xiaomi'];
+// Google NIE przyjmuje WebP w feedzie dynamic remarketingu (policy DYNAMIC_DISPLAY_ADS_FEED_IMAGE_FORMAT):
+// 10.09.2026 — 159 z 257 wpisów DISAPPROVED, każdy WebP; każdy JPG/PNG APPROVED. Che168 daje 100% WebP,
+// więc bez konwersji feed wykrusza się z każdym tygodniem. Kopie JPG lądują TYLKO w tym katalogu
+// (nigdzie indziej ich nie potrzebujemy). Sprząta je gads-rmkt-feed-refresh.py PO udanym pushu —
+// nie builder, bo build bez pusha (test, abort bezpiecznika) skasowałby obrazy, których używa feed na koncie.
+$JPG_DIR = '/home/host476470/domains/primaauto.com.pl/public_html/feeds/rmkt-img';
+$JPG_URL = 'https://primaauto.com.pl/feeds/rmkt-img';
+const JPG_QUALITY = 85;
+$jpg_used = []; $jpg_converted = 0; $jpg_failed = 0; // $jpg_used = statystyka
+
+/** URL obrazu do feedu: JPG/PNG oddaje bez zmian; WebP konwertuje do $JPG_DIR i oddaje URL kopii. */
+function feed_image_url($u){
+  global $JPG_DIR, $JPG_URL, $jpg_used, $jpg_converted, $jpg_failed;
+  $path = parse_url($u, PHP_URL_PATH) ?: '';
+  if (!preg_match('/\.webp$/i', $path)) return enc_url($u);
+  $up = wp_upload_dir();
+  $src = str_replace($up['baseurl'], $up['basedir'], $u);
+  $name = preg_replace('/\.webp$/i', '.jpg', basename($path));
+  $dst = "$JPG_DIR/$name";
+  if (!is_file($dst) || filemtime($dst) < filemtime($src)) {
+    $im = @imagecreatefromwebp($src);
+    if (!$im) { $jpg_failed++; return ''; }
+    $ok = imagejpeg($im, $dst, JPG_QUALITY); imagedestroy($im);
+    if (!$ok) { $jpg_failed++; return ''; }
+    $jpg_converted++;
+  }
+  $jpg_used[$name] = true;
+  return enc_url("$JPG_URL/$name");
+}
+if (!is_dir($JPG_DIR)) { mkdir($JPG_DIR, 0755, true); }
+if (!is_file("$JPG_DIR/index.html")) { file_put_contents("$JPG_DIR/index.html", ''); }
 
 function clip($s,$n){ $s=trim((string)$s); return (mb_strlen($s)>$n)?trim(mb_substr($s,0,$n)):$s; }
 function enc_url($u){ $p=parse_url($u); if(!$p||empty($p['path'])) return $u;
@@ -63,7 +94,7 @@ foreach($hubs as $sid=>$h){
   foreach(array_keys($h['prices']) as $pid){
     $gal=get_post_meta($pid,'gallery',true); $gal=is_array($gal)?$gal:[];
     $tid=(int)get_post_thumbnail_id($pid); if($tid&&!in_array($tid,$gal))array_unshift($gal,$tid);
-    foreach($gal as $aid){ $u=wp_get_attachment_image_url((int)$aid,'large')?:wp_get_attachment_image_url((int)$aid,'full'); if($u){$img=enc_url($u);break 2;} }
+    foreach($gal as $aid){ $u=wp_get_attachment_image_url((int)$aid,'large')?:wp_get_attachment_image_url((int)$aid,'full'); if($u){$img=feed_image_url($u); if($img)break 2;} }
   }
   if(!$img){ $no_img++; continue; }
   $min=(int)min($h['prices']); $cnt=count($h['pids']);
@@ -74,6 +105,9 @@ foreach($hubs as $sid=>$h){
   // tytuł: usuń nawiasowe aliasy (np. "(Tang L)") żeby nie ucinać w pół
   $title_src=trim(preg_replace('/\s*\([^)]*\)/','', "$make_name $model_name"));
   $title=clip($title_src!=='' ? $title_src : "$make_name $model_name", MAX_TITLE);
+  // „FREE” wersalikami = policy CAPITALIZATION (10.09.2026: Voyah FREE jedyny DISAPPROVED po naprawie WebP).
+  // AITO, PLUS, MEGA, PHEV przechodzą — poprawiamy tylko słowo, które Google faktycznie odrzucił.
+  $title=preg_replace('/\bFREE\b/u','Free',$title);
   // podtytuł = neutralny spec z reprezentatywnego listingu ($pid po pętli obrazu).
   // NIE deklarujemy dostępności: on_lot = status rezerwacji, NIE fizyczna obecność
   // (np. Xiaomi YU7 ma on_lot ale leży w Kantonie; Denza N9 on_lot ale „w drodze do UE").
@@ -105,6 +139,7 @@ foreach($hubs as $sid=>$h){
 file_put_contents($out, json_encode($assets, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES));
 fwrite(STDERR,"OK zapisano: $out\n");
 fwrite(STDERR,"model-hubów: ".count($assets)." | pominięto bez obrazu: $no_img | marki wycofane: $skip_wycofane\n");
+fwrite(STDERR,"JPG z WebP: w użyciu ".count($jpg_used)." | skonwertowane teraz: $jpg_converted | nieudane: $jpg_failed\n");
 arsort($by_make);
 fwrite(STDERR,"\n--- huby per marka (top 25) ---\n");
 $i=0; foreach($by_make as $m=>$c){ fwrite(STDERR,sprintf("  %-22s %d\n",$m,$c)); if(++$i>=25)break; }

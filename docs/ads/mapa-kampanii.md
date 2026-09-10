@@ -460,6 +460,34 @@ Rozważane przy budowie drugiej karuzeli. Zostajemy przy ofertach:
    **Do oceny 14.09:** czy konwersje wróciły w okolice 20+/mies. Uwaga przy interpretacji — sześć
    zmian tego samego dnia oznacza, że atrybucja będzie nieczytelna; feed jest jedyną z nich, która
    tłumaczy spadek, reszta to higiena.
+
+   **Ciąg dalszy 10.09 — odświeżenie z 07.09 nie mogło pomóc, bo Google odrzuca WebP.** Odczyt
+   `asset.policy_summary` na feedzie: **159 z 257 wpisów DISAPPROVED**, wszystkie z powodem
+   `DYNAMIC_DISPLAY_ADS_FEED_IMAGE_FORMAT`, 40 w recenzji, 56 APPROVED. Zero wyjątków: każdy WebP
+   odrzucony, każdy JPG/PNG przyjęty. Builder brał zdjęcie najtańszej oferty w formacie, w jakim leży
+   w uploads — dongchedi dawało JPG, che168 daje 100% WebP, więc od migracji (sierpień) każde
+   odświeżenie wpuszczało więcej WebP i wycinało kolejne modele z emisji. Feed sprzed 07.09 miał
+   112 WebP z 261, po odświeżeniu 164 z 257. Z listy TOP 30 do remarketingu emitowały się **3 modele**
+   (Leopard 7, Exeed VX, Hongqi H9), 18 było odrzuconych. Tygodnie W33–W36: ~115 zł i ~360 kliknięć
+   tygodniowo bez zmian, konwersje 5,1 → 1,7 → 1,1 → 3,1 → 1,1, od 07.09 zero.
+
+   **Naprawa 10.09:** `build-gads-hub-feed.php` konwertuje WebP do JPG (GD, q85) do
+   `public_html/feeds/rmkt-img/` i wpisuje URL kopii; JPG/PNG idą bez zmian; katalog sprząta
+   `gads-rmkt-feed-refresh.py` po udanym pushu (kopie nieużywane przez wgrany feed lecą od razu — JPG
+   nie są potrzebne nigdzie indziej). Sprzątanie w builderze było pierwszą wersją i skasowało przy
+   testowym buildzie 2 obrazy żywego feedu — build bez pusha nie może niczego kasować. `gads-rmkt-feed-refresh.py` traktuje zmianę obrazu jak zmianę ceny (wcześniej
+   sama podmiana obrazów = „bez zmian”) i odmawia pusha, gdy w buildzie zostanie jakikolwiek WebP.
+   `checki-pomiaru.py` liczy DISAPPROVED (AWARIA >10%, UWAGA >0). Feed wgrany: 254 wpisy, 253 JPG +
+   1 PNG, wszystkie w recenzji. DSA sprawdzony przy okazji — page feed bez obrazów, nie dotyczy;
+   Meta przyjmuje WebP (3 ostatnie uploady: 0 błędów, 3019 pozycji PUBLISHED).
+
+   **Odczyt 10.09 15:40, ~5 h po pushu:** 208 APPROVED, 14 APPROVED_LIMITED (weryfikacja usług
+   finansowych — emitują), 31 w recenzji, **1 DISAPPROVED: Voyah FREE, policy `CAPITALIZATION`**.
+   Builder zamienia „FREE” na „Free” (AITO, PLUS, MEGA, PHEV przeszły — ruszamy tylko to, co Google
+   odrzucił); refresh porównuje odtąd też tytuł/podtytuł/opis. Poprawka wejdzie z cronem 13.09.
+
+   **Do oceny 14.09 (razem z powyższym):** ile z 254 wpisów przeszło recenzję (`checki-pomiaru.py`
+   pokaże DISAPPROVED) i czy konwersje ruszyły. Dopiero od 11.09 kampania emituje pełny feed.
 8. **Landing `galaxy-yizhen-l380-2025-251809` zwraca 410** (reklama w zapauzowanej grupie `[SKAG-2]`).
    Sygnał szerszy: reklamy SKAG celują w konkretne oferty, a te rotują — przy odmrażaniu SKAG-2
    trzeba dołożyć kontrolę landingów.
@@ -479,6 +507,9 @@ Rozważane przy budowie drugiej karuzeli. Zostajemy przy ofertach:
 | 2026-09-07 | `[RMKT]` 11 placementów wykluczonych, desktop/tablet bid_modifier 0, druga reklama RDA 823752322983 | `scripts/gads-rmkt-optymalizacja-2026-09-07.py --apply`, zweryfikowane odczytem |
 | 2026-09-07 | `[RMKT]` harmonogram 7× 07:00–23:00 + geo Polska (kampania nie miała ŻADNEGO kryterium LOCATION) | `scripts/gads-rmkt-harmonogram-geo-2026-09-07.py --apply`, zweryfikowane odczytem |
 | 2026-09-07 | check „wiek feedu RMKT” dołożony do monitoringu godzinowego | `scripts/checki-pomiaru.py` (`check_feed_rmkt`), pierwszy bieg: TAK, 257 wpisów |
+| 2026-09-10 | `[RMKT]` feed odbudowany bez WebP — 254 wpisy (3 usunięte, 44 nowe ceny, 175 nowych obrazów); wcześniej 159/257 DISAPPROVED (`DYNAMIC_DISPLAY_ADS_FEED_IMAGE_FORMAT`) | `scripts/build-gads-hub-feed.php` (konwersja WebP→JPG do `feeds/rmkt-img/`, sprzątanie przy buildzie) + `scripts/gads-rmkt-feed-refresh.py --apply`, dump `~/backups/primaauto/rmkt-feed/2026-09-10/`, zweryfikowane odczytem: 0 WebP, 254 w recenzji |
+| 2026-09-10 | builder: „FREE”→„Free” w tytule (Voyah FREE odrzucony za `CAPITALIZATION`), refresh wykrywa zmiany tekstów, sprzątanie JPG przeniesione za udany push | `scripts/build-gads-hub-feed.php` + `scripts/gads-rmkt-feed-refresh.py`, bez pusha (wejdzie z cronem 13.09); sprzątanie przetestowane na kopii katalogu: 170/170 potrzebnych zostaje, w tym 17 z nazwami CJK |
+| 2026-09-10 | check RMKT liczy odrzucenia policy (nie tylko wiek feedu) | `scripts/checki-pomiaru.py` (`check_feed_rmkt`), bieg po pushu: TAK, 254 wpisy |
 | 2026-09-07 | `[DG]` budżet 45 → **35 zł/dz** (decyzja Janka), harmonogram 08:00–24:00, 22 kanały YT wykluczone (69 łącznie) | `scripts/gads-dg-optymalizacja-2026-09-07.py --apply`, zweryfikowane odczytem |
 | 2026-09-07 | `[DG]` pauza 2 kreacji bez konwersji: Denza Z9 GT (822803999502), BYD Leopard 7 (822846696946) — 10 → 8 aktywnych | `scripts/gads-dg-pauza-slabych-2026-09-07.py --apply`, PAUSED (nie REMOVED) |
 | 2026-09-07 | `[DG]` **in-feed wyłączony** — kanały grupy: In-Stream + Shorts | **panel** (API odmawia), zweryfikowane odczytem pola Kanały |

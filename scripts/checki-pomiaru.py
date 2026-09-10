@@ -267,14 +267,21 @@ def check_feed_rmkt():
     api = c.get("api_version", "v25")
     h = {"Authorization": f"Bearer {_refresh(o, t)}", "developer-token": c["developer_token"],
          "login-customer-id": "9506068500", "Content-Type": "application/json"}
-    q = ("SELECT asset.dynamic_custom_asset.id, asset.dynamic_custom_asset.price "
+    q = ("SELECT asset.dynamic_custom_asset.id, asset.dynamic_custom_asset.price, "
+         "asset.policy_summary.approval_status "
          f"FROM asset_set_asset WHERE asset_set_asset.asset_set = '{FEED_SET}' "
          "AND asset_set_asset.status = 'ENABLED'")
     u = f"https://googleads.googleapis.com/{api}/customers/9506068500/googleAds:searchStream"
     d = json.loads(urllib.request.urlopen(urllib.request.Request(
         u, data=json.dumps({"query": q}).encode(), headers=h), timeout=60).read())
+    wyniki_api = [r for b in (d or []) for r in b.get("results", [])]
     konto = {r["asset"]["dynamicCustomAsset"]["id"]: r["asset"]["dynamicCustomAsset"].get("price")
-             for b in (d or []) for r in b.get("results", [])}
+             for r in wyniki_api}
+    # 10.09.2026: 159 z 257 wpisów DISAPPROVED (obrazy WebP) — cron chodził, ceny się zgadzały,
+    # a kampania i tak reklamowała 1/3 feedu. Odrzucenia sprawdzamy osobno od świeżości.
+    odrzucone = [r for r in wyniki_api
+                 if r["asset"].get("policySummary", {}).get("approvalStatus") == "DISAPPROVED"]
+    kontekst["rmkt_feed_odrzucone"] = len(odrzucone)
 
     logi = sorted(Path("/home/host476470/.claude").glob("rmkt-feed-*.json"))
     if not logi:
@@ -297,6 +304,12 @@ def check_feed_rmkt():
     elif len(rozjazd) + len(brak) > len(baza) * 0.15:
         zapisz("RMKT — feed remarketingu", AWARIA,
                f"{len(rozjazd)} cen rozjechanych + {len(brak)} braków z {len(baza)} — push nie przechodzi")
+    elif len(odrzucone) > len(konto) * 0.10:
+        zapisz("RMKT — feed remarketingu", AWARIA,
+               f"{len(odrzucone)} z {len(konto)} wpisów DISAPPROVED przez Google — feed nie emituje")
+    elif odrzucone:
+        zapisz("RMKT — feed remarketingu", UWAGA,
+               f"{len(odrzucone)} z {len(konto)} wpisów DISAPPROVED przez Google")
     elif rozjazd or brak:
         zapisz("RMKT — feed remarketingu", UWAGA,
                f"{len(rozjazd)} cen rozjechanych, {len(brak)} braków z {len(baza)}")

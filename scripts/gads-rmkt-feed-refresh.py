@@ -18,9 +18,11 @@ Użycie:
   python3 scripts/gads-rmkt-feed-refresh.py <feed.json>           # dry-run
   python3 scripts/gads-rmkt-feed-refresh.py <feed.json> --apply
 """
+import glob
 import json
 import os
 import sys
+import urllib.parse
 import urllib.request
 import urllib.error
 from datetime import datetime
@@ -36,6 +38,8 @@ FEED_SET = f"customers/{CID}/assetSets/9118300013"
 BACKUP_ROOT = os.path.expanduser("~/backups/primaauto/rmkt-feed")
 
 MIN_ENTRIES = 200          # poniżej tego = coś jest nie tak ze źródłem
+# Kopie JPG z WebP (Google odrzuca WebP w feedzie) — tworzy je build-gads-hub-feed.php.
+JPG_DIR = "/home/host476470/domains/primaauto.com.pl/public_html/feeds/rmkt-img"
 MAX_REMOVE_RATIO = 0.40    # nie usuwaj więcej niż 40% feedu bez człowieka
 
 FEED_JSON = next((a for a in sys.argv[1:] if not a.startswith("--")), None)
@@ -55,6 +59,18 @@ def gaql(q, h):
     d = json.loads(urllib.request.urlopen(urllib.request.Request(
         u, data=json.dumps({"query": q}).encode(), headers=h)).read())
     return [r for b in (d or []) for r in b.get("results", [])]
+
+
+def prune_jpg(entries):
+    """Kasuje kopie JPG, których nie używa feed `entries`. Wołane TYLKO gdy konto = entries
+    (po udanym apply albo gdy feed jest aktualny) — inaczej skasowałoby obrazy żywych reklam.
+    Nazwy w URL-ach są zakodowane procentowo (CJK w nazwach plików), na dysku leżą zdekodowane."""
+    keep = {urllib.parse.unquote(e["dynamicCustomAsset"]["imageUrl"].rsplit("/", 1)[-1])
+            for e in entries if "/feeds/rmkt-img/" in e["dynamicCustomAsset"].get("imageUrl", "")}
+    usun = [f for f in glob.glob(f"{JPG_DIR}/*.jpg") if os.path.basename(f) not in keep]
+    for f in usun:
+        os.remove(f)
+    print(f"          JPG w rmkt-img: w użyciu {len(keep)} | usunięte stare: {len(usun)}")
 
 
 def die(msg):
@@ -82,21 +98,36 @@ before = gaql(
 cur = {r["asset"]["dynamicCustomAsset"]["id"]: r["assetSetAsset"]["resourceName"] for r in before}
 cur_price = {r["asset"]["dynamicCustomAsset"]["id"]: r["asset"]["dynamicCustomAsset"].get("price")
              for r in before}
+cur_img = {r["asset"]["dynamicCustomAsset"]["id"]: r["asset"]["dynamicCustomAsset"].get("imageUrl")
+           for r in before}
 
 removed = [k for k in cur if k not in NEW]
 added = [k for k in NEW if k not in cur]
 repriced = [k for k in NEW if k in cur and NEW[k]["dynamicCustomAsset"].get("price") != cur_price.get(k)]
+# zmiana obrazu też jest zmianą — 10.09.2026 sama podmiana WebP→JPG (ceny bez zmian) musiała wejść na konto
+reimaged = [k for k in NEW if k in cur and NEW[k]["dynamicCustomAsset"].get("imageUrl") != cur_img.get(k)]
+# i zmiana tekstów (tytuł/podtytuł/opis) — inaczej poprawka tytułu pod policy nigdy nie wejdzie
+cur_txt = {r["asset"]["dynamicCustomAsset"]["id"]: tuple(r["asset"]["dynamicCustomAsset"].get(f) for f in
+           ("itemTitle", "itemSubtitle", "itemDescription")) for r in before}
+retexted = [k for k in NEW if k in cur and tuple(NEW[k]["dynamicCustomAsset"].get(f) for f in
+            ("itemTitle", "itemSubtitle", "itemDescription")) != cur_txt.get(k)]
+webp = [k for k in NEW if (NEW[k]["dynamicCustomAsset"].get("imageUrl") or "").lower().split("?")[0].endswith(".webp")]
 
 stamp = datetime.now().strftime("%Y-%m-%d")
 print(f"[{stamp}] feed na koncie: {len(cur)} | nowy build: {len(NEW)}")
-print(f"          usuwane: {len(removed)} | dodawane: {len(added)} | zmiana ceny: {len(repriced)}")
+print(f"          usuwane: {len(removed)} | dodawane: {len(added)} | zmiana ceny: {len(repriced)} | zmiana obrazu: {len(reimaged)} | zmiana tekstu: {len(retexted)}")
+if webp:
+    die(f"{len(webp)} wpisów z obrazem WebP — Google je odrzuci (DYNAMIC_DISPLAY_ADS_FEED_IMAGE_FORMAT); "
+        f"builder ma konwertować do JPG: {webp[:5]}")
 
 if cur and len(removed) / len(cur) > MAX_REMOVE_RATIO:
     die(f"usunięcie {len(removed)}/{len(cur)} wpisów ({len(removed)/len(cur)*100:.0f}%) "
         f"przekracza próg {MAX_REMOVE_RATIO*100:.0f}% — wymaga decyzji człowieka")
 
-if not (removed or added or repriced):
+if not (removed or added or repriced or reimaged or retexted):
     print("          bez zmian — feed aktualny, nic nie robię.")
+    if "--apply" in sys.argv:
+        prune_jpg(new)
     sys.exit(0)
 
 # sanity nowych wpisów
@@ -130,5 +161,7 @@ try:
     n = len(resp.get("mutateOperationResponses", []))
     print(f"          {'validate OK' if validate else f'zastosowano {n} operacji'} "
           f"-> feed {len(NEW)} wpisów")
+    if not validate:
+        prune_jpg(new)
 except urllib.error.HTTPError as e:
     die(f"HTTP {e.code}: {e.read().decode()[:1500]}")
