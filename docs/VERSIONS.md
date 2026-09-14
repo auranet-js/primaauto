@@ -1,5 +1,31 @@
 # Historia wersji asiaauto-sync
 
+## 0.40.3 — 2026-09-14 (karta: moc układu jak w sortowaniu, „0 km”; uzupełniona moc che168)
+
+Po 0.40.2 sortowanie „Najmocniejsze” szło po mocy układu, a karta pokazywała co innego.
+Pomiar na 3083 ofertach: **1833 karty (EV + hybrydy) bez mocy w ogóle** — `resolvePower()` czyta
+tylko klucze dongchedi, oferty che168 mają moc w `electric_total_horsepower` / `system_max_power`;
+73 PHEV z samym napędem elektrycznym (Lynk & Co 900: 480 zamiast 734 KM — producent: 540 kW
+łącznie); 29 z sumą silnika i elektryka (Changan UNI-K iDD: 320 KM). 162 oferty che168 bez mocy
+w specs lądowały na końcu sortowania (Hongqi HS5 2.0T: karta 252 KM, sortowanie — dół listy).
+
+- **`class-asiaauto-inventory.php` / `renderCard()`** — KM z `_asiaauto_horse_power` (= `power_km`
+  w specs), fallback `resolvePower()`. Po zmianie karta = sortowanie na 3080/3080 ofert.
+  Karta jest wspólna: `/samochody/`, huby, wyszukiwarka, homepage.
+- **`renderCard()`** — przebieg 0 pokazywany jako „0 km” (było: pusty slot, wyglądało jak brak
+  danych). 16 ofert, 14 z che168 z rejestracją 08–09.2026; API: `km_age=10`, che168 `displayMileage=0`.
+- **Dane:** `napraw-moc-ukladu.php apply paliwa=phev,erev,electric,hybrid` (pełny) — 59 uzupełnień
+  mocy układu; `uzupelnij-moc-km.php apply paliwa=petrol,diesel` — 96 uzupełnień. Bez mocy zostało
+  13 ofert bez źródła w danych (m.in. 3× WEY Gaoshan 8 Hi4, NIO ES8, Voyah Dream).
+- **`scripts/uzupelnij-moc-km.php`** — parametr `paliwa=`: hybrydy zostają dla `napraw-moc-ukladu.php`,
+  bo tu przy braku mocy układu wpadłaby moc silnika.
+- **Nieruszane:** strona oferty (kluczowe parametry, meta description) nadal liczy moc przez
+  `resolvePower()` — karta i strona oferty mogą pokazywać różne KM. Brak crona dla spalinowych:
+  nowe oferty che168 bez mocy wrócą, dopóki `uzupelnij-moc-km.php` nie trafi do crona.
+
+Backup: `class-asiaauto-inventory.php.bak-2026-09-14-moc-km`, meta mocy
+`~/backups/primaauto/2026-09-14-moc/postmeta-horse-power.sql`.
+
 ## 0.40.2 — 2026-09-14 (/samochody/: 4 sortowania z wyszukiwarki)
 
 - **`class-asiaauto-inventory.php`** — select sortowania na `/samochody/` (i hubach z

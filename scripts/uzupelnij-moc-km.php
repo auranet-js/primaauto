@@ -13,13 +13,17 @@
  *   6. front_electric_max_horsepower
  * Stempel `_asiaauto_horse_power_source` = użyty klucz (audyt). Zapis tylko gdy wartość się różni.
  *
- * Użycie: php scripts/uzupelnij-moc-km.php [apply] [all]
+ * Użycie: php scripts/uzupelnij-moc-km.php [apply] [all] [paliwa=petrol,diesel]
  *   bez `all` — tylko oferty bez meta (wariant A); z `all` — przelicz wszystkie (wariant B)
+ *   paliwa= — tylko oferty z tymi slugami `fuel`. Hybrydy zostaw `napraw-moc-ukladu.php`: tu przy braku
+ *   mocy układu wpadłaby moc samego silnika (`system_max_power` w BYD/Denza/Voyah, `engine_max_horsepower`).
  */
 define('WP_USE_THEMES', false);
 require '/home/host476470/domains/primaauto.com.pl/public_html/wp-load.php';
 $apply = in_array('apply', $argv, true);
 $all   = in_array('all', $argv, true);
+$paliwa = [];
+foreach ($argv as $a) if (preg_match('~^paliwa=(.+)$~', (string) $a, $m)) $paliwa = array_map('trim', explode(',', $m[1]));
 global $wpdb;
 $rows = $wpdb->get_results("SELECT p.ID, p.post_title, ep.meta_value ep, hp.meta_value hp
     FROM {$wpdb->posts} p
@@ -40,6 +44,10 @@ $filled = $changed = $same = $none = $skipped = $kept = 0; $by = []; $log = [];
 foreach ($rows as $r) {
     $has = $r->hp !== null && $r->hp !== '' && (int) $r->hp > 0;
     if ($has && !$all) { $skipped++; continue; }
+    if ($paliwa) {
+        $fuel = wp_get_object_terms($r->ID, 'fuel', ['fields' => 'slugs']);
+        if (is_wp_error($fuel) || !array_intersect($fuel, $paliwa)) { $skipped++; continue; }
+    }
     $e = json_decode($r->ep, true) ?: [];
     [$km, $src] = moc_km($e);
     if ($km <= 0) { $none++; continue; }
