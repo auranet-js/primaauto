@@ -1,5 +1,25 @@
 # Historia wersji asiaauto-sync
 
+## 0.40.6 — 2026-09-14 (filtry katalogu przechodzą do wyszukiwarki zaawansowanej)
+
+Zmiana decyzji z 03.09 (ruch D „bez przenoszenia filtrów”) — Janek: link z katalogu ma otwierać
+wyszukiwarkę z tymi samymi filtrami.
+
+- **`asiaauto-inventory.js` / `syncSearchLinks()`** — każdy link do `/wyszukiwarka/` na stronie
+  katalogu (pasek nad nagłówkiem, panel filtrów, menu, stopka) dostaje bieżące filtry: `marka`,
+  `model`, `paliwo`, `nadwozie`, `kolor`, `naped`, `sort`. Wartości 1:1 (te same slugi w taksonomii
+  i w `wp7j_asiaauto_specs`). Podstrony: `/w-drodze/` → `oferta=w-drodze`, `/w-rzeszowie/` →
+  `oferta=na-placu`. Odświeżane przy wejściu, po każdej zmianie filtra i po „wstecz”.
+- **Pominięte celowo: `rocznik`, `cena_min/max`** — wyszukiwarka nie ma na nie pól, a stan buduje
+  z formularza, więc filtr bez pola znikałby po pierwszym kliknięciu (a do tego czasu zawężał
+  wyniki niewidocznie).
+- Test headless: `/samochody/?marka=chery&model=tiggo-9&paliwo=petrol&sort=price_asc&cena_min=…`
+  → wszystkie 4 linki `?marka=chery&model=tiggo-9&paliwo=petrol&sort=price_asc`; zaznaczenie SUV
+  w katalogu → `&nadwozie=suv` bez przeładowania; `/w-drodze/?marka=byd` → `?marka=byd&oferta=w-drodze`.
+  Wyszukiwarka zaznacza te pola z adresu (SSR, sprawdzone curlem).
+
+Backup: `asiaauto-inventory.js.bak-2026-09-14-link-wyszukiwarki`.
+
 ## 0.40.5 — 2026-09-14 (alias „Chery Tiggo 9 (Jaecoo 8)”)
 
 - **`data/brand-mapping-v6.1.php`** — `Chery|Tiggo 9`: `serie_eu` → `Tiggo 9 (Jaecoo 8)`,
