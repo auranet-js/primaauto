@@ -1,5 +1,17 @@
 # Historia wersji asiaauto-sync
 
+## 0.40.4 — 2026-09-14 (sortowanie „Najszybsze” 0–100)
+
+- **`class-asiaauto-search.php`** — `accel_asc` „Najszybsze 0–100” w `SORT_LABELS` i `SORTS`
+  (`accel_s IS NULL, accel_s ASC` — ASC w MySQL stawia NULL na początku, a 488 z 3080 ofert
+  nie ma przyspieszenia).
+- **`class-asiaauto-inventory.php`** — to samo na `/samochody/`: `SPECS_SORTS['accel_asc']`,
+  etykieta „Najszybsze” (krótka, pasek mobilny).
+- Przyspieszenie na karcie i `accel_s` w specs zgodne na 3080/3080 ofert (oba z `acceleration_time`).
+  Na górze: Zeekr 001 FR 2,0 s, Xiaomi SU7 Ultra 2,1 s; oferty bez 0–100 na ostatniej stronie.
+
+Backup: `class-asiaauto-search.php.bak-2026-09-14-accel`, `class-asiaauto-inventory.php.bak-2026-09-14-accel`.
+
 ## 0.40.3 — 2026-09-14 (karta: moc układu jak w sortowaniu, „0 km”; uzupełniona moc che168)
 
 Po 0.40.2 sortowanie „Najmocniejsze” szło po mocy układu, a karta pokazywała co innego.
