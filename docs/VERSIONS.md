@@ -1,5 +1,18 @@
 # Historia wersji asiaauto-sync
 
+## 0.40.2 — 2026-09-14 (/samochody/: 4 sortowania z wyszukiwarki)
+
+- **`class-asiaauto-inventory.php`** — select sortowania na `/samochody/` (i hubach z
+  `[asiaauto_inventory]`) dostał opcje z wyszukiwarki: „Najmniej km” (`mileage_asc`), „Rocznik”
+  (`year_desc`), „Najmocniejsze” (`power_desc`), „Zasięg” (`range_desc`). Stała `SPECS_SORTS`
+  = te same kolumny co `AsiaAuto_Search::SORTS`; `executeQuery()` na czas zapytania dokłada
+  `posts_clauses` z `LEFT JOIN` do `wp7j_asiaauto_specs`, oferty bez wartości (np. zasięg auta
+  spalinowego) idą na koniec. Etykiety krótkie — select na mobile rozpycha się do najdłuższej opcji.
+- Znane: moc w specs (`_asiaauto_horse_power`) różni się od KM na karcie (`resolvePower()`)
+  w 2027/3083 ofert — dotyczy też sortowania i filtra mocy w wyszukiwarce, nieruszane.
+
+Backup: `class-asiaauto-inventory.php.bak-2026-09-14-sort`, `asiaauto-sync.php.bak-2026-09-14-sort`.
+
 ## 0.40.1 — 2026-09-14 (PayU wyłączone, płatność online „uruchamiamy”)
 
 PayU odmówiło współpracy — flaga `asiaauto_payu_enabled` = 0. ADR:
