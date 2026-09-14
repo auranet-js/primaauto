@@ -1,5 +1,21 @@
 # Historia wersji asiaauto-sync
 
+## 0.40.5 — 2026-09-14 (alias „Chery Tiggo 9 (Jaecoo 8)”)
+
+- **`data/brand-mapping-v6.1.php`** — `Chery|Tiggo 9`: `serie_eu` → `Tiggo 9 (Jaecoo 8)`,
+  `title_eu` → `Chery Tiggo 9 (Jaecoo 8)`. Slug `tiggo-9` bez zmian → import trafia w term 3582
+  po slugu (T-190 guard), nazwa termu „Tiggo 9” zostaje w filtrze. Sprawdzone: che168 „Tiggo 9”
+  i dongchedi `Chery|Tiggo 9` → alias, Tiggo 8L i Tiggo 9 C-DM bez zmian.
+- **`class-asiaauto-single.php` / `v4HoistTrim()`** — nawias tuż za nazwą modelu należy do członu
+  modelowego. Wcześniej wersja wskakiwała przed alias: „Chery Tiggo 9 Luxury (Jaecoo 8)”.
+  Render-only, dotyczy 20 ofert (Tiggo 9 (Jaecoo 8) ×16, Tiggo 9 (Tiggo 8L) ×3, VX (Lanyue) ×1).
+- **Dane:** `scripts/alias-tiggo9-jaecoo8-2026-09-14.php apply` — hub term 3582 (`_serie_full_title`,
+  lead, wiki z sekcją „Jaecoo 8 a Chery Tiggo 9”, 6 FAQ, meta title/desc przez HubTitleGenerator)
+  + 19 tytułów ofert (16 publish, 3 trash) przez `$wpdb`, slugi bez zmian.
+
+Backup: `brand-mapping-v6.1.php.bak-2026-09-14-jaecoo8`, `class-asiaauto-single.php.bak-2026-09-14-jaecoo8`,
+`~/backups/primaauto/2026-09-14/tiggo9-termmeta-3582.sql`, `tiggo9-posts-titles.sql`.
+
 ## 0.40.4 — 2026-09-14 (sortowanie „Najszybsze” 0–100)
 
 - **`class-asiaauto-search.php`** — `accel_asc` „Najszybsze 0–100” w `SORT_LABELS` i `SORTS`

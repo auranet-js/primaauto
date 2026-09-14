@@ -85,6 +85,19 @@ niż sugeruje nazwa.
 w hubie Tiggo 9 plus wpis w dziale wiedzy „Jaecoo 8 czy Chery Tiggo 9 — to samo auto?",
 uczciwie rozdzielający napędy i ceny.
 
+## Aktualizacja 2026-09-14 — alias „(Jaecoo 8)” wdrożony (decyzja Janka)
+
+Nie rebrand, tylko alias w nawiasie według wzorca Exeed RX (Omoda 9 SHS) i VX (Omoda 11):
+- filtr `/samochody/?marka=chery` — dalej „Tiggo 9” (nazwa termu 3582 bez zmian),
+- hub — `_serie_full_title = Chery Tiggo 9 (Jaecoo 8)` → H1, title, description,
+- oferty — „Chery Tiggo 9 (Jaecoo 8) …” (istniejące skryptem, nowe z brand-mappingu),
+- treść huba łapie frazę „jaecoo 8” uczciwie: sekcja „Jaecoo 8 a Chery Tiggo 9”, tabela
+  import vs salon (Tiggo 9 PHEV od 209 900 zł, Jaecoo 8 od 219 900 / 224 900 zł), FAQ o imporcie.
+  Zastrzeżenie z sekcji „Decyzja” jest w treści wprost: w PL oba to PHEV 428 KM AWD, nasze to 2.0T FWD.
+
+Bez zmian: Tiggo 8L (term 6543 i wpis mapowania), Tiggo 9 C-DM. Szczegóły: `docs/VERSIONS.md` 0.40.5,
+skrypt `scripts/alias-tiggo9-jaecoo8-2026-09-14.php`.
+
 ## Efekt uboczny, o którym trzeba pamiętać
 
 Dopóki mapowanie zostaje bez zmian, **każda nowa oferta Tiggo 8L z che168 lub dongchedi
