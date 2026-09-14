@@ -26,7 +26,7 @@ z ceną”. Ten sam scenariusz grozi u następnego operatora, jeśli strona się
 ## Decyzja
 
 1. **PayU wyłączone na produkcji** 14.09.2026: `asiaauto_payu_enabled` `1 → 0` (`mode` zostaje `prod`, bez znaczenia przy fladze OFF).
-   - Kreator: bloki `step3`/`step4` renderują pusty string, klient widzi wyłącznie dane do przelewu — tak jak przed T-121.
+   - Kreator: bloki `step3`/`step4` pokazują płatność online jako nieaktywną („uruchamiamy”) plus dane do przelewu — patrz niżej (v0.40.1).
    - REST: trasy `/order/{id}/pay` i `/order/{id}/payment-status` zdjęte. **`/payu/notify` zostaje celowo**
      (rejestruje się zawsze — spóźniona notyfikacja nie trafi w 404; bez poprawnego podpisu nic nie robi).
    - Przed wyłączeniem: 0 prób w stanie `pending` (`_order_payment_state_*`), więc żadna wpłata nie wisi.
