@@ -1,6 +1,7 @@
 # T-121 — Płatność online (BLIK/karta) za depozyt rezerwacyjny
 
-> Status: **GATED na T-221 (regulamin usługi) → potem wniosek do PayU** · Rozmiar: L
+> Status (14.09.2026): **PayU odmówiło współpracy — bramka wyłączona, moduł uśpiony w kodzie; szukamy nowego operatora (Autopay / Tpay)**. Patrz [ADR 2026-09-14](../decyzje/2026-09-14-payu-odmowa-wylaczenie-bramki.md). Opis niżej dotyczy wdrożenia pod PayU (historia).
+> ~~Status: GATED na T-221 (regulamin usługi) → potem wniosek do PayU~~ · Rozmiar: L
 > Godziny realnie: **24–32 h** (Janek ~5–6 h, AI ~19–26 h) · Rynkowo: 60–80 h
 
 ## ⬆️ Decyzje 2026-07-27 (Janek) — nadpisują części opisu niżej

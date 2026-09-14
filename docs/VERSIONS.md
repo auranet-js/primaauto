@@ -1,5 +1,23 @@
 # Historia wersji asiaauto-sync
 
+## 0.40.1 — 2026-09-14 (PayU wyłączone, płatność online „uruchamiamy”)
+
+PayU odmówiło współpracy — flaga `asiaauto_payu_enabled` = 0. ADR:
+`docs/decyzje/2026-09-14-payu-odmowa-wylaczenie-bramki.md`.
+
+- **`class-asiaauto-payu-wizard.php`** — przy fladze OFF `renderBlock()` nie zwraca już pustego
+  stringu, tylko `renderSoon()`: blok „Płatność online — BLIK, karta” z nieaktywnymi przyciskami
+  i komunikatem „uruchamiamy, do tego czasu przelew”. Bez JS, bez REST, bez nazwy i barw operatora.
+  W kroku 3 dane do przelewu widoczne od razu (bez przełącznika — ten wymagał JS). Styl
+  rejestrowany zawsze, skrypt tylko przy fladze ON.
+- **`asiaauto-payu.css`** — dopisany wariant `.aa-payu--soon` (przyciski się zawijają na telefonie).
+- **Treści (poza kodem):** mail `status_potwierdzone` — „Depozyt opłacisz online (BLIK, karta) albo
+  zwykłym przelewem…” (było: „bezpiecznie przez PayU”); `/regulamin-uslugi/` (post 390645) —
+  „operatora płatności online (BLIK, karta płatnicza)” zamiast „PayU S.A. z siedzibą w Poznaniu”.
+
+Po podpięciu nowego operatora: włączenie flagi przywraca działający blok. Backup:
+`~/backups/primaauto/2026-09-14-payu-off/`.
+
 ## 0.40.0 — 2026-09-08 (T-204: panel klienta na /klient/)
 
 `/klient/` przestaje być ekranem logowania, który natychmiast przerzucał zalogowanego
