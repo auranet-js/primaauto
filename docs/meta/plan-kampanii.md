@@ -12,6 +12,36 @@
 
 ---
 
+## Mapa kampanii — stan na 15.09.2026 wieczorem (po przebudowie)
+
+> **To jest aktualny stan konta.** Sekcja 0 i dalsze opisują start (28.08–07.09) i zostają jako historia.
+> Przebieg dnia: `docs/sesje/2026-09-15-audyt-meta-przed-po.md` (audyt → diagnoza piksela → naprawa GTM v15 → quiz → przebudowa).
+> Dashboard (bez konta na FB): `https://auratest.pl/pa-live-8aaf08d6ece0db176603/`
+
+**Konto `act_1038563008906171`: 65 zł/dz, 3 aktywne zestawy, 4 aktywne reklamy.** Wydane od startu 662,66 zł, kontakt 1 (06.09, `[FOTO]` kadr 1).
+
+| Kampania | ID | Zestaw | Stan | Budżet | Kierowanie | Miejsca | Cel | Reklamy |
+|---|---|---|---|---:|---|---|---|---|
+| **`[KAT]` Oferta — nowi odbiorcy (katalog)** | 120249107889100243 | `[KAT] PL M 30-60 — cały katalog` 120249107889960243 | **ACTIVE od 15.09** | 35 zł | Polska, rama 25–65, **propozycja M 30–60** (Advantage+), bez wykluczeń | aktualności FB + IG | ViewContent (katalog „Wszystkie pojazdy”, ~3 000) | karuzela z katalogu, tekst A + B, „Skorzystaj z oferty” |
+| **`[FOTO]` Zdjęcia z sesji — karuzele** | 120248942206780243 | `Karuzele PL M 30-60 — Contact` 120249107902400243 | **ACTIVE od 15.09** | 15 zł | Polska, M 30–60 twardo, wykl. odwiedzający 180 dni + kontakt 180 dni | aktualności FB + IG | **Contact** (7 dni po kliknięciu) | kadr 1, kadr 2 |
+| `[FOTO]` | — | `Karuzele PL 25-65 — zdjęcia z sesji` 120248942223140243 | PAUSED 15.09 | — | — | — | ViewContent | historia 04–15.09 |
+| **`[RMKT]` Remarketing dynamiczny — katalog** | 120248991023540243 | `Oglądane — 30 dni` 120248991023860243 | ACTIVE | **15 zł** (z 7) | lista „Oglądający oferty — 30 dni”, wykl. kontakt + formularz 180 dni, **rozszerzanie listy włączone** (`custom_audience: 1` — do decyzji) | aktualności FB + IG | ViewContent | katalog, tekst A + G |
+| `[RMKT]` | — | `Na placu w Polsce` 120248991026870243 | PAUSED 15.09 | — | — | — | — | — |
+| `[VID]` Auta z Chin — nowi odbiorcy | 120248809387930243 | — | PAUSED 15.09 | — | — | — | — | z9-gt, g318 i reszta na pauzie |
+| `[POST]` Promowanie postów — ruch | 120248941749890243 | — | PAUSED 15.09 | — | — | — | — | Denza Z9, Zeekr 8X na pauzie |
+
+**Decyzje, które za tym stoją (15.09):**
+- Kierunek Janka: pokazywać jak najwięcej prawdziwych aut z cenami, kontakt dopiero po obejrzeniu oferty. Reklamy z samym zapytaniem (Messenger/WhatsApp w reklamie) odrzucone.
+- `[KAT]` zamiast `[VID]` + `[POST]`: jedna reklama pokazuje tysiące aut zamiast jednego filmu.
+- `[FOTO]` na Contact: od naprawy piksela (GTM v15) Contact liczy się na wszystkich stronach u osób ze zgodą. Celu nie da się zmienić w opublikowanym zestawie (3260011) — stąd nowy zestaw.
+- Ograniczenia Mety zmierzone sondami: katalog nie przyjmuje Contact (2446814); Advantage+ audience wymaga ramy wieku 25–65 (1870188/1870189).
+
+**Otwarte:** rozszerzanie listy w `[RMKT]`; przycisk Messengera na ofercie (makieta `primaauto-makieta-messenger-oferta-2026-09-15.html`, wariant A/B + test gotowego tekstu); recheck 18.09.
+
+**Skrypty:** `scripts/social/buduj_kat.py`, `scripts/social/przebudowa_2026_09_15.py`, `scripts/gtm-piksel-meta.py`.
+
+---
+
 ## 0. Stan po trzech dobach dostawy — recheck 07.09
 
 Pełny odczyt: `docs/sesje/2026-09-07-recheck-meta.md`. Skrót, bo sekcje niżej opisują stan

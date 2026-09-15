@@ -33,8 +33,15 @@ AKCJE = {
     'video_view': 'obejrzenia',
     'landing_page_view': 'wejscia',
     'post_engagement': 'reakcje',
-    'offsite_conversion.fb_pixel_lead': 'kontakty',
 }
+
+# Kontakt = klik w telefon/WhatsApp (piksel `Contact`) + formularz (`Lead`). Do 15.09 liczyliśmy
+# tylko `fb_pixel_lead`, więc dashboard pokazywał 0 mimo kontaktu z 06.09 — Meta zaraportowała go
+# jako `fb_pixel_custom`. Ten sam klik bywa pod kilkoma etykietami naraz, dlatego z grupy Contact
+# bierzemy MAKSIMUM, nie sumę. Od 15.09 [FOTO] optymalizuje na Contact — ten licznik jest wynikiem.
+KONTAKT_TYPY = ('offsite_conversion.fb_pixel_contact', 'contact_website', 'contact_total',
+                'offsite_conversion.fb_pixel_custom')
+LEAD_TYPY = ('offsite_conversion.fb_pixel_lead',)
 
 
 def pobierz(sciezka, prob=5):
@@ -54,6 +61,9 @@ def liczby(r):
     """Jeden wiersz insights → same liczby, bez pól tekstowych."""
     akcje = {AKCJE[a['action_type']]: int(float(a['value']))
              for a in r.get('actions', []) if a['action_type'] in AKCJE}
+    wart = {a['action_type']: int(float(a['value'])) for a in r.get('actions', [])}
+    akcje['kontakty'] = (max([wart.get(t, 0) for t in KONTAKT_TYPY])
+                         + sum(wart.get(t, 0) for t in LEAD_TYPY))
     return dict({
         'wyswietlenia': int(r.get('impressions', 0)),
         'zasieg': int(r.get('reach', 0)),
@@ -70,7 +80,7 @@ def suma(wiersze):
     """Agregat po reklamach. Zasięgu NIE sumujemy — ta sama osoba widzi kilka reklam,
     więc suma zasięgów to nie jest zasięg; pokazujemy tylko wyświetlenia i pieniądze."""
     out = {'wyswietlenia': 0, 'kliki': 0, 'kliki_link': 0, 'koszt': 0.0}
-    for k in AKCJE.values():
+    for k in list(AKCJE.values()) + ['kontakty']:
         out[k] = 0
     for w in wiersze:
         for k in out:
@@ -120,7 +130,10 @@ def main():
                                     'budzet': 0, 'chodzi': 0, 'reklam': 0, 'zestawy': set()})
         w['reklam'] += 1
         w['chodzi'] += a['effective_status'] == 'ACTIVE'
-        if a['adset']['name'] not in w['zestawy'] and a['adset']['status'] == 'ACTIVE':
+        # budżet liczy się tylko przy żywej kampanii — pauza kampanii zostawia zestawy ACTIVE
+        # (15.09: [VID] i [POST] zawyżały budżet dzienny z 65 do 100 zł)
+        if (a['adset']['name'] not in w['zestawy'] and a['adset']['status'] == 'ACTIVE'
+                and a['campaign']['status'] == 'ACTIVE'):
             w['zestawy'].add(a['adset']['name'])
             w['budzet'] += int(a['adset'].get('daily_budget', 0)) / 100
     for k, w in kampanie.items():
