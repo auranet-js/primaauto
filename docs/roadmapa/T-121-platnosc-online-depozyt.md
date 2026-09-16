@@ -1,6 +1,6 @@
 # T-121 — Płatność online (BLIK/karta) za depozyt rezerwacyjny
 
-> Status (14.09.2026): **PayU odmówiło współpracy — bramka wyłączona, moduł uśpiony w kodzie; nowy operator: Tpay Business (decyzja 16.09), zapasowy Przelewy24**. Porównanie: [2026-09-16](../biznes/2026-09-16-bramka-platnosci-porownanie.md). Patrz [ADR 2026-09-14](../decyzje/2026-09-14-payu-odmowa-wylaczenie-bramki.md). Opis niżej dotyczy wdrożenia pod PayU (historia).
+> Status (14.09.2026): **PayU odmówiło współpracy — bramka wyłączona, moduł uśpiony w kodzie; nowy operator: Tpay Business (decyzja 16.09), zapasowy Przelewy24**. Porównanie: [2026-09-16](../biznes/2026-09-16-bramka-platnosci-porownanie.md). **16.09: konto Tpay założone (czeka na przelew weryfikacyjny Ruslana), integracja v0.41.0 wdrożona i przetestowana na sandboxie, flaga OFF** — [VERSIONS](../VERSIONS.md). Patrz [ADR 2026-09-14](../decyzje/2026-09-14-payu-odmowa-wylaczenie-bramki.md). Opis niżej dotyczy wdrożenia pod PayU (historia).
 > ~~Status: GATED na T-221 (regulamin usługi) → potem wniosek do PayU~~ · Rozmiar: L
 > Godziny realnie: **24–32 h** (Janek ~5–6 h, AI ~19–26 h) · Rynkowo: 60–80 h
 

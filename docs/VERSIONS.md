@@ -1,5 +1,35 @@
 # Historia wersji asiaauto-sync
 
+## 0.41.0 — 2026-09-16 (płatność depozytu przez Tpay zamiast PayU)
+
+Po odmowie PayU (ADR 2026-09-14) i wyborze Tpay Business (porównanie `docs/biznes/2026-09-16-bramka-platnosci-porownanie.md`).
+Wymieniona warstwa API; store prób, kreator, panel, maile i GA4 bez zmian. **Flaga `asiaauto_payu_enabled` = 0** —
+klienci dalej widzą blok „uruchamiamy” + przelew.
+
+- **Nowy `class-asiaauto-tpay.php`** — OAuth (`/oauth/auth`, token w transiencie per tryb), `POST /transactions`,
+  `GET /transactions/{id}`, `GET /transactions/channels`, weryfikacja notyfikacji **JWS** (`X-JWS-Signature`:
+  x5u tylko z hosta Tpay bieżącego trybu, certyfikat podpisany root CA Tpay, RSA-SHA256; PEM-y w transiencie na dobę).
+  Klucze: `private-payu/tpay.env.{sandbox,prod}` (kopie z `~/secrets/tpay/`).
+- **`class-asiaauto-payu-api.php`** — `createPayment()` woła Tpay: BLIK Level 0 (`groupId 150` + `blikToken`),
+  przelew = przekierowanie na `transactionPaymentUrl`. Nowa trasa **`POST /tpay/notify`** (zawsze zarejestrowana;
+  odpowiedź `TRUE`, zły podpis 400 — nie 404, bo 404 zatrzymuje ponawianie). `/payu/notify` zostaje.
+  `payment-status` dopytuje Tpay o otwartą próbę — **Tpay nie wysyła notyfikacji o odrzuconym BLIK-u**
+  (zły kod: `result=success` + `payments.errors`; odmowa banku: `attempts[].paymentErrorCode`).
+  Księgowanie (`settle()`) wspólne dla notyfikacji i odpytania: zgodność kwoty/waluty + atomowe `markCompleted`.
+  Chargeback z panelu Tpay tylko logowany — depozytu automatycznie nie cofamy.
+- **Kreator** — „Płacę teraz przez Tpay”, stopka z regulaminem i klauzulą informacyjną Tpay (wymóg Tpay przy BLIK Level 0).
+- **Panel** — strona „Płatności online — Tpay” (test połączenia: token + kanały), karta zamówienia „Płatności online”.
+- **`markDepositPaid()`** — źródło `tpay` w logu statusów; mail `payment_source` = „płatność online (Tpay)”;
+  blokada maili w sandboxie liczona z trybu Tpay.
+- **Tryb `asiaauto_payu_mode`: `prod` → `sandbox`** (do czasu weryfikacji konta produkcyjnego).
+
+Testy sandbox 16.09 (zamówienie testowe 410903, depozyt 1 zł, potem meta przywrócone — diff z backupem pusty):
+zły kod BLIK → 422 i próba `failed`; kod 777123 → prawdziwa notyfikacja Tpay po 2 s, JWS zweryfikowany,
+depozyt `source=tpay`; powtórne księgowanie → „już rozliczona”; rozjazd kwoty → odrzucony, próba `pending`;
+przekierowanie → `secure.sandbox.tpay.com/?title=…`; notyfikacja bez podpisu z curla → 400.
+
+Backup: `~/backups/primaauto/2026-09-16-tpay/` (pliki modułu, meta zamówienia 410903, opcje).
+
 ## 0.40.6 — 2026-09-14 (filtry katalogu przechodzą do wyszukiwarki zaawansowanej)
 
 Zmiana decyzji z 03.09 (ruch D „bez przenoszenia filtrów”) — Janek: link z katalogu ma otwierać
