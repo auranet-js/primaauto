@@ -85,7 +85,8 @@ Wniosek: bez operatora nie da się dać klientowi płatności „jednym kliknię
 - ul. Jerzego Pleśniarowicza 2A lok. 38, 35-117 Rzeszów
 - Reprezentant: Ruslan Prima
 - Rachunek do wypłat: Alior Bank, `17 2490 1057 0000 9900 2270 3049` (ten sam, na który klienci robią dziś przelewy; musi być na białej liście VAT)
-- Kontakt: china@primaauto.com.pl, +48 721 730 507
+- **E-mail konta w Tpay (login, powiadomienia, kontakt): china@primaauto.com.pl** (Janek 16.09)
+- Telefon: +48 721 730 507
 - Sklep: https://primaauto.com.pl
 
 **Dokumenty** (OWU §3 + [FAQ Tpay](https://support.tpay.com/faq/jakie-dokumenty-sa-potrzebne-do-weryfikacji-konta-w-serwisie-tpay-com)):
