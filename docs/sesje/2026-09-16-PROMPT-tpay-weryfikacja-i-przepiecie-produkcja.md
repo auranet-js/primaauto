@@ -40,7 +40,7 @@ Nie zgaduj. Pytaj Janka (quiz, rekomendacja pierwsza, zawsze „nie wiem”):
 - czy przyszedł mail z Tpay o aktywacji konta / czy panel pokazuje konto aktywne,
 - czy Tpay prosił o dodatkowe dokumenty (mail na `china@primaauto.com.pl`).
 
-Konto niezweryfikowane → **STOP**, zapisz stan w T-121 i zaproponuj przypomnienie (trigger `przypomnij`).
+Konto niezweryfikowane → **STOP**, zapisz stan w T-256 (QUEUE + strona postępu) i zaproponuj przypomnienie (trigger `przypomnij`).
 
 ## Krok 1 — ustawienia panelu Tpay (produkcja) — robi Janek, Ty podajesz co i sprawdzasz efekt
 
@@ -141,7 +141,7 @@ Rozjazd = wypisz, nie poprawiaj bez zgody.
 ## Krok 6 — dokumentacja i domknięcie
 
 - `docs/decyzje/YYYY-MM-DD-tpay-produkcja.md` — ADR: data włączenia, test 1 zł (dowody), ustawienia panelu, rollback.
-- `docs/roadmapa/T-121-platnosc-online-depozyt.md` — status.
+- `docs/roadmapa/T-121-platnosc-online-depozyt.md` — status; T-256 w `docs/QUEUE.md` i na stronie postępu (`docs/kosztorys/dane/postep.json`: status, po włączeniu do `todo_ukryte_id` + wpis changelog z godzinami, `build_postep.py --deploy`).
 - `docs/VERSIONS.md` — tylko jeśli zmieniał się kod.
 - memory `project_payu_odmowa_2026_09_14` — stan: produkcja włączona / zablokowana na kroku X.
 - Monitoring pierwszych dni: po pierwszej prawdziwej wpłacie klienta sprawdź log (`notyfikacja`), `_order_payments`
