@@ -13,6 +13,8 @@
 | Adres | **`/porownywarka/`** (start) i `/porownywarka/{wersja-a}-vs-{wersja-b}/`. Nie `/porownanie/` — obok jest kategoria bloga `/porownania/` (T-214), jedna litera różnicy. |
 | Limit | **3 wersje**. |
 | Indeks | **Wszystko `noindex`** na start. Log porównań zbieramy od pierwszego dnia; o indeksie decyzja po danych. Link nigdzie nie wisi. |
+| Strony pojedynczych wersji | **Nie ma i nie będzie.** Slug wersji służy wyłącznie do złożenia adresu porównania `a-vs-b`. Osobna strona wersji = kopia karty oferty i kanibalizacja huba modelu (który ma tabelę „Wersje”). |
+| Ochrona przed kanibalizacją | `noindex` meta **i** nagłówkiem `X-Robots-Tag` na całym `/porownywarka/`; **bez** `Disallow` w robots.txt (Google musi zobaczyć noindex); poza sitemapą i Indexing API; brak linków. Porównanie wersji jednego modelu celuje w to samo zapytanie co hub. Rezerwa: adresy na numerach (`73246vs75103`) — rozważone 16.09, na razie slugi. |
 | Logowanie | **Niepotrzebne.** Wybrane wersje w localStorage. |
 | Wejście | **Pole wyszukiwania z podpowiedziami** (model → lista wersji z liczbą ofert i ceną „od”). |
 | Przycisk na karcie oferty | **Etap 2**, do przemyślenia — ~23% ofert nie ma `specid`. |
