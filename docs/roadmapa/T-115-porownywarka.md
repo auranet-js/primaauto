@@ -1,6 +1,6 @@
 # T-115 — Porównywarka aut
 
-> Status: **makiety zaakceptowane 16.09.2026 → do wdrożenia** · Rozmiar: M/L
+> Status: **wdrożenie w toku — krok 1 (tabela wersji) zrobiony 16.09** · Rozmiar: M/L
 > Gate z T-116 (tabela specs) **zdjęty** — tabela `wp7j_asiaauto_specs` działa od 02.09.
 > Poprzednia wersja tego pliku (porównanie ofert, `/porownaj/`, limit 4, checkbox na karcie) — w historii gita.
 
@@ -52,8 +52,10 @@ Start `/porownywarka/`: ta sama tabela z pustymi miejscami, pole wyszukiwania, �
 
 ## Otwarte do wdrożenia
 
-1. **Tabela wersji** — `wp7j_asiaauto_versions` (specid → model/term, nazwa wersji, rok, wskazanie oferty wzorcowej, liczby do podsumowania, liczba i cena „od” ofert) budowana nocą obok `zbuduj-specs.php` + przy imporcie. Bez niej wyszukiwarka wersji i wybór oferty wzorcowej liczą się w locie.
-2. **Slug wersji** stały (zapisany w tabeli), niezależny od zmiany tłumaczenia nazwy.
+1. ✅ **Tabela wersji `wp7j_asiaauto_versions`** (16.09) — klasa `includes/class-asiaauto-versions-table.php` (na serwerze, **jeszcze niepodpięta** w `asiaauto-sync.php`), skrypt `scripts/zbuduj-wersje.php` (dry-run domyślnie, `apply`, `limit=`, `specid=`). Wiersz = specid: model, wersja, stały slug, rok, paliwo, nadwozie, moc/0-100/zasięgi/bateria, liczba ofert i cena „od”, oferta wzorcowa (najwięcej kluczy extra_prep) + **zrzut sekcji karty oferty** (JSON, 15 sekcji). Wersja bez ofert zachowuje zrzut, cena → brak. Zrzut odświeżany tylko, gdy nowy wzorzec jest co najmniej tak pełny. Techniczne sekcje przez Reflection na `buildTechSpecSections()` — do udostępnienia w kroku 2.
+   Pierwszy bieg: **807 wersji, 2 335 ofert, 807 unikalnych slugów** (42 z dopiskiem roku, 2 z specid), 3 s, 7,2 MB zrzutów. 2 wersje bez nazwy (Voyah Dream PHEV 56516, BAIC BJ40 EREV 67937 — puste `_asiaauto_complectation`). **Mediana: 1 oferta na wersję; 414 z 807 wersji ma wzorzec < 250 kluczy** — połowa porównań będzie na uboższych danych.
+   **Nie podpięte:** cron (miejsce: po `zbuduj-specs.php` 05:05) i odświeżanie przy imporcie — do decyzji przy kroku 2.
+2. ✅ **Slug wersji** stały — nadawany raz, zapisany w tabeli.
 3. **Log porównań** (para/trójka specid, data, licznik) → lista popularnych.
 4. **Wersja znika z ofert** — strona porównania dalej działa (dane z ostatniej oferty wzorcowej trzymane w tabeli wersji / banku), cena = „brak aut”.
 5. **Nazwy wersji BYD** tłumaczone dosłownie („Cloud Suspension Sky God Ultra”); 曜黑版 ma trzy tłumaczenia. Nie blokuje — wyszukiwanie idzie po modelu.
