@@ -1,4 +1,4 @@
-# Tpay — weryfikacja konta i przepięcie płatności depozytu na produkcję — prompt wykonawczy, 2026-09-16
+# T-256 „przepięcie płatności PayU → Tpay” — weryfikacja konta i przepięcie płatności depozytu na produkcję — prompt wykonawczy, 2026-09-16
 
 > **Cel:** po weryfikacji konta produkcyjnego Tpay włączyć klientom płatność depozytu online (BLIK + przelew)
 > w kreatorze zamówienia. Kod jest gotowy od v0.41.0 i przetestowany na sandboxie — ten wątek to
