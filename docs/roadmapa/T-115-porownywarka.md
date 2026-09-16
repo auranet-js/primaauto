@@ -1,6 +1,6 @@
 # T-115 — Porównywarka aut
 
-> Status: **wdrożenie w toku — krok 1 (tabela wersji) zrobiony 16.09** · Rozmiar: M/L
+> Status: **wdrożone 16.09 w v0.42.0 — `/porownywarka/` działa, noindex, niepodlinkowana** · Rozmiar: M/L
 > Gate z T-116 (tabela specs) **zdjęty** — tabela `wp7j_asiaauto_specs` działa od 02.09.
 > Poprzednia wersja tego pliku (porównanie ofert, `/porownaj/`, limit 4, checkbox na karcie) — w historii gita.
 
@@ -56,15 +56,17 @@ Start `/porownywarka/`: ta sama tabela z pustymi miejscami, pole wyszukiwania, �
 
 1. ✅ **Tabela wersji `wp7j_asiaauto_versions`** (16.09) — klasa `includes/class-asiaauto-versions-table.php` (na serwerze, **jeszcze niepodpięta** w `asiaauto-sync.php`), skrypt `scripts/zbuduj-wersje.php` (dry-run domyślnie, `apply`, `limit=`, `specid=`). Wiersz = specid: model, wersja, stały slug, rok, paliwo, nadwozie, moc/0-100/zasięgi/bateria, liczba ofert i cena „od”, oferta wzorcowa (najwięcej kluczy extra_prep) + **zrzut sekcji karty oferty** (JSON, 15 sekcji). Wersja bez ofert zachowuje zrzut, cena → brak. Zrzut odświeżany tylko, gdy nowy wzorzec jest co najmniej tak pełny. Techniczne sekcje przez Reflection na `buildTechSpecSections()` — do udostępnienia w kroku 2.
    Pierwszy bieg: **807 wersji, 2 335 ofert, 807 unikalnych slugów** (42 z dopiskiem roku, 2 z specid), 3 s, 7,2 MB zrzutów. 2 wersje bez nazwy (Voyah Dream PHEV 56516, BAIC BJ40 EREV 67937 — puste `_asiaauto_complectation`). **Mediana: 1 oferta na wersję; 414 z 807 wersji ma wzorzec < 250 kluczy** — połowa porównań będzie na uboższych danych.
-   **Nie podpięte:** cron (miejsce: po `zbuduj-specs.php` 05:05) i odświeżanie przy imporcie — do decyzji przy kroku 2.
+   Podpięte w v0.42.0; cron **05:15** po `zbuduj-specs.php`. Odświeżania przy imporcie **nie ma** — nowa oferta nowej wersji trafia do porównywarki następnej nocy.
 2. ✅ **Slug wersji** stały — nadawany raz, zapisany w tabeli.
-3. **Log porównań** (para/trójka specid, data, licznik) → lista popularnych.
-4. **Wersja znika z ofert** — strona porównania dalej działa (dane z ostatniej oferty wzorcowej trzymane w tabeli wersji / banku), cena = „brak aut”.
-5. **Nazwy wersji BYD** tłumaczone dosłownie („Cloud Suspension Sky God Ultra”); 曜黑版 ma trzy tłumaczenia. Nie blokuje — wyszukiwanie idzie po modelu.
-6. Słownik: „Wyświetlacz AR HUD” trafia w `hud` zamiast `ar-hud`; „Sterowanie głosem (ekran)” w „rozpoznawanie głosu bez wybudzania”.
-7. „Spalanie (cykl mieszany)” 0.39 L/100km w Zeekr 9X przy 3.16 w katalogu — sprawdzić mapowanie (niezweryfikowane).
-8. Hybryda vs elektryk w zasięgu łącznym (N8L 1 300 km vs ES8 635 km) — dopisek, że hybryda liczy z paliwem.
-9. Oferty bez `specid` (703) nie wejdą do porównywarki; 8 ofert ze `specid` bez katalogu (poza che168).
+3. ✅ **Strona porównania i start** (v0.42.0) — `class-asiaauto-compare.php`, strona WP 481993, szczegóły w `docs/VERSIONS.md` (0.42.0).
+4. ✅ **Log porównań** `wp7j_asiaauto_compare_log` → „Popularne porównania” na starcie (ostatnia doba, przy pustym — 30 dni).
+5. ✅ **Wersja znika z ofert** — zrzut sekcji zostaje w tabeli wersji, cena = „brak aut”.
+6. **Etap 2 (otwarte):** przycisk „Porównaj” na karcie oferty, wejście w menu/nagłówku, decyzja o indeksie po danych z logu.
+7. **Nazwy wersji BYD** tłumaczone dosłownie („Cloud Suspension Sky God Ultra”); 曜黑版 ma trzy tłumaczenia. Nie blokuje — wyszukiwanie idzie po modelu.
+8. Słownik: „Wyświetlacz AR HUD” trafia w `hud` zamiast `ar-hud`; „Sterowanie głosem (ekran)” w „rozpoznawanie głosu bez wybudzania”.
+9. „Spalanie (cykl mieszany)” 0.39 L/100km w Zeekr 9X przy 3.16 w katalogu — sprawdzić mapowanie (niezweryfikowane).
+10. Hybryda vs elektryk w zasięgu łącznym (N8L 1 300 km vs ES8 635 km) — dopisek, że hybryda liczy z paliwem.
+11. Oferty bez `specid` (703) nie wejdą do porównywarki; 8 ofert ze `specid` bez katalogu (poza che168).
 
 ## Strefy kruche
 

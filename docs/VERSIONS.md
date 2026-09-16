@@ -1,5 +1,30 @@
 # Historia wersji asiaauto-sync
 
+## 0.42.0 — 2026-09-16 (porównywarka wersji /porownywarka/, T-115)
+
+Porównanie 2–3 **wersji** aut (specid), nie egzemplarzy. Wzór cpubenchmark; makiety `docs/makiety/gen-porownywarka-cpu.py`
+(desktop) i wariant A telefonu. **Nigdzie nie podlinkowana, całość `noindex, follow`.** Spec: `docs/roadmapa/T-115-porownywarka.md`.
+
+- **Nowy `class-asiaauto-versions-table.php`** — tabela `wp7j_asiaauto_versions` (807 wersji): model, wersja, stały slug,
+  liczby do podsumowania, liczba ofert i cena „od”, oferta wzorcowa (najpełniejsze `extra_prep`) i **zrzut sekcji karty
+  oferty** (JSON). Wersja bez ofert zachowuje zrzut. Budowa: `scripts/zbuduj-wersje.php`, cron **05:15** (po specs 05:05).
+- **Nowy `class-asiaauto-compare.php`** — strona WP `porownywarka` (ID 481993, `[asiaauto_compare]`) + rewrite
+  `^porownywarka/([a-z0-9-]+)/?$` → `aa_cmp`. 2–3 znane slugi → 200; jedna wersja → 302 na start `?wybrane=`
+  (brak stron pojedynczych wersji — kanibalizacja hubów); nieznany slug / >3 → 404 (wyłączone `redirect_canonical`).
+  noindex: RankMath robots + `wp_robots` + nagłówek `X-Robots-Tag`; meta strony `rank_math_robots`. Poza sitemapą.
+  REST `asiaauto/v1/versions?q=` (podpowiedzi; najpierw modele z pełną frazą) i `?slugs=`. Log porównań
+  `wp7j_asiaauto_compare_log` (posortowane specid × dzień; bez botów i redaktorów) → „Popularne porównania”.
+- Strona: wstęp składany z danych, tabela 4 kolumny (parametry + 3 miejsca), podsumowanie z „% różnicy do najlepszej”,
+  zasięg tego samego rodzaju u wszystkich, sekcje karty oferty 1:1 (zwijane, „tylko różnice”), etykiety linkowane do
+  słownika (`AsiaAuto_Autolink::map()`), wykresy. Schowek wersji w localStorage (bez logowania).
+- Nowe zasoby: `assets/css/asiaauto-compare.css`, `assets/js/asiaauto-compare.js`. Desktop: nagłówek tabeli przyklejony
+  pod menu; telefon: tabela przewijana w bok, kolumna parametrów przyklejona, własny margines 16 px.
+- **Zmiany w istniejących plikach:** `class-asiaauto-shortcodes.php` — `buildTechSpecSections()` z `private` na `public`
+  (czyta ją porównywarka); `asiaauto-sync.php` — require obu klas, `new AsiaAuto_Compare()`, wersja. Backupy `*.bak-2026-09-16-t115`.
+- Weryfikacja: 200/302/404 wg reguł, `noindex, follow` w HTML i nagłówku, brak w `page-sitemap.xml`, strona główna i hub 200,
+  podpowiedzi „leopard 5” / „9x hyper”, sticky nagłówka na desktopie (102 px przy admin barze), telefon 390 px w ramce,
+  konsola bez błędów. Złapane i poprawione: ciche odrzucanie 4. auta ze schowka, komórka „Parametr” przesunięta o 102 px na telefonie.
+
 ## 0.41.0 — 2026-09-16 (płatność depozytu przez Tpay zamiast PayU)
 
 Po odmowie PayU (ADR 2026-09-14) i wyborze Tpay Business (porównanie `docs/biznes/2026-09-16-bramka-platnosci-porownanie.md`).
