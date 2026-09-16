@@ -5,6 +5,8 @@
 > Źródła: publiczne strony i regulaminy operatorów, odczyt 16.09.2026. Z żadnym operatorem się nie kontaktowaliśmy.
 > Stawki to cenniki publiczne, nie oferta — potwierdzić przy rejestracji. Brak źródła = „niezweryfikowane”.
 
+> **Decyzja Janka 16.09.2026: Tpay Business.** Zapasowy: Przelewy24.
+
 ## 1. Tabela porównawcza
 
 Założenia: depozyt **6 150 zł** (`asiaauto_order_config.deposit_min`, odczyt 16.09), **7 depozytów/mies.** (z bazy, niżej),

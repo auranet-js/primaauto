@@ -36,6 +36,7 @@ z ceną”. Ten sam scenariusz grozi u następnego operatora, jeśli strona się
    `class-asiaauto-payu-api.php`).
 3. **Depozyty do czasu nowego operatora — wyłącznie przelewem**, księgowane ręcznie w panelu (`_order_deposit_paid_source = manual`) — tak jak Ruslan robi to od 28.08.
 4. **Nowy operator:** kandydaci **Autopay** i **Tpay** (wybór Janka). Rozpoznanie Autopay — osobny dokument.
+   **Aktualizacja 16.09.2026 — wybrany Tpay Business, zapasowy Przelewy24** (decyzja Janka). Autopay odrzucony przez „dropshipping” na liście zakazów. Uzasadnienie i paczka do rejestracji: [porównanie 2026-09-16](../biznes/2026-09-16-bramka-platnosci-porownanie.md).
    Warunek wstępny przed złożeniem wniosku u kogokolwiek: strona musi pokazywać model płatności (za co, ile, kiedy wraca) bez przechodzenia kreatora.
 
 ## Treści i kreator — po zmianach 14.09 (v0.40.1)
