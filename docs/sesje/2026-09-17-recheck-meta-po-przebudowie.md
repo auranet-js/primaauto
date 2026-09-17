@@ -110,6 +110,71 @@ w tabelach są wyłącznie `click_phone` i `click_whatsapp`.
 
 ## Otwarte z 15.09 (przypomnienie, nie działanie)
 
-- Rozszerzanie listy w `[RMKT]` (`targeting_relaxation_types.custom_audience: 1`).
+- ~~Rozszerzanie listy w `[RMKT]`~~ — **sprostowanie 17.09: już włączone**, zestaw ma
+  `targeting_relaxation_types: {lookalike: 0, custom_audience: 1}`. Pozycja nieaktualna.
 - Przycisk Messengera na ofercie — makieta `primaauto-makieta-messenger-oferta-2026-09-15.html`, wariant A/B.
 - `gclid` wycinany w GTM od v13 — decyzja z 11.09 nadal otwarta; zaniża `google / cpc` w GA4.
+
+
+---
+
+# Dodatek z 17.09 — wiek i posty (rozpoznanie na polecenie Janka)
+
+## Wiek w żywych zestawach — stan i rekomendacja (NIC NIE ZMIENIONE)
+
+Odczyt targetingu wykazał **rozjazd nazwy z ustawieniem**: zestaw nazywa się `[KAT] PL M 30-60`,
+a faktyczny przedział to **25–65**. `[FOTO]` ma 30–60, `[RMKT]` 18–65 bez filtra płci
+(w remarketingu to poprawne — lista sama definiuje odbiorcę).
+
+Rozkład za 15–17.09:
+
+| Zestaw | Przedział | Wydane | zł/klik | zł/LPV |
+|---|---|---:|---:|---:|
+| `[KAT]` | 35–44 | 25,14 zł (32,5%) | 0,078 | **0,20** |
+| `[KAT]` | 45–54 | 19,90 zł (25,8%) | 0,089 | 0,26 |
+| `[KAT]` | 55–64 | 11,03 zł (14,3%) | 0,065 | 0,27 |
+| `[KAT]` | 25–34 | 14,88 zł (19,3%) | 0,076 | 0,33 |
+| `[KAT]` | **65+** | 6,29 zł (8,1%) | **0,185** | **0,90** |
+| `[RMKT]` | 45–54 | 12,21 zł (29,6%) | 0,094 | **0,16** |
+| `[RMKT]` | 35–44 | 13,01 zł (31,5%) | 0,092 | 0,34 |
+| `[RMKT]` | 65+ | 4,74 zł (11,5%) | 0,085 | 0,30 |
+| `[RMKT]` | 55–64 | 6,37 zł (15,4%) | 0,112 | 0,58 |
+| `[RMKT]` | **18–24** | 0,58 zł (1,4%) | 0,048 | **0 wejść** |
+
+Rekomendacja była: `[KAT]` → 25–64 (65+ kosztuje 4,5× więcej na wejście), `[RMKT]` → 25–65
+(65+ w remarketingu wypada **dobrze**, do wycięcia tylko 18–24). **Decyzja Janka 17.09: nie ciąć,
+zebrać jeszcze dobę** — 65+ ma w `[KAT]` tylko 34 kliknięcia, a zmiana wieku restartuje fazę uczenia.
+Wracamy 19.09 na danych z 17. i 18.09.
+
+## Czy wrócić do reklam z postów
+
+**Jak posty wypadały jako reklama** (04–14.09, przed przebudową):
+
+| Reklama | Wydane | CTR w link | zł/klik | zł/LPV |
+|---|---:|---:|---:|---:|
+| `[POST]` Zeekr 8X | 5,54 zł | 2,84% | 0,241 | **0,29** |
+| `[POST]` Denza Z9 DM-i | 86,72 zł | 1,28% | 0,326 | 0,56 |
+| `[POST]` Mazda EZ-6 | 11,26 zł | 0,99% | 0,289 | 0,56 |
+| `[VID]` z9-gt (dla porównania) | 188,34 zł | 6,01% | 0,216 | 1,06 |
+| `[RMKT]` Na placu w Polsce (dla porównania) | 38,62 zł | 7,38% | 0,193 | **0,22** |
+
+Post jako reklama kosztuje **0,29–0,56 zł za wejście**, czyli gorzej niż dzisiejszy `[KAT]`
+(0,36 zł/sesja GA4 przy CTR 9,22%). Niski CTR w link jest wbudowany w format — w poście klika się
+„więcej", nie link.
+
+**Co się realnie klika w `[KAT]`** (15–17.09, 418 kliknięć z przypisaniem produktu):
+Changan UNI-V (26 kliknięć w dwóch rocznikach), Chery Arrizo 8 (15), Hongqi EH7 (14), Hongqi H5 (13),
+BYD Han DM-i + Han L (20), JETOUR G700 (10), Zeekr 7X (9). **Czyli sedany i tańsze SUV-y.**
+
+**Co publikuje Andrzej** (posty 03–15.09): iCAR Super V23, Freelander 8, JETOUR G700, Zeekr 8X,
+ROX 01, BYD Leopard 7, Voyah Taishan, Dongfeng M-Hero 917. **Czyli premium i nisza.**
+
+Pokrycie obu list to jeden model: **JETOUR G700**. Wszystkie te auta są realnie w Polsce albo w drodze
+(baza: 20 `on_lot`, 40 `in_transit`), więc materiał jest prawdziwy — rozjeżdża się dobór modeli,
+nie wiarygodność.
+
+**Rekomendacja:** nie wracać do `[POST]` jako formatu ogólnego. Dwie rzeczy warte ruchu, w tej kolejności:
+1. **Wznowić `[RMKT] Na placu w Polsce`** — 0,22 zł/LPV przy CTR 7,38%, drugi najlepszy wynik na koncie,
+   a zapas 60 aut dostępnych od ręki go karmi. To najtańsze wejście, jakie konto miało poza `[RMKT]` Oglądane.
+2. **Poprosić Andrzeja o posty o sedanach z listy klikanych** (Changan UNI-V, Arrizo 8, Hongqi EH7/H5, BYD Han)
+   — dziś publikuje o autach, których nikt nie klika. Dopiero taki post ma sens jako reklama.
