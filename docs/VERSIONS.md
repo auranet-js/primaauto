@@ -1,5 +1,24 @@
 # Historia wersji asiaauto-sync
 
+## 0.42.1 — 2026-09-17 (porównywarka: poprawki po testach Janka na telefonie)
+
+- **Telefon: × nie usuwał aut** — reguła `.aac-cmp thead th{position:static}` odbierała komórkom nagłówka punkt odniesienia,
+  wszystkie × lądowały w jednym punkcie w prawym górnym rogu strony (339, 8), a nagłówki były ~700 px niżej.
+  `thead th.aac-k{position:relative}`, × 36×36 px. Zmierzone: każdy × w swojej komórce i pod palcem (`elementFromPoint`).
+- **Czyszczenie listy** — link „Nowe porównanie” prowadził na start, który odtwarzał listę z localStorage, więc nie dało się
+  jej wyczyścić. Link czyści pamięć; na starcie przycisk „Wyczyść listę”. Krzyżyk pola `type=search` zamyka podpowiedzi.
+  Wybór podpowiedzi na `pointerdown` zamiast `mousedown` (dotyk).
+- **Nagłówki od „Porównanie”** (decyzja Janka, odróżnienie od intencji huba): title `Porównanie A vs B | Prima-Auto`,
+  H1 `Porównanie A vs B`, H2 `Porównanie parametrów` / `Porównanie na wykresach`; start: H1 `Porównanie samochodów`
+  (tytuł strony 481993), H2 `Porównania najczęściej oglądane`.
+- **Popularne porównania** — lista `ul`, cały wiersz jednym linkiem z `title="Porównanie A vs B"`.
+- **Sekcje (akordeony)** — wielkie litery, odstępy liter, strzałka CSS, czerwony pasek z lewej, licznik różnic w pastylce.
+  Złapane przy okazji: skrót `font: 700 14px inherit` jest niepoprawny i przeglądarka go odrzucała (przyciski 13,3 px systemowym krojem).
+- **Podpowiedzi** — przy remisie wyżej model z większą sumą ofert („9x max”: Zeekr 9X przed VW ID.ERA 9X).
+- Testy (ramki 390 i 1280 px): start → 2 auta z podpowiedzi → Porównaj → 3. auto → usunięcie ×; na telefonie „+ Dodaj auto”
+  przy tabeli przewiniętej w bok, dodanie 3. auta, usunięcie, „Wyczyść listę”, czyszczenie pola. Testowe wpisy logu usunięte.
+  Backupy `*.bak-2026-09-17`.
+
 ## 0.42.0 — 2026-09-16 (porównywarka wersji /porownywarka/, T-115)
 
 Porównanie 2–3 **wersji** aut (specid), nie egzemplarzy. Wzór cpubenchmark; makiety `docs/makiety/gen-porownywarka-cpu.py`

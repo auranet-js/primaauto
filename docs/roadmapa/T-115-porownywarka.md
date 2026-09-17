@@ -15,6 +15,7 @@
 | Indeks | **Wszystko `noindex`** na start. Log porównań zbieramy od pierwszego dnia; o indeksie decyzja po danych. Link nigdzie nie wisi. |
 | Strony pojedynczych wersji | **Nie ma i nie będzie.** Slug wersji służy wyłącznie do złożenia adresu porównania `a-vs-b`. Osobna strona wersji = kopia karty oferty i kanibalizacja huba modelu (który ma tabelę „Wersje”). |
 | Ochrona przed kanibalizacją | `noindex` meta **i** nagłówkiem `X-Robots-Tag` na całym `/porownywarka/`; **bez** `Disallow` w robots.txt (Google musi zobaczyć noindex); poza sitemapą i Indexing API; brak linków. Porównanie wersji jednego modelu celuje w to samo zapytanie co hub. Rezerwa: adresy na numerach (`73246vs75103`) — rozważone 16.09, na razie slugi. |
+| Nagłówki | **Od słowa „Porównanie”** (17.09): title i H1 `Porównanie A vs B`, H2 `Porównanie parametrów` / `Porównanie na wykresach`, start `Porównanie samochodów`. Odróżnia intencję od huba modelu (`Zeekr 9X — cena w Polsce…`); główną ochroną przed kanibalizacją pozostaje noindex. |
 | Logowanie | **Niepotrzebne.** Wybrane wersje w localStorage. |
 | Wejście | **Pole wyszukiwania z podpowiedziami** (model → lista wersji z liczbą ofert i ceną „od”). |
 | Przycisk na karcie oferty | **Etap 2**, do przemyślenia — ~23% ofert nie ma `specid`. |
