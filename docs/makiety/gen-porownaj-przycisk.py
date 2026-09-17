@@ -429,6 +429,28 @@ def main():
     sceny.insert(0, ('K', 'Moduł kontaktu i menu w nagłówku (razem z A2)', 'Pigułka telefon/WhatsApp i przycisk menu na telefonie przeprojektowane tak, żeby razem z wagą i sercem zajmowała mniej miejsca. Schowek: 2 auta.',
                      [(i, t, d, plik(f'K{i}.html', kontakt(kat, i) if i < 4 else kontakt2(kat, i))) for i, (t, d) in enumerate(K)],
                      dict(d_cel='', d_h=[150, 150, 280, 150, 150, 150, 150], t_cel='', t_h=[140, 140, 140, 140, 844, 140, 140])))
+    home = czysc(pobierz('https://primaauto.com.pl/', 'home-2026-09-17.html'))
+    N = [('Stan obecny', 'Pasek zapowiada wyszukiwarkę zaawansowaną.'),
+         ('N1 · Ten sam pasek, nowa treść', '„Nowość · Porównaj auta z Chin: Porównywarka samochodów”. Wygląd bez zmian, zmienia się tylko treść i link.'),
+         ('N2 · Pasek mówi, co daje porównywarka', 'Ikona wagi i jedno zdanie o tym, co porównujemy, link „Otwórz porównywarkę”. Na telefonie bez ikony i krócej: „Porównaj do 3 aut obok siebie.”'),
+         ('N3 · Żółty pasek z przyciskiem', 'Kolory odwrócone (żółte tło, granatowy tekst), żeby odróżnić nowy komunikat od poprzedniego, plus przycisk „Sprawdź”. Najmocniej przyciąga wzrok.')]
+    sceny.insert(0, ('N', 'Pasek „Nowość” — porównywarka', 'Nagłówek K4. Nowy klucz zapamiętania zamknięcia, pasek ukryty na stronie porównywarki.',
+                     [(i, t, d, plik(f'N{i}.html', nowosc(kat, i))) for i, (t, d) in enumerate(N)],
+                     dict(d_cel='', d_h=110, t_cel='', t_h=[120] * 4)))
+    H = [('Stan obecny', '„Szukaj po wyposażeniu →” pod wyszukiwarką marki i modelu.'),
+         ('H1 · Dwa linki z kreską', '„Wyszukiwanie zaawansowane | Porównywarka” — dokładnie jak w ustaleniach, w stylu obecnego linku.'),
+         ('H2 · Dwa przyciski z ikonami', 'Lupa i waga w obrysowanych przyciskach — widoczniejsze niż link, nadal podrzędne wobec „Szukaj wśród … ofert”.'),
+         ('H3 · Linki z podpowiedzią', 'Nad każdym linkiem krótkie pytanie, które mówi, kiedy z niego skorzystać.')]
+    sceny.insert(0, ('H', 'Strona główna — link pod wyszukiwarką', 'Hero strony głównej z nagłówkiem K4.',
+                     [(i, t, d, plik(f'H{i}.html', home_link(home, i))) for i, (t, d) in enumerate(H)],
+                     dict(d_cel='.aa-home__hero', d_off=90, d_h=560, t_cel='.aa-home__hero', t_off=70, t_h=[700] * 4)))
+    M = [('Stan obecny (z nagłówkiem K4)', 'Marki w głównym menu, wyszukiwarka tylko w menu mobilnym, porównywarki brak.'),
+         ('M1 · Tekst oddzielony kreskami', 'Desktop: „Wyszukiwarka” i „Porównywarka” jako zwykłe pozycje, oddzielone od menu i od ikon cienkimi kreskami; poniżej 1300 px mniejsza czcionka. Telefon: obie na dole listy. „Marki” pierwsze w „Wiedza” (rozwinięte na makiecie).'),
+         ('M2 · Ikony z etykietą, licznik przy porównywarce', 'Desktop: lupa + „Wyszukiwarka”, waga + „Porównywarka 2” — osobna ikona wagi w K4 znika, bo „Porównywarka” ją zastępuje; poniżej 1300 px same ikony. Telefon: dwa kafle na samej górze menu.'),
+         ('M3 · Biała pigułka narzędzi', 'Desktop: „Wyszukiwarka | Porównywarka” w białej pigułce — wyróżnione jako narzędzia, nie strony; poniżej 1300 px same ikony. Telefon: dwie pozycje na górze listy na żółto, oddzielone od reszty menu.')]
+    sceny.insert(0, ('M', 'Menu — Marki w Wiedzy, Wyszukiwarka i Porównywarka', 'Nagłówek K4, bez paska „Nowość”. Na desktopie „Wiedza” rozwinięta. Dziś po dodaniu dwóch pozycji menu łamie się w dwie linie przy 1366 i 1280 px — warianty mają ciaśniejsze odstępy (16 px), a poniżej 1300 px skracają narzędzia.',
+                     [(i, t, d, plik(f'M{i}.html', menu(kat, i))) for i, (t, d) in enumerate(M)],
+                     dict(d_cel='', d_h=300, d2=1280, t_cel='', t_h=[844] * 4)))
     sceny.insert(0, ('W', 'Wybrany zestaw (A2 + K4 · B1 · C na zdjęciu · D1 · E komunikat)', 'Złożone razem na prawdziwych stronach.',
                      [(0, Z[0][0], Z[0][1], plik('W1-d.html', zestaw_katalog(kat, stany)), plik('W1-t.html', zestaw_katalog(kat, stany))),
                       (1, Z[1][0], Z[1][1], plik('W2.html', zestaw_produkt(prod, False)), 'W2.html'),
@@ -627,6 +649,127 @@ def kontakt2(doc, wariant, ile=2, dok=True):
     return wstaw(doc, css, body)
 
 
+LUPA = ('<svg class="mk-i" width="{s}" height="{s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" '
+        'aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>')
+l = lambda s=18: LUPA.format(s=s)
+NEWS_RE = r'<div class="pa-news" data-nosnippet>.*?</div>\s*</div>'
+
+
+def baza_k4(doc, dok=True):
+    return bez_js(kontakt2(doc, 4, 2, dok))
+
+
+def nowosc(doc, wariant):
+    """N — pasek „Nowość” z porównywarką (nowy klucz localStorage paNews-2026-09-porownywarka, ukryty na stronie 481993)."""
+    doc = baza_k4(doc, dok=False)
+    css = ''
+    if wariant == 1:
+        tresc = ('<span class="pa-news__tag">Nowość</span><span class="pa-news__txt">Porównaj auta z Chin:</span>'
+                 '<a class="pa-news__cta" href="/porownywarka/">Porównywarka samochodów</a>')
+    elif wariant == 2:
+        tresc = (f'<span class="mk-nw">{w(17)}</span><span class="pa-news__txt">Porównaj do 3 aut obok siebie<span class="mk-dl2">: moc, zasięg i wyposażenie</span>.</span>'
+                 '<a class="pa-news__cta" href="/porownywarka/">Otwórz porównywarkę</a>')
+        css = """.mk-nw{display:flex;color:#E8AC07}
+@media(max-width:860px){.mk-dl2,.mk-nw{display:none}}"""
+    else:
+        tresc = (f'<span class="mk-n3">{w(18)}<b>Nowość:</b> porównywarka samochodów z Chin</span>'
+                 '<a class="mk-n3b" href="/porownywarka/">Sprawdź</a>')
+        css = """.pa-news{background:#E8AC07!important;color:#1B2A4A!important}
+.mk-n3{display:flex;align-items:center;gap:8px;font-weight:500}.mk-n3 b{font-weight:700}
+.pa-news a.mk-n3b{background:#1B2A4A;color:#fff;font-weight:700;padding:5px 12px;border-radius:4px;white-space:nowrap}
+.pa-news .pa-news__x{color:#1B2A4A!important;opacity:.8}
+@media(max-width:860px){.mk-n3 svg{display:none}.mk-n3{font-size:13px}}"""
+    if wariant:
+        doc = re.sub(NEWS_RE, lambda m: '<div class="pa-news" data-nosnippet>\n    <div class="pa-news__in">' + tresc +
+                     '<button type="button" class="pa-news__x" aria-label="Zamknij komunikat">&times;</button></div>\n</div>', doc, count=1, flags=re.S)
+    return wstaw(doc, css)
+
+
+def home_link(doc, wariant):
+    """H — link pod wyszukiwarką na stronie głównej."""
+    doc = baza_k4(doc)
+    stary = '<p class="aa-home__adv"><a href="https://primaauto.com.pl/wyszukiwarka/">Szukaj po wyposażeniu →</a></p>'
+    assert stary in doc
+    css = ''
+    if wariant == 1:
+        nowy = ('<p class="aa-home__adv mk-h1"><a href="/wyszukiwarka/">Wyszukiwanie zaawansowane</a><span aria-hidden="true">|</span>'
+                '<a href="/porownywarka/">Porównywarka</a></p>')
+        css = ".mk-h1{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}.mk-h1 span{opacity:.5}"
+    elif wariant == 2:
+        nowy = (f'<p class="aa-home__adv mk-h2"><a href="/wyszukiwarka/">{l(17)}Wyszukiwanie zaawansowane</a>'
+                f'<a href="/porownywarka/">{w(17)}Porównywarka</a></p>')
+        css = """.mk-h2{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+.aa-home__hero .mk-h2 a{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border:1.5px solid currentColor;border-radius:6px;text-decoration:none!important;font-weight:600}"""
+    else:
+        nowy = ('<div class="mk-h3"><a href="/wyszukiwarka/"><span>Szukasz konkretnego wyposażenia?</span><b>Wyszukiwanie zaawansowane</b></a>'
+                '<a href="/porownywarka/"><span>Wahasz się między modelami?</span><b>Porównywarka</b></a></div>')
+        css = """.mk-h3{display:flex;justify-content:center;gap:28px;flex-wrap:wrap;margin-top:18px;text-align:left}
+.aa-home__hero .mk-h3 a{display:flex;flex-direction:column;gap:2px;text-decoration:none!important;color:#fff!important}
+.mk-h3 span{font-size:13px;opacity:.8}.mk-h3 b{font-size:15px;text-decoration:underline;text-underline-offset:3px}
+@media(max-width:768px){.mk-h3{flex-direction:column;gap:12px;align-items:center;text-align:center}.aa-home__hero .mk-h3 a{align-items:center}}"""
+    return wstaw(doc.replace(stary, nowy if wariant else stary), css)
+
+
+def menu(doc, wariant):
+    """M — menu: „Marki” na górę działu „Wiedza”, „Wyszukiwarka” i „Porównywarka” po prawej (desktop) i w menu mobilnym."""
+    doc = baza_k4(doc)
+    doc = re.sub(NEWS_RE, '', doc, count=1, flags=re.S)
+    css = """.menu-item-389095 > .sub-menu{opacity:1!important;visibility:visible!important;transform:none!important}
+.pa-mobile-menu__list .menu-item-389095 > .sub-menu{display:block!important}
+@media(max-width:768px){.pa-mobile-menu{display:block!important}}"""
+    doc = re.sub(r'(<nav id="pa-mobile-menu"[^>]*?)\s+hidden>', r'\1>', doc, flags=re.S)
+    if wariant:
+        css += """
+.pa-header__inner--desktop{gap:12px}.pa-header__logo{flex-shrink:0}
+.pa-menu{gap:16px!important}.pa-menu a{white-space:nowrap}.pa-header__inner--desktop a.mk-u{width:36px}"""
+    if wariant == 0:
+        return wstaw(doc, css + ".menu-item-389095 > .sub-menu{display:none}.pa-mobile-menu__list .menu-item-389095 > .sub-menu{display:block!important}")
+    marki = re.search(r'<li id="menu-item-265786".*?</li>\s*', doc, flags=re.S).group(0)
+    doc = doc.replace(marki, '')
+    doc = re.sub(r'(menu-item-389095"><a href="#">Wiedza</a>\s*<ul class="sub-menu">)', lambda m: m.group(1) + marki, doc)
+    extra = re.search(r'<li class="menu-item pa-mobile-menu__extra">.*?</li>', doc, flags=re.S).group(0)
+    i = doc.find('<div class="mk-k">')          # desktop (pierwszy moduł K4)
+    if wariant == 1:
+        narz = '<div class="mk-m1"><a href="/wyszukiwarka/">Wyszukiwarka</a><a href="/porownywarka/">Porównywarka</a></div>'
+        doc = doc[:i] + narz + doc[i:]
+        doc = doc.replace(extra, extra.replace('Wyszukiwarka zaawansowana', 'Wyszukiwarka') +
+                          '<li class="menu-item pa-mobile-menu__extra"><a href="/porownywarka/">Porównywarka</a></li>')
+        css += """@media(max-width:1300px){.pa-header .mk-m1 a{font-size:13px}.mk-m1{gap:10px!important;padding:0 8px!important}.pa-menu{gap:13px!important}}
+.mk-m1{display:flex;gap:14px;align-items:center;padding:0 12px;margin-right:2px;border-left:1px solid rgba(255,255,255,.3);border-right:1px solid rgba(255,255,255,.3);flex-shrink:0}
+.pa-header .mk-m1 a{font-weight:700;font-size:14px;white-space:nowrap}"""
+    elif wariant == 2:
+        narz = (f'<div class="mk-m2"><a href="/wyszukiwarka/" title="Wyszukiwarka">{l(17)}<span class="mk-lt">Wyszukiwarka</span></a>'
+                f'<a href="/porownywarka/" title="Porównywarka">{w(18)}<span class="mk-lt">Porównywarka</span><span class="mk-cnt">2</span></a></div>')
+        k = doc.find('</div>', i)
+        modul = doc[i:k]
+        bez_wagi = re.sub(r'<a href="#" class="mk-u" aria-label="Porównanie.*?</a>', '', modul, count=1, flags=re.S)
+        doc = doc[:i] + narz + bez_wagi + doc[k:]
+        kafle = (f'<li class="menu-item mk-tiles"><a href="/wyszukiwarka/">{l(24)}<span>Wyszukiwarka</span></a>'
+                 f'<a href="/porownywarka/">{w(24)}<span>Porównywarka <em class="mk-cnt">2</em></span></a></li>')
+        doc = doc.replace(extra, '').replace('class="pa-mobile-menu__list">', 'class="pa-mobile-menu__list">' + kafle, 1)
+        css += """@media(max-width:1300px){.mk-m2 .mk-lt{display:none}}
+.mk-m2{display:flex;gap:4px;margin-right:6px;flex-shrink:0}
+.pa-header .mk-m2 a{display:flex;align-items:center;gap:7px;padding:8px 11px;border-radius:8px;font-weight:700;font-size:14px;white-space:nowrap}
+.pa-header .mk-m2 a:hover{background:rgba(255,255,255,.12)}
+.mk-cnt{display:inline-block;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:#fff;color:#9B0000;font:700 11px/18px Inter,sans-serif;text-align:center;font-style:normal}
+.pa-mobile-menu__list li.mk-tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;border:0;padding:4px 0 14px}
+.pa-mobile-menu__list .mk-tiles a{display:flex;flex-direction:column;align-items:flex-start;gap:10px;padding:14px;border-radius:10px;background:rgba(0,0,0,.2)}"""
+    else:
+        narz = (f'<div class="mk-m3"><a href="/wyszukiwarka/" title="Wyszukiwarka">{l(16)}<i class="mk-lt">Wyszukiwarka</i></a><span></span>'
+                f'<a href="/porownywarka/" title="Porównywarka">{w(17)}<i class="mk-lt">Porównywarka</i></a></div>')
+        doc = doc[:i] + narz + doc[i:]
+        rzedy = (f'<li class="menu-item mk-rows"><a href="/wyszukiwarka/">{l(20)}Wyszukiwarka zaawansowana</a></li>'
+                 f'<li class="menu-item mk-rows mk-rows--last"><a href="/porownywarka/">{w(20)}Porównywarka samochodów</a></li>')
+        doc = doc.replace(extra, '').replace('class="pa-mobile-menu__list">', 'class="pa-mobile-menu__list">' + rzedy, 1)
+        css += """.mk-lt{font-style:normal}@media(max-width:1300px){.mk-m3 .mk-lt{display:none}.pa-header .mk-m3 a{padding:6px 10px}}
+.mk-m3{display:flex;align-items:stretch;background:#fff;border-radius:999px;margin-right:2px;flex-shrink:0;padding:3px}
+.pa-header .mk-m3 a{display:flex;align-items:center;gap:6px;padding:6px 10px;color:#9B0000;font-weight:700;font-size:13px;white-space:nowrap;border-radius:999px}
+.pa-header .mk-m3 a:hover{background:#F5F6F8}.mk-m3 span{width:1px;background:#E1E4E8;margin:6px 0}
+.pa-mobile-menu__list .mk-rows a{display:flex!important;align-items:center;gap:10px;color:#E8AC07!important}
+.pa-mobile-menu__list .mk-rows--last{border-bottom:2px solid #E8AC07}"""
+    return wstaw(doc, css)
+
+
 def bez_js(doc):
     return doc.replace(POMOCNIK_JS, '')
 
@@ -668,6 +811,7 @@ def strona(sceny, akt):
             th = p['t_h'][idx]
             rows.append(f'<div class="war"><h3>{e(t)}</h3><p>{e(d)}</p><div class="pair">'
                         f'<div><span class="lab">Desktop 1366 px (pomniejszone)</span>{ramka(pd, 1366, p["d_h"][idx] if isinstance(p["d_h"], list) else p["d_h"], .62, p.get("d_cel_l", [p["d_cel"]] * 9)[idx], p.get("d_off", 0))}</div>'
+                        + (f'<div><span class="lab">Laptop 1280 px (pomniejszone)</span>{ramka(pd, 1280, p["d_h"], .66)}</div>' if p.get('d2') else '') +
                         f'<div><span class="lab">Telefon 390 px</span>{ramka(pt, 390, th, 1 if th <= 900 else .6, p["t_cel"], p.get("t_off", 0))}</div>'
                         f'</div></div>')
         out.append(f'<section id="s{k}"><h2>{k}. {e(tyt)}</h2><p class="op">{e(opis)}</p>{"".join(rows)}</section>')
