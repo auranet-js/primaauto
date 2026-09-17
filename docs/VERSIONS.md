@@ -1,5 +1,21 @@
 # Historia wersji asiaauto-sync
 
+## motyw primaauto2026 1.6.0 — 2026-09-17 (T-115 etap 2, krok 1: nagłówek K4 + lupa, dok kontaktu, pasek N4)
+
+- **Nagłówek:** biała pigułka telefon/WhatsApp usunięta. Desktop: lupa (`/wyszukiwarka/`) · waga z licznikiem (`/porownywarka/`)
+  · telefon w białym kółku · WhatsApp w zielonym. Telefon: lupa · waga · menu w żółtym kółku 40 px. Licznik czyta
+  `aa_porownanie` z localStorage (`nav.js`), odświeża się na `storage`, `visibilitychange` i zdarzenie `pa:porownanie`.
+  Miejsce na serce (T-114) / logowanie oznaczone komentarzem w `header.php`, przed kontaktem.
+- **Dok kontaktu** (≤768 px) „Zadzwoń / WhatsApp” w `footer.php`, `primaauto_has_dock()` — bez karty oferty (`aa-mobile-cta`)
+  i wyszukiwarki 459262 (`aas__pasek-dol`); klasa `has-pa-dock` na body (padding 64 px); poprawka iOS visualViewport jak w `asiaauto-single.js`.
+- **Pasek „Nowość”:** „Nowość · Porównywarka samochodów” (link `/porownywarka/`), klucz `paNews-2026-09-porownywarka`,
+  ukryty na stronie 481993 (także a-vs-b); etykieta widoczna także ≤860 px — jedna linia na 360–390 px.
+- **Menu desktop:** odstęp 24 → 16 px, `white-space: nowrap`, logo bez zwężania. Martwe reguły `.pa-pill*` usunięte.
+- Backupy `*.bak-2026-09-17-t115` (header.php, footer.php, functions.php, header.css, nav.js).
+- Testy: curl 5 typów stron (nowość / narzędzia / dok / wersja CSS) ✓; Chrome desktop 1456 px ✓; ramki 375/390 px: katalog,
+  strona główna, oferta — bez poziomego przewijania (`scrollWidth` = szerokość), dok na katalogu i głównej, na ofercie pasek
+  Zamów/Zadzwoń/WhatsApp; menu mobilne otwiera się; licznik znika po wyczyszczeniu schowka także w innych kartach.
+
 ## 0.42.2 — 2026-09-17 (porównywarka: historia porównań, ostatnie porównania, WhatsApp, okruszki)
 
 - **Historia porównań** `wp7j_asiaauto_compare_history` — każde wejście osobno: `specids` w kolejności z adresu, `combo`

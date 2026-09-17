@@ -45,12 +45,14 @@
 
 ## Plan wdrożenia etapu 2 (po wyborach 17.09)
 
+**Serce ukryte do czasu T-114** (17.09) — miejsce przed kontaktem w nagłówku, na kartach i galerii zostaje; może tam dojść też ikona logowania.
+
 **Wybrane:** nagłówek K4 + lupa (lupa → `/wyszukiwarka/`, waga z licznikiem → `/porownywarka/`, serce = miejsce na T-114) · karty B1 · karta produktu = ikony na zdjęciu galerii · pasek schowka D1 z X w kółku · przy 4. aucie komunikat + rozwinięty pasek · N4 „Nowość · Porównywarka samochodów” w jednej linii także na telefonie · H1 „Wyszukiwanie zaawansowane | Porównywarka” · „Marki” pierwsze w „Wiedza”. Bez tekstowych pozycji „Wyszukiwarka/Porównywarka” w menu (zastępuje je lupa i waga). Zestaw: `primaauto-makieta-porownaj-W-2026-09-17.html`, menu `…-M-…` (M4), pasek `…-N-…` (N4).
 
 | # | Zakres | Pliki |
 |---|---|---|
-| 1 | Nagłówek K4 + lupa: desktop lupa/waga/serce + telefon/WhatsApp w kółkach (bez pigułki); telefon: lupa/waga/serce + menu w żółtym kółku; dok „Zadzwoń/WhatsApp” na dole na całym serwisie, ukryty tam, gdzie jest `aa-mobile-cta`; dopasowanie do 375 px | `themes/primaauto2026/header.php`, `assets/css/header.css`, JS licznika |
-| 2 | Pasek N4 (nowy klucz `paNews-2026-09-porownywarka`, ukryty na stronie 481993 i podstronach) | `header.php`, `header.css` |
+| 1 ✅ 17.09 (motyw 1.6.0) | Nagłówek K4 + lupa: desktop lupa/waga/serce + telefon/WhatsApp w kółkach (bez pigułki); telefon: lupa/waga/serce + menu w żółtym kółku; dok „Zadzwoń/WhatsApp” na dole na całym serwisie, ukryty tam, gdzie jest `aa-mobile-cta`; dopasowanie do 375 px | `themes/primaauto2026/header.php`, `assets/css/header.css`, JS licznika |
+| 2 ✅ 17.09 | Pasek N4 (nowy klucz `paNews-2026-09-porownywarka`, ukryty na stronie 481993 i podstronach) | `header.php`, `header.css` |
 | 3 | Menu: „Marki” (db_id 265786) jako pierwsze dziecko „Wiedza” (389095) — zmiana w WP, oba menu; „Wyszukiwarka zaawansowana” w menu mobilnym **zostaje** obok lupy (decyzja Janka 17.09: jedni czytają, inni patrzą na ikony) | menu WP „Header” (term 6033) |
 | 4 | Strona główna H1 | `includes/class-asiaauto-homepage.php` |
 | 5 | Wspólny moduł schowka JS (jeden dla całego serwisu): licznik w nagłówku, zdarzenia `storage`/`visibilitychange`, pasek D1, komunikat „maksymalnie 3” + rozwinięcie, klikane auto wchodzi na zwolnione miejsce | nowy `assets/js/asiaauto-schowek.js` + CSS, ładowany globalnie |
