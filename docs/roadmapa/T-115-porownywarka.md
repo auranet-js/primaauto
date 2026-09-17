@@ -48,6 +48,7 @@
 - Desktop: `docs/makiety/gen-porownywarka-cpu.py` → `auratest.pl/fe4f58fec53ctmp/primaauto-porownywarka-makieta-cpu-2026-09-16.html`
 - Telefon (A/B/C): `docs/makiety/gen-porownywarka-mobile.py` → `…-makieta-mobile-2026-09-16.html`
 - Odrzucona (versus): `docs/makiety/gen-porownywarka.py`
+- **Etap 2 (17.09):** `docs/makiety/gen-porownaj-przycisk.py` → `auratest.pl/fe4f58fec53ctmp/primaauto-makieta-porownaj-{A..E}-2026-09-17.html` — A nagłówek, B karta w listingu, C karta produktu, D pasek schowka, E okienko zamiany (prawdziwe strony + wstrzyknięte warianty). **Czeka na wybór Janka.**
 
 Pięć porównań testowych: Zeekr 9X Ultra/Hyper/Max · Denza N8L vs NIO ES8 · Denza Z9 GT vs BYD Han L · BMW i5 vs Xiaomi SU7 · Leapmotor D19 vs Li Auto L8.
 
