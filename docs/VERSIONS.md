@@ -1,5 +1,37 @@
 # Historia wersji asiaauto-sync
 
+## 0.43.0 — 2026-09-17 (T-115 etap 2: przycisk „Porównaj”, schowek, porównywarka)
+
+- **Waga na kartach ofert** (`renderCard()` — katalog, huby, wyszukiwarka, podstrony rezerwacji) i **na zdjęciu galerii**
+  karty produktu: `AsiaAuto_Compare::przyciskPorownania($post_id, 'karta'|'galeria')`. Wersja w `wp7j_asiaauto_versions`
+  → `<button data-aa-cmp>` (slug, nazwy, miniatura karty); brak specid albo wiersza wersji → link
+  `/porownywarka/?model=<nazwa modelu>`. Na karcie przycisk stoi **poza** linkiem zdjęcia (pozycja: róg zdjęcia 280/220 px,
+  ≤768 px prawy róg). Galeria: pełny ekran przeniesiony na dół. Cache wiersza wersji per specid w żądaniu.
+  Reset `.aa-inv button { … !important }` z `asiaauto-inventory.css` wymagał nadpisania `.aa-inv .aa-card > .aa-cmp` z `!important`.
+- **`assets/js/asiaauto-schowek.js` + `css/asiaauto-schowek.css`** — ładowane na całym froncie (`AA_SCH`): dodaj/usuń
+  wersję (stan wspólny dla ofert tej samej wersji), **pasek schowka D1** (miniatury, ×, „Porównaj →”, „Wyczyść”, X w kółku
+  — zamknięcie w `sessionStorage` do kolejnego dodania), **4. auto** → komunikat „Możesz porównać maksymalnie 3 auta.
+  Usuń jedno z paska — X wejdzie na jego miejsce.” + rozwinięty pasek; po usunięciu klikane auto wchodzi samo.
+  Telefon: pasek skrócony, dotknięcie tytułu rozwija listę. Pasek staje nad dokiem kontaktu / `aa-mobile-cta` /
+  `aas__pasek-dol` (pomiar położenia). `storage` + `visibilitychange` + MutationObserver (doładowane karty).
+  Zdarzenie `pa:porownanie` → licznik w nagłówku. Na `/porownywarka/` paska nie ma.
+- **Porównywarka** (`asiaauto-compare.js`): strona porównania **nie nadpisuje już schowka** adresem (błąd do 0.42.2);
+  te same auta → bez zapisu (zachowuje miniatury), pusty schowek → adres staje się schowkiem, **odświeżenie** przy innym
+  schowku → przejście na schowek, **cudzy link / lista ostatnich** → podpowiedź „Masz w porównaniu inne auta: … Pokaż je →”,
+  zmiana w innej karcie → przejście przy powrocie do karty. Start: sloty odświeżane na `storage`/powrót. `?model=` wpisuje
+  nazwę modelu i otwiera listę wersji.
+- **Historia porównań:** źródła `oferta` (Referer `/oferta/…`) i `listing` (`/`, `/samochody/…`, `/wyszukiwarka/`,
+  `/w-rzeszowie/`, `/w-drodze/`); reszta `serwis`.
+- Testy (Chrome, zalogowany redaktor — historia pomija redaktorów, brak wpisów testowych): 24 przyciski na `/samochody/`
+  i `/wyszukiwarka/`; dodanie 2 aut → pasek + licznik 2; 3 + klik 4. → komunikat, schowek bez zmian; usunięcie AITO z paska
+  → Zeekr 001 wchodzi, licznik 3, link porównania 3 aut; wejście na to porównanie → brak podpowiedzi, miniatury zostają;
+  cudzy link z listy ostatnich → podpowiedź, schowek nietknięty; `?model=Li Auto L8` → pole wypełnione, lista wersji L8;
+  ramki ~360 px: pasek nad dokiem (katalog) i nad Zamów/Zadzwoń/WhatsApp (oferta), bez poziomego przewijania; desktop
+  1181 px: pasek z autami; waga w galerii 12 px od góry, pełny ekran 12 px od dołu; źródła historii przez `wp eval`
+  (oferta/listing/listing/listing/listing/serwis/start). Schowek w przeglądarce przywrócony do stanu sprzed testu (`[]`).
+  **Dotyk na iPhonie niezweryfikowany.**
+- Backupy `*.bak-2026-09-17-t115-schowek` (compare.php, inventory.php, shortcodes.php, compare.js, asiaauto-sync.php).
+
 ## motyw primaauto2026 1.6.6 — 2026-09-17 (granatowe menu mobilne)
 
 - Wybór Janka z makiety MT: granat (`--c-primary` #1B2A4A) **bez** żółtej kreski. Czerwone menu zlewało się z nagłówkiem.

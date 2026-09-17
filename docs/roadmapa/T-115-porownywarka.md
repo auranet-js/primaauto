@@ -1,6 +1,6 @@
 # T-115 — Porównywarka aut
 
-> Status: **wdrożone 16.09 w v0.42.0 — `/porownywarka/` działa, noindex, niepodlinkowana** · Rozmiar: M/L
+> Status: **etap 2 wdrożony 17.09 (0.43.0, motyw 1.6.6)** — nagłówek z lupą i wagą, pasek „Nowość”, waga na kartach i galerii, schowek; zostało: menu „Marki”→„Wiedza”, link H1 na stronie głównej · noindex bez zmian · Rozmiar: M/L
 > Gate z T-116 (tabela specs) **zdjęty** — tabela `wp7j_asiaauto_specs` działa od 02.09.
 > Poprzednia wersja tego pliku (porównanie ofert, `/porownaj/`, limit 4, checkbox na karcie) — w historii gita.
 
@@ -55,11 +55,11 @@
 | 2 ✅ 17.09 | Pasek N4 (nowy klucz `paNews-2026-09-porownywarka`, ukryty na stronie 481993 i podstronach) | `header.php`, `header.css` |
 | 3 | Menu: „Marki” (db_id 265786) jako pierwsze dziecko „Wiedza” (389095) — zmiana w WP, oba menu; „Wyszukiwarka zaawansowana” w menu mobilnym **zostaje** obok lupy (decyzja Janka 17.09: jedni czytają, inni patrzą na ikony) | menu WP „Header” (term 6033) |
 | 4 | Strona główna H1 | `includes/class-asiaauto-homepage.php` |
-| 5 | Wspólny moduł schowka JS (jeden dla całego serwisu): licznik w nagłówku, zdarzenia `storage`/`visibilitychange`, pasek D1, komunikat „maksymalnie 3” + rozwinięcie, klikane auto wchodzi na zwolnione miejsce | nowy `assets/js/asiaauto-schowek.js` + CSS, ładowany globalnie |
-| 6 | Ikony B1 na karcie — **poza linkiem zdjęcia** (dziś zdjęcie jest w `<a>`), `data-` z slugiem wersji albo modelem dla ofert bez wiersza wersji | `class-asiaauto-inventory.php` `renderCard()` |
-| 7 | Ikony na zdjęciu galerii; ikona pełnego ekranu na dół | `class-asiaauto-shortcodes.php` (galeria), `class-asiaauto-single.php` |
-| 8 | Porównywarka: `?model=` otwiera listę wersji modelu; naprawa nadpisywania schowka adresem (`asiaauto-compare.js`, tryb porównania); podpowiedź „Masz w porównaniu…” przy obcym linku | `class-asiaauto-compare.php`, `asiaauto-compare.js`, REST `versions` |
-| 9 | Historia porównań: źródła `oferta` i `listing` | `class-asiaauto-compare.php` (rozpoznanie Referer) |
+| 5 ✅ 0.43.0 | Wspólny moduł schowka JS (jeden dla całego serwisu): licznik w nagłówku, zdarzenia `storage`/`visibilitychange`, pasek D1, komunikat „maksymalnie 3” + rozwinięcie, klikane auto wchodzi na zwolnione miejsce | nowy `assets/js/asiaauto-schowek.js` + CSS, ładowany globalnie |
+| 6 ✅ 0.43.0 | Ikony B1 na karcie — **poza linkiem zdjęcia** (dziś zdjęcie jest w `<a>`), `data-` z slugiem wersji albo modelem dla ofert bez wiersza wersji | `class-asiaauto-inventory.php` `renderCard()` |
+| 7 ✅ 0.43.0 | Ikony na zdjęciu galerii; ikona pełnego ekranu na dół | `class-asiaauto-shortcodes.php` (galeria), `class-asiaauto-single.php` |
+| 8 ✅ 0.43.0 | Porównywarka: `?model=` otwiera listę wersji modelu; naprawa nadpisywania schowka adresem (`asiaauto-compare.js`, tryb porównania); podpowiedź „Masz w porównaniu…” przy obcym linku | `class-asiaauto-compare.php`, `asiaauto-compare.js`, REST `versions` |
+| 9 ✅ 0.43.0 | Historia porównań: źródła `oferta` i `listing` | `class-asiaauto-compare.php` (rozpoznanie Referer) |
 | 10 | Testy wg scenariusza odbioru (prompt 17.09) + 375/390 px + 1280/1366 px; wersja wtyczki 0.43.0 i motywu, `docs/VERSIONS.md` | — |
 
 Ryzyka do sprawdzenia przy wdrożeniu: inne elementy przyklejone do dołu ekranu (przycisk filtrów katalogu, arkusz filtra T-252, formularz `/zamow/`) kontra dok kontaktu i pasek schowka; cache strony po zmianie `header.php`.
