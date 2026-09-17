@@ -371,6 +371,7 @@ def main():
         shutil.copy(FONTS / f'Inter-{n}.woff2', OUT)
     kat = czysc(pobierz('https://primaauto.com.pl/samochody/', 'kat-2026-09-17.html'))
     prod = czysc(pobierz('https://primaauto.com.pl/oferta/zeekr-9x-2026-390631/', 'prod-390631-2026-09-17.html'))
+    home = czysc(pobierz('https://primaauto.com.pl/', 'home-2026-09-17.html'))
     stany = spec_stany(sorted(set(re.findall(r'listing_id=(\d+)', kat))))
 
     def plik(nazwa, tresc):
@@ -429,14 +430,14 @@ def main():
     sceny.insert(0, ('K', 'Moduł kontaktu i menu w nagłówku (razem z A2)', 'Pigułka telefon/WhatsApp i przycisk menu na telefonie przeprojektowane tak, żeby razem z wagą i sercem zajmowała mniej miejsca. Schowek: 2 auta.',
                      [(i, t, d, plik(f'K{i}.html', kontakt(kat, i) if i < 4 else kontakt2(kat, i))) for i, (t, d) in enumerate(K)],
                      dict(d_cel='', d_h=[150, 150, 280, 150, 150, 150, 150], t_cel='', t_h=[140, 140, 140, 140, 844, 140, 140])))
-    home = czysc(pobierz('https://primaauto.com.pl/', 'home-2026-09-17.html'))
     N = [('Stan obecny', 'Pasek zapowiada wyszukiwarkę zaawansowaną.'),
          ('N1 · Ten sam pasek, nowa treść', '„Nowość · Porównaj auta z Chin: Porównywarka samochodów”. Wygląd bez zmian, zmienia się tylko treść i link.'),
          ('N2 · Pasek mówi, co daje porównywarka', 'Ikona wagi i jedno zdanie o tym, co porównujemy, link „Otwórz porównywarkę”. Na telefonie bez ikony i krócej: „Porównaj do 3 aut obok siebie.”'),
+         ('N4 · Wybrany: jedna linia także na telefonie', 'Etykieta „Nowość” i link „Porównywarka samochodów”. Na telefonie etykieta zostaje widoczna (dziś jest tam ukryta), całość w jednej linii.'),
          ('N3 · Żółty pasek z przyciskiem', 'Kolory odwrócone (żółte tło, granatowy tekst), żeby odróżnić nowy komunikat od poprzedniego, plus przycisk „Sprawdź”. Najmocniej przyciąga wzrok.')]
     sceny.insert(0, ('N', 'Pasek „Nowość” — porównywarka', 'Nagłówek K4. Nowy klucz zapamiętania zamknięcia, pasek ukryty na stronie porównywarki.',
-                     [(i, t, d, plik(f'N{i}.html', nowosc(kat, i))) for i, (t, d) in enumerate(N)],
-                     dict(d_cel='', d_h=110, t_cel='', t_h=[120] * 4)))
+                     [(n, t, d, plik(f'N{n}.html', nowosc(kat, n))) for n, (t, d) in zip([0, 1, 2, 4, 3], N)],
+                     dict(d_cel='', d_h=110, t_cel='', t_h=[120] * 5)))
     H = [('Stan obecny', '„Szukaj po wyposażeniu →” pod wyszukiwarką marki i modelu.'),
          ('H1 · Dwa linki z kreską', '„Wyszukiwanie zaawansowane | Porównywarka” — dokładnie jak w ustaleniach, w stylu obecnego linku.'),
          ('H2 · Dwa przyciski z ikonami', 'Lupa i waga w obrysowanych przyciskach — widoczniejsze niż link, nadal podrzędne wobec „Szukaj wśród … ofert”.'),
@@ -445,17 +446,19 @@ def main():
                      [(i, t, d, plik(f'H{i}.html', home_link(home, i))) for i, (t, d) in enumerate(H)],
                      dict(d_cel='.aa-home__hero', d_off=90, d_h=560, t_cel='.aa-home__hero', t_off=70, t_h=[700] * 4)))
     M = [('Stan obecny (z nagłówkiem K4)', 'Marki w głównym menu, wyszukiwarka tylko w menu mobilnym, porównywarki brak.'),
+         ('M4 · Wybrany: lupa obok wagi i serca', 'Bez nowych pozycji tekstowych: w module K4 dochodzi lupa (wyszukiwarka) przed wagą (porównywarka) i sercem. „Marki” pierwsze w „Wiedza”. Na telefonie w nagłówku: lupa, waga, serce, menu.'),
          ('M1 · Tekst oddzielony kreskami', 'Desktop: „Wyszukiwarka” i „Porównywarka” jako zwykłe pozycje, oddzielone od menu i od ikon cienkimi kreskami; poniżej 1300 px mniejsza czcionka. Telefon: obie na dole listy. „Marki” pierwsze w „Wiedza” (rozwinięte na makiecie).'),
          ('M2 · Ikony z etykietą, licznik przy porównywarce', 'Desktop: lupa + „Wyszukiwarka”, waga + „Porównywarka 2” — osobna ikona wagi w K4 znika, bo „Porównywarka” ją zastępuje; poniżej 1300 px same ikony. Telefon: dwa kafle na samej górze menu.'),
          ('M3 · Biała pigułka narzędzi', 'Desktop: „Wyszukiwarka | Porównywarka” w białej pigułce — wyróżnione jako narzędzia, nie strony; poniżej 1300 px same ikony. Telefon: dwie pozycje na górze listy na żółto, oddzielone od reszty menu.')]
     sceny.insert(0, ('M', 'Menu — Marki w Wiedzy, Wyszukiwarka i Porównywarka', 'Nagłówek K4, bez paska „Nowość”. Na desktopie „Wiedza” rozwinięta. Dziś po dodaniu dwóch pozycji menu łamie się w dwie linie przy 1366 i 1280 px — warianty mają ciaśniejsze odstępy (16 px), a poniżej 1300 px skracają narzędzia.',
-                     [(i, t, d, plik(f'M{i}.html', menu(kat, i))) for i, (t, d) in enumerate(M)],
-                     dict(d_cel='', d_h=300, d2=1280, t_cel='', t_h=[844] * 4)))
-    sceny.insert(0, ('W', 'Wybrany zestaw (A2 + K4 · B1 · C na zdjęciu · D1 · E komunikat)', 'Złożone razem na prawdziwych stronach.',
+                     [(n, t, d, plik(f'M{n}.html', menu(kat, n))) for n, (t, d) in zip([0, 4, 1, 2, 3], M)],
+                     dict(d_cel='', d_h=300, d2=1280, t_cel='', t_h=[844] * 5)))
+    sceny.insert(0, ('W', 'Wybrany zestaw (K4 z lupą · B1 · C na zdjęciu · D1 · E komunikat · N4 · H1)', 'Złożone razem na prawdziwych stronach.',
                      [(0, Z[0][0], Z[0][1], plik('W1-d.html', zestaw_katalog(kat, stany)), plik('W1-t.html', zestaw_katalog(kat, stany))),
                       (1, Z[1][0], Z[1][1], plik('W2.html', zestaw_produkt(prod, False)), 'W2.html'),
-                      (2, Z[2][0], Z[2][1], plik('W3.html', zestaw_produkt(prod, True)), 'W3.html')],
-                     dict(d_cel='.aa-inv__grid', d_off=100, d_h=820, t_cel='', t_h=[844] * 3, d_cel_l=['.aa-inv__grid', '', ''])))
+                      (2, Z[2][0], Z[2][1], plik('W3.html', zestaw_produkt(prod, True)), 'W3.html'),
+                      (3, '4 · Strona główna: pasek N4 i link H1', 'Pasek „Nowość · Porównywarka samochodów” w jednej linii, pod wyszukiwarką „Wyszukiwanie zaawansowane | Porównywarka”. Nagłówek K4 z lupą, wagą i sercem (przeniesienie „Marki” do „Wiedza” pokazuje M4).', plik('W4.html', zestaw_home(home)), 'W4.html')],
+                     dict(d_cel='.aa-inv__grid', d_off=100, d_h=820, t_cel='', t_h=[844] * 4, d_cel_l=['.aa-inv__grid', '', '', ''])))
     for sc in sceny:
         (DROP / f'primaauto-makieta-porownaj-{sc[0]}-2026-09-17.html').write_text(strona(sceny, sc[0]), encoding='utf-8')
     INDEX.write_text(strona(sceny, 'W'), encoding='utf-8')
@@ -569,14 +572,15 @@ def kontakt(doc, wariant):
     return wstaw(doc, css)
 
 
-def kontakt2(doc, wariant, ile=2, dok=True):
+def kontakt2(doc, wariant, ile=2, dok=True, lupa=False):
     """K4–K6 (po GA4 90 dni: telefon 257 / WhatsApp 249 kliknięć na telefonach — oba kanały równorzędne i bez dodatkowego kliku)."""
     i = doc.find('<div class="pa-header__contact">')
     pill = doc[i:doc.find('</div>', i) + 6]
     svg = re.findall(r'<svg.*?</svg>', pill, flags=re.S)
     tel, wa = svg[0], svg[1]
     mk = lambda x, n: re.sub(r'width="18" height="18"', f'width="{n}" height="{n}"', x, count=1)
-    ikony = (f'<a href="#" class="mk-u" aria-label="Porównanie: {ile} auta">{w(21)}<span class="mk-badge">{ile}</span></a>'
+    ikony = ((f'<a href="#" class="mk-u" aria-label="Wyszukiwarka">{LUPA.format(s=21)}</a>' if lupa else '') +
+             f'<a href="#" class="mk-u" aria-label="Porównanie: {ile} auta">{w(21)}<span class="mk-badge">{ile}</span></a>'
              f'<a href="#" class="mk-u" aria-label="Ulubione">{h(21)}</a>')
     kolka = (f'<a href="#" class="mk-c mk-c--tel" aria-label="Zadzwoń">{mk(tel, 17)}</a>'
              f'<a href="#" class="mk-c mk-c--wa" aria-label="WhatsApp">{mk(wa, 17)}</a>')
@@ -589,7 +593,9 @@ def kontakt2(doc, wariant, ile=2, dok=True):
 .mk-k .mk-c{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;margin-left:4px}
 .pa-header a.mk-c--tel{background:#fff;color:#9B0000}.pa-header a.mk-c--wa{background:#25D366;color:#fff}
 .pa-hamburger{width:40px!important;height:40px!important;padding:12px 10px!important;border-radius:50%!important}
-@media(max-width:768px){.pa-header__inner--mobile .mk-k{margin-left:auto}}"""
+@media(max-width:768px){.pa-header__inner--mobile .mk-k{margin-left:auto}.pa-header__inner--mobile a.mk-u{width:34px}}
+@media(max-width:380px){.pa-header__inner--mobile{padding-inline:12px!important;gap:6px!important}.pa-header__inner--mobile a.mk-u{width:32px}
+ .pa-header__inner--mobile .pa-logo__main{font-size:16px}.pa-header__inner--mobile .pa-hamburger{width:38px!important;height:38px!important}}"""
     body = ''
     if wariant == 4:     # dok kontaktu na dole telefonu
         doc = zamien(doc, f'<div class="mk-k">{ikony}{kolka}</div>', f'<div class="mk-k">{ikony}</div>')
@@ -655,8 +661,8 @@ l = lambda s=18: LUPA.format(s=s)
 NEWS_RE = r'<div class="pa-news" data-nosnippet>.*?</div>\s*</div>'
 
 
-def baza_k4(doc, dok=True):
-    return bez_js(kontakt2(doc, 4, 2, dok))
+def baza_k4(doc, dok=True, lupa=True):
+    return bez_js(kontakt2(doc, 4, 2, dok, lupa))
 
 
 def nowosc(doc, wariant):
@@ -671,6 +677,10 @@ def nowosc(doc, wariant):
                  '<a class="pa-news__cta" href="/porownywarka/">Otwórz porównywarkę</a>')
         css = """.mk-nw{display:flex;color:#E8AC07}
 @media(max-width:860px){.mk-dl2,.mk-nw{display:none}}"""
+    elif wariant == 4:
+        tresc = '<span class="pa-news__tag">Nowość</span><a class="pa-news__cta mk-n4" href="/porownywarka/">Porównywarka samochodów</a>'
+        css = """.pa-news a.mk-n4{margin-left:0}
+@media(max-width:860px){.pa-news .pa-news__tag{display:inline-block!important}.pa-news__in{flex-wrap:nowrap}}"""
     else:
         tresc = (f'<span class="mk-n3">{w(18)}<b>Nowość:</b> porównywarka samochodów z Chin</span>'
                  '<a class="mk-n3b" href="/porownywarka/">Sprawdź</a>')
@@ -712,7 +722,7 @@ def home_link(doc, wariant):
 
 def menu(doc, wariant):
     """M — menu: „Marki” na górę działu „Wiedza”, „Wyszukiwarka” i „Porównywarka” po prawej (desktop) i w menu mobilnym."""
-    doc = baza_k4(doc)
+    doc = baza_k4(doc, lupa=(wariant == 4))
     doc = re.sub(NEWS_RE, '', doc, count=1, flags=re.S)
     css = """.menu-item-389095 > .sub-menu{opacity:1!important;visibility:visible!important;transform:none!important}
 .pa-mobile-menu__list .menu-item-389095 > .sub-menu{display:block!important}
@@ -720,16 +730,19 @@ def menu(doc, wariant):
     doc = re.sub(r'(<nav id="pa-mobile-menu"[^>]*?)\s+hidden>', r'\1>', doc, flags=re.S)
     if wariant:
         css += """
-.pa-header__inner--desktop{gap:12px}.pa-header__logo{flex-shrink:0}
+.pa-header__inner--desktop{gap:12px}.pa-header__inner--desktop .pa-header__logo{flex-shrink:0}
 .pa-menu{gap:16px!important}.pa-menu a{white-space:nowrap}.pa-header__inner--desktop a.mk-u{width:36px}"""
     if wariant == 0:
         return wstaw(doc, css + ".menu-item-389095 > .sub-menu{display:none}.pa-mobile-menu__list .menu-item-389095 > .sub-menu{display:block!important}")
-    marki = re.search(r'<li id="menu-item-265786".*?</li>\s*', doc, flags=re.S).group(0)
-    doc = doc.replace(marki, '')
-    doc = re.sub(r'(menu-item-389095"><a href="#">Wiedza</a>\s*<ul class="sub-menu">)', lambda m: m.group(1) + marki, doc)
+    wzor = r'<li[^>]*menu-item-265786[^>]*>.*?</li>\s*'
+    marki = re.search(wzor, doc, flags=re.S).group(0)
+    doc = re.sub(wzor, '', doc, flags=re.S)                     # desktop i menu mobilne
+    doc = re.sub(r'(menu-item-389095[^>]*><a href="#">Wiedza</a>\s*<ul class="sub-menu">)', lambda m: m.group(1) + marki, doc)
     extra = re.search(r'<li class="menu-item pa-mobile-menu__extra">.*?</li>', doc, flags=re.S).group(0)
     i = doc.find('<div class="mk-k">')          # desktop (pierwszy moduł K4)
-    if wariant == 1:
+    if wariant == 4:
+        pass
+    elif wariant == 1:
         narz = '<div class="mk-m1"><a href="/wyszukiwarka/">Wyszukiwarka</a><a href="/porownywarka/">Porównywarka</a></div>'
         doc = doc[:i] + narz + doc[i:]
         doc = doc.replace(extra, extra.replace('Wyszukiwarka zaawansowana', 'Wyszukiwarka') +
@@ -774,8 +787,23 @@ def bez_js(doc):
     return doc.replace(POMOCNIK_JS, '')
 
 
+def n4(doc):
+    tresc = '<span class="pa-news__tag">Nowość</span><a class="pa-news__cta mk-n4" href="/porownywarka/">Porównywarka samochodów</a>'
+    return re.sub(NEWS_RE, lambda m: '<div class="pa-news" data-nosnippet>\n    <div class="pa-news__in">' + tresc +
+                  '<button type="button" class="pa-news__x" aria-label="Zamknij komunikat">&times;</button></div>\n</div>', doc, count=1, flags=re.S)
+
+
+N4_CSS = """.pa-news a.mk-n4{margin-left:0}
+@media(max-width:860px){.pa-news .pa-news__tag{display:inline-block!important}.pa-news__in{flex-wrap:nowrap}}"""
+
+
+def zestaw_home(home):
+    doc = n4(bez_js(home_link(home, 1)))
+    return wstaw(doc, N4_CSS)
+
+
 def zestaw_katalog(kat, stany):
-    doc = bez_js(kontakt2(kat, 4, 2))
+    doc = n4(bez_js(kontakt2(kat, 4, 2, lupa=True)))
     def jedna(m):
         a = m.group(0)
         lid = re.search(r'listing_id=(\d+)', a)
@@ -783,11 +811,11 @@ def zestaw_katalog(kat, stany):
         st = 'in' if lid in IN_IDS else ('model' if stany.get(lid) == 'model' else 'add')
         return a.replace('<div class="aa-card__image">', '<div class="aa-card__image">' + ov(st), 1)
     doc = re.sub(r'<article class="aa-card">.*?</article>', jedna, doc, flags=re.S)
-    return wstaw(doc, OV_CSS + BAR_CSS + '.aa-card__image{position:relative}', bar(SCHOWEK[:2]))
+    return wstaw(doc, OV_CSS + BAR_CSS + N4_CSS + '.aa-card__image{position:relative}', bar(SCHOWEK[:2]))
 
 
 def zestaw_produkt(prod, pelny):
-    doc = bez_js(kontakt2(prod, 4, 3 if pelny else 2, dok=False))
+    doc = bez_js(kontakt2(prod, 4, 3 if pelny else 2, dok=False, lupa=True))
     doc = doc.replace('<div class="aa-gallery__main">', '<div class="aa-gallery__main">' + ov('act' if pelny else 'add', True), 1)
     auta = SCHOWEK if pelny else SCHOWEK[:2]
     return wstaw(doc, OV_CSS + BAR_CSS, bar(auta, pelny, f'{NOWA["model"]} {NOWA["wersja"]}'))

@@ -43,6 +43,25 @@
 | Zalogowani — synchronizacja | **Później, razem z T-114** (wspólna infrastruktura zapisu na koncie). |
 | Pomiar | Historia porównań: nowe źródła **`oferta`** i **`listing`**. **Bez zdarzeń GA4.** |
 
+## Plan wdrożenia etapu 2 (po wyborach 17.09)
+
+**Wybrane:** nagłówek K4 + lupa (lupa → `/wyszukiwarka/`, waga z licznikiem → `/porownywarka/`, serce = miejsce na T-114) · karty B1 · karta produktu = ikony na zdjęciu galerii · pasek schowka D1 z X w kółku · przy 4. aucie komunikat + rozwinięty pasek · N4 „Nowość · Porównywarka samochodów” w jednej linii także na telefonie · H1 „Wyszukiwanie zaawansowane | Porównywarka” · „Marki” pierwsze w „Wiedza”. Bez tekstowych pozycji „Wyszukiwarka/Porównywarka” w menu (zastępuje je lupa i waga). Zestaw: `primaauto-makieta-porownaj-W-2026-09-17.html`, menu `…-M-…` (M4), pasek `…-N-…` (N4).
+
+| # | Zakres | Pliki |
+|---|---|---|
+| 1 | Nagłówek K4 + lupa: desktop lupa/waga/serce + telefon/WhatsApp w kółkach (bez pigułki); telefon: lupa/waga/serce + menu w żółtym kółku; dok „Zadzwoń/WhatsApp” na dole na całym serwisie, ukryty tam, gdzie jest `aa-mobile-cta`; dopasowanie do 375 px | `themes/primaauto2026/header.php`, `assets/css/header.css`, JS licznika |
+| 2 | Pasek N4 (nowy klucz `paNews-2026-09-porownywarka`, ukryty na stronie 481993 i podstronach) | `header.php`, `header.css` |
+| 3 | Menu: „Marki” (db_id 265786) jako pierwsze dziecko „Wiedza” (389095) — zmiana w WP, oba menu; usunięcie dopinanej „Wyszukiwarki zaawansowanej” z menu mobilnego do decyzji (lupa ją zastępuje) | menu WP „Header” (term 6033) |
+| 4 | Strona główna H1 | `includes/class-asiaauto-homepage.php` |
+| 5 | Wspólny moduł schowka JS (jeden dla całego serwisu): licznik w nagłówku, zdarzenia `storage`/`visibilitychange`, pasek D1, komunikat „maksymalnie 3” + rozwinięcie, klikane auto wchodzi na zwolnione miejsce | nowy `assets/js/asiaauto-schowek.js` + CSS, ładowany globalnie |
+| 6 | Ikony B1 na karcie — **poza linkiem zdjęcia** (dziś zdjęcie jest w `<a>`), `data-` z slugiem wersji albo modelem dla ofert bez wiersza wersji | `class-asiaauto-inventory.php` `renderCard()` |
+| 7 | Ikony na zdjęciu galerii; ikona pełnego ekranu na dół | `class-asiaauto-shortcodes.php` (galeria), `class-asiaauto-single.php` |
+| 8 | Porównywarka: `?model=` otwiera listę wersji modelu; naprawa nadpisywania schowka adresem (`asiaauto-compare.js`, tryb porównania); podpowiedź „Masz w porównaniu…” przy obcym linku | `class-asiaauto-compare.php`, `asiaauto-compare.js`, REST `versions` |
+| 9 | Historia porównań: źródła `oferta` i `listing` | `class-asiaauto-compare.php` (rozpoznanie Referer) |
+| 10 | Testy wg scenariusza odbioru (prompt 17.09) + 375/390 px + 1280/1366 px; wersja wtyczki 0.43.0 i motywu, `docs/VERSIONS.md` | — |
+
+Ryzyka do sprawdzenia przy wdrożeniu: inne elementy przyklejone do dołu ekranu (przycisk filtrów katalogu, arkusz filtra T-252, formularz `/zamow/`) kontra dok kontaktu i pasek schowka; cache strony po zmianie `header.php`.
+
 ## Makiety
 
 - Desktop: `docs/makiety/gen-porownywarka-cpu.py` → `auratest.pl/fe4f58fec53ctmp/primaauto-porownywarka-makieta-cpu-2026-09-16.html`
