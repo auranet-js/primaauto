@@ -51,7 +51,7 @@
 |---|---|---|
 | 1 | Nagłówek K4 + lupa: desktop lupa/waga/serce + telefon/WhatsApp w kółkach (bez pigułki); telefon: lupa/waga/serce + menu w żółtym kółku; dok „Zadzwoń/WhatsApp” na dole na całym serwisie, ukryty tam, gdzie jest `aa-mobile-cta`; dopasowanie do 375 px | `themes/primaauto2026/header.php`, `assets/css/header.css`, JS licznika |
 | 2 | Pasek N4 (nowy klucz `paNews-2026-09-porownywarka`, ukryty na stronie 481993 i podstronach) | `header.php`, `header.css` |
-| 3 | Menu: „Marki” (db_id 265786) jako pierwsze dziecko „Wiedza” (389095) — zmiana w WP, oba menu; usunięcie dopinanej „Wyszukiwarki zaawansowanej” z menu mobilnego do decyzji (lupa ją zastępuje) | menu WP „Header” (term 6033) |
+| 3 | Menu: „Marki” (db_id 265786) jako pierwsze dziecko „Wiedza” (389095) — zmiana w WP, oba menu; „Wyszukiwarka zaawansowana” w menu mobilnym **zostaje** obok lupy (decyzja Janka 17.09: jedni czytają, inni patrzą na ikony) | menu WP „Header” (term 6033) |
 | 4 | Strona główna H1 | `includes/class-asiaauto-homepage.php` |
 | 5 | Wspólny moduł schowka JS (jeden dla całego serwisu): licznik w nagłówku, zdarzenia `storage`/`visibilitychange`, pasek D1, komunikat „maksymalnie 3” + rozwinięcie, klikane auto wchodzi na zwolnione miejsce | nowy `assets/js/asiaauto-schowek.js` + CSS, ładowany globalnie |
 | 6 | Ikony B1 na karcie — **poza linkiem zdjęcia** (dziś zdjęcie jest w `<a>`), `data-` z slugiem wersji albo modelem dla ofert bez wiersza wersji | `class-asiaauto-inventory.php` `renderCard()` |
