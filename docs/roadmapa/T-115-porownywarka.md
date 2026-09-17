@@ -27,6 +27,22 @@
 | Słownik | Nazwy parametrów linkowane do `/wiki/` przez `AsiaAuto_Autolink::map()`. |
 | Kolory | Najlepsza wartość w podsumowaniu zielona, strata % czerwona; wiersze z różnicą na jasnożółtym; ✓ zielony / „—” szary; puste miejsce zakreskowane. |
 
+## Decyzje etapu 2 — przycisk „Porównaj” i uruchomienie (17.09.2026, quiz)
+
+| Temat | Decyzja |
+|---|---|
+| Co dodaje przycisk | **Wersję** (specid) do **jednego schowka porównań** `aa_porownanie` w całym serwisie. **Ulubione (T-114) = osobny schowek**: egzemplarze, na koncie, bez limitu, ikona serca. Na karcie przewidujemy miejsce na **wagę i serce** obok siebie. |
+| Miejsce | Przy cenie/wersji (karta produktu) i na karcie w listingu. **Do makiet:** waga + serce także w dolnym pasku mobilnym (`aa-mcta`) jako wariant; **wejście do porównań i ulubionych w górnym pasku** (telefon: przed hamburgerem, obok pigułki telefon/WhatsApp; serce jako zarezerwowane miejsce do T-114). |
+| Po dodaniu | **Licznik przy wadze w nagłówku + przyklejony pasek schowka na dole** („Porównanie 2/3 — [Porównaj →] [wyczyść]”, zamykalny). Na karcie produktu na telefonie pasek nad `aa-mcta`. |
+| Pełny schowek (3) | **Okienko „Zamień jedno”** — trzy przyciski z nazwami wersji + „Anuluj”. |
+| Dwie oferty tej samej wersji | **Obie „W porównaniu ✓”**, podpowiedź „Ta wersja jest już w porównaniu”, klik = usuń. |
+| Oferta bez specid (681 z 3 065, 22%) | **Przycisk prowadzi do porównywarki z modelem** — `/porownywarka/?model=<slug>` otwiera wyszukiwanie z listą wersji tego modelu (parametr do dołożenia, dziś nie istnieje). |
+| Oferta ze specid bez wiersza wersji (18, cron 05:15) | **Odpuszczone na razie** — bez hooka w imporcie; do rana zachowuje się jak oferta bez specid (link do modelu). |
+| Inna karta przeglądarki | Strona porównania **sama przechodzi na aktualny schowek, gdy klient wraca do karty** (`storage` + `visibilitychange`). **Obcy link** (schowek ≠ adres i adres nie zawiera się w schowku): pokazuje auta z linku, **nie kasuje schowka**, podpowiedź „Masz w porównaniu X, Y — pokaż →”. Adres ⊂ schowek → przejście na pełny schowek. **Błąd do naprawy:** dziś `asiaauto-compare.js` w trybie porównania nadpisuje schowek autami z adresu (`zapisz(lista)`). |
+| Niezalogowani | Tylko localStorage (bez zmian, decyzja 16.09). |
+| Zalogowani — synchronizacja | **Później, razem z T-114** (wspólna infrastruktura zapisu na koncie). |
+| Pomiar | Historia porównań: nowe źródła **`oferta`** i **`listing`**. **Bez zdarzeń GA4.** |
+
 ## Makiety
 
 - Desktop: `docs/makiety/gen-porownywarka-cpu.py` → `auratest.pl/fe4f58fec53ctmp/primaauto-porownywarka-makieta-cpu-2026-09-16.html`
@@ -63,7 +79,7 @@ Start `/porownywarka/`: ta sama tabela z pustymi miejscami, pole wyszukiwania, �
 4. ✅ **Log porównań** `wp7j_asiaauto_compare_log` → „Popularne porównania” na starcie (ostatnia doba, przy pustym — 30 dni).
 5. ✅ **Wersja znika z ofert** — zrzut sekcji zostaje w tabeli wersji, cena = „brak aut”.
 6. ✅ **Historia porównań i lista ostatnich** (0.42.2) — `wp7j_asiaauto_compare_history`, każde wejście osobno. **Plan:** po ~1000 porównaniach analiza par modeli → ręczny wybór do indeksu (whitelist jak `asiaauto_hub_index_whitelist`), dla nich 301 na jedną kolejność, treść porównawcza, osobna sitemapa, sekcja „Popularne”; rywale → blok „Porównaj z” na hubach.
-6a. **Etap 2 (otwarte):** przycisk „Porównaj” na karcie oferty, wejście w menu/nagłówku, decyzja o indeksie po danych z logu.
+6a. **Etap 2 (w toku 17.09):** zasady przycisku „Porównaj” ustalone (sekcja „Decyzje etapu 2”); teraz makiety w 2–3 wariantach: pasek „Nowość”, link na stronie głównej, nagłówek/menu, przycisk na karcie listingu i produktu, pasek schowka, okienko zamiany. Decyzja o indeksie po danych z logu.
 7. **Nazwy wersji BYD** tłumaczone dosłownie („Cloud Suspension Sky God Ultra”); 曜黑版 ma trzy tłumaczenia. Nie blokuje — wyszukiwanie idzie po modelu.
 8. Słownik: „Wyświetlacz AR HUD” trafia w `hud` zamiast `ar-hud`; „Sterowanie głosem (ekran)” w „rozpoznawanie głosu bez wybudzania”.
 9. „Spalanie (cykl mieszany)” 0.39 L/100km w Zeekr 9X przy 3.16 w katalogu — sprawdzić mapowanie (niezweryfikowane).
