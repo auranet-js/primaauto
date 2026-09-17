@@ -173,8 +173,49 @@ Pokrycie obu list to jeden model: **JETOUR G700**. Wszystkie te auta są realnie
 (baza: 20 `on_lot`, 40 `in_transit`), więc materiał jest prawdziwy — rozjeżdża się dobór modeli,
 nie wiarygodność.
 
-**Rekomendacja:** nie wracać do `[POST]` jako formatu ogólnego. Dwie rzeczy warte ruchu, w tej kolejności:
-1. **Wznowić `[RMKT] Na placu w Polsce`** — 0,22 zł/LPV przy CTR 7,38%, drugi najlepszy wynik na koncie,
-   a zapas 60 aut dostępnych od ręki go karmi. To najtańsze wejście, jakie konto miało poza `[RMKT]` Oglądane.
-2. **Poprosić Andrzeja o posty o sedanach z listy klikanych** (Changan UNI-V, Arrizo 8, Hongqi EH7/H5, BYD Han)
-   — dziś publikuje o autach, których nikt nie klika. Dopiero taki post ma sens jako reklama.
+**Rekomendacja:** nie wracać do `[POST]` jako formatu ogólnego. ~~Wznowić `[RMKT] Na placu w Polsce`~~ —
+**rekomendacja wycofana tego samego dnia po weryfikacji, patrz sekcja niżej.** Zostaje jedno:
+**poprosić Andrzeja o posty o sedanach z listy klikanych** (Changan UNI-V, Arrizo 8, Hongqi EH7/H5, BYD Han)
+— dziś publikuje o autach, których nikt nie klika. Dopiero taki post ma sens jako reklama.
+
+## `[RMKT] Na placu w Polsce` — dlaczego NIE wznawiamy (weryfikacja 17.09)
+
+Janek kazał sprawdzić strategię i ustalenia przed wznowieniem. Sprawdzenie obaliło rekomendację.
+
+**Czego dowiodło rozpoznanie zestawu** (`120248991026870243`, kampania `[RMKT] Remarketing dynamiczny — katalog`,
+utworzony 07.09, pauza 15.09 17:13):
+
+- Budżet to **5 zł/dz**, nie 15 — wznowienie na 15 zł byłoby potrojeniem.
+- Lista to **„Wszyscy odwiedzający — 180 dni"** (reguła: `PageView`), a nie oglądający oferty.
+  Żywy zestaw `Oglądane — 30 dni` stoi na `ViewContent` w oknie 30 dni. **Wzajemnego wykluczenia nie ma.**
+- Zestaw produktów **„Na placu w Polsce" = 20 aut**, filtr `availability=available AND custom_label_0=na-placu`.
+  Feed zgadza się z bazą co do sztuki (20 `on_lot`, 40 `in_transit`); etykiety w katalogu: `sprowadzimy` 2 959,
+  `w-drodze` 40, `na-placu` 20. Reklama ma status `ACTIVE` — na pauzie jest sam zestaw.
+- **Korekta metryki:** „0,22 zł/LPV, drugi najlepszy wynik" to LPV Meta. W sesjach GA4 ten zestaw robił
+  **0,54 zł/sesja** (audyt 15.09) wobec 0,36 zł w `[KAT]` i 0,33 zł w `[RMKT] Oglądane` dzisiaj.
+  W porównywalnej metryce wypada **gorzej niż to, co już chodzi**.
+
+**Rozstrzygające: rozmiary list.** `approximate_count` zwraca `20-20` dla każdej grupy z piksela — to maskowanie
+progowe, nie rozmiar (memory `reference_meta_zasieg_grup_delivery_estimate`). Pomiar przez `delivery_estimate`:
+
+| Lista | 07.09 | 17.09 |
+|---|---:|---:|
+| Wszyscy odwiedzający — 180 dni | 2 200–2 600 | **3 300–3 900** |
+| Oglądający oferty — 30 dni | 1 400–1 700 | **2 900–3 300** |
+| 180 dni **minus** oglądający 30 dni | — | **1 100–1 400** |
+
+Grupy powstały **28.08**, czyli 20 dni temu — retencja 180 dni nie ma czego zbierać wstecz, więc lista
+30-dniowa prawie dogoniła 180-dniową. **Na tym koncie to dziś praktycznie ten sam zbiór ludzi.**
+Pula, która zostałaby dla „Na placu" po wykluczeniu oglądających, to 1 100–1 400 osób; przy 5 zł zestaw
+dowoził 200–440 osób zasięgu na dobę, więc przy 15 zł wyczerpałby ją w 3–4 doby i wszedł w przemiał.
+
+**Decyzja Janka 17.09: zostawiamy tak, jak jest.** Zestaw pozostaje na pauzie, budżety i listy nietknięte.
+Do tematu wracamy, gdy lista 180-dniowa faktycznie odskoczy od 30-dniowej (przy obecnym tempie kilka tygodni).
+
+**Wariant na przyszłość, gdyby komunikat o dostępności miał wrócić wcześniej:** żywy `[RMKT] Oglądane` używa
+zestawu produktów „Wszystkie pojazdy" (3 019). W katalogu leżą gotowe „Na placu w Polsce" (20)
+i „W drodze do Polski" (40) — druga reklama w tym samym zestawie, ten sam budżet, jedna aukcja.
+
+**Przy okazji, do rozważenia osobno:** oba zestawy `[RMKT]` mają `targeting_relaxation_types.custom_audience: 1`,
+więc Meta wychodzi poza listę. Przy remarketingu na 3 tys. osób część wyników może pochodzić spoza grupy —
+zasięg dzienny (1 178 os. dla `Oglądane`) **nie dowodzi** rozmiaru listy.
