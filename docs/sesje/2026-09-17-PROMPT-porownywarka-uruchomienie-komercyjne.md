@@ -13,7 +13,9 @@
 ## Cel wątku
 
 Porównywarka przestaje być ukryta: wchodzi do nawigacji, na stronę główną i do kart ofert.
-**Kolejność pracy: najpierw rozkmina działania przycisku „Porównaj” (quiz do Janka), potem makiety przed/po, dopiero potem wdrożenie.**
+**Kolejność pracy: najpierw rozkmina działania przycisku „Porównaj” (quiz do Janka), potem makiety, dopiero potem wdrożenie.**
+
+> **WYMÓG JANKA (17.09): każda zmiana wizualna — a zwłaszcza na listingu (karty w katalogu i wyszukiwarce) i na karcie produktu — najpierw jako makieta w 2–3 wariantach** obok siebie, na desktopie i telefonie, ze stanem obecnym jako punktem odniesienia. Bez jednej „słusznej” propozycji. Wdrożenie dopiero po wyborze wariantu. Dotyczy także paska „Nowość”, linku pod wyszukiwarką na stronie głównej i nagłówka z menu.
 Nagłówek, menu i strona główna to szablony widoczne na całym serwisie — **zmiany dopiero po OK Janka na makiecie** (memory: `feedback_no_edit_homepage_without_ok.md`, `feedback_mockupy_przed_po.md`).
 
 ## Zakres (decyzje Janka z 17.09)
@@ -56,7 +58,7 @@ Karta w katalogu, wyszukiwarce i shortcode'ach to jeden komponent: `AsiaAuto_Inv
 
 ## Zasady wykonania
 
-- Makiety przed/po (desktop 1366 i telefon 390) na auratest przed każdą zmianą szablonu; wdrożenie po OK.
+- **Makiety w 2–3 wariantach** + stan obecny (desktop 1366 i telefon 390) na auratest przed każdą zmianą wizualną: pasek, strona główna, nagłówek/menu, **przycisk na karcie w listingu, przycisk na karcie produktu, pasek schowka, okienko zamiany**. Warianty mają się realnie różnić (miejsce, forma: ikona / ikona + tekst / przycisk, zachowanie po dodaniu), nie tylko kolorem. Na prawdziwych danych i prawdziwym wyglądzie karty (`renderCard()`), nie na atrapie. Wdrożenie po wyborze wariantu.
 - Backup `.bak-YYYY-MM-DD` przed edycją, `php -l` przed zapisem, podbicie wersji Pythonem (nie `sed`), `docs/VERSIONS.md`, commit + push.
 - Porównywarka **zostaje `noindex`** — linki z nawigacji tego nie zmieniają (decyzja o indeksie: po analizie historii ~1000 porównań, T-115 pkt 6).
 - **Testy w przeglądarce:** desktop i ramka 390 px. Pułapki z 17.09: strona ma `scroll-behavior: smooth` — w testach `scrollTo({behavior:'instant'})`, inaczej `elementFromPoint` zwraca null; **zalogowany redaktor nie trafia do historii porównań** — do sprawdzania historii/listy ostatnich używać curla ze zwykłym UA albo incognito, a testowe wpisy usuwać.
