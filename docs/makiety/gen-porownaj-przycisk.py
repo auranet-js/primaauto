@@ -423,9 +423,12 @@ def main():
          ('K1 · Jeden rząd ikon, bez pigułki', 'Waga, serce | telefon, WhatsApp — wszystkie białe na pasku, kreska oddziela kontakt. Menu na telefonie: same białe kreski, bez żółtego tła. Najwęższy, ale kontakt i menu przestają się wyróżniać.'),
          ('K2 · Przycisk „Kontakt” z listą', 'Jeden biały przycisk „Kontakt ▾” (na telefonie sama słuchawka) rozwija: Zadzwoń z numerem / WhatsApp. Pokazane rozwinięte na desktopie. Menu na telefonie: białe kreski w obrysie. Kosztuje klik więcej do kontaktu.'),
          ('K3 · Kolorowe kółka', 'Waga i serce białe, telefon w białym kółku, WhatsApp w zielonym. Kontakt nadal wyróżniony, a moduł węższy o ramę pigułki. Menu na telefonie: żółte kółko w rozmiarze pozostałych ikon.')]
+    K += [('K4 · Kontakt w doku na dole telefonu', 'Na telefonie nagłówek ma tylko logo, wagę, serce i menu, a „Zadzwoń” i „WhatsApp” są stale pod kciukiem na dole ekranu — ten sam wzór co dolny pasek na karcie oferty, więc na całym serwisie kontakt jest w jednym miejscu. Desktop: kolorowe kółka jak K3. Koszt: dok zasłania 64 px treści, pasek schowka staje nad nim.'),
+          ('K5 · Stały pasek kontaktu nad nagłówkiem', 'Granatowy pasek (dziś „Nowość”) zostaje na stałe: na desktopie nowość po lewej, numer 721 730 507 i zielony WhatsApp po prawej; na telefonie dwa pola na całą szerokość. Czerwony nagłówek zostaje dla logo, wagi, serca i menu. Koszt: na telefonie znika miejsce na komunikat „Nowość”.'),
+          ('K6 · Ikony z podpisami', 'Porównaj · Ulubione · Zadzwoń · WhatsApp · Menu — każda ikona z krótkim podpisem, kontakt w kolorowych kółkach. Nikt nie musi zgadywać, co znaczy waga. Koszt: najciaśniej na 390 px, logo mniejsze.')]
     sceny.insert(0, ('K', 'Moduł kontaktu i menu w nagłówku (razem z A2)', 'Pigułka telefon/WhatsApp i przycisk menu na telefonie przeprojektowane tak, żeby razem z wagą i sercem zajmowała mniej miejsca. Schowek: 2 auta.',
-                     [(i, t, d, plik(f'K{i}.html', kontakt(kat, i))) for i, (t, d) in enumerate(K)],
-                     dict(d_cel='', d_h=[150, 150, 280, 150], t_cel='', t_h=[140] * 4)))
+                     [(i, t, d, plik(f'K{i}.html', kontakt(kat, i) if i < 4 else kontakt2(kat, i))) for i, (t, d) in enumerate(K)],
+                     dict(d_cel='', d_h=[150, 150, 280, 150, 150, 150, 150], t_cel='', t_h=[140, 140, 140, 140, 844, 140, 140])))
     sceny.insert(0, ('W', 'Wybrany zestaw (A2 · B1 · C na zdjęciu · D1 · E komunikat)', 'Złożone razem na prawdziwych stronach.',
                      [(0, Z[0][0], Z[0][1], plik('W1-d.html', zestaw_katalog(kat, stany)), plik('W1-t.html', zestaw_katalog(kat, stany))),
                       (1, Z[1][0], Z[1][1], plik('W2.html', zestaw_produkt(prod, False)), 'W2.html'),
@@ -541,6 +544,86 @@ def kontakt(doc, wariant):
 .mk-u .mk-badge{top:1px;right:-1px;box-shadow:0 0 0 2px var(--c-header-bg,#9B0000)}
 @media(max-width:768px){.pa-header__inner--mobile .mk-k{margin-left:auto}.pa-header a.mk-u{width:34px}}"""
     return wstaw(doc, css)
+
+
+def kontakt2(doc, wariant):
+    """K4–K6 (po GA4 90 dni: telefon 257 / WhatsApp 249 kliknięć na telefonach — oba kanały równorzędne i bez dodatkowego kliku)."""
+    i = doc.find('<div class="pa-header__contact">')
+    pill = doc[i:doc.find('</div>', i) + 6]
+    svg = re.findall(r'<svg.*?</svg>', pill, flags=re.S)
+    tel, wa = svg[0], svg[1]
+    mk = lambda x, n: re.sub(r'width="18" height="18"', f'width="{n}" height="{n}"', x, count=1)
+    ikony = (f'<a href="#" class="mk-u" aria-label="Porównanie: 2 auta">{w(21)}<span class="mk-badge">2</span></a>'
+             f'<a href="#" class="mk-u" aria-label="Ulubione">{h(21)}</a>')
+    kolka = (f'<a href="#" class="mk-c mk-c--tel" aria-label="Zadzwoń">{mk(tel, 17)}</a>'
+             f'<a href="#" class="mk-c mk-c--wa" aria-label="WhatsApp">{mk(wa, 17)}</a>')
+    j = doc.find(pill, i + len(pill))          # druga pigułka = nagłówek mobilny
+    zamien = lambda d, desk, mob: d[:i] + desk + d[i + len(pill):j] + mob + d[j + len(pill):]
+    css = """
+.mk-k{display:flex;align-items:center;gap:2px;flex-shrink:0}
+.pa-header a.mk-u{position:relative;display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:8px;color:#fff}
+.mk-u .mk-badge{top:2px;right:0;box-shadow:0 0 0 2px var(--c-header-bg,#9B0000)}
+.mk-k .mk-c{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;margin-left:4px}
+.pa-header a.mk-c--tel{background:#fff;color:#9B0000}.pa-header a.mk-c--wa{background:#25D366;color:#fff}
+.pa-hamburger{width:40px!important;height:40px!important;padding:12px 10px!important;border-radius:50%!important}
+@media(max-width:768px){.pa-header__inner--mobile .mk-k{margin-left:auto}}"""
+    body = ''
+    if wariant == 4:     # dok kontaktu na dole telefonu
+        doc = zamien(doc, f'<div class="mk-k">{ikony}{kolka}</div>', f'<div class="mk-k">{ikony}</div>')
+        body = (f'<nav class="mk-dock" aria-label="Kontakt"><a href="#" class="mk-dock__tel">{mk(tel, 18)}Zadzwoń</a>'
+                f'<a href="#" class="mk-dock__wa">{mk(wa, 18)}WhatsApp</a></nav>')
+        css += """
+.mk-dock{display:none}
+@media(max-width:768px){
+ .mk-dock{display:grid;grid-template-columns:1fr 1fr;gap:8px;position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#fff;
+   padding:8px 10px calc(8px + env(safe-area-inset-bottom,0px));border-top:1px solid #E1E4E8;box-shadow:0 -2px 12px rgba(0,0,0,.1)}
+ .mk-dock a{display:flex;align-items:center;justify-content:center;gap:7px;height:44px;border-radius:6px;font:700 15px/1 Inter,sans-serif;color:#fff}
+ .mk-dock__tel{background:#1B2A4A}.mk-dock__wa{background:#25D366}
+ body{padding-bottom:64px}}"""
+    elif wariant == 5:   # stały pasek kontaktu nad nagłówkiem
+        doc = zamien(doc, f'<div class="mk-k">{ikony}</div>', f'<div class="mk-k">{ikony}</div>')
+        n0 = doc.find('<div class="pa-news"')
+        n1 = doc.find('</div>', doc.find('</div>', n0) + 6) + 6
+        news = doc[n0:n1]
+        tag = re.search(r'<span class="pa-news__tag">.*?</span>\s*<span class="pa-news__txt">.*?</span>\s*<a class="pa-news__cta".*?</a>', news, flags=re.S)
+        top = (f'<div class="mk-top"><div class="mk-top__in"><span class="mk-top__news">{tag.group(0) if tag else ""}</span>'
+               f'<span class="mk-top__k"><a href="#" class="mk-top__tel">{mk(tel, 15)}<span class="mk-dl">721 730 507</span><span class="mk-ml">Zadzwoń</span></a>'
+               f'<a href="#" class="mk-top__wa">{mk(wa, 15)}WhatsApp</a></span></div></div>')
+        doc = doc[:n0] + top + doc[n1:]
+        css += """
+.mk-top{background:#1B2A4A;color:#fff;font:14px/1 Inter,sans-serif}
+.mk-top__in{max-width:1400px;margin:0 auto;height:36px;display:flex;align-items:center;justify-content:space-between;padding:0 20px}
+.mk-top__news{display:flex;align-items:center;gap:8px}
+.mk-top__k{display:flex;align-items:stretch;height:100%}
+.mk-top a{display:flex;align-items:center;gap:7px;color:#fff;padding:0 14px;font-weight:600}
+.mk-top__tel .mk-ml{display:none}.mk-top__wa{background:#25D366}
+.mk-top__tel{border-left:1px solid rgba(255,255,255,.2)}
+@media(max-width:768px){
+ .mk-top__in{padding:0;height:40px}.mk-top__news,.mk-dl{display:none}.mk-top__tel .mk-ml{display:inline}
+ .mk-top__k{width:100%}.mk-top a{flex:1;justify-content:center;font-size:15px;border:0}}"""
+    else:                # 6: ikony z podpisami
+        def lab(ikona, t, kl=''):
+            return f'<a href="#" class="mk-l {kl}"><span class="mk-l__i">{ikona}</span><span class="mk-l__t">{t}</span></a>'
+        por = lab(f'{w(20)}<span class="mk-badge">2</span>', 'Porównaj')
+        ul = lab(h(20), 'Ulubione')
+        tl = lab(mk(tel, 16), 'Zadzwoń', 'mk-l--tel')
+        wl = lab(mk(wa, 16), 'WhatsApp', 'mk-l--wa')
+        menu = ('<button type="button" class="mk-l mk-l--menu" aria-label="Otwórz menu"><span class="mk-l__i">'
+                '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true">'
+                '<path d="M4 7h16M4 12h16M4 17h16"/></svg></span><span class="mk-l__t">Menu</span></button>')
+        doc = zamien(doc, f'<div class="mk-k mk-k6">{por}{ul}{tl}{wl}</div>', f'<div class="mk-k mk-k6">{por}{ul}{tl}{wl}{menu}</div>')
+        css += """
+.pa-header__inner--mobile .pa-hamburger{display:none!important}
+.mk-k6{gap:0}
+.pa-header .mk-l{display:flex;flex-direction:column;align-items:center;gap:4px;width:62px;color:#fff;background:none;border:0;padding:0;cursor:pointer;font-family:Inter,sans-serif}
+.mk-l__i{position:relative;display:flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%}
+.mk-l__t{font-size:11px;font-weight:600;line-height:1;white-space:nowrap;letter-spacing:-.1px}
+.mk-l .mk-badge{top:-4px;right:-7px;box-shadow:0 0 0 2px var(--c-header-bg,#9B0000)}
+.mk-l--tel .mk-l__i{background:#fff;color:#9B0000}.mk-l--wa .mk-l__i{background:#25D366;color:#fff}
+.mk-l--menu .mk-l__i{background:#E8AC07;color:#1B2A4A}
+@media(max-width:768px){.pa-header .mk-l{width:auto;padding:0 3px}.mk-l__t{font-size:10px;letter-spacing:-.2px}.mk-k6{gap:2px}
+.pa-header__inner--mobile{padding-inline:10px!important;gap:4px!important}.pa-header__inner--mobile .pa-logo__main{font-size:16px}.pa-header__inner--mobile .pa-logo__sub{font-size:9px}}"""
+    return wstaw(doc, css, body)
 
 
 def bez_js(doc):
