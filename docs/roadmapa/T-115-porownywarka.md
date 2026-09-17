@@ -34,7 +34,7 @@
 | Co dodaje przycisk | **Wersję** (specid) do **jednego schowka porównań** `aa_porownanie` w całym serwisie. **Ulubione (T-114) = osobny schowek**: egzemplarze, na koncie, bez limitu, ikona serca. Na karcie przewidujemy miejsce na **wagę i serce** obok siebie. |
 | Miejsce | Przy cenie/wersji (karta produktu) i na karcie w listingu. **Do makiet:** waga + serce także w dolnym pasku mobilnym (`aa-mcta`) jako wariant; **wejście do porównań i ulubionych w górnym pasku** (telefon: przed hamburgerem, obok pigułki telefon/WhatsApp; serce jako zarezerwowane miejsce do T-114). |
 | Po dodaniu | **Licznik przy wadze w nagłówku + przyklejony pasek schowka na dole** („Porównanie 2/3 — [Porównaj →] [wyczyść]”, zamykalny). Na karcie produktu na telefonie pasek nad `aa-mcta`. |
-| Pełny schowek (3) | **Okienko „Zamień jedno”** — trzy przyciski z nazwami wersji + „Anuluj”. |
+| Pełny schowek (3) | ~~Okienko „Zamień jedno”~~ (zmiana po makietach 17.09) → **komunikat „Możesz porównać maksymalnie 3 auta” + rozwinięty pasek schowka z × przy każdym aucie**. |
 | Dwie oferty tej samej wersji | **Obie „W porównaniu ✓”**, podpowiedź „Ta wersja jest już w porównaniu”, klik = usuń. |
 | Oferta bez specid (681 z 3 065, 22%) | **Przycisk prowadzi do porównywarki z modelem** — `/porownywarka/?model=<slug>` otwiera wyszukiwanie z listą wersji tego modelu (parametr do dołożenia, dziś nie istnieje). |
 | Oferta ze specid bez wiersza wersji (18, cron 05:15) | **Odpuszczone na razie** — bez hooka w imporcie; do rana zachowuje się jak oferta bez specid (link do modelu). |
@@ -48,7 +48,7 @@
 - Desktop: `docs/makiety/gen-porownywarka-cpu.py` → `auratest.pl/fe4f58fec53ctmp/primaauto-porownywarka-makieta-cpu-2026-09-16.html`
 - Telefon (A/B/C): `docs/makiety/gen-porownywarka-mobile.py` → `…-makieta-mobile-2026-09-16.html`
 - Odrzucona (versus): `docs/makiety/gen-porownywarka.py`
-- **Etap 2 (17.09):** `docs/makiety/gen-porownaj-przycisk.py` → `auratest.pl/fe4f58fec53ctmp/primaauto-makieta-porownaj-{A..E}-2026-09-17.html` — A nagłówek, B karta w listingu, C karta produktu, D pasek schowka, E okienko zamiany (prawdziwe strony + wstrzyknięte warianty). **Czeka na wybór Janka.**
+- **Etap 2 (17.09):** `docs/makiety/gen-porownaj-przycisk.py` → `auratest.pl/fe4f58fec53ctmp/primaauto-makieta-porownaj-{A..E}-2026-09-17.html` — A nagłówek, B karta w listingu, C karta produktu, D pasek schowka, E okienko zamiany (prawdziwe strony + wstrzyknięte warianty). **Wybór Janka (17.09): A2 · B1 · karta produktu = ikony na zdjęciu galerii (jak B1) · D1 z X w kółku zamiast „zwiń” · okno zamiany odrzucone → przy 4. aucie komunikat „maksymalnie 3” + rozwinięty pasek D1 z × (klikane auto wchodzi na zwolnione miejsce — do potwierdzenia).** Zestaw: `primaauto-makieta-porownaj-W-2026-09-17.html`.
 
 Pięć porównań testowych: Zeekr 9X Ultra/Hyper/Max · Denza N8L vs NIO ES8 · Denza Z9 GT vs BYD Han L · BMW i5 vs Xiaomi SU7 · Leapmotor D19 vs Li Auto L8.
 

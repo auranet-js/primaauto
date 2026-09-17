@@ -21,9 +21,19 @@ UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/128 Safari/537.36'
 e = html.escape
 
 
-def pobierz(url):
+ZRODLA = pathlib.Path(__file__).resolve().parents[2] / 'tmp' / 'makiety-zrodla'
+
+
+def pobierz(url, cache):
+    """Zrzut strony zapisany raz w tmp/makiety-zrodla/ — katalog zmienia się co kilka minut, a stany na kartach są przypięte do ID ofert."""
+    plik = ZRODLA / cache
+    if plik.exists():
+        return plik.read_text(encoding='utf-8')
     req = urllib.request.Request(url, headers={'User-Agent': UA})
-    return urllib.request.urlopen(req, timeout=60).read().decode('utf-8')
+    tresc = urllib.request.urlopen(req, timeout=60).read().decode('utf-8')
+    ZRODLA.mkdir(parents=True, exist_ok=True)
+    plik.write_text(tresc, encoding='utf-8')
+    return tresc
 
 
 def spec_stany(ids):
@@ -95,7 +105,7 @@ def wstaw(doc, css='', body=''):
 
 
 # ================================================================ A. NAGŁÓWEK
-def naglowek(doc, wariant):
+def naglowek(doc, wariant, ile=2):
     if wariant == 0:
         return doc
     if wariant == 1:   # ikony w białej pigułce obok telefonu
@@ -105,7 +115,7 @@ def naglowek(doc, wariant):
         css = '.mk-hb{position:relative} @media(max-width:768px){.pa-header .pa-pill__btn{width:32px}}'
         return wstaw(doc, css)
     if wariant == 2:   # osobne białe ikony na granacie, przed pigułką
-        ikony = (f'<div class="mk-hic"><a href="#" aria-label="Porównanie: 2 auta">{w(22)}<span class="mk-badge">2</span></a>'
+        ikony = (f'<div class="mk-hic"><a href="#" aria-label="Porównanie: {ile} auta">{w(22)}<span class="mk-badge">{ile}</span></a>'
                  f'<a href="#" aria-label="Ulubione">{h(22)}</a></div>')
         doc = doc.replace('<div class="pa-header__contact">', ikony + '<div class="pa-header__contact">')
         css = """.mk-hic{display:flex;gap:4px;flex-shrink:0}
@@ -359,8 +369,8 @@ def main():
     OUT.mkdir(parents=True, exist_ok=True)
     for n in ('Regular', 'SemiBold', 'Bold'):
         shutil.copy(FONTS / f'Inter-{n}.woff2', OUT)
-    kat = czysc(pobierz('https://primaauto.com.pl/samochody/'))
-    prod = czysc(pobierz('https://primaauto.com.pl/oferta/zeekr-9x-2026-390631/'))
+    kat = czysc(pobierz('https://primaauto.com.pl/samochody/', 'kat-2026-09-17.html'))
+    prod = czysc(pobierz('https://primaauto.com.pl/oferta/zeekr-9x-2026-390631/', 'prod-390631-2026-09-17.html'))
     stany = spec_stany(sorted(set(re.findall(r'listing_id=(\d+)', kat))))
 
     def plik(nazwa, tresc):
@@ -406,10 +416,103 @@ def main():
                   [(i + 1, t, d, plik(f'E{i + 1}-d.html', zamiana(prod, i + 1, False)), plik(f'E{i + 1}-t.html', zamiana(prod, i + 1, True)))
                    for i, (t, d) in enumerate(E)],
                   dict(d_cel='', d_h=820, t_cel='', t_h=[844] * 3)))
+    Z = [('1 · Katalog po dodaniu dwóch aut', 'Nagłówek A2 (waga z licznikiem 2), ikony B1 na zdjęciach: Zeekr 8X ×2 i Xiaomi SU7 Ultra w porównaniu, Li Auto L8 → do modelu. Pasek D1 z X w kółku (zamyka pasek; porównanie dalej pod wagą w nagłówku). Na telefonie pasek w wersji skróconej — dotknięcie rozwija listę aut.'),
+         ('2 · Karta produktu, wersja jeszcze nie w porównaniu', 'Waga i serce na głównym zdjęciu galerii, jak na kartach listingu (ikona pełnego ekranu przeniesiona na dół). Na telefonie pasek schowka nad dolnym paskiem kontaktu.'),
+         ('3 · Czwarte auto — komunikat i rozwinięty pasek', 'Zamiast okna: komunikat „maksymalnie 3 auta” i pasek z wyraźnym × przy każdym aucie (na telefonie rozwinięty w listę). Po usunięciu jednego klikane auto wchodzi samo na zwolnione miejsce.')]
+    sceny.insert(0, ('W', 'Wybrany zestaw (A2 · B1 · C na zdjęciu · D1 · E komunikat)', 'Złożone razem na prawdziwych stronach.',
+                     [(0, Z[0][0], Z[0][1], plik('W1-d.html', zestaw_katalog(kat, stany)), plik('W1-t.html', zestaw_katalog(kat, stany))),
+                      (1, Z[1][0], Z[1][1], plik('W2.html', zestaw_produkt(prod, False)), 'W2.html'),
+                      (2, Z[2][0], Z[2][1], plik('W3.html', zestaw_produkt(prod, True)), 'W3.html')],
+                     dict(d_cel='.aa-inv__grid', d_off=100, d_h=820, t_cel='', t_h=[844] * 3, d_cel_l=['.aa-inv__grid', '', ''])))
     for sc in sceny:
         (DROP / f'primaauto-makieta-porownaj-{sc[0]}-2026-09-17.html').write_text(strona(sceny, sc[0]), encoding='utf-8')
-    INDEX.write_text(strona(sceny, 'A'), encoding='utf-8')
+    INDEX.write_text(strona(sceny, 'W'), encoding='utf-8')
     print('OK', len(sceny), 'stron,', len(list(OUT.iterdir())), 'plików w', OUT)
+
+
+# ================================================================ ZESTAW WYBRANY (17.09): A2 + B1 + C4 + D1' + E4
+ZAMKNIJ = ('<span class="mk-xc" role="button" aria-label="Zamknij pasek"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" '
+           'stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/>'
+           '<path d="m15 9-6 6M9 9l6 6"/></svg></span>')
+OV_CSS = """.mk-ov{position:absolute;top:8px;right:8px;display:flex;gap:6px;z-index:5}
+.mk-ob{position:relative;display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;
+  background:rgba(255,255,255,.94);color:#1B2A4A;box-shadow:0 1px 4px rgba(0,0,0,.25)}
+.mk-ob.is-in{background:#1B2A4A;color:#fff}
+.mk-ob.is-act{box-shadow:0 0 0 3px #E8AC07,0 1px 4px rgba(0,0,0,.25)}
+.mk-ok{position:absolute;right:-3px;bottom:-3px;width:16px;height:16px;border-radius:50%;background:#2F855A;color:#fff;
+  display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 2px #fff}
+.aa-gallery__main .mk-ov{top:12px;right:12px;gap:8px}.aa-gallery__main .mk-ob{width:42px;height:42px}
+.aa-gallery .aa-gallery__fullscreen{top:auto!important;bottom:12px!important;opacity:1!important}"""
+BAR_CSS = """.mk-bar{position:fixed;left:0;right:0;bottom:0;z-index:99990;background:#1B2A4A;color:#fff;box-shadow:0 -4px 16px rgba(0,0,0,.2);font-family:Inter,sans-serif}
+body:has(.aa-mobile-cta) .mk-bar{bottom:0}
+.mk-bar__in{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:14px;padding:10px 16px;font-size:14px;line-height:1.2}
+.mk-bar__t{display:flex;align-items:center;gap:8px;white-space:nowrap}
+.mk-bar__chips{display:flex;gap:8px;flex:1;min-width:0}
+.mk-chip{display:flex;align-items:center;gap:8px;background:#fff;color:#1B2A4A;border-radius:6px;padding:4px 6px 4px 4px;min-width:0}
+.mk-chip img{width:52px;height:37px;object-fit:cover;border-radius:4px}
+.mk-chip b{display:block;font-size:13px}.mk-chip small{display:block;font-size:12px;color:#5C6B7F;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:170px}
+.mk-x{display:flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:#EDF2F7;color:#1B2A4A;font-size:17px;line-height:1;margin-left:4px;cursor:pointer;flex-shrink:0}
+.mk-chip--pusty{background:transparent;border:1px dashed rgba(255,255,255,.5);color:rgba(255,255,255,.8);padding:12px 14px;font-size:13px}
+.mk-bar__go{background:#C92A2B;color:#fff;font-weight:700;padding:10px 18px;border-radius:6px;white-space:nowrap}
+.mk-bar__cl{text-decoration:underline;opacity:.85;white-space:nowrap}
+.mk-xc{display:flex;color:#fff;opacity:.9;cursor:pointer}
+.mk-bar__rows{display:none}
+@media(max-width:768px){
+  body:has(.aa-mobile-cta) .mk-bar{bottom:62px}
+  .mk-bar__in{gap:10px;padding:8px 12px}.mk-bar__chips,.mk-bar__cl{display:none}.mk-bar__t{flex:1}.mk-bar__go{padding:9px 14px}}
+/* pełny schowek: komunikat + rozwinięty pasek */
+.mk-bar.is-full{border-top:3px solid #E8AC07}
+.mk-msg{background:#FFF8E1;color:#1B2A4A;border-bottom:1px solid #F6E05E}
+.mk-msg__in{max-width:1200px;margin:0 auto;padding:9px 16px;font-size:14px;display:flex;gap:8px;align-items:center}
+.mk-msg__in b{white-space:nowrap}
+.mk-bar.is-full .mk-x{background:#FED7D7;color:#C53030;width:30px;height:30px;font-size:20px}
+@media(max-width:768px){
+  .mk-msg__in{padding:9px 12px;font-size:13px;align-items:flex-start}
+  .mk-bar.is-full .mk-bar__rows{display:flex;flex-direction:column;gap:6px;padding:8px 12px 0}
+  .mk-bar.is-full .mk-chip{padding:4px 6px 4px 4px}.mk-bar.is-full .mk-chip > span:nth-child(2){flex:1;min-width:0}
+  .mk-bar.is-full .mk-chip small{max-width:none}}"""
+
+
+def ov(stan, duze=False):
+    s = 20 if duze else 18
+    cls = {'in': ' is-in', 'act': ' is-act', 'add': '', 'model': ''}[stan]
+    return (f'<span class="mk-ov"><span class="mk-ob{cls}">{w(s)}' + (f'<span class="mk-ok">{f(9)}</span>' if stan == 'in' else '') +
+            f'</span><span class="mk-ob">{h(s)}</span></span>')
+
+
+def bar(auta, pelny=False, nowa=''):
+    chips = ''.join(f'<span class="mk-chip"><img src="{a["img"]}" alt=""><span><b>{e(a["model"])}</b><small>{e(a["wersja"])}</small></span>'
+                    f'<span class="mk-x" role="button" aria-label="Usuń z porównania">×</span></span>' for a in auta)
+    pusty = '' if len(auta) >= 3 else '<span class="mk-chip mk-chip--pusty">+ dodaj trzecie auto</span>'
+    msg = (f'<div class="mk-msg"><div class="mk-msg__in">{w(18)}<span><b>Możesz porównać maksymalnie 3 auta.</b> '
+           f'Usuń jedno z paska — {e(nowa)} wejdzie na jego miejsce.</span></div></div>') if pelny else ''
+    return (f'<div class="mk-bar{" is-full" if pelny else ""}">{msg}<div class="mk-bar__rows">{chips}</div>'
+            f'<div class="mk-bar__in"><span class="mk-bar__t">{w(20)}<span>Porównanie <b>{len(auta)}/3</b></span></span>'
+            f'<span class="mk-bar__chips">{chips}{pusty}</span><span class="mk-bar__go">Porównaj →</span>'
+            f'<span class="mk-bar__cl">Wyczyść</span>{ZAMKNIJ}</div></div>')
+
+
+def bez_js(doc):
+    return doc.replace(POMOCNIK_JS, '')
+
+
+def zestaw_katalog(kat, stany):
+    doc = bez_js(naglowek(kat, 2, 2))
+    def jedna(m):
+        a = m.group(0)
+        lid = re.search(r'listing_id=(\d+)', a)
+        lid = lid.group(1) if lid else ''
+        st = 'in' if lid in IN_IDS else ('model' if stany.get(lid) == 'model' else 'add')
+        return a.replace('<div class="aa-card__image">', '<div class="aa-card__image">' + ov(st), 1)
+    doc = re.sub(r'<article class="aa-card">.*?</article>', jedna, doc, flags=re.S)
+    return wstaw(doc, OV_CSS + BAR_CSS + '.aa-card__image{position:relative}', bar(SCHOWEK[:2]))
+
+
+def zestaw_produkt(prod, pelny):
+    doc = bez_js(naglowek(prod, 2, 3 if pelny else 2))
+    doc = doc.replace('<div class="aa-gallery__main">', '<div class="aa-gallery__main">' + ov('act' if pelny else 'add', True), 1)
+    auta = SCHOWEK if pelny else SCHOWEK[:2]
+    return wstaw(doc, OV_CSS + BAR_CSS, bar(auta, pelny, f'{NOWA["model"]} {NOWA["wersja"]}'))
 
 
 def ramka(src, szer, wys, skala, cel='', off=0):
@@ -429,7 +532,7 @@ def strona(sceny, akt):
             pd, pt = (row[3], row[3]) if len(row) == 4 else (row[3], row[4])
             th = p['t_h'][idx]
             rows.append(f'<div class="war"><h3>{e(t)}</h3><p>{e(d)}</p><div class="pair">'
-                        f'<div><span class="lab">Desktop 1366 px (pomniejszone)</span>{ramka(pd, 1366, p["d_h"], .62, p["d_cel"], p.get("d_off", 0))}</div>'
+                        f'<div><span class="lab">Desktop 1366 px (pomniejszone)</span>{ramka(pd, 1366, p["d_h"], .62, p.get("d_cel_l", [p["d_cel"]] * 9)[idx], p.get("d_off", 0))}</div>'
                         f'<div><span class="lab">Telefon 390 px</span>{ramka(pt, 390, th, 1 if th <= 900 else .6, p["t_cel"], p.get("t_off", 0))}</div>'
                         f'</div></div>')
         out.append(f'<section id="s{k}"><h2>{k}. {e(tyt)}</h2><p class="op">{e(opis)}</p>{"".join(rows)}</section>')
@@ -453,7 +556,7 @@ section{{margin-top:34px}}h2{{margin:0 0 4px;font-size:24px}}.op{{color:var(--mu
 .full{{display:inline-block;font-size:12px;color:var(--mut);margin-top:4px}}
 </style></head><body>
 <header><span>T-115 · makiety 17.09:</span>{nav}</header>
-<main><div class="intro"><p style="margin:0">Każda ramka to <b>prawdziwa strona primaauto.com.pl</b> (dzisiejszy HTML, bez skryptów) z dołożonym wariantem.
+<main><div class="intro"><p style="margin:0">{'<b>Zestaw wybrany 17.09</b> — A2, B1, ikony na zdjęciu w karcie produktu, D1 z X w kółku, zamiast okna zamiany komunikat + rozwinięty pasek. Strony A–E zostają jako historia wyboru. ' if akt == 'W' else ''}Każda ramka to <b>prawdziwa strona primaauto.com.pl</b> (dzisiejszy HTML, bez skryptów) z dołożonym wariantem.
 Wybierz po jednym wariancie w A–E (np. „A2, B1, C1, D1, E2”). Zasady działania ustalone w quizie są wspólne dla wszystkich wariantów — różni się miejsce i forma.
 Serce to miejsce zarezerwowane dla ulubionych (T-114) — pokazane, żeby układ od razu je mieścił.</p></div>
 {''.join(out)}</main></body></html>"""
