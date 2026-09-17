@@ -62,7 +62,8 @@ Start `/porownywarka/`: ta sama tabela z pustymi miejscami, pole wyszukiwania, �
 3. ✅ **Strona porównania i start** (v0.42.0) — `class-asiaauto-compare.php`, strona WP 481993, szczegóły w `docs/VERSIONS.md` (0.42.0).
 4. ✅ **Log porównań** `wp7j_asiaauto_compare_log` → „Popularne porównania” na starcie (ostatnia doba, przy pustym — 30 dni).
 5. ✅ **Wersja znika z ofert** — zrzut sekcji zostaje w tabeli wersji, cena = „brak aut”.
-6. **Etap 2 (otwarte):** przycisk „Porównaj” na karcie oferty, wejście w menu/nagłówku, decyzja o indeksie po danych z logu.
+6. ✅ **Historia porównań i lista ostatnich** (0.42.2) — `wp7j_asiaauto_compare_history`, każde wejście osobno. **Plan:** po ~1000 porównaniach analiza par modeli → ręczny wybór do indeksu (whitelist jak `asiaauto_hub_index_whitelist`), dla nich 301 na jedną kolejność, treść porównawcza, osobna sitemapa, sekcja „Popularne”; rywale → blok „Porównaj z” na hubach.
+6a. **Etap 2 (otwarte):** przycisk „Porównaj” na karcie oferty, wejście w menu/nagłówku, decyzja o indeksie po danych z logu.
 7. **Nazwy wersji BYD** tłumaczone dosłownie („Cloud Suspension Sky God Ultra”); 曜黑版 ma trzy tłumaczenia. Nie blokuje — wyszukiwanie idzie po modelu.
 8. Słownik: „Wyświetlacz AR HUD” trafia w `hud` zamiast `ar-hud`; „Sterowanie głosem (ekran)” w „rozpoznawanie głosu bez wybudzania”.
 9. „Spalanie (cykl mieszany)” 0.39 L/100km w Zeekr 9X przy 3.16 w katalogu — sprawdzić mapowanie (niezweryfikowane).

@@ -1,5 +1,30 @@
 # Historia wersji asiaauto-sync
 
+## 0.42.2 — 2026-09-17 (porównywarka: historia porównań, ostatnie porównania, WhatsApp, okruszki)
+
+- **Historia porównań** `wp7j_asiaauto_compare_history` — każde wejście osobno: `specids` w kolejności z adresu, `combo`
+  (posortowane), `serie_ids`, `models`, `n`, `same_model`, `zrodlo` (start / dodaj / usun / zmiana / odswiezenie / lista /
+  serwis / wyszukiwarka / zewnetrzne / bezposrednie — z Referer, lista przez `?od=lista`), `urzadzenie` (`wp_is_mobile`).
+  **Bez IP i identyfikatora użytkownika** (RODO). Boty i zalogowani redaktorzy pomijani. Cel: analiza ~1000 porównań
+  (pary modeli do indeksu, rywale do hubów). Stary log `wp7j_asiaauto_compare_log` przestał być zapisywany; 9 wejść
+  przeniesionych z `zrodlo=import_logu` (bez kolejności — stary log jej nie trzymał). GA4: bez nowego zdarzenia
+  (decyzja 17.09) — `page_view` ma adres, a `click_whatsapp`/`click_phone` z `page_location` wiążą porównanie z kontaktem.
+- **Start: „Porównania ostatnio oglądane”** jak na cpubenchmark — unikalne zestawy od najnowszego wejścia (30 dni),
+  wersje w kolejności z ostatniego wejścia; zamiast „najczęściej oglądanych”.
+- **× przy 2 autach** — usuwa auto z localStorage PRZED przejściem na start (start odtwarzał oba auta).
+- **Duplikat** — podpowiedź pokazuje wersję z listy jako „już w porównaniu” + komunikat, zamiast ukrywać.
+- **Wersje jednego modelu** — pasek „Porównujesz wersje jednego modelu … Zobacz {model} →” z linkiem do huba.
+- **WhatsApp „Zapytaj o te auta”** (nad tabelą i na dole) — numer z `asiaauto_order_config.company_phone` jak `[aa_whatsapp]`,
+  wiadomość z nazwami aut i adresem porównania; zliczany istniejącym `click_whatsapp`.
+- **Linki:** nazwa modelu w nagłówku kolumny → hub; „Znajdź auta po parametrach w wyszukiwarce zaawansowanej →” na starcie
+  i pod porównaniem; nota CLTC → hasło `cltc-wltp` (tylko desktop — kolumna parametrów na telefonie ma 118 px).
+  Link Z wyszukiwarki DO porównywarki — świadomie jeszcze nie.
+- **Okruszki** „Prima-Auto › Porównanie samochodów › …” — własny szablon `templates/page-porownywarka.php` (kopia `page.php`
+  motywu) przez `template_include`, bo `page.php` wypisuje H1 przed treścią. Motyw nietknięty.
+- Testy (ramka 390 px): × przy 2 autach → start z jednym autem; duplikat oznaczony + komunikat; 3 auta → usunięcie środkowego
+  przy przewiniętej tabeli (wszystkie × pod palcem po przewinięciu); „Nowe porównanie” czyści; klik w listę ostatnich;
+  pasek przy wersjach jednego modelu; curl → wpis historii `start`/`komputer` (testowy usunięty). Backupy `*.bak-2026-09-17b`.
+
 ## 0.42.1 — 2026-09-17 (porównywarka: poprawki po testach Janka na telefonie)
 
 - **Telefon: × nie usuwał aut** — reguła `.aac-cmp thead th{position:static}` odbierała komórkom nagłówka punkt odniesienia,
