@@ -1,5 +1,14 @@
 # Historia wersji asiaauto-sync
 
+## motyw primaauto2026 1.6.1 — 2026-09-17 (dok kontaktu chowa się przy pisaniu)
+
+- Zgłoszenie Janka (iPhone): na `/porownywarka/` przy otwartej klawiaturze dok „Zadzwoń / WhatsApp” zasłaniał podpowiedzi.
+  Przyczyna: poprawka visualViewport z 1.6.0 dosuwała dok do górnej krawędzi klawiatury.
+- `nav.js`: dok dostaje `is-ukryty` na fokus pola tekstowego (input tekstowy, textarea, contenteditable) i gdy widok
+  skurczył się o > 120 px (klawiatura); mały odstęp (pasek Safari) — nadal dosuwany. Dotyczy całego serwisu.
+- Test: Chrome, ramka 390 px na `/porownywarka/` — zdarzenie `focusin` na polu → `display: none`, `nav.js?ver=1.6.1`.
+  **Na iPhonie niezweryfikowane** (brak urządzenia) — do sprawdzenia przez Janka.
+
 ## motyw primaauto2026 1.6.0 — 2026-09-17 (T-115 etap 2, krok 1: nagłówek K4 + lupa, dok kontaktu, pasek N4)
 
 - **Nagłówek:** biała pigułka telefon/WhatsApp usunięta. Desktop: lupa (`/wyszukiwarka/`) · waga z licznikiem (`/porownywarka/`)
