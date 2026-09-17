@@ -1,5 +1,21 @@
 # Historia wersji asiaauto-sync
 
+## dane — 2026-09-17 (specid dla ofert na placu i w drodze)
+
+- Zgłoszenie Janka: oferty z `/w-rzeszowie/` i `/w-drodze/` nie wchodzą do porównań. Przyczyna: nie `extra_prep` (56/60 ma),
+  tylko **brak `_asiaauto_spec_id`** (44/60) — ręczne oferty Ruslana skopiowane z dongchedi.
+- Dopasowanie: seria + `extra_prep['official_price']` wśród ofert ze specid, rozstrzygnięcie nazwą; EZ-60 pełnym odciskiem;
+  4 × Leopard 7 bez `extra_prep` po identycznym tytule. **Wpisane 31 ofert** (`_asiaauto_spec_id` + `_asiaauto_spec_id_mapped_at`).
+  Mapowanie i wycofanie: `~/backups/primaauto/2026-09-17/specid-plac-w-drodze-mapowanie.tsv` (przed zapisem oferty nie miały
+  żadnego meta `_asiaauto_spec*`); wiersze wersji przed: `wersje-przed-mapowaniem.tsv`.
+- Przebudowa 14 wersji `zbuduj-wersje.php apply specid=…` — m.in. Leopard 7 190KM Ultra 2 → 9 ofert, Denza N9 Flagship 1 → 5,
+  nowy wiersz Mazda EZ-60 EREV 200 Max (72679, 4 oferty).
+- Kontrola HTML: `/w-rzeszowie/` 13 z 20 kart z przyciskiem wagi (było 1), `/w-drodze/` 23 z 24 na 1. stronie.
+- **Zostało 13** (brak/niejednoznaczne dopasowanie): Denza Z9 1100 Ultra (447002), Mazda EZ-6 Premium ×2 (333056, 390023 —
+  cena wspólna 70149/70150), Hongqi H9 Style ×2 (387799, 387815, bez extra_prep), Geely Monjaro 2.0TD 4WD (361289),
+  Nissan Rich 7 (355801, bez extra_prep), Zeekr 8X Ultra/Ultra+/Yao Ying (303486, 303501, 289733), BYD Shark 6 (272113, bez
+  extra_prep), Deepal G318 Flagship (272010 — 66398/71844), Jetour T2 206km XWD (264454) → ścieżka Autohome.
+
 ## 0.43.0 (uzupełnienie) — 2026-09-17 (menu „Marki” w „Wiedza”, link H1 na stronie głównej)
 
 - Menu WP „Header” (6033): „Marki” (265786) jako pierwsze dziecko „Wiedza” (389095), kolejność pozostałych bez zmian
