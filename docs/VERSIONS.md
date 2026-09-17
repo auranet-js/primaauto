@@ -1,5 +1,21 @@
 # Historia wersji asiaauto-sync
 
+## porównywarka (asiaauto-compare.js) + motyw 1.6.2 — 2026-09-17 (lista podpowiedzi na iPhonie)
+
+- Zgłoszenie Janka (iPhone, po 1.6.1): przewijanie listy podpowiedzi na `/porownywarka/` od razu ją zamykało.
+  Przyczyna (błąd z 0.42.x, wcześniej niewidoczny — listę zasłaniał dok): (1) pozycja wybierała się na `pointerdown`,
+  czyli już przy dotknięciu rozpoczynającym przewijanie; (2) lista zamykała się 200 ms po `blur`, a przewinięcie
+  listy na iPhonie chowa klawiaturę.
+- `asiaauto-compare.js`: wybór na `click` (nie pada po przewinięciu); zamykanie przy `pointerdown` poza polem i listą,
+  `focusout` z `relatedTarget` (Tab) i Escape — bez `blur`; `mousedown` na liście z `preventDefault` (desktop nie traci fokusu).
+  CSS listy: `overscroll-behavior: contain`. Zdarzenie `pa:dok` przy otwarciu/zamknięciu listy.
+- `nav.js` (motyw 1.6.2): dok ukryty także, gdy na stronie jest pole z `aria-expanded="true"` (otwarta lista) — po schowaniu
+  klawiatury nie zasłania dołu listy.
+- Testy Chrome: desktop — „zeekr” → lista 20 pozycji, przewinięcie listy (scrollTop 200) nie zamyka, kliknięcie obok zamyka,
+  kliknięcie pozycji dodaje wersję do schowka i zamyka listę (schowek przywrócony do stanu sprzed testu); ramka 390 px —
+  dok `grid` → otwarta lista `none` → po zamknięciu `grid`. **Dotyk na iPhonie niezweryfikowany** — do sprawdzenia przez Janka.
+- Backupy `*.bak-2026-09-17-t115-podpowiedzi`.
+
 ## motyw primaauto2026 1.6.1 — 2026-09-17 (dok kontaktu chowa się przy pisaniu)
 
 - Zgłoszenie Janka (iPhone): na `/porownywarka/` przy otwartej klawiaturze dok „Zadzwoń / WhatsApp” zasłaniał podpowiedzi.
