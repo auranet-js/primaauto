@@ -1,6 +1,6 @@
 # T-115 — Porównywarka aut
 
-> Status: **etap 2 wdrożony 17.09 (0.43.0, motyw 1.6.6)** — nagłówek z lupą i wagą, pasek „Nowość”, waga na kartach i galerii, schowek; zostało: menu „Marki”→„Wiedza”, link H1 na stronie głównej · noindex bez zmian · Rozmiar: M/L
+> Status: **etap 2 wdrożony 17.09 (0.43.0, motyw 1.6.6)** — nagłówek z lupą i wagą, pasek „Nowość”, waga na kartach i galerii, schowek · menu „Marki”→„Wiedza” i link H1 na stronie głównej · noindex bez zmian · Rozmiar: M/L
 > Gate z T-116 (tabela specs) **zdjęty** — tabela `wp7j_asiaauto_specs` działa od 02.09.
 > Poprzednia wersja tego pliku (porównanie ofert, `/porownaj/`, limit 4, checkbox na karcie) — w historii gita.
 
@@ -53,8 +53,8 @@
 |---|---|---|
 | 1 ✅ 17.09 (motyw 1.6.0) | Nagłówek K4 + lupa: desktop lupa/waga/serce + telefon/WhatsApp w kółkach (bez pigułki); telefon: lupa/waga/serce + menu w żółtym kółku; dok „Zadzwoń/WhatsApp” na dole na całym serwisie, ukryty tam, gdzie jest `aa-mobile-cta`; dopasowanie do 375 px | `themes/primaauto2026/header.php`, `assets/css/header.css`, JS licznika |
 | 2 ✅ 17.09 | Pasek N4 (nowy klucz `paNews-2026-09-porownywarka`, ukryty na stronie 481993 i podstronach) | `header.php`, `header.css` |
-| 3 | Menu: „Marki” (db_id 265786) jako pierwsze dziecko „Wiedza” (389095) — zmiana w WP, oba menu; „Wyszukiwarka zaawansowana” w menu mobilnym **zostaje** obok lupy (decyzja Janka 17.09: jedni czytają, inni patrzą na ikony) | menu WP „Header” (term 6033) |
-| 4 | Strona główna H1 | `includes/class-asiaauto-homepage.php` |
+| 3 ✅ 17.09 | Menu: „Marki” (db_id 265786) jako pierwsze dziecko „Wiedza” (389095) — zmiana w WP, oba menu; „Wyszukiwarka zaawansowana” w menu mobilnym **zostaje** obok lupy (decyzja Janka 17.09: jedni czytają, inni patrzą na ikony) | menu WP „Header” (term 6033) |
+| 4 ✅ 17.09 | Strona główna H1 | `includes/class-asiaauto-homepage.php` |
 | 5 ✅ 0.43.0 | Wspólny moduł schowka JS (jeden dla całego serwisu): licznik w nagłówku, zdarzenia `storage`/`visibilitychange`, pasek D1, komunikat „maksymalnie 3” + rozwinięcie, klikane auto wchodzi na zwolnione miejsce | nowy `assets/js/asiaauto-schowek.js` + CSS, ładowany globalnie |
 | 6 ✅ 0.43.0 | Ikony B1 na karcie — **poza linkiem zdjęcia** (dziś zdjęcie jest w `<a>`), `data-` z slugiem wersji albo modelem dla ofert bez wiersza wersji | `class-asiaauto-inventory.php` `renderCard()` |
 | 7 ✅ 0.43.0 | Ikony na zdjęciu galerii; ikona pełnego ekranu na dół | `class-asiaauto-shortcodes.php` (galeria), `class-asiaauto-single.php` |

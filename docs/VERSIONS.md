@@ -1,5 +1,13 @@
 # Historia wersji asiaauto-sync
 
+## 0.43.0 (uzupełnienie) — 2026-09-17 (menu „Marki” w „Wiedza”, link H1 na stronie głównej)
+
+- Menu WP „Header” (6033): „Marki” (265786) jako pierwsze dziecko „Wiedza” (389095), kolejność pozostałych bez zmian
+  (`menu_order` 1–20 przepisane w tej samej kolejności). Kopia przed zmianą: `~/backups/primaauto/2026-09-17/menu-6033-przed-t115.csv`.
+  Kontrola HTML: w obu menu (desktop i mobilne) `Wiedza › Marki, Aktualności, Słownik, Rankingi`.
+- Strona główna (`class-asiaauto-homepage.php`): „Szukaj po wyposażeniu →” → „Wyszukiwanie zaawansowane | Porównywarka”
+  (kreska `.aa-home__adv-sep`). Backup `*.bak-2026-09-17-t115-h1`.
+
 ## 0.43.0 — 2026-09-17 (T-115 etap 2: przycisk „Porównaj”, schowek, porównywarka)
 
 - **Waga na kartach ofert** (`renderCard()` — katalog, huby, wyszukiwarka, podstrony rezerwacji) i **na zdjęciu galerii**
