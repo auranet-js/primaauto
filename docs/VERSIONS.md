@@ -1,5 +1,10 @@
 # Historia wersji asiaauto-sync
 
+## motyw primaauto2026 1.6.6 — 2026-09-17 (granatowe menu mobilne)
+
+- Wybór Janka z makiety MT: granat (`--c-primary` #1B2A4A) **bez** żółtej kreski. Czerwone menu zlewało się z nagłówkiem.
+- Test 390 px: tło `rgb(27, 42, 74)`, menu od 150 px = dół nagłówka, `header.css?ver=1.6.6`. Backup `*.bak-2026-09-17-t115-granat`.
+
 ## motyw primaauto2026 1.6.3–1.6.5 — 2026-09-17 (menu mobilne: położenie i krzyżyk)
 
 - Zgłoszenie Janka (iPhone): menu „dziwnie się rozjeżdża i trudno je schować”.
