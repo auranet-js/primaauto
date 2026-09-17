@@ -419,6 +419,13 @@ def main():
     Z = [('1 · Katalog po dodaniu dwóch aut', 'Nagłówek A2 (waga z licznikiem 2), ikony B1 na zdjęciach: Zeekr 8X ×2 i Xiaomi SU7 Ultra w porównaniu, Li Auto L8 → do modelu. Pasek D1 z X w kółku (zamyka pasek; porównanie dalej pod wagą w nagłówku). Na telefonie pasek w wersji skróconej — dotknięcie rozwija listę aut.'),
          ('2 · Karta produktu, wersja jeszcze nie w porównaniu', 'Waga i serce na głównym zdjęciu galerii, jak na kartach listingu (ikona pełnego ekranu przeniesiona na dół). Na telefonie pasek schowka nad dolnym paskiem kontaktu.'),
          ('3 · Czwarte auto — komunikat i rozwinięty pasek', 'Zamiast okna: komunikat „maksymalnie 3 auta” i pasek z wyraźnym × przy każdym aucie (na telefonie rozwinięty w listę). Po usunięciu jednego klikane auto wchodzi samo na zwolnione miejsce.')]
+    K = [('Obecny moduł + A2', 'Pigułka telefon/WhatsApp i żółty przycisk menu jak dziś, obok waga i serce z A2. Na telefonie logo się ściska.'),
+         ('K1 · Jeden rząd ikon, bez pigułki', 'Waga, serce | telefon, WhatsApp — wszystkie białe na pasku, kreska oddziela kontakt. Menu na telefonie: same białe kreski, bez żółtego tła. Najwęższy, ale kontakt i menu przestają się wyróżniać.'),
+         ('K2 · Przycisk „Kontakt” z listą', 'Jeden biały przycisk „Kontakt ▾” (na telefonie sama słuchawka) rozwija: Zadzwoń z numerem / WhatsApp. Pokazane rozwinięte na desktopie. Menu na telefonie: białe kreski w obrysie. Kosztuje klik więcej do kontaktu.'),
+         ('K3 · Kolorowe kółka', 'Waga i serce białe, telefon w białym kółku, WhatsApp w zielonym. Kontakt nadal wyróżniony, a moduł węższy o ramę pigułki. Menu na telefonie: żółte kółko w rozmiarze pozostałych ikon.')]
+    sceny.insert(0, ('K', 'Moduł kontaktu i menu w nagłówku (razem z A2)', 'Pigułka telefon/WhatsApp i przycisk menu na telefonie przeprojektowane tak, żeby razem z wagą i sercem zajmowała mniej miejsca. Schowek: 2 auta.',
+                     [(i, t, d, plik(f'K{i}.html', kontakt(kat, i))) for i, (t, d) in enumerate(K)],
+                     dict(d_cel='', d_h=[150, 150, 280, 150], t_cel='', t_h=[140] * 4)))
     sceny.insert(0, ('W', 'Wybrany zestaw (A2 · B1 · C na zdjęciu · D1 · E komunikat)', 'Złożone razem na prawdziwych stronach.',
                      [(0, Z[0][0], Z[0][1], plik('W1-d.html', zestaw_katalog(kat, stany)), plik('W1-t.html', zestaw_katalog(kat, stany))),
                       (1, Z[1][0], Z[1][1], plik('W2.html', zestaw_produkt(prod, False)), 'W2.html'),
@@ -492,6 +499,50 @@ def bar(auta, pelny=False, nowa=''):
             f'<span class="mk-bar__cl">Wyczyść</span>{ZAMKNIJ}</div></div>')
 
 
+def kontakt(doc, wariant):
+    """K — przeprojektowanie modułu kontaktu razem z ikonami A2 (wariant 0 = A2 bez zmian)."""
+    if wariant == 0:
+        return naglowek(doc, 2, 2)
+    i = doc.find('<div class="pa-header__contact">')
+    pill = doc[i:doc.find('</div>', i) + 6]
+    svg = re.findall(r'<svg.*?</svg>', pill, flags=re.S)
+    tel, wa = svg[0], svg[1]
+    mk = lambda x, n: re.sub(r'width="18" height="18"', f'width="{n}" height="{n}"', x, count=1)
+    ikony = (f'<a href="#" class="mk-u" aria-label="Porównanie: 2 auta">{w(21)}<span class="mk-badge">2</span></a>'
+             f'<a href="#" class="mk-u" aria-label="Ulubione">{h(21)}</a>')
+    if wariant == 1:
+        modul = (f'<div class="mk-k mk-k1">{ikony}<span class="mk-sep"></span>'
+                 f'<a href="#" class="mk-u" aria-label="Zadzwoń">{mk(tel, 20)}</a><a href="#" class="mk-u" aria-label="WhatsApp">{mk(wa, 20)}</a></div>')
+        css = ".mk-sep{width:1px;height:22px;background:rgba(255,255,255,.35);margin:0 4px}\n.pa-hamburger{background:transparent!important;width:34px!important;height:34px!important;padding:8px 6px!important}\n.pa-hamburger span{background:#fff!important}"
+    elif wariant == 2:
+        modul = (f'<div class="mk-k mk-k2">{ikony}<span class="mk-kt"><span class="mk-ktb">{mk(tel, 16)}<span class="mk-ktl">Kontakt</span>'
+                 f'<span class="mk-ktl">▾</span></span><span class="mk-dd"><a href="#">{mk(tel, 18)}<span><b>Zadzwoń</b><small>721 730 507</small></span></a>'
+                 f'<a href="#">{mk(wa, 18)}<span><b>WhatsApp</b><small>napisz wiadomość</small></span></a></span></span></div>')
+        css = """.mk-kt{position:relative}
+.mk-ktb{display:flex;align-items:center;gap:6px;background:#fff;color:#9B0000;border-radius:999px;padding:7px 12px;font:700 14px/1 Inter,sans-serif}
+.mk-dd{position:absolute;right:0;top:calc(100% + 8px);background:#fff;border-radius:8px;box-shadow:0 10px 28px rgba(0,0,0,.25);padding:6px;min-width:250px;z-index:50}
+.pa-header .mk-dd a{display:flex;gap:10px;align-items:center;padding:9px 10px;border-radius:6px;color:#1B2A4A}
+.pa-header .mk-dd a:hover{background:#F5F6F8}.mk-dd b{display:block;font-size:14px}.mk-dd small{display:block;font-size:12px;color:#5C6B7F}
+.pa-header__inner--mobile .mk-dd{display:none}
+@media(max-width:768px){.mk-ktl{display:none}.mk-ktb{padding:8px}}
+.pa-hamburger{background:transparent!important;border:1.5px solid rgba(255,255,255,.7)!important;width:34px!important;height:34px!important;padding:9px 7px!important;border-radius:8px!important}
+.pa-hamburger span{background:#fff!important}"""
+    else:
+        modul = (f'<div class="mk-k mk-k3">{ikony}<a href="#" class="mk-c mk-c--tel" aria-label="Zadzwoń">{mk(tel, 17)}</a>'
+                 f'<a href="#" class="mk-c mk-c--wa" aria-label="WhatsApp">{mk(wa, 17)}</a></div>')
+        css = """.mk-k3 .mk-c{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;margin-left:2px}
+.pa-header a.mk-c--tel{background:#fff;color:#9B0000}.pa-header a.mk-c--wa{background:#25D366;color:#fff}
+.pa-hamburger{width:34px!important;height:34px!important;padding:9px 8px!important;border-radius:50%!important}"""
+    doc = doc.replace(pill, modul)
+    css += """
+.mk-k{display:flex;align-items:center;gap:2px;flex-shrink:0}
+.pa-header a.mk-u{position:relative;display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;color:#fff}
+.pa-header a.mk-u:hover{background:rgba(255,255,255,.12)}
+.mk-u .mk-badge{top:1px;right:-1px;box-shadow:0 0 0 2px var(--c-header-bg,#9B0000)}
+@media(max-width:768px){.pa-header__inner--mobile .mk-k{margin-left:auto}.pa-header a.mk-u{width:34px}}"""
+    return wstaw(doc, css)
+
+
 def bez_js(doc):
     return doc.replace(POMOCNIK_JS, '')
 
@@ -532,7 +583,7 @@ def strona(sceny, akt):
             pd, pt = (row[3], row[3]) if len(row) == 4 else (row[3], row[4])
             th = p['t_h'][idx]
             rows.append(f'<div class="war"><h3>{e(t)}</h3><p>{e(d)}</p><div class="pair">'
-                        f'<div><span class="lab">Desktop 1366 px (pomniejszone)</span>{ramka(pd, 1366, p["d_h"], .62, p.get("d_cel_l", [p["d_cel"]] * 9)[idx], p.get("d_off", 0))}</div>'
+                        f'<div><span class="lab">Desktop 1366 px (pomniejszone)</span>{ramka(pd, 1366, p["d_h"][idx] if isinstance(p["d_h"], list) else p["d_h"], .62, p.get("d_cel_l", [p["d_cel"]] * 9)[idx], p.get("d_off", 0))}</div>'
                         f'<div><span class="lab">Telefon 390 px</span>{ramka(pt, 390, th, 1 if th <= 900 else .6, p["t_cel"], p.get("t_off", 0))}</div>'
                         f'</div></div>')
         out.append(f'<section id="s{k}"><h2>{k}. {e(tyt)}</h2><p class="op">{e(opis)}</p>{"".join(rows)}</section>')
