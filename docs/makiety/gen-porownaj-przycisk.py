@@ -453,6 +453,13 @@ def main():
     sceny.insert(0, ('M', 'Menu — Marki w Wiedzy, Wyszukiwarka i Porównywarka', 'Nagłówek K4, bez paska „Nowość”. Na desktopie „Wiedza” rozwinięta. Dziś po dodaniu dwóch pozycji menu łamie się w dwie linie przy 1366 i 1280 px — warianty mają ciaśniejsze odstępy (16 px), a poniżej 1300 px skracają narzędzia.',
                      [(n, t, d, plik(f'M{n}.html', menu(kat, n))) for n, (t, d) in zip([0, 4, 1, 2, 3], M)],
                      dict(d_cel='', d_h=300, d2=1280, t_cel='', t_h=[844] * 5)))
+    MT = [('Stan obecny', 'Menu w tym samym czerwonym kolorze co nagłówek — granica ginie.'),
+          ('MT1 · Granat z żółtą kreską', 'Kolor paska „Nowość” i stopki; żółta kreska oddziela menu od nagłówka. Mocny kontrast z czerwienią.'),
+          ('MT2 · Białe menu', 'Białe tło, granatowy tekst, żółta linia przy rozwiniętych działach — wygląda jak rozwinięta lista, najczytelniejsze.'),
+          ('MT3 · Ciemna czerwień z cieniem', 'Zostaje w kolorze marki, ale o ton ciemniej, z cieniem pod nagłówkiem. Najmniejsza zmiana.')]
+    sceny.insert(0, ('MT', 'Tło menu mobilnego', 'Nagłówek K4 z lupą, menu otwarte, krzyżyk w poprawionym rozmiarze, „Wiedza” rozwinięta.',
+                     [(i, t, d, plik(f'MT{i}.html', menu_tlo(kat, i))) for i, (t, d) in enumerate(MT)],
+                     dict(d_cel='', d_h=0, t_cel='', t_h=[720] * 4)))
     sceny.insert(0, ('W', 'Wybrany zestaw (K4 z lupą · B1 · C na zdjęciu · D1 · E komunikat · N4 · H1)', 'Złożone razem na prawdziwych stronach.',
                      [(0, Z[0][0], Z[0][1], plik('W1-d.html', zestaw_katalog(kat, stany)), plik('W1-t.html', zestaw_katalog(kat, stany))),
                       (1, Z[1][0], Z[1][1], plik('W2.html', zestaw_produkt(prod, False)), 'W2.html'),
@@ -783,6 +790,30 @@ def menu(doc, wariant):
     return wstaw(doc, css)
 
 
+def menu_tlo(doc, wariant):
+    """MT — tło otwartego menu mobilnego (17.09: czerwone menu zlewa się z czerwonym nagłówkiem)."""
+    doc = re.sub(NEWS_RE, '', baza_k4(doc, dok=False), count=1, flags=re.S)
+    doc = re.sub(r'<a href="#" class="mk-u" aria-label="Ulubione">.*?</a>', '', doc, flags=re.S)   # serce ukryte na produkcji (17.09)
+    doc = re.sub(r'(<nav id="pa-mobile-menu"[^>]*?)\s+hidden>', r'\1>', doc, flags=re.S)
+    doc = doc.replace('class="pa-hamburger"', 'class="pa-hamburger" aria-expanded="true"', 1)
+    css = """@media(max-width:768px){.pa-mobile-menu{display:block!important;top:70px!important}}
+.pa-hamburger[aria-expanded="true"] span:nth-child(1){transform:translateY(6px) rotate(45deg)!important}
+.pa-hamburger[aria-expanded="true"] span:nth-child(2){opacity:0}
+.pa-hamburger[aria-expanded="true"] span:nth-child(3){transform:translateY(-6px) rotate(-45deg)!important}
+.pa-mobile-menu__list .menu-item-389095 > .sub-menu{display:block!important}"""
+    if wariant == 1:
+        css += """.pa-mobile-menu{background:#1B2A4A!important;box-shadow:inset 0 3px 0 #E8AC07}"""
+    elif wariant == 2:
+        css += """.pa-mobile-menu{background:#fff!important;box-shadow:inset 0 1px 0 #E1E4E8, 0 8px 24px rgba(0,0,0,.15)}
+.pa-mobile-menu__list li{border-bottom-color:#E1E4E8!important}
+.pa-mobile-menu__list a{color:#1B2A4A!important}
+.pa-mobile-menu__list .sub-menu{border-left-color:#E8AC07!important}
+.pa-mobile-toggle{color:#1B2A4A!important}"""
+    elif wariant == 3:
+        css += """.pa-mobile-menu{background:#6E0000!important;box-shadow:inset 0 6px 10px -6px rgba(0,0,0,.5)}"""
+    return wstaw(doc, css)
+
+
 def bez_js(doc):
     return doc.replace(POMOCNIK_JS, '')
 
@@ -838,7 +869,7 @@ def strona(sceny, akt):
             pd, pt = (row[3], row[3]) if len(row) == 4 else (row[3], row[4])
             th = p['t_h'][idx]
             rows.append(f'<div class="war"><h3>{e(t)}</h3><p>{e(d)}</p><div class="pair">'
-                        f'<div><span class="lab">Desktop 1366 px (pomniejszone)</span>{ramka(pd, 1366, p["d_h"][idx] if isinstance(p["d_h"], list) else p["d_h"], .62, p.get("d_cel_l", [p["d_cel"]] * 9)[idx], p.get("d_off", 0))}</div>'
+                        + (f'<div><span class="lab">Desktop 1366 px (pomniejszone)</span>{ramka(pd, 1366, p["d_h"][idx] if isinstance(p["d_h"], list) else p["d_h"], .62, p.get("d_cel_l", [p["d_cel"]] * 9)[idx], p.get("d_off", 0))}</div>' if p["d_h"] else '')
                         + (f'<div><span class="lab">Laptop 1280 px (pomniejszone)</span>{ramka(pd, 1280, p["d_h"], .66)}</div>' if p.get('d2') else '') +
                         f'<div><span class="lab">Telefon 390 px</span>{ramka(pt, 390, th, 1 if th <= 900 else .6, p["t_cel"], p.get("t_off", 0))}</div>'
                         f'</div></div>')

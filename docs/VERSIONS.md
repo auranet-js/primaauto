@@ -1,5 +1,20 @@
 # Historia wersji asiaauto-sync
 
+## motyw primaauto2026 1.6.3–1.6.5 — 2026-09-17 (menu mobilne: położenie i krzyżyk)
+
+- Zgłoszenie Janka (iPhone): menu „dziwnie się rozjeżdża i trudno je schować”.
+  Przyczyna (od 04.09, paska „Nowość”): `.pa-mobile-menu { top: var(--header-h) }` = sztywne 70 px od góry ekranu,
+  a nagłówek stoi niżej (pasek „Nowość” 34 px, u zalogowanych pasek admina 46 px). Pomiar 390 px: nagłówek do 150 px,
+  menu od 70 px — **przykrywało przycisk zamknięcia** (element w środku przycisku = link menu). Na iPhonie strona pod menu
+  dalej się przewija (Safari ignoruje `overflow:hidden` na body), nagłówek odjeżdża, menu zostaje.
+- `nav.js`: menu ustawiane pod dolną krawędź nagłówka przy otwarciu oraz na `scroll`/`resize`/`visualViewport.resize`
+  (tylko gdy otwarte). Test 390 px: na górze nagłówek 150 = menu 150; po przewinięciu 116 = 116 (zdarzenie scroll
+  wywołane ręcznie — w ramce automatu Chrome nie dostarcza scroll/rAF); przycisk klikalny, menu się zamyka.
+- `header.css`: krzyżyk — kreski przesuwane o 6 px zamiast 8 px (8 px było dla starego przycisku 32 px; w kółku 40 px
+  odstęp kresek to 6 px, więc ramiona X się rozjeżdżały).
+- Makieta tła menu (czerwone zlewa się z nagłówkiem): `primaauto-makieta-porownaj-MT-2026-09-17.html` — czeka na wybór.
+- **Na iPhonie niezweryfikowane** — do sprawdzenia przez Janka. Backupy `*.bak-2026-09-17-t115-menu`, `-krzyzyk`.
+
 ## porównywarka (asiaauto-compare.js) + motyw 1.6.2 — 2026-09-17 (lista podpowiedzi na iPhonie)
 
 - Zgłoszenie Janka (iPhone, po 1.6.1): przewijanie listy podpowiedzi na `/porownywarka/` od razu ją zamykało.
