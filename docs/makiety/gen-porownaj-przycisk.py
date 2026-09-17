@@ -416,7 +416,7 @@ def main():
                   [(i + 1, t, d, plik(f'E{i + 1}-d.html', zamiana(prod, i + 1, False)), plik(f'E{i + 1}-t.html', zamiana(prod, i + 1, True)))
                    for i, (t, d) in enumerate(E)],
                   dict(d_cel='', d_h=820, t_cel='', t_h=[844] * 3)))
-    Z = [('1 · Katalog po dodaniu dwóch aut', 'Nagłówek A2 (waga z licznikiem 2), ikony B1 na zdjęciach: Zeekr 8X ×2 i Xiaomi SU7 Ultra w porównaniu, Li Auto L8 → do modelu. Pasek D1 z X w kółku (zamyka pasek; porównanie dalej pod wagą w nagłówku). Na telefonie pasek w wersji skróconej — dotknięcie rozwija listę aut.'),
+    Z = [('1 · Katalog po dodaniu dwóch aut', 'Nagłówek A2 + K4 (waga z licznikiem, serce, kolorowe kółka kontaktu na desktopie; na telefonie kontakt w doku na dole), ikony B1 na zdjęciach: Zeekr 8X ×2 i Xiaomi SU7 Ultra w porównaniu, Li Auto L8 → do modelu. Pasek D1 z X w kółku (zamyka pasek; porównanie dalej pod wagą w nagłówku). Na telefonie pasek w wersji skróconej nad dokiem kontaktu — dotknięcie rozwija listę aut.'),
          ('2 · Karta produktu, wersja jeszcze nie w porównaniu', 'Waga i serce na głównym zdjęciu galerii, jak na kartach listingu (ikona pełnego ekranu przeniesiona na dół). Na telefonie pasek schowka nad dolnym paskiem kontaktu.'),
          ('3 · Czwarte auto — komunikat i rozwinięty pasek', 'Zamiast okna: komunikat „maksymalnie 3 auta” i pasek z wyraźnym × przy każdym aucie (na telefonie rozwinięty w listę). Po usunięciu jednego klikane auto wchodzi samo na zwolnione miejsce.')]
     K = [('Obecny moduł + A2', 'Pigułka telefon/WhatsApp i żółty przycisk menu jak dziś, obok waga i serce z A2. Na telefonie logo się ściska.'),
@@ -429,7 +429,7 @@ def main():
     sceny.insert(0, ('K', 'Moduł kontaktu i menu w nagłówku (razem z A2)', 'Pigułka telefon/WhatsApp i przycisk menu na telefonie przeprojektowane tak, żeby razem z wagą i sercem zajmowała mniej miejsca. Schowek: 2 auta.',
                      [(i, t, d, plik(f'K{i}.html', kontakt(kat, i) if i < 4 else kontakt2(kat, i))) for i, (t, d) in enumerate(K)],
                      dict(d_cel='', d_h=[150, 150, 280, 150, 150, 150, 150], t_cel='', t_h=[140, 140, 140, 140, 844, 140, 140])))
-    sceny.insert(0, ('W', 'Wybrany zestaw (A2 · B1 · C na zdjęciu · D1 · E komunikat)', 'Złożone razem na prawdziwych stronach.',
+    sceny.insert(0, ('W', 'Wybrany zestaw (A2 + K4 · B1 · C na zdjęciu · D1 · E komunikat)', 'Złożone razem na prawdziwych stronach.',
                      [(0, Z[0][0], Z[0][1], plik('W1-d.html', zestaw_katalog(kat, stany)), plik('W1-t.html', zestaw_katalog(kat, stany))),
                       (1, Z[1][0], Z[1][1], plik('W2.html', zestaw_produkt(prod, False)), 'W2.html'),
                       (2, Z[2][0], Z[2][1], plik('W3.html', zestaw_produkt(prod, True)), 'W3.html')],
@@ -469,6 +469,7 @@ body:has(.aa-mobile-cta) .mk-bar{bottom:0}
 .mk-bar__rows{display:none}
 @media(max-width:768px){
   body:has(.aa-mobile-cta) .mk-bar{bottom:62px}
+  body:has(.mk-dock) .mk-bar{bottom:60px}
   .mk-bar__in{gap:10px;padding:8px 12px}.mk-bar__chips,.mk-bar__cl{display:none}.mk-bar__t{flex:1}.mk-bar__go{padding:9px 14px}}
 /* pełny schowek: komunikat + rozwinięty pasek */
 .mk-bar.is-full{border-top:3px solid #E8AC07}
@@ -546,14 +547,14 @@ def kontakt(doc, wariant):
     return wstaw(doc, css)
 
 
-def kontakt2(doc, wariant):
+def kontakt2(doc, wariant, ile=2, dok=True):
     """K4–K6 (po GA4 90 dni: telefon 257 / WhatsApp 249 kliknięć na telefonach — oba kanały równorzędne i bez dodatkowego kliku)."""
     i = doc.find('<div class="pa-header__contact">')
     pill = doc[i:doc.find('</div>', i) + 6]
     svg = re.findall(r'<svg.*?</svg>', pill, flags=re.S)
     tel, wa = svg[0], svg[1]
     mk = lambda x, n: re.sub(r'width="18" height="18"', f'width="{n}" height="{n}"', x, count=1)
-    ikony = (f'<a href="#" class="mk-u" aria-label="Porównanie: 2 auta">{w(21)}<span class="mk-badge">2</span></a>'
+    ikony = (f'<a href="#" class="mk-u" aria-label="Porównanie: {ile} auta">{w(21)}<span class="mk-badge">{ile}</span></a>'
              f'<a href="#" class="mk-u" aria-label="Ulubione">{h(21)}</a>')
     kolka = (f'<a href="#" class="mk-c mk-c--tel" aria-label="Zadzwoń">{mk(tel, 17)}</a>'
              f'<a href="#" class="mk-c mk-c--wa" aria-label="WhatsApp">{mk(wa, 17)}</a>')
@@ -570,7 +571,7 @@ def kontakt2(doc, wariant):
     body = ''
     if wariant == 4:     # dok kontaktu na dole telefonu
         doc = zamien(doc, f'<div class="mk-k">{ikony}{kolka}</div>', f'<div class="mk-k">{ikony}</div>')
-        body = (f'<nav class="mk-dock" aria-label="Kontakt"><a href="#" class="mk-dock__tel">{mk(tel, 18)}Zadzwoń</a>'
+        body = '' if not dok else (f'<nav class="mk-dock" aria-label="Kontakt"><a href="#" class="mk-dock__tel">{mk(tel, 18)}Zadzwoń</a>'
                 f'<a href="#" class="mk-dock__wa">{mk(wa, 18)}WhatsApp</a></nav>')
         css += """
 .mk-dock{display:none}
@@ -631,7 +632,7 @@ def bez_js(doc):
 
 
 def zestaw_katalog(kat, stany):
-    doc = bez_js(naglowek(kat, 2, 2))
+    doc = bez_js(kontakt2(kat, 4, 2))
     def jedna(m):
         a = m.group(0)
         lid = re.search(r'listing_id=(\d+)', a)
@@ -643,7 +644,7 @@ def zestaw_katalog(kat, stany):
 
 
 def zestaw_produkt(prod, pelny):
-    doc = bez_js(naglowek(prod, 2, 3 if pelny else 2))
+    doc = bez_js(kontakt2(prod, 4, 3 if pelny else 2, dok=False))
     doc = doc.replace('<div class="aa-gallery__main">', '<div class="aa-gallery__main">' + ov('act' if pelny else 'add', True), 1)
     auta = SCHOWEK if pelny else SCHOWEK[:2]
     return wstaw(doc, OV_CSS + BAR_CSS, bar(auta, pelny, f'{NOWA["model"]} {NOWA["wersja"]}'))
@@ -690,7 +691,7 @@ section{{margin-top:34px}}h2{{margin:0 0 4px;font-size:24px}}.op{{color:var(--mu
 .full{{display:inline-block;font-size:12px;color:var(--mut);margin-top:4px}}
 </style></head><body>
 <header><span>T-115 · makiety 17.09:</span>{nav}</header>
-<main><div class="intro"><p style="margin:0">{'<b>Zestaw wybrany 17.09</b> — A2, B1, ikony na zdjęciu w karcie produktu, D1 z X w kółku, zamiast okna zamiany komunikat + rozwinięty pasek. Strony A–E zostają jako historia wyboru. ' if akt == 'W' else ''}Każda ramka to <b>prawdziwa strona primaauto.com.pl</b> (dzisiejszy HTML, bez skryptów) z dołożonym wariantem.
+<main><div class="intro"><p style="margin:0">{'<b>Zestaw wybrany 17.09</b> — A2 z modułem kontaktu K4, B1, ikony na zdjęciu w karcie produktu, D1 z X w kółku, zamiast okna zamiany komunikat + rozwinięty pasek. Strony A–E zostają jako historia wyboru. ' if akt == 'W' else ''}Każda ramka to <b>prawdziwa strona primaauto.com.pl</b> (dzisiejszy HTML, bez skryptów) z dołożonym wariantem.
 Wybierz po jednym wariancie w A–E (np. „A2, B1, C1, D1, E2”). Zasady działania ustalone w quizie są wspólne dla wszystkich wariantów — różni się miejsce i forma.
 Serce to miejsce zarezerwowane dla ulubionych (T-114) — pokazane, żeby układ od razu je mieścił.</p></div>
 {''.join(out)}</main></body></html>"""
