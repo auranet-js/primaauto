@@ -8,20 +8,27 @@
 Zgłoszenie Janka: „oferty kończą wchodzić po południu i wtedy trzeba by je uzupełniać,
 a nie rano kiedy wchodzą nowe". Pomiar potwierdził w całości.
 
-Rozkład godzinowy wejść ofert (che168, 14 dni, czas PL — średnio na dobę):
+⚠️ **Strefy: WP tej instalacji chodzi w UTC** (`gmt_offset = 0`, `timezone_string` pusty),
+więc `post_date` = `post_date_gmt`, a log pluginu też stempluje UTC. **Crontab systemowy chodzi
+w czasie serwera (CEST = UTC+2).** Pomiar z bazy trzeba przeliczyć, zanim ustawi się godzinę crona
+— przy pierwszym podejściu tabela poniżej została opisana jako „czas PL", czym była w UTC.
 
-| godz | 02 | 03 | 04 | 05 | 06 | 07 | 08 | 09 | 10 | 11 | 12 | 13 | 14 | 15 | 16 |
+Rozkład godzinowy wejść ofert (che168, 14 dni, średnio na dobę):
+
+| UTC | 02 | 03 | 04 | 05 | 06 | 07 | 08 | 09 | 10 | 11 | 12 | 13 | 14 | 15 | 16 |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| **PL (CEST)** | **04** | **05** | **06** | **07** | **08** | **09** | **10** | **11** | **12** | **13** | **14** | **15** | **16** | **17** | **18** |
 | ofert | 1,7 | 10,1 | 9,6 | 9,4 | 12,4 | 15,6 | 12,7 | 12,6 | 7,6 | 7,1 | 3,0 | 3,5 | 2,8 | 1,3 | 1,6 |
 
-Strumień otwiera się o 02:00, szczyt 06–09, ogon do 16:00, po 16:00 cisza. Cykl dolewania
-stał na 04:25–05:05, czyli **przed ~85% dnia**.
+Strumień pracuje **04:00–18:00 czasu polskiego**, szczyt 08–11, ogon do 18:00, potem cisza
+(chińskie godziny robocze 10–24 CST). Cykl dolewania stał na 04:25–05:05 PL = 02:25–03:05 UTC,
+czyli **przed całym dniem** — obsługiwał wczorajszy ogon, a nie dzisiejszy zaciąg.
 
 Dowód wprost, pomiar 18.09 o 17:20:
 
 | oferty z dnia | sztuk | pełne (6 kB+) |
 |---|---|---|
-| dziś (weszły 02:00–10:57) | 110 | **0** |
+| dziś (weszły 04:00–12:57 PL) | 110 | **0** |
 | wczoraj (po nocnym cyklu) | 125 | 100 |
 
 Każda oferta wisiała na stronie **~21 h z niepełną specyfikacją** — pusta tabela wyposażenia
@@ -47,7 +54,9 @@ Gaszenie zostaje rano — nie zależy od świeżych ofert, a wieczorem tylko wyd
 Kolejność bliźniak → bank → katalog → specs zachowana (bliźniak zdejmuje bankowi cele,
 tabela specs musi iść po dolewkach).
 
-17:15 jest bezpieczne: po 16:00 wejść praktycznie nie ma (1,6/dobę w godzinie 16).
+Godziny crona są w czasie serwera (CEST). 17:15 PL = 15:15 UTC łapie ~99% dnia; po tej godzinie
+wchodzi jeszcze ~3 oferty na dobę (godziny 17–18 PL), które przeczekają do następnego biegu.
+Dociągnięcie cyklu do 19:15–19:55 PL złapałoby dzień w całości — rozważane, decyzja Janka.
 
 ## Wynik pierwszego biegu (18.09, uruchomiony ręcznie o 17:45)
 
