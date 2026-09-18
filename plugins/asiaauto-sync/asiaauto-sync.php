@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Prima-Auto Sync
  * Description: Synchronizacja ogłoszeń z Dongchedi/Che168, pipeline cenowy, zamówienia, umowy PDF.
- * Version: 0.39.6
+ * Version: 0.44.0
  * Author: Auranet / Jan Schenk
  * Author URI: https://auranet.com.pl
  * Text Domain: asiaauto
@@ -13,7 +13,7 @@
 
 defined('ABSPATH') || exit;
 
-define('ASIAAUTO_VERSION', '0.39.6');
+define('ASIAAUTO_VERSION', '0.44.0');
 define('ASIAAUTO_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('ASIAAUTO_PLUGIN_URL', plugin_dir_url(__FILE__));
 
@@ -49,9 +49,11 @@ require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-admin.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-admin-manual-import.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-admin-che168-import.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-admin-che168-browse.php';
+require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-admin-dongchedi-browse.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-admin-listings-views.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-ga4.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-payu.php';
+require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-tpay.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-payu-store.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-payu-api.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-payu-mail.php';
@@ -66,11 +68,14 @@ require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-order-api.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-order-wizard.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-contract.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-shortcodes.php';
+require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-account.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-brand-hub.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-rest-hub.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-spec.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-specs-table.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-search.php';
+require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-versions-table.php';   // T-115 porównywarka
+require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-compare.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-hub-title-generator.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-inventory.php';
 require_once ASIAAUTO_PLUGIN_DIR . 'includes/class-asiaauto-single.php';
@@ -190,10 +195,12 @@ add_action('plugins_loaded', function () {
     new AsiaAuto_Order_Wizard();
     new AsiaAuto_Contract();
     new AsiaAuto_Shortcodes();
+    new AsiaAuto_Account();
     new AsiaAuto_Brand_Hub();
     new AsiaAuto_REST_Hub();
     AsiaAuto_Specs_Table::boot();
     new AsiaAuto_Search();
+    new AsiaAuto_Compare();
     new AsiaAuto_Inventory();
     new AsiaAuto_Single();
     new AsiaAuto_Redirects();
@@ -209,6 +216,7 @@ add_action('plugins_loaded', function () {
         new AsiaAuto_Admin_Manual_Import();
         new AsiaAuto_Admin_Che168_Import();
         new AsiaAuto_Admin_Che168_Browse();
+        new AsiaAuto_Admin_Dongchedi_Browse();
         new AsiaAuto_Admin_Listings_Views();
         new AsiaAuto_Order_Admin();
         new AsiaAuto_PayU_Settings();

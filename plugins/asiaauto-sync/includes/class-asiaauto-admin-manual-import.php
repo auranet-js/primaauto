@@ -103,6 +103,15 @@ class AsiaAuto_Admin_Manual_Import {
             fetchBtn.addEventListener('click', doFetch);
             input.addEventListener('keydown', function(e) { if (e.key === 'Enter') doFetch(); });
 
+            // Deep-link z „Przeglądaj Dongchedi": ?inner_id=... → prefill + auto-podglad.
+            // doFetch używa wp.ajax (wp-util ładowany w stopce) → czekamy na DOMContentLoaded.
+            const prefill = new URLSearchParams(location.search).get('inner_id');
+            if (prefill) {
+                input.value = prefill;
+                if (window.wp && wp.ajax) { doFetch(); }
+                else { document.addEventListener('DOMContentLoaded', doFetch); }
+            }
+
             function doFetch() {
                 const raw = input.value.trim();
                 if (!raw) { showError('Wpisz URL lub inner_id.'); return; }

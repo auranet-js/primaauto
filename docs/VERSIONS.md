@@ -5490,3 +5490,64 @@ Aistaland → „GAC i Huawei", Changan Qiyuan → „Changan". `/marki/` po zmi
 
 **Sync repo:** `plugins/asiaauto-sync/data/` był rozjechany z produkcją o ~350 linii (mapowania
 dokładane na serwerze w wielu sesjach bez kopii do repo) — wciągnięty pełny stan serwera.
+
+---
+
+## v0.44.0 — „Przeglądaj Dongchedi" (2026-09-18)
+
+Przeglądarka ofert dongchedi z filtrami + import per klik, bliźniacza wobec „Przeglądaj Che168".
+Powód: dongchedi chodzi w trybie „tylko aktualizacja" (92% pełnego strumienia dubluje che168),
+więc unikalne sztuki bierzemy ręcznie — potrzebne było wygodne narzędzie do ich wyłowienia.
+
+**Nowy plik:** `includes/class-asiaauto-admin-dongchedi-browse.php` — strona
+`edit.php?post_type=listings&page=asiaauto-dongchedi-browse`, AJAX `asiaauto_dongchedi_browse`,
+`browseOffers()` publiczne (testowalne z `wp eval`). **Bez gate'a fazy testów** — sam
+`IMPORT_CAP`, czyli Ruslan (rola `primaauto`) widzi stronę od razu, tak jak „Dodaj z Dongchedi".
+Decyzja Janka 18.09. Import per klik woła istniejący AJAX `asiaauto_manual_import`, więc
+oferta dostaje `_asiaauto_manual_import` i wpada w widok „Ręczny import".
+
+**`class-asiaauto-che168-dictionary.php` sparametryzowany źródłem** (addytywnie, argument
+domyślny `'che168'` → wszystkie dotychczasowe wywołania bez zmian; che168 zostaje też na starych
+nazwach transientów, więc żywy cache nie wyleciał). Dorzucone `modelNames()`.
+
+**`class-asiaauto-admin-manual-import.php`:** deep-link `?inner_id=…` → prefill + auto-podgląd
+(kalka z „Dodaj z Che168"), żeby przycisk „Podgląd" z przeglądarki działał.
+
+> **Pułapka (złapana 18.09 przez Janka):** `wp-util` jest zarejestrowany **do stopki**
+> (`wp-includes/script-loader.php:1072`, `in_footer = 1`), a skrypt strony leci w body.
+> Wołanie `doFetch()` wprost przy parsowaniu → `wp.ajax` jeszcze nie istnieje → `TypeError`,
+> `.always()` nigdy nie gasi spinnera i strona „kręci kółkiem" w nieskończoność.
+> Dlatego prefill musi mieć guard `window.wp && wp.ajax ? doFetch() : DOMContentLoaded → doFetch`
+> — dokładnie taki, jaki ma „Dodaj z Che168" (tam komentarz w kodzie ostrzegał, ja go pominąłem
+> przy przepisywaniu).
+
+### Trzy różnice dongchedi vs che168 — zmierzone 18.09, nie założone
+
+1. **`getFilters` ma inny kształt.** che168: `mark → model` = LISTA stringów (`["A1","A3",…]`).
+   dongchedi: MAPA `"Audi Q7" => ['complectation' => [...]]`. Bez normalizacji
+   (`array_is_list` → `array_keys`) dongchedi dawał „Array to string conversion" i chipy „Array".
+2. **Miasto z innego pola.** Wzorzec che168 czyta `explode(',', address)[0]`; w dongchedi
+   `address` to pełny adres ulicy (`海口市保税区76号汽车小镇1号楼`) i nigdy nie trafi w listę
+   31 miast. Dongchedi ma czyste `city` (`海口`) — i stąd jest brane (fallback na `address`).
+3. **`first_registration` = NULL** w dongchedi; pierwsza rejestracja siedzi w `reg_date`.
+
+### Korekta do założenia o chudych ofertach
+
+Prompt zakładał, że dongchedi oddaje ~42 pola `extra_prep` (regresja źródła). Pomiar na 20 ofertach
+BYD ≥2024: **286–364 pól**, identycznie w `getOffers` i `getOffer`. Chudość dotyczy świeżych
+wystawień, nie całego źródła. Dlatego karta pokazuje **realną liczbę pól z payloadu** zamiast
+zgadywanki „z bliźniaka / brak dawcy"; poniżej 100 pól — ostrzeżenie „chuda, czeka na bliźniaka"
+(dongchedi nie ma `spec_id`, więc katalog Autohome go nie uzupełni).
+
+### Weryfikacja
+
+- `php -l` czysty na 4 plikach.
+- `browseOffers()` z `wp eval`: BYD ≥2024 cena ≥85 000 ¥ → 5 ofert, `next_page=2`; filtr miast
+  5 → 1; chipy `["Tang DM","Han DM"]` → 40 ofert, strona 2 bez przecięcia ze stroną 1;
+  Tank → 20 ofert, `Tank 300 Hi4-T` poprawnie oznaczony 🆕 (bez huba).
+- Wykrywanie „w bazie": `18061580` → post #341935.
+- Che168 bez regresji: `AsiaAuto_Che168_Browse::browseOffers()` działa, cache słownika
+  z 16.09 nietknięty (285 marek).
+- Menu: `Przeglądaj Dongchedi`, cap `manage_asiaauto_import`; rola `primaauto` ma ten cap.
+- **Niezweryfikowane:** realny import per klik w przeglądarce (tworzy ogłoszenie na produkcji —
+  czeka na zgodę Janka) i zachowanie JS w wp-admin.
