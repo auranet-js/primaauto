@@ -471,11 +471,13 @@ return array (
     'title_eu' => 'Chery Arrizo 8 Pro',
     'slug' => 'arrizo-8-pro',
   ),
-  'Chery|Tiggo 9' => 
+  // 2026-09-14: alias „(Jaecoo 8)" — europejski bliźniak Tiggo 9. serie_eu idzie do tytułu oferty,
+  // term dobierany po slugu (3582 „Tiggo 9"), więc filtr zostaje „Tiggo 9". Hub: _serie_full_title.
+  'Chery|Tiggo 9' =>
   array (
     'mark_eu' => 'Chery',
-    'serie_eu' => 'Tiggo 9',
-    'title_eu' => 'Chery Tiggo 9',
+    'serie_eu' => 'Tiggo 9 (Jaecoo 8)',
+    'title_eu' => 'Chery Tiggo 9 (Jaecoo 8)',
     'slug' => 'tiggo-9',
   ),
   'Chery|Tiggo 8 PLUS' => 
@@ -1296,12 +1298,71 @@ return array (
     'title_eu' => 'Leapmotor B01',
     'slug' => 'b01',
   ),
-  'Leapmotor|零跑Lafa5' => 
+  'Leapmotor|零跑Lafa5' =>
   array (
     'mark_eu' => 'Leapmotor',
     'serie_eu' => 'B05',
     'title_eu' => 'Leapmotor B05',
     'slug' => 'b05',
+  ),
+  // 2026-09-11: che168 wysyła D19 w dwóch formach; slug celuje w istniejący hub leapmotor-d19 (term 6604)
+  'Leapmotor|Leapmotor D19' =>
+  array (
+    'mark_eu' => 'Leapmotor',
+    'serie_eu' => 'D19',
+    'title_eu' => 'Leapmotor D19',
+    'slug' => 'leapmotor-d19',
+  ),
+  'Leapmotor|零跑D19' =>
+  array (
+    'mark_eu' => 'Leapmotor',
+    'serie_eu' => 'D19',
+    'title_eu' => 'Leapmotor D19',
+    'slug' => 'leapmotor-d19',
+  ),
+  // 2026-09-11: 华境 = sub-marka SAIC-GM-Wuling (Autohome brandid 686) — fold pod Wuling wg T-190, jak Leopard pod BYD
+  'Huajing|Huajing S' =>
+  array (
+    'mark_eu' => 'Wuling',
+    'serie_eu' => 'Huajing S',
+    'title_eu' => 'Wuling Huajing S',
+    'slug' => 'huajing-s',
+  ),
+  // 2026-09-11: Wuling Starlight (星光) — 5 osobnych modeli; 560/730 tylko warianty NEV (spalinowe poniżej progu ceny)
+  'Wuling|Xingguang' =>
+  array (
+    'mark_eu' => 'Wuling',
+    'serie_eu' => 'Starlight',
+    'title_eu' => 'Wuling Starlight',
+    'slug' => 'starlight',
+  ),
+  'Wuling|Xingguang S' =>
+  array (
+    'mark_eu' => 'Wuling',
+    'serie_eu' => 'Starlight S',
+    'title_eu' => 'Wuling Starlight S',
+    'slug' => 'starlight-s',
+  ),
+  'Wuling|Xingguang L' =>
+  array (
+    'mark_eu' => 'Wuling',
+    'serie_eu' => 'Starlight L',
+    'title_eu' => 'Wuling Starlight L',
+    'slug' => 'starlight-l',
+  ),
+  'Wuling|Xingguang 560 New Energy' =>
+  array (
+    'mark_eu' => 'Wuling',
+    'serie_eu' => 'Starlight 560',
+    'title_eu' => 'Wuling Starlight 560',
+    'slug' => 'starlight-560',
+  ),
+  'Wuling|Xingguang 730 New Energy' =>
+  array (
+    'mark_eu' => 'Wuling',
+    'serie_eu' => 'Starlight 730',
+    'title_eu' => 'Wuling Starlight 730',
+    'slug' => 'starlight-730',
   ),
   'Li Auto|Li Auto L6' => 
   array (
@@ -2592,5 +2653,29 @@ return array (
     'serie_eu' => 'Bronco',
     'title_eu' => 'Ford Bronco',
     'slug' => 'ford-bronco',
+  ),
+
+  // --- 2026-09-19: huby, które zeszły do zera mimo żywej podaży w źródle ---
+  // 'MG|MG Cyberster' nigdy nie było w mapie — do 18.08 oferty wchodziły ścieżką fallbacku
+  // (stąd term „MG Cyberster" z marką w nazwie). Guard T-186 rozszerzony wtedy na dongchedi
+  // odciął fallback i hub /samochody/mg/mg-cyberster/ wygasł przez rotację.
+  // serie_eu BEZ marki — title składa się jako "{mark_eu} {serie_eu}", inaczej „MG MG Cyberster".
+  // slug = istniejący term 3504 (keeper), nie twórz 'cyberster'.
+  'MG|MG Cyberster' =>
+  array (
+    'mark_eu' => 'MG',
+    'serie_eu' => 'Cyberster',
+    'title_eu' => 'MG Cyberster',
+    'slug' => 'mg-cyberster',
+  ),
+  // Alias wielkości liter: che168 zwraca 'Yuan Plus', mapa miała tylko 'Yuan PLUS'.
+  // getEuForCn() porównuje klucze dokładnie (case-sensitive) — 25 ofert poszło w kolejkę
+  // domapowań i hub /samochody/byd/atto-3/ zszedł do zera. Wartości 1:1 z 'BYD|Yuan PLUS'.
+  'BYD|Yuan Plus' =>
+  array (
+    'mark_eu' => 'BYD',
+    'serie_eu' => 'ATTO 3 (Yuan PLUS)',
+    'title_eu' => 'BYD ATTO 3',
+    'slug' => 'atto-3',
   ),
 );
