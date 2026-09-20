@@ -1,5 +1,26 @@
 # Historia wersji asiaauto-sync
 
+## 0.44.1 — 2026-09-20 (WhatsApp: kontekst auta w kreatorze zamówienia)
+
+- Zgłoszenie Ruslana (screeny na Telegramie): na WhatsApp przychodziły wiadomości „piszę w sprawie:
+  https://primaauto.com.pl/zamow/" — link otwiera pusty kreator z komunikatem „Nie wskazano pojazdu".
+- Przyczyna: `[aa_whatsapp]` (`class-asiaauto-shortcodes.php`) budował treść z `get_permalink()`, które
+  zwraca czysty adres strony **bez query stringu** — a kreator identyfikuje auto przez `?listing_id=NNN`
+  (`class-asiaauto-order-wizard.php:108`). Klient szedł z oferty w „Zamawiam", klikał WhatsApp w doku
+  mobilnym (`themes/primaauto2026/footer.php`) i wysyłał adres bez auta.
+- Poprawka: kontekst auta czytany także z `?listing_id` (weryfikacja `post_type=listings` + `publish`),
+  wiadomość niesie wtedy tytuł i **link do oferty**: „Dzień dobry, chcę zamówić: <tytuł> — /oferta/…".
+  Karta oferty bez zmian („interesuję się ofertą").
+- Nowy `currentUrlForMessage()`: adres z `REQUEST_URI` zamiast `get_permalink()` (zachowuje ścieżkę
+  porównania `/porownywarka/a-vs-b/` i filtry katalogu), wycina parametry wrażliwe (`magic_token`,
+  `order_id`, `_wpnonce`, `token`, `key`, `email`) i śledzące (`utm_*`, `fbclid`, `gclid`, `msclkid`,
+  `gad_source`). Strony aplikacyjne bez kontekstu (`/zamow/`, `/porownywarka/`, `/klient/`) → wiadomość
+  generyczna bez adresu, zamiast linku, który u odbiorcy otwiera pustą stronę.
+- Weryfikacja (curl na produkcji, po wgraniu): `/zamow/?listing_id=488718` → „chcę zamówić: Zeekr 9X 2026
+  Ultra 55kWh 6-osobowy — /oferta/zeekr-9x-2026-488718/"; `/zamow/` i `/porownywarka/` → generyk;
+  `/zamow/?order_id=1&magic_token=abc123` → generyk (token nie wycieka); karta oferty bez zmian;
+  `/`, `/kontakt/`, `/oferta/…`, `/porownywarka/` → 200. Backup `*.bak-2026-09-20-wa-kontekst`.
+
 ## dane — 2026-09-17 (specid dla ofert na placu i w drodze)
 
 - Zgłoszenie Janka: oferty z `/w-rzeszowie/` i `/w-drodze/` nie wchodzą do porównań. Przyczyna: nie `extra_prep` (56/60 ma),
