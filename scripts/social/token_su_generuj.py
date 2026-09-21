@@ -12,9 +12,9 @@ Nowy token trafia na stdout, NIE do pliku — podmianę `tokens/primaauto-portfo
 robisz świadomie, po sprawdzeniu, że nowy działa. Stary zostaje ważny (Meta nie unieważnia
 poprzednich tokenów SU przy generowaniu kolejnego).
 
-`pages_manage_posts` świadomie nie ma na liście — ustalenie z 27.08: publikuje Andrzej,
-my promujemy to, co napisał. Dołożenie tego uprawnienia to osobna decyzja Janka, nie
-efekt uboczny rozszerzania scope'ów.
+`pages_manage_posts` dopisane 2026-09-20 — publikacja wideo z sesji własnym harmonogramem.
+Wcześniej (27.08) świadomie pomijane, bo publikował wyłącznie Andrzej. Dokładanie kolejnych
+scope'ów nadal jest decyzją Janka, nie efektem ubocznym rozszerzania listy.
 """
 import argparse
 import hashlib
@@ -39,9 +39,13 @@ UPRAWNIENIA = [
     'instagram_content_publish',
     'pages_read_engagement',
     'pages_manage_ads',
-    'read_insights',            # statystyki Strony — zasięg organiczny postów
-    'pages_read_user_content',  # reakcje i komentarze
+    'pages_manage_posts',       # publikacja i planowanie postów na Stronie
 ]
+
+# Scope'y ODRZUCANE przez Metę dla appki „Prima-Auto API" (zmierzone 2026-09-20):
+# `read_insights` i `pages_read_user_content` → „(#100) Invalid Scopes".
+# Appka ich nie ma zatwierdzonych, a jeden zły scope wywala CAŁE generowanie,
+# więc nie dopisuj ich z powrotem „na próbę" bez App Review.
 
 
 def wolaj(url, dane, metoda='POST'):

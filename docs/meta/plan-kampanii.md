@@ -184,7 +184,7 @@ atomów: `moov` przed `mdat` znaczy, że faststart jest.
 | 6 | Lynk & Co 900 | sierpień | `/samochody/lynk-co/900/#oferty` |
 | 7 | Exeed VX (Omoda 11) | lipiec | `/samochody/exeed/vx/#oferty` |
 | 8 | BYD Leopard 7 | sierpień | `/samochody/byd/leopard-7/#oferty` |
-| 9 | Jetour T2 PHEV | lipiec | `/samochody/jetour/t2/#oferty` |
+| 9 | Jetour T2 PHEV | lipiec | `/samochody/jetour/t2-c-dm/#oferty` |
 | 10 | BYD Leopard 5 niebieski | lipiec | `/samochody/byd/leopard-5/#oferty` |
 
 **Dziesięć pozycji, dwadzieścia plików** — każda w kadrze pionowym 9:16 i poziomym 16:9.
