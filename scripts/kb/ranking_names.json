@@ -664,6 +664,20 @@
     },
     "锐胜王牌M7": {
       "nazwa": "Ruisheng M7"
+    },
+    "岚图追光L": {
+      "nazwa": "Passion L"
+    },
+    "红旗金葵花国雅": {
+      "nazwa": "Guoya"
+    },
+    "红旗金葵花国礼": {
+      "nazwa": "Guoli"
+    },
+    "仰望U7 PHEV": {
+      "nazwa": "U7 PHEV",
+      "serie": "Yangwang U7",
+      "marka": "BYD"
     }
   }
 }

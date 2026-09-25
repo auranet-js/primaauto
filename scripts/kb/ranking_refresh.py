@@ -131,7 +131,8 @@ def przerenderuj_tabele(w, dry_run=False):
     if not pozycje:
         print("  brak danych przy wpisie"); return None
     pozycje, trafione = rs.wzbogac(pozycje, "model")
-    okres = rg.okres_slownie(w["dane"]["okres"])
+    okres = rg.okres_zakres(w["dane"].get("okres_od"), w["dane"]["okres"])
+    kol_zmiany = rg.etykieta_zmiany(w["dane"])
     # Rankingi parametryczne maja INNA tabele (inne kolumny i nagłowek). Bez tej galezi
     # przebudowa wstawiala im tabele sprzedazowa - kolumna z sekundami dostawala naglowek
     # „Sprzedaz / sierpien 2026" (blad zlapany przez Janka 2026-08-05).
@@ -145,7 +146,7 @@ def przerenderuj_tabele(w, dry_run=False):
         pozycje, trafione = rs.wzbogac(dane_tab["ranking"], "model")
         buduj = lambda: rg.tabela_specow(pozycje, dane_tab, d)
     else:
-        buduj = lambda: rg.tabela_rankingu(pozycje, okres)
+        buduj = lambda: rg.tabela_rankingu(pozycje, okres, kol_zmiany)
     nowa = re.sub(r"<!--RANKING:START-->.*?<!--RANKING:END-->",
                   lambda _: "<!--RANKING:START-->" + buduj() + "<!--RANKING:END-->",
                   w["tresc"], flags=re.S)
@@ -205,7 +206,8 @@ def odswiez_ranking(w, miesiac=None, dry_run=False):
     d["_nazwa"] = klucz_def
 
     stary_okres = w["dane"].get("okres")
-    dane = rm.dongchedi_ranking(d["klasy"], miesiac, d.get("typ", 11), d.get("naped", ""), d.get("top"))
+    dane = rm.dongchedi_ranking(d["klasy"], miesiac, d.get("typ", 11), d.get("naped", ""), d.get("top"),
+                                miesiecy=d.get("miesiecy", 1), tylko_serie=d.get("tylko_serie"))
     if dane["dziury_w_czolowce"]:
         print("  ⚠ pozycje bez nazwy w czołówce — uzupełnij ranking_names.json:")
         for b in dane["dziury_w_czolowce"]:
@@ -216,11 +218,12 @@ def odswiez_ranking(w, miesiac=None, dry_run=False):
         return None
 
     pozycje, trafione = rs.wzbogac(dane["ranking"], d.get("poziom_dopasowania", "model"))
-    okres = rg.okres_slownie(dane["zrodlo_data"])
+    okres = rg.okres_dane(dane)
     tresc = w["tresc"]
 
     tresc = re.sub(r"<!--RANKING:START-->.*?<!--RANKING:END-->",
-                   lambda _: "<!--RANKING:START-->" + rg.tabela_rankingu(pozycje, okres) + "<!--RANKING:END-->",
+                   lambda _: "<!--RANKING:START-->" + rg.tabela_rankingu(pozycje, okres, rg.etykieta_zmiany(dane))
+                   + "<!--RANKING:END-->",
                    tresc, flags=re.S)
     tresc = re.sub(r"<!--ZRODLA:START-->.*?<!--ZRODLA:END-->",
                    lambda _: "<!--ZRODLA:START-->" + rg.sekcja_zrodla(dane, trafione) + "<!--ZRODLA:END-->",
@@ -230,7 +233,14 @@ def odswiez_ranking(w, miesiac=None, dry_run=False):
     # przypadki i mówimy ile razy, żeby dało się sprawdzić, czy tekst dalej trzyma się sensu.
     stary_m, nowy_m = stary_okres[4:6], dane["zrodlo_data"][4:6]
     podmian = 0
-    for tab in (rg.MIESIACE, rg.MIESIACE_D):
+    # Okno kilku miesięcy: najpierw cały zakres („czerwiec–sierpień 2026"), dopiero potem
+    # pojedyncze nazwy — inaczej podmiana „sierpień" rozbiłaby zakres na pół.
+    if dane.get("okres_od") and w["dane"].get("okres_od"):
+        stary_zakres = rg.okres_zakres(w["dane"]["okres_od"], stary_okres)
+        if stary_zakres != okres and stary_zakres in tresc:
+            podmian += tresc.count(stary_zakres)
+            tresc = tresc.replace(stary_zakres, okres)
+    for tab in (rg.MIESIACE, rg.MIESIACE_D) if not dane.get("okres_od") else ():
         for stara, nowa in ((f"{tab[stary_m]} {stary_okres[:4]}", f"{tab[nowy_m]} {dane['zrodlo_data'][:4]}"),
                             (tab[stary_m], tab[nowy_m])):
             if stara != nowa and stara in tresc:
@@ -246,6 +256,7 @@ def odswiez_ranking(w, miesiac=None, dry_run=False):
     zapisz_tresc(w["id"], tresc, "ranking")
     meta = dict(w["dane"])
     meta.update({"okres": dane["zrodlo_data"], "porownanie_z": dane["porownanie_z"],
+                 **{k: dane[k] for k in ("okres_od", "miesiecy", "porownanie_od") if dane.get(k)},
                  "pobrano": dane["pobrano"], "zrodlo_url": dane["zrodlo_url"],
                  "pozycje": [{k: p.get(k) for k in
                               ("pozycja", "marka", "model", "model_cn", "podmiot", "nasza_marka",

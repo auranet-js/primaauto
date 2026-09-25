@@ -104,6 +104,28 @@ def okres_slownie(miesiac: str, dopelniacz=False) -> str:
     return f"{tab[miesiac[4:6]]} {miesiac[:4]}"
 
 
+def okres_zakres(od, do: str, dopelniacz=False) -> str:
+    """Okres rankingu słownie: jeden miesiąc albo okno („czerwiec–sierpień 2026").
+    `od` puste = ranking miesięczny, jak wszystkie sprzed limuzyn."""
+    if not od or od == do:
+        return okres_slownie(do, dopelniacz)
+    if dopelniacz:
+        return f"okresie {okres_zakres(od, do)}"
+    if od[:4] == do[:4]:
+        return f"{MIESIACE[od[4:6]]}–{MIESIACE[do[4:6]]} {do[:4]}"
+    return f"{okres_slownie(od)} – {okres_slownie(do)}"
+
+
+def okres_dane(dane: dict, dopelniacz=False) -> str:
+    return okres_zakres(dane.get("okres_od"), dane["zrodlo_data"], dopelniacz)
+
+
+def etykieta_zmiany(dane: dict) -> str:
+    """Nagłówek kolumny zmiany: m/m albo porównanie okna z oknem poprzednim."""
+    n = dane.get("miesiecy") or 1
+    return "m/m" if n == 1 else f"vs {n} mies. wcz."
+
+
 # Ile pierwszych pozycji dostaje link w nazwie modelu. Świadomie mało: oferta ma już ~40 linków
 # w <main>, a link z tabeli ma prowadzić tam, gdzie czytelnik faktycznie klika — czyli w czołówkę
 # (decyzja Janka, 2026-08-05). Pozycja bez naszego huba zostaje tekstem, nie linkujemy w pustkę.
@@ -128,7 +150,7 @@ def nazwa_auta(p: dict) -> str:
     return tekst
 
 
-def tabela_rankingu(pozycje: list, okres: str) -> str:
+def tabela_rankingu(pozycje: list, okres: str, kol_zmiany: str = "m/m") -> str:
     """Tabela = źródło prawdy wpisu. Układ pod telefon (79,6% ruchu): klasa nadwozia jedzie
     w komórce modelu jako druga linia, a kolumna „Klasa" znika pod 700 px — zamiast zmuszać
     do przewijania w bok sześciu kolumn."""
@@ -158,7 +180,7 @@ def tabela_rankingu(pozycje: list, okres: str) -> str:
         '<table class="aa-rank"><thead><tr>'
         '<th class="aa-rank-poz">#</th><th>Model</th><th class="aa-rank-klasa">Klasa</th>'
         f'<th class="aa-rank-szt">Sprzedaż<span>{okres}</span></th>'
-        '<th class="aa-rank-zm">m/m</th><th class="aa-rank-oferta">U nas</th>'
+        f'<th class="aa-rank-zm">{kol_zmiany}</th><th class="aa-rank-oferta">U nas</th>'
         "</tr></thead><tbody>" + "".join(wiersze) + "</tbody></table></div>"
     )
 
@@ -269,12 +291,18 @@ def normalizuj_wan(tekst: str) -> str:
 def sekcja_zrodla(dane: dict, wzbogacone: int) -> str:
     """Obowiązkowa (3.3) — to jest różnica między nami a przepisywaczami zrzutów z WeChat."""
     dzis = date.today().strftime("%d.%m.%Y")
+    if dane.get("okres_od"):
+        zakres = (f"sumuje sprzedaż z okresu {okres_dane(dane)} i porównuje ją z takim samym "
+                  f"okresem wcześniej ({okres_zakres(dane['porownanie_od'], dane['porownanie_z'])}). "
+                  f"W tym segmencie miesięczne liczby są za małe, żeby pojedynczy miesiąc coś mówił")
+    else:
+        zakres = (f"obejmuje {okres_slownie(dane['zrodlo_data'])} i porównuje je z miesiącem poprzednim "
+                  f"({okres_slownie(dane['porownanie_z'])})")
     return (
         "<h2>Skąd te dane</h2>"
         f"<p>Liczby sprzedaży pochodzą z serwisu Dongchedi (懂车帝), który publikuje miesięczne "
         f"zestawienia rejestracji w Chinach w podziale na modele i klasy nadwozia. Zestawienie "
-        f"obejmuje {okres_slownie(dane['zrodlo_data'])} i porównuje je z miesiącem poprzednim "
-        f"({okres_slownie(dane['porownanie_z'])}). Z listy wybraliśmy wyłącznie marki chińskie — "
+        f"{zakres}. Z listy wybraliśmy wyłącznie marki chińskie — "
         f"w oryginalnym rankingu są też auta koncernów zagranicznych produkowane w Chinach.</p>"
         f"<p>Kolumna „U nas\" pokazuje <strong>bieżący</strong> stan naszej oferty — nie stan "
         f"z dnia publikacji. Przelicza się automatycznie, bo to ona rotuje; ranking rynkowy "
@@ -326,16 +354,25 @@ def dane_dla_modelu(dane: dict, pozycje: list, d: dict) -> str:
     linie = []
     for p in pozycje:
         oferta = " | mamy w ofercie" if p.get("nasza_oferta") else ""
-        zm = "nowość w zestawieniu" if p.get("zmiana_proc") is None else f"{p['zmiana_proc']:+d}% m/m"
+        zm = ("nowość w zestawieniu" if p.get("zmiana_proc") is None
+              else f"{p['zmiana_proc']:+d}% {etykieta_zmiany(dane)}")
         linie.append(f"  {p['pozycja']}. {p['marka']} {p['model']} — {p['wartosc']:,} szt., "
                      f"{zm}, klasa: {p['klasa']}{oferta}".replace(",", " "))
     mamy = [p for p in pozycje if p.get("nasza_oferta")]
+    uwaga_okna = ""
+    if dane.get("okres_od"):
+        uwaga_okna = (f"UWAGA O OKRESIE: liczby to SUMA {dane['miesiecy']} miesięcy, nie jeden miesiąc. "
+                      f"Zmiana procentowa porównuje to okno z {dane['miesiecy']} miesiącami wcześniej — "
+                      f"NIE pisz o zmianie „miesiąc do miesiąca\" ani o sprzedaży „w sierpniu\".\n")
+        uwaga_okna = uwaga_okna.replace("w sierpniu", "w " + MIESIACE_D[dane["zrodlo_data"][4:6]])
+    if d.get("notka_dla_modelu"):
+        uwaga_okna += f"POZA TABELĄ: {d['notka_dla_modelu']}\n"
     return f"""TEMAT: {d['tytul']}
 KRYTERIUM RANKINGU: {d['kryterium']}
-OKRES: {okres_slownie(dane['zrodlo_data'], dopelniacz=True)}
+OKRES: {okres_dane(dane, dopelniacz=True)}
 FRAZA, NA KTÓRĄ PISZEMY: {d['fraza_glowna']}
 KONTEKST REDAKCYJNY: {d.get('kontekst', '')}
-
+{uwaga_okna}
 DANE (jedyne dopuszczalne liczby):
 {chr(10).join(linie)}
 
@@ -367,7 +404,8 @@ def bramka_liczb(narracja: str, pozycje: list, dane: dict):
         if p.get("nasza_oferta"):
             dozwolone |= {p["nasza_oferta"]["sztuk"], p["nasza_oferta"]["cena_od"]}
     # Rankingi parametryczne nie mają miesiąca porównawczego — pole bywa puste.
-    dozwolone |= {int(x) for x in (dane.get("zrodlo_data"), dane.get("porownanie_z"))
+    dozwolone |= {int(x) for x in (dane.get("zrodlo_data"), dane.get("porownanie_z"),
+                                   dane.get("okres_od"), dane.get("porownanie_od"), dane.get("miesiecy"))
                   if str(x or "").isdigit()}
     # Wartości parametrów (zasięg, kWh, moc, V-max, cena w 万) też są danymi z tabeli.
     for p in pozycje:
@@ -396,7 +434,7 @@ def bramka_liczb(narracja: str, pozycje: list, dane: dict):
 
 def zbuduj_tresc(gen: dict, dane: dict, pozycje: list, d: dict) -> str:
     spec = d.get("zrodlo") == "spec"
-    okres = okres_slownie(dane["zrodlo_data"])
+    okres = okres_dane(dane)
     mamy = sum(1 for p in pozycje if p.get("nasza_oferta"))
     naglowek = (f"<h2>Ranking: {d.get('naglowek_tabeli', 'zestawienie')} — TOP {len(pozycje)}</h2>"
                 if spec else
@@ -410,8 +448,11 @@ def zbuduj_tresc(gen: dict, dane: dict, pozycje: list, d: dict) -> str:
         naglowek,
         kryterium,
         "<!--RANKING:START-->",
-        tabela_specow(pozycje, dane, d) if spec else tabela_rankingu(pozycje, okres),
+        tabela_specow(pozycje, dane, d) if spec else tabela_rankingu(pozycje, okres, etykieta_zmiany(dane)),
         "<!--RANKING:END-->",
+        # Notka pod tabelą — stała treść redakcyjna z definicji (np. model, który mamy,
+        # a który w danych sprzedaży się nie mieści). Bez liczb z naszej oferty.
+        f'<p class="aa-rank-notka">{d["notka"]}</p>' if d.get("notka") else "",
         podsumowanie_oferty(pozycje, dane.get("parametr")),
     ]
     for s in gen["sekcje"]:
@@ -496,7 +537,7 @@ def okladka(post_id: str, d: dict, dane: dict, pozycje: list = None):
     2026-08-05): **WebP**, **nazwa pliku z frazą** (nie `cover-123.webp`) i **opisy pod SEO** —
     tytuł, alt i podpis. Zdjęcie z sesji, gdy definicja je wskazuje (`foto`); plansza
     typograficzna tylko jako ostatnia deska ratunku, bo prawdziwe auto bije planszę."""
-    okres = okres_slownie(dane["zrodlo_data"])
+    okres = okres_dane(dane)
     nazwa = f"{d['slug']}-{okres.replace(' ', '-')}.webp"
     plik = kb.STATE_DIR / nazwa
     zrodlowe = d.get("foto")
@@ -554,6 +595,7 @@ def zapisz_draft(d: dict, gen: dict, tresc: str, dane: dict, pozycje: list) -> t
     # bez ponownego odpytywania API przy każdym przeliczeniu dostępności.
     meta = {"definicja": d["_nazwa"], "okres": dane["zrodlo_data"],
             "porownanie_z": dane["porownanie_z"], "zrodlo": dane["zrodlo"],
+            **{k: dane[k] for k in ("okres_od", "miesiecy", "porownanie_od") if dane.get(k)},
             "zrodlo_url": dane["zrodlo_url"], "pobrano": dane["pobrano"],
             "parametr": dane.get("parametr"), "jednostka": dane.get("jednostka"),
             "etykieta": dane.get("etykieta"),
@@ -617,7 +659,8 @@ def main():
     else:
         print("  dane rynkowe…", flush=True)
         dane = rm.dongchedi_ranking(d["klasy"], a.miesiac, d.get("typ", 11), d.get("naped", ""),
-                                    d.get("top"))
+                                    d.get("top"), miesiecy=d.get("miesiecy", 1),
+                                    tylko_serie=d.get("tylko_serie"))
     pozycje = dane["ranking"]
     if dane["dziury_w_czolowce"]:
         print("  BŁĄD: pozycje bez nazwy mieszczą się w publikowanej czołówce — ranking byłby "
@@ -735,7 +778,7 @@ def main():
                 f"Prima-Auto: draft rankingu — {d['tytul']}",
                 f"<p>Draft rankingu do przejrzenia (nie jest opublikowany).</p>"
                 f"<p><a href=\"{url}\">{d['tytul']}</a> · <a href=\"{podglad}\">podgląd treści</a></p>"
-                f"<p>Dane: {okres_slownie(dane['zrodlo_data'])}, {len(pozycje)} pozycji, "
+                f"<p>Dane: {okres_dane(dane)}, {len(pozycje)} pozycji, "
                 f"{trafione} mamy w ofercie.</p>")
             print("  mail wysłany", flush=True)
     elif a.apply:

@@ -203,6 +203,43 @@
       "naglowek_tabeli": "najdroższe chińskie auta w cenniku producenta",
       "poziom_dopasowania": "model",
       "kontekst": "Segment, o którym w Polsce nikt nie wie: Yangwang U9 za 1,68 mln juanów to auto z klasy Ferrari, a Maextro S800 konkuruje z Maybachem. Cena chińska nie jest ceną w Polsce i trzeba to napisać wprost."
+    },
+    "limuzyny": {
+      "tytul": "Chińskie limuzyny — ranking luksusowych sedanów w Chinach",
+      "slug": "chinskie-limuzyny-ranking",
+      "fraza_glowna": "chińskie limuzyny",
+      "fraza_wolumen": 880,
+      "frazy_poboczne": [
+        "chińska limuzyna",
+        "luksusowe chińskie limuzyny",
+        "luksusowe chińskie samochody"
+      ],
+      "kryterium": "łączna sprzedaż w Chinach z trzech miesięcy, chińskie limuzyny klasy wyższej i luksusowej — wyłącznie nadwozie sedan, bez wersji kombi, shooting brake i liftback (Stelato S9T, Denza Z9 GT, Avatr 12, Zeekr 001)",
+      "klasy": [
+        4,
+        5
+      ],
+      "typ": 11,
+      "naped": "",
+      "top": null,
+      "miesiecy": 3,
+      "tylko_serie": [
+        9947,
+        24599,
+        4355,
+        9324,
+        25095,
+        9707,
+        25647,
+        10122,
+        691,
+        24693
+      ],
+      "_tylko_serie_opis": "Lista modeli (decyzja Janka 2026-09-25): Stelato S9 9947, Maextro S800 24599, Hongqi H9 4355, Yangwang U7 EV 9324 i PHEV 25095, NIO ET9 9707, Voyah Passion L 25647, Hongqi Guoya 10122 i Guoli 691, Denza Z9 (sedan) 24693. Świadomie POZA: S9T 25595 i Z9 GT 10070/10171 (shooting brake), Avatr 12, Zeekr 001, NIO ET7, IM L7, Hyptec A800. Suma 3 miesięcy, bo miesięczne liczby w segmencie są za małe.",
+      "poziom_dopasowania": "model",
+      "kontekst": "Segment wąski: kilka modeli z kilkuset sztukami miesięcznie, liczonych łącznie z trzech miesięcy. Czytelnik szuka reprezentacyjnego auta klasy wyższej — S9, Z9, Passion L to realne alternatywy dla limuzyn niemieckich marek, ale NIE porównuj ich z pamięci do aut europejskich. Wersje GT i T (kombi, shooting brake) celowo wyłączone — to nie są limuzyny.",
+      "notka": "Denza Z9 w wersji sedan nie mieści się w zestawieniu: w Chinach sprzedaje się śladowo — wiosną 2026 po kilka sztuk miesięcznie, a od czerwca nie pojawia się w danych Dongchedi. Nie należy jej mylić z Denzą Z9 GT, która sprzedaje się w tysiącach, ale jest shooting brake, a nie limuzyną. Limuzyna Z9 jest dostępna w imporcie — <a href=\"/samochody/denza/z9-dm-i/\">zobacz Denzę Z9</a>.",
+      "notka_dla_modelu": "Denza Z9 (sedan) jest dostępna w imporcie (mamy ją w ofercie), ale w danych Dongchedi od czerwca 2026 nie ma jej sprzedaży (wcześniej po kilka sztuk miesięcznie). Opisuje ją osobna notka pod tabelą. Jeśli o niej piszesz: bez liczb, NIE sugeruj, że jest niedostępna, i NIE twierdź nic o jej produkcji — tego nie wiemy. Denza Z9 GT i Stelato S9T to nie limuzyny (shooting brake / kombi), nie ma ich w danych."
     }
   },
   "_foto_opis": "`foto` = ścieżka do zdjęcia źródłowego (sesje własne, np. z Dysku PrimaAuto/sesje/). Generator sam kadruje 16:9, konwertuje do WebP i nadaje nazwę pliku z frazy (slug + okres) oraz opisy pod SEO. Bez `foto` wchodzi plansza typograficzna — gorsza, więc traktujemy ją jako awaryjną. Oryginały sesji trzymamy w `~/media/primaauto/sesje/<data>/` (nie w `tmp/`, które jest czyszczone) — Dysk Google zostaje archiwum, serwer ma kopię roboczą. Zdjęcia z galerii ofert KOPIUJEMY do `~/media/primaauto/oferty/` — oferta rotuje i po jej usunięciu plik znika razem z załącznikami, a okładka wpisu ma zostać."

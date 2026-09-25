@@ -332,18 +332,39 @@ echo json_encode($out, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES|JSON_FORCE_
         return {}
 
 
-def dongchedi_ranking(klasy, miesiac=None, typ=11, naped="", top=None, tylko_chinskie=True):
+def dongchedi_ranking(klasy, miesiac=None, typ=11, naped="", top=None, tylko_chinskie=True,
+                      miesiecy=1, tylko_serie=None):
+    """`miesiecy` > 1 sumuje sprzedaż z okna kilku miesięcy (kończącego się na `miesiac`)
+    i porównuje ją z oknem tej samej długości tuż przed nim — dla segmentów, w których
+    miesięczne liczby są za małe, żeby coś mówić (limuzyny: kilka–kilkaset sztuk).
+    `tylko_serie` (lista `series_id` Dongchedi) zawęża klasę do wskazanych modeli: klasa 4
+    miesza limuzyny z SU7 i Hanem, a Z9 GT (shooting brake) ma inną serię niż Z9 (sedan)."""
     nazwy = wczytaj_nazwy()
     miesiac = miesiac or dcd_ostatni_miesiac(klasy[0])
-    poprzedni = poprzedni_miesiac(miesiac)
+    okno = [miesiac]
+    for _ in range(miesiecy - 1):
+        okno.insert(0, poprzedni_miesiac(okno[0]))
+    okno_wcz = [poprzedni_miesiac(okno[0])]
+    for _ in range(miesiecy - 1):
+        okno_wcz.insert(0, poprzedni_miesiac(okno_wcz[0]))
+    poprzedni = okno_wcz[-1]
+    dozwolone = set(tylko_serie) if tylko_serie else None
 
-    surowe, wczesniej = [], {}
+    # Jedna pozycja na serię: przy oknie wielomiesięcznym sumujemy sztuki, a metadane
+    # (nazwa, ceny, klasa) bierzemy z najświeższego miesiąca, w którym seria się pojawiła.
+    po_serii, wczesniej = {}, {}
     for odt in klasy:
-        for x in dcd_pobierz(odt, miesiac, typ, naped):
-            x["_odt"] = odt
-            surowe.append(x)
-        for x in dcd_pobierz(odt, poprzedni, typ, naped):
-            wczesniej[x["series_id"]] = x["count"]
+        for m in okno:
+            for x in dcd_pobierz(odt, m, typ, naped):
+                if dozwolone is not None and x["series_id"] not in dozwolone:
+                    continue
+                x["_odt"] = odt
+                x["count"] += po_serii[x["series_id"]]["count"] if x["series_id"] in po_serii else 0
+                po_serii[x["series_id"]] = x
+        for m in okno_wcz:
+            for x in dcd_pobierz(odt, m, typ, naped):
+                wczesniej[x["series_id"]] = wczesniej.get(x["series_id"], 0) + x["count"]
+    surowe = list(po_serii.values())
 
     pozycje, odrzucone = [], {"obce": 0, "nazwa": []}
     for x in surowe:
@@ -394,6 +415,13 @@ def dongchedi_ranking(klasy, miesiac=None, typ=11, naped="", top=None, tylko_chi
         # `podmiot` = klucz dopasowania w ranking_stock.py (taksonomia `serie`)
         pozycje[i]["podmiot"] = nasze["serie"]
     for p in pozycje:
+        # Ręczne wskazanie huba (`serie` w ranking_names.json) wygrywa z resolverem — gdy
+        # nasza taksonomia trzyma model pod inną nazwą niż źródło (仰望U7 PHEV → „Yangwang U7").
+        wpis = nazwy["modele"].get(p["model_cn"]) or {}
+        if wpis.get("serie"):
+            p["podmiot"] = p["nasza_serie"] = wpis["serie"]
+            if wpis.get("marka"):          # nasza marka, gdy inna niż u źródła (Yangwang → BYD)
+                p["nasza_marka"] = wpis["marka"]
         p.setdefault("podmiot", p["model"])
         p["podmiot_zrodlo"] = p["model_cn"]
 
@@ -401,8 +429,13 @@ def dongchedi_ranking(klasy, miesiac=None, typ=11, naped="", top=None, tylko_chi
         "zrodlo": "dongchedi-rank-api",
         "zrodlo_url": f"{DCD_URL}?rank_data_type={typ}&month={miesiac}",
         "zrodlo_data": miesiac,
-        "okres": f"{miesiac[4:6]}.{miesiac[:4]}",
+        "okres": (f"{okno[0][4:6]}–{miesiac[4:6]}.{miesiac[:4]}" if miesiecy > 1
+                  else f"{miesiac[4:6]}.{miesiac[:4]}"),
         "porownanie_z": poprzedni,
+        # Pola okna — obecne tylko przy sumie kilku miesięcy, żeby stare rankingi miały
+        # identyczny JSON jak dotąd.
+        **({"okres_od": okno[0], "miesiecy": miesiecy, "porownanie_od": okno_wcz[0]}
+           if miesiecy > 1 else {}),
         "klasy": [KLASY.get(k, str(k)) for k in klasy],
         "pobrano": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "pozycji_zrodlowych": len(surowe),
