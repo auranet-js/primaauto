@@ -31,8 +31,10 @@ BAZA = "https://tagmanager.googleapis.com/tagmanager/v2"
 SCIEZKA = "accounts/6351095501/containers/250095450"
 NAZWA_ZMIENNEJ = "URL bez fbclid"
 
-# Parametry klikowe, które nie niosą informacji o treści strony, a rozbijają raporty.
-CZYSC = ["fbclid", "gclid", "wbraid", "gbraid", "msclkid", "ttclid"]
+# TYLKO fbclid. Wersja z 07.09 (v13) wycinała też gclid/wbraid/gbraid/msclkid/ttclid —
+# poza poleceniem — i odcięła GA4 od atrybucji Google Ads (sesje google/cpc 103–133 → 33–41/dobę).
+# Cofnięte 04.10.2026. Identyfikatorów klików Google NIE dopisywać z powrotem.
+CZYSC = ["fbclid"]
 
 JS = ("function() {\n"
       "  try {\n"
@@ -80,6 +82,9 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--zbuduj", action="store_true")
     ap.add_argument("--publikuj", action="store_true")
+    ap.add_argument("--popraw-zmienna", action="store_true",
+                    help="nadpisz JS istniejącej zmiennej bieżącą listą CZYSC")
+    ap.add_argument("--nazwa", default="fbclid poza page_location", help="nazwa wersji przy --publikuj")
     ap.add_argument("--tag", metavar="ID", help="wypisz surowy JSON tagu i wyjdź")
     a = ap.parse_args()
     tok = token()
@@ -115,13 +120,23 @@ def main():
 
     if a.publikuj:
         d, e = wolaj(tok, f"{wsp}:create_version",
-                     {"name": "fbclid poza page_location", "notes":
+                     {"name": a.nazwa, "notes":
                       "Zmienna \u201eURL bez fbclid\u201d podpieta pod page_location w tagu GA4."})
         if e:
             sys.exit(f"wersja nie powstała: {e}")
         wer = d["containerVersion"]["containerVersionId"]
         d, e = wolaj(tok, f"{SCIEZKA}/versions/{wer}:publish", {})
         print(f"\npublikacja wersji {wer}: {'OK' if not e else e}")
+        return
+
+    if a.popraw_zmienna:
+        if not istnieje:
+            sys.exit("zmiennej nie ma — najpierw --zbuduj")
+        v = istnieje[0]
+        v["parameter"] = [{"type": "TEMPLATE", "key": "javascript", "value": JS}]
+        v["notes"] = "Zdejmuje wyłącznie fbclid z adresu wysyłanego do GA4."
+        d, e = wolaj(tok, f"{wsp}/variables/{v['variableId']}", v, metoda="PUT")
+        print(f"\nzmienna {v['variableId']} zaktualizowana: {CZYSC}" if not e else f"BŁĄD: {e}")
         return
 
     if not a.zbuduj:

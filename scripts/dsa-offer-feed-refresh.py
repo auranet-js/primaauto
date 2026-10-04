@@ -32,7 +32,9 @@ from datetime import datetime
 sys.path.insert(0, "/home/host476470/projekty/primaauto/tmp")
 from gads_client import load, refresh
 
-CID="9506068500"; API="v21"; FEED_SET_ID="9118569940"; LABEL="dsa2026"
+# Wersja API z ~/secrets/google/ads-config.json — hardkod "v21" cicho zabił ten cron 10.08 (404)
+API = json.load(open("/home/host476470/secrets/google/ads-config.json")).get("api_version", "v25")
+CID="9506068500"; FEED_SET_ID="9118569940"; LABEL="dsa2026"
 WP="/home/host476470/domains/primaauto.com.pl/public_html"
 LOG=os.path.expanduser("~/.claude/dsa-offer-feed.log")
 APPLY="--apply" in sys.argv; QUIET="--quiet" in sys.argv
@@ -108,6 +110,16 @@ for line in r3.stdout.splitlines():
     p=line.split("\t")
     if len(p)>=3 and p[0].strip():
         status[p[0]]=p[1]; slug2hub[p[0]]=p[2]
+
+# Sztuka skasowana na stałe przez rotację (draft 48 h + kosz 7 dni) nie ma już modelu w bazie —
+# odtwarzamy go ze sluga „marka-model-ROK-ID”, dopasowując do kluczy best (marka/model -> marka-model).
+# Bez tego po dłuższym postoju crona cały martwy feed znikał bez następców (incydent 10.08–04.10).
+import re
+hub_by_prefix={k.replace("/","-"): k for k in best}
+for s in cur:
+    if s not in slug2hub:
+        m=re.match(r"^(.*)-20\d\d-\d+$", s)
+        if m and m.group(1) in hub_by_prefix: slug2hub[s]=hub_by_prefix[m.group(1)]
 
 alive=[s for s in cur if status.get(s)=="publish"]
 dead =[s for s in cur if status.get(s)!="publish"]

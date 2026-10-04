@@ -13,7 +13,8 @@ from datetime import datetime
 sys.path.insert(0, "/home/host476470/projekty/primaauto/tmp")
 from gads_client import load, refresh
 
-CID="9506068500"; API="v21"; FEED_SET_ID="9118569940"; CAMP="23896725555"
+API = json.load(open("/home/host476470/secrets/google/ads-config.json")).get("api_version", "v25")
+CID="9506068500"; FEED_SET_ID="9118569940"; CAMP="23896725555"
 oauth, tokens, cfg = load(); AT = refresh(oauth, tokens)
 H={"Authorization":f"Bearer {AT}","developer-token":cfg["developer_token"],
    "login-customer-id":cfg["mcc_customer_id"],"Content-Type":"application/json"}

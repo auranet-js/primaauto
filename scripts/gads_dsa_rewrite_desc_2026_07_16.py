@@ -25,7 +25,8 @@ import os, sys, json, urllib.request, urllib.error
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from gads_client import load, refresh
 
-CID="9506068500"; API="v21"; CAMP="23896725555"; ADGROUP="197286896339"
+API = json.load(open("/home/host476470/secrets/google/ads-config.json")).get("api_version", "v25")
+CID="9506068500"; CAMP="23896725555"; ADGROUP="197286896339"
 APPLY = "--apply" in sys.argv
 
 # Copy Janka (16.07). Cene niesie juz naglowek (title oferty), wiec opis mowi to,

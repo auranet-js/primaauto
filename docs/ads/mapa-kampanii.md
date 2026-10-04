@@ -14,7 +14,7 @@
 | kampania | ID | typ | rola | historia / ustalenia |
 |---|---|---|---|---|
 | **[Brand] Prima-Auto** | 23779860635 | Search | obrona marki, najtańsze leady | od 22.04, oryginalna trójka kampanii. **31.08: `TARGET_IMPRESSION_SHARE`** (górna pozycja 90%, sufit CPC 1,50 zł) zamiast MANUAL_CPC — udział skakał od 10% do 100%. Dwie reklamy od 31.08 (wcześniej jedna = pojedynczy punkt awarii) |
-| **[Topic] Import z Chin** | 23779860638 | Search | intencje generyczne („import aut z Chin") | od 22.04, oryginalna trójka |
+| **[Topic] Import z Chin** | 23779860638 | Search | intencje generyczne („import aut z Chin") | od 22.04, oryginalna trójka. **ROLA (Janek 04.10): zabezpiecza 80–99% pozycji rynkowej na frazach importu aut z Chin — NIE oceniać kosztem kontaktu, NIE proponować cięcia budżetu ani pauzy.** |
 | **[DSA] Import modele z Chin** | 23896725555 | Search DSA | page-feed, długi ogon modeli | rework 12.07 (`dsa-rework-2026-07-12.md`); T-200 rekomendował PAUZĘ 09.07 przy CPA 204 zł; 16.07 feed przestawiony z hubów na najtańszą ofertę per model (`docs/decyzje/2026-07-16-dsa-feed-na-oferty.md`), kampania została włączona. Feed odświeża cron co 3 dni (`scripts/dsa-offer-feed-refresh.py`, lepki — podmiana tylko gdy sztuka zeszła z publish) |
 | **[RMKT] Dynamic Remarketing — Model-huby** | 23897599362 | Display | powrót niedoszłych, feed model-hubów | recon + optymalizacja 12.07 (`rmkt-optymalizacja-2026-07-12.md`), konwersje ×2 po zmianach; feed odświeżany tygodniowo (`scripts/refresh-rmkt-feed.sh`) |
 | **[DG] Demand Gen — auta z Chin (YouTube)** | 24069066886 | Demand Gen | zasięg wizualny na YouTube | z T-200 „visual-first" (09.07) — teza: auta kupuje się oczami, 3 000 ogłoszeń ze zdjęciami jako paliwo |
@@ -313,6 +313,11 @@ Rozważane przy budowie drugiej karuzeli. Zostajemy przy ofertach:
 - **Dowód z konta:** obecna karuzela ma karty z 24.07 i po pięciu tygodniach trzy z czterech ofert
   nadal oddają 200, czwarta przekierowuje na hub. Nic się nie wysypało, a to najlepsza reklama w `[DG]`.
 
+### Incydenty 04.10 — feed DSA i `gclid` (oba naprawione)
+
+- **Feed `[DSA]` stał 10.08–04.10.** `dsa-offer-feed-refresh.py` miał `API="v21"` (ten sam błąd co `gads_client.py` do 19.08 i feed RMKT do 07.09 — trzeciego skryptu nikt nie sprawdził). Przez 55 dni rotacja skasowała oferty z feedu na stałe, więc skrypt nie umiał ustalić modelu i chciał wyciąć cały martwy feed bez następców. Naprawa: wersja API z configu + model ze sluga (`marka-model-ROK-ID`). Wgrane 04.10 13:25: 99 → 83 żywe oferty. **Przy każdym błędzie wersji API sprawdzaj WSZYSTKIE skrypty Ads (`grep -rn '"v2[0-9]"' scripts/`).**
+- **`gclid` wycinany w GTM 07.09–04.10.** Polecenie z 07.09 dotyczyło tylko `fbclid`; wdrożenie wycięło też `gclid`/`wbraid`/`gbraid`/`msclkid`/`ttclid` i GA4 straciło atrybucję Google Ads (`google / cpc` 103–133 → 33–41 sesji/dobę, ruch RMKT/DG jako youtube.com / doubleclick). 11.09 błędnie zapisane jako „decyzja Janka”. Cofnięte: GTM **v16** czyści tylko `fbclid`. **Dane GA4 z tego okresu dla `google / cpc` są zaniżone — nie porównuj z nimi.**
+
 ### Gotchy API (każda kosztowała czas)
 
 - Wersję API bierz z `~/secrets/google/ads-config.json` (pole `api_version`, dziś `v25`).
@@ -431,8 +436,7 @@ Rozważane przy budowie drugiej karuzeli. Zostajemy przy ofertach:
      więc cotygodniowy cron nie wciągnie jej z powrotem.
    Do decyzji, czy mail ws. marki Xiaomi obejmuje też pozostałe miejsca.
 5. **Wykluczenie „auto prima bełchatów"** z `[Brand]` — 31 zł za 4 kliknięcia, 0 konwersji, obcy brand.
-6. **[Topic] jest nasycone** (IS 98%, utracone przez budżet 0%) przy CPA 77 zł i rosnącym CPC
-   (2,12 zł). Nie ma gdzie rosnąć — pytanie brzmi, czy nie zabrać stąd budżetu na [DG].
+6. ~~**[Topic] jest nasycone** — „czy nie zabrać stąd budżetu na [DG]"~~ — **odrzucone 04.10:** [Topic] trzyma pozycję rynkową (IS 97–98%), nie jest kampanią do rozliczania CPA. Nie wracać.
 7. ~~**[RMKT] słabnie**~~ — **przyczyna ustalona 07.09: feed stał od 09.08.**
    `gads-rmkt-feed-refresh.py` miał `API = "v21"` na sztywno; po wygaszeniu v21 push leciał 404
    przez cztery niedziele (16.08, 23.08, 30.08, 06.09), a błąd szedł tylko do logu, którego nikt
