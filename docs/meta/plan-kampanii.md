@@ -40,6 +40,10 @@
 
 **04.10 — korekty po rechecku:**
 - `[KAT]` zbudowany 15.09 **bez wykluczeń**, mimo że jest kampanią na nowych odbiorców (plan z 28.08: prospecting wyklucza odwiedzających i kontakty). To był nasz błąd. 04.10 dodane te same wykluczenia co w `[FOTO]`: „Wszyscy odwiedzający — 180 dni” i „Kontakt tel./WhatsApp — 180 dni”. Kopia targetowania sprzed zmiany: `~/backups/primaauto/2026-10-04/meta-kat-targeting-przed.json`.
+- `[RMKT]`: rozszerzanie listy wyłączone (`targeting_relaxation_types.custom_audience: 0`). Remarketing trafia wyłącznie do osób z listy „Oglądający oferty — 30 dni”. Decyzja Janka 04.10, kopia targetowania sprzed zmiany: `meta-rmkt-targeting-przed.json`.
+- `[FOTO]` zapauzowany 04.10. Test celu „kontakt” z 15.09: 1 WhatsApp w 19 dni (stary zestaw z celem „wyświetlenie oferty”: 1 WhatsApp w 11 dni), 0 telefonów w obu okresach. Decyzja Janka.
+- `[KAT]` 35 → **45 zł/dz**. 5 zł zostaje jako zapas. **Konto: 60 zł/dz** ([KAT] 45 + [RMKT] 15). Decyzja Janka 04.10.
+- Rozważony i niewdrożony odpowiednik [Brand]: katalog do „Zaangażowani FB/IG — 365 dni”. Wraca, jeśli zapas 5 zł ma pójść na nową kampanię.
 - **Messenger na ofercie — odrzucone przez Janka 04.10.** Żadnych zmian na stronie oferty. Tematu nie wznawiać.
 
 **Skrypty:** `scripts/social/buduj_kat.py`, `scripts/social/przebudowa_2026_09_15.py`, `scripts/gtm-piksel-meta.py`.
