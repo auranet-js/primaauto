@@ -121,8 +121,17 @@ for s in cur:
         m=re.match(r"^(.*)-20\d\d-\d+$", s)
         if m and m.group(1) in hub_by_prefix: slug2hub[s]=hub_by_prefix[m.group(1)]
 
-alive=[s for s in cur if status.get(s)=="publish"]
-dead =[s for s in cur if status.get(s)!="publish"]
+# Marki wycofane z reklam decyzją Janka (Xiaomi: RMKT 07.09, DSA 04.10) — spójnie z
+# $WYCOFANE_MARKI w build-gads-hub-feed.php. Wpis takiej marki wylatuje z feedu nawet żywy
+# i nigdy nie dostaje następcy.
+WYCOFANE_MARKI = {"xiaomi"}
+def wycofana(s):
+    hub = slug2hub.get(s, "")
+    return hub.split("/")[0] in WYCOFANE_MARKI or s.split("-")[0] in WYCOFANE_MARKI
+best = {h: v for h, v in best.items() if h.split("/")[0] not in WYCOFANE_MARKI}
+
+alive=[s for s in cur if status.get(s)=="publish" and not wycofana(s)]
+dead =[s for s in cur if status.get(s)!="publish" or wycofana(s)]
 
 # Dla martwych: nastepca = najtansza ZYWA sztuka tego samego modelu (o ile taka jest i nie jest juz w feedzie).
 add=[]; rm=[]; reason={}
@@ -131,7 +140,7 @@ for s in dead:
     hub=slug2hub.get(s)
     nxt=best.get(hub) if hub else None
     rm.append(s)
-    reason[s]=f"sztuka zeszla ({status.get(s,'BRAK W BAZIE')})" + (
+    reason[s]=(f"marka wycofana ({hub})" if wycofana(s) else f"sztuka zeszla ({status.get(s,'BRAK W BAZIE')})") + (
         f" -> nastepca {nxt}" if nxt and nxt not in taken else
         " -> brak zywej sztuki w modelu, wpis znika" if not nxt else
         f" -> nastepca {nxt} juz w feedzie")

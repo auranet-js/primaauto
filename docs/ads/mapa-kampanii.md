@@ -523,6 +523,11 @@ Rozważane przy budowie drugiej karuzeli. Zostajemy przy ofertach:
 | 2026-08-31 | `[DG]` +4 reklamy wideo (Shorty: Shark 6, Deepal G318, Leopard 7, Denza Z9 GT) | `scripts/gads-dg-nowe-filmy-2026-08-31.py --apply`, zweryfikowane odczytem |
 | 2026-08-31 | `[DG]` „wideo — Exeed VX" → sam Short (poziomy miał 371 kliknięć i 0 konwersji) | `scripts/gads-dg-exeed-tylko-short-2026-08-31.py --apply`, zweryfikowane: 1 wideo |
 | 2026-08-31 | `[DG]` +2. karuzela „nowa dostawa Rzeszów (sesja 25.08)" — 8 obrazów, 4 karty, reklama 822804557271 | `scripts/gads-dg-karuzela2-2026-08-31.py --apply`, zweryfikowane odczytem |
+| 2026-10-04 | `[DSA]` feed naprawiony (hardkod API v21) i wgrany: 99 → 83 żywe oferty | `scripts/dsa-offer-feed-refresh.py --apply` 13:25, bieg kontrolny „wszystkie sztuki żyją” |
+| 2026-10-04 | `[DSA]` Xiaomi usunięte z feedu (SU7, SU7 Ultra) + `WYCOFANE_MARKI` w skrypcie feedu — decyzja Janka | `dsa-offer-feed-refresh.py --apply` 19:13: 83 → 81, bieg kontrolny bez zmian |
+| 2026-10-04 | `[DSA]` wykluczenie PHRASE `olx` (rynek wtórny) — decyzja Janka | API `campaignCriteria:mutate`, zweryfikowane odczytem (criterion 1336451395) |
+| 2026-10-04 | `[DG]` pauza wideo BYD Shark 6 (822921418733) — 116 zł / 30 dni, 0 kontaktów — decyzja Janka | API `adGroupAds:mutate`, zweryfikowane odczytem: PAUSED |
+| 2026-10-04 | GTM v16: `page_location` czyści tylko `fbclid` (`gclid` przywrócony) | `scripts/gtm-fbclid.py --popraw-zmienna` + `--publikuj`, potwierdzone w żywym `gtm.js` |
 
 ## 7. Etykiety polityki — nie przepisuj reklam pod `APPROVED_LIMITED` (ustalone 2026-08-31)
 
