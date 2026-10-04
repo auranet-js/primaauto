@@ -22,7 +22,7 @@
 
 | Kampania | ID | Zestaw | Stan | Budżet | Kierowanie | Miejsca | Cel | Reklamy |
 |---|---|---|---|---:|---|---|---|---|
-| **`[KAT]` Oferta — nowi odbiorcy (katalog)** | 120249107889100243 | `[KAT] PL M 30-60 — cały katalog` 120249107889960243 | **ACTIVE od 15.09** | 35 zł | Polska, rama 25–65, **propozycja M 30–60** (Advantage+), bez wykluczeń | aktualności FB + IG | ViewContent (katalog „Wszystkie pojazdy”, ~3 000) | karuzela z katalogu, tekst A + B, „Skorzystaj z oferty” |
+| **`[KAT]` Oferta — nowi odbiorcy (katalog)** | 120249107889100243 | `[KAT] PL M 30-60 — cały katalog` 120249107889960243 | **ACTIVE od 15.09** | 35 zł | Polska, rama 25–65, **propozycja M 30–60** (Advantage+), **wykl. odwiedzający 180 dni + kontakt 180 dni (od 04.10)** | aktualności FB + IG | ViewContent (katalog „Wszystkie pojazdy”, ~3 000) | karuzela z katalogu, tekst A + B, „Skorzystaj z oferty” |
 | **`[FOTO]` Zdjęcia z sesji — karuzele** | 120248942206780243 | `Karuzele PL M 30-60 — Contact` 120249107902400243 | **ACTIVE od 15.09** | 15 zł | Polska, M 30–60 twardo, wykl. odwiedzający 180 dni + kontakt 180 dni | aktualności FB + IG | **Contact** (7 dni po kliknięciu) | kadr 1, kadr 2 |
 | `[FOTO]` | — | `Karuzele PL 25-65 — zdjęcia z sesji` 120248942223140243 | PAUSED 15.09 | — | — | — | ViewContent | historia 04–15.09 |
 | **`[RMKT]` Remarketing dynamiczny — katalog** | 120248991023540243 | `Oglądane — 30 dni` 120248991023860243 | ACTIVE | **15 zł** (z 7) | lista „Oglądający oferty — 30 dni”, wykl. kontakt + formularz 180 dni, **rozszerzanie listy włączone** (`custom_audience: 1` — do decyzji) | aktualności FB + IG | ViewContent | katalog, tekst A + G |
@@ -36,7 +36,11 @@
 - `[FOTO]` na Contact: od naprawy piksela (GTM v15) Contact liczy się na wszystkich stronach u osób ze zgodą. Celu nie da się zmienić w opublikowanym zestawie (3260011) — stąd nowy zestaw.
 - Ograniczenia Mety zmierzone sondami: katalog nie przyjmuje Contact (2446814); Advantage+ audience wymaga ramy wieku 25–65 (1870188/1870189).
 
-**Otwarte:** rozszerzanie listy w `[RMKT]`; przycisk Messengera na ofercie (makieta `primaauto-makieta-messenger-oferta-2026-09-15.html`, wariant A/B + test gotowego tekstu); recheck 18.09.
+**Otwarte:** rozszerzanie listy w `[RMKT]`.
+
+**04.10 — korekty po rechecku:**
+- `[KAT]` zbudowany 15.09 **bez wykluczeń**, mimo że jest kampanią na nowych odbiorców (plan z 28.08: prospecting wyklucza odwiedzających i kontakty). To był nasz błąd. 04.10 dodane te same wykluczenia co w `[FOTO]`: „Wszyscy odwiedzający — 180 dni” i „Kontakt tel./WhatsApp — 180 dni”. Kopia targetowania sprzed zmiany: `~/backups/primaauto/2026-10-04/meta-kat-targeting-przed.json`.
+- **Messenger na ofercie — odrzucone przez Janka 04.10.** Żadnych zmian na stronie oferty. Tematu nie wznawiać.
 
 **Skrypty:** `scripts/social/buduj_kat.py`, `scripts/social/przebudowa_2026_09_15.py`, `scripts/gtm-piksel-meta.py`.
 
