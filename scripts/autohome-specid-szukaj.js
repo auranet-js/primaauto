@@ -36,6 +36,9 @@ if (!IN) { console.error('Użycie: node autohome-specid-szukaj.js <wejscie.tsv> 
 fs.mkdirSync(CACHE, { recursive: true });
 
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36';
+// Cache wygasa: nowe modele (indeks) i nowe wersje (listy modeli) muszą kiedyś wejść w nocnym biegu.
+const DZIEN = 86400000;
+const swiezy = (f, dni) => fs.existsSync(f) && Date.now() - fs.statSync(f).mtimeMs < dni * DZIEN;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 async function get(url, enc = 'utf8') {
@@ -95,7 +98,7 @@ function grabJson(html, varName) {
 
 async function seriesIndex() {
   const f = path.join(CACHE, '_series-index.json');
-  if (fs.existsSync(f)) return JSON.parse(fs.readFileSync(f, 'utf8'));
+  if (swiezy(f, 30)) return JSON.parse(fs.readFileSync(f, 'utf8'));
   const brands = [...(await get('https://car.autohome.com.cn/AsLeftMenu/As_LeftListNew.ashx?typeId=1&brandId=0&fctId=0&seriesId=0', 'gbk'))
     .matchAll(/id='b(\d+)'>/g)].map((m) => m[1]);
   const idx = {};
@@ -113,7 +116,7 @@ async function seriesIndex() {
 
 async function seriesVersions(sid) {
   const f = path.join(CACHE, `_series-${sid}.json`);
-  if (fs.existsSync(f)) return JSON.parse(fs.readFileSync(f, 'utf8'));
+  if (swiezy(f, 7)) return JSON.parse(fs.readFileSync(f, 'utf8'));
   const out = [];
   try {
     const html = await get(`https://car.autohome.com.cn/config/series/${sid}.html`);
