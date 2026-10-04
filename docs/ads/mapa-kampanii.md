@@ -528,6 +528,7 @@ Rozważane przy budowie drugiej karuzeli. Zostajemy przy ofertach:
 | 2026-10-04 | `[DSA]` wykluczenie PHRASE `olx` (rynek wtórny) — decyzja Janka | API `campaignCriteria:mutate`, zweryfikowane odczytem (criterion 1336451395) |
 | 2026-10-04 | `[DG]` pauza wideo BYD Shark 6 (822921418733) — 116 zł / 30 dni, 0 kontaktów — decyzja Janka | API `adGroupAds:mutate`, zweryfikowane odczytem: PAUSED |
 | 2026-10-04 | GTM v16: `page_location` czyści tylko `fbclid` (`gclid` przywrócony) | `scripts/gtm-fbclid.py --popraw-zmienna` + `--publikuj`, potwierdzone w żywym `gtm.js` |
+| 2026-10-04 | `[DSA]` pod profil klienta: feed 9 marek (min. 2 oferty/model + auta na placu) 81 → 188; wiek 65+ ×1,15 (było wykluczone), 45–54 ×1,30, 55–64 ×1,10, 35–44 ×0,80; harmonogram z korektami; świętokrzyskie ×1,15 — decyzja Janka | ADR `docs/decyzje/2026-10-04-dsa-profil-klienta.md`, `dsa-offer-feed-refresh.py --apply` + `dsa-profil-2026-10-04.py --bez-feedu --apply`, zweryfikowane odczytem |
 
 ## 7. Etykiety polityki — nie przepisuj reklam pod `APPROVED_LIMITED` (ustalone 2026-08-31)
 

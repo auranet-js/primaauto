@@ -23,13 +23,19 @@ Ryzyko rezydualne jest male: zeszla oferta NIE daje 404, tylko 301 na hub modelu
 dalej, traci tylko cene w naglowku (Google wezmie title huba). Dlatego cron moze chodzic co 3 dni.
 Tempo schodzenia sztuk: ~12 listingow/30 dni opuszcza publish (~1 co 2-3 dni z 3058).
 
-Zakres: te same modele co w feedzie (bez rozszerzania) — patrz ADR.
+=== PROFIL KLIENTA (zmiana 04.10, decyzja Janka) ===
+Feed obejmuje tylko marki z listy MARKI (te, przy których ludzie się kontaktują albo kupują —
+profil GA4 wszystkie kanały + zamówienia, `docs/decyzje/2026-10-04-dsa-profil-klienta.md`).
+Reguła lepka zostaje: żywego wpisu nie podmieniamy. Uzupełniamy tylko braki:
+- każdy model z listy marek ma mieć co najmniej NA_MODEL ofert (najtańsze żywe, rocznik 2025/2026),
+- każde auto na placu (`_asiaauto_reservation_status=on_lot`) z tych marek jest w feedzie.
+Wpis marki spoza listy (np. Xiaomi — wycofane 07.09/04.10) wylatuje, nawet żywy.
 Tryby: (domyslnie) dry-run | --apply | --quiet (bez outputu gdy zero zmian)
 Log: ~/.claude/dsa-offer-feed.log
 """
 import os, sys, json, subprocess, urllib.request, urllib.error
 from datetime import datetime
-sys.path.insert(0, "/home/host476470/projekty/primaauto/tmp")
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from gads_client import load, refresh
 
 # Wersja API z ~/secrets/google/ads-config.json — hardkod "v21" cicho zabił ten cron 10.08 (404)
@@ -59,30 +65,31 @@ def query(g):
         data=json.dumps({"query":g}).encode(), headers=H)
     return json.load(urllib.request.urlopen(req)).get("results",[])
 
-SQL = r"""
-SELECT CONCAT(mk.slug,'/',ts.slug), x.slug FROM (
-  SELECT tt.term_id AS sid,
-    SUBSTRING_INDEX(GROUP_CONCAT(p.post_name ORDER BY CAST(pmp.meta_value AS UNSIGNED) ASC, p.ID ASC SEPARATOR '||'),'||',1) AS slug
-  FROM wp7j_posts p
-  JOIN wp7j_term_relationships tr ON tr.object_id=p.ID
-  JOIN wp7j_term_taxonomy tt ON tt.term_taxonomy_id=tr.term_taxonomy_id AND tt.taxonomy='serie'
-  JOIN wp7j_postmeta pmp ON pmp.post_id=p.ID AND pmp.meta_key='price' AND pmp.meta_value REGEXP '^[0-9]+$'
-  JOIN wp7j_postmeta pmy ON pmy.post_id=p.ID AND pmy.meta_key='ca-year' AND pmy.meta_value IN ('2025','2026')
-  WHERE p.post_type='listings' AND p.post_status='publish'
-  GROUP BY tt.term_id
-) x
-JOIN wp7j_term_taxonomy tt2 ON tt2.term_id=x.sid
-JOIN wp7j_terms ts ON ts.term_id=x.sid
-LEFT JOIN wp7j_term_taxonomy ttm ON ttm.term_id=tt2.parent
-LEFT JOIN wp7j_terms mk ON mk.term_id=ttm.term_id
-"""
+# Marki w feedzie — decyzja 04.10 (profil klienta). Marka spoza listy = wpis wylatuje, nawet żywy.
+MARKI = ["byd", "zeekr", "denza", "mazda", "exeed", "lynk-co", "deepal", "jetour", "xpeng"]
+NA_MODEL = 2
+
+SQL = f"""
+SELECT CONCAT(mk.slug,'/',ts.slug), p.post_name, CAST(pp.meta_value AS UNSIGNED), IFNULL(rs.meta_value,'')
+FROM wp7j_posts p
+JOIN wp7j_term_relationships tr ON tr.object_id=p.ID
+JOIN wp7j_term_taxonomy tt ON tt.term_taxonomy_id=tr.term_taxonomy_id AND tt.taxonomy='serie'
+JOIN wp7j_terms ts ON ts.term_id=tt.term_id
+JOIN wp7j_term_taxonomy ttm ON ttm.term_id=tt.parent JOIN wp7j_terms mk ON mk.term_id=ttm.term_id
+JOIN wp7j_postmeta pp ON pp.post_id=p.ID AND pp.meta_key='price' AND pp.meta_value REGEXP '^[0-9]+$'
+JOIN wp7j_postmeta py ON py.post_id=p.ID AND py.meta_key='ca-year' AND py.meta_value IN ('2025','2026')
+LEFT JOIN wp7j_postmeta rs ON rs.post_id=p.ID AND rs.meta_key='_asiaauto_reservation_status'
+WHERE p.post_type='listings' AND p.post_status='publish' AND mk.slug IN ({','.join(repr(m) for m in MARKI)})
+ORDER BY 1, 3, p.ID"""
 r=subprocess.run(["wp","db","query",SQL,"--skip-column-names"],cwd=WP,capture_output=True,text=True)
 if r.returncode!=0:
     log(f"BLAD wp db query: {r.stderr[:200]}"); sys.exit(1)
-best={}
+zywe={}   # hub -> [(slug, cena, na_placu)] od najtańszej
 for line in r.stdout.splitlines():
     p=line.split("\t")
-    if len(p)>=2 and p[0].strip(): best[p[0]]=p[1]
+    if len(p)==4 and p[0].strip(): zywe.setdefault(p[0],[]).append((p[1],int(p[2]),p[3]=="on_lot"))
+if not zywe:
+    log("BLAD: zero żywych ofert z listy marek — przerywam bez zmian"); sys.exit(1)
 
 cur={}   # slug -> assetSetAsset
 for r2 in query(f"SELECT asset.page_feed_asset.page_url, asset_set_asset.resource_name FROM asset_set_asset "
@@ -112,40 +119,33 @@ for line in r3.stdout.splitlines():
         status[p[0]]=p[1]; slug2hub[p[0]]=p[2]
 
 # Sztuka skasowana na stałe przez rotację (draft 48 h + kosz 7 dni) nie ma już modelu w bazie —
-# odtwarzamy go ze sluga „marka-model-ROK-ID”, dopasowując do kluczy best (marka/model -> marka-model).
+# odtwarzamy go ze sluga „marka-model-ROK-ID”, dopasowując do kluczy zywe (marka/model -> marka-model).
 # Bez tego po dłuższym postoju crona cały martwy feed znikał bez następców (incydent 10.08–04.10).
 import re
-hub_by_prefix={k.replace("/","-"): k for k in best}
+hub_by_prefix={k.replace("/","-"): k for k in zywe}
 for s in cur:
     if s not in slug2hub:
         m=re.match(r"^(.*)-20\d\d-\d+$", s)
         if m and m.group(1) in hub_by_prefix: slug2hub[s]=hub_by_prefix[m.group(1)]
 
-# Marki wycofane z reklam decyzją Janka (Xiaomi: RMKT 07.09, DSA 04.10) — spójnie z
-# $WYCOFANE_MARKI w build-gads-hub-feed.php. Wpis takiej marki wylatuje z feedu nawet żywy
-# i nigdy nie dostaje następcy.
-WYCOFANE_MARKI = {"xiaomi"}
-def wycofana(s):
+def poza_lista(s):
     hub = slug2hub.get(s, "")
-    return hub.split("/")[0] in WYCOFANE_MARKI or s.split("-")[0] in WYCOFANE_MARKI
-best = {h: v for h, v in best.items() if h.split("/")[0] not in WYCOFANE_MARKI}
+    if hub: return hub.split("/")[0] not in MARKI
+    return not any(s.startswith(m + "-") for m in MARKI)   # sztuka skasowana z bazy — po slugu
 
-alive=[s for s in cur if status.get(s)=="publish" and not wycofana(s)]
-dead =[s for s in cur if status.get(s)!="publish" or wycofana(s)]
+alive=[s for s in cur if status.get(s)=="publish" and not poza_lista(s)]
+dead =[s for s in cur if s not in alive]
+rm=dead; reason={s: ("marka spoza listy" if poza_lista(s) else f"sztuka zeszla ({status.get(s,'BRAK W BAZIE')})") for s in rm}
 
-# Dla martwych: nastepca = najtansza ZYWA sztuka tego samego modelu (o ile taka jest i nie jest juz w feedzie).
-add=[]; rm=[]; reason={}
-taken=set(alive)
-for s in dead:
-    hub=slug2hub.get(s)
-    nxt=best.get(hub) if hub else None
-    rm.append(s)
-    reason[s]=(f"marka wycofana ({hub})" if wycofana(s) else f"sztuka zeszla ({status.get(s,'BRAK W BAZIE')})") + (
-        f" -> nastepca {nxt}" if nxt and nxt not in taken else
-        " -> brak zywej sztuki w modelu, wpis znika" if not nxt else
-        f" -> nastepca {nxt} juz w feedzie")
-    if nxt and nxt not in taken:
-        add.append((hub,nxt)); taken.add(nxt)
+# Uzupełnienie: do NA_MODEL ofert na model (najtańsze żywe) + każde auto na placu. Żywych wpisów nie ruszamy.
+taken=set(alive); add=[]
+na_model={}
+for s in alive: na_model[slug2hub.get(s,"")]=na_model.get(slug2hub.get(s,""),0)+1
+for hub, oferty in zywe.items():
+    for slug, cena, lot in oferty:
+        if slug in taken: continue
+        if na_model.get(hub,0) < NA_MODEL or lot:
+            add.append((hub, slug)); taken.add(slug); na_model[hub]=na_model.get(hub,0)+1
 
 if not add and not rm:
     log(f"OK bez zmian — feed {len(cur)} ofert, wszystkie sztuki zyja"); sys.exit(0)
