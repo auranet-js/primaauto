@@ -1,6 +1,6 @@
 # Rejestr rozliczeń z Ruslanem
 
-> Ostatnia aktualizacja: 2026-09-01
+> Ostatnia aktualizacja: 2026-10-05
 > Zakres: zamówienia (`asiaauto_order`) rozliczone między Auranet a Prima-Auto.
 > **Ten plik jest source of truth dla „co już rozliczone".** Baza nie ma znacznika
 > rozliczenia — jedyne co w niej jest to `_order_deposit_paid` / `_order_deposit_paid_at`.
@@ -30,6 +30,10 @@ Z wyniku odsiej ręcznie (query tego nie odróżnia):
 - **Konto user ID 13 `andriy1988hudzo@gmail.com` („Andrii Hudzo") = Andrzej, nasz człowiek.**
   Figuruje w bazie jako zwykły klient (`_order_type=customer`). Jego zamówienia są
   **testowe** — nigdy nie wchodzą do rozliczenia.
+- **Konto user ID 10 `mwbrothers.rus@gmail.com` („Dawid Stefan") — testowe** (Janek 2026-10-05).
+  Zamówienia 238868, 249890, 251058 z kwietnia — nigdy do rozliczenia.
+- **Konto user ID 157 `eragir777@gmail.com` („Viktor Pr", Victor Prima) — testowe** (Janek 2026-10-05).
+  Zamówienie 464103 (BMW 530Li, depozyt 05.09) — nie wchodzi do rozliczenia.
 - **Wpisy testowe** — np. 410894 (Seal U, Jan Schenk, depozyt 1 zł, 10.08.2026).
 - **Anulowane** — status `anulowane` mimo zaksięgowanego depozytu.
 
@@ -38,10 +42,23 @@ z configu**, nie potwierdzenie rozliczonej prowizji. Nie traktuj jej jako kwoty 
 
 ---
 
+## 2026-09-02 — partie 5 + 6 + Leopard 7 #869 ROZLICZONE (FV FS/1/09/2026)
+
+Ruslan zaakceptował listę 9 pozycji (partie 5 i 6) i dołożył **BYD Leopard 7 zielony #869,
+sprzedany z placu** („Razem 10 pozycji"). Janek: „fv 10000 netto". Faktura
+**FS/1/09/2026 z 02.09.2026, 10 000 zł netto / 12 300 zł brutto** (Fakturownia, pozycja
+„Prace techniczne przy stronie WWW"). Źródło: zrzut WhatsApp przesłany przez Janka na Telegram.
+
+Leopard 7 #869 to numer Ruslana (sprzedaż z placu), w bazie zamówień go nie ma.
+
+**Data odcięcia na kolejną partię: `2026-08-31T11:16:17`** (depozyt 453465).
+
+---
+
 ## 2026-09-01 — partie 5 + 6 wysłane Ruslanowi do akceptacji
 
 Lista 9 pozycji (partia 5 z 21.08 + partia 6 poniżej) poszła do Ruslana 01.09.2026 —
-czeka na akcept. Po potwierdzeniu oznaczyć obie partie jako rozliczone.
+zaakceptowana i rozliczona 02.09 (patrz wpis wyżej).
 
 ## 2026-09-01 — partia 6 (do rozliczenia)
 
