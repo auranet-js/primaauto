@@ -34,6 +34,8 @@ Z wyniku odsiej ręcznie (query tego nie odróżnia):
   Zamówienia 238868, 249890, 251058 z kwietnia — nigdy do rozliczenia.
 - **Konto user ID 157 `eragir777@gmail.com` („Viktor Pr", Victor Prima) — testowe** (Janek 2026-10-05).
   Zamówienie 464103 (BMW 530Li, depozyt 05.09) — nie wchodzi do rozliczenia.
+- **Konto user ID 12 `oprimma1@gmail.com` („Olia Prima") — testowe** (Janek 2026-10-05).
+  Zamówienie 252226 (Galaxy L380, kwiecień) — nigdy do rozliczenia.
 - **Wpisy testowe** — np. 410894 (Seal U, Jan Schenk, depozyt 1 zł, 10.08.2026).
 - **Anulowane** — status `anulowane` mimo zaksięgowanego depozytu.
 
