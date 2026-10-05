@@ -44,6 +44,28 @@ z configu**, nie potwierdzenie rozliczonej prowizji. Nie traktuj jej jako kwoty 
 
 ---
 
+## 2026-10-05 — partia 7 (kandydaci, czeka na listę od Ruslana)
+
+Depozyty po odcięciu 2026-08-31T11:16:17, konta testowe odsiane:
+
+| ID | Depozyt | Cena | Status | Auto — klient |
+|---|---|---|---|---|
+| 423100 | 03.09 | 279 000 | zakupione | BYD Leopard 5 (Denza B5) 2026 Ultra |
+| 453464 | 03.09 | 457 000 | umowa_gotowa | Li Auto L9 2026 LIVIS — Marcin Nowak |
+
+Wyłączone: 464103 (BMW 530Li, Viktor Pr — testowe).
+
+Do potwierdzenia przez Ruslana (sprzedaż z placu nie przechodzi przez depozyt):
+- listing 270959 BYD Leopard 5 Smart Drive Ultra — był `on_lot`, draft 21.09 → zszedł z placu?
+- listing 265748 Exeed VX — był `on_lot`, kosz 24.09 → czy to auto SIROMEX (rozliczone 25.08)? sprawdzić VIN
+- 493440 Anna Kowalczyk, Denza Z9 — `zarezerwowane` od 23.09 bez zaksięgowanego depozytu
+- inne sprzedaże z placu po 31.08 (jak #869 — znane tylko Ruslanowi)
+
+Jak szukać sprzedaży z placu: listingi z `_asiaauto_reservation_status=on_lot`
+w statusie draft/trash ze zmianą po dacie odcięcia.
+
+---
+
 ## 2026-09-02 — partie 5 + 6 + Leopard 7 #869 ROZLICZONE (FV FS/1/09/2026)
 
 Ruslan zaakceptował listę 9 pozycji (partie 5 i 6) i dołożył **BYD Leopard 7 zielony #869,
