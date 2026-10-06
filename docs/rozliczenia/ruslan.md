@@ -60,7 +60,7 @@ Ruslan podał 6 pozycji:
 | 453464 | Li Auto L9 LIVIS — Marcin Nowak | depozyt 03.09 |
 | 492014 | Zeekr 001 YOU — Maciej Supernak | umowa_gotowa 22.09, **depozyt nieodznaczony** |
 | 493440 | Denza Z9 — Anna Kowalczyk | zarezerwowane 24.09, **depozyt nieodznaczony** |
-| plac | Denza Z9 GT | bez zamówienia z depozytem (on_lot: 303534 / 314155) |
+| plac | Denza Z9 GT zielona — **VIN LC0DD4C47S7008060** (listing 314155) | potwierdzone przez Ruslana 06.10 („końcówka #060”) |
 | plac | Geely Monjaro | bez zamówienia z depozytem (on_lot: 361289) |
 | plac | BYD Shark 6 | bez zamówienia z depozytem (on_lot: 272113) |
 
