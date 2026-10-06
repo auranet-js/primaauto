@@ -57,8 +57,13 @@ Ruslan podał 6 pozycji:
 | plac | Geely Monjaro | bez zamówienia z depozytem (on_lot: 361289) |
 | plac | BYD Shark 6 | bez zamówienia z depozytem (on_lot: 272113) |
 
-**Rozjazd:** 423100 (BYD Leopard 5 2026 Yunnian Ultra — Jerzy Erenz, depozyt 03.09,
-`zakupione`) jest w bazie, a nie ma go na liście Ruslana — do wyjaśnienia.
+**423100** (BYD Leopard 5 2026 Yunnian Ultra — Jerzy Erenz, depozyt 03.09, `zakupione`)
+nie było na liście Ruslana — po pytaniu Ruslan potwierdził: **„ok to 7 szt łącznie"** (2026-10-06).
+Partia 7 = 7 pozycji, do zafakturowania.
+
+Otwarte pytanie do Ruslana: Leopard 5 czarny VIN LC0FD1C44S5186060 (listing 270959, draft 21.09)
+i Exeed VX niebieski/granatowy VIN LNNBDDEH8SD105759 (listing 265748, kosz 24.09, ręcznie z panelu)
+— sprzedane z placu czy zdjęte z innego powodu? Exeed to NIE auto SIROMEX (inny VIN).
 Poza tym po odcięciu 31.08 baza ma tylko 464103 (testowe). Leopard 5 270959 i Exeed VX
 265748 (zniknęły z placu) Ruslan nie wymienił.
 
