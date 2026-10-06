@@ -63,15 +63,16 @@ Ruslan podał 6 pozycji:
 | plac | Denza Z9 GT zielona — **VIN LC0DD4C47S7008060** (listing 314155) | potwierdzone przez Ruslana 06.10 („końcówka #060”) |
 | plac | Geely Monjaro | bez zamówienia z depozytem (on_lot: 361289) |
 | plac | BYD Shark 6 | bez zamówienia z depozytem (on_lot: 272113) |
-| plac → Rumunia | Exeed VX niebieski — VIN LNNBDDEH8SD105759 (listing 265748) | potwierdzone 06.10, rejestracja w Rumunii w toku |
+| plac → Rumunia | Exeed VX niebieski — VIN LNNBDDEH8SD105759 (listing 265748) | potwierdzone 06.10, sprzedaż z placu (bezwarunkowo) |
 
 **423100** (BYD Leopard 5 2026 Yunnian Ultra — Jerzy Erenz, depozyt 03.09, `zakupione`)
 nie było na liście Ruslana — po pytaniu Ruslan potwierdził: **„ok to 7 szt łącznie"** (2026-10-06).
 Partia 7 = 7 pozycji + Exeed VX (06.10) = **8 pozycji**, do zafakturowania.
 
 Odpowiedź 2026-10-06: **Leopard 5 270959 — pomijamy** (auto Ruslana od dawna, nie sprzedaż do rozliczenia).
-**Exeed VX 265748 (VIN …105759) — sprzedany do Rumunii, czeka na rejestrację**; jeśli się nie uda,
-auto wraca. **Ruslan potwierdził 06.10: to DRUGI Exeed VX do Rumunii** („jeszcze jeden VX",
+**Exeed VX 265748 (VIN …105759) — sprzedany do Rumunii.** „Czeka na rejestrację" dotyczy
+SIROMEX z sierpnia (partia 6) — depozyt był, rola Auranet zrealizowana, **rozliczone, nie wraca do
+rozliczeń** niezależnie od wyniku rejestracji. **Ruslan potwierdził 06.10: to DRUGI Exeed VX do Rumunii** („jeszcze jeden VX",
 końcówka 748 = listing 265748), inny niż SIROMEX z partii 6 (VIN …108343).
 **Wchodzi do partii 7 jako 8. pozycja** — partia 7 = 8 pozycji.
 
