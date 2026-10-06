@@ -44,6 +44,24 @@ z configu**, nie potwierdzenie rozliczonej prowizji. Nie traktuj jej jako kwoty 
 
 ---
 
+## 2026-10-06 — partia 7: lista Ruslana za 09.2026 (do fakturowania)
+
+Ruslan podał 6 pozycji:
+
+| Pozycja | Auto | Stan w bazie |
+|---|---|---|
+| 453464 | Li Auto L9 LIVIS — Marcin Nowak | depozyt 03.09 |
+| 492014 | Zeekr 001 YOU — Maciej Supernak | umowa_gotowa 22.09, **depozyt nieodznaczony** |
+| 493440 | Denza Z9 — Anna Kowalczyk | zarezerwowane 24.09, **depozyt nieodznaczony** |
+| plac | Denza Z9 GT | bez zamówienia z depozytem (on_lot: 303534 / 314155) |
+| plac | Geely Monjaro | bez zamówienia z depozytem (on_lot: 361289) |
+| plac | BYD Shark 6 | bez zamówienia z depozytem (on_lot: 272113) |
+
+**Rozjazd:** 423100 (BYD Leopard 5 2026 Yunnian Ultra — Jerzy Erenz, depozyt 03.09,
+`zakupione`) jest w bazie, a nie ma go na liście Ruslana — do wyjaśnienia.
+Poza tym po odcięciu 31.08 baza ma tylko 464103 (testowe). Leopard 5 270959 i Exeed VX
+265748 (zniknęły z placu) Ruslan nie wymienił.
+
 ## 2026-10-05 — partia 7 (kandydaci, czeka na listę od Ruslana)
 
 Depozyty po odcięciu 2026-08-31T11:16:17, konta testowe odsiane:
