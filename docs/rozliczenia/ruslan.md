@@ -70,7 +70,10 @@ Partia 7 = 7 pozycji, do zafakturowania.
 
 Odpowiedź 2026-10-06: **Leopard 5 270959 — pomijamy** (auto Ruslana od dawna, nie sprzedaż do rozliczenia).
 **Exeed VX 265748 (VIN …105759) — sprzedany do Rumunii, czeka na rejestrację**; jeśli się nie uda,
-auto wraca. Do rozliczenia dopiero po potwierdzeniu rejestracji (osobna pozycja w kolejnej partii).
+auto wraca. Wg Janka (2026-10-06) to najpewniej **auto SIROMEX, już rozliczone 25.08 (partia 6)** —
+NIE liczyć drugi raz. Rozjazd VIN: w partii 6 zapisano LNNBDDEH3SD108343 (z proformy 082126-2),
+listing ma LNNBDDEH8SD105759; wątku z proformą nie ma już w skrzynce china@ (sprawdzone 06.10),
+więc źródła nie da się zweryfikować — jeśli kiedyś wróci temat, VIN potwierdza Ruslan.
 
 Historyczne pytanie do Ruslana: Leopard 5 czarny VIN LC0FD1C44S5186060 (listing 270959, draft 21.09)
 i Exeed VX niebieski/granatowy VIN LNNBDDEH8SD105759 (listing 265748, kosz 24.09, ręcznie z panelu)
