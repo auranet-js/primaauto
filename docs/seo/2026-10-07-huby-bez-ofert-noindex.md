@@ -138,4 +138,4 @@ Otwarte: zgłoszenie 15 URL-i przez `index-submit` — 07.10 pula GCP wyczerpana
 Błąd wdrożenia: filtr blokował indeks wszystkim markom z `_asiaauto_info_only` (VW/Audi/Volvo/BMW), choć w
 `docs/QUEUE.md` (T-259) zapisano, że `noindex` Audi „NIE jest decyzją — to automat RankMath”. Teraz blokuje
 wyłącznie lista `asiaauto_hub_index_blocked_makes` (VW/MINI/Iveco, pismo VW). Audi, E5 Sportback, E7X → `index`,
-tytuły informacyjne bez zmian. Volvo/BMW: bez znacznika, nadal `noindex` — do decyzji Janka.
+tytuły informacyjne bez zmian. Volvo/BMW: decyzja Janka — zostają `noindex`, dopisane jawnie do `asiaauto_hub_index_blocked_makes` (volkswagen, mini, iveco, volvo, bmw).
