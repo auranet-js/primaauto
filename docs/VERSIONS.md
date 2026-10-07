@@ -1,5 +1,18 @@
 # Historia wersji asiaauto-sync
 
+## 0.44.3 — 2026-10-07 (T-259 „klauzula niezależny importer”) + motyw primaauto2026 1.6.7
+
+- Po piśmie VW (Bird & Bird), zgoda Ruslana 07.10. Tekst z makiety zaakceptowanej 27.09 (`primaauto-zastrzezenie-dla-ruslana-2026-09-27.html`).
+- `class-asiaauto-single.php`: `AsiaAuto_Single::brandDisclaimer($marka, 'listing'|'hub')` (wspólna dla pluginu i motywu)
+  + `listingDisclaimer()` w `render()` po `[asiaauto_equipment]`, przed „Inne modele {marka}”. Marka = `display_name` termu `make`.
+  CSS `.aa-disclaimer` w `asiaauto-single.css`.
+- Motyw: `taxonomy-make.php` i `taxonomy-serie.php` — klauzula pod `aa-hub__usp`, przed FAQ, także na hubach informacyjnych
+  (`_asiaauto_info_only`: Audi/VW/BMW/Volvo). `footer.php` — zdanie `pa-footer__disclaimer` pod dolnym paskiem na każdej stronie.
+  CSS w `hub.css` i `footer.css`, `PRIMAAUTO_THEME_VERSION` 1.6.6 → 1.6.7 (cache CSS).
+- Link „Zasady importu” prowadzi do `/regulamin-uslugi/` bez kotwicy — sekcji `#zastrzezenia` w regulaminie nie ma (regulaminu nie ruszaliśmy).
+- Backupy: `*.bak-2026-10-07-t259` przy każdym zmienionym pliku.
+- Sprawdzone 07.10: HTML ogłoszenia AITO M9, huby Xiaomi SU7, BYD, Audi — klauzula 1×, stopka 1×; zrzuty telefon + komputer.
+
 ## 0.44.2 — 2026-10-07 (T-260 „huby bez ofert wypadają z indeksu”: znacznik historii ofert)
 
 - Problem: RankMath `noindex_empty_taxonomies=on` dawał `noindex` każdemu hubowi z `count=0`, także tym z
