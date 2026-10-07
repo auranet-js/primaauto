@@ -1,6 +1,6 @@
 # T-221 — Pakiet prawny pod PayU (regulamin usługi + strona o depozycie)
 
-> Status: **ZREALIZOWANE 2026-07-27 — regulamin usługi i strona o depozycie opublikowane; resztki zdjęte z kolejki 07.09** · było: **gotowe do startu** · Rozmiar: M · **Blokuje T-121** (płatność online)
+> Status: **ZREALIZOWANE 2026-08-13 — regulamin usługi i strona o depozycie opublikowane 27.07, czas realizacji 20 dni roboczych + linki prawne w stopce i menu 13.08; resztki zdjęte z kolejki 07.09** · było: **gotowe do startu** · Rozmiar: M · **Blokuje T-121** (płatność online)
 > Godziny realnie: **4–6 h** — treść regulaminu i strony `/depozyt/` jest już **napisana i opublikowana** (rozliczone osobno, 27.07). Pozostałe godziny to: poprawki po akcepcie, PayU w polityce prywatności, korekta `/finansowanie/`, zdjęcie noindex + podlinkowanie, wniosek do PayU. ⚠️ **Nie obejmuje** przebudowy góry `/depozyt/` (kierunek „InPost") — osobne 2–3 h
 > Powiązane: T-121 (PayU), T-217 (umowa leasingowa)
 

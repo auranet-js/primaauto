@@ -1,6 +1,6 @@
 # T-201 — Wideo: assety reklamowe + kanał YouTube
 
-> Status: **ZREALIZOWANE 2026-07-25 — kanał skonfigurowany i 8 filmów (24.07), kampanie YouTube [DG] (24–25.07); zamknięte 07.10** · było: **rozbity na dwie pozycje** (rekomendacja po zwiadzie 14.07)
+> Status: **ZREALIZOWANE 2026-09-07 — kanał i 8 filmów (24–25.07), [DG] (24–25.07), fala 2 filmów (31.08–02.09), [DG] 8 reklam wideo + teksty katalogowe (05.09), in-feed off i budżet 35 zł (07.09); zamknięte 07.10** · było: **rozbity na dwie pozycje** (rekomendacja po zwiadzie 14.07)
 > ⚠️ **Blokujące pytanie do Ruslana:** kto kręci TikToki i czy mamy pliki źródłowe?
 
 ## 🎯 Odkrycie zwiadu: Prima-Auto MA już 127 filmów
