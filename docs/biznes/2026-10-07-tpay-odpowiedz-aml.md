@@ -67,4 +67,4 @@ Ruslan Prima
 Prima-Auto
 
 ---
-Wysłane Jankowi na Telegram 07.10 do przekazania Ruslanowi. Zasady (Janek): Tpay obsługuje wyłącznie depozyt, nic wspólnego z autem; nie udostępniamy wzoru umowy ani źródeł/dostawców (tajemnica przedsiębiorstwa). Odmowa Tpay = zawieszamy płatności online.
+Wysłane Jankowi na Telegram 07.10 do przekazania Ruslanowi. **Do Tpay wysłał Janek (07.10)** — po stronie Ruslana nic nie zostało. Zasady (Janek): Tpay obsługuje wyłącznie depozyt, nic wspólnego z autem; nie udostępniamy wzoru umowy ani źródeł/dostawców (tajemnica przedsiębiorstwa). Odmowa Tpay = zawieszamy płatności online.
