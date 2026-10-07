@@ -1,4 +1,22 @@
-# Odpowiedź do Tpay — „Uzupełnij informacje o ofercie” (draft v4, 07.10)
+# Odpowiedź do Tpay — „Uzupełnij informacje o ofercie” (07.10)
+
+## Wersja do formularza (limit 1000 znaków) — wysłana Jankowi na Telegram 07.10
+
+956 znaków. Formularz Tpay przyjmuje maks. 1000, dlatego pełna wersja niżej nie weszła.
+
+```
+Przez Tpay przechodzi wyłącznie zwrotny depozyt 6 150 zł za usługę pośrednictwa, w całości w Polsce: przyjmuje go Prima-Auto Ruslan Prima, ul. Pleśniarowicza 2A/38, Rzeszów, NIP 8133898576, REGON 525442846 (CEIDG), na rachunek w polskim banku, z fakturą VAT, i ta sama firma zwraca go tą samą drogą. Właściciel ma Kartę Polaka. Nie sprzedajemy ani nie rejestrujemy aut, Tpay nie bierze udziału w imporcie. Wszystko jest w Regulaminie (primaauto.com.pl/regulamin-uslugi/) i na primaauto.com.pl/depozyt/.
+1. Zamówienie z akceptacją Regulaminu → weryfikacja auta → e-mail → depozyt (Tpay lub przelew) → umowa zlecenia.
+2. Umowa to dokument wewnętrzny, dostawcy to tajemnica przedsiębiorstwa.
+3. Klient płaci dealerowi w USD, SWIFT, na fakturę na siebie, i jest importerem na PZC/SAD.
+4. Usługa wykonana w dniu zakupu auta.
+5. Zwrot: auto sprzedane, wycofane, niezgodne z opisem, droższe niż cena maksymalna.
+6. Rejestracja to obowiązek klienta jako importera.
+```
+
+Wypadło przy skracaniu: terminy zwrotu (3/7 dni roboczych), potrącenie wynagrodzenia z depozytu i zwrot nadwyżki, licencja dealera i oględziny, „za własne zaniedbania odpowiadamy my”.
+
+## Pełna wersja (draft v4, nie mieści się w formularzu)
 
 Dzień dobry,
 
