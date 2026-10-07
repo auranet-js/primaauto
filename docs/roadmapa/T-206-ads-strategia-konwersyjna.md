@@ -1,6 +1,6 @@
 # T-206 — Google Ads: strategia konwersyjna + cykliczny przegląd fraz
 
-> Status: **gotowy do odpalenia** · Rozmiar: S
+> Status: **ZREALIZOWANE 2026-07-24 — [DG] na maksymalizacji konwersji (cele: kontakty + formularze), przegląd fraz w cyklicznych recheckach (31.08, 05.09, 04.10); [Topic]/[Brand] świadomie bez zmian; zamknięte 07.10** · było: **gotowy do odpalenia** · Rozmiar: S
 > Godziny realnie: **5–7 h** (Janek ~1–2 h, AI ~4–5 h) · Rynkowo: 14–16 h
 > **Obniżone z 7–8 h — bo import konwersji JEST JUŻ ZROBIONY** (prace z 09.07). Kosztorys opisywał to jako pracę do wykonania.
 

@@ -1,6 +1,6 @@
 # T-113 — Finansowanie / leasing jako alternatywa w umowie
 
-> Status: **GATED na partnera finansującego** (pytanie do Ruslana) · Rozmiar: L
+> Status: **ZREALIZOWANE 2026-07-30 — umowa leasingowa generowana z panelu (T-217, v0.34.14); zamknięte 07.10** · było: **GATED na partnera finansującego** (pytanie do Ruslana) · Rozmiar: L
 > Godziny realnie: **30–40 h** (Janek ~6–8 h, AI ~24–32 h) · Rynkowo: 85–100 h
 > Obniżone z 40–50 h — po zwiadzie wiadomo, że to **nie jest integracja z bankiem**, tylko ścieżka w kreatorze + wzorzec umowy.
 
