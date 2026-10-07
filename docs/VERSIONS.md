@@ -1,5 +1,25 @@
 # Historia wersji asiaauto-sync
 
+## 0.45.1 — 2026-10-08 (T-261 „flaga A rozliczone z Auranetem”)
+
+- Spec: `docs/roadmapa/T-261-flaga-a-rozliczone-auranet.md`. Dwie meta na `asiaauto_order`: `_order_auranet_settled_at` (Y-m-d)
+  i `_order_auranet_invoice` (numer FV).
+- `class-asiaauto-order-admin.php` (addytywnie): `renderAuranetPin()` — pin A po D i C w tabeli desktop i w kartach mobilnych,
+  meta czytane `get_post_meta()` wprost, **nie** przez `getOrderData()` (panel klienta, maile, umowa bez zmian).
+  Zielony `is-ok` + title „Auranet: rozliczone DD.MM.RRRR, FV …”, brak flagi = pin neutralny (bez czerwieni).
+  Kolumna „Wpłaty” 76 → 104 px (trzy piny w jednej linii).
+- Nowy `scripts/rozliczenia-oznacz.php` (`wp eval-file`, `ids= data= fv=`, dry-run domyślnie, `apply=1`); odmowa dla
+  nie-zamówień, kont testowych (user 10, 12, 13, 157), zamówienia testowego 410903 (rejestr podawał 410894 — takiego posta nie ma)
+  i flagi z innym FV.
+- Uzupełnienie wsteczne 08.10 (backup `~/backups/primaauto/2026-10-08/postmeta-pre-t261.sql`): 7 zamówień FS/1/09/2026
+  (02.09) + 13 zamówień partii z 22.07 jako „rozliczenie 07.2026 (bez nr)” (decyzja Janka — brak numeru FV w rejestrze).
+- Nietknięte: `getOrderData()`, statusy, maile, umowa PDF, rezerwacje, `markDepositPaid()`.
+- Backupy: `class-asiaauto-order-admin.php.bak-2026-10-08-t261`, `asiaauto-sync.php.bak-2026-10-08-t261`.
+- Smoke test 08.10 (Chrome, zalogowany `js`): desktop — 5 zielonych A + 25 szarych na 1. stronie, piny w jednej linii,
+  title „Auranet: rozliczone 02.09.2026, FV FS/1/09/2026”; 390 px (iframe) — karty, 5 zielonych A, bez poziomego scrolla;
+  przy długim nazwisku pin A zawija się do drugiej linii. Rola `primaauto` ma `manage_asiaauto_orders`, helper nie rozróżnia ról
+  — widoku zalogowanego Ruslana w przeglądarce nie oglądaliśmy.
+
 ## 0.45.0 — 2026-10-07 (T-258 „prywatne oferty na link”)
 
 - Spec: `docs/roadmapa/T-258-prywatne-oferty.md` (potwierdzony z Ruslanem 07.10). Wbudowany status WP „Prywatny” + link `/oferta/<slug>/?k=<klucz>`.

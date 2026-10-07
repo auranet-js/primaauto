@@ -1,6 +1,6 @@
 # Rejestr rozliczeń z Ruslanem
 
-> Ostatnia aktualizacja: 2026-10-05
+> Ostatnia aktualizacja: 2026-10-08
 > Zakres: zamówienia (`asiaauto_order`) rozliczone między Auranet a Prima-Auto.
 > **Ten plik jest source of truth dla „co już rozliczone".** Baza nie ma znacznika
 > rozliczenia — jedyne co w niej jest to `_order_deposit_paid` / `_order_deposit_paid_at`.
@@ -46,8 +46,25 @@ Z wyniku odsiej ręcznie (query tego nie odróżnia):
 - **Wpisy testowe** — np. 410894 (Seal U, Jan Schenk, depozyt 1 zł, 10.08.2026).
 - **Anulowane** — status `anulowane` mimo zaksięgowanego depozytu.
 
+**Od 2026-10-08 (T-261) rozliczone zamówienia mają flagę A** — meta `_order_auranet_settled_at` + `_order_auranet_invoice`,
+pin A na liście zamówień. Ustawianie: `wp eval-file ~/projekty/primaauto/scripts/rozliczenia-oznacz.php ids=… data=RRRR-MM-DD fv=…`
+(dry-run, potem `apply=1`). Pozycje bez zamówienia (plac, eksport) — nadal tylko w tym rejestrze.
+Uwaga: zamówienie testowe Seal U Jana Schenka to **410903** (numer 410894 niżej jest błędny — takiego posta nie ma).
+
 `_order_contract_commission_net` = 5000 na każdym zamówieniu to **wartość domyślna
 z configu**, nie potwierdzenie rozliczonej prowizji. Nie traktuj jej jako kwoty rozliczenia.
+
+---
+
+## 2026-10-08 — flaga A wstecz (T-261)
+
+| FV / data | Zamówienia | Ile |
+|---|---|---|
+| FS/1/09/2026, 2026-09-02 | 387071, 397416, 407328, 411381, 422076, 438216, 453465 | 7 |
+| „rozliczenie 07.2026 (bez nr)”, 2026-07-22 | 270958, 271002, 273994, 278689, 355784, 355823, 355931, 360445, 360448, 361288, 387042, 387760, 387788 | 13 |
+
+Bez flagi (brak zamówienia): SIROMEX Exeed VX (…108343), SIROMEX Deepal G318 (…700637), Leopard 7 #869 z placu.
+Partia 7 — flaga po wystawieniu FV.
 
 ---
 

@@ -6,6 +6,13 @@
   },
   "changelog": [
     {
+      "data": "08.10.2026",
+      "tytul": "Oznaczenie „rozliczone z Auranetem” na liście zamówień",
+      "opis": "Na liście zamówień obok oznaczeń D (depozyt) i C (CIF) jest teraz trzecie: A. Zielone A znaczy, że zamówienie zostało rozliczone z Auranetem — po najechaniu widać datę rozliczenia i numer faktury. Szare A — jeszcze nierozliczone. Oznaczenie jest na komputerze i na telefonie.\n\nUstawiamy je my, raz w miesiącu, po Twoim potwierdzeniu tabelki i wystawieniu faktury — w panelu nie ma przycisku, więc nie da się go przestawić przypadkiem. Klient go nie widzi: nie trafia do panelu klienta, maili ani umowy.\n\nWstecz oznaczyliśmy 20 zamówień: 7 z faktury z 2 września i 13 z rozliczenia lipcowego. Sprzedaże eksportowe i auta z placu bez zamówienia (Exeed VX i Deepal G318 dla SIROMEX, Leopard 7 #869) zostają w naszym rejestrze rozliczeń — oznaczymy je, gdy przy takiej sprzedaży powstanie zamówienie wewnętrzne.",
+      "wersje": "0.45.1",
+      "godz": 1
+    },
+    {
       "data": "07.10.2026",
       "tytul": "Prywatne oferty — strona auta dostępna tylko z linku",
       "opis": "Ofertę ustawiasz teraz jako „Prywatną” i w karcie oferty dostajesz gotowy odnośnik do skopiowania. Klient widzi pod nim normalną stronę auta — zdjęcia, parametry, cenę — i może złożyć zamówienie. Oferta nie pojawia się w listingu, na stronach modeli, w wyszukiwarce, w porównywarce, w reklamach ani w Google. Bez odnośnika strona nie istnieje.\n\nGdy link trafi w niepowołane ręce, jednym kliknięciem generujesz nowy, a stary przestaje działać. Ukrycie może być czasowe: po przestawieniu z powrotem na „Opublikowany” oferta wraca na stronę i do Google jak każda inna.\n\nZgodnie z ustaleniem ze spotkania prywatne mogą być tylko auta z ręcznego importu i duplikaty — tylko one są chronione przed automatyczną aktualizacją i usunięciem przez giełdę. Sprawdziliśmy całą ścieżkę na Xiaomi YU7: z linkiem strona i formularz zamówienia działają, bez linku, ze złym linkiem i po wygenerowaniu nowego klucza — strona nie istnieje; oferta nie trafia do żadnej listy, mapy strony ani katalogu reklam.",
@@ -751,7 +758,8 @@
     "T-215",
     "T-201",
     "T-241",
-    "T-221"
+    "T-221",
+    "T-261"
   ],
   "todo_pierwsze": [],
   "todo_po_nowych": []

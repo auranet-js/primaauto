@@ -83,7 +83,11 @@ footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line);
 <table>
 <thead><tr><th>Data</th><th>Praca</th><th class="num">Godziny [h]</th></tr></thead>
 <tbody>
-<tr class="msc"><td colspan="2">Październik 2026</td><td class="num">22</td></tr>
+<tr class="msc"><td colspan="2">Październik 2026</td><td class="num">23</td></tr>
+<tr>
+<td class="data-col">08.10.2026</td>
+<td><strong>Oznaczenie „rozliczone z Auranetem” na liście zamówień</strong> <span class='wersje'>0.45.1</span><div class="opis"><p>Na liście zamówień obok oznaczeń D (depozyt) i C (CIF) jest teraz trzecie: A. Zielone A znaczy, że zamówienie zostało rozliczone z Auranetem — po najechaniu widać datę rozliczenia i numer faktury. Szare A — jeszcze nierozliczone. Oznaczenie jest na komputerze i na telefonie.</p><p>Ustawiamy je my, raz w miesiącu, po Twoim potwierdzeniu tabelki i wystawieniu faktury — w panelu nie ma przycisku, więc nie da się go przestawić przypadkiem. Klient go nie widzi: nie trafia do panelu klienta, maili ani umowy.</p><p>Wstecz oznaczyliśmy 20 zamówień: 7 z faktury z 2 września i 13 z rozliczenia lipcowego. Sprzedaże eksportowe i auta z placu bez zamówienia (Exeed VX i Deepal G318 dla SIROMEX, Leopard 7 #869) zostają w naszym rejestrze rozliczeń — oznaczymy je, gdy przy takiej sprzedaży powstanie zamówienie wewnętrzne.</p></div></td>
+<td class="num">1</td></tr>
 <tr>
 <td class="data-col">07.10.2026</td>
 <td><strong>Prywatne oferty — strona auta dostępna tylko z linku</strong> <span class='wersje'>0.45.0</span><div class="opis"><p>Ofertę ustawiasz teraz jako „Prywatną” i w karcie oferty dostajesz gotowy odnośnik do skopiowania. Klient widzi pod nim normalną stronę auta — zdjęcia, parametry, cenę — i może złożyć zamówienie. Oferta nie pojawia się w listingu, na stronach modeli, w wyszukiwarce, w porównywarce, w reklamach ani w Google. Bez odnośnika strona nie istnieje.</p><p>Gdy link trafi w niepowołane ręce, jednym kliknięciem generujesz nowy, a stary przestaje działać. Ukrycie może być czasowe: po przestawieniu z powrotem na „Opublikowany” oferta wraca na stronę i do Google jak każda inna.</p><p>Zgodnie z ustaleniem ze spotkania prywatne mogą być tylko auta z ręcznego importu i duplikaty — tylko one są chronione przed automatyczną aktualizacją i usunięciem przez giełdę. Sprawdziliśmy całą ścieżkę na Xiaomi YU7: z linkiem strona i formularz zamówienia działają, bez linku, ze złym linkiem i po wygenerowaniu nowego klucza — strona nie istnieje; oferta nie trafia do żadnej listy, mapy strony ani katalogu reklam.</p></div></td>
@@ -380,7 +384,7 @@ footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line);
 <td><strong>Reklamy dynamiczne Google (DSA) — celowanie w najtańsze oferty</strong> <div class="opis">Feed reklam przestawiony ze stron modeli na najtańszą aktualną ofertę każdego modelu, z automatyczną codzienną aktualizacją. Do tego nowa treść reklamy (wymiana jednej z dwóch kreacji).</div></td>
 <td class="num">3</td></tr>
 </tbody>
-<tfoot><tr><td colspan="2">Razem od spotkania 16.07.2026</td><td class="num">415,5</td></tr></tfoot>
+<tfoot><tr><td colspan="2">Razem od spotkania 16.07.2026</td><td class="num">416,5</td></tr></tfoot>
 </table>
 
 <div class="note przed-spotkaniem">Godziny zrealizowane do spotkania 16.07.2026 (etapy 1–2 kosztorysu): <strong>926 h</strong></div>
@@ -402,11 +406,6 @@ Zrobione 7 października: odpowiedź na pytania kontrolne Tpay, sprawdzenie kont
 
 Do zrobienia: po przełączeniu konta przez Tpay jedna prawdziwa płatność testowa za 1 zł, włączenie płatności dla klientów i kontrola pierwszych wpłat. Jeśli Tpay odmówi — zawieszamy płatności online. Do tego czasu klienci widzą w zamówieniu informację, że płatność online uruchamiamy, i dane do przelewu.</div><div class="skala">Status: w toku — zrealizowano ok. 7 h z 12 h; czeka na decyzję Tpay po odpowiedzi na pytania kontrolne</div></td>
 <td class="num">12</td></tr>
-<tr>
-<td><strong>T-261 — Oznaczenie „rozliczone z Auranetem” na liście zamówień</strong> <div class="opis"><span class="badge new">nowe</span> Na liście zamówień w panelu obok oznaczeń D (depozyt) i C (CIF) pojawi się trzecie: A — zamówienie rozliczone z Auranetem. Po najechaniu widać datę rozliczenia i numer faktury. Dzięki temu od razu widzisz, co już poszło na fakturę, bez dopytywania nas.
-
-Oznaczenie ustawiamy my, raz w miesiącu, po Twoim potwierdzeniu tabelki z rozliczeniem i wystawieniu faktury — w panelu nie ma przycisku, więc nie da się go przestawić przypadkiem. Klient go nie widzi: nie trafia do panelu klienta, maili ani umowy. Wstecz oznaczymy wszystkie zamówienia z dotychczasowych rozliczeń. Auta sprzedane z placu oznaczymy, gdy przy sprzedaży powstaje zamówienie wewnętrzne albo rezerwacja.</div><div class="skala">Status: zgłoszone 7 października — plan gotowy, wdrożenie w najbliższych dniach</div></td>
-<td class="num">1,5–2</td></tr>
 <tr>
 <td><strong>T-224 — Formularz „Zapytaj o leasing” na stronie leasingowej</strong> <div class="opis"><span class="badge new">nowe</span> Dziś przycisk na stronie o leasingu prowadzi do zakładki Kontakt, czyli do zwykłego maila. Zapytanie trafia więc do skrzynki i nigdzie się nie zapisuje — nie widać go w panelu, nie da się policzyć, ile osób pyta o leasing i z których modeli przychodzą. Formularz to zmienia: zapytanie ląduje na liście w panelu, przychodzi powiadomienie na maila i zliczamy je jako zapytanie w statystykach. Pod ten sam formularz podepniemy później kalkulator raty (T-189).</div><div class="skala">Status: plan wykonawczy gotowy</div></td>
 <td class="num">5–6</td></tr>
@@ -496,7 +495,7 @@ Zadanie wymaga wcześniejszego zbudowania konta klienta (pozycja wyżej) — dok
 <td><strong>T-214 — Ujednolicenie i wzmocnienie stron modeli (hubów) pod frazy zakupowe</strong> <span class='rozmiar'>skala: średnia</span><div class="opis">Strony modeli to nasza najmocniejsza broń w Google — stoją na 1.-2. miejscu na frazy typu 'zeekr 9x cena'. Przegląd 14.07 wykazał trzy luki do domknięcia. (1) 34 z 302 stron modeli ma słabszy nagłówek — brakuje w nim słów 'cena w Polsce', bo powstały po ostatnim ujednoliceniu i nie dostały automatycznie tego dopisku; wśród nich ważne modele: Zeekr 9X, Zeekr 8X, Denza Z9 GT. (2) Strona modelu BAW wyświetla się w Google jako 'Beijing' zamiast 'BAW' — a to marka, której szuka 1300 osób miesięcznie; podobnie Zeekr 8X ma zbędny dopisek 'PHEV' rozmywający dopasowanie. (3) Strony modeli opisują wersje słownie, ale nie podają ceny osobno dla każdej wersji (np. 'Ultra od 426 tys.') — dane już mamy, wystarczy je pokazać. Pracujemy ostrożnie, pojedynczo, z pomiarem przed i po (strony z 1. miejsca mają najwięcej do stracenia), bo nadrzędna zasada brzmi: nie zepsuć tego, co już rankuje.</div><div class="skala">Status: znaleziska zapisane (docs/seo/znaleziska-huby-2026-07-14); wymaga pilota + progów wycofania z T-203-baseline</div></td>
 <td class="num">11–14</td></tr>
 </tbody>
-<tfoot><tr><td>Razem pełna lista (widełki)</td><td class="num">507,5–668</td></tr></tfoot>
+<tfoot><tr><td>Razem pełna lista (widełki)</td><td class="num">506–666</td></tr></tfoot>
 </table>
 </section>
 </div>
