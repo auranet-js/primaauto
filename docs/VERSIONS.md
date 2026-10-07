@@ -13,6 +13,10 @@
 - `class-asiaauto-seo.php`, `filterRankMathRobots()` → `soldOutHubKeepsIndex()`: `index` dla `serie` i `make`
   przy `count=0`, gdy znacznik + marka nieinformacyjna (`_asiaauto_info_only`) + brak
   `_asiaauto_hub_duplicate_of` + (dla modelu) `_asiaauto_spec_snapshot`.
+- Poprawka tego samego dnia (Janek: „Audi E5 Sportback nie miało mieć noindex”): indeks blokuje WYŁĄCZNIE
+  lista `asiaauto_hub_index_blocked_makes` (domyślnie volkswagen/mini/iveco — pismo VW). Flaga
+  `_asiaauto_info_only` (Audi/Volvo/BMW) steruje tylko treścią i tytułem. Znacznik ręcznie: Audi (4087),
+  E5 Sportback (6520); E7X (7197, bez specu) na whitelist. Volvo/BMW bez znacznika — czekają na decyzję.
 - Bezpiecznik: opcja `asiaauto_hub_keep_index` = `0` przywraca zachowanie sprzed zmiany.
 - Backfill: znacznik dla 273 modeli + 55 marek z ofertami oraz 15 hubów z decyzji Janka (przedziały z
   historycznych cen opisu/FAQ, zdjęte ręczne `skip_title_regen`); `_asiaauto_hub_duplicate_of` na 13

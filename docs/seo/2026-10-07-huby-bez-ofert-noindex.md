@@ -132,3 +132,10 @@ Odrzucone: wyłączenie `noindex_empty_taxonomies` w RankMath (wpuszcza VW/Audi 
 widma z lipca) oraz kasowanie pustych termów (strefa krucha, `syncAll` odtwarza widma).
 
 Otwarte: zgłoszenie 15 URL-i przez `index-submit` — 07.10 pula GCP wyczerpana (429), ponowić po 9:00.
+
+### Poprawka 07.10 — Audi wraca do indeksu
+
+Błąd wdrożenia: filtr blokował indeks wszystkim markom z `_asiaauto_info_only` (VW/Audi/Volvo/BMW), choć w
+`docs/QUEUE.md` (T-259) zapisano, że `noindex` Audi „NIE jest decyzją — to automat RankMath”. Teraz blokuje
+wyłącznie lista `asiaauto_hub_index_blocked_makes` (VW/MINI/Iveco, pismo VW). Audi, E5 Sportback, E7X → `index`,
+tytuły informacyjne bez zmian. Volvo/BMW: bez znacznika, nadal `noindex` — do decyzji Janka.
