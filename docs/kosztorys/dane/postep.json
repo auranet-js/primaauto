@@ -601,6 +601,14 @@
       "realnie_do": 12
     },
     {
+      "id": "T-261",
+      "tytul": "Oznaczenie „rozliczone z Auranetem” na liście zamówień",
+      "opis": "Na liście zamówień w panelu obok oznaczeń D (depozyt) i C (CIF) pojawi się trzecie: A — zamówienie rozliczone z Auranetem. Po najechaniu widać datę rozliczenia i numer faktury. Dzięki temu od razu widzisz, co już poszło na fakturę, bez dopytywania nas.\n\nOznaczenie ustawiamy my, raz w miesiącu, po Twoim potwierdzeniu tabelki z rozliczeniem i wystawieniu faktury — w panelu nie ma przycisku, więc nie da się go przestawić przypadkiem. Klient go nie widzi: nie trafia do panelu klienta, maili ani umowy. Wstecz oznaczymy wszystkie zamówienia z dotychczasowych rozliczeń. Auta sprzedane z placu oznaczymy, gdy przy sprzedaży powstaje zamówienie wewnętrzne albo rezerwacja.",
+      "status": "zgłoszone 7 października — plan gotowy, wdrożenie w najbliższych dniach",
+      "realnie_od": 1.5,
+      "realnie_do": 2
+    },
+    {
       "id": "T-241",
       "tytul": "Zdjęcia i filmy z sesji — wykorzystanie na stronach modeli i w reklamach",
       "opis": "Po każdej sesji zdjęciowej na placu powstaje komplet materiałów konkretnych egzemplarzy: zdjęcia w kilku kolorach i filmy w dwóch kadrach — poziomym i pionowym. Dziś te materiały trafiają wyłącznie na YouTube i do reklam, a strony modeli zostają na zdjęciach z chińskich placów. Po zmianie każda nowa sesja uruchamia jeden powtarzalny cykl: zdjęcia idą na stronę modelu razem z filmami i opisem realnego egzemplarza, świeże kreacje wchodzą do kampanii wideo i Demand Gen, a filmy są publikowane na kanale pojedynczo, dzień po dniu, bo tak utrzymują zasięg. Przy okazji sprawdzamy, które modele z sesji nie mają jeszcze własnej strony.\n\nPierwszy przebieg: BYD Leopard 5. Jego strona przyciąga dziś 3 709 wyświetleń w Google miesięcznie i 228 wejść. Przy zapytaniach o cenę jesteśmy w ścisłej czołówce — przy „denza bao 5 cena” na drugim–trzecim miejscu, przy „denza b5 cena” na pierwszym. Ale przy dwóch najważniejszych hasłach, samym „leopard 5” i „byd leopard 5”, jesteśmy dopiero na piątym i dziewiątym miejscu, a to razem 1 625 wyświetleń, z których dostajemy zaledwie 23 wejścia. Google przy takim zapytaniu szuka strony, która pokazuje realny samochód, a nie opis katalogowy — i dokładnie to mamy: 29 zdjęć obu egzemplarzy z placu, cztery filmy oraz test tego auta w Terenwizji, kanale z 394 tys. subskrybentów, gdzie właściciel mówi wprost, że kupił je u Ciebie.",
