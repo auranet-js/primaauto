@@ -11,7 +11,7 @@
 - Nowy `scripts/rozliczenia-oznacz.php` (`wp eval-file`, `ids= data= fv=`, dry-run domyślnie, `apply=1`); odmowa dla
   nie-zamówień, kont testowych (user 10, 12, 13, 157), zamówienia testowego 410903 (rejestr podawał 410894 — takiego posta nie ma)
   i flagi z innym FV.
-- Uzupełnienie wsteczne 08.10 (backup `~/backups/primaauto/2026-10-08/postmeta-pre-t261.sql`): 7 zamówień FS/1/09/2026
+- Uzupełnienie wsteczne 08.10: + 4 zamówienia partii 7 FS/4/10/2026 (06.10) — 423100, 453464, 492014, 493440 (backup `~/backups/primaauto/2026-10-08/postmeta-pre-t261.sql`): 7 zamówień FS/1/09/2026
   (02.09) + 13 zamówień partii z 22.07 jako „rozliczenie 07.2026 (bez nr)” (decyzja Janka — brak numeru FV w rejestrze).
 - Nietknięte: `getOrderData()`, statusy, maile, umowa PDF, rezerwacje, `markDepositPaid()`.
 - Backupy: `class-asiaauto-order-admin.php.bak-2026-10-08-t261`, `asiaauto-sync.php.bak-2026-10-08-t261`.

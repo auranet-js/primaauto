@@ -63,12 +63,18 @@ z configu**, nie potwierdzenie rozliczonej prowizji. Nie traktuj jej jako kwoty 
 | FS/1/09/2026, 2026-09-02 | 387071, 397416, 407328, 411381, 422076, 438216, 453465 | 7 |
 | „rozliczenie 07.2026 (bez nr)”, 2026-07-22 | 270958, 271002, 273994, 278689, 355784, 355823, 355931, 360445, 360448, 361288, 387042, 387760, 387788 | 13 |
 
-Bez flagi (brak zamówienia): SIROMEX Exeed VX (…108343), SIROMEX Deepal G318 (…700637), Leopard 7 #869 z placu.
-Partia 7 — flaga po wystawieniu FV.
+| FS/4/10/2026, 2026-10-06 (partia 7, 8 000 zł netto) | 423100, 453464, 492014, 493440 | 4 |
+
+Bez flagi (brak zamówienia): SIROMEX Exeed VX (…108343), SIROMEX Deepal G318 (…700637), Leopard 7 #869 z placu;
+z partii 7 — Denza Z9 GT z placu (…060), Geely Monjaro, BYD Shark 6, Exeed VX do Rumunii (…105759).
+
+**Faktury sprawdzaj w Fakturowni (`~/bin/fakturownia get invoices`), nie tylko w tym rejestrze** — FS/4/10/2026
+nie była tu wpisana i w pierwszym przebiegu 08.10 pominęliśmy partię 7. Partia 22.07 nie ma w Fakturowni faktury
+„Prace techniczne” (od 01.2026 są tylko budżety Google Ads) — flaga z opisem „bez nr”.
 
 ---
 
-## 2026-10-06 — partia 7: lista Ruslana za 09.2026 (do fakturowania)
+## 2026-10-06 — partia 7: lista Ruslana za 09.2026 — ROZLICZONA FS/4/10/2026 (06.10, 8 000 zł netto)
 
 Ruslan podał 6 pozycji:
 
