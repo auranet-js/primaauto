@@ -1,5 +1,32 @@
 # Historia wersji asiaauto-sync
 
+## 0.45.0 — 2026-10-07 (T-258 „prywatne oferty na link”)
+
+- Spec: `docs/roadmapa/T-258-prywatne-oferty.md` (potwierdzony z Ruslanem 07.10). Wbudowany status WP „Prywatny” + link `/oferta/<slug>/?k=<klucz>`.
+- Nowa `class-asiaauto-private-offer.php`:
+  - meta `_asiaauto_private_key` (20 zn., `wp_generate_password`), zakładany na `transition_post_status` → `private`;
+  - dostęp: `pre_get_posts` dokłada `private` do statusów głównego zapytania przy zgodnym kluczu (`hash_equals`).
+    `posts_results` ze specu nie zadziała — SQL anonima w ogóle nie zwraca wpisów `private`;
+  - klucz do kreatora idzie ciasteczkiem `aa_pk_<id>` (HttpOnly, 30 dni) ustawianym przy wejściu z poprawnym `?k=` —
+    bez zmian w JS kreatora i w 8 miejscach budujących `/zamow/?listing_id=`. Nowy klucz unieważnia stare linki i ciasteczka;
+  - `post_type_link`: ładny `/oferta/<slug>/` (niezalogowanym WP dawał `?post_type=listings&p=ID`);
+  - noindex: `X-Robots-Tag: noindex, nofollow`, `wp_robots`, `rank_math/frontend/robots`; `rank_math/json_ld` → `[]`,
+    canonical RankMath → `''`, `nocache_headers()`, bez `redirect_canonical`; `private_title_format` → bez „Prywatne:” na froncie;
+  - metabox „Prywatny link dla klienta” (link + Kopiuj + „Wygeneruj nowy klucz” przez `admin-post`, nonce, `edit_post`).
+- Addytywnie (1–2 linie): `class-asiaauto-order-api.php` (reserve + start) i `class-asiaauto-order-wizard.php` — bramka
+  `publish || canOrder()`; `class-asiaauto-rotation.php` — `markRemoved()`/`restore()` pomijają `private` (log);
+  `class-asiaauto-single.php` — guard przed schema Product/Car + BreadcrumbList (schema wypisywana w `renderMeta`, nie przez RankMath);
+  `class-asiaauto-redirects.php` — prywatna oferta bez klucza = 404 zamiast 301 na hub modelu (stary mechanizm sprzedanych).
+- Nietknięte: importer, sync, pipeline cenowy, image pipeline, indexing, `class-asiaauto-order.php`.
+- Backupy: `*.bak-2026-10-07-t258` przy każdym zmienionym pliku.
+- Smoke test 07.10 na Xiaomi YU7 #387505 (curl): z kluczem 200 + `x-robots-tag: noindex, nofollow` + meta robots noindex,
+  0× canonical, 0× ld+json; bez klucza / zły klucz / `?p=` → 404; po nowym kluczu stary link i stare ciasteczko → 404;
+  hub Xiaomi i YU7, wyszukiwarka (18 stron), listings-sitemap1–12, świeży feed Meta (4 615 ofert, min ID 222255) — 0 trafień;
+  kreator: bez ciasteczka „nie istnieje”, z ciasteczkiem formularz kroku 1, REST reserve analogicznie; rotacja na #387505 → status
+  zostaje `private`. Publiczna oferta bez regresji (schema 2×, canonical 1×, kreator działa).
+- Otwarte (wymaga zgody Janka): testowe zamówienie z linku (zapis do bazy zamówień) i test konta `asiaauto_customer`
+  (rola nie ma `read_private_posts` — sprawdzone w kodzie roli).
+
 ## 0.44.3 — 2026-10-07 (T-259 „klauzula niezależny importer”) + motyw primaauto2026 1.6.7
 
 - Po piśmie VW (Bird & Bird), zgoda Ruslana 07.10. Tekst z makiety zaakceptowanej 27.09 (`primaauto-zastrzezenie-dla-ruslana-2026-09-27.html`).
