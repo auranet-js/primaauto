@@ -1,7 +1,9 @@
 # T-258 „prywatne oferty na link” — spec
 
 > Zgłoszenie: Ruslan przez Janka, 2026-10-06. Wycena: **4 h** (wpis w postępie prac; realnie ~3 h + bufor na testy).
-> Status: spec do potwierdzenia, kod nieruszony.
+> Status: **spec potwierdzony z Ruslanem 2026-10-07** (`docs/sesje/2026-10-07-spotkanie-ruslan.md`), kod nieruszony.
+>
+> Doprecyzowanie z 07.10: prywatne mogą być **wyłącznie ręczne importy i duplikaty** — tylko one są chronione przed syncem i rotacją. Oferta z feedu dongchedi/che168 przestawiona na „Prywatny” zostałaby nadpisana albo usunięta. Drugi przypadek użycia: ukrycie czasowe (podobne auto taniej niż kupione przez poprzedniego klienta), po tygodniu powrót do `publish` — przy tym przejściu Indexing API zgłosi ofertę normalnie.
 > Rewizja 2026-10-06: zamiast własnego statusu — wbudowany status WordPressa „Prywatny”.
 
 ## Problem

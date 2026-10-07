@@ -115,3 +115,26 @@ zmiana wzorców umów (T-217/T-220), przebudowa listy zamówień (T-218).
    z pakietem prawnym (T-221), nie osobno.
 3. **Limit objętości** — dziś 10 MB na plik po stronie klienta, 20 MB u Ruslana. Zdjęcia z placu potrafią
    przekroczyć oba; do decyzji przy fazie 2, razem z pytaniem, czy pliki mają być skalowane po wgraniu.
+
+## 9. Proces dokumentów według Ruslana (spotkanie 2026-10-07)
+
+Źródło: `docs/sesje/2026-10-07-spotkanie-ruslan.md`. Kolejność w cyklu importu:
+
+| # | Dokument | Kto dostarcza | Etap |
+|---|---|---|---|
+| 1 | Umowa PDF (pośrednictwo / leasing) | system + podpis klienta i Ruslana | po złożeniu zamówienia |
+| 2 | Aneks do umowy (dziś tylko VIN) | system | po zakupie auta |
+| 3 | Invoice chiński na całe auto (płatność 30% + 70%, faktura na całość) — przy leasingu zamiast tego zaliczka w PLN + faktura zaliczkowa | Ruslan | zakup auta w Chinach |
+| 4 | Potwierdzenia wpłat (kilka — klient może płacić z różnych kont) | klient | po fakturze |
+| 5 | Weryfikacja auta w Chinach — PDF (zdjęcia, opis) albo link do filmu/strony firmy weryfikującej | Ruslan | przed wypłynięciem |
+| 6 | Dokumenty klienta do odprawy — **listy osobno dla firm i osób prywatnych, Ruslan ma je przesłać** | klient | po dopłynięciu do portu (DE/NL) |
+| 7 | Faktura z portu za odprawę (na klienta albo na Ruslana) + potwierdzenie zapłaty | Ruslan → klient → klient | odprawa |
+| — | Transport port → Polska | — | płatny gotówką przy odbiorze, bez dokumentu (faktura przewoźnika raz na kwartał) |
+
+Ustalenia:
+- Ruslan wybiera w zamówieniu „fiszkami”, które dokumenty z katalogu są potrzebne; klient widzi tylko nazwy.
+- Dodanie dowolnego pliku = nazwa + plik (tak jak dziś umowa/aneks).
+- **Wideo** (MP4, ~2 min ≈ 50–100 MB) — tylko jako test; ryzyko spowolnienia strony i miejsca na serwerze. Domyślnie link.
+- **Odrzucone na teraz:** checkboxy postępu (przegląd/tłumaczenie/detailing) — pusty stan u klienta generuje telefony.
+- **Odłożone:** rozliczenie końcowe dla klienta (ile jeszcze do zapłaty) — kalkulacje i tak rozjeżdżają się z rzeczywistością.
+- Pkt 1 „Otwarte punkty” (katalog dokumentów) — częściowo zamknięty; brakuje list Ruslana z pkt 6.
