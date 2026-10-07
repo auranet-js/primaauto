@@ -58,7 +58,7 @@ Janek przebudowuje panel klienta w październiku (plus ulubione — T-114). Proc
 ## Po naszej stronie
 - [ ] T-256 — odpowiedź do Tpay (przypomnienie 08.10)
 - [ ] T-259 — klauzula „niezależny importer” (3 miejsca)
-- [ ] Audi — blokada w imporcie + przegląd hubu
+- [x] Audi — już wyłączone (stan 07.10: poza importem, huby informacyjne + noindex)
 - [ ] T-258 — wdrożenie prywatnych ofert
 - [ ] Kreacje [VID] z nowych filmów
 - [ ] Kontrola placu (przypomnienie 14.10)
