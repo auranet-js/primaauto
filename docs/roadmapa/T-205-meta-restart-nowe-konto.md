@@ -1,6 +1,6 @@
 # T-205 — Meta: restart na nowym koncie (Facebook/Instagram)
 
-> Status: **W TOKU — pomiar i katalog wdrożone 2026-08-01, zostały kampanie** · Rozmiar: M
+> Status: **ZAMKNIĘTE 2026-10-07 (przegląd postępu) — kampanie działają od 04.09, przebudowa 15.09, stan bieżący: `docs/meta/plan-kampanii.md` i rechecki w `docs/sesje/`** · było: W TOKU — pomiar i katalog wdrożone 2026-08-01, zostały kampanie · Rozmiar: M
 > Godziny: **12–16 h na całość** (z pierwotnych 16–22 h; Ruslan wykonał konfigurację portfolio wg naszej instrukcji)
 > **Plan wykonawczy (rewizja 01.08): [`T-205-plan-wykonawczy-2026-07-31.md`](T-205-plan-wykonawczy-2026-07-31.md)**
 >

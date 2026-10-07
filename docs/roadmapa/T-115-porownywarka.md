@@ -1,6 +1,6 @@
 # T-115 — Porównywarka aut
 
-> Status: **etap 2 wdrożony 17.09 (0.43.0, motyw 1.6.6)** — nagłówek z lupą i wagą, pasek „Nowość”, waga na kartach i galerii, schowek · menu „Marki”→„Wiedza” i link H1 na stronie głównej · noindex bez zmian · Rozmiar: M/L
+> Status: **ZAMKNIĘTE 2026-10-07 (przegląd postępu) — etap 2 wdrożony 17.09 (0.43.0, motyw 1.6.6)** — nagłówek z lupą i wagą, pasek „Nowość”, waga na kartach i galerii, schowek · menu „Marki”→„Wiedza” i link H1 na stronie głównej · noindex bez zmian · Rozmiar: M/L
 > Gate z T-116 (tabela specs) **zdjęty** — tabela `wp7j_asiaauto_specs` działa od 02.09.
 > Poprzednia wersja tego pliku (porównanie ofert, `/porownaj/`, limit 4, checkbox na karcie) — w historii gita.
 

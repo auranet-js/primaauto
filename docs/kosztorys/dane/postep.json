@@ -6,6 +6,146 @@
   },
   "changelog": [
     {
+      "data": "07.10.2026",
+      "tytul": "Prywatne oferty — strona auta dostępna tylko z linku",
+      "opis": "Ofertę ustawiasz teraz jako „Prywatną” i w karcie oferty dostajesz gotowy odnośnik do skopiowania. Klient widzi pod nim normalną stronę auta — zdjęcia, parametry, cenę — i może złożyć zamówienie. Oferta nie pojawia się w listingu, na stronach modeli, w wyszukiwarce, w porównywarce, w reklamach ani w Google. Bez odnośnika strona nie istnieje.\n\nGdy link trafi w niepowołane ręce, jednym kliknięciem generujesz nowy, a stary przestaje działać. Ukrycie może być czasowe: po przestawieniu z powrotem na „Opublikowany” oferta wraca na stronę i do Google jak każda inna.\n\nZgodnie z ustaleniem ze spotkania prywatne mogą być tylko auta z ręcznego importu i duplikaty — tylko one są chronione przed automatyczną aktualizacją i usunięciem przez giełdę. Sprawdziliśmy całą ścieżkę na Xiaomi YU7: z linkiem strona i formularz zamówienia działają, bez linku, ze złym linkiem i po wygenerowaniu nowego klucza — strona nie istnieje; oferta nie trafia do żadnej listy, mapy strony ani katalogu reklam.",
+      "wersje": "0.45.0",
+      "godz": 4
+    },
+    {
+      "data": "07.10.2026",
+      "tytul": "Zastrzeżenie „niezależny importer” na ogłoszeniach, stronach marek i w stopce",
+      "opis": "Po piśmie kancelarii Bird & Bird w imieniu Volkswagena przygotowaliśmy 27.09 analizę i propozycję zastrzeżenia, a 07.10, zgodnie z Twoją decyzją ze spotkania, wdrożyliśmy je bez czekania na radcę. Tekst: „Prima Auto to niezależny, bezpośredni importer samochodów. Nie jesteśmy autoryzowanym dealerem marki. Auto pochodzi z rynku chińskiego, spoza oficjalnej sieci w UE. Nazwa marki służy identyfikacji pojazdu.” — z nazwą marki podstawianą automatycznie.\n\nZastrzeżenie stoi w trzech miejscach z makiety: na dole każdego ogłoszenia (pod wyposażeniem, przed „Inne modele”), na dole stron marek i modeli (także informacyjnych, jak Audi) oraz jednym zdaniem w stopce każdej strony. Link „Zasady importu” prowadzi do regulaminu usługi. Treść można zmienić w jednym miejscu po uwagach prawnika.",
+      "wersje": "0.44.3",
+      "godz": 2
+    },
+    {
+      "data": "07.10.2026",
+      "tytul": "Strony modeli wyprzedanych zostają w Google",
+      "opis": "Gdy model chwilowo nie ma żadnej oferty, jego strona dostawała automatycznie znacznik „nie indeksuj” i wypadała z Google — tak wypadły m.in. NIO ET9, Haval H6 i GAC GS8, które w ostatnich 90 dniach przyniosły ok. 400 wejść. Po powrocie towaru strona musiała odbudowywać pozycję od zera.\n\nTeraz system zapamiętuje, że model był w ofercie, i jaki był przedział cen. Strona wyprzedanego modelu zostaje w Google z tytułem „{Model} cena w Polsce: od–do tys. zł” i informacją o cenach — bez sztucznych liczników. Wyjątek stanowią marki z pisma Volkswagena (VW, Mini, Iveco) oraz Volvo i BMW: ich strony pozostają poza Google.",
+      "wersje": "0.44.2",
+      "godz": 2
+    },
+    {
+      "data": "07.10.2026",
+      "tytul": "Płatność online Tpay — odpowiedź na pytania kontrolne",
+      "opis": "Przygotowaliśmy odpowiedź na pytania kontrolne Tpay (zmieszczoną w limicie 1 000 znaków formularza): opisuje usługę jako pośrednictwo w imporcie, nie sprzedaż ani rejestrację aut, a przez Tpay przechodzi wyłącznie depozyt. Sprawdziliśmy też konto produkcyjne: transakcja na 1 zł tworzy się poprawnie, ale strona płatności pokazuje jeszcze tryb testowy — Tpay musi przełączyć konto po weryfikacji.\n\nDo czasu uruchomienia płatności w stopce zamiast „import i sprzedaż samochodów” stoi „import samochodów” — zgodnie z opisem działalności podanym operatorowi. Jeśli Tpay odmówi, zawieszamy płatności online, tak jak ustaliliśmy na spotkaniu.",
+      "wersje": "",
+      "godz": 1
+    },
+    {
+      "data": "04.10.2026",
+      "tytul": "Google Ads — przegląd kampanii i naprawa reklam dynamicznych",
+      "opis": "Przegląd całego konta po miesiącu pokazał awarię, której nikt nie zgłosił: lista ofert dla reklam dynamicznych przestała się odświeżać 10.08. Przez prawie dwa miesiące reklamy prowadziły w większości do aut, które dawno zeszły z oferty (69 z 99 adresów przekierowywało dalej), a w kampanii wciąż był Xiaomi, wycofany 07.09. Lista działa znowu i odświeża się automatycznie.\n\nPrzy okazji naprawiliśmy pomiar: znacznik kliknięcia z Google był wycinany na stronie, więc część kontaktów z reklam nie była im przypisywana. Reklamy dynamiczne ustawiliśmy pod profil Twoich klientów: dziewięć marek, które realnie się sprzedają (81 → 188 ofert w kampanii), przywrócona grupa wiekowa 65+, harmonogram i dodane województwo świętokrzyskie. Wykluczyliśmy też frazy z OLX i Forda Bronco, które ściągały przypadkowy ruch.",
+      "wersje": "",
+      "godz": 5
+    },
+    {
+      "data": "04.10.2026",
+      "tytul": "Reklamy na Facebooku i Instagramie — postój, wznowienie i korekta kampanii",
+      "opis": "18.09 reklamy przestały się wyświetlać, choć wszystkie statusy w panelu były zielone. Przyczyną był limit wydatków konta — Meta wstrzymuje reklamy, zanim zostanie on w pełni wykorzystany, i nigdzie tego nie zgłasza. Po wyzerowaniu licznika w panelu (21.09) konto ruszyło i od 22.09 wydaje równo.\n\nPrzegląd 04.10: koszt wejścia na stronę bez zmian (0,36–0,37 zł), wzrosła skala ruchu. Wykryliśmy, że kampania katalogowa od 15.09 pokazywała reklamy także osobom, które już były na stronie albo się kontaktowały — dołożyliśmy wykluczenia, żeby nie płacić drugi raz za tych samych ludzi. Kampanię ze zdjęciami wstrzymaliśmy (wejście trzy razy droższe niż w katalogowej), budżet konta to teraz 60 zł dziennie.",
+      "wersje": "",
+      "godz": 4
+    },
+    {
+      "data": "04.10.2026",
+      "tytul": "4 400 ofert na stronie i uzupełnione wyposażenie aut z Dongchedi",
+      "opis": "Liczba ofert urosła z ok. 3 200 do 4 400 — połowa weszła po 23.09, kiedy Dongchedi znów zaczął przyjmować nowe auta, a Che168 dowozi coraz więcej. Wycofywanie aut zdjętych z giełdy działa normalnie, po prostu dopływ jest większy.\n\nCzęść nowych ofert z Dongchedi przychodzi z bardzo ubogim opisem — sam dostawca od lipca oddaje ok. 40 parametrów zamiast ponad 300, a te auta nie pojawiają się w filtrach wyposażenia ani w porównywarce. 134 ze 162 takich ofert uzupełniliśmy z katalogu producenta (Autohome), z kontrolą, że to ta sama wersja. Dolewanie działa teraz co wieczór automatycznie.",
+      "wersje": "",
+      "godz": 4
+    },
+    {
+      "data": "25.09.2026",
+      "tytul": "Ranking chińskich limuzyn",
+      "opis": "Nowy wpis w dziale rankingów: luksusowe sedany w Chinach, liczone z sumy sprzedaży z trzech miesięcy, a nie z jednego — pojedynczy miesiąc w tym segmencie za bardzo skacze. Przy każdym modelu pokazujemy, czy i za ile mamy go w ofercie, z linkiem do strony modelu. Przy okazji wyłapaliśmy i opisaliśmy błąd w podawaniu mocy na części stron modeli.",
+      "wersje": "",
+      "godz": 3
+    },
+    {
+      "data": "23.09.2026",
+      "tytul": "Che168 stoi po stronie dostawcy, Dongchedi znów przyjmuje nowe auta",
+      "opis": "Od 22.09 wieczorem dostawca danych z Che168 przestał przekazywać zmiany — drugi taki przestój po sierpniowym. Ustaliliśmy, że problem leży po jego stronie (nasz system pyta poprawnie i bez błędów), i przygotowaliśmy zgłoszenie z prośbą o termin naprawy i rozliczenie przestoju.\n\nTego samego dnia przełączyliśmy Dongchedi z trybu „tylko aktualizacja” na pełny — od 24.08 odrzucał nowe auta. Od tej chwili wchodzi 50–200 nowych ofert dziennie.",
+      "wersje": "",
+      "godz": 2
+    },
+    {
+      "data": "21.09.2026",
+      "tytul": "Plan publikacji filmów z sesji w Rzeszowie",
+      "opis": "Dziesięć filmów z sesji 23.07 nie ukazało się dotąd na stronie na Facebooku ani razu — ich jedynym życiem były płatne reklamy. Przygotowaliśmy dla Andrzeja gotowy pakiet na 11 dni: 20 publikacji (film pionowy wieczorem jako rolka, poziomy tego samego auta następnego dnia w aktualnościach, z innym tekstem), gotowe teksty do wklejenia i sprawdzone linki. Każdy post prowadzi na stronę modelu, nie do pojedynczej oferty — auto może zejść, a link w poście zostaje na zawsze.",
+      "wersje": "",
+      "godz": 3
+    },
+    {
+      "data": "20.09.2026",
+      "tytul": "WhatsApp z kreatora zamówienia mówi, o które auto chodzi",
+      "opis": "Poprawka po Twoim zgłoszeniu: klient, który z kreatora zamówienia klikał WhatsApp, wysyłał adres pustego kreatora z komunikatem „Nie wskazano pojazdu” — nie było wiadomo, o które auto pyta. Teraz wiadomość zawiera nazwę auta i link do oferty („chcę zamówić: …”). Z porównywarki i filtrów katalogu wiadomość niesie dokładnie to, co klient oglądał, a z adresu wycinamy dane, które nie powinny trafić do rozmowy.",
+      "wersje": "0.44.1",
+      "godz": 1
+    },
+    {
+      "data": "19.09.2026",
+      "tytul": "Nowe modele i nazwy: Leapmotor D19, Wuling, Tiggo 9 / Jaecoo 8, MG Cyberster",
+      "opis": "Dołączyliśmy do oferty modele, które czekały w kolejce bez przypisania: Leapmotor D19 oraz Wuling Huajing S i Starlight (pięć stron modeli z treścią). Chery Tiggo 9 występuje teraz także pod europejską nazwą Jaecoo 8 — w tytułach ofert i na stronie modelu, bo tak szukają go klienci w Polsce. Doszły też przypisania dla MG Cyberster i BYD Yuan Plus, więc kolejne auta tych modeli trafiają od razu we właściwe miejsce.",
+      "wersje": "0.40.5",
+      "godz": 4
+    },
+    {
+      "data": "18.09.2026",
+      "tytul": "„Przeglądaj Dongchedi” — wyszukiwanie aut na giełdzie i import jednym kliknięciem",
+      "opis": "Masz w panelu nowe narzędzie, takie samo jak „Przeglądaj Che168”: przeglądasz oferty z Dongchedi z filtrami (marka, model, rocznik, cena, miasto) i dodajesz wybrane auto do strony jednym kliknięciem. Dongchedi chodził wtedy w trybie samej aktualizacji, bo większość jego ofert dubluje Che168 — unikalne sztuki wyławiamy więc ręcznie. Przy okazji przesunęliśmy wieczorne uzupełnianie specyfikacji i podwoiliśmy dzienny limit pobrań z katalogu producenta.",
+      "wersje": "0.44.0",
+      "godz": 4
+    },
+    {
+      "data": "17.09.2026",
+      "tytul": "Nowy nagłówek strony i menu na telefonie",
+      "opis": "Nagłówek dostał dwa nowe wejścia: lupę do wyszukiwarki zaawansowanej i wagę z licznikiem aut dodanych do porównania. Na telefonie przy dolnej krawędzi stoi stały pasek „Zadzwoń / WhatsApp”, który chowa się, gdy klient coś wpisuje. Menu mobilne otwiera się pod nagłówkiem na granatowym tle i nie przykrywa przycisków. W menu „Wiedza” pojawiły się „Marki”, a na górze strony pasek „Nowość · Porównywarka samochodów”.",
+      "wersje": "motyw 1.6.0 – 1.6.6",
+      "godz": 4
+    },
+    {
+      "data": "17.09.2026",
+      "tytul": "Porównywarka samochodów",
+      "opis": "Nowa strona /porownywarka/: klient zestawia obok siebie do trzech wersji aut (807 wersji w bazie) i widzi parametry w jednej tabeli, podsumowanie z różnicą do najlepszego w każdej kategorii i całe wyposażenie w tych samych sekcjach co na karcie oferty, z opcją „tylko różnice”. Porównujemy wersje, a nie pojedyncze egzemplarze — dzięki temu porównanie działa też dla modeli, których chwilowo nie ma w ofercie. Na telefonie tabela przewija się w bok z przyklejoną kolumną parametrów.\n\nNa każdej karcie auta i w galerii oferty jest przycisk porównania, a dodane auta zbierają się w pasku na dole ekranu. Gotowe porównanie można wysłać przez WhatsApp. Strona trzyma historię porównań, co pozwoli nam później ocenić, czy warto ją pokazać w Google. Auta z placu i w drodze, dodawane ręcznie, nie miały danych wersji — 31 z nich dopasowaliśmy, więc też dają się porównać.",
+      "wersje": "0.42.0 – 0.43.0",
+      "godz": 12
+    },
+    {
+      "data": "16.09.2026",
+      "tytul": "Płatność depozytu online — wybór Tpay i podłączenie",
+      "opis": "Po odmowie PayU porównaliśmy dziesięciu operatorów pod kątem kosztu przy naszej liczbie depozytów i ryzyka kolejnej odmowy. Wybraliśmy Tpay (ok. 61 zł od depozytu 6 150 zł, bez sprzedaży aut i zaliczek na liście zakazanych branż), zapasowo Przelewy24. Przygotowaliśmy dane i opis działalności do rejestracji, założyliśmy konto i przebudowaliśmy płatność w systemie: BLIK kodem wpisywanym na naszej stronie, przelew online przez Tpay, automatyczne zaksięgowanie depozytu po potwierdzeniu. Całość przetestowana w środowisku testowym Tpay — łącznie z odrzuconym kodem BLIK, powtórzonym potwierdzeniem i niezgodną kwotą. Płatność czeka wyłączona na aktywację konta.",
+      "wersje": "0.41.0",
+      "godz": 6
+    },
+    {
+      "data": "15.09.2026",
+      "tytul": "Reklamy na Facebooku i Instagramie — audyt i przebudowa kampanii",
+      "opis": "Po dziesięciu dniach od startu audyt pokazał jeden kontakt na 645 zł wydatków — ruch tanieje, ale nie zamienia się w telefony. Znaleźliśmy przyczynę po stronie pomiaru: od 25.08 licznik Facebooka działał tylko na stronach ofert — kontaktów ze stron modeli, strony głównej i zakładki Kontakt nie widział wcale, więc Meta optymalizowała reklamy prawie po omacku. Licznik działa teraz na całej stronie.\n\nKampanie przebudowaliśmy: katalog aut dla nowych odbiorców, reklamy ze zdjęciami nastawione na kontakt zamiast na kliknięcia, przypomnienie dla osób, które już oglądały auta — razem 65 zł dziennie. Dwa dni później sprawdziliśmy pierwszą dobę po zmianie, osobno dla każdej reklamy.",
+      "wersje": "",
+      "godz": 6
+    },
+    {
+      "data": "14.09.2026",
+      "tytul": "Katalog aut — nowe sortowania i spójna moc na kartach",
+      "opis": "Na /samochody/ i na stronach modeli doszły sortowania z wyszukiwarki: najmniejszy przebieg, rocznik, najmocniejsze, największy zasięg i najszybsze 0–100. Przy okazji wyszło, że ponad 1 800 kart aut elektrycznych i hybryd nie pokazywało mocy, a część hybryd podawała moc samego silnika elektrycznego (Lynk & Co 900: 480 zamiast 734 KM). Karta pokazuje teraz moc całego układu, tę samą, po której się sortuje. Przebieg zero wyświetla się jako „0 km”, a nie jako puste pole. Link z katalogu do wyszukiwarki zaawansowanej przenosi wybrane filtry, więc klient nie zaczyna od nowa.",
+      "wersje": "0.40.2 – 0.40.6",
+      "godz": 3
+    },
+    {
+      "data": "14.09.2026",
+      "tytul": "Odmowa PayU — płatność online wyłączona, klient płaci przelewem",
+      "opis": "PayU odmówiło współpracy. Wyłączyliśmy bramkę tak, żeby klient nie trafił na niedziałającą płatność: w zamówieniu widzi blok „Płatność online — BLIK, karta” z informacją, że ją uruchamiamy, a dane do przelewu od razu. Z maila statusowego i z regulaminu usługi zniknęła nazwa PayU. Tego samego dnia rozpoznaliśmy Autopay jako możliwą alternatywę.",
+      "wersje": "0.40.1",
+      "godz": 1
+    },
+    {
+      "data": "10.09.2026",
+      "tytul": "Remarketing Google — lista aut znów przyjmowana przez Google",
+      "opis": "Google odrzucał 159 z 257 aut z listy, na której opiera się remarketing — nie przyjmował zdjęć w formacie WebP, w którym zapisujemy galerie. Lista wysyła teraz zdjęcia w formacie akceptowanym przez Google, a nowe sprawdzenie od razu pokazuje, ile pozycji zostało odrzuconych.",
+      "wersje": "",
+      "godz": 1.5
+    },
+    {
       "data": "08.09.2026",
       "tytul": "Numer przesyłki w zamówieniu i informacja o transporcie dla klienta",
       "opis": "Auto w drodze to najdłuższa cisza w całym zamówieniu — klient wiedział tylko tyle, że płynie. Numer przesyłki wpisujesz teraz w karcie zamówienia, obok numeru VIN, i masz przy nim gotowy odnośnik do śledzenia u przewoźnika. Adres składa się z szablonu w ustawieniach (domyślnie Maersk), więc zmiana armatora nie wymaga naszej ingerencji w system — wystarczy podmienić adres w konfiguracji. Możesz też wkleić pełny odnośnik prosto od spedytora, wtedy użyjemy go bez zmian.\n\nKlient widzi numer w swoim panelu jako osobną, wyróżnioną kartę „Transport”, razem z odnośnikiem do przewoźnika. Karta pojawia się od razu po wpisaniu numeru — nie czeka, aż zamówienie przejdzie na etap „w drodze”, bo numer zwykle dostajesz od spedytora wcześniej, niż zmieniasz status.\n\nOsobno jest przycisk „Wyślij informację o transporcie” — mail do klienta z numerem i odesłaniem do panelu. Wysyłka wychodzi wyłącznie po kliknięciu: samo wpisanie numeru ani zmiana statusu nie wysyłają nic. Przy przycisku widzisz datę ostatniej wysyłki, więc wiadomo, czy klient już dostał informację.",
@@ -455,8 +595,8 @@
     {
       "id": "T-256",
       "tytul": "Płatność depozytu online — przepięcie z PayU na Tpay",
-      "opis": "PayU 14.09 odmówiło współpracy, więc płatność depozytu online stała, a klienci płacą wyłącznie przelewem, który trzeba ręcznie księgować. Zadanie obejmuje całe przejście na nowego operatora.\n\nZrobione 16.09: porównanie dziesięciu operatorów pod kątem kosztu przy naszej liczbie depozytów i ryzyka ponownej odmowy (wybrany Tpay — ok. 61 zł od depozytu 6 150 zł, bez zapisów o sprzedaży aut i zaliczkach na liście zakazanych branż; zapasowo Przelewy24), przygotowanie danych i opisu działalności do rejestracji, założenie konta, podłączenie kluczy oraz przebudowa płatności w systemie: BLIK kodem wpisywanym na naszej stronie, przelew online przez Tpay, automatyczne księgowanie depozytu po potwierdzeniu z Tpay. Całość przetestowana w środowisku testowym Tpay — łącznie z odrzuconym kodem BLIK, powtórzonym potwierdzeniem i niezgodną kwotą.\n\nDo zrobienia: po weryfikacji konta przez Tpay (przelew weryfikacyjny z Twojego konta w Aliorze) ustawienia w panelu Tpay, jedna prawdziwa płatność testowa za 1 zł, włączenie płatności dla klientów i kontrola pierwszych wpłat. Do tego czasu klienci widzą w zamówieniu informację, że płatność online uruchamiamy, i dane do przelewu.",
-      "status": "w toku — zrealizowano ok. 6 h z 12 h; czeka na weryfikację konta Tpay (przelew weryfikacyjny z konta w Aliorze)",
+      "opis": "PayU 14.09 odmówiło współpracy, więc płatność depozytu online stała, a klienci płacą wyłącznie przelewem, który trzeba ręcznie księgować. Zadanie obejmuje całe przejście na nowego operatora.\n\nZrobione 16.09: porównanie dziesięciu operatorów pod kątem kosztu przy naszej liczbie depozytów i ryzyka ponownej odmowy (wybrany Tpay — ok. 61 zł od depozytu 6 150 zł, bez zapisów o sprzedaży aut i zaliczkach na liście zakazanych branż; zapasowo Przelewy24), przygotowanie danych i opisu działalności do rejestracji, założenie konta, podłączenie kluczy oraz przebudowa płatności w systemie: BLIK kodem wpisywanym na naszej stronie, przelew online przez Tpay, automatyczne księgowanie depozytu po potwierdzeniu z Tpay. Całość przetestowana w środowisku testowym Tpay — łącznie z odrzuconym kodem BLIK, powtórzonym potwierdzeniem i niezgodną kwotą.\n\nZrobione 07.10: odpowiedź na pytania kontrolne Tpay, sprawdzenie konta produkcyjnego (transakcja się tworzy, strona płatności pokazuje jeszcze tryb testowy), stopka bez słowa „sprzedaż” do czasu aktywacji.\n\nDo zrobienia: po przełączeniu konta przez Tpay jedna prawdziwa płatność testowa za 1 zł, włączenie płatności dla klientów i kontrola pierwszych wpłat. Jeśli Tpay odmówi — zawieszamy płatności online. Do tego czasu klienci widzą w zamówieniu informację, że płatność online uruchamiamy, i dane do przelewu.",
+      "status": "w toku — zrealizowano ok. 7 h z 12 h; czeka na decyzję Tpay po odpowiedzi na pytania kontrolne (07.10)",
       "realnie_od": 12,
       "realnie_do": 12
     },
@@ -548,7 +688,7 @@
       "id": "T-254",
       "tytul": "Automatyczne dane od armatora przy aucie w drodze (pozycja, port, data przypłynięcia)",
       "opis": "Rozwinięcie pozycji o numerze przesyłki. Po wpisaniu numeru system sam pytałby przewoźnika o stan przesyłki i pokazywał w zamówieniu — Tobie i klientowi — gdzie jest ładunek, jaki port jest następny i kiedy przewidywane jest przypłynięcie. Dane odświeżałyby się same, więc przesunięcie terminu przez armatora docierałoby do klienta bez Waszego udziału.\n\nZanim to wycenimy, trzeba sprawdzić, na jakich zasadach Maersk udostępnia dane śledzenia dla Waszych przesyłek — czy w ogóle, czy odpłatnie i z jakimi ograniczeniami. Do ustalenia też, czy poza Maerskiem korzystacie z innych armatorów; obsługa każdego kolejnego to osobna praca.",
-      "status": "wydzielone 04.09.2026 z pozycji o numerze przesyłki — czeka na sprawdzenie dostępu do danych Maersk",
+      "status": "odłożone — 07.10 rozważany tańszy wariant: odliczanie ok. 60 dni od wypłynięcia zamiast danych od armatora",
       "realnie_od": null,
       "realnie_do": null,
       "rynkowo_od": null,
@@ -568,13 +708,12 @@
       "id": "T-249",
       "tytul": "Dokumenty w zamówieniu — wymiana plików z klientem i lista dokumentów oczekiwanych",
       "opis": "Dziś dokumenty krążą mailem i WhatsAppem. Strona przyjmuje od klienta dokładnie dwa pliki — podpisaną umowę i potwierdzenie wpłaty — i to tylko w krótkim oknie, na etapie umowy. Po podpisaniu klient nie ma już gdzie niczego wysłać, a Ty możesz wgrać do zamówienia wyłącznie własną umowę PDF. Nie da się przy pliku napisać, czym on jest.\n\nPo zmianie: Ty dodajesz do zamówienia dowolny dokument z własnym opisem, klient tak samo — również później, kiedy auto jest już w drodze albo na placu. Zamówienie pokazuje obu stronom listę dokumentów, których jeszcze brakuje: co jest potrzebne, kto to dostarcza i czy już wpłynęło. Dokument przysłany przez klienta możesz przyjąć albo odrzucić z powodem — powód widzi klient, więc poprawia bez telefonu. Na liście zamówień od razu widać, w których czegoś brakuje.\n\nPrzy okazji domykamy sprawę ochrony tych plików. Sprawdziliśmy 2.09: przy zamówieniach wisi 68 dokumentów — umowy z danymi osobowymi i podpisami klientów — i każdy z nich otworzy się bez logowania, jeśli ktoś zna dokładny adres pliku. Chroni je dziś tylko to, że w nazwie jest losowy ciąg znaków. Po zmianie dokument otworzy wyłącznie osoba zalogowana: Ty albo właściciel tego zamówienia. Stare pliki przenosimy razem z resztą, nic nie przepada.\n\nZadanie wymaga wcześniejszego zbudowania konta klienta (pozycja wyżej) — dokumenty mają swoje stałe miejsce dopiero tam, gdzie klient się loguje. Przed startem ustalamy z Tobą jedną rzecz: jakie dokumenty realnie krążą w cyklu importu i na którym etapie — z tego powstaje lista, którą system pilnuje.",
-      "status": "zgłoszone 02.09.2026 — plan i wycena gotowe; wymaga wcześniejszego zbudowania konta klienta",
+      "status": "plan i wycena gotowe; proces dokumentów i lista dokumentów do odprawy ustalone z Tobą 07.10 — budujemy po panelu klienta",
       "realnie_od": 45,
       "realnie_do": 60,
       "rynkowo_od": 110,
       "rynkowo_do": 145,
       "pytania": [
-        "Jakie dokumenty realnie krążą przy imporcie poza umową i potwierdzeniem wpłaty — i na którym etapie każdy z nich jest potrzebny? Z tej listy powstaje wykaz, którego system pilnuje przy każdym zamówieniu.",
         "Jak długo mamy trzymać dokumenty klienta po zakończeniu zamówienia?"
       ]
     },
@@ -595,10 +734,11 @@
     "T-186",
     "T-116",
     "T-248",
-    "T-253"
+    "T-253",
+    "T-115",
+    "T-205",
+    "T-258"
   ],
-  "todo_pierwsze": [
-    "T-205"
-  ],
+  "todo_pierwsze": [],
   "todo_po_nowych": []
 }
