@@ -127,7 +127,7 @@ zmiana wzorców umów (T-217/T-220), przebudowa listy zamówień (T-218).
 | 3 | Invoice chiński na całe auto (płatność 30% + 70%, faktura na całość) — przy leasingu zamiast tego zaliczka w PLN + faktura zaliczkowa | Ruslan | zakup auta w Chinach |
 | 4 | Potwierdzenia wpłat (kilka — klient może płacić z różnych kont) | klient | po fakturze |
 | 5 | Weryfikacja auta w Chinach — PDF (zdjęcia, opis) albo link do filmu/strony firmy weryfikującej | Ruslan | przed wypłynięciem |
-| 6 | Dokumenty klienta do odprawy — **listy osobno dla firm i osób prywatnych, Ruslan ma je przesłać** | klient | po dopłynięciu do portu (DE/NL) |
+| 6 | Dokumenty klienta do odprawy — lista niżej (§9.1) | klient | po dopłynięciu do portu (DE/NL) |
 | 7 | Faktura z portu za odprawę (na klienta albo na Ruslana) + potwierdzenie zapłaty | Ruslan → klient → klient | odprawa |
 | — | Transport port → Polska | — | płatny gotówką przy odbiorze, bez dokumentu (faktura przewoźnika raz na kwartał) |
 
@@ -137,4 +137,23 @@ Ustalenia:
 - **Wideo** (MP4, ~2 min ≈ 50–100 MB) — tylko jako test; ryzyko spowolnienia strony i miejsca na serwerze. Domyślnie link.
 - **Odrzucone na teraz:** checkboxy postępu (przegląd/tłumaczenie/detailing) — pusty stan u klienta generuje telefony.
 - **Odłożone:** rozliczenie końcowe dla klienta (ile jeszcze do zapłaty) — kalkulacje i tak rozjeżdżają się z rzeczywistością.
-- Pkt 1 „Otwarte punkty” (katalog dokumentów) — częściowo zamknięty; brakuje list Ruslana z pkt 6.
+- Pkt 1 „Otwarte punkty” (katalog dokumentów) — **zamknięty 07.10** (lista od Ruslana niżej).
+
+### 9.1 Dokumenty do odprawy celnej (lista Ruslana, 07.10)
+
+Źródło: Dysk `PrimaAuto/temp/dokumenty do odprawy (1).pdf`.
+
+**Osoba prywatna:**
+1. Kopia dowodu osobistego (imię, nazwisko, numer i seria, data ważności) — *klient*
+2. Faktura zakupu pojazdu + koszty frachtu, z jasną walutą; przy jednej fakturze poprawny INCOTERM (CIP/CIF/CFR), dane adresowe klienta — *Ruslan* (= dokument 3 z tabeli)
+3. Dodatkowa dokumentacja pojazdu — zależna od rodzaju pojazdu i kraju pochodzenia/eksportu — *Ruslan*
+
+**Firma:**
+1. Kopia dowodu osobistego osoby uprawnionej do reprezentacji — *klient*
+2. Wyciąg z CEIDG / KRS — *klient*
+3. Aktywny VAT ID (NIP) na transakcje wewnątrzwspólnotowe — weryfikacja VIES: https://ec.europa.eu/taxation_customs/vies/#/vat-validation — *klient (numer) / sprawdzenie Ruslan*
+4. Aktywny numer EORI — weryfikacja: https://ec.europa.eu/taxation_customs/dds2/eos/eori_validation.jsp?Lang=pl — *klient*
+5. Faktura zakupu pojazdu + frachtu (jak wyżej) z NIP i adresem firmy — *Ruslan*
+6. Dodatkowa dokumentacja pojazdu — *Ruslan*
+
+Wnioski do katalogu: od klienta realnie idą tylko **dowód** (obie ścieżki) oraz **CEIDG/KRS + EORI** (firma); VAT ID/EORI to numery, nie pliki — kandydaci na pola w formularzu zamówienia zamiast uploadu (NIP firmy już zbieramy do umowy). Typ klienta (firma/prywatny) wybiera zestaw dokumentów automatycznie. Dowód osobisty = dane wrażliwe → ochrona plików z §2 (68 załączników bez logowania) jest warunkiem, nie dodatkiem.
