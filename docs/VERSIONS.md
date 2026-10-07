@@ -1,5 +1,26 @@
 # Historia wersji asiaauto-sync
 
+## 0.44.2 — 2026-10-07 (T-260 „huby bez ofert wypadają z indeksu”: znacznik historii ofert)
+
+- Problem: RankMath `noindex_empty_taxonomies=on` dawał `noindex` każdemu hubowi z `count=0`, także tym z
+  towarem w przeszłości i ruchem (NIO ET9, Haval H6, GAC GS8 — 22 huby, ~400 kl./90 dni). Opcji nie
+  wyłączamy: trzyma ~2 400 termów-widm. Historii ofert nie da się odtworzyć z bazy (rotacja).
+- `class-asiaauto-hub-title-generator.php`: przy każdym przeliczeniu huba z ofertami (hook importu + cron
+  dzienny) zapis `_asiaauto_had_offers` (data) i `_asiaauto_last_price_range` („min,max”), PRZED skip flag.
+  Hub z `count=0` ze znacznikiem dostaje tytuł `{Model} cena w Polsce: X–Y tys. zł | Prima-Auto` i opis
+  „Ceny … wahają się od … do … zł” (decyzja Janka: bez liczników, bez odniesienia czasowego). Cron dzienny
+  przechodzi dodatkowo po wyprzedanych hubach ze znacznikiem.
+- `class-asiaauto-seo.php`, `filterRankMathRobots()` → `soldOutHubKeepsIndex()`: `index` dla `serie` i `make`
+  przy `count=0`, gdy znacznik + marka nieinformacyjna (`_asiaauto_info_only`) + brak
+  `_asiaauto_hub_duplicate_of` + (dla modelu) `_asiaauto_spec_snapshot`.
+- Bezpiecznik: opcja `asiaauto_hub_keep_index` = `0` przywraca zachowanie sprzed zmiany.
+- Backfill: znacznik dla 273 modeli + 55 marek z ofertami oraz 15 hubów z decyzji Janka (przedziały z
+  historycznych cen opisu/FAQ, zdjęte ręczne `skip_title_regen`); `_asiaauto_hub_duplicate_of` na 13
+  duplikatach wariantów. Whitelist `asiaauto_hub_index_whitelist` = 5 premierowych + Sealion 6 EV (brak specu).
+- Weryfikacja: curl na 22 adresach — 15 hubów `index` z nowym tytułem; kontrolne `seal-5-dm`, `a7-phev`
+  (duplikat), Audi E5, VW, Skoda → `noindex`; tytuły żywych hubów przed/po: 3 różnice = bieżąca liczba sztuk.
+  Backupy: `*.bak-2026-10-07-t260`, `~/backups/primaauto/2026-10-07/`. Raport: `docs/seo/2026-10-07-huby-bez-ofert-noindex.md`.
+
 ## 0.44.1 — 2026-09-20 (WhatsApp: kontekst auta w kreatorze zamówienia)
 
 - Zgłoszenie Ruslana (screeny na Telegramie): na WhatsApp przychodziły wiadomości „piszę w sprawie:
