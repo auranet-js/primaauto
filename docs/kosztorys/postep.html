@@ -73,7 +73,7 @@ footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line);
 <header class="top">
 <h1>Prima Auto — postęp prac i plan rozwoju</h1>
 <div class="sub">Platforma importu samochodów z Chin · primaauto.com.pl · opracowanie: Auranet (Jan Schenk)</div>
-<div class="stamp">Stan na 07.10.2026 · dokument roboczy, aktualizowany na bieżąco wraz z postępem prac</div>
+<div class="stamp">Stan na 08.10.2026 · dokument roboczy, aktualizowany na bieżąco wraz z postępem prac</div>
 </header>
 
 <div class="cols">
@@ -407,6 +407,16 @@ Zrobione 7 października: odpowiedź na pytania kontrolne Tpay, sprawdzenie kont
 Do zrobienia: po przełączeniu konta przez Tpay jedna prawdziwa płatność testowa za 1 zł, włączenie płatności dla klientów i kontrola pierwszych wpłat. Jeśli Tpay odmówi — zawieszamy płatności online. Do tego czasu klienci widzą w zamówieniu informację, że płatność online uruchamiamy, i dane do przelewu.</div><div class="skala">Status: w toku — zrealizowano ok. 7 h z 12 h; czeka na decyzję Tpay po odpowiedzi na pytania kontrolne</div></td>
 <td class="num">12</td></tr>
 <tr>
+<td><strong>T-262 — Specyfikacja auta w PDF przy zamówieniu</strong> <div class="opis"><span class="badge new">nowe</span> Przy każdym zamówieniu w panelu pojawi się przycisk „Specyfikacja PDF”. Generuje dokument z pełnymi danymi zamówionego auta: zdjęcie, dane techniczne i całe wyposażenie — tak jak na stronie ogłoszenia, a nie tylko kilkanaście pól, które są dziś w załączniku nr 1 do umowy.
+
+Specyfikacja zapisuje się w zamówieniu w chwili jego złożenia. To ważne, bo ogłoszenia po sprzedaży albo wycofaniu znikają ze strony — dziś przy części starszych zamówień nie da się już odtworzyć, jak dokładnie wyglądało zamówione auto. Dokument możesz wysłać klientowi albo dołączyć do umowy; ten sam plik pobierze klient ze swojego zamówienia.</div><div class="skala">Status: zgłoszone 8 października — wycena wstępna; robimy przed wydrukiem ogłoszenia, bo oba dokumenty korzystają z tego samego wzoru</div></td>
+<td class="num">4–6</td></tr>
+<tr>
+<td><strong>T-263 — Wydruk ogłoszenia do PDF</strong> <div class="opis"><span class="badge new">nowe</span> Na stronie każdego ogłoszenia pojawi się przycisk „Pobierz PDF”. Klient dostaje elegancki, kilkustronicowy dokument: duże zdjęcie, cena, najważniejsze parametry, dane techniczne, wyposażenie i kontakt do Prima Auto. Można go wydrukować, przesłać dalej — np. wspólnikowi albo do banku czy leasingu — i wrócić do niego, gdy ogłoszenia już nie ma.
+
+W nagłówku i stopce każdej strony znajdą się informacje prawne: że dokument ma charakter informacyjny i nie jest ofertą w rozumieniu kodeksu cywilnego, data wygenerowania i stan ceny na ten dzień, klauzula „niezależny importer, nie autoryzowany dealer” oraz dane firmy. Dopracujemy je tak, by nie psuły wyglądu dokumentu. Przed wdrożeniem pokażemy 2–3 projekty wyglądu do wyboru.</div><div class="skala">Status: zgłoszone 8 października — najpierw projekty wyglądu do wyboru</div></td>
+<td class="num">6–8</td></tr>
+<tr>
 <td><strong>T-224 — Formularz „Zapytaj o leasing” na stronie leasingowej</strong> <div class="opis"><span class="badge new">nowe</span> Dziś przycisk na stronie o leasingu prowadzi do zakładki Kontakt, czyli do zwykłego maila. Zapytanie trafia więc do skrzynki i nigdzie się nie zapisuje — nie widać go w panelu, nie da się policzyć, ile osób pyta o leasing i z których modeli przychodzą. Formularz to zmienia: zapytanie ląduje na liście w panelu, przychodzi powiadomienie na maila i zliczamy je jako zapytanie w statystykach. Pod ten sam formularz podepniemy później kalkulator raty (T-189).</div><div class="skala">Status: plan wykonawczy gotowy</div></td>
 <td class="num">5–6</td></tr>
 <tr>
@@ -495,7 +505,7 @@ Zadanie wymaga wcześniejszego zbudowania konta klienta (pozycja wyżej) — dok
 <td><strong>T-214 — Ujednolicenie i wzmocnienie stron modeli (hubów) pod frazy zakupowe</strong> <span class='rozmiar'>skala: średnia</span><div class="opis">Strony modeli to nasza najmocniejsza broń w Google — stoją na 1.-2. miejscu na frazy typu 'zeekr 9x cena'. Przegląd 14.07 wykazał trzy luki do domknięcia. (1) 34 z 302 stron modeli ma słabszy nagłówek — brakuje w nim słów 'cena w Polsce', bo powstały po ostatnim ujednoliceniu i nie dostały automatycznie tego dopisku; wśród nich ważne modele: Zeekr 9X, Zeekr 8X, Denza Z9 GT. (2) Strona modelu BAW wyświetla się w Google jako 'Beijing' zamiast 'BAW' — a to marka, której szuka 1300 osób miesięcznie; podobnie Zeekr 8X ma zbędny dopisek 'PHEV' rozmywający dopasowanie. (3) Strony modeli opisują wersje słownie, ale nie podają ceny osobno dla każdej wersji (np. 'Ultra od 426 tys.') — dane już mamy, wystarczy je pokazać. Pracujemy ostrożnie, pojedynczo, z pomiarem przed i po (strony z 1. miejsca mają najwięcej do stracenia), bo nadrzędna zasada brzmi: nie zepsuć tego, co już rankuje.</div><div class="skala">Status: znaleziska zapisane (docs/seo/znaleziska-huby-2026-07-14); wymaga pilota + progów wycofania z T-203-baseline</div></td>
 <td class="num">11–14</td></tr>
 </tbody>
-<tfoot><tr><td>Razem pełna lista (widełki)</td><td class="num">506–666</td></tr></tfoot>
+<tfoot><tr><td>Razem pełna lista (widełki)</td><td class="num">516–680</td></tr></tfoot>
 </table>
 </section>
 </div>

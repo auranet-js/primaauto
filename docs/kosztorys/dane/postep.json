@@ -616,6 +616,22 @@
       "realnie_do": 2
     },
     {
+      "id": "T-262",
+      "tytul": "Specyfikacja auta w PDF przy zamówieniu",
+      "opis": "Przy każdym zamówieniu w panelu pojawi się przycisk „Specyfikacja PDF”. Generuje dokument z pełnymi danymi zamówionego auta: zdjęcie, dane techniczne i całe wyposażenie — tak jak na stronie ogłoszenia, a nie tylko kilkanaście pól, które są dziś w załączniku nr 1 do umowy.\n\nSpecyfikacja zapisuje się w zamówieniu w chwili jego złożenia. To ważne, bo ogłoszenia po sprzedaży albo wycofaniu znikają ze strony — dziś przy części starszych zamówień nie da się już odtworzyć, jak dokładnie wyglądało zamówione auto. Dokument możesz wysłać klientowi albo dołączyć do umowy; ten sam plik pobierze klient ze swojego zamówienia.",
+      "status": "zgłoszone 8 października — wycena wstępna; robimy przed wydrukiem ogłoszenia, bo oba dokumenty korzystają z tego samego wzoru",
+      "realnie_od": 4,
+      "realnie_do": 6
+    },
+    {
+      "id": "T-263",
+      "tytul": "Wydruk ogłoszenia do PDF",
+      "opis": "Na stronie każdego ogłoszenia pojawi się przycisk „Pobierz PDF”. Klient dostaje elegancki, kilkustronicowy dokument: duże zdjęcie, cena, najważniejsze parametry, dane techniczne, wyposażenie i kontakt do Prima Auto. Można go wydrukować, przesłać dalej — np. wspólnikowi albo do banku czy leasingu — i wrócić do niego, gdy ogłoszenia już nie ma.\n\nW nagłówku i stopce każdej strony znajdą się informacje prawne: że dokument ma charakter informacyjny i nie jest ofertą w rozumieniu kodeksu cywilnego, data wygenerowania i stan ceny na ten dzień, klauzula „niezależny importer, nie autoryzowany dealer” oraz dane firmy. Dopracujemy je tak, by nie psuły wyglądu dokumentu. Przed wdrożeniem pokażemy 2–3 projekty wyglądu do wyboru.",
+      "status": "zgłoszone 8 października — najpierw projekty wyglądu do wyboru",
+      "realnie_od": 6,
+      "realnie_do": 8
+    },
+    {
       "id": "T-241",
       "tytul": "Zdjęcia i filmy z sesji — wykorzystanie na stronach modeli i w reklamach",
       "opis": "Po każdej sesji zdjęciowej na placu powstaje komplet materiałów konkretnych egzemplarzy: zdjęcia w kilku kolorach i filmy w dwóch kadrach — poziomym i pionowym. Dziś te materiały trafiają wyłącznie na YouTube i do reklam, a strony modeli zostają na zdjęciach z chińskich placów. Po zmianie każda nowa sesja uruchamia jeden powtarzalny cykl: zdjęcia idą na stronę modelu razem z filmami i opisem realnego egzemplarza, świeże kreacje wchodzą do kampanii wideo i Demand Gen, a filmy są publikowane na kanale pojedynczo, dzień po dniu, bo tak utrzymują zasięg. Przy okazji sprawdzamy, które modele z sesji nie mają jeszcze własnej strony.\n\nPierwszy przebieg: BYD Leopard 5. Jego strona przyciąga dziś 3 709 wyświetleń w Google miesięcznie i 228 wejść. Przy zapytaniach o cenę jesteśmy w ścisłej czołówce — przy „denza bao 5 cena” na drugim–trzecim miejscu, przy „denza b5 cena” na pierwszym. Ale przy dwóch najważniejszych hasłach, samym „leopard 5” i „byd leopard 5”, jesteśmy dopiero na piątym i dziewiątym miejscu, a to razem 1 625 wyświetleń, z których dostajemy zaledwie 23 wejścia. Google przy takim zapytaniu szuka strony, która pokazuje realny samochód, a nie opis katalogowy — i dokładnie to mamy: 29 zdjęć obu egzemplarzy z placu, cztery filmy oraz test tego auta w Terenwizji, kanale z 394 tys. subskrybentów, gdzie właściciel mówi wprost, że kupił je u Ciebie.",
