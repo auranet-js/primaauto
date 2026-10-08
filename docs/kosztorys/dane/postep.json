@@ -628,8 +628,8 @@
       "tytul": "Wydruk ogłoszenia do PDF",
       "opis": "Na stronie każdego ogłoszenia pojawi się przycisk „Pobierz PDF”. Klient dostaje elegancki, kilkustronicowy dokument: duże zdjęcie, cena, najważniejsze parametry, dane techniczne, wyposażenie i kontakt do Prima Auto. Można go wydrukować, przesłać dalej — np. wspólnikowi albo do banku czy leasingu — i wrócić do niego, gdy ogłoszenia już nie ma.\n\nW nagłówku i stopce każdej strony znajdą się informacje prawne: że dokument ma charakter informacyjny i nie jest ofertą w rozumieniu kodeksu cywilnego, data wygenerowania i stan ceny na ten dzień, klauzula „niezależny importer, nie autoryzowany dealer” oraz dane firmy. Dopracujemy je tak, by nie psuły wyglądu dokumentu. Przed wdrożeniem pokażemy 2–3 projekty wyglądu do wyboru.",
       "status": "zgłoszone 8 października — najpierw projekty wyglądu do wyboru",
-      "realnie_od": 6,
-      "realnie_do": 8
+      "realnie_od": 4,
+      "realnie_do": 6
     },
     {
       "id": "T-241",
