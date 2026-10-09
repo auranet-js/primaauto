@@ -68,3 +68,19 @@ Prima-Auto
 
 ---
 Wysłane Jankowi na Telegram 07.10 do przekazania Ruslanowi. **Do Tpay wysłał Janek (07.10)** — po stronie Ruslana nic nie zostało. Zasady (Janek): Tpay obsługuje wyłącznie depozyt, nic wspólnego z autem; nie udostępniamy wzoru umowy ani źródeł/dostawców (tajemnica przedsiębiorstwa). Odmowa Tpay = zawieszamy płatności online.
+
+## 09.10 — Tpay: prośba o dowód osobisty + oświadczenie
+
+Panel (`/account/my-data`) zablokowany banerem „Weryfikacja konta — uzupełnij brakujące informacje”. W sekcji „Prześlij dodatkowe dokumenty” są dwa pola do wgrania plików (png/jpg/pdf, maks. 10 MB): „Dowód osobisty (Ruslan Prima)” i „Oświadczenie”. Nie ma pola na komentarz ani wzoru oświadczenia.
+
+Tpay ma już: obywatelstwo UA, dokument = paszport (ważny do 2029), skan `WhatsApp Image 2026-05-29 at 11.37.58.jpeg`. Prawdopodobnie odrzucają jakość skanu (WhatsApp), a nie brak polskiego dowodu.
+
+Janek 09.10: kliknął „Wyślij do ponownej weryfikacji” i wysłał mail jako Ruslan (zalogowany na jego konto):
+
+> Temat: Konto 227596 — weryfikacja dokumentów
+>
+> w panelu proszą Państwo o dowód osobisty i oświadczenie. Nie mam polskiego dowodu osobistego — jestem obywatelem Ukrainy, weryfikowałem się paszportem, mam też Kartę Polaka. Czy paszport wystarczy? Jeśli potrzebny jest lepszy skan, prześlę od razu. Proszę też o wzór oświadczenia — w panelu go nie ma.
+
+Granica: kolejna odbijanka bez konkretu = odpuszczamy Tpay (flaga v0.41.0 zostaje OFF, depozyt przelewem).
+
+Do poprawy w panelu: opis oferty zaczyna się od „rzez” zamiast „Przez”.
