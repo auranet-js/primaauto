@@ -600,6 +600,14 @@
   ],
   "todo_nowe": [
     {
+      "id": "T-264",
+      "tytul": "„Zamów” zamienione na zgłoszenie chęci rezerwacji",
+      "opis": "Przycisk „Zamów” na stronie auta zmieni się na „Chcę to auto”, a strona z formularzem będzie się nazywać „Zgłoszenie rezerwacji”. Nad formularzem, na ekranie po wysłaniu i w mailu o weryfikacji pojawi się jedno zdanie: zgłoszenie nie jest zamówieniem ani zawarciem umowy, jest bezpłatne i do niczego nie zobowiązuje, a umowę i depozyt ustalamy dopiero wtedy, gdy klient zdecyduje, że chce kontynuować. Po wysłaniu klient zobaczy „Otrzymaliśmy Twoje zgłoszenie”, a maile będą przychodzić od nadawcy „Prima-Auto” zamiast „Zamówienia Prima-Auto”.\n\nCel: formularz działa jak pozyskanie kontaktu do klienta, a nie jak złożenie zamówienia — bez sformułowań, które można odczytać jako zawarcie umowy. Dalszy przebieg (weryfikacja, umowa, depozyt) się nie zmienia. Projekty wyglądu na komputerze i telefonie są gotowe.",
+      "status": "zgłoszone 13 października — projekty zaakceptowane, wdrożenie po Twoim potwierdzeniu",
+      "realnie_od": 3,
+      "realnie_do": 3
+    },
+    {
       "id": "T-256",
       "tytul": "Płatność depozytu online — przepięcie z PayU na Tpay",
       "opis": "PayU 14.09 odmówiło współpracy, więc płatność depozytu online stała, a klienci płacą wyłącznie przelewem, który trzeba ręcznie księgować. Zadanie obejmuje całe przejście na nowego operatora.\n\nZrobione 16.09: porównanie dziesięciu operatorów pod kątem kosztu przy naszej liczbie depozytów i ryzyka ponownej odmowy (wybrany Tpay — ok. 61 zł od depozytu 6 150 zł, bez zapisów o sprzedaży aut i zaliczkach na liście zakazanych branż; zapasowo Przelewy24), przygotowanie danych i opisu działalności do rejestracji, założenie konta, podłączenie kluczy oraz przebudowa płatności w systemie: BLIK kodem wpisywanym na naszej stronie, przelew online przez Tpay, automatyczne księgowanie depozytu po potwierdzeniu z Tpay. Całość przetestowana w środowisku testowym Tpay — łącznie z odrzuconym kodem BLIK, powtórzonym potwierdzeniem i niezgodną kwotą.\n\nZrobione 7 października: odpowiedź na pytania kontrolne Tpay, sprawdzenie konta produkcyjnego (transakcja się tworzy, strona płatności pokazuje jeszcze tryb testowy), stopka bez słowa „sprzedaż” do czasu aktywacji.\n\nDo zrobienia: po przełączeniu konta przez Tpay jedna prawdziwa płatność testowa za 1 zł, włączenie płatności dla klientów i kontrola pierwszych wpłat. Jeśli Tpay odmówi — zawieszamy płatności online. Do tego czasu klienci widzą w zamówieniu informację, że płatność online uruchamiamy, i dane do przelewu.",

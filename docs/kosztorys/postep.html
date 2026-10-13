@@ -73,7 +73,7 @@ footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line);
 <header class="top">
 <h1>Prima Auto — postęp prac i plan rozwoju</h1>
 <div class="sub">Platforma importu samochodów z Chin · primaauto.com.pl · opracowanie: Auranet (Jan Schenk)</div>
-<div class="stamp">Stan na 08.10.2026 · dokument roboczy, aktualizowany na bieżąco wraz z postępem prac</div>
+<div class="stamp">Stan na 13.10.2026 · dokument roboczy, aktualizowany na bieżąco wraz z postępem prac</div>
 </header>
 
 <div class="cols">
@@ -398,6 +398,11 @@ footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line);
 <thead><tr><th>Zadanie</th><th class="num">Godziny [h]</th></tr></thead>
 <tbody>
 <tr>
+<td><strong>T-264 — „Zamów” zamienione na zgłoszenie chęci rezerwacji</strong> <div class="opis"><span class="badge new">nowe</span> Przycisk „Zamów” na stronie auta zmieni się na „Chcę to auto”, a strona z formularzem będzie się nazywać „Zgłoszenie rezerwacji”. Nad formularzem, na ekranie po wysłaniu i w mailu o weryfikacji pojawi się jedno zdanie: zgłoszenie nie jest zamówieniem ani zawarciem umowy, jest bezpłatne i do niczego nie zobowiązuje, a umowę i depozyt ustalamy dopiero wtedy, gdy klient zdecyduje, że chce kontynuować. Po wysłaniu klient zobaczy „Otrzymaliśmy Twoje zgłoszenie”, a maile będą przychodzić od nadawcy „Prima-Auto” zamiast „Zamówienia Prima-Auto”.
+
+Cel: formularz działa jak pozyskanie kontaktu do klienta, a nie jak złożenie zamówienia — bez sformułowań, które można odczytać jako zawarcie umowy. Dalszy przebieg (weryfikacja, umowa, depozyt) się nie zmienia. Projekty wyglądu na komputerze i telefonie są gotowe.</div><div class="skala">Status: zgłoszone 13 października — projekty zaakceptowane, wdrożenie po Twoim potwierdzeniu</div></td>
+<td class="num">3</td></tr>
+<tr>
 <td><strong>T-256 — Płatność depozytu online — przepięcie z PayU na Tpay</strong> <div class="opis"><span class="badge new">nowe</span> PayU 14.09 odmówiło współpracy, więc płatność depozytu online stała, a klienci płacą wyłącznie przelewem, który trzeba ręcznie księgować. Zadanie obejmuje całe przejście na nowego operatora.
 
 Zrobione 16.09: porównanie dziesięciu operatorów pod kątem kosztu przy naszej liczbie depozytów i ryzyka ponownej odmowy (wybrany Tpay — ok. 61 zł od depozytu 6 150 zł, bez zapisów o sprzedaży aut i zaliczkach na liście zakazanych branż; zapasowo Przelewy24), przygotowanie danych i opisu działalności do rejestracji, założenie konta, podłączenie kluczy oraz przebudowa płatności w systemie: BLIK kodem wpisywanym na naszej stronie, przelew online przez Tpay, automatyczne księgowanie depozytu po potwierdzeniu z Tpay. Całość przetestowana w środowisku testowym Tpay — łącznie z odrzuconym kodem BLIK, powtórzonym potwierdzeniem i niezgodną kwotą.
@@ -505,7 +510,7 @@ Zadanie wymaga wcześniejszego zbudowania konta klienta (pozycja wyżej) — dok
 <td><strong>T-214 — Ujednolicenie i wzmocnienie stron modeli (hubów) pod frazy zakupowe</strong> <span class='rozmiar'>skala: średnia</span><div class="opis">Strony modeli to nasza najmocniejsza broń w Google — stoją na 1.-2. miejscu na frazy typu 'zeekr 9x cena'. Przegląd 14.07 wykazał trzy luki do domknięcia. (1) 34 z 302 stron modeli ma słabszy nagłówek — brakuje w nim słów 'cena w Polsce', bo powstały po ostatnim ujednoliceniu i nie dostały automatycznie tego dopisku; wśród nich ważne modele: Zeekr 9X, Zeekr 8X, Denza Z9 GT. (2) Strona modelu BAW wyświetla się w Google jako 'Beijing' zamiast 'BAW' — a to marka, której szuka 1300 osób miesięcznie; podobnie Zeekr 8X ma zbędny dopisek 'PHEV' rozmywający dopasowanie. (3) Strony modeli opisują wersje słownie, ale nie podają ceny osobno dla każdej wersji (np. 'Ultra od 426 tys.') — dane już mamy, wystarczy je pokazać. Pracujemy ostrożnie, pojedynczo, z pomiarem przed i po (strony z 1. miejsca mają najwięcej do stracenia), bo nadrzędna zasada brzmi: nie zepsuć tego, co już rankuje.</div><div class="skala">Status: znaleziska zapisane (docs/seo/znaleziska-huby-2026-07-14); wymaga pilota + progów wycofania z T-203-baseline</div></td>
 <td class="num">11–14</td></tr>
 </tbody>
-<tfoot><tr><td>Razem pełna lista (widełki)</td><td class="num">514–678</td></tr></tfoot>
+<tfoot><tr><td>Razem pełna lista (widełki)</td><td class="num">517–681</td></tr></tfoot>
 </table>
 </section>
 </div>
