@@ -10,8 +10,9 @@
 - API (`class-asiaauto-order-api.php`): `message` „Zgłoszenie przyjęte. Weryfikujemy dostępność pojazdu.”
 - Nadawca maili (`asiaauto-sync.php`): „Zamówienia Prima-Auto” → „Prima-Auto”.
 - Maile w bazie (`asiaauto_order_email_templates`): `status_nowe` i `status_weryfikacja` — temat „Prima-Auto — sprawdzamy dostępność (zgłoszenie #…)”, treść o weryfikacji + adnotacja, przycisk „Śledź status zgłoszenia”. Od „potwierdzone” dalej „zamówienie”.
+- Karty katalogu (`class-asiaauto-inventory.php:1097, 1110` — `/samochody/`, `/w-rzeszowie/`, `/w-drodze/`): „Zamów” → „Chcę to auto” (ikona zakładki zostaje). Dopięte 13.10 po zgłoszeniu Janka — pominięte w tabeli 16 miejsc. Po zmianie: 0× „Zamów”, 24/19/14× „Chcę to auto”.
 - Panel klienta (`class-asiaauto-account.php`): pusty stan „złożysz zamówienie” → „wyślesz zgłoszenie”; zakładka „Moje zamówienia” zostaje.
-- Backupy: pliki `*.bak-2026-10-13-T264` (8), opcja `asiaauto_order_email_templates_backup_2026_10_13` + `~/backups/primaauto/2026-10-13/options-email-templates-T264.sql`.
+- Backupy: pliki `*.bak-2026-10-13-T264` (9), opcja `asiaauto_order_email_templates_backup_2026_10_13` + `~/backups/primaauto/2026-10-13/options-email-templates-T264.sql`.
 - Smoke test 13.10 (oferta #547942, `/zamow/?listing_id=547942`, Puppeteer na Mikrusie): przycisk + podpis na desktopie, pasek mobilny 390 px mieści „Chcę to auto” w 1/3, ramka adnotacji nad polami formularza; `<title>` „Zgłoszenie rezerwacji - Prima-Auto - …”. Ekran po wysłaniu i maile — sprawdzone w HTML/bazie, nie wysłane (bez zakładania zamówienia).
 
 ## 0.45.1 — 2026-10-08 (T-261 „flaga A rozliczone z Auranetem”)

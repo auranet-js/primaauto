@@ -1,7 +1,7 @@
 # T-264 „Zamów” → zgłoszenie chęci rezerwacji — spec
 
 > Zgłoszenie: rozmowa telefoniczna, transkrypt wklejony przez Janka 2026-10-13.
-> Status: **WDROŻONE 13.10 (v0.45.2, `docs/VERSIONS.md`)** — zestaw A1, B1, C1, D1 zaakceptowany przez Ruslana 13.10. Otwarte: przycisk „Zamów” na kartach katalogu (sekcja „Po wdrożeniu”).
+> Status: **WDROŻONE 13.10 (v0.45.2, `docs/VERSIONS.md`)** — zestaw A1, B1, C1, D1 zaakceptowany przez Ruslana 13.10. Karty katalogu dopięte tego samego dnia.
 > Makiety: https://auratest.pl/fe4f58fec53ctmp/primaauto-makieta-t264-zgloszenie-2026-10-13.html (generator `docs/makiety/gen-t264-zgloszenie.py`, źródła HTML w `tmp/makiety-zrodla/`).
 > Wycena: **3 h** (decyzja Janka 13.10; makiety zrobione w tej wycenie). W postępie prac na górze listy.
 > Dotyka stref wrażliwych: karta oferty (CTA desktop + pasek mobilny), kreator `/zamow/`, szablony maili w bazie, panel klienta. Zmiany wyłącznie w tekstach — logika zamówień, statusy i rezerwacje nietknięte.
@@ -93,5 +93,5 @@ Zmierzone na zrzutach z telefonu (390 px): „Chcę to auto” i „Zarezerwuj�
 
 ## Po wdrożeniu (13.10)
 
-- **Karty katalogu `/samochody/`** (`class-asiaauto-inventory.php:1097, 1110`) mają nadal przycisk „Zamów” z ikoną zakładki (24 na stronie) — nie było ich w tabeli 16 miejsc ani na makiecie. Do decyzji.
+- **Karty katalogu `/samochody/`** (`class-asiaauto-inventory.php:1097, 1110`) miały przycisk „Zamów” — pominięte w tabeli 16 miejsc (weryfikacja szła po plikach karty oferty, nie po wszystkich szablonach z linkiem do `/zamow/`). Zmienione na „Chcę to auto” 13.10, po zgłoszeniu Janka.
 - Mail do obsługi `order_started_admin` („[Prima-Auto] Nowe zgłoszenie #…”) mówi o zgłoszeniu od co najmniej 30.05 — bez zmian.
