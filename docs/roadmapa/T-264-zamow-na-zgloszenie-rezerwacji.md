@@ -95,3 +95,7 @@ Zmierzone na zrzutach z telefonu (390 px): „Chcę to auto” i „Zarezerwuj�
 
 - **Karty katalogu `/samochody/`** (`class-asiaauto-inventory.php:1097, 1110`) miały przycisk „Zamów” — pominięte w tabeli 16 miejsc (weryfikacja szła po plikach karty oferty, nie po wszystkich szablonach z linkiem do `/zamow/`). Zmienione na „Chcę to auto” 13.10, po zgłoszeniu Janka.
 - Mail do obsługi `order_started_admin` („[Prima-Auto] Nowe zgłoszenie #…”) mówi o zgłoszeniu od co najmniej 30.05 — bez zmian.
+
+## Pomiar efektu
+
+`docs/analizy/2026-10-13-t264-pomiar-przycisku-chce-to-auto.md` — punkt odniesienia (GA4 0,85% wejść na oferty → `/zamow/`, ~6 klików z oferty dziennie w logach, ~0,6 zgłoszenia dziennie), recheck 27.10 i 10.11.
