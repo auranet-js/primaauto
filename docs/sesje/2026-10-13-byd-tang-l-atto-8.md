@@ -42,3 +42,26 @@ Część ofert che168 ma już tytuł „BYD Tang L 2025 …" (niespójność). M
 - **Dwie serie (DM-i / EV) czy jedna** — rekomendacja: zostają dwie.
 - **„Sealion 8" w treści huba** — rekomendacja: tak, po sprawdzeniu w GSC, czy fraza zbiera ruch.
 - **Reklamy** — sprawdzić, czy Ads/Meta celują w „Sealion 8" (tylko odczyt, zmiany osobno).
+
+## GSC — czego dotyka zmiana (13.10, okres 13.07–11.10)
+
+Ruslan zaakceptował tabelkę „po zmianie". Sprawdzenie rankingu przed wdrożeniem:
+
+- Hub `/samochody/byd/sealion-8-dm-i/` = **7. strona serwisu**: 1 454 klik / 11 333 wyśw (ok. 2,5% kliknięć całej witryny, 58 748).
+  Miesięcznie: lip 199, sie 625, wrz 525, paź (1–11) 105 klik.
+- Frazy z „sealion 8": 759 klik / 4 340 wyśw, prawie wszystko na hubie DM-i, poz. 1,5–1,7
+  („byd sealion 8" 2 218 wyśw / 400 klik; „…kiedy w polsce" 136 klik; „…cena" 69 klik).
+- Frazy z „sealion 08" na tym samym hubie: ok. 250 klik („byd sealion 08" 1 272 wyśw / 167 klik, poz. 3,1).
+  **Sealion 08 to osobny nowy model BYD (seria Ocean, premiera 09.2026)** — nasze 3 newsy z 08–09.2026.
+  Ten ruch hub łapie „przy okazji" podobnej nazwy.
+- „atto 8": 172 wyśw / 12 klik, już na hubie DM-i (poz. 1–5) — nazwa ma już popyt.
+- „tang l": ~250 wyśw rozproszone na hub `tang-dm-i` (stary Tang) i oferty, prawie bez kliknięć — rename to porządkuje.
+- Hub `sealion-8-ev`: 37 klik / 876 wyśw — marginalny.
+
+**Ryzyko:** zmiana H1/meta title z „BYD Sealion 8" na „BYD Tang L (Atto 8)" może obniżyć pozycję 1,6 na „byd sealion 8"
+(główne źródło kliknięć huba). Slug zostaje, więc URL i historia zostają.
+
+**Rekomendacja:** slug bez zmian; „Sealion 8" zostaje w meta title/description i treści huba jako druga nazwa
+(np. „BYD Tang L (Atto 8) — dawniej Sealion 8"). Pomiar po zmianie: `scripts/gsc-hub-pomiar.py` po 14 i 28 dniach.
+
+Zauważone obok, nie ruszam: Sealion 08 nie ma własnego huba ani termu — osobny temat.
