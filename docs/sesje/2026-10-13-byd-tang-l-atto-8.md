@@ -102,3 +102,34 @@ Pomiar: GSC dla obu hubów po 14 i 28 dniach (`scripts/gsc-hub-pomiar.py`).
 **Indexing API 13.10:** zgłoszenie obu hubów nieudane (`rate_limited=True`, pula „Piaskownica" wyczerpana
 przez zgłoszenia PrimaAuto poza wrapperem). Do ponowienia po resecie (~09:00 PL):
 `index-submit --project primaauto --type URL_UPDATED --url …/sealion-8-ev/ --url …/sealion-8-dm-i/`.
+
+## Etap 2 — Sealion 08 zamiast „Sealion 8" (CZEKA na akcept Ruslana, 13.10)
+
+**Skąd:** Ruslan dostaje telefony o nowego **BYD Sealion 08** (seria Ocean, premiera w Chinach 2.09.2026,
+5115 mm, EV + PHEV, 5/6 miejsc, 229 900–279 900 CNY). Ludzie wpisują „sealion 8" bez zera.
+To inny model niż Tang L i niż Datang (Great Tang, Dynasty, 5263 mm — hub `datang` bez zmian).
+
+**Dane (GSC 13.07–11.10):** „sealion 08" na hubie DM-i: sie 993 wyśw / 143 klik (skok z premierą), „sealion 8"
+rośnie od maja (368 → 1 110 w lip) — do lipca to był Tang L, od sierpnia ruch mieszany.
+**GA4 (90 dni):** hub DM-i 748 wejść, wszystkie strony Tang L razem = **2 kontakty** (click_phone na hubie,
+click_whatsapp na ofercie 468692; GA4 widzi ~1/3 przez zgodę) → przekierowanie zabiera mało leadów Tang L.
+**Źródła:** BYD dopuszczony w filtrze che168/dongchedi, Sealion 08 nie na blackliście; brak w mapowaniu;
+w `asiaauto_che168_unmapped` (rolling 200) niewidoczny — najpewniej brak podaży używanych w filtrze (≤40 tys. km, 31 miast).
+Europejska nazwa 08 niepotwierdzona (prasa spekuluje „Sealion 8"); „Sealion 8" PHEV istnieje jako eksport (Australia).
+
+**Decyzja Janka + Ruslana:** oba Tang L jako Atto 8 (hybryda z dopiskiem „w Europie Atto 8 tylko jako elektryk").
+
+**Plan (tabela wysłana Ruslanowi 13.10):**
+
+| Model | Teraz | Po zmianie |
+|---|---|---|
+| BYD Sealion 08 | brak strony | nowy hub `/sealion-08/` (wzorzec premierowy, bez ofert): cena w Chinach, wersje, kiedy w PL, sprowadzenie na zamówienie + mapowanie 08 |
+| Tang L hybryda (14 ofert) | „BYD Sealion 8 DM-I (Tang L)", `/sealion-8-dm-i/` | nowy hub `/tang-l-dm-i/` „BYD Tang L DM-i (Atto 8)" + dopisek EV/PHEV; tytuły ofert + mapowanie `BYD\|Tang L DM` |
+| Tang L EV (9 ofert) | „BYD Tang L EV (Atto 8)", `/sealion-8-ev/` | `/tang-l-ev/` (301), nazwa bez zmian |
+| `/sealion-8-dm-i/` | hub Tang L hybrydy | 301 → `/sealion-08/`; na 08 ramka „Szukasz 7-osobowej hybrydy Tang L (Atto 8)? →" |
+
+**Otwarte pytanie do Ruslana:** czy sprowadzamy Sealion 08 na zamówienie (nowe auto)? Od tego zależy treść huba 08.
+**Ryzyko:** spadek pozycji na „sealion 8" przez kilka tygodni po 301 na stronę bez ofert.
+**Uwagi wykonawcze:** puste termy `tang-l-dm` (6630) i `tang-l-ev` (6621) już istnieją — sprawdzić przed zakładaniem
+nowych (duplikaty); redirect legacy w `class-asiaauto-redirects.php` (`sealion-8-dm-i-tang-l`, `sealion-8-tang-l-ev`)
+przepiąć na nowe slugi; Indexing API po resecie puli; GSC po 14 i 28 dniach.
