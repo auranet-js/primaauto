@@ -98,3 +98,7 @@ Weryfikacja (curl na produkcji): H1/title obu hubów i 2 ofert (399762, 538664) 
 
 **Uwaga:** NIE uruchamiać `scripts/odswiez-tytuly-ofert.php` na termie 3703 — liczy z nazwy termu i zdejmie „Tang L EV (Atto 8)".
 Pomiar: GSC dla obu hubów po 14 i 28 dniach (`scripts/gsc-hub-pomiar.py`).
+
+**Indexing API 13.10:** zgłoszenie obu hubów nieudane (`rate_limited=True`, pula „Piaskownica" wyczerpana
+przez zgłoszenia PrimaAuto poza wrapperem). Do ponowienia po resecie (~09:00 PL):
+`index-submit --project primaauto --type URL_UPDATED --url …/sealion-8-ev/ --url …/sealion-8-dm-i/`.
