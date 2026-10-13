@@ -1,7 +1,7 @@
 # T-264 „Zamów” → zgłoszenie chęci rezerwacji — spec
 
 > Zgłoszenie: rozmowa telefoniczna, transkrypt wklejony przez Janka 2026-10-13.
-> Status: **makiety zaakceptowane 13.10 — zestaw A1, B1, C1, D1** (sekcja „Decyzje”). Czekamy na pisemne potwierdzenie ustaleń, potem wdrożenie.
+> Status: **WDROŻONE 13.10 (v0.45.2, `docs/VERSIONS.md`)** — zestaw A1, B1, C1, D1 zaakceptowany przez Ruslana 13.10. Otwarte: przycisk „Zamów” na kartach katalogu (sekcja „Po wdrożeniu”).
 > Makiety: https://auratest.pl/fe4f58fec53ctmp/primaauto-makieta-t264-zgloszenie-2026-10-13.html (generator `docs/makiety/gen-t264-zgloszenie.py`, źródła HTML w `tmp/makiety-zrodla/`).
 > Wycena: **3 h** (decyzja Janka 13.10; makiety zrobione w tej wycenie). W postępie prac na górze listy.
 > Dotyka stref wrażliwych: karta oferty (CTA desktop + pasek mobilny), kreator `/zamow/`, szablony maili w bazie, panel klienta. Zmiany wyłącznie w tekstach — logika zamówień, statusy i rezerwacje nietknięte.
@@ -62,7 +62,7 @@ Wniosek: kreator i pierwszy mail są już napisane językiem zgłoszenia. Rozjaz
 - Adnotacja w **pełnym brzmieniu** (z makiety).
 - Makieta zestawu: https://auratest.pl/fe4f58fec53ctmp/primaauto-makieta-t264-wybrane-2026-10-13.html
 
-Wdrożenie czeka na pisemne potwierdzenie ustaleń z rozmowy.
+Ruslan zaakceptował makietę zestawu 13.10 — wdrożone tego samego dnia (v0.45.2).
 
 ## Do decyzji (stan sprzed quizu, rozstrzygnięte wyżej)
 
@@ -90,3 +90,8 @@ Zmierzone na zrzutach z telefonu (390 px): „Chcę to auto” i „Zarezerwuj�
 - Nazewnictwo zdarzeń GA4/Meta przy wysłaniu formularza — bez zmian.
 - `/zamow/` na telefonie: formularz jest **pod** podsumowaniem auta, ceną i ramką „Informacje” (~1400 px przewijania po kliknięciu przycisku). Kolejność bloków to osobna zmiana układu.
 - Maile w przeglądarce 390 px rozjeżdżają się do 749 px przez pasek postępu z `white-space:nowrap` — dotyczy wszystkich szablonów statusowych, także dziś. Zachowanie w Gmailu/Outlooku mobilnym niezweryfikowane.
+
+## Po wdrożeniu (13.10)
+
+- **Karty katalogu `/samochody/`** (`class-asiaauto-inventory.php:1097, 1110`) mają nadal przycisk „Zamów” z ikoną zakładki (24 na stronie) — nie było ich w tabeli 16 miejsc ani na makiecie. Do decyzji.
+- Mail do obsługi `order_started_admin` („[Prima-Auto] Nowe zgłoszenie #…”) mówi o zgłoszeniu od co najmniej 30.05 — bez zmian.

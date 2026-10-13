@@ -1,5 +1,19 @@
 # Historia wersji asiaauto-sync
 
+## 0.45.2 — 2026-10-13 (T-264 „Zamów → zgłoszenie rezerwacji”)
+
+- Spec: `docs/roadmapa/T-264-zamow-na-zgloszenie-rezerwacji.md`, zestaw A1/B1/C1/D1 zaakceptowany przez Ruslana 13.10. Tylko teksty i CSS — logika zamówień, statusy, rezerwacje i adres `/zamow/` bez zmian.
+- Karta oferty (`class-asiaauto-single.php`): „Zamów” → **„Chcę to auto”**; desktop + podpis `.aa-cta__under` „Bezpłatne zgłoszenie — nie jest zamówieniem”, pasek mobilny bez ikony koszyka.
+- Shortcody (`class-asiaauto-shortcodes.php`): `[asiaauto_cta]` „Chcę to auto”, `[asiaauto_order_cta]` domyślny `text` „Chcę to auto” (użyte tylko w starych szablonach Elementora).
+- Kreator (`class-asiaauto-order-wizard.php`): krok 1 „Zgłoś chęć rezerwacji” + adnotacja `.aa-wiz__note`; krok 2 „Otrzymaliśmy Twoje zgłoszenie” + „w sprawie dalszych kroków rezerwacji” + adnotacja. CSS w `asiaauto-order-wizard.css`.
+- Strona #174547 (`/zamow/`): tytuł „Zamów” → „Zgłoszenie rezerwacji” (slug bez zmian).
+- API (`class-asiaauto-order-api.php`): `message` „Zgłoszenie przyjęte. Weryfikujemy dostępność pojazdu.”
+- Nadawca maili (`asiaauto-sync.php`): „Zamówienia Prima-Auto” → „Prima-Auto”.
+- Maile w bazie (`asiaauto_order_email_templates`): `status_nowe` i `status_weryfikacja` — temat „Prima-Auto — sprawdzamy dostępność (zgłoszenie #…)”, treść o weryfikacji + adnotacja, przycisk „Śledź status zgłoszenia”. Od „potwierdzone” dalej „zamówienie”.
+- Panel klienta (`class-asiaauto-account.php`): pusty stan „złożysz zamówienie” → „wyślesz zgłoszenie”; zakładka „Moje zamówienia” zostaje.
+- Backupy: pliki `*.bak-2026-10-13-T264` (8), opcja `asiaauto_order_email_templates_backup_2026_10_13` + `~/backups/primaauto/2026-10-13/options-email-templates-T264.sql`.
+- Smoke test 13.10 (oferta #547942, `/zamow/?listing_id=547942`, Puppeteer na Mikrusie): przycisk + podpis na desktopie, pasek mobilny 390 px mieści „Chcę to auto” w 1/3, ramka adnotacji nad polami formularza; `<title>` „Zgłoszenie rezerwacji - Prima-Auto - …”. Ekran po wysłaniu i maile — sprawdzone w HTML/bazie, nie wysłane (bez zakładania zamówienia).
+
 ## 0.45.1 — 2026-10-08 (T-261 „flaga A rozliczone z Auranetem”)
 
 - Spec: `docs/roadmapa/T-261-flaga-a-rozliczone-auranet.md`. Dwie meta na `asiaauto_order`: `_order_auranet_settled_at` (Y-m-d)
