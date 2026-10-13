@@ -79,3 +79,22 @@ Kierunek (decyzje Janka w toku):
   FAQ 2 i 3 wymienione, literówki „przy średnie" / „jedyna droga".
 - **Hub DM-i** — nazwa i H1 bez zmian; ewentualnie akapit + FAQ „Atto 8 w Europie to EV, hybrydy nie ma" z linkiem do EV.
 - **Oferty** — „Tang L EV (Atto 8)" tylko dla EV; DM-i bez zmian (rekomendacja).
+
+## WDROŻONE 13.10 (zgoda Janka na 1–3)
+
+Backup: `~/backups/primaauto/2026-10-13-atto8/` (termmeta 3703+3746, posty EV, mapowanie) +
+`data/brand-mapping-v6.1.php.bak-2026-10-13-atto8` na serwerze.
+
+1. **Hub EV** (term 3703, slug `sealion-8-ev` bez zmian): `_serie_full_title` = „BYD Tang L EV (Atto 8)",
+   focus keyword j.w., lead, akapit otwierający, sekcja „Import z Chin czy salon" + nowa sekcja
+   „Sealion 8, Tang L, Atto 8 — to ten sam samochód?", FAQ 2 i 3, literówki; title/desc przez
+   `AsiaAuto_HubTitleGenerator::regenerateForTerm(3703)`. Nazwa termu (filtr) bez zmian: „Sealion 8 (Tang L) EV".
+2. **9 ofert EV**: „BYD Tang L EV (Atto 8) 2025 …" (post_title przez `$wpdb`, post_name bez zmian).
+   Mapowanie `BYD|Tang L EV`: `serie_eu` = „Tang L EV (Atto 8)", `title_eu` = „BYD Tang L EV (Atto 8)".
+3. **Hub DM-i** (term 3746): nazwa/H1/title bez zmian; akapit „A BYD Atto 8?" na końcu sekcji „Cena i dostępność"
+   z linkiem do huba EV + FAQ (pozycja 3) „Kiedy BYD Atto 8 będzie w Polsce i czy to ten sam samochód?".
+
+Weryfikacja (curl na produkcji): H1/title obu hubów i 2 ofert (399762, 538664) zgodne; FAQPage schema zawiera nowe pytania.
+
+**Uwaga:** NIE uruchamiać `scripts/odswiez-tytuly-ofert.php` na termie 3703 — liczy z nazwy termu i zdejmie „Tang L EV (Atto 8)".
+Pomiar: GSC dla obu hubów po 14 i 28 dniach (`scripts/gsc-hub-pomiar.py`).
