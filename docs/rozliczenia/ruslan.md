@@ -1,6 +1,6 @@
 # Rejestr rozliczeń z Ruslanem
 
-> Ostatnia aktualizacja: 2026-10-08
+> Ostatnia aktualizacja: 2026-10-13
 > Zakres: zamówienia (`asiaauto_order`) rozliczone między Auranet a Prima-Auto.
 > **Ten plik jest source of truth dla „co już rozliczone".** Baza nie ma znacznika
 > rozliczenia — jedyne co w niej jest to `_order_deposit_paid` / `_order_deposit_paid_at`.
@@ -53,6 +53,23 @@ Uwaga: zamówienie testowe Seal U Jana Schenka to **410903** (numer 410894 niże
 
 `_order_contract_commission_net` = 5000 na każdym zamówieniu to **wartość domyślna
 z configu**, nie potwierdzenie rozliczonej prowizji. Nie traktuj jej jako kwoty rozliczenia.
+
+---
+
+## 2026-10-13 — do wyjaśnienia z Ruslanem przy kolejnym rozliczeniu
+
+Odczyt bazy 13.10, po spotkaniu 07.10 (Ruslan był w panelu tylko 08.10 rano). Zapytać przy partii 8, w tabelce z ☐.
+
+| Lp. | Auto | Zamówienie | Co widać w bazie | Pytanie | ☐ |
+|---|---|---|---|---|---|
+| 1 | BYD Tang L 2025 DM 175KM Drone Edition, z hakiem (ogł. #470569) | stock #470576, 189 000 zł | ogłoszenie w szkicu od 07.10, zamówienie nadal `w_drodze`, brak zamówienia klienta | sprzedane? komu, za ile | ☐ |
+| 2 | BYD Tang L 2025 DM 175KM Drone Edition (ogł. #468692) | stock #470335, 189 000 zł | j.w., szkic od 07.10 | sprzedane? komu, za ile | ☐ |
+| 3 | BYD Sealion 06 2025 DM-i 205 Navigator Plus (ogł. #476632) | stock #476674, 145 000 zł | szkic od 12.10, zamówienie `w_drodze`, brak zamówienia klienta | sprzedane? komu, za ile | ☐ |
+| 4 | Dongfeng eπ007 2025 BEV 550Max (ogł. #488793) | #530257, Maciej Cimoszuk | depozyt oznaczony 08.10 przy statusie `potwierdzone` (bez umowy), anulowane 12.10 bez notatki; ogłoszenie dalej publiczne | depozyt wpłynął? zwrot, przeniesienie czy pomyłka w oznaczeniu | ☐ |
+| 5 | BYD Leopard 5 (Denza B5) 2025 Cloud Suspension (ogł. #448113) | #470582 | status `zarezerwowane`, depozyt NIE oznaczony | depozyt wpłynął? jeśli tak — data (bez znacznika query partii go nie złapie) | ☐ |
+| 6 | Denza Z9 DM-i 2025 1100 4WD Ultra (ogł. #447002) | #493440, Anna K. | j.w. | j.w. | ☐ |
+
+Znacznik C (wpłata CIF) celowo pominięty — nie jest podstawą rozliczenia z Auranetem.
 
 ---
 
