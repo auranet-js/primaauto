@@ -626,10 +626,10 @@
     {
       "id": "T-262",
       "tytul": "Specyfikacja auta w PDF przy zamówieniu",
-      "opis": "Przy każdym zamówieniu w panelu pojawi się przycisk „Specyfikacja PDF”. Generuje dokument z pełnymi danymi zamówionego auta: zdjęcie, dane techniczne i całe wyposażenie — tak jak na stronie ogłoszenia, a nie tylko kilkanaście pól, które są dziś w załączniku nr 1 do umowy.\n\nSpecyfikacja zapisuje się w zamówieniu w chwili jego złożenia. To ważne, bo ogłoszenia po sprzedaży albo wycofaniu znikają ze strony — dziś przy części starszych zamówień nie da się już odtworzyć, jak dokładnie wyglądało zamówione auto. Dokument możesz wysłać klientowi albo dołączyć do umowy; ten sam plik pobierze klient ze swojego zamówienia.",
-      "status": "zgłoszone 8 października — wycena wstępna; robimy przed wydrukiem ogłoszenia, bo oba dokumenty korzystają z tego samego wzoru",
-      "realnie_od": 4,
-      "realnie_do": 6
+      "opis": "Przy każdym zamówieniu w panelu pojawi się przycisk „Specyfikacja PDF”. Generuje dokument z pełnymi danymi zamówionego auta: zdjęcia, dane techniczne, schemat wymiarów i całe wyposażenie — tak jak na stronie ogłoszenia, a nie tylko kilkanaście pól, które są dziś w załączniku nr 1 do umowy.\n\nOpis auta zapisuje się w zamówieniu w chwili jego złożenia i już się nie zmienia. To ważne, bo ogłoszenia po sprzedaży albo wycofaniu znikają ze strony — dziś przy części starszych zamówień nie da się już odtworzyć, jak dokładnie wyglądało zamówione auto. Dane zamówienia — VIN, cena, termin dostawy — dokument bierze zawsze aktualne.\n\nGdy VIN dojdzie później aneksem, jednym przyciskiem generujesz nową wersję specyfikacji: z VIN-em, a z tym samym opisem auta. Każda wersja ma numer i datę w nagłówku, a poprzednie zostają w zamówieniu, więc zawsze wiadomo, która była dołączona do umowy. Dokument możesz wysłać klientowi albo dołączyć do umowy.",
+      "status": "zgłoszone 8 października — wygląd dokumentu wybrany 13 października; robimy przed wydrukiem ogłoszenia, bo oba dokumenty korzystają z tego samego wzoru",
+      "realnie_od": 8,
+      "realnie_do": 10
     },
     {
       "id": "T-263",
