@@ -65,3 +65,17 @@ Ruslan zaakceptował tabelkę „po zmianie". Sprawdzenie rankingu przed wdroże
 (np. „BYD Tang L (Atto 8) — dawniej Sealion 8"). Pomiar po zmianie: `scripts/gsc-hub-pomiar.py` po 14 i 28 dniach.
 
 Zauważone obok, nie ruszam: Sealion 08 nie ma własnego huba ani termu — osobny temat.
+
+## Korekta 13.10 — Atto 8 w Europie to tylko EV
+
+Premiera Atto 8 w Paryżu 12–13.10.2026: w Europie wyłącznie wersja elektryczna (Design RWD / Excellence AWD,
+115 kWh), sprzedaż od I kw. 2027, brak polskiej daty i cennika. Hybrydy DM-p BYD do Europy nie zapowiedział.
+Tabelka zaakceptowana przez Ruslana (oba warianty → Atto 8) była zrobiona przed sprawdzeniem tego faktu — **nieaktualna**.
+
+Kierunek (decyzje Janka w toku):
+- **Hub EV `sealion-8-ev`** — wariant **B** (Janek 13.10): nazwa „BYD Tang L EV (Atto 8)" (H1 + title), lead z Atto 8,
+  sekcja „Import z Chin czy salon" przepisana (był błąd „chiński Sealion 8 to inny pojazd niż europejski Tang"),
+  nowa sekcja „Sealion 8, Tang L, Atto 8 — to ten sam samochód?" (+ odróżnienie od Sealion 08, link do DM-i),
+  FAQ 2 i 3 wymienione, literówki „przy średnie" / „jedyna droga".
+- **Hub DM-i** — nazwa i H1 bez zmian; ewentualnie akapit + FAQ „Atto 8 w Europie to EV, hybrydy nie ma" z linkiem do EV.
+- **Oferty** — „Tang L EV (Atto 8)" tylko dla EV; DM-i bez zmian (rekomendacja).
