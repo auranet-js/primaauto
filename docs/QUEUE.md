@@ -4,6 +4,14 @@
 
 ---
 
+## 🟢 KOLEJNOŚĆ OD 2026-10-14 — PDF → panel klienta → ulubione → dokumenty
+
+Plan z wątkami i decyzjami przed startem: `docs/roadmapa/2026-10-14-plan-panel-pdf-ulubione.md` (zatwierdzony przez Janka 14.10).
+**W1** T-262 „specyfikacja PDF” → **W2** T-263 „wydruk ogłoszenia PDF” · **W3** makiety wejścia do konta + ulubione + T-257 (równolegle z W1/W2) → **W4** T-204 domknięcie + T-257 + T-244 → **W5** T-212 + T-114 „ulubione” → **W6** T-249 „dokumenty”.
+Każdy wątek: jeden quiz decyzji na starcie, potem realizacja bez pytań w trakcie.
+
+---
+
 ## 🔴 WĄTEK AKTYWNY — umowy, depozyt, płatności (2026-07-27)
 
 > Geneza: analiza umowy leasingowej #072426-1 (Agw Moto, 24.07) + wzorca aneksu VIN z Google Drive, konfrontacja z regulaminami na produkcji. Decyzje zapadły 2026-07-27 w rozmowie z Jankiem — **te taski mają spec, nie są już pomysłami**.

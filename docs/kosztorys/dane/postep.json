@@ -12,6 +12,34 @@
       "godz": 0.5
     },
     {
+      "data": "14.10.2026",
+      "tytul": "Opis firmy dla asystentów AI: auta na placu i w drodze",
+      "opis": "W opisie firmy, który czytają asystenci AI (ChatGPT, Perplexity, Gemini), wyróżniamy teraz auta na placu w Rzeszowie i auta w drodze. Ich liczba aktualizuje się sama. Gdy ktoś poprosi asystenta o porównanie firm sprowadzających auta z Chin, dostanie informację, że u nas auto można obejrzeć przed zakupem i odebrać od ręki albo w krótkim terminie.",
+      "wersje": "",
+      "godz": 1
+    },
+    {
+      "data": "14.10.2026",
+      "tytul": "BYD Tang L pod nazwą Atto 8 i nowa strona Sealion 08",
+      "opis": "Zgodnie z Twoją decyzją z 13 października Tang L występuje pod nazwą, z którą wchodzi do Europy. Mamy dwie wersje, „BYD Tang L DM-i (Atto 8)” i „BYD Tang L EV (Atto 8)”: w tytułach 16 ofert hybrydy i 9 elektryków oraz na stronach modeli pod nowymi adresami. Na obu stronach wyjaśniamy, że Atto 8 trafi do Europy tylko jako elektryk (premiera w Paryżu, sprzedaż od początku 2027).\n\nPowstała też osobna strona nowego BYD Sealion 08. Dzwonią do Ciebie klienci, którzy pytają o ten model, a w Google wpisują „sealion 8”. Strona pokazuje ceny 8 wersji przeliczone z cennika chińskiego (ok. 255–300 tys. zł) i odsyła do Tang L. Dotychczasowa strona „Sealion 8”, która zbierała ruch na oba modele, przekierowuje teraz na Sealion 08. Oferty Sealion 08 z Che168 trafią na nią automatycznie. Pozycje w Google sprawdzimy po dwóch tygodniach, ok. 28 października.",
+      "wersje": "",
+      "godz": 1
+    },
+    {
+      "data": "13.10.2026",
+      "tytul": "„Chcę to auto” zamiast „Zamów” — formularz jako zgłoszenie rezerwacji",
+      "opis": "Zgodnie z projektami, które zaakceptowałeś 13 października, przycisk „Zamów” na stronie auta, na pasku na telefonie i na kartach w katalogu (wszystkie auta, auta na placu, auta w drodze) brzmi teraz „Chcę to auto”. Na komputerze pod przyciskiem jest dopisek „Bezpłatne zgłoszenie — nie jest zamówieniem”, a ikona koszyka zniknęła. Strona z formularzem nazywa się „Zgłoszenie rezerwacji”. Nad polami i na ekranie po wysłaniu („Otrzymaliśmy Twoje zgłoszenie”) stoi zdanie, że zgłoszenie nie jest zamówieniem ani umową i do niczego nie zobowiązuje. Pierwsze maile do klienta mówią o zgłoszeniu, a nadawcą wszystkich maili jest teraz „Prima-Auto”. Adres strony, statusy i dalszy przebieg się nie zmieniają, a od potwierdzenia dalej mówimy o zamówieniu.\n\nZapisaliśmy, ile zgłoszeń przychodziło przed zmianą. Porównanie zrobimy 27 października i 10 listopada.",
+      "wersje": "0.45.2",
+      "godz": 3
+    },
+    {
+      "data": "13.10.2026",
+      "tytul": "Reklamy — sprawdzenie efektów zmian z 4 października",
+      "opis": "Sprawdziliśmy tydzień 5–12 października. Dziś Google Ads ma 12 kontaktów, a statystyki strony 11. Wejścia z wyszukiwarki i z remarketingu znów widać w statystykach w normalnej proporcji. Wyjątkiem są reklamy Demand Gen, z których rejestruje się wyraźnie mniej wejść niż przed awarią. Reklamy dynamiczne wydają tyle co wcześniej, ale budżet przesunął się na grupy wieku i godziny, które wskazaliśmy. Na Facebooku i Instagramie kampania katalogowa po wykluczeniu osób, które już były na stronie, dociera do dwa razy większej liczby nowych osób dziennie. Pojedyncze wejście kosztuje trochę więcej (0,26 zł zamiast 0,17 zł). Remarketing dał 4 kontakty, tydzień wcześniej nie dał żadnego. 11 października reklamy na Facebooku stały przez całą dobę, bo konto czekało na płatność. Po pobraniu opłaty z karty ruszyły następnego dnia. W kampaniach nic nie zmienialiśmy.",
+      "wersje": "",
+      "godz": 1
+    },
+    {
       "data": "08.10.2026",
       "tytul": "Oznaczenie „rozliczone z Auranetem” na liście zamówień",
       "opis": "Na liście zamówień obok oznaczeń D (depozyt) i C (CIF) jest teraz trzecie: A. Zielone A znaczy, że zamówienie zostało rozliczone z Auranetem — po najechaniu widać datę rozliczenia i numer faktury. Szare A — jeszcze nierozliczone. Oznaczenie jest na komputerze i na telefonie.\n\nUstawiamy je my, raz w miesiącu, po Twoim potwierdzeniu tabelki i wystawieniu faktury — w panelu nie ma przycisku, więc nie da się go przestawić przypadkiem. Klient go nie widzi: nie trafia do panelu klienta, maili ani umowy.\n\nWstecz oznaczyliśmy 24 zamówienia: 4 z faktury z 6 października, 7 z faktury z 2 września i 13 z rozliczenia lipcowego. Sprzedaże eksportowe i auta z placu bez zamówienia (m.in. Exeed VX i Deepal G318 dla SIROMEX, Leopard 7 #869, Denza Z9 GT, Monjaro, Shark 6) zostają w naszym rejestrze rozliczeń — oznaczymy je, gdy przy takiej sprzedaży powstanie zamówienie wewnętrzne.",
@@ -640,8 +668,8 @@
     {
       "id": "T-263",
       "tytul": "Wydruk ogłoszenia do PDF",
-      "opis": "Na stronie każdego ogłoszenia pojawi się przycisk „Pobierz PDF”. Klient dostaje elegancki, kilkustronicowy dokument: duże zdjęcie, cena, najważniejsze parametry, dane techniczne, wyposażenie i kontakt do Prima Auto. Można go wydrukować, przesłać dalej — np. wspólnikowi albo do banku czy leasingu — i wrócić do niego, gdy ogłoszenia już nie ma.\n\nW nagłówku i stopce każdej strony znajdą się informacje prawne: że dokument ma charakter informacyjny i nie jest ofertą w rozumieniu kodeksu cywilnego, data wygenerowania i stan ceny na ten dzień, klauzula „niezależny importer, nie autoryzowany dealer” oraz dane firmy. Dopracujemy je tak, by nie psuły wyglądu dokumentu. Przed wdrożeniem pokażemy 2–3 projekty wyglądu do wyboru.",
-      "status": "zgłoszone 8 października — najpierw projekty wyglądu do wyboru",
+      "opis": "Na stronie każdego ogłoszenia pojawi się przycisk „Pobierz PDF”. Klient dostaje elegancki, kilkustronicowy dokument: duże zdjęcie, cena, najważniejsze parametry, dane techniczne, wyposażenie i kontakt do Prima Auto. Można go wydrukować, przesłać dalej — np. wspólnikowi albo do banku czy leasingu — i wrócić do niego, gdy ogłoszenia już nie ma.\n\nW nagłówku i stopce każdej strony znajdą się informacje prawne: że dokument ma charakter informacyjny i nie jest ofertą w rozumieniu kodeksu cywilnego, data wygenerowania i stan ceny na ten dzień, klauzula „niezależny importer, nie autoryzowany dealer” oraz dane firmy. Dopracujemy je tak, by nie psuły wyglądu dokumentu. Wygląd wybrany 13 października — ten sam wzór co specyfikacja auta w zamówieniu.",
+      "status": "zgłoszone 8 października — wygląd wybrany 13 października, wspólny ze specyfikacją auta; robimy po niej",
       "realnie_od": 4,
       "realnie_do": 6
     },
@@ -743,7 +771,7 @@
       "id": "T-243",
       "tytul": "Automatyczna dystrybucja zdjęć i filmów na wszystkie kanały społecznościowe",
       "opis": "Po każdej sesji na placu powstaje komplet materiałów: zdjęcia każdego auta i filmy w dwóch kadrach, poziomym i pionowym. Dziś opublikowanie ich to robota ręczna — ktoś musi wymyślić tytuł, opis i hashtagi, dobrać właściwy kadr do platformy i wrzucić plik osobno na Facebooka, Instagrama, YouTube'a i TikToka. Przy sesji z dziesięcioma autami to kilka godzin klikania, a część materiałów nigdy nie wychodzi. Na Facebooku posty powstają ręcznie do dziś.\n\nPo zmianie wskazujesz auto w panelu i dostajesz gotowy komplet postów na wszystkie kanały — z ceną w tytule, opisem, hashtagami i linkiem prowadzącym wprost do tej oferty. Materiały z nowej sesji zgłaszają się same, z folderu na Dysku. Posty trafiają do kalendarza jako zaplanowane, więc widzisz je z wyprzedzeniem i możesz je zmienić, przesunąć albo skasować, zanim się ukażą — nic nie publikuje się bez Twojej wiedzy. System pilnuje też rytmu: nie wypuści dwóch postów o tym samym aucie pod rząd, a w tygodniach bez nowych dostaw sam zaproponuje powtórkę wcześniejszych ofert w nowym ujęciu, żeby kanały nie milczały.\n\nDrugi powód, dla którego to się liczy: materiał trzeba najpierw opublikować, żeby móc go promować. Film wgrany na YouTube można wypromować kampanią wideo, post na Facebooku można podbić, rolkę na TikToku wypuścić w reklamę. Post, którego nie ma, nie jest kandydatem do promocji. Dziś każda taka publikacja kosztuje osobną sesję pracy, więc materiał z sesji trafia do reklam w ułamku.\n\nDo tego jedna wspólna strona z podglądem: co poszło na który kanał, co czeka w kolejce, co się nie udało i jak to zadziałało. Dziś tego widoku nie ma nigdzie.\n\nPodział na osiem etapów. Pierwszy — uporządkowanie dostępów do kont — jest po Waszej stronie i blokuje resztę; instrukcja jest gotowa. Osobny, mały etap to czujnik pilnujący, czy ruch z Facebooka nie zamarł — bo dziś nikt nas o tym nie powiadomi. Wersja, która realnie zdejmuje ręczną robotę na Facebooku i Instagramie, to 57–75 godzin; YouTube, TikTok, podgląd wyników i rotacja dochodzą po kolei.",
-      "status": "spec i instrukcja dostępów gotowe — czeka na uporządkowanie uprawnień do kont",
+      "status": "odłożone — posty i rolki publikujecie Wy (ustalenie 7 października), reklamy z filmów robimy my; wracamy, gdy ręczna publikacja zacznie przeszkadzać",
       "realnie_od": 89,
       "realnie_do": 119,
       "rynkowo_od": 225,
@@ -752,7 +780,7 @@
     {
       "id": "T-249",
       "tytul": "Dokumenty w zamówieniu — wymiana plików z klientem i lista dokumentów oczekiwanych",
-      "opis": "Dziś dokumenty krążą mailem i WhatsAppem. Strona przyjmuje od klienta dokładnie dwa pliki — podpisaną umowę i potwierdzenie wpłaty — i to tylko w krótkim oknie, na etapie umowy. Po podpisaniu klient nie ma już gdzie niczego wysłać, a Ty możesz wgrać do zamówienia wyłącznie własną umowę PDF. Nie da się przy pliku napisać, czym on jest.\n\nPo zmianie: Ty dodajesz do zamówienia dowolny dokument z własnym opisem, klient tak samo — również później, kiedy auto jest już w drodze albo na placu. Zamówienie pokazuje obu stronom listę dokumentów, których jeszcze brakuje: co jest potrzebne, kto to dostarcza i czy już wpłynęło. Dokument przysłany przez klienta możesz przyjąć albo odrzucić z powodem — powód widzi klient, więc poprawia bez telefonu. Na liście zamówień od razu widać, w których czegoś brakuje.\n\nPrzy okazji domykamy sprawę ochrony tych plików. Sprawdziliśmy 2.09: przy zamówieniach wisi 68 dokumentów — umowy z danymi osobowymi i podpisami klientów — i każdy z nich otworzy się bez logowania, jeśli ktoś zna dokładny adres pliku. Chroni je dziś tylko to, że w nazwie jest losowy ciąg znaków. Po zmianie dokument otworzy wyłącznie osoba zalogowana: Ty albo właściciel tego zamówienia. Stare pliki przenosimy razem z resztą, nic nie przepada.\n\nZadanie wymaga wcześniejszego zbudowania konta klienta (pozycja wyżej) — dokumenty mają swoje stałe miejsce dopiero tam, gdzie klient się loguje. Przed startem ustalamy z Tobą jedną rzecz: jakie dokumenty realnie krążą w cyklu importu i na którym etapie — z tego powstaje lista, którą system pilnuje.",
+      "opis": "Dziś dokumenty krążą mailem i WhatsAppem. Strona przyjmuje od klienta dokładnie dwa pliki — podpisaną umowę i potwierdzenie wpłaty — i to tylko w krótkim oknie, na etapie umowy. Po podpisaniu klient nie ma już gdzie niczego wysłać, a Ty możesz wgrać do zamówienia wyłącznie własną umowę PDF. Nie da się przy pliku napisać, czym on jest.\n\nPo zmianie: Ty dodajesz do zamówienia dowolny dokument z własnym opisem, klient tak samo — również później, kiedy auto jest już w drodze albo na placu. Zamówienie pokazuje obu stronom listę dokumentów, których jeszcze brakuje: co jest potrzebne, kto to dostarcza i czy już wpłynęło. Dokument przysłany przez klienta możesz przyjąć albo odrzucić z powodem — powód widzi klient, więc poprawia bez telefonu. Na liście zamówień od razu widać, w których czegoś brakuje.\n\nPrzy okazji domykamy sprawę ochrony tych plików. Sprawdziliśmy 2.09: przy zamówieniach wisi 68 dokumentów — umowy z danymi osobowymi i podpisami klientów — i każdy z nich otworzy się bez logowania, jeśli ktoś zna dokładny adres pliku. Chroni je dziś tylko to, że w nazwie jest losowy ciąg znaków. Po zmianie dokument otworzy wyłącznie osoba zalogowana: Ty albo właściciel tego zamówienia. Stare pliki przenosimy razem z resztą, nic nie przepada.\n\nZadanie wymaga wcześniejszego zbudowania konta klienta (pozycja wyżej) — dokumenty mają swoje stałe miejsce dopiero tam, gdzie klient się loguje. Listę dokumentów do odprawy — osobno dla osoby prywatnej i firmy — przekazałeś 7 października; z niej powstaje lista, której pilnuje system.",
       "status": "plan i wycena gotowe; proces dokumentów i lista dokumentów do odprawy ustalone z Tobą na spotkaniu — budujemy po panelu klienta",
       "realnie_od": 45,
       "realnie_do": 60,
@@ -789,7 +817,9 @@
     "T-201",
     "T-241",
     "T-221",
-    "T-261"
+    "T-261",
+    "T-264",
+    "T-256"
   ],
   "todo_pierwsze": [],
   "todo_po_nowych": []
