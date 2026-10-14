@@ -1,5 +1,14 @@
 # Historia wersji asiaauto-sync
 
+## 0.45.3 — 2026-10-14 (płatności online zawieszone — T-256 „przepięcie depozytu na Tpay”)
+
+Decyzja Janka: temat płatności online zamknięty (ADR `docs/decyzje/2026-10-14-platnosci-online-zawieszone.md`). Flaga `asiaauto_payu_enabled=0` bez zmian, kod PayU/Tpay uśpiony.
+- `class-asiaauto-payu-wizard.php` `renderSoon()`: usunięty blok „Płatność online — BLIK, karta / uruchamiamy” z nieaktywnymi przyciskami — zostaje kwota, notka o depozycie i dane do przelewu (krok 3 i 4).
+- Mail `status_potwierdzone` (`asiaauto_order_email_templates`): „Depozyt opłacisz zwykłym przelewem — otrzymasz od nas fakturę.”
+- Treści: `/regulamin-uslugi/` (390645) — depozyt wyłącznie przelewem; `/depozyt/` (390646) — zwrot przelewem + FAQ „Czym mogę zapłacić?” (HTML i JSON-LD).
+- Theme `footer.php`: przywrócone „import i sprzedaż samochodów” (zmiana z 07.10 pod AML Tpay cofnięta).
+- Backupy: `*.bak-2026-10-14-platnosci-off`, `~/backups/primaauto/2026-10-14-platnosci-off/` (opcja maili, treści stron).
+
 ## 0.45.2 + dane — 2026-10-14 (Sealion 08 / Tang L Atto 8, bez bumpa wersji)
 
 - Bez zmiany `ASIAAUTO_VERSION` — tylko dane mapowania i mapa przekierowań. Opis: `docs/sesje/2026-10-13-byd-tang-l-atto-8.md`.

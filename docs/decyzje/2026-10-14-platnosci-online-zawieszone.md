@@ -25,6 +25,15 @@ Zamyka: **T-121 „płatność PayU za depozyt”** (zastąpione 07.10) i **T-25
 - Stopka: „import samochodów” (bez „sprzedaż”, zmiana z 07.10 pod AML Tpay; backup `footer.php.bak-2026-10-07-sprzedaz`).
 - Konta: PayU (odmowa), Tpay 227596 (niezweryfikowane, tryb testowy) — nic nie zamykamy po stronie operatorów.
 
+## Wykonane 14.10 (v0.45.3)
+
+- Kreator: usunięty blok „uruchamiamy” — klient widzi tylko dane do przelewu.
+- Mail po potwierdzeniu, `/regulamin-uslugi/`, `/depozyt/` (z FAQ i JSON-LD): depozyt wyłącznie przelewem.
+- Stopka: wróciło „import i sprzedaż samochodów”.
+- Strona postępu dla Ruslana: T-256 zawieszone + wpis 14.10.
+
+Punkty poniżej są tym samym rozstrzygnięte.
+
 ## Konsekwencje / otwarte (nie ruszone tą decyzją)
 
 - Komunikat „uruchamiamy” obiecuje coś, czego nie będzie — do decyzji, czy zostaje, czy zamieniamy na sam przelew.
