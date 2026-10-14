@@ -163,3 +163,6 @@ Indexing API 14.10: 3 nowe huby zgłoszone (3 OK, ad-hoc 28/100).
 
 **Do pomiaru:** GSC po 14 i 28 dniach — `sealion-08` (fraza „sealion 8"/„sealion 08"), `tang-l-dm-i`, `tang-l-ev`.
 **Pułapka:** `odswiez-tytuly-ofert.php` na termach 3746/3703 zdejmie „(Atto 8)" z tytułów ofert (liczy z nazwy termu).
+
+**Komunikacja 14.10:** info dla Ruslana (3 linki + przekierowanie + zapowiedź pomiaru za 2 tygodnie) wysłane na Telegram
+Janka (msg 1059) do przekazania. Zapowiedziany recheck GSC ~28.10.
