@@ -35,6 +35,9 @@ body{font-family:Inter,sans-serif;color:var(--txt);position:relative}
 .lay{position:absolute;left:0;top:0;width:390px;opacity:0;will-change:transform}
 .chrome{position:absolute;left:0;width:390px;overflow:hidden;opacity:0}
 .chrome img{position:absolute;left:0;width:390px}
+#zform .f{position:absolute;background:#fff;border-radius:6px;font:400 15px Inter;color:#2D3748;display:flex;align-items:center;padding-left:12px;white-space:nowrap;overflow:hidden}
+#zform .f.on{box-shadow:0 0 0 2px #1B2A4A}
+#zform .c{position:absolute;width:16px;height:16px;border-radius:3px;background:#1B2A4A;display:flex;align-items:center;justify-content:center;color:#fff;font:700 12px Inter}
 #tap{position:absolute;width:64px;height:64px;margin:-32px 0 0 -32px;border-radius:50%;border:5px solid var(--red);opacity:0;background:rgba(201,42,43,.18)}
 #ring{position:absolute;border:4px solid var(--red);border-radius:14px;opacity:0;box-shadow:0 0 0 9999px rgba(16,21,31,0)}
 /* grafiki */
@@ -104,6 +107,7 @@ body{font-family:Inter,sans-serif;color:var(--txt);position:relative}
   <img class="lay" id="L-spec" src="img/spec-pelna.png">
   <img class="lay" id="L-ofE" src="img/oferta-ekran.png">
   <img class="lay" id="L-zgl" src="img/zgloszenie-pelna.png">
+  <div id="zform" style="position:absolute;left:0;top:0;width:390px;opacity:0"></div>
   <div class="chrome" id="C-top" style="top:0;height:70px"><img id="C-topimg" src="img/oferta-ekran.png" style="top:0"></div>
   <div class="chrome" id="C-bot" style="top:780px;height:64px"><img src="img/oferta-ekran.png" style="top:-780px"></div>
   <div id="pan">
@@ -195,15 +199,15 @@ const S = [
   { id: 'filtr', a: 7.0, b: 13.0, krok: 1, head: ['Filtrujesz', 'markę i model'], sub: 'albo korzystasz z wyszukiwarki zaawansowanej' },
   { id: 'oferta', a: 13.0, b: 16.8, krok: 2, head: ['Cena na gotowo'], sub: 'Cło, VAT, akcyza, transport, homologacja' },
   { id: 'spec', a: 16.8, b: 20.8, krok: 3, head: ['Pełna specyfikacja', 'w tabelach'], sub: 'Ponad 100 parametrów: silnik, bateria, napęd, asystenci, wyposażenie' },
-  { id: 'zgl', a: 20.8, b: 25.8, krok: 4, head: ['„Chcę to auto”'], sub: 'Zgłoszenie jest bezpłatne i do niczego nie zobowiązuje' },
-  { id: 'dep', a: 25.8, b: 30.8, krok: 5, head: ['Zwrotny depozyt', 'uruchamia naszą pracę'], sub: '' },
-  { id: 'umowa', a: 30.8, b: 35.0, krok: 6, head: ['Umowa, gdy auto', 'jest sprawdzone'], sub: 'Wtedy wpłacasz 30% ceny' },
-  { id: 'panel', a: 35.0, b: 38.6, krok: 7, head: ['Wszystko widzisz', 'w swoim panelu'], sub: 'Status zamówienia krok po kroku' },
-  { id: 'fin', a: 38.6, b: 43.6, krok: 8, head: ['70% przed portem,', 'odbiór w Rzeszowie'], sub: 'albo pod dom do rejestracji' },
+  { id: 'zgl', a: 20.8, b: 26.8, krok: 4, head: ['„Chcę to auto”'], sub: 'Zgłoszenie jest bezpłatne i do niczego nie zobowiązuje' },
+  { id: 'dep', a: 26.8, b: 31.8, krok: 5, head: ['Zwrotny depozyt', 'uruchamia naszą pracę'], sub: '' },
+  { id: 'umowa', a: 31.8, b: 36.0, krok: 6, head: ['Umowa, gdy auto', 'jest sprawdzone'], sub: 'Wtedy wpłacasz 30% ceny' },
+  { id: 'panel', a: 36.0, b: 39.6, krok: 7, head: ['Wszystko widzisz', 'w swoim panelu'], sub: 'Status zamówienia krok po kroku' },
+  { id: 'fin', a: 39.6, b: 44.6, krok: 8, head: ['70% przed portem,', 'odbiór w Rzeszowie'], sub: 'albo pod dom do rejestracji' },
 ];
 const DUR = S[S.length - 1].b;
 // stopklatki karuzeli: moment każdej sceny, gdy wszystko już weszło
-const STILL = { cover: 2.6, lista: 5.0, filtr: 10.45, oferta: 15.4, spec: 19.4, zgl: 22.0, dep: 30.2, umowa: 34.4, panel: 38.0, fin: 42.8 };
+const STILL = { cover: 2.6, lista: 5.0, filtr: 10.45, oferta: 15.4, spec: 19.4, zgl: 22.0, dep: 31.2, umowa: 35.4, panel: 39.0, fin: 43.8 };
 
 let curHead = null;
 function setHead(sc) {
@@ -263,7 +267,7 @@ function render(t) {
 
   // reset warstw
   ['L-lista', 'L-listaE', 'L-f1', 'L-f2', 'L-f3', 'L-f4', 'L-wysz', 'L-spec', 'L-ofE', 'L-zgl'].forEach(i => lay(i, 0));
-  chrome('oferta-ekran.png', 0); tapAt(0, 0, 0); ring({}, 0); zoom(1, 0, 0); $('pan').style.opacity = 0;
+  chrome('oferta-ekran.png', 0); $('zform').style.opacity = 0; tapAt(0, 0, 0); ring({}, 0); zoom(1, 0, 0); $('pan').style.opacity = 0;
   ['cover-car', 'dep', 'doc', 'chip', 'fin-car', 'cta'].forEach(i => { $(i).style.opacity = 0; });
 
   // telefon: obecny od listy do zgłoszenia i w panelu
@@ -314,20 +318,30 @@ function render(t) {
   }
   if (sc.id === 'zgl') {
     // tap „Chcę to auto” na ofercie → formularz, przewinięcie do noty
-    // zbliżenie i ramka na przycisku „Chcę to auto” → klik → formularz → nota → „Wyślij zgłoszenie”
+    // zbliżenie i ramka na przycisku „Chcę to auto” → klik → wypełnianie formularza → zgody → „Wyślij zgłoszenie”
+    const kar = R ? 0 : -210;   // w karuzeli telefon jest ucięty dołem kadru — podnosimy treść, żeby przycisk był widoczny
     if (u < 1.9) {
-      lay('L-ofE', 1);
+      lay('L-ofE', 1, 0, kar);
       const z = eio(lin(u, .1, .7)) * (1 - eio(lin(u, 1.5, 1.9)));
-      zoom(1 + z * .8, 10, 830);
-      ring({ x: 10, y: 791, w: 119, h: 43 }, eo(lin(u, .5, .8)) * (1 - lin(u, 1.5, 1.7)));
-      tapAt(70, 812, lin(u, 1.1, 1.6));
+      zoom(1 + z * .8, 10, 830 + kar);
+      ring({ x: 10, y: 791 + kar, w: 119, h: 43 }, eo(lin(u, .5, .8)) * (1 - lin(u, 1.5, 1.7)));
+      tapAt(70, 812 + kar, lin(u, 1.1, 1.6));
     } else {
-      const s = eio(lin(u, 2.1, 2.7)) * 700 + eio(lin(u, 3.5, 3.9)) * 500;
-      lay('L-zgl', 1, (1 - eo(lin(u, 1.9, 2.2))) * 390, -s);
+      const s = eio(lin(u, 2.0, 2.6)) * 880 + eio(lin(u, 4.4, 4.8)) * 330;
+      const x = (1 - eo(lin(u, 1.9, 2.2))) * 390;
+      lay('L-zgl', 1, x, -s);
       chrome('oferta-ekran.png', 1, 70, false);
-      ring({ x: 28, y: 855 - s, w: 334, h: 170 }, eo(lin(u, 2.7, 2.95)) * (1 - lin(u, 3.35, 3.5)));
-      ring2 = { x: 29, y: 1533 - s, w: 332, h: 43, o: eo(lin(u, 3.9, 4.15)) * (1 - lin(u, len - .6, len - .45)) };
-      if (ring2.o > 0) ring(ring2, ring2.o);
+      const F = [['first_name', 1071, 'Anna', 2.6, 3.0], ['last_name', 1153, 'Nowak', 3.0, 3.4], ['email', 1235, 'anna.nowak@poczta.pl', 3.4, 4.0], ['phone', 1316, '600 100 200', 4.0, 4.4]];
+      let h = '';
+      for (const [n, y, v, a, b] of F) {
+        const k = Math.round(v.length * lin(u, a, b - .05));
+        const on = u >= a && u < b + .1;
+        if (u >= a || n === 'phone') h += `<div class="f${on ? ' on' : ''}" style="left:31px;top:${y + 2}px;width:328px;height:37px">${v.slice(0, k)}${on && k < v.length ? '|' : ''}</div>`;
+      }
+      if (u >= 4.85) h += '<div class="c" style="left:33px;top:1376px">✓</div>';
+      if (u >= 5.0) h += '<div class="c" style="left:33px;top:1490px">✓</div>';
+      const zf = $('zform'); zf.innerHTML = h; zf.style.opacity = 1; zf.style.transform = `translate(${x}px,${-s}px)`;
+      tapAt(195, 1554 - s, lin(u, 5.2, 5.7));
     }
   }
   if (sc.id === 'dep') {
