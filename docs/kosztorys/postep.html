@@ -73,7 +73,7 @@ footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line);
 <header class="top">
 <h1>Prima Auto — postęp prac i plan rozwoju</h1>
 <div class="sub">Platforma importu samochodów z Chin · primaauto.com.pl · opracowanie: Auranet (Jan Schenk)</div>
-<div class="stamp">Stan na 13.10.2026 · dokument roboczy, aktualizowany na bieżąco wraz z postępem prac</div>
+<div class="stamp">Stan na 14.10.2026 · dokument roboczy, aktualizowany na bieżąco wraz z postępem prac</div>
 </header>
 
 <div class="cols">
@@ -83,7 +83,11 @@ footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line);
 <table>
 <thead><tr><th>Data</th><th>Praca</th><th class="num">Godziny [h]</th></tr></thead>
 <tbody>
-<tr class="msc"><td colspan="2">Październik 2026</td><td class="num">23</td></tr>
+<tr class="msc"><td colspan="2">Październik 2026</td><td class="num">23,5</td></tr>
+<tr>
+<td class="data-col">14.10.2026</td>
+<td><strong>Płatność online zawieszona — depozyt wyłącznie przelewem</strong> <div class="opis">Tpay po odpowiedzi na pytania kontrolne zażądał dowodu osobistego i dodatkowego oświadczenia. Tych dokumentów nie przekazujemy, więc zgodnie z ustaleniem ze spotkania zawieszamy płatności online — także u innych operatorów. Z zamówienia zniknął blok „Płatność online — BLIK, karta” z informacją, że ją uruchamiamy: klient widzi od razu dane do przelewu. Mail po potwierdzeniu zamówienia mówi już tylko o przelewie, a w stopce wróciło „import i sprzedaż samochodów”. Integracje PayU i Tpay zostają w systemie wyłączone.</div></td>
+<td class="num">0,5</td></tr>
 <tr>
 <td class="data-col">08.10.2026</td>
 <td><strong>Oznaczenie „rozliczone z Auranetem” na liście zamówień</strong> <span class='wersje'>0.45.1</span><div class="opis"><p>Na liście zamówień obok oznaczeń D (depozyt) i C (CIF) jest teraz trzecie: A. Zielone A znaczy, że zamówienie zostało rozliczone z Auranetem — po najechaniu widać datę rozliczenia i numer faktury. Szare A — jeszcze nierozliczone. Oznaczenie jest na komputerze i na telefonie.</p><p>Ustawiamy je my, raz w miesiącu, po Twoim potwierdzeniu tabelki i wystawieniu faktury — w panelu nie ma przycisku, więc nie da się go przestawić przypadkiem. Klient go nie widzi: nie trafia do panelu klienta, maili ani umowy.</p><p>Wstecz oznaczyliśmy 24 zamówienia: 4 z faktury z 6 października, 7 z faktury z 2 września i 13 z rozliczenia lipcowego. Sprzedaże eksportowe i auta z placu bez zamówienia (m.in. Exeed VX i Deepal G318 dla SIROMEX, Leopard 7 #869, Denza Z9 GT, Monjaro, Shark 6) zostają w naszym rejestrze rozliczeń — oznaczymy je, gdy przy takiej sprzedaży powstanie zamówienie wewnętrzne.</p></div></td>
@@ -384,7 +388,7 @@ footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid var(--line);
 <td><strong>Reklamy dynamiczne Google (DSA) — celowanie w najtańsze oferty</strong> <div class="opis">Feed reklam przestawiony ze stron modeli na najtańszą aktualną ofertę każdego modelu, z automatyczną codzienną aktualizacją. Do tego nowa treść reklamy (wymiana jednej z dwóch kreacji).</div></td>
 <td class="num">3</td></tr>
 </tbody>
-<tfoot><tr><td colspan="2">Razem od spotkania 16.07.2026</td><td class="num">416,5</td></tr></tfoot>
+<tfoot><tr><td colspan="2">Razem od spotkania 16.07.2026</td><td class="num">417</td></tr></tfoot>
 </table>
 
 <div class="note przed-spotkaniem">Godziny zrealizowane do spotkania 16.07.2026 (etapy 1–2 kosztorysu): <strong>926 h</strong></div>
@@ -409,7 +413,7 @@ Zrobione 16.09: porównanie dziesięciu operatorów pod kątem kosztu przy nasze
 
 Zrobione 7 października: odpowiedź na pytania kontrolne Tpay, sprawdzenie konta produkcyjnego (transakcja się tworzy, strona płatności pokazuje jeszcze tryb testowy), stopka bez słowa „sprzedaż” do czasu aktywacji.
 
-Do zrobienia: po przełączeniu konta przez Tpay jedna prawdziwa płatność testowa za 1 zł, włączenie płatności dla klientów i kontrola pierwszych wpłat. Jeśli Tpay odmówi — zawieszamy płatności online. Do tego czasu klienci widzą w zamówieniu informację, że płatność online uruchamiamy, i dane do przelewu.</div><div class="skala">Status: w toku — zrealizowano ok. 7 h z 12 h; czeka na decyzję Tpay po odpowiedzi na pytania kontrolne</div></td>
+Zawieszone 14 października: po odpowiedzi na pytania kontrolne Tpay zażądał dowodu osobistego i dodatkowego oświadczenia. Tych dokumentów nie przekazujemy, więc — zgodnie z ustaleniem ze spotkania — zawieszamy płatności online i nie szukamy kolejnego operatora. Integracja zostaje w systemie wyłączona; klienci płacą depozyt przelewem.</div><div class="skala">Status: zawieszone 14 października — Tpay zażądał kolejnych dokumentów, których nie przekazujemy; płatność online wyłączona, depozyt przelewem (zrealizowano ok. 7 h z 12 h)</div></td>
 <td class="num">12</td></tr>
 <tr>
 <td><strong>T-262 — Specyfikacja auta w PDF przy zamówieniu</strong> <div class="opis"><span class="badge new">nowe</span> Przy każdym zamówieniu w panelu pojawi się przycisk „Specyfikacja PDF”. Generuje dokument z pełnymi danymi zamówionego auta: zdjęcia, dane techniczne, schemat wymiarów i całe wyposażenie — tak jak na stronie ogłoszenia, a nie tylko kilkanaście pól, które są dziś w załączniku nr 1 do umowy.
