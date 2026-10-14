@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="pl"><head><meta charset="utf-8">
+<title>Proces zakupu Prima-Auto</title>
+<link rel="stylesheet" href="f/fonts.css">
+<style>
+:root{--navy:#1B2A4A;--red:#C92A2B;--deep:#9B0000;--txt:#2D3748;--sec:#5C6B7F;--line:#D5DBE3;--bg:#F5F6F8;--ok:#38A169}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:var(--H);overflow:hidden;background:var(--bg)}
+body{font-family:Inter,sans-serif;color:var(--txt);position:relative}
+.abs{position:absolute}
+#bg{inset:0;background:linear-gradient(180deg,#fff 0%,#F5F6F8 46%,#E9EDF2 100%)}
+#bgline{left:0;right:0;height:3px;background:var(--red)}
+/* trasa */
+#route{left:60px;width:960px;height:120px}
+#route svg{overflow:visible}
+.stopnum{font:600 22px Inter;fill:var(--sec)}
+.endlbl{font:600 24px Inter;fill:var(--navy)}
+/* wiersz krok / wpłaty */
+#krok{left:70px;font:600 30px Inter;color:var(--red)}
+#pill{right:60px;height:66px;padding:0 26px;border-radius:33px;background:var(--navy);color:#fff;display:flex;align-items:center;gap:16px;white-space:nowrap}
+#pill .l{font:400 24px Inter;color:#B0BEC5}
+#pill .v{font:700 34px 'Barlow Condensed';letter-spacing:.5px}
+#pbar{right:60px;height:8px;border-radius:4px;background:#DCE1E8;overflow:hidden}
+#pbar i{display:block;height:100%;background:var(--red);width:0}
+/* nagłówki */
+#head{left:70px;right:70px;font:700 var(--hs) 'Barlow Condensed';line-height:.96;color:var(--navy);letter-spacing:-.5px}
+#head .ln{display:block;overflow:hidden;padding-bottom:.06em}
+#head .ln span{display:inline-block}
+#sub{left:70px;right:110px;font:400 var(--ss) Inter;line-height:1.32;color:var(--sec)}
+/* telefon */
+#phone{left:290px;width:500px;border-radius:70px;background:#10151F;padding:15px;box-shadow:0 40px 80px rgba(27,42,74,.28),0 8px 18px rgba(27,42,74,.18)}
+#screen{width:470px;height:1017px;border-radius:56px;overflow:hidden;position:relative;background:#fff}
+#inner{width:390px;height:844px;transform-origin:0 0;position:absolute;left:0;top:0}
+#zoom{position:absolute;inset:0;transform-origin:0 0}
+.lay{position:absolute;left:0;top:0;width:390px;opacity:0;will-change:transform}
+.chrome{position:absolute;left:0;width:390px;overflow:hidden;opacity:0}
+.chrome img{position:absolute;left:0;width:390px}
+#tap{position:absolute;width:64px;height:64px;margin:-32px 0 0 -32px;border-radius:50%;border:5px solid var(--red);opacity:0;background:rgba(201,42,43,.18)}
+#ring{position:absolute;border:4px solid var(--red);border-radius:14px;opacity:0;box-shadow:0 0 0 9999px rgba(16,21,31,0)}
+/* grafiki */
+.card{background:#fff;border-radius:28px;box-shadow:0 30px 60px rgba(27,42,74,.16)}
+#cover-car{left:90px;width:900px;height:620px;overflow:hidden;border-radius:36px}
+#cover-car img{width:100%;height:100%;object-fit:cover}
+#dep{left:90px;width:900px}
+#dep .num{font:700 230px 'Barlow Condensed';color:var(--red);line-height:.9;letter-spacing:-2px}
+#dep .netto{font:600 46px Inter;color:var(--sec);margin-top:4px}
+#dep .cap{font:600 36px Inter;color:var(--navy);margin:6px 0 40px}
+#dep .row{display:flex;align-items:center;gap:26px;font:600 40px Inter;color:var(--navy);padding:26px 0;border-top:2px solid var(--line)}
+#dep .chk{width:56px;height:56px;border-radius:14px;background:var(--red);flex:none;display:flex;align-items:center;justify-content:center}
+#doc{left:170px;width:740px;height:960px;padding:64px 60px}
+#doc h3{font:700 54px 'Barlow Condensed';color:var(--navy);line-height:1;margin-bottom:12px}
+#doc .meta{font:400 26px Inter;color:var(--sec);margin-bottom:36px}
+#doc .sk{height:16px;border-radius:8px;background:#E6EAF0;margin:18px 0}
+#doc .pos{display:flex;justify-content:space-between;font:600 30px Inter;color:var(--navy);padding:22px 0;border-top:2px solid var(--line);border-bottom:2px solid var(--line);margin:34px 0}
+#doc .sig{position:absolute;left:60px;right:60px;bottom:90px;border-top:2px solid var(--navy);padding-top:12px;font:400 22px Inter;color:var(--sec)}
+#doc svg{position:absolute;left:80px;bottom:104px}
+#chip{padding:22px 34px;border-radius:999px;background:var(--red);color:#fff;font:700 54px 'Barlow Condensed';white-space:nowrap;box-shadow:0 18px 36px rgba(201,42,43,.35)}
+/* panel narysowany */
+#pan{position:absolute;inset:0;background:#F5F6F8;opacity:0}
+#pan .top{height:96px;background:var(--deep);display:flex;align-items:flex-end;justify-content:center;padding-bottom:16px}
+#pan .top img{height:42px}
+#pan h4{font:700 30px 'Barlow Condensed';color:var(--navy);margin:22px 22px 12px}
+#pan .car{margin:0 22px 14px;background:#fff;border-radius:16px;display:flex;gap:12px;padding:10px;align-items:center}
+#pan .car img{width:110px;height:76px;object-fit:cover;border-radius:10px}
+#pan .car b{display:block;font:700 17px Inter;color:var(--navy)}
+#pan .car span{font:400 14px Inter;color:var(--sec)}
+#pan ul{list-style:none;margin:0 22px;background:#fff;border-radius:16px;padding:8px 16px}
+#pan li{display:flex;align-items:center;gap:14px;font:600 17px Inter;color:#A0AABA;padding:13px 0;border-bottom:1px solid #EEF1F4}
+#pan li:last-child{border:0}
+#pan li i{width:26px;height:26px;border-radius:50%;border:2px solid #CBD2DC;flex:none;display:flex;align-items:center;justify-content:center;font:700 15px Inter;color:#fff;font-style:normal}
+#pan li.done{color:var(--navy)} #pan li.done i{background:var(--ok);border-color:var(--ok)}
+#pan li.now{color:var(--red)} #pan li.now i{border-color:var(--red);background:#fff}
+#fin-car{left:90px;width:900px;height:640px;overflow:hidden;border-radius:36px}
+#fin-car img{width:100%;height:100%;object-fit:cover}
+#cta{left:90px;width:900px;height:150px;border-radius:30px;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;font:700 64px 'Barlow Condensed';letter-spacing:.3px}
+</style></head><body>
+<div id="bg" class="abs"></div><div id="bgline" class="abs"></div>
+
+<div id="route" class="abs"><svg width="960" height="120" viewBox="0 0 960 120">
+  <path id="rbase" d="" fill="none" stroke="#C9D1DC" stroke-width="5" stroke-dasharray="2 13" stroke-linecap="round"/>
+  <path id="rdone" d="" fill="none" stroke="#1B2A4A" stroke-width="6" stroke-linecap="round"/>
+  <g id="rstops"></g>
+  <text class="endlbl" x="0" y="112">Chiny</text>
+  <text class="endlbl" x="960" y="112" text-anchor="end">Polska</text>
+  <g id="rmark"><circle r="22" fill="#C92A2B"/><circle r="9" fill="#fff"/></g>
+</svg></div>
+<div id="krok" class="abs"></div>
+<div id="pill" class="abs"><span class="l">Twoje wpłaty</span><span class="v" id="pv">0 zł</span></div>
+<div id="pbar" class="abs"><i id="pbi"></i></div>
+
+<div id="head" class="abs"></div>
+<div id="sub" class="abs"></div>
+
+<div id="cover-car" class="abs card"><img src="img/auto-1.jpg"></div>
+
+<div id="phone" class="abs"><div id="screen"><div id="inner"><div id="zoom">
+  <img class="lay" id="L-lista" src="img/lista-pelna.png">
+  <img class="lay" id="L-listaE" src="img/lista-ekran.png">
+  <img class="lay" id="L-f1" src="img/filtr-1-panel.png">
+  <img class="lay" id="L-f2" src="img/filtr-2-marki.png">
+  <img class="lay" id="L-f3" src="img/filtr-3-denza.png">
+  <img class="lay" id="L-f4" src="img/filtr-4-wynik.png">
+  <img class="lay" id="L-wysz" src="img/wyszuk-pelna.png">
+  <img class="lay" id="L-spec" src="img/spec-pelna.png">
+  <img class="lay" id="L-ofE" src="img/oferta-ekran.png">
+  <img class="lay" id="L-zgl" src="img/zgloszenie-pelna.png">
+  <div class="chrome" id="C-top" style="top:0;height:70px"><img id="C-topimg" src="img/oferta-ekran.png" style="top:0"></div>
+  <div class="chrome" id="C-bot" style="top:780px;height:64px"><img src="img/oferta-ekran.png" style="top:-780px"></div>
+  <div id="pan">
+    <div class="top"><img src="img/logo-szerokie.png"></div>
+    <h4>Twoje zamówienie</h4>
+    <div class="car"><img src="img/auto-1.jpg"><div><b>Denza Z9 GT DM-i Ultra</b><span>2025 · 302 000 zł</span></div></div>
+    <ul id="panl">
+      <li><i>✓</i>Zgłoszenie rezerwacji</li>
+      <li><i>✓</i>Depozyt zwrotny</li>
+      <li><i>✓</i>Umowa podpisana</li>
+      <li><i>✓</i>Auto kupione w Chinach</li>
+      <li><i></i>W drodze do Polski</li>
+      <li><i></i>Odprawa i homologacja</li>
+      <li><i></i>Odbiór</li>
+    </ul>
+  </div>
+  <div id="ring"></div>
+  <div id="tap"></div>
+</div></div></div></div>
+
+<div id="dep" class="abs">
+  <div class="num" id="depn">0 zł</div>
+  <div class="netto">(5 000 zł netto)</div>
+  <div class="cap">zwrotny depozyt uruchamia naszą pracę</div>
+  <div class="row"><span class="chk"><svg width="30" height="30" viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Szukamy i sprawdzamy auto</div>
+  <div class="row"><span class="chk"><svg width="30" height="30" viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Kontakt z Tobą i z dostawcą</div>
+  <div class="row"><span class="chk"><svg width="30" height="30" viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Przeprowadzamy zakup</div>
+  <div class="row"><span class="chk"><svg width="30" height="30" viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Przygotowujemy formalności</div>
+</div>
+
+<div id="doc" class="abs card">
+  <h3>Umowa zlecenia sprowadzenia samochodu z Chin</h3>
+  <div class="meta">Zleceniodawca · Prima-Auto, Rzeszów</div>
+  <div class="sk" style="width:92%"></div><div class="sk" style="width:84%"></div><div class="sk" style="width:88%"></div>
+  <div class="pos"><span>Denza Z9 GT DM-i Ultra</span><span>302 000 zł</span></div>
+  <div class="sk" style="width:90%"></div><div class="sk" style="width:76%"></div><div class="sk" style="width:86%"></div><div class="sk" style="width:60%"></div>
+  <svg width="360" height="110" viewBox="0 0 360 110"><path id="sigp" d="M6 80 C40 20 60 20 66 64 S96 98 112 50 S140 14 150 60 S176 92 196 44 C206 22 222 30 218 62 C214 86 240 84 262 56 S320 30 352 46" fill="none" stroke="#1B2A4A" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <div class="sig">podpis Zleceniodawcy</div>
+</div>
+<div id="chip" class="abs">+30% ceny auta</div>
+
+<div id="fin-car" class="abs card"><img src="img/auto-3.jpg"></div>
+<div id="cta" class="abs">Wybierz auto na primaauto.com.pl</div>
+
+<script>
+const MODE = new URLSearchParams(location.search).get('mode') || 'reel';
+const R = MODE === 'reel';
+const H = R ? 1920 : 1350;
+document.documentElement.style.setProperty('--H', H + 'px');
+const $ = id => document.getElementById(id);
+// ---- układ zależny od formatu
+const Y = R ? { route: 108, row: 236, head: 328, hs: 108, ss: 38, phone: 690, dep: 760, doc: 720, card: 760, cta: 1430 }
+            : { route: 56, row: 178, head: 262, hs: 92, ss: 33, phone: 560, dep: 560, doc: 560, card: 560, cta: 1150 };
+document.documentElement.style.setProperty('--hs', Y.hs + 'px');
+document.documentElement.style.setProperty('--ss', Y.ss + 'px');
+$('route').style.top = Y.route + 'px'; $('bgline').style.top = 0;
+$('krok').style.top = (Y.row + 16) + 'px';
+$('pill').style.top = Y.row + 'px'; $('pbar').style.top = (Y.row + 76) + 'px'; $('pbar').style.width = '330px';
+$('head').style.top = Y.head + 'px';
+$('phone').style.top = Y.phone + 'px';
+$('dep').style.top = Y.dep + 'px'; $('doc').style.top = Y.doc + 'px';
+$('cover-car').style.top = (R ? 820 : 640) + 'px'; $('cover-car').style.height = (R ? 760 : 560) + 'px';
+$('fin-car').style.top = (R ? 800 : 600) + 'px'; if (!R) $('fin-car').style.height = '470px';
+$('cta').style.top = Y.cta + 'px';
+$('inner').style.transform = `scale(${470 / 390})`;
+
+// ---- trasa
+const STOPS = 8, RX0 = 30, RX1 = 930;
+const ry = x => 48;
+const rpath = (x0, x1) => { let d = ''; for (let x = x0; x <= x1 + .1; x += 6) d += (d ? 'L' : 'M') + x.toFixed(1) + ' ' + ry(x).toFixed(1); return d; };
+$('rbase').setAttribute('d', rpath(RX0, RX1));
+const sx = i => RX0 + (RX1 - RX0) * (i / STOPS);   // i = 0..8, 0 = Chiny
+let g = '';
+for (let i = 1; i <= STOPS; i++) g += `<circle id="st${i}" cx="${sx(i)}" cy="${ry(sx(i))}" r="11" fill="#fff" stroke="#9AA6B6" stroke-width="4"/>`;
+$('rstops').innerHTML = g;
+
+// ---- narzędzia
+const cl = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+const lin = (t, a, b) => cl((t - a) / (b - a));
+const eo = x => 1 - Math.pow(1 - x, 3);
+const eio = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+const back = x => { const c = 1.7; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };
+const zl = n => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' zł';
+
+// ---- scenariusz (sekundy). krok = numer przystanku na trasie (0 = start)
+const S = [
+  { id: 'cover', a: 0, b: 3.4, krok: 0, head: ['Auto z Chin —', 'od kliknięcia', 'do odbioru'], sub: '8 kroków. Każdy widzisz na swoim ekranie.' },
+  { id: 'lista', a: 3.4, b: 7.0, krok: 1, head: ['Ponad 4 600 aut', 'z Chin w jednym miejscu'], sub: 'Na placu w Rzeszowie, w drodze i prosto z Chin' },
+  { id: 'filtr', a: 7.0, b: 13.0, krok: 1, head: ['Filtrujesz', 'markę i model'], sub: 'albo korzystasz z wyszukiwarki zaawansowanej' },
+  { id: 'oferta', a: 13.0, b: 16.8, krok: 2, head: ['Cena na gotowo'], sub: 'Cło, VAT, akcyza, transport, homologacja' },
+  { id: 'spec', a: 16.8, b: 20.8, krok: 3, head: ['Pełna specyfikacja', 'w tabelach'], sub: 'Ponad 100 parametrów: silnik, bateria, napęd, asystenci, wyposażenie' },
+  { id: 'zgl', a: 20.8, b: 25.8, krok: 4, head: ['„Chcę to auto”'], sub: 'Zgłoszenie jest bezpłatne i do niczego nie zobowiązuje' },
+  { id: 'dep', a: 25.8, b: 30.8, krok: 5, head: ['Zwrotny depozyt', 'uruchamia naszą pracę'], sub: '' },
+  { id: 'umowa', a: 30.8, b: 35.0, krok: 6, head: ['Umowa, gdy auto', 'jest sprawdzone'], sub: 'Wtedy wpłacasz 30% ceny' },
+  { id: 'panel', a: 35.0, b: 38.6, krok: 7, head: ['Wszystko widzisz', 'w swoim panelu'], sub: 'Status zamówienia krok po kroku' },
+  { id: 'fin', a: 38.6, b: 43.6, krok: 8, head: ['70% przed portem,', 'odbiór w Rzeszowie'], sub: 'albo pod dom do rejestracji' },
+];
+const DUR = S[S.length - 1].b;
+// stopklatki karuzeli: moment każdej sceny, gdy wszystko już weszło
+const STILL = { cover: 2.6, lista: 5.0, filtr: 10.45, oferta: 15.4, spec: 19.4, zgl: 22.0, dep: 30.2, umowa: 34.4, panel: 38.0, fin: 42.8 };
+
+let curHead = null;
+function setHead(sc) {
+  if (curHead === sc.id) return; curHead = sc.id;
+  $('head').innerHTML = sc.head.map(l => `<span class="ln"><span>${l}</span></span>`).join('');
+  $('sub').textContent = sc.sub;
+}
+function hide(...ids) { ids.forEach(i => { $(i).style.opacity = 0; }); }
+function lay(id, o, x = 0, y = 0) { const e = $(id); e.style.opacity = o; e.style.transform = `translate(${x}px,${y}px)`; }
+function tapAt(x, y, u) { // u: 0..1 przebieg kliknięcia
+  const e = $('tap'); if (u <= 0 || u >= 1) { e.style.opacity = 0; return; }
+  e.style.left = x + 'px'; e.style.top = y + 'px';
+  e.style.opacity = u < .25 ? u / .25 : 1 - (u - .25) / .75;
+  e.style.transform = `scale(${.6 + u * 1.1})`;
+}
+function ring(r, o) { const e = $('ring'); e.style.opacity = o; if (o > 0) { e.style.left = (r.x - 8) + 'px'; e.style.top = (r.y - 8) + 'px'; e.style.width = (r.w + 16) + 'px'; e.style.height = (r.h + 16) + 'px'; e.style.boxShadow = `0 0 0 9999px rgba(16,21,31,${.38 * o})`; } }
+function chrome(src, o, topH = 70, showBot = true) { $('C-top').style.opacity = o; $('C-topimg').src.endsWith(src) || ($('C-topimg').src = 'img/' + src); $('C-top').style.height = topH + 'px'; $('C-bot').style.opacity = showBot ? o : 0; $('C-bot').querySelector('img').src.endsWith(src) || ($('C-bot').querySelector('img').src = 'img/' + src); }
+function zoom(s, ox, oy) { $('zoom').style.transform = `translate(${ox}px,${oy}px) scale(${s}) translate(${-ox}px,${-oy}px)`; }
+
+let ring2;
+function render(t) {
+  const sc = S.find(s => t >= s.a && t < s.b) || S[S.length - 1];
+  const u = t - sc.a, len = sc.b - sc.a;
+  setHead(sc);
+  // nagłówek: linie wjeżdżają z maski, wyjście na końcu sceny
+  const outT = sc.id === 'fin' ? 0 : lin(u, len - .28, len);
+  [...$('head').querySelectorAll('.ln span')].forEach((s, i) => {
+    const k = eo(lin(u, .05 + i * .09, .5 + i * .09));
+    s.style.transform = `translateY(${(1 - k) * 105 - outT * 30}%)`; s.style.opacity = 1 - outT;
+  });
+  const ks = eo(lin(u, .35, .8)); $('sub').style.opacity = ks * (1 - outT); $('sub').style.transform = `translateY(${(1 - ks) * 24}px)`;
+  $('head').style.fontSize = sc.id === 'cover' ? (R ? 150 : 120) + 'px' : '';
+  const hb = $('head').getBoundingClientRect(); $('sub').style.top = (hb.top + hb.height + (R ? 22 : 16)) + 'px';
+  const sb = $('sub').getBoundingClientRect(); $('phone').style.top = Math.max(Y.phone, sb.top + sb.height + 40) + 'px';
+  if (sc.id === 'cover') { const ct = sb.top + sb.height + 50; $('cover-car').style.top = ct + 'px'; $('cover-car').style.height = ((R ? 1720 : 1300) - ct) + 'px'; }
+  if (sc.id === 'dep') $('sub').style.opacity = 0;
+
+  // trasa: postęp do przystanku sceny
+  const prevK = (S[S.indexOf(sc) - 1] || sc).krok;
+  const kk = sc.id === 'cover' ? 0 : prevK + (sc.krok - prevK) * eio(lin(u, .1, .9));
+  const xm = sc.id === 'cover' ? RX0 : sx(kk);
+  const draw = sc.id === 'cover' ? eio(lin(u, .2, 1.6)) : 1;
+  $('rbase').style.opacity = draw; $('route').style.opacity = 1;
+  $('rdone').setAttribute('d', xm > RX0 + 1 ? rpath(RX0, xm) : 'M0 0');
+  $('rmark').setAttribute('transform', `translate(${xm},${ry(xm)})`);
+  for (let i = 1; i <= STOPS; i++) { const c = $('st' + i); const on = kk >= i - .01; c.setAttribute('fill', on ? '#1B2A4A' : '#fff'); c.setAttribute('stroke', on ? '#1B2A4A' : '#9AA6B6'); c.style.opacity = sc.id === 'cover' ? lin(u, .2 + i * .12, .5 + i * .12) : 1; }
+  $('krok').textContent = sc.krok ? `Krok ${sc.krok} z ${STOPS}` : '';
+
+  // wpłaty
+  let pv = '0 zł', pb = 0;
+  if (sc.id === 'dep') pv = zl(6150 * eo(lin(u, .6, 2.0)));
+  if (sc.id === 'umowa' || sc.id === 'panel') { pv = '6 150 zł + 30%'; pb = sc.id === 'umowa' ? 30 * eo(lin(u, 1.6, 2.6)) : 30; }
+  if (sc.id === 'fin') { const k = eo(lin(u, .8, 2.4)); pv = `6 150 zł + ${Math.round(30 + 70 * k)}%`; pb = 30 + 70 * k; }
+  $('pv').textContent = pv; $('pbi').style.width = pb + '%';
+  const pillPulse = (sc.id === 'dep' && u > .6 && u < 2.0) || (sc.id === 'umowa' && u > 1.6 && u < 2.6) || (sc.id === 'fin' && u > .8 && u < 2.4);
+  $('pill').style.background = pillPulse ? '#C92A2B' : '#1B2A4A';
+
+  // reset warstw
+  ['L-lista', 'L-listaE', 'L-f1', 'L-f2', 'L-f3', 'L-f4', 'L-wysz', 'L-spec', 'L-ofE', 'L-zgl'].forEach(i => lay(i, 0));
+  chrome('oferta-ekran.png', 0); tapAt(0, 0, 0); ring({}, 0); zoom(1, 0, 0); $('pan').style.opacity = 0;
+  ['cover-car', 'dep', 'doc', 'chip', 'fin-car', 'cta'].forEach(i => { $(i).style.opacity = 0; });
+
+  // telefon: obecny od listy do zgłoszenia i w panelu
+  const phoneScenes = ['lista', 'filtr', 'oferta', 'spec', 'zgl', 'panel'];
+  let px = 0, po = 0;
+  if (phoneScenes.includes(sc.id)) {
+    po = 1;
+    if (sc.id === 'lista') px = (1 - eo(lin(u, 0, .7))) * 900;
+    if (sc.id === 'zgl') px = -eio(lin(u, len - .5, len)) * 1100;
+    if (sc.id === 'panel') px = (1 - eo(lin(u, 0, .6))) * 1100;
+  }
+  $('phone').style.opacity = po; $('phone').style.transform = `translateX(${px}px)`;
+
+  // przejście ekranu wewnątrz telefonu: nowa scena wjeżdża z prawej
+  const swIn = (sc.id === 'filtr' || sc.id === 'oferta') ? (1 - eo(lin(u, 0, .45))) * 390 : 0;
+
+  if (sc.id === 'cover') {
+    const k = eo(lin(u, .5, 1.3));
+    $('cover-car').style.opacity = k; $('cover-car').style.transform = `translateY(${(1 - k) * 80}px) scale(${1.04 - .04 * k})`;
+    $('cover-car').querySelector('img').style.transform = `scale(${1.08 + u * .02})`;
+  }
+  if (sc.id === 'lista') {
+    const s = eio(lin(u, .9, len - .2)) * 1500;
+    lay('L-lista', 1, 0, -s); chrome('lista-ekran.png', 1, 70, false);
+  }
+  if (sc.id === 'filtr') {
+    // 0.0 lista-ekran → tap Marka/model (0.8) → panel (1.2) → tap Marka (1.9) → lista marek (2.3) → tap Denza (3.0) → zaznaczone (3.3) → ramka „Pokaż 146” → tap (3.9) → wynik (4.2)
+    const st = u < 1.15 ? 'L-listaE' : u < 2.2 ? 'L-f1' : u < 3.2 ? 'L-f2' : u < 4.15 ? 'L-f3' : 'L-f4';
+    if (u < 4.6) lay(st, 1, swIn, 0); else lay('L-f4', 1, -eio(lin(u, 4.6, 5.0)) * 390, 0);
+    if (u >= 4.6) { lay('L-wysz', 1, (1 - eio(lin(u, 4.6, 5.0))) * 390, -eio(lin(u, 5.0, len - .1)) * 520); chrome('lista-ekran.png', lin(u, 4.6, 4.8), 70, false); }
+    if (u >= 1.15 && u < 1.5) lay('L-f1', 1, -(1 - eo(lin(u, 1.15, 1.5))) * 390, 0);
+    if (u < 1.3) tapAt(92, 274, lin(u, .7, 1.2));
+    else if (u < 2.4) tapAt(195, 126, lin(u, 1.75, 2.25));
+    else if (u < 3.4) tapAt(90, 286, lin(u, 2.75, 3.25));
+    else tapAt(165, 729, lin(u, 3.7, 4.2));
+    if (u > 3.2 && u < 4.15) ring({ x: 16, y: 706, w: 300, h: 46 }, eo(lin(u, 3.25, 3.5)) * (1 - lin(u, 3.95, 4.15)));
+  }
+  if (sc.id === 'spec') {
+    // z góry oferty szybki zjazd przez tabele specyfikacji (od „Dane podstawowe” do „Multimedia”)
+    const s = eio(lin(u, .1, .8)) * 2600 + eio(lin(u, .9, len - .2)) * 4100;
+    lay('L-spec', 1, 0, -s); chrome('oferta-ekran.png', 1, 70, true);
+  }
+  if (sc.id === 'oferta') {
+    lay('L-ofE', 1, swIn, 0);
+    const z = eio(lin(u, .9, 1.7)) * (1 - eio(lin(u, len - .7, len - .1)));
+    zoom(1 + z * .75, 12, 150);
+    ring({ x: 6, y: 150, w: 156, h: 44 }, eo(lin(u, 1.5, 1.9)) * (1 - lin(u, len - .8, len - .4)));
+  }
+  if (sc.id === 'zgl') {
+    // tap „Chcę to auto” na ofercie → formularz, przewinięcie do noty
+    // zbliżenie i ramka na przycisku „Chcę to auto” → klik → formularz → nota → „Wyślij zgłoszenie”
+    if (u < 1.9) {
+      lay('L-ofE', 1);
+      const z = eio(lin(u, .1, .7)) * (1 - eio(lin(u, 1.5, 1.9)));
+      zoom(1 + z * .8, 10, 830);
+      ring({ x: 10, y: 791, w: 119, h: 43 }, eo(lin(u, .5, .8)) * (1 - lin(u, 1.5, 1.7)));
+      tapAt(70, 812, lin(u, 1.1, 1.6));
+    } else {
+      const s = eio(lin(u, 2.1, 2.7)) * 700 + eio(lin(u, 3.5, 3.9)) * 500;
+      lay('L-zgl', 1, (1 - eo(lin(u, 1.9, 2.2))) * 390, -s);
+      chrome('oferta-ekran.png', 1, 70, false);
+      ring({ x: 28, y: 855 - s, w: 334, h: 170 }, eo(lin(u, 2.7, 2.95)) * (1 - lin(u, 3.35, 3.5)));
+      ring2 = { x: 29, y: 1533 - s, w: 332, h: 43, o: eo(lin(u, 3.9, 4.15)) * (1 - lin(u, len - .6, len - .45)) };
+      if (ring2.o > 0) ring(ring2, ring2.o);
+    }
+  }
+  if (sc.id === 'dep') {
+    const k = eo(lin(u, .2, .8)); $('dep').style.opacity = k; $('dep').style.transform = `translateX(${(1 - k) * 600}px)`;
+    $('depn').textContent = zl(6150 * eo(lin(u, .6, 2.0)));
+    [...$('dep').querySelectorAll('.row')].forEach((r, i) => { const q = back(lin(u, 1.6 + i * .5, 2.1 + i * .5)); r.style.opacity = cl(q); r.style.transform = `translateX(${(1 - q) * 120}px)`; r.querySelector('.chk').style.transform = `scale(${cl(q, 0, 1.3)})`; });
+    const ou = lin(u, len - .35, len); $('dep').style.opacity = k * (1 - ou);
+  }
+  if (sc.id === 'umowa') {
+    const k = eo(lin(u, 0, .6)); $('doc').style.opacity = k * (1 - lin(u, len - .3, len));
+    $('doc').style.transform = `translateY(${(1 - k) * 200}px) rotate(${-2.5 + (1 - k) * 4}deg)`;
+    const p = $('sigp'), L = p.getTotalLength(); p.style.strokeDasharray = L; p.style.strokeDashoffset = L * (1 - eio(lin(u, .8, 1.8)));
+    const c = back(lin(u, 1.7, 2.2)); $('chip').style.opacity = cl(c) * (1 - lin(u, len - .3, len));
+    $('chip').style.left = '600px'; $('chip').style.top = (Y.doc + 270) + 'px'; $('chip').style.transform = `scale(${cl(c, 0, 1.2)}) rotate(4deg)`;
+  }
+  if (sc.id === 'panel') {
+    $('pan').style.opacity = 1;
+    const li = [...$('panl').children];
+    li.forEach((e, i) => { e.className = i < 4 ? 'done' : ''; });
+    // „W drodze” pulsuje jako bieżący
+    const now = li[4]; now.className = 'now'; now.querySelector('i').style.boxShadow = `0 0 0 ${4 + 6 * Math.abs(Math.sin(u * 4))}px rgba(201,42,43,.18)`;
+    li.forEach((e, i) => { const q = eo(lin(u, .5 + i * .14, .8 + i * .14)); e.style.opacity = .2 + .8 * q; e.style.transform = `translateX(${(1 - q) * 40}px)`; });
+  }
+  if (sc.id === 'fin') {
+    const k = eo(lin(u, .1, .8)); $('fin-car').style.opacity = k; $('fin-car').style.transform = `translateY(${(1 - k) * 120}px)`;
+    $('fin-car').querySelector('img').style.transform = `scale(${1.12 - .06 * lin(u, 0, len)})`;
+    const c = eo(lin(u, 2.4, 3.0)); $('cta').style.opacity = c; $('cta').style.transform = `translateY(${(1 - c) * 50}px)`;
+  }
+}
+window.render = render; window.DUR = DUR; window.STILL = STILL;
+window.gotowe = Promise.all([document.fonts.ready, ...[...document.images].map(i => i.decode().catch(() => 0))]);
+if (!navigator.webdriver) render(Number(new URLSearchParams(location.search).get('t') || 0));
+</script>
+</body></html>
