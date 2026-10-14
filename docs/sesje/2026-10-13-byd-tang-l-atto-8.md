@@ -133,3 +133,33 @@ Europejska nazwa 08 niepotwierdzona (prasa spekuluje „Sealion 8"); „Sealion 
 **Uwagi wykonawcze:** puste termy `tang-l-dm` (6630) i `tang-l-ev` (6621) już istnieją — sprawdzić przed zakładaniem
 nowych (duplikaty); redirect legacy w `class-asiaauto-redirects.php` (`sealion-8-dm-i-tang-l`, `sealion-8-tang-l-ev`)
 przepiąć na nowe slugi; Indexing API po resecie puli; GSC po 14 i 28 dniach.
+
+## Etap 2 WDROŻONY 14.10 (akcept Ruslana, „działaj" Janka)
+
+Skrypt: `scripts/sealion-08-tang-l-atto8-2026-10-14.php` (podglad/apply, treść wygenerował model).
+Backup: `~/backups/primaauto/2026-10-14-sealion08/` (termy/meta 3700, 3703, 3746, 6621, 6630, 7244; posty Tang L
++ ranking 406167; whitelist; 3 pliki pluginu; `.htaccess`).
+
+| Element | Stan po 14.10 |
+|---|---|
+| `/samochody/byd/sealion-08/` | nowy term **7278** „Sealion 08", premierowy (0 ofert), whitelist indeksu, `skip_title_regen`; title „BYD Sealion 08 / Sealion 8 — cena w Polsce od 255 000 zł", ceny z Autohome (seriesid 8484, 8 wersji) przez `calculateFromCny` (255–300 tys. zł); ramka do Tang L |
+| `/samochody/byd/tang-l-dm-i/` | term 3746 → „Tang L DM-i", H1 „BYD Tang L DM-i (Atto 8)", treść przepisana (EV/PHEV, link do 08 i EV), 16 ofert „BYD Tang L DM-i (Atto 8) …" |
+| `/samochody/byd/tang-l-ev/` | term 3703 → „Tang L EV", nazwa bez zmian, sekcja „Tang L EV, Atto 8 i Sealion 08 — co jest czym?", FAQ 3 |
+| 301 | `sealion-8-dm-i` → `sealion-08`; `sealion-8-ev` → `tang-l-ev`; legacy → nowe huby Tang L |
+| Sieroty | 6621 `tang-l-ev`, 6630 `tang-l-dm` (parent 0, 0 ofert, bez meta) skasowane |
+| Linki | huby Tang DM-i (3700), Datang (7244), ranking baterii (406167) → nowe adresy |
+| Mapowanie | `BYD\|Tang L DM`/`EV` → nowe slugi; `BYD\|Haishi 08` + che168 `BYD\|海狮08` → sealion-08 (che168 sprawdzony EV i PHEV; klucz dongchedi „Haishi 08" **zgadnięty**, niezweryfikowany) |
+| `.htaccess` | usunięta reguła soft-404 `tang-l-ev` → `/byd/` (LiteSpeed łapie zmianę z opóźnieniem ~1 min) |
+
+Weryfikacja curl 14.10: 3 huby 200 + `index`, 4 przekierowania 301 bez łańcuchów, H1 ofert 347718 i 470337.
+Indexing API 14.10: 3 nowe huby zgłoszone (3 OK, ad-hoc 28/100).
+
+**Google Ads (odczyt, nic nie zmieniane):**
+- RMKT feed (DYNAMIC_CUSTOM, 22 assety) wskazuje stare huby `sealion-8-dm-i`/`sealion-8-ev` → po 301 asset Tang L hybrydy
+  prowadzi na Sealion 08. Cron `refresh-rmkt-feed.sh` (niedziela 06:00) przebuduje feed z nowymi URL-ami — albo ręcznie wcześniej.
+- [SKAG-1] „Na placu", grupy „BYD Tang — od ręki" i „Sealion 8 / Tang — od ręki" (słowa „byd sealion 8…", „byd tang…")
+  kierują na `/oferta/…-278657/` — tej oferty nie ma w bazie (301). Problem sprzed tej zmiany.
+- DSA page feed: oferty z `sealion-8` w adresie — adresy ofert się nie zmieniły (post_name bez zmian), działają.
+
+**Do pomiaru:** GSC po 14 i 28 dniach — `sealion-08` (fraza „sealion 8"/„sealion 08"), `tang-l-dm-i`, `tang-l-ev`.
+**Pułapka:** `odswiez-tytuly-ofert.php` na termach 3746/3703 zdejmie „(Atto 8)" z tytułów ofert (liczy z nazwy termu).

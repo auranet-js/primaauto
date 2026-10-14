@@ -1,5 +1,14 @@
 # Historia wersji asiaauto-sync
 
+## 0.45.2 + dane — 2026-10-14 (Sealion 08 / Tang L Atto 8, bez bumpa wersji)
+
+- Bez zmiany `ASIAAUTO_VERSION` — tylko dane mapowania i mapa przekierowań. Opis: `docs/sesje/2026-10-13-byd-tang-l-atto-8.md`.
+- `data/brand-mapping-v6.1.php`: `BYD|Tang L DM` → „Tang L DM-i (Atto 8)”, slug `tang-l-dm-i`; `BYD|Tang L EV` slug `tang-l-ev`; nowy `BYD|Haishi 08` → „Sealion 08”, slug `sealion-08`.
+- `data/che168-model-map.php`: alias `BYD|海狮08` → Sealion 08 (EV i DM-i w jednym hubie), poprawiony komentarz przy Tang DM-i.
+- `includes/class-asiaauto-redirects.php` (V62 `byd`): `sealion-8-dm-i` → `sealion-08`, `sealion-8-ev` → `tang-l-ev`, legacy `sealion-8-dm-i-tang-l` → `tang-l-dm-i`, `sealion-8-tang-l-ev` → `tang-l-ev`.
+- `.htaccess`: usunięta reguła soft-404 z 14.06 `samochody/byd/tang-l-ev` → `/samochody/byd/` (blokowała nowy hub EV; zgoda Janka 14.10).
+- Backupy: `*.bak-2026-10-14-sealion08` (3 pliki pluginu + `.htaccess`), `~/backups/primaauto/2026-10-14-sealion08/`.
+
 ## 0.45.2 — 2026-10-13 (T-264 „Zamów → zgłoszenie rezerwacji”)
 
 - Spec: `docs/roadmapa/T-264-zamow-na-zgloszenie-rezerwacji.md`, zestaw A1/B1/C1/D1 zaakceptowany przez Ruslana 13.10. Tylko teksty i CSS — logika zamówień, statusy, rezerwacje i adres `/zamow/` bez zmian.
