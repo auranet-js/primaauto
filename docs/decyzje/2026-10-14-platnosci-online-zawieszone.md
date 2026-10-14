@@ -18,12 +18,11 @@ Zamyka: **T-121 „płatność PayU za depozyt”** (zastąpione 07.10) i **T-25
 
 **Razem zaraportowane: 35 h** (T-121 27 h + T-256 8 h; T-256 wyceniony na 12 h, nie dokończony). Kalendarzowo: 06.08 → 14.10, ok. 10 tygodni.
 
-## Stan, w jakim zostawiamy (zweryfikowane 14.10)
+## Stan przed zmianami 14.10 (zweryfikowany)
 
 - `asiaauto_payu_enabled = 0` — płatność online wyłączona dla obu operatorów; kod PayU i Tpay (v0.41.0) zostaje w pluginie, nieużywany.
-- Kreator zamówienia (`class-asiaauto-payu-wizard.php:286`) pokazuje: „Płatność online uruchamiamy. Do tego czasu opłać depozyt przelewem…” + dane do przelewu.
-- Stopka: „import samochodów” (bez „sprzedaż”, zmiana z 07.10 pod AML Tpay; backup `footer.php.bak-2026-10-07-sprzedaz`).
-- Konta: PayU (odmowa), Tpay 227596 (niezweryfikowane, tryb testowy) — nic nie zamykamy po stronie operatorów.
+- Kreator pokazywał „Płatność online uruchamiamy…” + dane do przelewu; stopka „import samochodów” (zmiana z 07.10 pod AML Tpay).
+- Konta: PayU (odmowa), Tpay 227596 (niezweryfikowane, tryb testowy) — nic nie zamykamy po stronie operatorów; ewentualny abonament Tpay do sprawdzenia przez Janka.
 
 ## Wykonane 14.10 (v0.45.3)
 
@@ -31,13 +30,6 @@ Zamyka: **T-121 „płatność PayU za depozyt”** (zastąpione 07.10) i **T-25
 - Mail po potwierdzeniu, `/regulamin-uslugi/`, `/depozyt/` (z FAQ i JSON-LD): depozyt wyłącznie przelewem.
 - Stopka: wróciło „import i sprzedaż samochodów”.
 - Strona postępu dla Ruslana: T-256 zawieszone + wpis 14.10.
-
-Punkty poniżej są tym samym rozstrzygnięte.
-
-## Konsekwencje / otwarte (nie ruszone tą decyzją)
-
-- Komunikat „uruchamiamy” obiecuje coś, czego nie będzie — do decyzji, czy zostaje, czy zamieniamy na sam przelew.
-- „Sprzedaż” w stopce miała wrócić po aktywacji Tpay — aktywacji nie będzie, do decyzji.
-- Strona postępu dla Ruslana: T-256 ma status „w toku, czeka na Tpay” — do przestawienia na zawieszone.
+- Kalendarz: przypomnienie T-256 z 13.10 zamknięte.
 
 Historia: `docs/decyzje/2026-09-14-payu-odmowa-wylaczenie-bramki.md`, `docs/biznes/2026-09-16-bramka-platnosci-porownanie.md`, `docs/biznes/2026-10-07-tpay-odpowiedz-aml.md`, `docs/roadmapa/T-121-platnosc-online-depozyt.md`.
