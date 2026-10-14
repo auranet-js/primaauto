@@ -113,3 +113,7 @@ uruchamiamy render ponownie (1–2 h), zamiast produkować materiał od nowa.
 **Decyzje przed startem (quiz):** 1. akcept scenariusza i tekstów scen (szkic w specu); 2. auto do prezentacji — rek.: auto z placu w Rzeszowie;
 3. jak opisać rozliczenie po depozycie (scena 7–9).
 **Stop, pytaj:** rozszerzenie silnika w repo `auranet` (commit tam osobno); przekazanie materiału Ruslanowi idzie przez Janka.
+
+## Po W6 — T-268 „instrukcja wideo jak zamówić krok po kroku” (dopisane 14.10)
+
+Dłuższa instrukcja wideo o tym, co klient robi po zgłoszeniu (dane do umowy, umowa, depozyt, statusy i dokumenty w panelu). Startuje dopiero po W6, bo nagrywa ekrany przebudowywane w W4–W6. Silnik z T-265, scenariusz nowy. Wycena na starcie.
