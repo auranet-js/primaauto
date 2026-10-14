@@ -634,6 +634,14 @@
   ],
   "todo_nowe": [
     {
+      "id": "T-265",
+      "tytul": "Prezentacja procesu zakupu — wideo i karuzela na social",
+      "opis": "Krótki film pionowy (30–45 sekund) i karuzela zdjęć pokazujące krok po kroku, jak kupuje się auto przez Prima-Auto — na prawdziwych ekranach naszej strony: wyszukiwanie, filtry, porównanie aut, strona oferty, zgłoszenie „Chcę to auto”, umowa i depozyt, panel klienta, transport i odbiór. Przez cały materiał widać pasek „Twoje wpłaty”: wybór auta i zgłoszenie nic nie kosztują, zwrotny depozyt 6 150 zł uruchamia naszą pracę — szukanie i sprawdzenie auta, kontakt z dostawcą, przeprowadzenie zakupu i przygotowanie formalności, 30% ceny płaci się po podpisaniu umowy, a 70% przed przypłynięciem auta do portu.\n\nFilm jest na Reels, Shorts, TikToka i Telegram, karuzela na Facebooka, Instagrama i TikToka. Oba powstają z jednego scenariusza, więc po przebudowie panelu klienta odświeżymy scenę panelu bez robienia materiału od nowa. Publikację na kanałach prowadzicie Wy.",
+      "status": "zgłoszone 14 października — plan i scenariusz gotowe, robimy teraz, na obecnym panelu",
+      "realnie_od": 16,
+      "realnie_do": 22
+    },
+    {
       "id": "T-264",
       "tytul": "„Zamów” zamienione na zgłoszenie chęci rezerwacji",
       "opis": "Przycisk „Zamów” na stronie auta zmieni się na „Chcę to auto”, a strona z formularzem będzie się nazywać „Zgłoszenie rezerwacji”. Nad formularzem, na ekranie po wysłaniu i w mailu o weryfikacji pojawi się jedno zdanie: zgłoszenie nie jest zamówieniem ani zawarciem umowy, jest bezpłatne i do niczego nie zobowiązuje, a umowę i depozyt ustalamy dopiero wtedy, gdy klient zdecyduje, że chce kontynuować. Po wysłaniu klient zobaczy „Otrzymaliśmy Twoje zgłoszenie”, a maile będą przychodzić od nadawcy „Prima-Auto” zamiast „Zamówienia Prima-Auto”.\n\nCel: formularz działa jak pozyskanie kontaktu do klienta, a nie jak złożenie zamówienia — bez sformułowań, które można odczytać jako zawarcie umowy. Dalszy przebieg (weryfikacja, umowa, depozyt) się nie zmienia. Projekty wyglądu na komputerze i telefonie są gotowe.",

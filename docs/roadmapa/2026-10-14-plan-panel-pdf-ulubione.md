@@ -20,6 +20,7 @@
 | W4 | Panel klienta — wejście, rejestracja, magic link, dane do umowy | T-204 domknięcie, T-257, T-244 | W3 (wybrane warianty) | do wyceny po W3 |
 | W5 | Karta oferty + ulubione | T-212, T-114 | W4 | 14–19 |
 | W6 | Dokumenty w zamówieniu | T-249 | W4, W1 (ten sam `class-asiaauto-order-admin.php`) | 45–60 |
+| W7 | Prezentacja procesu zakupu (wideo + karuzela) | T-265 | — (teraz, na obecnym panelu); po W4 ponowny render sceny panelu | 16–22 + 1–2 |
 
 Razem bez W3/W4: 71–95 h. Na spotkaniu 07.10 padło „panel klienta w październiku (plus ulubione)" — W3 warto
 puścić równolegle z W1, żeby W4–W5 zmieściły się w październiku.
@@ -102,3 +103,13 @@ oraz `aa-home__car` (huby marek/modeli, strona główna, `class-asiaauto-wiki-ca
 4. Makiety sekcji dokumentów (karta zamówienia u Ruslana + kreator krok 4/5 + zakładka w panelu) — 2–3 warianty na starcie.
 
 **Stop, pytaj:** migracja 68 istniejących załączników (dane klientów) — `mysqldump` + tar, dry-run, potem zgoda.
+
+## W7 — T-265 „prezentacja procesu zakupu — wideo + karuzela” (dopisane 14.10)
+
+Spec i decyzje D1–D4: `docs/roadmapa/T-265-prezentacja-procesu-zakupu.md`. Idzie równolegle z W1/W2, bo nie dotyka kodu pluginu.
+Zależność od W4 rozwiązana skryptem: scenariusz JSON + silnik renderują sceny z żywej strony, więc po wdrożeniu nowego panelu
+uruchamiamy render ponownie (1–2 h), zamiast produkować materiał od nowa.
+
+**Decyzje przed startem (quiz):** 1. akcept scenariusza i tekstów scen (szkic w specu); 2. auto do prezentacji — rek.: auto z placu w Rzeszowie;
+3. jak opisać rozliczenie po depozycie (scena 7–9).
+**Stop, pytaj:** rozszerzenie silnika w repo `auranet` (commit tam osobno); przekazanie materiału Ruslanowi idzie przez Janka.
