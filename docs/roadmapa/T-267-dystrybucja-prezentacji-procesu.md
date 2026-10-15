@@ -17,6 +17,8 @@
 | Telegram | kanał/grupa Ruslana | brak dostępu | gotowiec dla Ruslana |
 | Strona primaauto.com.pl | — | pełny | osadzenie wideo, patrz niżej |
 
+> **15.10:** prawdziwy adres strony to **`/informacje/proces-zamawiania/`** — w opisach na social używać pełnego (`/proces-zamawiania/` = 404). D1 strona najpierw, D2 TikTok z gotowców, D3 nie teraz, D4 poza zakresem. Strona LIVE 15.10 (patrz QUEUE).
+
 ## Gdzie na stronie
 
 1. **`/proces-zamawiania/`** — wideo na górze strony, nad opisem 5 kroków. To strona, która opisuje dokładnie to, co pokazuje film,
