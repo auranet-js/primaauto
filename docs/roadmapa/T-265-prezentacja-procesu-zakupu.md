@@ -71,6 +71,16 @@ Karuzela = 10 stopklatek scen 0–9 + CTA, z ciągłą osią czasu przez slajdy 
 - Dźwięk: bez muzyki w pliku (licencje) — muzykę dodaje się natywnie na platformie; napisy wtopione, bez lektora w v1.
 - Pliki wynikowe: MP4 9:16 + 10–11 × JPG 1080×1350, wystawione na auratest do akceptu Janka, potem do Ruslana przez Janka.
 
+## v4 — uwagi Ruslana (15.10)
+
+- 70% bez terminu: scena „fin” = „70% dopłacasz później — bez odsetek” (decyzja Janka; bez słowa „kredyt” — wymogi reklamy kredytu konsumenckiego).
+- Nowa scena „koniec” (5,6 s): klip AI „Twoje auto czeka” (klient obejmuje maskę auta z czerwoną kokardą) + CTA; przed outro.
+  Generacja: `scripts/reel-proces-zakupu/koncowka.py` (Gemini kadr → Veo 3.1 Fast), prompty i wybrane ujęcie w `koncowka-prompt.md`.
+- Auto: **Zeekr 8X** (`/oferta/zeekr-8x-2026-540080/`, wybór Ruslana).
+- **Podmiana auta = `scripts/reel-proces-zakupu/auto.json`** (URL + numery zdjęć). `prima-reel-zrzuty.mjs` robi zrzuty, pobiera zdjęcia
+  i mierzy z DOM pozycje kliknięć (filtr marki przez „Szukaj…”, cena, „Chcę to auto”, pola formularza) do `img/dane.js`;
+  `reel.html` bierze z niego nazwę, rok, cenę, zdjęcia i współrzędne. Potem tylko nowa końcówka AI z nowym zdjęciem referencyjnym.
+
 ## Poza zakresem
 
 - Publikacja na kanałach (robi Ruslan/Andrzej; automat = T-243, odłożony).

@@ -75,9 +75,13 @@ body{font-family:Inter,sans-serif;color:var(--txt);position:relative}
 #pan li.now{color:var(--red)} #pan li.now i{border-color:var(--red);background:#fff}
 #fin-car{left:90px;width:900px;height:640px;overflow:hidden;border-radius:36px}
 #fin-car img{width:100%;height:100%;object-fit:cover}
+#kon{left:0;top:0;width:1080px;height:var(--H);overflow:hidden;opacity:0}
+#kon img{width:100%;height:100%;object-fit:cover}
+#konfade{left:0;top:0;width:1080px;height:var(--H);opacity:0;background:linear-gradient(180deg,rgba(255,255,255,.96) 0%,rgba(255,255,255,.88) 22%,rgba(255,255,255,0) 38%,rgba(255,255,255,0) 70%,rgba(16,21,31,.45) 100%)}
+html.nakl,html.nakl body{background:transparent}
 #cta{left:90px;width:900px;height:150px;border-radius:30px;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;font:700 64px 'Barlow Condensed';letter-spacing:.3px}
 </style></head><body>
-<div id="bg" class="abs"></div><div id="bgline" class="abs"></div>
+<div id="bg" class="abs"></div><div id="kon" class="abs"><img id="konimg" src="img/koniec-stopklatka.jpg"></div><div id="konfade" class="abs"></div><div id="bgline" class="abs"></div>
 
 <div id="route" class="abs"><svg width="960" height="120" viewBox="0 0 960 120">
   <path id="rbase" d="" fill="none" stroke="#C9D1DC" stroke-width="5" stroke-dasharray="2 13" stroke-linecap="round"/>
@@ -94,7 +98,7 @@ body{font-family:Inter,sans-serif;color:var(--txt);position:relative}
 <div id="head" class="abs"></div>
 <div id="sub" class="abs"></div>
 
-<div id="cover-car" class="abs card"><img src="img/auto-1.jpg"></div>
+<div id="cover-car" class="abs card"><img class="zdj0"></div>
 
 <div id="phone" class="abs"><div id="screen"><div id="inner"><div id="zoom">
   <img class="lay" id="L-lista" src="img/lista-pelna.png">
@@ -113,7 +117,7 @@ body{font-family:Inter,sans-serif;color:var(--txt);position:relative}
   <div id="pan">
     <div class="top"><img src="img/logo-szerokie.png"></div>
     <h4>Twoje zamówienie</h4>
-    <div class="car"><img src="img/auto-1.jpg"><div><b>Denza Z9 GT DM-i Ultra</b><span>2025 · 302 000 zł</span></div></div>
+    <div class="car"><img class="zdj0"><div><b class="d-nazwa"></b><span id="d-rokcena"></span></div></div>
     <ul id="panl">
       <li><i>✓</i>Zgłoszenie rezerwacji</li>
       <li><i>✓</i>Depozyt zwrotny</li>
@@ -142,19 +146,34 @@ body{font-family:Inter,sans-serif;color:var(--txt);position:relative}
   <h3>Umowa zlecenia sprowadzenia samochodu z Chin</h3>
   <div class="meta">Zleceniodawca · Prima-Auto, Rzeszów</div>
   <div class="sk" style="width:92%"></div><div class="sk" style="width:84%"></div><div class="sk" style="width:88%"></div>
-  <div class="pos"><span>Denza Z9 GT DM-i Ultra</span><span>302 000 zł</span></div>
+  <div class="pos"><span class="d-nazwa"></span><span class="d-cena"></span></div>
   <div class="sk" style="width:90%"></div><div class="sk" style="width:76%"></div><div class="sk" style="width:86%"></div><div class="sk" style="width:60%"></div>
   <svg width="360" height="110" viewBox="0 0 360 110"><path id="sigp" d="M6 80 C40 20 60 20 66 64 S96 98 112 50 S140 14 150 60 S176 92 196 44 C206 22 222 30 218 62 C214 86 240 84 262 56 S320 30 352 46" fill="none" stroke="#1B2A4A" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
   <div class="sig">podpis Zleceniodawcy</div>
 </div>
 <div id="chip" class="abs">+30% ceny auta</div>
 
-<div id="fin-car" class="abs card"><img src="img/auto-3.jpg"></div>
+<div id="fin-car" class="abs card"><img class="zdj1"></div>
 <div id="cta" class="abs">Wybierz auto na primaauto.com.pl</div>
 
+<script src="img/dane.js"></script>
 <script>
 const MODE = new URLSearchParams(location.search).get('mode') || 'reel';
 const R = MODE === 'reel';
+// nakladka=1: scena końcowa bez tła i stopklatki — przezroczyste PNG kładzione w ffmpeg na klip AI
+const NAKL = new URLSearchParams(location.search).get('nakladka') === '1';
+// dane auta (img/dane.js z prima-reel-zrzuty.mjs); wartości zapasowe = pomiary dla Denzy z v3
+const D = Object.assign({ nazwa: 'Denza Z9 GT DM-i Ultra', rok: '2025', cena: '302 000 zł', zdj: ['auto-1.jpg', 'auto-3.jpg'],
+  fToggle: { x: 12, y: 257, w: 161, h: 36 }, fMarka: { x: 16, y: 105, w: 358, h: 42 }, fOpcja: { x: 17, y: 268, w: 146, h: 36 }, fApply: { x: 16, y: 706, w: 300, h: 47 },
+  oCena: { x: 12, y: 158, w: 141, h: 26 }, oChce: { x: 10, y: 791, w: 119, h: 43 },
+  zPola: { first_name: { x: 29, y: 1071 }, last_name: { x: 29, y: 1153 }, email: { x: 29, y: 1235 }, phone: { x: 29, y: 1316 } },
+  zZgody: [{ x: 33, y: 1376 }, { x: 33, y: 1490 }], zWyslij: { x: 29, y: 1533, w: 332, h: 43 } }, window.D || {});
+document.querySelectorAll('.zdj0').forEach(e => { e.src = 'img/' + D.zdj[0]; });
+document.querySelectorAll('.zdj1').forEach(e => { e.src = 'img/' + (D.zdj[1] || D.zdj[0]); });
+document.querySelectorAll('.d-nazwa').forEach(e => { e.textContent = D.nazwa; });
+document.querySelectorAll('.d-cena').forEach(e => { e.textContent = D.cena; });
+document.getElementById('d-rokcena').textContent = `${D.rok} · ${D.cena}`;
+const sr = r => ({ x: r.x + r.w / 2, y: r.y + r.h / 2 });
 const H = R ? 1920 : 1350;
 document.documentElement.style.setProperty('--H', H + 'px');
 const $ = id => document.getElementById(id);
@@ -171,7 +190,7 @@ $('phone').style.top = Y.phone + 'px';
 $('dep').style.top = Y.dep + 'px'; $('doc').style.top = Y.doc + 'px';
 $('cover-car').style.top = (R ? 820 : 640) + 'px'; $('cover-car').style.height = (R ? 760 : 560) + 'px';
 $('fin-car').style.top = (R ? 800 : 600) + 'px'; if (!R) $('fin-car').style.height = '470px';
-$('cta').style.top = Y.cta + 'px';
+$('cta').style.top = (R ? 1680 : 1150) + 'px';
 $('inner').style.transform = `scale(${470 / 390})`;
 
 // ---- trasa
@@ -203,11 +222,12 @@ const S = [
   { id: 'dep', a: 26.8, b: 31.8, krok: 5, head: ['Zwrotny depozyt', 'uruchamia naszą pracę'], sub: '' },
   { id: 'umowa', a: 31.8, b: 36.0, krok: 6, head: ['Umowa, gdy auto', 'jest sprawdzone'], sub: 'Wtedy wpłacasz 30% ceny' },
   { id: 'panel', a: 36.0, b: 39.6, krok: 7, head: ['Wszystko widzisz', 'w swoim panelu'], sub: 'Status zamówienia krok po kroku' },
-  { id: 'fin', a: 39.6, b: 44.6, krok: 8, head: ['70% przed portem,', 'odbiór w Rzeszowie'], sub: 'albo pod dom do rejestracji' },
+  { id: 'fin', a: 39.6, b: 44.6, krok: 8, head: ['70% dopłacasz później', '— bez odsetek'], sub: 'Odbiór w Rzeszowie albo pod dom, gotowe do rejestracji' },
+  { id: 'koniec', a: 44.6, b: 50.2, krok: 8, head: ['Twoje auto czeka'], sub: '' },
 ];
 const DUR = S[S.length - 1].b;
 // stopklatki karuzeli: moment każdej sceny, gdy wszystko już weszło
-const STILL = { cover: 2.6, lista: 5.0, filtr: 10.45, oferta: 15.4, spec: 19.4, zgl: 22.0, dep: 31.2, umowa: 35.4, panel: 39.0, fin: 43.8 };
+const STILL = { cover: 2.6, lista: 5.0, filtr: 10.45, oferta: 15.4, spec: 19.4, zgl: 22.0, dep: 31.2, umowa: 35.4, panel: 39.0, fin: 43.8, koniec: 49.4 };
 
 let curHead = null;
 function setHead(sc) {
@@ -233,7 +253,7 @@ function render(t) {
   const u = t - sc.a, len = sc.b - sc.a;
   setHead(sc);
   // nagłówek: linie wjeżdżają z maski, wyjście na końcu sceny
-  const outT = sc.id === 'fin' ? 0 : lin(u, len - .28, len);
+  const outT = (sc.id === 'fin' || sc.id === 'koniec') ? 0 : lin(u, len - .28, len);
   [...$('head').querySelectorAll('.ln span')].forEach((s, i) => {
     const k = eo(lin(u, .05 + i * .09, .5 + i * .09));
     s.style.transform = `translateY(${(1 - k) * 105 - outT * 30}%)`; s.style.opacity = 1 - outT;
@@ -246,7 +266,7 @@ function render(t) {
   if (sc.id === 'dep') $('sub').style.opacity = 0;
 
   // trasa: postęp do przystanku sceny
-  const prevK = (S[S.indexOf(sc) - 1] || sc).krok;
+  const prevK = sc.id === 'koniec' ? 8 : (S[S.indexOf(sc) - 1] || sc).krok;
   const kk = sc.id === 'cover' ? 0 : prevK + (sc.krok - prevK) * eio(lin(u, .1, .9));
   const xm = sc.id === 'cover' ? RX0 : sx(kk);
   const draw = sc.id === 'cover' ? eio(lin(u, .2, 1.6)) : 1;
@@ -261,6 +281,7 @@ function render(t) {
   if (sc.id === 'dep') pv = zl(6150 * eo(lin(u, .6, 2.0)));
   if (sc.id === 'umowa' || sc.id === 'panel') { pv = '6 150 zł + 30%'; pb = sc.id === 'umowa' ? 30 * eo(lin(u, 1.6, 2.6)) : 30; }
   if (sc.id === 'fin') { const k = eo(lin(u, .8, 2.4)); pv = `6 150 zł + ${Math.round(30 + 70 * k)}%`; pb = 30 + 70 * k; }
+  if (sc.id === 'koniec') { pv = '6 150 zł + 100%'; pb = 100; }
   $('pv').textContent = pv; $('pbi').style.width = pb + '%';
   const pillPulse = (sc.id === 'dep' && u > .6 && u < 2.0) || (sc.id === 'umowa' && u > 1.6 && u < 2.6) || (sc.id === 'fin' && u > .8 && u < 2.4);
   $('pill').style.background = pillPulse ? '#C92A2B' : '#1B2A4A';
@@ -268,7 +289,10 @@ function render(t) {
   // reset warstw
   ['L-lista', 'L-listaE', 'L-f1', 'L-f2', 'L-f3', 'L-f4', 'L-wysz', 'L-spec', 'L-ofE', 'L-zgl'].forEach(i => lay(i, 0));
   chrome('oferta-ekran.png', 0); $('zform').style.opacity = 0; tapAt(0, 0, 0); ring({}, 0); zoom(1, 0, 0); $('pan').style.opacity = 0;
-  ['cover-car', 'dep', 'doc', 'chip', 'fin-car', 'cta'].forEach(i => { $(i).style.opacity = 0; });
+  ['cover-car', 'dep', 'doc', 'chip', 'fin-car', 'cta', 'kon', 'konfade'].forEach(i => { $(i).style.opacity = 0; });
+  // nakładka: poza końcówką nic nie rysujemy (tamte klatki idą z trybu reel)
+  document.documentElement.classList.toggle('nakl', NAKL && sc.id === 'koniec');
+  $('bg').style.opacity = NAKL && sc.id === 'koniec' ? 0 : 1;
 
   // telefon: obecny od listy do zgłoszenia i w panelu
   const phoneScenes = ['lista', 'filtr', 'oferta', 'spec', 'zgl', 'panel'];
@@ -299,11 +323,12 @@ function render(t) {
     if (u < 4.6) lay(st, 1, swIn, 0); else lay('L-f4', 1, -eio(lin(u, 4.6, 5.0)) * 390, 0);
     if (u >= 4.6) { lay('L-wysz', 1, (1 - eio(lin(u, 4.6, 5.0))) * 390, -eio(lin(u, 5.0, len - .1)) * 520); chrome('lista-ekran.png', lin(u, 4.6, 4.8), 70, false); }
     if (u >= 1.15 && u < 1.5) lay('L-f1', 1, -(1 - eo(lin(u, 1.15, 1.5))) * 390, 0);
-    if (u < 1.3) tapAt(92, 274, lin(u, .7, 1.2));
-    else if (u < 2.4) tapAt(195, 126, lin(u, 1.75, 2.25));
-    else if (u < 3.4) tapAt(90, 286, lin(u, 2.75, 3.25));
-    else tapAt(165, 729, lin(u, 3.7, 4.2));
-    if (u > 3.2 && u < 4.15) ring({ x: 16, y: 706, w: 300, h: 46 }, eo(lin(u, 3.25, 3.5)) * (1 - lin(u, 3.95, 4.15)));
+    const tT = sr(D.fToggle), tM = sr(D.fMarka), tO = { x: D.fOpcja.x + 70, y: sr(D.fOpcja).y }, tA = sr(D.fApply);
+    if (u < 1.3) tapAt(tT.x, tT.y, lin(u, .7, 1.2));
+    else if (u < 2.4) tapAt(tM.x, tM.y, lin(u, 1.75, 2.25));
+    else if (u < 3.4) tapAt(tO.x, tO.y, lin(u, 2.75, 3.25));
+    else tapAt(tA.x, tA.y, lin(u, 3.7, 4.2));
+    if (u > 3.2 && u < 4.15) ring(D.fApply, eo(lin(u, 3.25, 3.5)) * (1 - lin(u, 3.95, 4.15)));
   }
   if (sc.id === 'spec') {
     // z góry oferty szybki zjazd przez tabele specyfikacji (od „Dane podstawowe” do „Multimedia”)
@@ -313,8 +338,8 @@ function render(t) {
   if (sc.id === 'oferta') {
     lay('L-ofE', 1, swIn, 0);
     const z = eio(lin(u, .9, 1.7)) * (1 - eio(lin(u, len - .7, len - .1)));
-    zoom(1 + z * .75, 12, 150);
-    ring({ x: 6, y: 150, w: 156, h: 44 }, eo(lin(u, 1.5, 1.9)) * (1 - lin(u, len - .8, len - .4)));
+    const c = D.oCena; zoom(1 + z * .75, c.x, c.y - 8);
+    ring({ x: c.x - 6, y: c.y - 8, w: c.w + 15, h: c.h + 18 }, eo(lin(u, 1.5, 1.9)) * (1 - lin(u, len - .8, len - .4)));
   }
   if (sc.id === 'zgl') {
     // tap „Chcę to auto” na ofercie → formularz, przewinięcie do noty
@@ -323,25 +348,27 @@ function render(t) {
     if (u < 1.9) {
       lay('L-ofE', 1, 0, kar);
       const z = eio(lin(u, .1, .7)) * (1 - eio(lin(u, 1.5, 1.9)));
-      zoom(1 + z * .8, 10, 830 + kar);
-      ring({ x: 10, y: 791 + kar, w: 119, h: 43 }, eo(lin(u, .5, .8)) * (1 - lin(u, 1.5, 1.7)));
-      tapAt(70, 812 + kar, lin(u, 1.1, 1.6));
+      const ch = D.oChce; zoom(1 + z * .8, ch.x, ch.y + 39 + kar);
+      ring({ x: ch.x, y: ch.y + kar, w: ch.w, h: ch.h }, eo(lin(u, .5, .8)) * (1 - lin(u, 1.5, 1.7)));
+      tapAt(ch.x + 60, ch.y + 21 + kar, lin(u, 1.1, 1.6));
     } else {
-      const s = eio(lin(u, 2.0, 2.6)) * 880 + eio(lin(u, 4.4, 4.8)) * 330;
+      const s1 = D.zPola.first_name.y - 191, s2 = D.zWyslij.y - 323;   // przewinięcie: pola na ekranie, potem przycisk wysyłki
+      const s = eio(lin(u, 2.0, 2.6)) * s1 + eio(lin(u, 4.4, 4.8)) * (s2 - s1);
       const x = (1 - eo(lin(u, 1.9, 2.2))) * 390;
       lay('L-zgl', 1, x, -s);
       chrome('oferta-ekran.png', 1, 70, false);
-      const F = [['first_name', 1071, 'Anna', 2.6, 3.0], ['last_name', 1153, 'Nowak', 3.0, 3.4], ['email', 1235, 'anna.nowak@poczta.pl', 3.4, 4.0], ['phone', 1316, '600 100 200', 4.0, 4.4]];
+      const P = D.zPola, F = [['first_name', P.first_name.y, 'Anna', 2.6, 3.0], ['last_name', P.last_name.y, 'Nowak', 3.0, 3.4], ['email', P.email.y, 'anna.nowak@poczta.pl', 3.4, 4.0], ['phone', P.phone.y, '600 100 200', 4.0, 4.4]];
       let h = '';
       for (const [n, y, v, a, b] of F) {
         const k = Math.round(v.length * lin(u, a, b - .05));
         const on = u >= a && u < b + .1;
-        if (u >= a || n === 'phone') h += `<div class="f${on ? ' on' : ''}" style="left:31px;top:${y + 2}px;width:328px;height:37px">${v.slice(0, k)}${on && k < v.length ? '|' : ''}</div>`;
+        if (u >= a || n === 'phone') h += `<div class="f${on ? ' on' : ''}" style="left:${P[n].x + 2}px;top:${y + 2}px;width:328px;height:37px">${v.slice(0, k)}${on && k < v.length ? '|' : ''}</div>`;
       }
-      if (u >= 4.85) h += '<div class="c" style="left:33px;top:1376px">✓</div>';
-      if (u >= 5.0) h += '<div class="c" style="left:33px;top:1490px">✓</div>';
+      const Z = D.zZgody;
+      if (u >= 4.85 && Z[0]) h += `<div class="c" style="left:${Z[0].x}px;top:${Z[0].y}px">✓</div>`;
+      if (u >= 5.0 && Z[1]) h += `<div class="c" style="left:${Z[1].x}px;top:${Z[1].y}px">✓</div>`;
       const zf = $('zform'); zf.innerHTML = h; zf.style.opacity = 1; zf.style.transform = `translate(${x}px,${-s}px)`;
-      tapAt(195, 1554 - s, lin(u, 5.2, 5.7));
+      const w = sr(D.zWyslij); tapAt(w.x, w.y - s, lin(u, 5.2, 5.7));
     }
   }
   if (sc.id === 'dep') {
@@ -368,7 +395,11 @@ function render(t) {
   if (sc.id === 'fin') {
     const k = eo(lin(u, .1, .8)); $('fin-car').style.opacity = k; $('fin-car').style.transform = `translateY(${(1 - k) * 120}px)`;
     $('fin-car').querySelector('img').style.transform = `scale(${1.12 - .06 * lin(u, 0, len)})`;
-    const c = eo(lin(u, 2.4, 3.0)); $('cta').style.opacity = c; $('cta').style.transform = `translateY(${(1 - c) * 50}px)`;
+  }
+  if (sc.id === 'koniec') {
+    // klip AI (w reelu podkładany w ffmpeg), tu stopklatka do karuzeli i podglądu
+    const k = lin(u, 0, .35); $('kon').style.opacity = NAKL ? 0 : k; $('konfade').style.opacity = k;
+    const c = eo(lin(u, 1.6, 2.2)); $('cta').style.opacity = c; $('cta').style.transform = `translateY(${(1 - c) * 50}px)`;
   }
 }
 window.render = render; window.DUR = DUR; window.STILL = STILL;

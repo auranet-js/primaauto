@@ -46,6 +46,14 @@
 Opisy: jeden tekst bazowy dopasowany do każdej platformy (YT tytuł ≤70 znaków + opis z linkiem do `/proces-zamawiania/`;
 FB/IG bez linków w treści IG — link w bio; TikTok krótko + hashtagi). Do akceptu Janka przed zaplanowaniem.
 
+## Oznaczenie treści AI (od v4)
+
+Od v4 (15.10) końcówka filmu i ostatni slajd karuzeli to **klip wygenerowany przez AI** (Veo 3.1, osoba fikcyjna). Realistyczna
+treść AI wymaga oznaczenia przy publikacji: YouTube — „Altered or synthetic content” = tak w Studio / `containsSyntheticMedia: true`
+w API; Meta (FB/IG) — etykieta „AI info” (przy uploadzie przez API: flaga w Business Suite / ręcznie, sprawdzić przy planowaniu);
+TikTok — przełącznik „AI-generated content”. Do opisów gotowców dla Ruslana/Andrzeja: dopisać, żeby włączyli tę etykietę.
+Nie przedstawiamy osoby z klipu jako naszego klienta.
+
 ## Decyzje do podjęcia
 
 - **D1 Strona przed social czy równolegle** — rek.: najpierw strona (krok 1), bo opisy na social kierują na `/proces-zamawiania/`,
