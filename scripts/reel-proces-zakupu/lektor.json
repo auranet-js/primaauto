@@ -1,0 +1,77 @@
+{
+ "opis": "T-265 v4: kwestie lektora. start = sekunda w gotowym filmie (z przenikaniami: koniec od 44,2 s, outro od 49,3 s), okno = ile sekund kwestia może trwać. Liczby i adresy słownie (TTS).",
+ "kwestie": [
+  {
+   "id": "cover",
+   "start": 0.2,
+   "okno": 3.2,
+   "tekst": "Auto z Chin — od kliknięcia do odbioru."
+  },
+  {
+   "id": "lista",
+   "start": 3.6,
+   "okno": 3.3,
+   "tekst": "Ponad cztery tysiące sześćset aut."
+  },
+  {
+   "id": "filtr",
+   "start": 7.2,
+   "okno": 5.6,
+   "tekst": "Wybierasz markę i model albo korzystasz z wyszukiwarki zaawansowanej."
+  },
+  {
+   "id": "oferta",
+   "start": 13.2,
+   "okno": 3.6,
+   "tekst": "Cena na gotowo — z cłem i VAT-em."
+  },
+  {
+   "id": "spec",
+   "start": 16.9,
+   "okno": 3.9,
+   "tekst": "Pełna specyfikacja: ponad sto parametrów."
+  },
+  {
+   "id": "zgl",
+   "start": 21.0,
+   "okno": 5.6,
+   "tekst": "Klikasz „Chcę to auto”. To bezpłatne i do niczego nie zobowiązuje."
+  },
+  {
+   "id": "dep",
+   "start": 27.0,
+   "okno": 4.6,
+   "tekst": "Zwrotny depozyt uruchamia naszą pracę."
+  },
+  {
+   "id": "umowa",
+   "start": 31.9,
+   "okno": 4.3,
+   "tekst": "Gdy auto jest sprawdzone — umowa i trzydzieści procent."
+  },
+  {
+   "id": "panel",
+   "start": 36.4,
+   "okno": 3.0,
+   "tekst": "Każdy etap widzisz w swoim panelu."
+  },
+  {
+   "id": "fin",
+   "start": 39.8,
+   "okno": 4.4,
+   "tekst": "Siedemdziesiąt procent dopłacasz później — bez odsetek."
+  },
+  {
+   "id": "koniec",
+   "start": 44.5,
+   "okno": 5.2,
+   "tekst": "Twoje auto czeka. Wybierz je na prima auto kropka com kropka pe el."
+  },
+  {
+   "id": "outro",
+   "start": 50.0,
+   "okno": 3.6,
+   "tekst": "Prima Auto. Import samochodów z Chin."
+  }
+ ]
+}

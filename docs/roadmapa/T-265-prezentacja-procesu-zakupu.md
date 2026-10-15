@@ -79,7 +79,12 @@ Karuzela = 10 stopklatek scen 0–9 + CTA, z ciągłą osią czasu przez slajdy 
 - Auto: **Zeekr 8X** (`/oferta/zeekr-8x-2026-540080/`, wybór Ruslana).
 - **Podmiana auta = `scripts/reel-proces-zakupu/auto.json`** (URL + numery zdjęć). `prima-reel-zrzuty.mjs` robi zrzuty, pobiera zdjęcia
   i mierzy z DOM pozycje kliknięć (filtr marki przez „Szukaj…”, cena, „Chcę to auto”, pola formularza) do `img/dane.js`;
-  `reel.html` bierze z niego nazwę, rok, cenę, zdjęcia i współrzędne. Potem tylko nowa końcówka AI z nowym zdjęciem referencyjnym.
+  `reel.html` bierze z niego nazwę, rok, cenę, zdjęcia i współrzędne. Karta auta jest wstawiana na górę listy i wyników filtra
+  (prawdziwa karta z `asiaauto/v1/listings`). Potem tylko nowa końcówka AI z nowym zdjęciem referencyjnym.
+- **Lektor** (Janek/Ruslan 15.10: głos „Charon”): `lektor.py` (Gemini `gemini-3.1-flash-tts-preview`) + `lektor.json` (kwestie,
+  start i okno w sekundach gotowego filmu). `lektor.py sceny Charon <kat>` → `lektor.py miks <kat> reel-v4.mp4 <wyj>.mp4`
+  (cisza obcięta, tempo dopasowane do okna, −16 LUFS). Wszystkie kwestie zmieściły się bez przyspieszania; wymowa sprawdzona
+  transkrypcją Gemini. Wersja bez lektora zostaje (platformy, gdzie dodaje się muzykę). Przy zmianie auta lektor zostaje bez zmian.
 
 ## Poza zakresem
 

@@ -6,6 +6,12 @@
   },
   "changelog": [
     {
+      "data": "15.10.2026",
+      "tytul": "Prezentacja procesu zakupu — wersja z uwagami: Zeekr 8X, końcówka i lektor",
+      "opis": "Wprowadziliśmy uwagi do filmu i karuzeli. W miejscu dopłaty 70% nie podajemy już terminu — jest „70% dopłacasz później — bez odsetek”. Na końcu filmu dodaliśmy scenę „Twoje auto czeka”: zadowolony klient obejmuje maskę auta z czerwoną kokardą (krótki klip wygenerowany przez AI, osoba fikcyjna — przy publikacji oznaczamy go jako treść AI), a pod nim „Wybierz auto na primaauto.com.pl”. Cały materiał prowadzi teraz wskazany Zeekr 8X: od pierwszego miejsca na liście aut, przez filtr marki, cenę i specyfikację, po umowę i panel.\n\nFilm ma lektora — spokojny męski głos dopasowany do każdej sceny — i trwa 56 sekund z naszym logo na końcu; karuzela ma 11 zdjęć. Zmiana auta to teraz wskazanie innego ogłoszenia: zrzuty, nazwa, cena i zdjęcia przestawiają się same, do wygenerowania zostaje tylko nowa końcówka.",
+      "godz": 3
+    },
+    {
       "data": "14.10.2026",
       "tytul": "Prezentacja procesu zakupu — film i karuzela na social",
       "opis": "Przygotowaliśmy film pionowy (50 sekund, z naszym logo na końcu) na Reels, Shorts, TikToka i Telegram oraz karuzelę 10 zdjęć na Facebooka, Instagrama i TikToka. Oba materiały pokazują krok po kroku zakup auta na prawdziwych ekranach naszej strony: filtr marki i modelu oraz wyszukiwarkę zaawansowaną, cenę na gotowo, pełną specyfikację w tabelach, zgłoszenie „Chcę to auto”, zwrotny depozyt 6 150 zł (5 000 zł netto), umowę z wpłatą 30% ceny, panel klienta oraz dopłatę 70% przed portem i odbiór. Przez cały materiał widać trasę z Chin do Polski i licznik „Twoje wpłaty”.\n\nOba materiały powstają z jednego scenariusza, więc po przebudowie panelu klienta albo zmianie strony odświeżymy je bez robienia od nowa. Publikację na kanałach prowadzicie Wy.",
@@ -642,10 +648,10 @@
     {
       "id": "T-265",
       "tytul": "Prezentacja procesu zakupu — wideo i karuzela na social",
-      "opis": "Krótki film pionowy (30–45 sekund) i karuzela zdjęć pokazujące krok po kroku, jak kupuje się auto przez Prima-Auto — na prawdziwych ekranach naszej strony: wyszukiwanie, filtry, porównanie aut, strona oferty, zgłoszenie „Chcę to auto”, umowa i depozyt, panel klienta, transport i odbiór. Przez cały materiał widać pasek „Twoje wpłaty”: wybór auta i zgłoszenie nic nie kosztują, zwrotny depozyt 6 150 zł uruchamia naszą pracę — szukanie i sprawdzenie auta, kontakt z dostawcą, przeprowadzenie zakupu i przygotowanie formalności, 30% ceny płaci się po podpisaniu umowy, a 70% przed przypłynięciem auta do portu.\n\nFilm jest na Reels, Shorts, TikToka i Telegram, karuzela na Facebooka, Instagrama i TikToka. Oba powstają z jednego scenariusza, więc po przebudowie panelu klienta odświeżymy scenę panelu bez robienia materiału od nowa. Publikację na kanałach prowadzicie Wy.",
-      "status": "zrealizowane 14 października — film i karuzela gotowe (4 h)",
-      "realnie_od": 4,
-      "realnie_do": 4
+      "opis": "Krótki film pionowy (30–45 sekund) i karuzela zdjęć pokazujące krok po kroku, jak kupuje się auto przez Prima-Auto — na prawdziwych ekranach naszej strony: wyszukiwanie, filtry, porównanie aut, strona oferty, zgłoszenie „Chcę to auto”, umowa i depozyt, panel klienta, transport i odbiór. Przez cały materiał widać pasek „Twoje wpłaty”: wybór auta i zgłoszenie nic nie kosztują, zwrotny depozyt 6 150 zł uruchamia naszą pracę — szukanie i sprawdzenie auta, kontakt z dostawcą, przeprowadzenie zakupu i przygotowanie formalności, 30% ceny płaci się po podpisaniu umowy, a pozostałe 70% później — bez odsetek. Na końcu klient odbiera auto z kokardą, a film prowadzi lektor.\n\nFilm jest na Reels, Shorts, TikToka i Telegram, karuzela na Facebooka, Instagrama i TikToka. Oba powstają z jednego scenariusza, więc po przebudowie panelu klienta odświeżymy scenę panelu bez robienia materiału od nowa. Publikację na kanałach prowadzicie Wy.",
+      "status": "zrealizowane 14–15 października — film z lektorem i karuzela gotowe, z uwagami (7 h)",
+      "realnie_od": 7,
+      "realnie_do": 7
     },
     {
       "id": "T-264",
