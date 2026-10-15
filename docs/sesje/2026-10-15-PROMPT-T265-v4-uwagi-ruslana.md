@@ -61,7 +61,4 @@ PRZEBIEG WĄTKU
   QA klatek z każdej sceny (oglądaj!), wystawienie na auratest, wysyłka na Telegram Janka (film + album).
 - Nie zmieniaj tego, czego Ruslan nie zgłosił. Nie publikuj nigdzie. Commit + push po akcepcie Janka.
 - Godziny: dopisz do postępu dopiero przy domknięciu (wpis T-265 ma dziś 4 h).
-
-Zauważone obok, nie ruszaj: Ruslan uczy ChatGPT wystawiania ogłoszeń na stronie („żeby mniej czasu zeszło”)
-— potencjalny osobny temat (wspomaganie dodawania ofert), tylko zgłoś Jankowi jedną linią.
 ```
