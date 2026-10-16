@@ -46,6 +46,12 @@
 - Rozważony i niewdrożony odpowiednik [Brand]: katalog do „Zaangażowani FB/IG — 365 dni”. Wraca, jeśli zapas 5 zł ma pójść na nową kampanię.
 - **Messenger na ofercie — odrzucone przez Janka 04.10.** Żadnych zmian na stronie oferty. Tematu nie wznawiać.
 
+**16.10 — `[PROCES]` zbudowany, PAUSED (decyzja Janka 16.10):**
+- Kampania `[PROCES] Jak wygląda zakup — film i karuzela` 120249578927240243, cel ruch (LANDING_PAGE_VIEWS), zestaw `Oglądający oferty 30 dni bez kontaktu` 120249578927600243, **5 zł/dz** (zapas z 04.10), wykl. kontakt + formularz 180 dni, bez rozszerzania listy. Miejsca: aktualności, Reels i relacje FB + IG.
+- Reklamy: `[PROCES] Film 9:16 z lektorem` 120249578928370243 (wideo T-265 v4, MD5 d556f91c…, wersja zaakceptowana przez Ruslana 15.10) i `[PROCES] Karuzela 10 kroków` 120249578928790243 (slajdy 1–10; slajd 11 z klipem AI odpada, limit 10 kart). Landing `/informacje/proces-zamawiania/`, UTM ustawione.
+- Materiał zawiera słowo „homologacja” (dwa napisy w filmie, slajd 4) — świadomie zostawione, bo wersja zaakceptowana przez Ruslana. Oznaczenia AI dla końcówki filmu (Veo) API Mety nie ustawia.
+- Włączenie = decyzja Janka. Konto po włączeniu: 65 zł/dz. Skrypt: `scripts/social/buduj_proces.py`.
+
 **Skrypty:** `scripts/social/buduj_kat.py`, `scripts/social/przebudowa_2026_09_15.py`, `scripts/gtm-piksel-meta.py`.
 
 ---
