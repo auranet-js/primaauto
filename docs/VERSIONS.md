@@ -1,5 +1,14 @@
 # Historia wersji asiaauto-sync
 
+## 0.45.4 — 2026-10-16 (nowy hub Xiaomi YU7 GT, prośba Ruslana 15.10)
+
+Che168 i dongchedi trzymają YU7 GT pod serią YU7 (wersja `四驱GT`), więc osobny hub — jak SU7 Ultra — wymagał rozdziału po wersji.
+- `includes/class-asiaauto-mapping.php` `getEuForCn()`: opcjonalny 3. argument (surowa wersja) i klucz `by_complectation` we wpisie brand-mappingu (fragment wersji → wariant docelowy; brak klucza = bez zmian).
+- `includes/class-asiaauto-importer.php`: 4 wywołania `getEuForCn()` (import, taksonomie, dry-run, `computeTerms`) przekazują `$data['complectation']`.
+- `data/brand-mapping-v6.1.php`: `Xiaomi|Xiaomi YU7` → `by_complectation['GT']` = „YU7 GT”, slug `yu7-gt`.
+- Dane: term `serie` 7280 „YU7 GT” (parent Xiaomi 5148), przepięte oferty 467426, 512651, 521975, 524427, 540550, 553316 (+ 529082 w koszu); treść huba wg metody (`scripts/hub-yu7-gt-2026-10-16.php`), link z wiki huba YU7. Indexing: oba huby.
+- Backupy: `*.bak-2026-10-16-yu7gt` (5 plików pluginu), `~/backups/primaauto/2026-10-16-yu7gt/` (termmeta YU7, relacje i meta `serie` ofert).
+
 ## 0.45.3 — 2026-10-14 (płatności online zawieszone — T-256 „przepięcie depozytu na Tpay”)
 
 Decyzja Janka: temat płatności online zamknięty (ADR `docs/decyzje/2026-10-14-platnosci-online-zawieszone.md`). Flaga `asiaauto_payu_enabled=0` bez zmian, kod PayU/Tpay uśpiony.
